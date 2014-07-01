@@ -1,0 +1,4 @@
+2014-06-16
+1.2.0 发布
+	1.从common保重拆除，使用java spi载入
+	2.移植到cn.featherfly

@@ -1,0 +1,86 @@
+2014-06-16
+1.2.0 发布
+	1.移植到cn.featherfly
+	2.TreeNode.setParentNode加入从本来的父节点删除当前节点的功能
+	3.加入ServiceLoaderUtils类
+	4.使用Java SPI加载BeanProperty的字节码增强实现（基于javassist）
+	
+2013-07-11
+1.1.3 发布
+	1.BeanDescriptor.addProperty修正为空时空指正异常问题
+	2.加入Assert和AssertUtils
+	3.ClassUtils加入多个重载版本的newInstance方法
+	4.BeanUtils加入instantiateClass(Class<T> clazz, Object...args)方法
+
+2013-03-21
+1.1.2 发布
+	1.BeanUtils.copyProperties，可以复制父子对象属性
+
+
+2012-9-27
+1.1.1 发布
+	1. StringUtils加入filterHtml和toHtml两个html转换方法
+	2. 修复加载小bug
+	3. FileUtils所有检查异常包装为非检查异常
+	4. FileUtils加入write一系列方法
+	5. BeanDescriptor加入getBeanProperty(int index)方法
+	7. LangUtils.isEmpty(Object object)，LangUtils.isNotEmpty(Object object)加入数组判断
+	8. ArrayUtils 加入 isEmpty isNotEmpty方法
+
+2012-8-29
+1.1.0 发布
+	1 加入bcel支持
+
+2012-8-21
+1.0.10 发布
+	1 BeanUtils，BeanDescriptor加入addProperty方法
+
+2012-3-9
+1.0.9 发布
+	1 把codec包剔除
+	2 加入BeanPropertyClassCondition
+	3 加入字节码增强支持，使用beanDescriptor.setUseByteCode(true)开启
+
+2011-10-12
+1.0.8 发布
+	1 把db包剔除
+	2 BeanUtils修改为泛型实现
+	3 BeanUtils加入toMap,fromMap,fillProperties实现
+
+2011-09-30
+1.0.7 发布
+	1 LogUtils.logObject修改为debugObject
+	2 把net包剔除
+	3 LangUtils添加文件存在的判断，AssertIllegalArgument添加文件存在的断言
+	4 BeanPropertyNameRegexCondition匹配从字符串直接匹配改为预编译Pattern匹配
+
+2011-9-19
+1.0.6 发布
+	1 重构strutcture的包名com.cdthgk.strutcture为com.cdthgk.common.strutcture
+
+2011-9-15
+1.0.5 发布
+	1 加入UUIDGenerator
+	2 加入BeanPropertyFactory
+
+2011-08-28
+1.0.4 发布
+	1 FtpClient的makeDirectory方法添加嵌套目录生成支持
+	2 FtpClient添加isDirectoryExist方法
+
+2011-08-28
+1.0.3 发布
+	1 修正FtpClient的makeDirectory方法没有设置工作目录的问题
+
+2011-08-26
+1.0.2 发布
+	1 FtpClient添加makeDirectory创建目录方法
+
+2011-06-16
+1.0.1 发布
+	1 BeanDescriptor增加getChildBeanProperty(String)方法
+	2 BeanProperty私有方法checkType的判断从完全类型匹配改为类型匹配及子类匹配
+
+2011-06-16
+1.0发布
+

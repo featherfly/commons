@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="featherfly-common builder" default="build" basedir="."
+	xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ecf="antlib:com.featherfly.ecf">
+
+	<!-- 版本名称 -->
+	<property name="version" value="1" />
+	<property name="subVersion" value="2" />
+	<property name="reversion" value="0" />
+	<property name="pubVersion" value="${version}.${subVersion}.${reversion}" />
+	<!-- 项目名称 -->
+	<property name="projectName" value="featherfly-common-bean-javassist"/>
+	<property name="artifact" value="${projectName}" />
+	
+	<property name="Built-By" value="zhongji" />
+
+	<!-- ivy setting -->
+	<property name="ivysettings" value="D:/programe/runtime/ivy/settings/ivysettings.xml" />
+	
+	<!-- 编译临时目录 -->
+	<property name="buildTempDir" location="build_temp" />
+
+	<property name="src" location="${buildTempDir}/src" />
+	<property name="bin" location="${buildTempDir}/bin" />
+	<property name="ecfBin" location="${buildTempDir}/ecfBin" />
+	<property name="docapi" location="${buildTempDir}/docapi" />
+	<property name="lib" location="${buildTempDir}/lib" />
+
+	<!-- 发布目录 -->
+	<property name="release" location="E:/svn_work_copy/featherfly/01.Commons/02.发布/01.发布包/${version}" />
+	<property name="srcRelease" location="E:/svn_work_copy/featherfly/01.Commons/02.发布/02.归档包/${version}" />
+
+	<property name="jarFile"
+	          value="${projectName}-${pubVersion}.jar" />
+	<property name="docJarFile"
+			          value="${projectName}-${pubVersion}-javadoc.jar" />
+	<property name="srcJarFile"
+			          value="${projectName}-${pubVersion}-sources.jar" />
+		
+	<property name="releaseZipFile"
+	          value="${projectName}-${pubVersion}.zip" />
+	<property name="srcZipFile"
+	          value="${projectName}-src-${pubVersion}.zip" />
+
+    <property name="ivy.lib.dir" value="${lib}" />
+
+    <!-- paths used for compilation and run  -->
+    <path id="classpath">
+        <fileset dir="${lib}" includes="**/*.jar"/>
+	</path>
+
+	<!-- 删除编译临时目录 -->
+	<target name="deleteFold">
+		<tstamp />
+		<delete dir="${buildTempDir}" />
+	</target>
+
+	<!-- 创建web项目放 类文件(.class) 目录 -->
+	<target name="createFold" depends="deleteFold">
+		<tstamp />
+		<mkdir dir="${buildTempDir}" />
+		<mkdir dir="${src}" />
+		<mkdir dir="${bin}" />
+		<mkdir dir="${docapi}" />
+		<mkdir dir="${lib}" />
+	</target>
+
+	<!-- 复制java原文件和配置文件到临时编译目录 -->
+	<target name="copySrcFile" depends="createFold">
+		<copy todir="${src}">
+			<fileset dir="src">
+				<exclude name="**/.svn" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="resolve">
+		<ivy:configure file="${ivysettings}"/>
+		<ivy:settings id="settings" file="${ivysettings}"/>
+		<ivy:resolve file="${ivy.dep.file}" conf ="${ivy.configurations}" revision="${pubVersion}"/>
+		<ivy:retrieve pattern="${ivy.retrieve.pattern}" conf="${ivy.configurations}"/>
+    </target>
+
+	<!-- 编译java原文件 并复制到的相应目录 -->
+	<target name="compile" depends="copySrcFile, resolve">
+		<tstamp />
+		<javac srcdir="${src}" destdir="${bin}" encoding="utf-8">
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+	
+	<target name="copyResToBin" depends="compile">
+		<copy todir="${bin}">
+			<fileset dir="${src}">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!--
+	<target name="copyBinToEcf" depends="compile">
+		<copy todir="${ecfBin}">
+			<fileset dir="${bin}">
+				<exclude name="**/*.class" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="ecf" depends="copyBinToEcf">
+		<ecf:ecf todir="${ecfBin}">
+			<fileset dir="${bin}">
+				<include name="**/*.class" />
+			</fileset>
+		</ecf:ecf>
+	</target>
+	-->
+
+	<target name="jarBin" depends="copyResToBin">
+		<jar destfile="${jarFile}" basedir="${bin}">
+			<include name="**" />
+			<exclude name="**/*/JavassistBeanPropertyFactory.java"/>
+			<service type="cn.featherfly.common.bean.BeanPropertyFactory"> 
+				<provider classname="cn.featherfly.common.bean.JavassistBeanPropertyFactory"/> 
+			</service> 
+			<manifest>
+				<attribute name="Built-By" value="${Built-By}" />
+				<attribute name="Version" value="${pubVersion}"/>
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="createJavaDoc" depends="jarBin">
+		<!-- destdir是javadoc生成的目录位置 -->
+		<javadoc classpathref="classpath" destdir="${docapi}" charset="UTF-8" encoding="UTF-8" docencoding="UTF-8">
+			<!-- dir是你的代码位置，记住是java文件的位置而不是class文件的位置哦，第一次用这个命令容易忽略这点 -->
+			<packageset dir="${src}">
+				<!-- exclude是不想生成哪些类的javadoc -->
+				<!--<exclude name="${excludeClasses}" />-->
+			</packageset>
+			<classpath refid="classpath" />
+		</javadoc>
+	</target>
+
+	<target name="jarJavaDoc" depends="createJavaDoc">
+		<jar destfile="${docJarFile}" basedir="${docapi}">
+			<include name="**" />
+			<manifest>
+				<attribute name="Built-By" value="${Built-By}" />
+				<attribute name="Version" value="${pubVersion}"/>
+			</manifest>
+		</jar>
+	</target>
+	<target name="jarSources" depends="jarJavaDoc">
+		<jar destfile="${srcJarFile}" basedir="${src}">
+			<include name="**" />
+			<manifest>
+				<attribute name="Built-By" value="${Built-By}" />
+				<attribute name="Version" value="${pubVersion}"/>
+			</manifest>
+		</jar>
+	</target>
+	
+
+	<!-- 打包发布版本文件，包括jar文件  -->
+	<target name="zipRelease" depends="jarJavaDoc">
+		<zip destfile="${releaseZipFile}"
+			     encoding="UTF-8">
+			<fileset dir="${basedir}">
+				<include name="change-log.txt"/>
+				<include name="${jarFile}"/>
+			</fileset>
+			<fileset dir="${buildTempDir}">
+				<include name="**/docapi/**"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<!-- 移动发布包到目的地 -->
+	<target name="moveRelease" depends="zipRelease">
+		<move file="${releaseZipFile}" todir="${release}"/>
+	</target>
+
+	<target name="publish"
+        description="--> Publish share" depends="resolve">
+		<ivy:publish resolver="share-publish"
+				revision="${pubVersion}"
+	            update="true"
+	            overwrite="true"
+				settingsref="settings">
+			<artifacts pattern="[artifact]-[revision](-[classifier]).[ext]"/>
+            <artifacts pattern="[artifact]-[revision].[ext]"/>
+        </ivy:publish>
+	</target>
+
+	<!-- 删除编译临时目录 -->
+	<target name="clear" depends="moveRelease,publish,clear_only">
+	</target>
+	<!-- 删除编译临时目录 -->
+	<target name="clear_only">
+		<tstamp />
+		<delete dir="${buildTempDir}" />
+		<delete file="${jarFile}" />
+		<delete file="${docJarFile}" />
+		<delete file="${srcJarFile}" />
+		<delete file="ivy-${pubVersion}.xml" />
+		<delete file="ivy-${pubVersion}-ivy.xml" />
+	</target>
+
+
+	<!-- 打包发布版本文件 -->
+	<target name="zip_project">
+		<zip destfile="${srcZipFile}" encoding="UTF-8">
+			<fileset dir="${basedir}" >
+				<exclude name="**/*.jar" />
+				<exclude name="bin/**/*.*" />
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="zip_project_move" depends="zip_project">
+		<move file="${srcZipFile}" todir="${srcRelease}" />
+	</target>
+	
+	<target name="publish_clear" depends="jarSources,publish,clear_only">
+	</target>
+
+	<target name="build" depends="clear,zip_project_move">
+	</target>
+
+</project>

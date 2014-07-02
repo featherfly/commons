@@ -31,31 +31,23 @@ public class Tree<E> {
 	private TreeNode<E> rootNode;
 
 	private boolean autoClearNodeList = true;
-
-	private Relation<TreeNode<E>> relation = new DefaultRelation<E>();
-
+	
 	private Tree(TreeNode<E> rootNode) {
-		if (!getRelation().isRoot(rootNode)) {
+		if (rootNode == null) {
+			throw new IllegalArgumentException("传入的node不能为空");
+		}
+		if (rootNode.isRoot()) {
 			throw new IllegalArgumentException("传入的node不是根节点");
 		}
 		this.rootNode = rootNode;
 	}
 	/**
-	 * 根据传入的集合创建树，使用DefaultRelation作为关系判断依据.
+	 * 根据传入的集合创建树
 	 * IllegalArgumentException 在集合中没有找到根节点抛出（根据Relation判断）
 	 * @param nodeList 节点列表
 	 */
 	public Tree(List<TreeNode<E>> nodeList) {
-		this(nodeList, new DefaultRelation<E>());
-	}
-	/**
-	 * 根据传入的集合创建树，使用传入的relation作为关系判断依据.
-	 * IllegalArgumentException 在集合中没有找到根节点抛出（根据Relation判断）
-	 * @param nodeList 节点列表
-	 * @param relation 关系判断对象
-	 */
-	public Tree(List<TreeNode<E>> nodeList, Relation<TreeNode<E>> relation) {
-		buildTree(nodeList, relation);
+		buildTree(nodeList);
 	}
 //	YUFEI_TODO 此模式暂时还不支持
 //	创建根节点再加子节点
@@ -65,12 +57,12 @@ public class Tree<E> {
 	/*
 	 * 创建树
 	 */
-	private void buildTree(List<TreeNode<E>> nodeList, Relation<TreeNode<E>> relation) {
+	private void buildTree(List<TreeNode<E>> nodeList) {
 		if (nodeList != null) {
 			Iterator<TreeNode<E>> iter = nodeList.iterator();
 			while (iter.hasNext()) {
 				TreeNode<E> node = iter.next();
-				if (getRelation().isRoot(node)) {
+				if (node != null && node.isRoot()) {
 					if (rootNode != null) {
 						throw new IllegalArgumentException("在TreeNode集合中找到多个根节点");
 					}
@@ -83,7 +75,7 @@ public class Tree<E> {
 			}
 			iter = nodeList.iterator();
 			while (iter.hasNext()) {
-				addChildNode(nodeList, iter.next(), relation);
+				addChildNode(nodeList, iter.next());
 				//addChildNode(nodeList,getRootNode(), iter.next(),relation);
 			}
 			if (LOGGER.isTraceEnabled()) {
@@ -100,26 +92,25 @@ public class Tree<E> {
 	 * 添加子节点
 	 */
 	private void addChildNode(List<TreeNode<E>> nodeList,
-			TreeNode<E> childNode, Relation<TreeNode<E>> relation) {
-		rootNode.setRelation(relation);
+			TreeNode<E> childNode) {
 		if (rootNode.isParent(childNode)) {
 			rootNode.mergeChild(childNode);
 		} else if (!rootNode.hasProgeny(childNode)) {
-			addProgeny(nodeList, childNode, relation);
+			addProgeny(nodeList, childNode);
 		}
 	}
 	/*
 	 * 添加子孙
 	 */
 	private void addProgeny(List<TreeNode<E>> nodes,
-			TreeNode<E> progenyNode, Relation<TreeNode<E>> relation) {
-		int index = nodes.indexOf(progenyNode.getParentNode());
+			TreeNode<E> progenyNode) {
+		int index = nodes.indexOf(progenyNode.getParent());
 		if (index < nodes.size() && index > -1) {
 			TreeNode<E> progenyParent = nodes.get(index);
 			//把当前的节点加它的父节点
 			progenyParent.mergeChild(progenyNode);
 			//把父节点加入树种
-			addChildNode(nodes, progenyParent, relation);
+			addChildNode(nodes, progenyParent);
 		}
 	}
 	/**
@@ -138,8 +129,8 @@ public class Tree<E> {
 	public Tree<E> subTree(String treeNodeId) {
 		TreeNode<E> node = getRootNode().findTreeNode(treeNodeId);
 		if (node != null) {
-			TreeNode<E> nodeCopy = node.clone();
-			getRelation().changeToRoot(nodeCopy);
+			// 这里要处理
+			TreeNode<E> nodeCopy = node.cloneAsRoot();			
 			return new Tree<E>(nodeCopy);
 		}
 		return null;
@@ -151,7 +142,7 @@ public class Tree<E> {
 	 * @param matcher 匹配器
 	 * @return 指定匹配节点
 	 */
-	public TreeNode<E> find(Matcher<E> matcher) {
+	public TreeNode<E> find(TreeNodeMatcher<TreeNode<E>> matcher) {
 		return getRootNode().findTreeNode(matcher);
 	}
 	/**
@@ -188,7 +179,7 @@ public class Tree<E> {
 	 * 树的所有子节点使用传入执行器进行操作
 	 * @param executor 执行器
 	 */
-	public void each(NodeExecutor<E> executor) {
+	public void each(NodeExecutor<TreeNode<E>> executor) {
 		getRootNode().each(executor);
 	}
 
@@ -202,20 +193,6 @@ public class Tree<E> {
 	 */
 	public TreeNode<E> getRootNode() {
 		return rootNode;
-	}
-	/**
-	 * 返回relation
-	 * @return relation
-	 */
-	public Relation<TreeNode<E>> getRelation() {
-		return relation;
-	}
-	/**
-	 * 设置relation
-	 * @param relation relation
-	 */
-	public void setRelation(Relation<TreeNode<E>> relation) {
-		this.relation = relation;
 	}
 	/**
 	 * 返回autoClearNodeList

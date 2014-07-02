@@ -12,9 +12,9 @@ package cn.featherfly.common.structure.tree;
  * @param <E> 树节点存放的对象类型
  * @author 钟冀
  */
-public interface NodeExecutor<E> {
+public interface NodeExecutor<T extends TreeNodeModel<T>> {
 	/**
 	 * @param treeNode 树节点 
 	 */
-	void execute(TreeNode<E> treeNode);
+	void execute(T treeNode);
 }

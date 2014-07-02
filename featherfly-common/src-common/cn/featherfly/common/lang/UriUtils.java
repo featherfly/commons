@@ -134,7 +134,7 @@ public final class UriUtils {
 	 * @return 移除结尾/后的uri
 	 */
 	public static String removeEndSeparator(String uri) {
-		// TODO 使用循环来判断（倒序），出现不是UriUtils.SEPARATOR的直接以当前index为界返回substring
+		// TODO 使用循环来判断（倒序），出现不是UriUtils.SEPARATOR的直接以当前index为界返回substring		
 		while (uri.endsWith(UriUtils.SEPARATOR)) {
 			uri = uri.substring(0, uri.length() - 1);
 		}

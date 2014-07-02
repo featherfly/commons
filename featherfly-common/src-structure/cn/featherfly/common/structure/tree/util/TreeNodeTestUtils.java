@@ -54,7 +54,7 @@ public final class TreeNodeTestUtils {
 			}
 		}
 		sb.append(space + treeNode.getId().toString() + "\n");				
-		if (!treeNode.isLeafNode()) {
+		if (!treeNode.isLeaf()) {
 			Iterator<TreeNode<E>> iter = treeNode.getChildNodes().iterator();
 			TreeNode<E> node = null;
 			while (iter.hasNext()) {
@@ -87,7 +87,7 @@ public final class TreeNodeTestUtils {
 		}		
 		System.out.println("level:" + level + " " + space + treeNode.getId() + "  ");
 		
-		if (!treeNode.isLeafNode()) {
+		if (!treeNode.isLeaf()) {
 			Iterator<TreeNode<E>> iter = treeNode.getChildNodes().iterator();
 			TreeNode<E> node = null;
 			while (iter.hasNext()) {

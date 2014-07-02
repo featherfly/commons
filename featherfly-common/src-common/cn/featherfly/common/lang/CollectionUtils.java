@@ -46,7 +46,7 @@ public final class CollectionUtils {
 	 * @param elements 需要批量添加的元素
 	 * @return 是否添加
 	 */
-	public static <T> boolean addAll(Collection<? super T> collection, T... elements) {
+	public static <T> boolean addAll(Collection<T> collection, @SuppressWarnings("unchecked") T...elements) {
 		if (collection == null) {
 			return false;
 		}

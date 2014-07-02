@@ -17,7 +17,7 @@ import org.apache.commons.collections.map.ListOrderedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.featherfly.common.bean.condition.BeanPropertyCondition;
+import cn.featherfly.common.bean.condition.BeanPropertyMatcher;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.ServiceLoaderUtils;
 
@@ -170,7 +170,7 @@ public class BeanDescriptor<T> {
 	 * @param condition 条件判断
 	 * @return 第一个符合条件BeanProperty
 	 */
-	public BeanProperty findBeanProperty(BeanPropertyCondition condition) {
+	public BeanProperty findBeanProperty(BeanPropertyMatcher condition) {
 		for (BeanProperty beanProperty : getBeanProperties()) {
 			if (condition.match(beanProperty)) {
 				return beanProperty;
@@ -186,7 +186,7 @@ public class BeanDescriptor<T> {
 	 * @param condition 条件判断
 	 * @return 所有符合条件BeanProperty的集合
 	 */
-	public Collection<BeanProperty> findBeanPropertys(BeanPropertyCondition condition) {
+	public Collection<BeanProperty> findBeanPropertys(BeanPropertyMatcher condition) {
 		Collection<BeanProperty> coll = new ArrayList<BeanProperty>();
 		for (BeanProperty beanProperty : getBeanProperties()) {
 			if (condition.match(beanProperty)) {

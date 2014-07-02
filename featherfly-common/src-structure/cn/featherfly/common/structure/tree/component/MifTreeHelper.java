@@ -98,7 +98,7 @@ public class MifTreeHelper {
 		nodeMap.put("type", node.getType());
 		nodeMap.put("state", node.getState());
 		nodeMap.put("data", node.getData());
-		if (!treeNode.isLeafNode()) {
+		if (!treeNode.isLeaf()) {
 			List<Map<String, Object>> childNodeList = new ArrayList<Map<String, Object>>();
 			nodeMap.put("children", childNodeList);
 			Iterator<?> iter = treeNode.getChildNodes().iterator();

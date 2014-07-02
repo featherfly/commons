@@ -4,10 +4,10 @@ package cn.featherfly.common.tree;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.featherfly.common.tree.annotation.Children;
-import cn.featherfly.common.tree.annotation.Equals;
-import cn.featherfly.common.tree.annotation.Parent;
-import cn.featherfly.common.tree.annotation.TreeNode;
+import cn.featherfly.common.structure.tree.annotation.Children;
+import cn.featherfly.common.structure.tree.annotation.Equals;
+import cn.featherfly.common.structure.tree.annotation.Parent;
+import cn.featherfly.common.structure.tree.annotation.TreeNode;
 
 /**
  * <p>

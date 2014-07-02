@@ -30,6 +30,9 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cn.featherfly.common.lang.matcher.FieldMatcher;
+import cn.featherfly.common.lang.matcher.MethodMatcher;
+
 
 /**
  * <p>
@@ -54,27 +57,6 @@ public final class ClassUtils {
 	private static final String IS = "is";
 
 	/**
-	 * 判断第一个参数是否实现了第二个参数代表的接口类型
-	 * @deprecated 使用isParent
-	 * @param classType 类型（包括类和接口）
-	 * @param interfaceType 接口类型
-	 * @return 判断第一个参数是否实现了第二个参数代表的接口类型
-	 */
-	@Deprecated
-	public static boolean isImplementation(Class<?> classType, Class<?> interfaceType) {
-//		Class<?>[] classes = classType.getInterfaces();
-//		if(classes!=null){
-//			for (Class<?> c : classes) {
-//				if(c == interfaceType){
-//					return true;
-//				}
-//			}
-//		}
-//		return false;
-		return interfaceType.isAssignableFrom(classType);
-	}
-
-	/**
 	 * <p>
 	 * 查找指定类型
 	 * </p>
@@ -85,7 +67,7 @@ public final class ClassUtils {
 		try {
 			return Class.forName(className);
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(e);
+			throw new IllegalArgumentException(e);
 		}
 	}
 
@@ -96,6 +78,9 @@ public final class ClassUtils {
 	 * @return 第一个参数是否是第二个参数的父类（父接口）
 	 */
 	public static boolean isParent(Class<?> parentType, Class<?> childType) {
+		if (parentType == null) {
+			return false;
+		}
 		return parentType.isAssignableFrom(childType);
 	}
 
@@ -440,6 +425,10 @@ public final class ClassUtils {
 		}
 		return className.replace(".", "/");
 	}
+	
+	// ********************************************************************
+	//	获取泛型参数
+	// ********************************************************************
 
 	/**
 	 * 通过反射,获得指定类的父类的泛型参数的实际类型. 如BuyerServiceBean extends DaoSupport<Buyer>
@@ -592,6 +581,10 @@ public final class ClassUtils {
 	public static Class<?> getFieldGenericType(Field field) {
 		return getFieldGenericType(field, 0);
 	}
+	
+	// ********************************************************************
+	//	实例化对象
+	// ********************************************************************
 
 	/**
 	 * 实例化.
@@ -697,5 +690,85 @@ public final class ClassUtils {
 				)
 			);
 		}
+	}
+	
+	// ********************************************************************
+	//	查找
+	// ********************************************************************
+	
+	/**
+	 * <p>
+	 * 查找并返回第一个符合条件的Field.
+	 * 如果没有则返回null.
+	 * </p>
+	 * @param type 匹配条件
+	 * @param matcher 匹配条件
+	 * @return 第一个符合条件Field
+	 */
+	public Field findField(Class<?> type, FieldMatcher matcher) {
+		if (type != null) {
+			for (Field field : type.getDeclaredFields()) {
+				if (matcher.match(field)) {
+					return field;
+				}
+			}
+		}
+		return null;
+	}
+	/**
+	 * <p>
+	 * 查找并返回所有符合条件Field的集合.
+	 * 如果没有则返回一个长度为0的集合.
+	 * </p>
+	 * @param matcher 匹配条件
+	 * @return 所有符合条件Field的集合
+	 */
+	public Collection<Field> findFields(Class<?> type, FieldMatcher matcher) {
+		Collection<Field> fields = new ArrayList<Field>();
+		if (type != null) {
+			for (Field field : type.getDeclaredFields()) {
+				if (matcher.match(field)) {
+					fields.add(field);
+				}
+			}
+		}
+		return fields;
+	}
+	/**
+	 * <p>
+	 * 查找并返回第一个符合条件的Method.
+	 * 如果没有则返回null.
+	 * </p>
+	 * @param matcher 匹配条件
+	 * @return 第一个符合条件Method
+	 */
+	public Method findMethod(Class<?> type, MethodMatcher matcher) {
+		if (type != null) {
+			for (Method method : type.getDeclaredMethods()) {
+				if (matcher.match(method)) {
+					return method;
+				}
+			}
+		}
+		return null;
+	}
+	/**
+	 * <p>
+	 * 查找并返回所有符合条件Method的集合.
+	 * 如果没有则返回一个长度为0的集合.
+	 * </p>
+	 * @param matcher 匹配条件
+	 * @return 所有符合条件Method的集合
+	 */
+	public Collection<Method> findMethods(Class<?> type, MethodMatcher matcher) {
+		Collection<Method> methods = new ArrayList<Method>();
+		if (type != null) {
+			for (Method method : type.getDeclaredMethods()) {
+				if (matcher.match(method)) {
+					methods.add(method);
+				}
+			}
+		}
+		return methods;
 	}
 }

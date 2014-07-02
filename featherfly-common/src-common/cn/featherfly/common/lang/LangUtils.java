@@ -41,7 +41,8 @@ public final class LangUtils {
 	 *            需要选择的对象
 	 * @return 第一个非空的对象
 	 */
-	public static <T> T pickFirst(T... pickedItems) {
+	@SafeVarargs
+	public static <T> T pickFirst(T...pickedItems) {
 		if (pickedItems != null) {
 			for (T t : pickedItems) {
 				if (t != null) {
@@ -61,7 +62,8 @@ public final class LangUtils {
 	 *            需要选择的对象
 	 * @return 最后一个非空的对象
 	 */
-	public static <T> T pickLast(T... pickedItems) {
+	@SafeVarargs
+	public static <T> T pickLast(T...pickedItems) {
 		if (pickedItems != null) {
 			for (int i = pickedItems.length - 1; i >= 0; i--) {
 				T t = pickedItems[i];

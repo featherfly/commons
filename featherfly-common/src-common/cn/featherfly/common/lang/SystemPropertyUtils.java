@@ -39,7 +39,7 @@ public class SystemPropertyUtils {
     public static final String USER_HOME = "user.home";
     public static final String USER_DIR = "user.dir";
 
-    public static void main(String[] args) {
+  /*  public static void main(String[] args) {
         System.out.println(getJavaCompiler());
         System.out.println(getJavaSpecificationName());
         System.out.println(getJavaSpecificationVendor());
@@ -52,7 +52,7 @@ public class SystemPropertyUtils {
         System.out.println(getJavaVmSpecificationVersion());
         System.out.println(getJavaVmVendor());
         System.out.println(getJavaVmVersion());
-    }
+    }*/
 
     //--------------------------------------------------------
     // getter

@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src-common"/>
 	<classpathentry kind="src" path="src-structure"/>
-	<classpathentry kind="src" path="src-tree"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=featherfly-Common&amp;ivyXmlPath=ivy.xml&amp;confs=*"/>
 	<classpathentry kind="output" path="bin"/>

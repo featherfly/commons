@@ -1,6 +1,9 @@
 package cn.featherfly.common.lang;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import cn.featherfly.common.constant.Chars;
 
@@ -60,10 +63,10 @@ public final class ArrayUtils {
 	 */
 	public static String toString(Object array) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(Chars.BRACK_L);
 		if (array != null) {
 			Class<?> type = array.getClass();
 			if (type.isArray()) {
+				sb.append(Chars.BRACK_L);
 				StringBuilder result = new StringBuilder();
 				for (int i = 0; i < Array.getLength(array); i++) {
 					result.append(Array.get(array, i))
@@ -72,10 +75,10 @@ public final class ArrayUtils {
 				if (result.length() > 0) {
 					result.deleteCharAt(result.length() - 1);
 				}
-				return result.toString();
+				sb.append(result.toString())
+					.append(Chars.BRACK_R);
 			}
 		}
-		sb.append(Chars.BRACK_R);
 		return sb.toString();
 	}
 
@@ -87,6 +90,7 @@ public final class ArrayUtils {
 	 * @param objects 对象数组
 	 * @return 字符串
 	 */
+	@SafeVarargs
 	public static <E> String toString(E...objects) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(Chars.BRACK_L);
@@ -99,6 +103,20 @@ public final class ArrayUtils {
 		}
 		sb.append(Chars.BRACK_R);
 		return sb.toString();
+	}
+	
+	/**
+	 * <p>
+	 * 转换为列表
+	 * </p>
+	 * @param arrays 数组
+	 * @return 列表
+	 */
+	public static <T> List<T> toList(T[] arrays) {
+		if (arrays == null) {
+			return new ArrayList<>();
+		}
+		return new ArrayList<>(Arrays.asList(arrays));
 	}
 
 	/**

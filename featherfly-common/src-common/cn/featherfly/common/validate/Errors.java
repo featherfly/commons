@@ -10,7 +10,7 @@ public class Errors {
 
     private String message;
     
-    private int code = -1;
+    private String code;
 
     private List<String> errorMessages = new ArrayList<String>();
 
@@ -20,7 +20,7 @@ public class Errors {
 	 * 返回code
 	 * @return code
 	 */
-	public int getCode() {
+	public String getCode() {
 		return code;
 	}
 
@@ -28,7 +28,7 @@ public class Errors {
 	 * 设置code
 	 * @param code code
 	 */
-	public void setCode(int code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 

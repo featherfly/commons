@@ -5,26 +5,26 @@ package cn.featherfly.common.validate;
  */
 public class FieldError {
 
-    private String field;
+    private String name;
 
     private String message;
     
     private String value;
 
 	/**
-	 * 返回field
-	 * @return field
+	 * 返回name
+	 * @return name
 	 */
-	public String getField() {
-		return field;
+	public String getName() {
+		return name;
 	}
 
 	/**
-	 * 设置field
-	 * @param field field
+	 * 设置name
+	 * @param name name
 	 */
-	public void setField(String field) {
-		this.field = field;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**

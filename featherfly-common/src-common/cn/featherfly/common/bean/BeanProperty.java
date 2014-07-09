@@ -4,6 +4,8 @@ package cn.featherfly.common.bean;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +40,9 @@ public class BeanProperty {
 	private Class<?> ownerType;
 	//属性定义所在的类（可以被子类继承）
 //	private Class<?> extendsFrom;
+//	private Collection<Annotation> annotations;
+	private Map<Class<?>, Annotation> annotationMap;
+	
 	/**
 	 * @param ownerType 当前类的类型
 	 * @param field 成员变量
@@ -51,6 +56,26 @@ public class BeanProperty {
 		this.type = field.getType();
 		this.setter = setter;
 		this.getter = getter;
+		initAnnotation();
+	}
+	
+	private void initAnnotation() {
+		annotationMap = new HashMap<Class<?>, Annotation>();		
+		if (isWritable()) {
+			for (Annotation a : setter.getAnnotations()) {
+				annotationMap.put(a.getClass(), a);
+			}
+		}
+		if (isReadable()) {
+			for (Annotation a : getter.getAnnotations()) {
+				annotationMap.put(a.getClass(), a);
+			}
+		}
+		if (field != null) {
+			for (Annotation a : field.getAnnotations()) {
+				annotationMap.put(a.getClass(), a);
+			}
+		}
 	}
 //	/**
 //	 * @param ownerType 当前类类型
@@ -100,9 +125,16 @@ public class BeanProperty {
 	 * @param obj 设置属性的目标对象
 	 * @param value 属性值
 	 */
-	public <T> void setValueForce(Object obj, T value) {
+	public void setValueForce(Object obj, Object value) {
+		if (isWritable()) {
+			setValue(obj, value);
+			return;
+		}
+		if (field == null) {
+			return;
+		}
 		checkType(obj.getClass());
-		try {
+		try {			
 			field.setAccessible(true);
 			field.set(obj, value);
 		} catch (Exception e) {
@@ -121,7 +153,7 @@ public class BeanProperty {
 		checkType(obj.getClass());
 		if (isReadable()) {
 			try {
-				return (Object) getter.invoke(obj);
+				return getter.invoke(obj);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
@@ -141,12 +173,17 @@ public class BeanProperty {
 	 * @param obj 获取属性的目标对象
 	 * @return 属性
 	 */
-	@SuppressWarnings("unchecked")
-	public <T> T getValueForce(Object obj) {
+	public Object getValueForce(Object obj) {
+		if (isReadable()) {
+			return getValue(obj);
+		}
+		if (field == null) {
+			return null;
+		}
 		checkType(obj.getClass());
 		try {
 			field.setAccessible(true);
-			return (T) field.get(obj);
+			return field.get(obj);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -192,37 +229,36 @@ public class BeanProperty {
 	 * @param annotationClass 注解类型
 	 * @return 注解
 	 */
+	@SuppressWarnings("unchecked")
 	public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
-		try {
-//			if (annotationClass == null) {
-//				return null;
-//			}
-//			A a = this.field.getAnnotation(annotationClass);
-//			if (a != null) {
-//				LOGGER.debug("在类成员变量[{}]中找到传入注释[{}]", this.field.getName(), annotationClass.getName());
-//				return a;
-//			} else {
-//				if (isReadable()) {
-//					a = this.getter.getAnnotation(annotationClass);
-//					if (a != null) {
-//						LOGGER.debug("在类方法[{}]中找到传入注释[{}]", this.getter.getName(), annotationClass.getName());
-//						return a;
-//					}
-//				}
-//				if (isWritable()) {
-//					a = this.getter.getAnnotation(annotationClass);
-//					if (a != null) {
-//						LOGGER.debug("在类方法[{}]中找到传入注释[{}]", this.setter.getName(), annotationClass.getName());
-//						return a;
-//					}
-//				}
-//			}
+//		if (annotationClass == null) {
+//			return null;
+//		}
+//		A a = null;
+//		if (this.field != null) {
+//			a = this.field.getAnnotation(annotationClass);
+//		}
+//		if (a != null) {
+//			LOGGER.debug("在类成员变量[{}]中找到传入注解[{}]", this.field.getName(), annotationClass.getName());
 //			return a;
-
-			return this.field.getAnnotation(annotationClass);
-		} catch (NullPointerException e) {
-			return null;
-		}
+//		} else {
+//			if (isReadable()) {
+//				a = this.getter.getAnnotation(annotationClass);
+//				if (a != null) {
+//					LOGGER.debug("在类方法[{}]中找到传入注解[{}]", this.getter.getName(), annotationClass.getName());
+//					return a;
+//				}
+//			}
+//			if (isWritable()) {
+//				a = this.setter.getAnnotation(annotationClass);
+//				if (a != null) {
+//					LOGGER.debug("在类方法[{}]中找到传入注解[{}]", this.setter.getName(), annotationClass.getName());
+//					return a;
+//				}
+//			}
+//		}
+		return (A) annotationMap.get(annotationClass);
+//		return this.field.getAnnotation(annotationClass);
 	}
 
 	/**

@@ -71,10 +71,12 @@ public class BeanDescriptor<T> {
 	 */
 	protected BeanDescriptor(Class<T> type) {
 		this.type = type;
+		this.init(this.type);
 	}
 
 	//初始化
 	private void init(Class<?> parent) {
+		// TODO 从field查找完成再查找set,get方法，单纯的设置、读取方法，没有field，用于动态读取、设置
 		if (null == parent || parent == Object.class) {
 			return ;
 		}
@@ -83,13 +85,7 @@ public class BeanDescriptor<T> {
 			Method getter = ClassUtils.getGetter(field, this.type);
 			Method setter = ClassUtils.getSetter(field, this.type);
 			if (getter != null || setter != null) {
-				BeanProperty prop = null;
-				prop = FACTORY.create(this.type, field, setter, getter);
-//				if (useByteCode) {
-//					prop = JavassistBeanPropertyFactory.create(this.type, field, setter, getter);
-//				} else {
-//					prop = new BeanProperty(this.type, field, setter, getter);
-//				}
+				BeanProperty prop = FACTORY.create(this.type, field, setter, getter);
 				beanProperties.put(prop.getName(), prop);
 				if (LOGGER.isTraceEnabled() && parent != this.type) {
 					LOGGER.trace("类{}从父类{}中继承的属性：[{}]",
@@ -356,8 +352,7 @@ public class BeanDescriptor<T> {
 			if (ClassUtils.isParent(Map.class, type)) {
 				bd = new MapBeanDescriptor<T>(type);
 			} else {
-				bd = new BeanDescriptor<T>(type);
-				bd.init(type);
+				bd = new BeanDescriptor<T>(type);				
 			}
 			BEAN_DESCRIPTORS.put(type, bd);
 		}

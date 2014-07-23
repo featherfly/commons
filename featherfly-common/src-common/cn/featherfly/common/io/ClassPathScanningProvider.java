@@ -15,7 +15,9 @@ import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.SystemPropertyUtils;
 
+import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
+import cn.featherfly.common.lang.LangUtils;
 
 
 /**
@@ -74,6 +76,21 @@ public class ClassPathScanningProvider{
 			}
 		} catch (IOException ex) {
 			throw new RuntimeException("扫描classpath时I/O异常", ex);
+		}
+		return metaSet;
+	}
+	/**
+	 * 扫描CLASSPATH指定包名前缀的类
+	 * @param basePackages 基础包名数组
+	 * @return 元数据集合
+	 */
+	public Set<MetadataReader> findMetadata(String...basePackages) {		
+		Set<MetadataReader> metaSet = new LinkedHashSet<MetadataReader>();		
+		if (LangUtils.isNotEmpty(basePackages)) {
+			LOGGER.debug("扫描basePackages: " + ArrayUtils.toString(basePackages));
+			for (String basePackage : basePackages) {
+				metaSet.addAll(findMetadata(basePackage));
+			}
 		}
 		return metaSet;
 	}

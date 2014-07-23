@@ -9,7 +9,6 @@ package cn.featherfly.common.structure.tree;
  * @author 钟冀
  */
 public interface TreeNode<O> extends TreeNodeModel<TreeNode<O>>{
-	
 	/**
 	 * 返回nodeObject
 	 * @return nodeObject
@@ -22,5 +21,5 @@ public interface TreeNode<O> extends TreeNodeModel<TreeNode<O>>{
 	 * @param object 对象
 	 * @return 节点存放的对象
 	 */
-	void setNodeObject(O object);	
+	void setNodeObject(O object);
 }

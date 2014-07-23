@@ -5,6 +5,7 @@
 package cn.featherfly.common.structure.tree;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.structure.tree.matcher.TreeNodeEqualsMatcher;
 
 /**
  * <p>
@@ -48,7 +50,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
 	private int depth = ROOT_DEPTH;
 
 	private List<TreeNode<E>> childNodes = new ArrayList<TreeNode<E>>();
-
+		
 	// ********************************************************************
 	//	constractor
 	// ********************************************************************
@@ -174,7 +176,10 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
 		if (progeny == null) {
 			return null;
 		}
-		return findProgeny(progeny.getId());
+		// TODO 使用matcher重写
+		TreeNodeMatcher<TreeNode<E>> matcher = new TreeNodeEqualsMatcher<TreeNode<E>>(progeny);
+		return findTreeNode(matcher, this.getChildNodes());
+//		return findProgeny(progeny.getId());
 	}
 	/**
 	 * {@inheritDoc}
@@ -205,8 +210,24 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
 		if (matcher.match(treeNode)) {
 			return treeNode;
 		} else {
-			List<TreeNode<E>> childs = treeNode.getChildNodes();
-			Iterator<TreeNode<E>> iter = childs.iterator();
+			findTreeNode(matcher, treeNode.getChildNodes());
+//			List<TreeNode<E>> childs = treeNode.getChildNodes();
+//			Iterator<TreeNode<E>> iter = childs.iterator();
+//			while (iter.hasNext()) {
+//				TreeNode<E> child = iter.next();
+//				TreeNode<E> result = null;
+//				result = ((SimpleTreeNode<E>) child).findTreeNode(matcher, child);
+//				if (result != null) {
+//					return result;
+//				}
+//			}
+		}
+		return null;
+	}
+	
+	private TreeNode<E> findTreeNode(TreeNodeMatcher<TreeNode<E>> matcher, Collection<TreeNode<E>> treeNodes) {
+		if (LangUtils.isNotEmpty(treeNodes)) {
+			Iterator<TreeNode<E>> iter = treeNodes.iterator();
 			while (iter.hasNext()) {
 				TreeNode<E> child = iter.next();
 				TreeNode<E> result = null;
@@ -226,13 +247,19 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
 		if (node == null) {
 			return null;
 		}
-		return findTreeNode(node.getId());
+		// TODO 使用matcher重写，写死的matcher
+		TreeNodeMatcher<TreeNode<E>> matcher = new TreeNodeEqualsMatcher<TreeNode<E>>(node);
+		return findTreeNode(matcher);
+//		return findTreeNode(node.getId());
+		
+		
 	}
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public TreeNode<E> findTreeNode(String nodeId) {
+		// TODO 这种基于ID的方法是否需要删除
 		if (nodeId == null || "".equals(nodeId)) {
 			return null;
 		}

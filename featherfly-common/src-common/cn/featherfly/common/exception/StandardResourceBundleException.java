@@ -11,6 +11,7 @@ import cn.featherfly.common.i18n.JdkResourceBundleFactory;
 import cn.featherfly.common.i18n.ResourceBundleFactory;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.LogUtils;
 import cn.featherfly.common.lang.ServiceLoaderUtils;
 
 
@@ -141,9 +142,8 @@ public abstract class StandardResourceBundleException extends RuntimeException{
 			f.setAccessible(true);
 			f.set(this, msg);
 			f.setAccessible(false);
-		} catch (Exception e) {
-		
-			e.printStackTrace();
+		} catch (Exception e) {		
+			LogUtils.error(e, logger);
 		}
 	}
 	

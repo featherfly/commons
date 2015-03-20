@@ -1,7 +1,9 @@
 
-package cn.featherfly.common.storage;
+package cn.featherfly.common.storage.file;
 
 import java.io.File;
+
+import cn.featherfly.common.storage.Storage;
 
 /**
  * <p>

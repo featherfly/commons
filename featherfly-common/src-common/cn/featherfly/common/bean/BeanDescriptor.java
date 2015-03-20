@@ -71,11 +71,11 @@ public class BeanDescriptor<T> {
 	 */
 	protected BeanDescriptor(Class<T> type) {
 		this.type = type;
-		this.init(this.type);
+		this.initField(this.type);
 	}
 
-	//初始化
-	private void init(Class<?> parent) {
+	//从field开始初始化
+	private void initField(Class<?> parent) {
 		// TODO 从field查找完成再查找set,get方法，单纯的设置、读取方法，没有field，用于动态读取、设置
 		if (null == parent || parent == Object.class) {
 			return ;
@@ -94,8 +94,21 @@ public class BeanDescriptor<T> {
 			}
 		}
 		//到父类中查找属性
-		init(parent.getSuperclass());
+		initField(parent.getSuperclass());
 	}
+//	// 初始化动态set get方法
+//	private void initMethod() {
+//		for (Method method : this.type.getMethods()) {
+//			if (ClassUtils.isGetter(method) && beanProperties.containsKey(method.getName())) {
+//				
+//			}
+//		}
+//		for (Method method : this.type.getMethods()) {
+//			if (ClassUtils.isSetter(method)) {
+//				
+//			}
+//		}
+//	}
 
 	/**
 	 * @return 返回beanProperties
@@ -141,7 +154,6 @@ public class BeanDescriptor<T> {
 	 * @return 指定属性
 	 */
 	public BeanProperty getChildBeanProperty(String name) {
-		BeanProperty beanProperty = null;
 		if (name.contains(DOT)) {
 			String currentPropertyName = name.substring(0, name.indexOf(DOT));
 			String innerPropertyName = name.substring(name.indexOf(DOT) + 1);
@@ -149,13 +161,8 @@ public class BeanDescriptor<T> {
 			BeanDescriptor<?> propertyDescriptor = getBeanDescriptor(property.getType());
 			return propertyDescriptor.getChildBeanProperty(innerPropertyName);
 		} else {
-			beanProperty = (BeanProperty) beanProperties.get(name);
-			if (beanProperty == null) {
-				throw new NoSuchPropertyException(type, name);
-			}
+			return getBeanProperty(name);
 		}
-
-		return beanProperty;
 	}
 
 	/**

@@ -29,4 +29,12 @@ public interface Storage<E, ID> {
 	 * @return 对象
 	 */
 	E retrieve(ID id);
+	/**
+	 * <p>
+	 * 删除对象
+	 * </p>
+	 * @param id 对象唯一标示
+	 * @return 对象
+	 */
+	boolean delete(ID id);
 }

@@ -1,0 +1,156 @@
+apply plugin: "java"
+apply plugin: "ivy-publish"
+apply plugin: 'maven'  
+apply plugin: 'signing'
+apply plugin: 'eclipse'
+
+group = 'cn.featherfly'
+version = '1.2.1'
+
+sourceCompatibility = 1.7  
+targetCompatibility = 1.7  
+
+tasks.withType(Compile) {
+    options.encoding = "UTF-8"
+}
+tasks.withType(Javadoc) {
+    options.encoding = "UTF-8"
+}
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src-common", "src-structure"]
+        }
+    }
+}
+		
+compileDependencies =[
+		"org.slf4j:slf4j-api:1.7.7"
+		,"commons-lang:commons-lang:2.6"
+		,'commons-io:commons-io:2.4'
+		,"commons-collections:commons-collections:3.2.1" 
+		,"org.springframework:spring-core:4.0.5.RELEASE"
+		,'com.fasterxml.jackson.core:jackson-databind:2.4.1.2'		
+					] 
+
+publishRepo = "d:/store/ivy2/gradle_publish"
+
+repositories {
+	mavenCentral()
+	ivy {
+		url publishRepo
+	}
+}
+
+task sourcesJar(type: Jar) {
+	classifier "sources"
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn:javadoc) { 
+     classifier = "javadoc"
+     from javadoc.destinationDir 
+}
+
+artifacts {  
+    archives jar  
+    archives javadocJar  
+    archives sourcesJar  
+}  
+  
+//为所有的jar包做数字签名  
+signing {  
+    sign configurations.archives  
+}  
+
+uploadArchives {  
+    repositories {  
+        mavenDeployer {  
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) } 
+            repository(url:"https://oss.sonatype.org/service/local/staging/deploy/maven2") {  
+                authentication(userName: 'yufei', password: 'yufeimvn101')  
+            }  
+            pom.project {  
+                name project.name  
+                packaging 'jar'
+                description 'common tool'  
+                url 'https://github.com/featherfly/common.git'  
+                scm {  
+                    url 'scm:git@github.com:featherfly/common.git'  
+                    connection 'scm:git@github.com:featherfly/common.git'  
+                    developerConnection 'git@github.com:featherfly/common.git'  
+                }  
+                licenses {  
+                    license {  
+                        name 'The Apache Software License, Version 2.0'  
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'  
+                        distribution 'repo'  
+                    }  
+                }  
+                developers {  
+                    developer {  
+                        id 'featherfly'  
+                        name 'Yufei'
+                    }  
+                }  
+            }  
+        }  
+    }  
+}
+
+publishing {
+    publications {
+    	ivy(IvyPublication) {
+            artifact jar{
+        		from components.java
+        	}
+            artifact (sourcesJar){
+            	type "source"
+            }
+			artifact (javadocJar) {
+				type "javadoc"
+			}
+			descriptor.withXml {
+                for (def depend : compileDependencies)  {
+                	def deps = depend.split(':')
+                	asNode().dependencies[0].appendNode("dependency",
+                					['org' : deps[0] , 'name' : deps[1], 'rev' : deps[2]])
+				}                
+            }
+            
+        }
+    }    
+    repositories {
+        ivy {
+            url publishRepo
+        }        
+    }
+}
+  
+dependencies {
+	for (def depend : compileDependencies)  {
+		compile (depend)
+	}
+    testCompile (
+    	'org.testng:testng:6.8.8'
+    )
+}
+/*
+test {
+    useTestNG()
+    testLogging.showStandardStreams = true
+    minHeapSize = "128m"
+    maxHeapSize = "512m"
+    jvmArgs '-XX:MaxPermSize=256m'
+    beforeTest { descriptor ->
+        logger.lifecycle("Running test: " + descriptor)
+    }
+    onOutput { descriptor, event ->
+        logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message)
+    }
+}
+*/
+jar {
+    manifest.attributes buildBy: "zhong ji"
+    manifest.attributes provider: "gradle"
+}

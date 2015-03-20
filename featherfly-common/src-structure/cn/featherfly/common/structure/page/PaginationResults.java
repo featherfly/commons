@@ -9,7 +9,7 @@ package cn.featherfly.common.structure.page;
  *
  * @author 钟冀
  */
-public interface PaginationResults<E> extends Pagination<E>{
+public interface PaginationResults<E> extends Pagination{
 	/**
 	 * <p>
 	 * 获取结果集

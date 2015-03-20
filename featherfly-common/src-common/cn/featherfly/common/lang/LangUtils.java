@@ -245,4 +245,26 @@ public final class LangUtils {
 		}
 		return null;
 	}
+	
+	/**
+	 * <p>
+	 * 转换为String，如果不能转换（null）则使用默认值
+	 * </p>
+	 * @param obj obj
+	 * @param defaultValue defaultValue
+	 * @return string
+	 */
+	public static String toString(Object obj, String defaultValue) {
+		return obj != null ? obj.toString() : defaultValue;
+	}
+	/**
+	 * <p>
+	 * 转换为String，如果不能转换（null）则返回null
+	 * </p>
+	 * @param obj obj
+	 * @return string
+	 */
+	public static String toString(Object obj) {
+		return toString(obj, null);
+	}
 }

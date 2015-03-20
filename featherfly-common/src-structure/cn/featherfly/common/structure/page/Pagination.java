@@ -9,7 +9,7 @@ package cn.featherfly.common.structure.page;
  *
  * @author 钟冀
  */
-public interface Pagination<E> {
+public interface Pagination {
 	/**
 	 * <p>
 	 * 获取每页数量

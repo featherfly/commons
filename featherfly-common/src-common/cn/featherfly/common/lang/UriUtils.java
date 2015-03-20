@@ -74,6 +74,9 @@ public final class UriUtils {
 		if (ignoreCaseEmpty && StringUtils.isEmpty(startUri)) {
 			return endUri;
 		}
+		if (ignoreCaseEmpty && StringUtils.isEmpty(endUri)) {
+			return startUri;
+		}
 		startUri = removeEndSeparator(startUri);
 		endUri = removeStartAndEndSeparator(endUri);
 		return startUri + UriUtils.SEPARATOR + endUri;

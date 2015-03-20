@@ -4,8 +4,8 @@ package cn.featherfly.common.bean;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collection;
+import java.util.HashSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +40,7 @@ public class BeanProperty {
 	private Class<?> ownerType;
 	//属性定义所在的类（可以被子类继承）
 //	private Class<?> extendsFrom;
-//	private Collection<Annotation> annotations;
-	private Map<Class<?>, Annotation> annotationMap;
+	private Collection<Annotation> annotations;
 	
 	/**
 	 * @param ownerType 当前类的类型
@@ -60,20 +59,20 @@ public class BeanProperty {
 	}
 	
 	private void initAnnotation() {
-		annotationMap = new HashMap<Class<?>, Annotation>();		
+		annotations = new HashSet<>();
 		if (isWritable()) {
 			for (Annotation a : setter.getAnnotations()) {
-				annotationMap.put(a.getClass(), a);
+				annotations.add(a);
 			}
 		}
 		if (isReadable()) {
 			for (Annotation a : getter.getAnnotations()) {
-				annotationMap.put(a.getClass(), a);
+				annotations.add(a);
 			}
 		}
 		if (field != null) {
 			for (Annotation a : field.getAnnotations()) {
-				annotationMap.put(a.getClass(), a);
+				annotations.add(a);
 			}
 		}
 	}
@@ -229,11 +228,19 @@ public class BeanProperty {
 	 * @param annotationClass 注解类型
 	 * @return 注解
 	 */
-	@SuppressWarnings("unchecked")
+	
 	public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
-//		if (annotationClass == null) {
-//			return null;
-//		}
+		if (annotationClass == null) {
+			return null;
+		}
+		for (Annotation annotation : annotations) {
+			if (annotation.annotationType().equals(annotationClass)) {
+				@SuppressWarnings("unchecked")
+				A a = (A) annotation;
+				return a;
+			}
+		}
+		return null;
 //		A a = null;
 //		if (this.field != null) {
 //			a = this.field.getAnnotation(annotationClass);
@@ -241,23 +248,23 @@ public class BeanProperty {
 //		if (a != null) {
 //			LOGGER.debug("在类成员变量[{}]中找到传入注解[{}]", this.field.getName(), annotationClass.getName());
 //			return a;
-//		} else {
-//			if (isReadable()) {
-//				a = this.getter.getAnnotation(annotationClass);
-//				if (a != null) {
-//					LOGGER.debug("在类方法[{}]中找到传入注解[{}]", this.getter.getName(), annotationClass.getName());
-//					return a;
-//				}
-//			}
-//			if (isWritable()) {
-//				a = this.setter.getAnnotation(annotationClass);
-//				if (a != null) {
-//					LOGGER.debug("在类方法[{}]中找到传入注解[{}]", this.setter.getName(), annotationClass.getName());
-//					return a;
-//				}
+//		}
+//		
+//		if (isReadable()) {
+//			a = this.getter.getAnnotation(annotationClass);
+//			if (a != null) {
+//				LOGGER.debug("在类方法[{}]中找到传入注解[{}]", this.getter.getName(), annotationClass.getName());
+//				return a;
 //			}
 //		}
-		return (A) annotationMap.get(annotationClass);
+//		if (isWritable()) {
+//			a = this.setter.getAnnotation(annotationClass);
+//			if (a != null) {
+//				LOGGER.debug("在类方法[{}]中找到传入注解[{}]", this.setter.getName(), annotationClass.getName());
+//				return a;
+//			}
+//		}
+//		return null;		
 //		return this.field.getAnnotation(annotationClass);
 	}
 
@@ -268,7 +275,8 @@ public class BeanProperty {
 	 * @return 当前属性的所有注解
 	 */
 	public Annotation[] getAnnotations() {
-		return this.field.getAnnotations();
+//		return this.field.getAnnotations();
+		return annotations.toArray(new Annotation[]{});
 	}
 
 	/**

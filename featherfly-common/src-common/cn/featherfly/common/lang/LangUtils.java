@@ -227,7 +227,7 @@ public final class LangUtils {
 	 * @param object 需要转换的对象
 	 * @return 转换后的枚举，如果是无法转换或不存在的枚举类型，则返回null
 	 */
-	public static <T extends Enum<T>> Enum<T> toEnum(Class<T> toClass, Object object) {
+	public static <T extends Enum<T>> T toEnum(Class<T> toClass, Object object) {
 		if (object != null) {
 			if (object instanceof String[]) {
 				return Enum.valueOf(toClass, ((String[])(String[])object)[0]);
@@ -235,10 +235,10 @@ public final class LangUtils {
 				return Enum.valueOf(toClass, (String)object);
 			} else if (object instanceof Integer || object.getClass() == int.class) {
 				Integer ordinal = (Integer) object;
-				Enum<T>[] es = (Enum<T>[]) toClass.getEnumConstants();
-				for (Enum<T> e : es) {
+				T[] es = (T[]) toClass.getEnumConstants();
+				for (T e : es) {
 					if (e.ordinal() == ordinal) {
-						return e;
+						return (T) e;
 					}
 				}
 			}

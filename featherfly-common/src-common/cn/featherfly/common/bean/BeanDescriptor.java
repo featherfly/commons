@@ -115,7 +115,7 @@ public class BeanDescriptor<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<BeanProperty> getBeanProperties() {
-		return beanProperties.valueList();
+		return beanProperties.values();
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class BeanDescriptor<T> {
 	 * @return 指定属性
 	 */
 	public BeanProperty getBeanProperty(int index) {
-		return (BeanProperty) beanProperties.valueList().get(index);
+		return (BeanProperty) beanProperties.getValue(index);
 	}
 
 	/**

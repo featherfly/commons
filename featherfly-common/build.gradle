@@ -1,16 +1,17 @@
 apply plugin: "java"
 apply plugin: "ivy-publish"
 apply plugin: 'maven'  
+apply plugin: 'maven-publish'  
 apply plugin: 'signing'
 apply plugin: 'eclipse'
 
 group = 'cn.featherfly'
-version = '1.2.1'
+version = '1.2.2'
 
 sourceCompatibility = 1.7  
 targetCompatibility = 1.7  
 
-tasks.withType(Compile) {
+tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 tasks.withType(Javadoc) {
@@ -24,16 +25,18 @@ sourceSets {
     }
 }
 		
-compileDependencies =[
-		"org.slf4j:slf4j-api:1.7.7"
+ext {
+	compileDependencies =[
+		"org.slf4j:slf4j-api:1.7.12"
 		,"commons-lang:commons-lang:2.6"
 		,'commons-io:commons-io:2.4'
-		,"commons-collections:commons-collections:3.2.1" 
-		,"org.springframework:spring-core:4.0.5.RELEASE"
-		,'com.fasterxml.jackson.core:jackson-databind:2.4.1.2'		
-					] 
+		,'commons-collections:commons-collections:3.2.1'
+		,"org.springframework:spring-core:4.1.6.RELEASE"
+		,'com.fasterxml.jackson.core:jackson-databind:2.5.2'		
+					]
+	publishRepo = ant.properties['user.home'] + "/.repository/ivy2/gradle_publish"	
+}
 
-publishRepo = "d:/store/ivy2/gradle_publish"
 
 repositories {
 	mavenCentral()
@@ -44,7 +47,7 @@ repositories {
 
 task sourcesJar(type: Jar) {
 	classifier "sources"
-    from sourceSets.main.allJava
+    from sourceSets.main.java.srcDirs
 }
 
 task javadocJar(type: Jar, dependsOn:javadoc) { 
@@ -101,9 +104,7 @@ uploadArchives {
 publishing {
     publications {
     	ivy(IvyPublication) {
-            artifact jar{
-        		from components.java
-        	}
+       		from components.java
             artifact (sourcesJar){
             	type "source"
             }
@@ -117,7 +118,15 @@ publishing {
                 					['org' : deps[0] , 'name' : deps[1], 'rev' : deps[2]])
 				}                
             }
-            
+        }
+		mavenJava(MavenPublication) {
+        	from components.java
+            artifact (sourcesJar) {
+             	classifier "source"
+            }
+			artifact (javadocJar) {
+				classifier "javadoc"
+			}
         }
     }    
     repositories {

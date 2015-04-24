@@ -204,20 +204,6 @@
         </ivy:publish>
 	</target>
 	
-	<target name="publish_gradle"
-        description="--> Publish gradle" depends="resolve">
-		<property name="ivysettings_gradle" value="${user.home}/.ivy2/ivysettings_gradle.xml" />
-		<ivy:settings id="settings_gradle" file="${ivysettings_gradle}"/>
-		<ivy:publish resolver="gradle-publish"
-				revision="${version}"
-	            update="true"
-	            overwrite="true"
-				settingsref="settings_gradle">			
-			<artifacts pattern="[artifact]-[revision](-[classifier]).[ext]"/>
-            <artifacts pattern="[artifact]-[revision].[ext]" />
-        </ivy:publish>
-	</target>
-
 	<!-- 删除编译临时目录 -->
 	<target name="clear" depends="moveRelease,publish,clear_only">
 	</target>
@@ -249,8 +235,6 @@
 	</target>
 	
 	<target name="publish_clear" depends="jarSources,publish,clear_only">
-	</target>
-	<target name="publish_both_clear" depends="jarSources,publish,publish_gradle,clear_only">
 	</target>
 
 	<target name="build" depends="clear,zip_project_move">

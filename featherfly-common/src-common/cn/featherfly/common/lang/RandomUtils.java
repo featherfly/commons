@@ -35,16 +35,22 @@ public final class RandomUtils {
 
 	/**
 	 * <p>
-	 * 字符类型
+	 * 字符类型.
 	 * </p>
 	 */
 	public static enum CharType {
 		/**
 		 * lowerCase	小写字母
+		 */
+		LOWER_CASE, 
+		/**
 		 * upperCase	大写字母
+		 */
+		UPPER_CASE,
+		/**
 		 * numberCase	数字
 		 */
-		lowerCase, upperCase, numberCase
+		NUMBER_CASE
 	}
 	private static Random random = new Random();
 	/**
@@ -175,11 +181,11 @@ public final class RandomUtils {
 		boolean[] signTemp = new boolean[]{false, false, false};
 		for (int i = 0; charTypes != null && i < charTypes.length; i++) {
 			CharType type = charTypes[i];
-			if (type == CharType.lowerCase) {
+			if (type == CharType.LOWER_CASE) {
 				signTemp[0] = true;
-			} else if (type == CharType.upperCase) {
+			} else if (type == CharType.UPPER_CASE) {
 				signTemp[1] = true;
-			} else if (type == CharType.numberCase) {
+			} else if (type == CharType.NUMBER_CASE) {
 				signTemp[2] = true;
 			}
 		}

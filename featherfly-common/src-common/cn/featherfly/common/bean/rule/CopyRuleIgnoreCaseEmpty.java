@@ -12,20 +12,20 @@ import cn.featherfly.common.lang.LangUtils;
  */
 public class CopyRuleIgnoreCaseEmpty implements CopyRule{
 
-	/**
-	 *
-	 */
-	public CopyRuleIgnoreCaseEmpty() {
-	}
+    /**
+     *
+     */
+    public CopyRuleIgnoreCaseEmpty() {
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean isCopyEnabled(Object target, Object from, String propertyName, Object propertyValue) {
-		if (LangUtils.isEmpty(propertyValue)) {
-			return false;
-		}
-		return true;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isCopyEnabled(Object target, Object from, String propertyName, Object propertyValue) {
+        if (LangUtils.isEmpty(propertyValue)) {
+            return false;
+        }
+        return true;
+    }
 }

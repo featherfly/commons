@@ -11,21 +11,21 @@ package cn.featherfly.common.io.file.rename;
  */
 public class TimestampRenamePolicy extends AbstractExtNameRenamePolicy{
 
-	/**
-	 */
-	public TimestampRenamePolicy() {
-	}
+    /**
+     */
+    public TimestampRenamePolicy() {
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String rename(String fileName) {
-		return appendExtName(System.currentTimeMillis() + "", fileName);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String rename(String fileName) {
+        return appendExtName(System.currentTimeMillis() + "", fileName);
+    }
 
-	// ********************************************************************
-	//	property
-	// ********************************************************************
+    // ********************************************************************
+    //    property
+    // ********************************************************************
 
 }

@@ -17,73 +17,73 @@ import cn.featherfly.common.storage.Storage;
  */
 public abstract class RemoteStorage<E, ID> implements Storage<E, ID>{
 
-	/**
-	 * 日志
-	 */
-	protected Logger logger = LoggerFactory.getLogger(this.getClass());
+    /**
+     * 日志
+     */
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	/**
-	 */
-	public RemoteStorage() {
-	}
+    /**
+     */
+    public RemoteStorage() {
+    }
 
-	// ********************************************************************
-	//	protected method
-	// ********************************************************************
+    // ********************************************************************
+    //    protected method
+    // ********************************************************************
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		return getProtocol() + "://" + getHost() + ":" + getPort();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return getProtocol() + "://" + getHost() + ":" + getPort();
+    }
 
-	/**
-	 * <p>
-	 * 获取协议
-	 * </p>
-	 * @return 协议
-	 */
-	protected abstract String getProtocol();
+    /**
+     * <p>
+     * 获取协议
+     * </p>
+     * @return 协议
+     */
+    protected abstract String getProtocol();
 
-	// ********************************************************************
-	//	property
-	// ********************************************************************
+    // ********************************************************************
+    //    property
+    // ********************************************************************
 
-	private String host;
+    private String host;
 
-	private Integer port;
+    private Integer port;
 
-	/**
-	 * 返回host
-	 * @return host
-	 */
-	public String getHost() {
-		return host;
-	}
+    /**
+     * 返回host
+     * @return host
+     */
+    public String getHost() {
+        return host;
+    }
 
-	/**
-	 * 设置host
-	 * @param host host
-	 */
-	public void setHost(String host) {
-		this.host = host;
-	}
+    /**
+     * 设置host
+     * @param host host
+     */
+    public void setHost(String host) {
+        this.host = host;
+    }
 
-	/**
-	 * 返回port
-	 * @return port
-	 */
-	public Integer getPort() {
-		return port;
-	}
+    /**
+     * 返回port
+     * @return port
+     */
+    public Integer getPort() {
+        return port;
+    }
 
-	/**
-	 * 设置port
-	 * @param port port
-	 */
-	public void setPort(Integer port) {
-		this.port = port;
-	}
+    /**
+     * 设置port
+     * @param port port
+     */
+    public void setPort(Integer port) {
+        this.port = port;
+    }
 }

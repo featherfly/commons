@@ -10,21 +10,21 @@ import java.lang.reflect.Field;
  * @author 钟冀
  */
 public class FieldNameRegexMatcher extends MemberNameRegexMatcher<Field>
-	implements FieldMatcher {
+    implements FieldMatcher {
 
-	/**
-	 *
-	 * @param nameRegex 名称匹配的正则表达式（使用大小写敏感模式）
-	 */
-	public FieldNameRegexMatcher(String nameRegex) {
-		super(nameRegex);
-	}
-	/**
-	 *
-	 * @param nameRegex 名称匹配的正则表达式
-	 * @param flags 正则模式 
-	 */
-	public FieldNameRegexMatcher(String nameRegex, int flags) {
-		super(nameRegex, flags);
-	}
+    /**
+     *
+     * @param nameRegex 名称匹配的正则表达式（使用大小写敏感模式）
+     */
+    public FieldNameRegexMatcher(String nameRegex) {
+        super(nameRegex);
+    }
+    /**
+     *
+     * @param nameRegex 名称匹配的正则表达式
+     * @param flags 正则模式 
+     */
+    public FieldNameRegexMatcher(String nameRegex, int flags) {
+        super(nameRegex, flags);
+    }
 }

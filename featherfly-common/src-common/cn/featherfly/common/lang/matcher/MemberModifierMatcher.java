@@ -13,28 +13,28 @@ import cn.featherfly.common.lang.reflect.Modifier;
  * @author 钟冀
  */
 public class MemberModifierMatcher<T extends Member> extends AbstractMemberMatcher<T>{
-	
-	private Modifier modifier = Modifier.PUBLIC;
-	
-	/**
-	 */
-	public MemberModifierMatcher() {
-	}
-	
-	/**
-	 */
-	public MemberModifierMatcher(Modifier modifier) {		
-		this.modifier = modifier;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean match(T member) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("目标成员 Modifiers {} 匹配 {}", java.lang.reflect.Modifier.toString(member.getModifiers()), Modifier.PUBLIC);
-		}
-		return this.modifier.isModifier(member.getModifiers());
-	}
+    
+    private Modifier modifier = Modifier.PUBLIC;
+    
+    /**
+     */
+    public MemberModifierMatcher() {
+    }
+    
+    /**
+     */
+    public MemberModifierMatcher(Modifier modifier) {        
+        this.modifier = modifier;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean match(T member) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("目标成员 Modifiers {} 匹配 {}", java.lang.reflect.Modifier.toString(member.getModifiers()), Modifier.PUBLIC);
+        }
+        return this.modifier.isModifier(member.getModifiers());
+    }
 }

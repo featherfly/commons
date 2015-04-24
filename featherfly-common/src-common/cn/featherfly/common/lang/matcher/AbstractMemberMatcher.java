@@ -14,13 +14,13 @@ import org.slf4j.LoggerFactory;
  * @author 钟冀
  */
 public abstract class AbstractMemberMatcher<T extends Member> implements MemberMatcher<T>{
-	/**
-	 * logger
-	 */
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-		
-	/**
-	 */
-	public AbstractMemberMatcher() {		
-	}
+    /**
+     * logger
+     */
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+        
+    /**
+     */
+    public AbstractMemberMatcher() {        
+    }
 }

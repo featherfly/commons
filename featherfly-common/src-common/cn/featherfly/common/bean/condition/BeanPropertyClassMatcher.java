@@ -11,26 +11,26 @@ import cn.featherfly.common.bean.BeanProperty;
  */
 public class BeanPropertyClassMatcher implements BeanPropertyMatcher{
 
-	private Class<?>[] propertyClasses;
+    private Class<?>[] propertyClasses;
 
-	/**
-	 * 使用交集判断逻辑来匹配.
-	 * @param propertyClasses 属性类型
-	 */
-	public BeanPropertyClassMatcher(Class<?>...propertyClasses) {
-		this.propertyClasses = propertyClasses;
-	}
+    /**
+     * 使用交集判断逻辑来匹配.
+     * @param propertyClasses 属性类型
+     */
+    public BeanPropertyClassMatcher(Class<?>...propertyClasses) {
+        this.propertyClasses = propertyClasses;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean match(BeanProperty<?> beanProperty) {
-		for (Class<?> propertyClass : propertyClasses) {
-			if (beanProperty.getType() == propertyClass) {
-				return true;
-			}
-		}
-		return false;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean match(BeanProperty<?> beanProperty) {
+        for (Class<?> propertyClass : propertyClasses) {
+            if (beanProperty.getType() == propertyClass) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

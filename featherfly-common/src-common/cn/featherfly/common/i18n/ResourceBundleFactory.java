@@ -1,4 +1,3 @@
-
 package cn.featherfly.common.i18n;
 
 import java.util.Locale;
@@ -11,15 +10,15 @@ import java.util.Locale;
  * @author 钟冀
  */
 public interface ResourceBundleFactory {
-	/**
-	 * <p>
-	 * getBundle
-	 * </p>
-	 * @param baseName
+    /**
+     * <p>
+     * getBundle
+     * </p>
+     * @param baseName
      *        the base name of the resource bundle, a fully qualified class name
      * @param locale
      *        the locale for which a resource bundle is desired
-	 * @return
-	 */
-	public ResourceBundle getBundle(String baseName, Locale locale);
+     * @return ResourceBundle
+     */
+    ResourceBundle getBundle(String baseName, Locale locale);
 }

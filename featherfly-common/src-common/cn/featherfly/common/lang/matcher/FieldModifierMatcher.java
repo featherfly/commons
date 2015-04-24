@@ -13,16 +13,16 @@ import cn.featherfly.common.lang.reflect.Modifier;
  * @author 钟冀
  */
 public class FieldModifierMatcher extends MemberModifierMatcher<Field>
-	implements FieldMatcher{
-	
-	/**
-	 */
-	public FieldModifierMatcher() {
-	}
-	
-	/**
-	 */
-	public FieldModifierMatcher(Modifier modifier) {		
-		super(modifier);
-	}
+    implements FieldMatcher{
+    
+    /**
+     */
+    public FieldModifierMatcher() {
+    }
+    
+    /**
+     */
+    public FieldModifierMatcher(Modifier modifier) {        
+        super(modifier);
+    }
 }

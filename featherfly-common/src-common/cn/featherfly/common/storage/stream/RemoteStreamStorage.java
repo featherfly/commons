@@ -12,10 +12,10 @@ import java.io.InputStream;
  * @author 钟冀
  */
 public abstract class RemoteStreamStorage extends RemoteStorage<InputStream, String>
-	implements StreamStorage {
+    implements StreamStorage {
 
-	/**
-	 */
-	public RemoteStreamStorage() {
-	}
+    /**
+     */
+    public RemoteStreamStorage() {
+    }
 }

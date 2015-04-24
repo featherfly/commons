@@ -13,29 +13,29 @@ import cn.featherfly.common.enums.Logic;
  * @author 钟冀
  */
 public class MethodGroupMatcher extends MemberGroupMatcher<Method>
-	implements MethodMatcher{
-	
-	/**
-	 * 
-	 */
-	public MethodGroupMatcher() {
-		super();
-	}
+    implements MethodMatcher{
+    
+    /**
+     * 
+     */
+    public MethodGroupMatcher() {
+        super();
+    }
 
-	/**
-	 * @param logic
-	 * @param matchers
-	 */
-	public MethodGroupMatcher(Logic logic, MethodMatcher... matchers) {
-		super(logic, matchers);
-	}
+    /**
+     * @param logic
+     * @param matchers
+     */
+    public MethodGroupMatcher(Logic logic, MethodMatcher... matchers) {
+        super(logic, matchers);
+    }
 
-	/**
-	 * @param matchers
-	 */
-	public MethodGroupMatcher(MethodMatcher... matchers) {
-		super(matchers);
-	}
-	
-	
+    /**
+     * @param matchers
+     */
+    public MethodGroupMatcher(MethodMatcher... matchers) {
+        super(matchers);
+    }
+    
+    
 }

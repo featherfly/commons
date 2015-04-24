@@ -14,29 +14,29 @@ import cn.featherfly.common.enums.Logic;
  * @author 钟冀
  */
 public class MemberGroupMatcher<T extends Member> extends GroupMatcher<MemberMatcher<T>, T>
-	implements MemberMatcher<T>{
-	
-	/**
-	 * 
-	 */
-	public MemberGroupMatcher() {
-		super();
-	}
+    implements MemberMatcher<T>{
+    
+    /**
+     * 
+     */
+    public MemberGroupMatcher() {
+        super();
+    }
 
-	/**
-	 * @param logic
-	 * @param matchers
-	 */
-	public MemberGroupMatcher(Logic logic, @SuppressWarnings("unchecked") MemberMatcher<T>... matchers) {
-		super(logic, matchers);
-	}
+    /**
+     * @param logic
+     * @param matchers
+     */
+    public MemberGroupMatcher(Logic logic, @SuppressWarnings("unchecked") MemberMatcher<T>... matchers) {
+        super(logic, matchers);
+    }
 
-	/**
-	 * @param matchers
-	 */
-	public MemberGroupMatcher(@SuppressWarnings("unchecked") MemberMatcher<T>... matchers) {
-		super(matchers);
-	}
-	
-	
+    /**
+     * @param matchers
+     */
+    public MemberGroupMatcher(@SuppressWarnings("unchecked") MemberMatcher<T>... matchers) {
+        super(matchers);
+    }
+    
+    
 }

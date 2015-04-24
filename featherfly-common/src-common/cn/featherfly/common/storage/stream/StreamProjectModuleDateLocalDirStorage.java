@@ -29,62 +29,62 @@ import cn.featherfly.common.storage.ProjectModuleDateLocalDirStorage;
  * @author 钟冀
  */
 public class StreamProjectModuleDateLocalDirStorage extends ProjectModuleDateLocalDirStorage<InputStream>
-	implements StreamStorage {
+    implements StreamStorage {
 
-	/**
-	 */
-	public StreamProjectModuleDateLocalDirStorage() {
-	}
+    /**
+     */
+    public StreamProjectModuleDateLocalDirStorage() {
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String store(InputStream is) {
-		AssertStandardSys.isNotNull(is, "参数流不能为空");
-		try {
-			File targetFile = createTargetFile(UUIDGenerator.generateUUID32());
-			if (!targetFile.getParentFile().exists()) {
-				targetFile.getParentFile().mkdirs();
-			}
-			OutputStream os = new FileOutputStream(targetFile); 
-			IOUtils.copy(is, os);
-			IOUtils.closeQuietly(os);
-			return getId(targetFile);
-		} catch (IOException e) {
-			throw new StandardSysException(e);
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String store(InputStream is) {
+        AssertStandardSys.isNotNull(is, "参数流不能为空");
+        try {
+            File targetFile = createTargetFile(UUIDGenerator.generateUUID32());
+            if (!targetFile.getParentFile().exists()) {
+                targetFile.getParentFile().mkdirs();
+            }
+            OutputStream os = new FileOutputStream(targetFile); 
+            IOUtils.copy(is, os);
+            IOUtils.closeQuietly(os);
+            return getId(targetFile);
+        } catch (IOException e) {
+            throw new StandardSysException(e);
+        }
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public InputStream retrieve(String id) {
-		AssertStandardSys.isNotEmpty(id, "存储唯一标示不能为空");
-		logger.debug("存储唯一标示：{}", id);
-		File file = createRelativeDir();
-		file = new File(UriUtils.linkUri(
-				file.getAbsolutePath(), id));
-		logger.debug("获取文件：{}", file.getAbsolutePath());
-		try {
-			return new FileInputStream(file);
-		} catch (FileNotFoundException e) {
-			throw new StandardSysException(e);
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public InputStream retrieve(String id) {
+        AssertStandardSys.isNotEmpty(id, "存储唯一标示不能为空");
+        logger.debug("存储唯一标示：{}", id);
+        File file = createRelativeDir();
+        file = new File(UriUtils.linkUri(
+                file.getAbsolutePath(), id));
+        logger.debug("获取文件：{}", file.getAbsolutePath());
+        try {
+            return new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            throw new StandardSysException(e);
+        }
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean delete(String id) {
-		AssertStandardSys.isNotEmpty(id, "存储唯一标示不能为空");
-		logger.debug("存储唯一标示：{}", id);
-		File file = createRelativeDir();
-		file = new File(UriUtils.linkUri(
-				file.getAbsolutePath(), id));
-		logger.debug("获取文件：{}", file.getAbsolutePath());
-		return FileUtils.delete(file);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean delete(String id) {
+        AssertStandardSys.isNotEmpty(id, "存储唯一标示不能为空");
+        logger.debug("存储唯一标示：{}", id);
+        File file = createRelativeDir();
+        file = new File(UriUtils.linkUri(
+                file.getAbsolutePath(), id));
+        logger.debug("获取文件：{}", file.getAbsolutePath());
+        return FileUtils.delete(file);
+    }
 }

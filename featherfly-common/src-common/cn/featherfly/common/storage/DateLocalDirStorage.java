@@ -17,84 +17,84 @@ import cn.featherfly.common.lang.UriUtils;
  */
 public abstract class DateLocalDirStorage<E> extends LocalDirStorage<E>{
 
-	/**
-	 */
-	public DateLocalDirStorage() {
-	}
+    /**
+     */
+    public DateLocalDirStorage() {
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected String getExtDir() {
-		String result = "";
-		if (withYear) {
-			result = UriUtils.linkUri(DateUtils.getCurrentYear() + "");
-		}
-		if (withMonth) {
-			result = UriUtils.linkUri(result , DateUtils.getCurrentMonth() + "");
-		}
-		if (withDay) {
-			result = UriUtils.linkUri(result , DateUtils.getCurrentDayOfMonth() + "");
-		}
-		return result;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getExtDir() {
+        String result = "";
+        if (withYear) {
+            result = UriUtils.linkUri(DateUtils.getCurrentYear() + "");
+        }
+        if (withMonth) {
+            result = UriUtils.linkUri(result , DateUtils.getCurrentMonth() + "");
+        }
+        if (withDay) {
+            result = UriUtils.linkUri(result , DateUtils.getCurrentDayOfMonth() + "");
+        }
+        return result;
+    }
 
-	// ********************************************************************
-	//
-	// ********************************************************************
+    // ********************************************************************
+    //
+    // ********************************************************************
 
-	private boolean withYear = true;
+    private boolean withYear = true;
 
-	private boolean withMonth = true;
+    private boolean withMonth = true;
 
-	private boolean withDay = true;
+    private boolean withDay = true;
 
-	/**
-	 * 返回withYear
-	 * @return withYear
-	 */
-	public boolean isWithYear() {
-		return withYear;
-	}
+    /**
+     * 返回withYear
+     * @return withYear
+     */
+    public boolean isWithYear() {
+        return withYear;
+    }
 
-	/**
-	 * 设置withYear
-	 * @param withYear withYear
-	 */
-	public void setWithYear(boolean withYear) {
-		this.withYear = withYear;
-	}
+    /**
+     * 设置withYear
+     * @param withYear withYear
+     */
+    public void setWithYear(boolean withYear) {
+        this.withYear = withYear;
+    }
 
-	/**
-	 * 返回withMonth
-	 * @return withMonth
-	 */
-	public boolean isWithMonth() {
-		return withMonth;
-	}
+    /**
+     * 返回withMonth
+     * @return withMonth
+     */
+    public boolean isWithMonth() {
+        return withMonth;
+    }
 
-	/**
-	 * 设置withMonth
-	 * @param withMonth withMonth
-	 */
-	public void setWithMonth(boolean withMonth) {
-		this.withMonth = withMonth;
-	}
+    /**
+     * 设置withMonth
+     * @param withMonth withMonth
+     */
+    public void setWithMonth(boolean withMonth) {
+        this.withMonth = withMonth;
+    }
 
-	/**
-	 * 返回withDay
-	 * @return withDay
-	 */
-	public boolean isWithDay() {
-		return withDay;
-	}
+    /**
+     * 返回withDay
+     * @return withDay
+     */
+    public boolean isWithDay() {
+        return withDay;
+    }
 
-	/**
-	 * 设置withDay
-	 * @param withDay withDay
-	 */
-	public void setWithDay(boolean withDay) {
-		this.withDay = withDay;
-	}
+    /**
+     * 设置withDay
+     * @param withDay withDay
+     */
+    public void setWithDay(boolean withDay) {
+        this.withDay = withDay;
+    }
 }

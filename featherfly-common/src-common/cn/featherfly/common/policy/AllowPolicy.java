@@ -10,12 +10,12 @@ package cn.featherfly.common.policy;
  * @author 钟冀
  */
 public interface AllowPolicy<T> {
-	/**
-	 * <p>
-	 * 是否允许
-	 * </p>
-	 * @param t 需要判断的对象
-	 * @return 是否允许
-	 */
-	boolean isAllow(T t);
+    /**
+     * <p>
+     * 是否允许
+     * </p>
+     * @param t 需要判断的对象
+     * @return 是否允许
+     */
+    boolean isAllow(T t);
 }

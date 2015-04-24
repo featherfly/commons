@@ -14,52 +14,52 @@ import cn.featherfly.common.lang.LangUtils;
  */
 public abstract class AbstractExtNameRenamePolicy implements RenamePolicy{
 
-	/**
-	 */
-	public AbstractExtNameRenamePolicy() {
-	}
+    /**
+     */
+    public AbstractExtNameRenamePolicy() {
+    }
 
-	/**
-	 * <p>
-	 * 为重命名的文件名称附加扩展名
-	 * </p>
-	 * @param newFileName 重命名后的名称
-	 * @param fileName 原始文件名称
-	 * @return 重命名的文件名称附加扩展名后的完整字符串
- 	 */
-	protected String appendExtName(String newFileName, String fileName) {
-		if (withExtName) {
-			String extName = FileUtils.getFileExtName(fileName);
-			if (LangUtils.isNotEmpty(extName)) {
-				return newFileName + "." + FileUtils.getFileExtName(fileName);
-			}
-		}
-		return newFileName;
-	}
+    /**
+     * <p>
+     * 为重命名的文件名称附加扩展名
+     * </p>
+     * @param newFileName 重命名后的名称
+     * @param fileName 原始文件名称
+     * @return 重命名的文件名称附加扩展名后的完整字符串
+      */
+    protected String appendExtName(String newFileName, String fileName) {
+        if (withExtName) {
+            String extName = FileUtils.getFileExtName(fileName);
+            if (LangUtils.isNotEmpty(extName)) {
+                return newFileName + "." + FileUtils.getFileExtName(fileName);
+            }
+        }
+        return newFileName;
+    }
 
-	// ********************************************************************
-	//	property
-	// ********************************************************************
+    // ********************************************************************
+    //    property
+    // ********************************************************************
 
 
-	/**
-	 * 是否包含扩展名
-	 */
-	protected boolean withExtName;
+    /**
+     * 是否包含扩展名
+     */
+    protected boolean withExtName;
 
-	/**
-	 * 返回是否包含扩展名
-	 * @return withExtName
-	 */
-	public boolean isWithExtName() {
-		return withExtName;
-	}
+    /**
+     * 返回是否包含扩展名
+     * @return withExtName
+     */
+    public boolean isWithExtName() {
+        return withExtName;
+    }
 
-	/**
-	 * 设置是否包含扩展名
-	 * @param withExtName withExtName
-	 */
-	public void setWithExtName(boolean withExtName) {
-		this.withExtName = withExtName;
-	}
+    /**
+     * 设置是否包含扩展名
+     * @param withExtName withExtName
+     */
+    public void setWithExtName(boolean withExtName) {
+        this.withExtName = withExtName;
+    }
 }

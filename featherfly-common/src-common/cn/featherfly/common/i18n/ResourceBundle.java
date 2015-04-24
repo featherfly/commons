@@ -1,4 +1,3 @@
-
 package cn.featherfly.common.i18n;
 
 import java.util.Enumeration;
@@ -13,8 +12,8 @@ import java.util.Set;
  * @author 钟冀
  */
 public interface ResourceBundle {
-	
-	/**
+    
+    /**
      * {@link java.util.ResourceBundle#getString(java.lang.String) getString}
      */
     String getString(String key);
@@ -47,5 +46,5 @@ public interface ResourceBundle {
     /**
      * {@link java.util.ResourceBundle#keySet() keySet}
      */
-    Set<String> keySet();	 
+    Set<String> keySet();     
 }

@@ -13,75 +13,75 @@ import java.lang.reflect.Method;
  */
 public class MethodParameter {
 
-	private Method method;
-	
-	private String name;
-	
-	private Class<?> type;
-	
-	private Annotation[] annotations;
+    private Method method;
+    
+    private String name;
+    
+    private Class<?> type;
+    
+    private Annotation[] annotations;
 
-	/**
-	 * 返回name
-	 * @return name
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * 返回name
+     * @return name
+     */
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * 设置name
-	 * @param name name
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+    /**
+     * 设置name
+     * @param name name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	/**
-	 * 返回type
-	 * @return type
-	 */
-	public Class<?> getType() {
-		return type;
-	}
+    /**
+     * 返回type
+     * @return type
+     */
+    public Class<?> getType() {
+        return type;
+    }
 
-	/**
-	 * 设置type
-	 * @param type type
-	 */
-	public void setType(Class<?> type) {
-		this.type = type;
-	}
+    /**
+     * 设置type
+     * @param type type
+     */
+    public void setType(Class<?> type) {
+        this.type = type;
+    }
 
-	/**
-	 * 返回annotations
-	 * @return annotations
-	 */
-	public Annotation[] getAnnotations() {
-		return annotations;
-	}
+    /**
+     * 返回annotations
+     * @return annotations
+     */
+    public Annotation[] getAnnotations() {
+        return annotations;
+    }
 
-	/**
-	 * 设置annotations
-	 * @param annotations annotations
-	 */
-	public void setAnnotations(Annotation[] annotations) {
-		this.annotations = annotations;
-	}
+    /**
+     * 设置annotations
+     * @param annotations annotations
+     */
+    public void setAnnotations(Annotation[] annotations) {
+        this.annotations = annotations;
+    }
 
-	/**
-	 * 返回method
-	 * @return method
-	 */
-	public Method getMethod() {
-		return method;
-	}
+    /**
+     * 返回method
+     * @return method
+     */
+    public Method getMethod() {
+        return method;
+    }
 
-	/**
-	 * 设置method
-	 * @param method method
-	 */
-	public void setMethod(Method method) {
-		this.method = method;
-	}
+    /**
+     * 设置method
+     * @param method method
+     */
+    public void setMethod(Method method) {
+        this.method = method;
+    }
 }

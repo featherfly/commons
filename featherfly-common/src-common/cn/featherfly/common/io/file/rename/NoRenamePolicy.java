@@ -13,21 +13,21 @@ import cn.featherfly.common.io.file.RenamePolicy;
  */
 public class NoRenamePolicy implements RenamePolicy{
 
-	/**
-	 */
-	public NoRenamePolicy() {
-	}
+    /**
+     */
+    public NoRenamePolicy() {
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String rename(String fileName) {
-		return fileName;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String rename(String fileName) {
+        return fileName;
+    }
 
-	// ********************************************************************
-	//	property
-	// ********************************************************************
+    // ********************************************************************
+    //    property
+    // ********************************************************************
 
 }

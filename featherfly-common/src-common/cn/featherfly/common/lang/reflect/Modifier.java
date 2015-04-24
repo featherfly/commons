@@ -9,11 +9,11 @@ package cn.featherfly.common.lang.reflect;
  * @author 钟冀
  */
 public enum Modifier {
-	 /**
+     /**
      * The {@code int} value representing the {@code public}
      * modifier.
      */
-	PUBLIC,
+    PUBLIC,
     /**
      * The {@code int} value representing the {@code private}
      * modifier.
@@ -81,45 +81,45 @@ public enum Modifier {
     STRICT;
     
     public boolean isModifier(int mod) {
-    	boolean result = false;
-    	switch (this) {
-			case PUBLIC:
-				result = java.lang.reflect.Modifier.isPublic(mod);
-				break;
-			case PRIVATE:
-				result = java.lang.reflect.Modifier.isPrivate(mod);			
-				break;
-			case PROTECTED:
-				result = java.lang.reflect.Modifier.isProtected(mod);			
-				break;
-			case STATIC:
-				result = java.lang.reflect.Modifier.isStatic(mod);			
-				break;
-			case FINAL:
-				result = java.lang.reflect.Modifier.isFinal(mod);			
-				break;
-			case SYNCHRONIZED:
-				result = java.lang.reflect.Modifier.isSynchronized(mod);			
-				break;
-			case VOLATILE:
-				result = java.lang.reflect.Modifier.isVolatile(mod);			
-				break;
-			case TRANSIENT:
-				result = java.lang.reflect.Modifier.isTransient(mod);			
-				break;
-			case NATIVE:
-				result = java.lang.reflect.Modifier.isNative(mod);			
-				break;
-			case INTERFACE:
-				result = java.lang.reflect.Modifier.isInterface(mod);			
-				break;
-			case ABSTRACT:
-				result = java.lang.reflect.Modifier.isAbstract(mod);			
-				break;
-			case STRICT:
-				result = java.lang.reflect.Modifier.isStrict(mod);			
-				break;
-		}
-    	return result;
-	}
+        boolean result = false;
+        switch (this) {
+            case PUBLIC:
+                result = java.lang.reflect.Modifier.isPublic(mod);
+                break;
+            case PRIVATE:
+                result = java.lang.reflect.Modifier.isPrivate(mod);            
+                break;
+            case PROTECTED:
+                result = java.lang.reflect.Modifier.isProtected(mod);            
+                break;
+            case STATIC:
+                result = java.lang.reflect.Modifier.isStatic(mod);            
+                break;
+            case FINAL:
+                result = java.lang.reflect.Modifier.isFinal(mod);            
+                break;
+            case SYNCHRONIZED:
+                result = java.lang.reflect.Modifier.isSynchronized(mod);            
+                break;
+            case VOLATILE:
+                result = java.lang.reflect.Modifier.isVolatile(mod);            
+                break;
+            case TRANSIENT:
+                result = java.lang.reflect.Modifier.isTransient(mod);            
+                break;
+            case NATIVE:
+                result = java.lang.reflect.Modifier.isNative(mod);            
+                break;
+            case INTERFACE:
+                result = java.lang.reflect.Modifier.isInterface(mod);            
+                break;
+            case ABSTRACT:
+                result = java.lang.reflect.Modifier.isAbstract(mod);            
+                break;
+            case STRICT:
+                result = java.lang.reflect.Modifier.isStrict(mod);            
+                break;
+        }
+        return result;
+    }
 }

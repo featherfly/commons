@@ -12,11 +12,11 @@ import java.util.List;
  * @author 钟冀
  */
 public interface WhiteListPolicy<T> extends AllowPolicy<T>{
-	/**
-	 * <p>
-	 * 设置策略
-	 * </p>
-	 * @param whiteList 策略
-	 */
-	void setWhiteList(List<T> whiteList);
+    /**
+     * <p>
+     * 设置策略
+     * </p>
+     * @param whiteList 策略
+     */
+    void setWhiteList(List<T> whiteList);
 }

@@ -10,5 +10,11 @@ package cn.featherfly.common.lang;
  * @author 钟冀
  */
 public interface GenericType<T> {
-	Class<T> getType();
+    /**
+     * <p>
+     * 返回type
+     * </p>
+     * @return type
+     */
+    Class<T> getType();
 }

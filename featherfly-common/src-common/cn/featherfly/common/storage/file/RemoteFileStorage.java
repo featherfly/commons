@@ -14,9 +14,9 @@ import cn.featherfly.common.storage.stream.RemoteStorage;
  */
 public abstract class RemoteFileStorage extends RemoteStorage<File, String> implements FileStorage{
 
-	/**
-	 */
-	public RemoteFileStorage() {
-	}
+    /**
+     */
+    public RemoteFileStorage() {
+    }
 
 }

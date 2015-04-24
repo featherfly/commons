@@ -18,5 +18,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface TreeNode {	
+public @interface TreeNode {    
 }

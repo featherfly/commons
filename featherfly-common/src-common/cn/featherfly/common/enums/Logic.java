@@ -6,12 +6,12 @@ package cn.featherfly.common.enums;
  * </p>
  */
 public enum Logic {
-	/**
-	 * 并集
-	 */
-	AND,
-	/**
-	 * 交集
-	 */
-	OR
+    /**
+     * 并集
+     */
+    AND,
+    /**
+     * 交集
+     */
+    OR
 }

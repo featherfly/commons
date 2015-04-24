@@ -22,35 +22,36 @@ import cn.featherfly.common.lang.LogUtils;
  */
 public class ReflectionBeanPropertyFactory implements BeanPropertyFactory{
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ReflectionBeanPropertyFactory.class);
-	
-	public ReflectionBeanPropertyFactory() {
-	}
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReflectionBeanPropertyFactory.class);
+    /**
+     */
+    public ReflectionBeanPropertyFactory() {
+    }
 
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public <T> BeanProperty<T> create(Class<T> type, Field field, Method setMethod,
-			Method getMethod) {
-		return new BeanProperty<T>(type, field, setMethod, getMethod);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T> BeanProperty<T> create(Class<T> type, Field field, Method setMethod,
+                    Method getMethod) {
+        return new BeanProperty<T>(type, field, setMethod, getMethod);
+    }
 
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public <T> BeanProperty<T> create(Class<T> type, String propertyName) {
-		try {
-			Field field = type.getDeclaredField(propertyName);
-			Method getter = ClassUtils.getGetter(field, type);
-			Method setter = ClassUtils.getSetter(field, type);
-			return create(type, field, setter, getter);
-		} catch (Exception e) {
-			LogUtils.debug(e, LOGGER);
-			throw new NoSuchPropertyException(type, propertyName, e);
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T> BeanProperty<T> create(Class<T> type, String propertyName) {
+        try {
+            Field field = type.getDeclaredField(propertyName);
+            Method getter = ClassUtils.getGetter(field, type);
+            Method setter = ClassUtils.getSetter(field, type);
+            return create(type, field, setter, getter);
+        } catch (Exception e) {
+            LogUtils.debug(e, LOGGER);
+            throw new NoSuchPropertyException(type, propertyName, e);
+        }
+    }
 }

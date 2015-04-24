@@ -13,11 +13,11 @@ import java.util.List;
  * @author 钟冀
  */
 public interface BlackListPolicy<T> extends AllowPolicy<T>{
-	/**
-	 * <p>
-	 * 设置策略
-	 * </p>
-	 * @param blackList 策略
-	 */
-	void setBlackList(List<T> blackList);
+    /**
+     * <p>
+     * 设置策略
+     * </p>
+     * @param blackList 策略
+     */
+    void setBlackList(List<T> blackList);
 }

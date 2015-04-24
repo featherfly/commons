@@ -9,12 +9,12 @@ package cn.featherfly.common.io.file;
  */
 public interface RenamePolicy {
 
-	/**
-	 * <p>
-	 * 重命名
-	 * </p>
-	 * @param fileName 名称
-	 * @return 重命名后的名称
-	 */
-	String rename(String fileName);
+    /**
+     * <p>
+     * 重命名
+     * </p>
+     * @param fileName 名称
+     * @return 重命名后的名称
+     */
+    String rename(String fileName);
 }

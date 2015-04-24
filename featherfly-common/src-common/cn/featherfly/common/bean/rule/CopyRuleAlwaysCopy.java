@@ -9,17 +9,17 @@ package cn.featherfly.common.bean.rule;
  * @author 钟冀
  */
 public class CopyRuleAlwaysCopy implements CopyRule{
-	/**
-	 * 
-	 */
-	public CopyRuleAlwaysCopy() {
-		
-	}
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean isCopyEnabled(Object target, Object from, String propertyName, Object propertyValue) {
-		return true;
-	}
+    /**
+     * 
+     */
+    public CopyRuleAlwaysCopy() {
+        
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isCopyEnabled(Object target, Object from, String propertyName, Object propertyValue) {
+        return true;
+    }
 }

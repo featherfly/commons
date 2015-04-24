@@ -7,6 +7,11 @@ import java.util.List;
  * @author Zhong Ji
  */
 public class Errors {
+    
+    /**
+     */
+    public Errors() {
+    }
 
     private String message;
     
@@ -17,68 +22,85 @@ public class Errors {
     private List<FieldError> fieldErrors = new ArrayList<FieldError>();
     
     /**
-	 * 返回code
-	 * @return code
-	 */
-	public String getCode() {
-		return code;
-	}
-
-	/**
-	 * 设置code
-	 * @param code code
-	 */
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	/**
-	 * 返回message
-	 * @return message
-	 */
-	public String getMessage() {
-		return message;
-	}
-
-	/**
-	 * 设置message
-	 * @param message message
-	 */
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	/**
-	 * 返回errorMessages
-	 * @return errorMessages
-	 */
-	public List<String> getErrorMessages() {
-		return errorMessages;
-	}
-
-	/**
-	 * 设置errorMessages
-	 * @param errorMessages errorMessages
-	 */
-	public void setErrorMessages(List<String> errorMessages) {
-		this.errorMessages = errorMessages;
-	}
-
-	/**
-	 * 返回fieldErrors
-	 * @return fieldErrors
-	 */
-	public List<FieldError> getFieldErrors() {
-		return fieldErrors;
-	}
-
-	public void setFieldErrors(List<FieldError> fieldErrors) {
-        this.fieldErrors = fieldErrors;
+     * 返回code
+     * @return code
+     */
+    public String getCode() {
+        return code;
     }
 
+    /**
+     * 设置code
+     * @param code code
+     */
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    /**
+     * 返回message
+     * @return message
+     */
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * 设置message
+     * @param message message
+     */
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    /**
+     * 返回errorMessages
+     * @return errorMessages
+     */
+    public List<String> getErrorMessages() {
+        return errorMessages;
+    }
+
+    /**
+     * 设置errorMessages
+     * @param errorMessages errorMessages
+     */
+    public void setErrorMessages(List<String> errorMessages) {
+        this.errorMessages = errorMessages;
+    }
+
+    /**
+     * 返回fieldErrors
+     * @return fieldErrors
+     */
+    public List<FieldError> getFieldErrors() {
+        return fieldErrors;
+    }
+    /**
+     * 
+     * <p>
+     * 设置fieldErrors
+     * </p>
+     * @param fieldErrors fieldErrors
+     */
+    public void setFieldErrors(List<FieldError> fieldErrors) {
+        this.fieldErrors = fieldErrors;
+    }
+    /**
+     * <p>
+     * set errorMessage
+     * </p>
+     * @param errorMessage errorMessage
+     */
     public void addErrorMessage(String errorMessage) {
         this.errorMessages.add(errorMessage);
     }
+    /**
+     * <p>
+     * set fieldError
+     * </p>
+     * @param fieldError fieldError
+     */
     public void addFieldError(FieldError fieldError) {
         this.fieldErrors.add(fieldError);
     }

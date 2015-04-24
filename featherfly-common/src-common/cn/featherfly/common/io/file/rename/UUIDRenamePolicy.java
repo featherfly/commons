@@ -12,16 +12,16 @@ import cn.featherfly.common.lang.UUIDGenerator;
  */
 public class UUIDRenamePolicy extends AbstractExtNameRenamePolicy{
 
-	/**
-	 */
-	public UUIDRenamePolicy() {
-	}
+    /**
+     */
+    public UUIDRenamePolicy() {
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String rename(String name) {
-		return appendExtName(UUIDGenerator.generateUUID32(), name);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String rename(String name) {
+        return appendExtName(UUIDGenerator.generateUUID32(), name);
+    }
 }

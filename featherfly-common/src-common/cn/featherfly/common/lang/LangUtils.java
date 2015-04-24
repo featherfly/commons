@@ -248,6 +248,28 @@ public final class LangUtils {
 	
 	/**
 	 * <p>
+	 * 安全的equals，防止空指针异常
+	 * </p>
+	 * @param target 比较对象
+	 * @param otherTarget 另一个比较对象
+	 * @return 比较结果
+	 */
+	public static boolean equals(Object target, Object otherTarget) {
+		return (target == otherTarget) || (target != null && target.equals(otherTarget));
+	}
+	
+	 /**
+     * 返回hash code，如果传入参数为null,返回0.
+     * @param o 对象
+     * @return hash code
+     * @see Object#hashCode
+     */
+    public static int hashCode(Object o) {
+        return o != null ? o.hashCode() : 0;
+    }
+	
+	/**
+	 * <p>
 	 * 转换为String，如果不能转换（null）则使用默认值
 	 * </p>
 	 * @param obj obj

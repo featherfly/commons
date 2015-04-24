@@ -20,5 +20,4 @@ public class JdkResourceBundleFactory implements ResourceBundleFactory{
 	public cn.featherfly.common.i18n.ResourceBundle getBundle(String baseName, Locale locale) {
 		return new JdkResourceBundleProxy(ResourceBundle.getBundle(baseName,locale));
 	}
-
 }

@@ -1,48 +1,22 @@
-apply plugin: "java"
 apply plugin: "ivy-publish"
 apply plugin: 'maven'  
 apply plugin: 'maven-publish'  
 apply plugin: 'signing'
-apply plugin: 'eclipse'
 
-group = 'cn.featherfly'
-version = '1.2.2'
+//group = 'cn.featherfly'
+//version = '1.2.2'
 
-sourceCompatibility = 1.7  
-targetCompatibility = 1.7  
+//sourceCompatibility = 1.7  
+//targetCompatibility = 1.7  
 
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
-}
-tasks.withType(Javadoc) {
-    options.encoding = "UTF-8"
-}
+archivesBaseName = 'featherfly-common'
+
 sourceSets {
     main {
         java {
             srcDirs = ["src-common", "src-structure"]
         }
     }
-}
-		
-ext {
-	compileDependencies =[
-		"org.slf4j:slf4j-api:1.7.12"
-		,"commons-lang:commons-lang:2.6"
-		,'commons-io:commons-io:2.4'
-		,'commons-collections:commons-collections:3.2.1'
-		,"org.springframework:spring-core:4.1.6.RELEASE"
-		,'com.fasterxml.jackson.core:jackson-databind:2.5.2'		
-					]
-	publishRepo = ant.properties['user.home'] + "/.repository/ivy2/gradle_publish"	
-}
-
-
-repositories {
-	mavenCentral()
-	ivy {
-		url publishRepo
-	}
 }
 
 task sourcesJar(type: Jar) {
@@ -103,46 +77,16 @@ uploadArchives {
 
 publishing {
     publications {
-    	ivy(IvyPublication) {
-       		from components.java
-            artifact (sourcesJar){
-            	type "source"
-            }
-			artifact (javadocJar) {
-				type "javadoc"
-			}
-			descriptor.withXml {
-                for (def depend : compileDependencies)  {
-                	def deps = depend.split(':')
-                	asNode().dependencies[0].appendNode("dependency",
-                					['org' : deps[0] , 'name' : deps[1], 'rev' : deps[2]])
-				}                
-            }
-        }
 		mavenJava(MavenPublication) {
         	from components.java
             artifact (sourcesJar) {
-             	classifier "source"
+             	classifier "sources"
             }
 			artifact (javadocJar) {
 				classifier "javadoc"
 			}
         }
     }    
-    repositories {
-        ivy {
-            url publishRepo
-        }        
-    }
-}
-  
-dependencies {
-	for (def depend : compileDependencies)  {
-		compile (depend)
-	}
-    testCompile (
-    	'org.testng:testng:6.8.8'
-    )
 }
 /*
 test {
@@ -160,6 +104,5 @@ test {
 }
 */
 jar {
-    manifest.attributes buildBy: "zhong ji"
-    manifest.attributes provider: "gradle"
+    manifest.attributes 'Build-Name': archivesBaseName
 }

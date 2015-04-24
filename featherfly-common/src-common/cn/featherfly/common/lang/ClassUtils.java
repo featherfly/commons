@@ -338,6 +338,26 @@ public final class ClassUtils {
 	public static boolean isMap(Class<?> type) {
 		return isParent(Map.class, type);
 	}
+	/**
+	 * <p>
+	 * 判断传入类型是否是抽象类
+	 * </p>
+	 * @param type type
+	 * @return 是否是抽象类
+	 */
+	public static boolean isAbstractClass(Class<?> type) {
+		return cn.featherfly.common.lang.reflect.Modifier.ABSTRACT.isModifier(type.getModifiers());
+	}
+	/**
+	 * <p>
+	 * 判断传入类型是否是可实例化的类
+	 * </p>
+	 * @param type type
+	 * @return 是否是可实例化的类
+	 */
+	public static boolean isInstanceClass(Class<?> type) {
+		return !isAbstractClass(type);
+	}
 
 	/**
 	 * <p>
@@ -440,11 +460,12 @@ public final class ClassUtils {
 	 * @return 范型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
 	 *         <code>Object.class</code>
 	 */
-	public static Class<?> getSuperClassGenricType(Class<?> clazz, int index) {
+	@SuppressWarnings("unchecked")
+	public static <T> Class<T> getSuperClassGenricType(Class<?> clazz, int index) {
 		Type genType = clazz.getGenericSuperclass();// 得到泛型父类
 		// 如果没有实现ParameterizedType接口，即不支持泛型，直接返回Object.class
 		if (!(genType instanceof ParameterizedType)) {
-			return Object.class;
+			return (Class<T>) Object.class;
 		}
 		// 返回表示此类型实际类型参数的Type对象的数组,数组里放的都是对应类型的Class, 如BuyerServiceBean extends
 		// DaoSupport<Buyer,Contact>就返回Buyer和Contact类型
@@ -454,9 +475,9 @@ public final class ClassUtils {
 					+ (index < 0 ? "不能小于0" : "超出了参数的总数"));
 		}
 		if (!(params[index] instanceof Class)) {
-			return Object.class;
+			return (Class<T>) Object.class;
 		}
-		return (Class<?>) params[index];
+		return (Class<T>) params[index];
 	}
 
 	/**
@@ -467,7 +488,7 @@ public final class ClassUtils {
 	 * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
 	 *         <code>Object.class</code>
 	 */
-	public static Class<?> getSuperClassGenricType(Class<?> clazz) {
+	public static <T> Class<T> getSuperClassGenricType(Class<?> clazz) {
 		return getSuperClassGenricType(clazz, 0);
 	}
 
@@ -480,7 +501,8 @@ public final class ClassUtils {
 	 * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
 	 *         <code>Object.class</code>
 	 */
-	public static Class<?> getMethodGenericReturnType(Method method, int index) {
+	@SuppressWarnings("unchecked")
+	public static <T> Class<T> getMethodGenericReturnType(Method method, int index) {
 		Type returnType = method.getGenericReturnType();
 		if (returnType instanceof ParameterizedType) {
 			ParameterizedType type = (ParameterizedType) returnType;
@@ -489,9 +511,9 @@ public final class ClassUtils {
 				throw new RuntimeException("你输入的索引"
 						+ (index < 0 ? "不能小于0" : "超出了参数的总数"));
 			}
-			return (Class<?>) typeArguments[index];
+			return (Class<T>) typeArguments[index];
 		}
-		return Object.class;
+		return (Class<T>) Object.class;
 	}
 
 	/**
@@ -502,7 +524,7 @@ public final class ClassUtils {
 	 * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
 	 *         <code>Object.class</code>
 	 */
-	public static Class<?> getMethodGenericReturnType(Method method) {
+	public static <T> Class<T> getMethodGenericReturnType(Method method) {
 		return getMethodGenericReturnType(method, 0);
 	}
 
@@ -556,7 +578,8 @@ public final class ClassUtils {
 	 * @param int index 泛型参数所在索引,从0开始.
 	 * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
 	 */
-	public static Class<?> getFieldGenericType(Field field, int index) {
+	@SuppressWarnings("unchecked")
+	public static <T> Class<T> getFieldGenericType(Field field, int index) {
 		Type genericFieldType = field.getGenericType();
 		if (genericFieldType instanceof ParameterizedType) {
 			ParameterizedType aType = (ParameterizedType) genericFieldType;
@@ -565,9 +588,9 @@ public final class ClassUtils {
 				throw new RuntimeException("你输入的索引"
 						+ (index < 0 ? "不能小于0" : "超出了参数的总数"));
 			}
-			return (Class<?>) fieldArgTypes[index];
+			return (Class<T>) fieldArgTypes[index];
 		}
-		return Object.class;
+		return (Class<T>) Object.class;
 	}
 
 	/**
@@ -578,7 +601,7 @@ public final class ClassUtils {
 	 * @param int index 泛型参数所在索引,从0开始.
 	 * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
 	 */
-	public static Class<?> getFieldGenericType(Field field) {
+	public static <T> Class<T> getFieldGenericType(Field field) {
 		return getFieldGenericType(field, 0);
 	}
 	

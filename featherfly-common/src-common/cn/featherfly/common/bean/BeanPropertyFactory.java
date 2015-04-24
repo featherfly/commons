@@ -23,7 +23,7 @@ public interface BeanPropertyFactory {
 	 * @param getMethod 读取方法
 	 * @return 创建的BeanProperty
 	 */
-	BeanProperty create(Class<?> type, Field field, Method setMethod, Method getMethod);
+	<T> BeanProperty<T> create(Class<T> type, Field field, Method setMethod, Method getMethod);
 	
 	/**
 	 * <p>
@@ -33,5 +33,5 @@ public interface BeanPropertyFactory {
 	 * @param propertyName 属性名
 	 * @return 创建的BeanProperty子类
 	 */
-	public BeanProperty create(Class<?> type, String propertyName);	
+	<T> BeanProperty<T> create(Class<T> type, String propertyName);	
 }

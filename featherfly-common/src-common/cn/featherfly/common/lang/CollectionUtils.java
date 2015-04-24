@@ -1,9 +1,14 @@
 
 package cn.featherfly.common.lang;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 
 /**
  * <p>
@@ -77,5 +82,24 @@ public final class CollectionUtils {
 			i++;
 		}
 		return results;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <C extends Collection<E>, E> C newInstance(Class<?> type) {
+		AssertIllegalArgument.isTrue(ClassUtils.isParent(Collection.class, type), "传入类型必须是Collection接口的子接口或实现类");
+		if (ClassUtils.isInstanceClass(type)) {
+			return (C) ClassUtils.newInstance(type);
+		} else {
+			if (type == Collection.class) {
+				return (C) new ArrayList<E>();
+			} else if (type == List.class) {
+				return (C) new ArrayList<E>();
+			} else if (type == Set.class) {
+				return (C) new HashSet<E>();
+			} else if (type == Queue.class) {
+				return (C) new ArrayDeque<E>();
+			}
+			throw new IllegalArgumentException("不支持的类型：" + type.getName());
+ 		}
 	}
 }

@@ -131,7 +131,7 @@ public final class BeanUtils {
 		}
 		BeanDescriptor<E> beanDescriptor = BeanDescriptor.getBeanDescriptor(
 				ClassUtils.castGenericType(bean.getClass(), bean));
-		for (BeanProperty beanProperty : beanDescriptor.getBeanProperties()) {
+		for (BeanProperty<?> beanProperty : beanDescriptor.getBeanProperties()) {
 			if (beanProperty.isReadable()) {
 				map.put(beanProperty.getName(), beanProperty.getValue(bean));
 			}
@@ -194,7 +194,7 @@ public final class BeanUtils {
 		}
 		BeanDescriptor<E> beanDescriptor = BeanDescriptor.getBeanDescriptor(
 				ClassUtils.castGenericType(bean.getClass(), bean));
-		for (BeanProperty beanProperty : beanDescriptor.getBeanProperties()) {
+		for (BeanProperty<?> beanProperty : beanDescriptor.getBeanProperties()) {
 			String name = beanProperty.getName();
 			if (beanProperty.isWritable() && map.containsKey(name)) {
 				Object value = map.get(name);
@@ -254,9 +254,9 @@ public final class BeanUtils {
 					ClassUtils.castGenericType(target.getClass(), target));
 			BeanDescriptor<E> fromBeanDescriptor = BeanDescriptor.getBeanDescriptor(
 					ClassUtils.castGenericType(from.getClass(), from));
-			Iterator<BeanProperty> iter = fromBeanDescriptor.getBeanProperties().iterator();
+			Iterator<BeanProperty<?>> iter = fromBeanDescriptor.getBeanProperties().iterator();
 			while (iter.hasNext()) {
-				BeanProperty fromProperty = iter.next();
+				BeanProperty<?> fromProperty = iter.next();
 				String name = fromProperty.getName();
 				copyProperty(target, targetBeanDescriptor, from, fromProperty, name, rule);
 			}
@@ -266,9 +266,9 @@ public final class BeanUtils {
 //			BeanDescriptor<E> fromBeanDescriptor = BeanDescriptor.getBeanDescriptor(
 //					ClassUtils.castGenericType(from.getClass(), from));
 			// 目标是父类，所以循环目标的属性
-			Iterator<BeanProperty> iter = targetBeanDescriptor.getBeanProperties().iterator();
+			Iterator<BeanProperty<?>> iter = targetBeanDescriptor.getBeanProperties().iterator();
 			while (iter.hasNext()) {
-				BeanProperty fromProperty = iter.next();
+				BeanProperty<?> fromProperty = iter.next();
 				String name = fromProperty.getName();
 				copyProperty(target, from, name, rule);
 			}
@@ -322,12 +322,12 @@ public final class BeanUtils {
 		BeanDescriptor targetBeanDescriptor = BeanDescriptor.getBeanDescriptor(target.getClass());
 		@SuppressWarnings("rawtypes")
 		BeanDescriptor fromBeanDescriptor = BeanDescriptor.getBeanDescriptor(from.getClass());
-		BeanProperty fromProperty = fromBeanDescriptor.getBeanProperty(name);
+		BeanProperty<?> fromProperty = fromBeanDescriptor.getBeanProperty(name);
 		copyProperty(target, targetBeanDescriptor, from, fromProperty, name, rule);
 	}
 
 	private static <E> void copyProperty(E target, BeanDescriptor<?> targetBeanDescriptor,
-			E from, BeanProperty fromProperty, String name, CopyRule rule) {
+			E from, BeanProperty<?> fromProperty, String name, CopyRule rule) {
 		if (fromProperty.isReadable() && fromProperty.isWritable()) {
 			Object value = fromProperty.getValue(from);
 			if (rule.isCopyEnabled(target, from, name, value)) {

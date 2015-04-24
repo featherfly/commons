@@ -10,6 +10,8 @@ import java.util.HashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cn.featherfly.common.lang.GenericType;
+
 
 /**
  * <p>
@@ -21,14 +23,14 @@ import org.slf4j.LoggerFactory;
  * @since 1.0
  * @version 1.0
  */
-public class BeanProperty {
+public class BeanProperty<T> implements GenericType<T> {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(BeanProperty.class);
 
 	private String name;
 
-	private Class<?> type;
+	private Class<T> type;
 
 	private Method setter;
 
@@ -48,11 +50,12 @@ public class BeanProperty {
 	 * @param setter 读取方法
 	 * @param getter 写入方法
 	 */
+	@SuppressWarnings("unchecked")
 	protected BeanProperty(Class<?> ownerType, Field field, Method setter, Method getter) {
 		this.ownerType = ownerType;
 		this.field = field;
 		this.name = field.getName();
-		this.type = field.getType();
+		this.type = (Class<T>) field.getType();
 		this.setter = setter;
 		this.getter = getter;
 		initAnnotation();
@@ -316,7 +319,8 @@ public class BeanProperty {
 	 * 返回属性类型
 	 * @return 返回type
 	 */
-	public Class<?> getType() {
+	@Override
+	public Class<T> getType() {
 		return type;
 	}
 

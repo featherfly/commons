@@ -32,7 +32,8 @@ public final class StringUtils {
 	 * </p>
 	 */
 	public static final String NULL_STRING = "null";
-
+	
+	
 	/**
 	 * <p>
 	 * 如果第一个为有效的字符串(不是null，空串），则返回，否则返回第二个.

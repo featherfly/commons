@@ -4,8 +4,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 
-import cn.featherfly.common.lang.LangUtils;
-import cn.featherfly.common.lang.StringUtils;
+import cn.featherfly.common.lang.Assert;
 
 /**
  * <p>
@@ -19,7 +18,7 @@ import cn.featherfly.common.lang.StringUtils;
  */
 public final class AssertStandardConfig {
 
-	private static final String ASSERT_TITLE = "[断言失败] - ";
+	private static final Assert a = new Assert(StandardConfigException.class);
 
 	private AssertStandardConfig() {
 	}
@@ -30,11 +29,10 @@ public final class AssertStandardConfig {
 	 * </p>
 	 * @param object 判断的对象
 	 * @param message 断言失败的信息
+	 * @return 传入的参数
 	 */
-	public static void isNotNull(Object object, String message) {
-		if (object == null) {
-			throw new StandardConfigException(ASSERT_TITLE + message);
-		}
+	public static <T> T isNotNull(T object, String message) {
+		return a.isNotNull(object, message);
 	}
 
 	/**
@@ -42,10 +40,10 @@ public final class AssertStandardConfig {
 	 * 判断不为空，如果为空，抛出StandardConfigException异常
 	 * </p>
 	 * @param object 判断的对象
+	 * @return 传入的参数
 	 */
-	public static void isNotNull(Object object) {
-		isNotNull(object,
-				"参数不能为null");
+	public static <T> T isNotNull(T object) {
+		return a.isNotNull(object);
 	}
 
 	/**
@@ -54,11 +52,10 @@ public final class AssertStandardConfig {
 	 * </p>
 	 * @param expression 判断的值
 	 * @param message 断言失败的信息
+	 * @return 传入的参数
 	 */
-	public static void isTrue(boolean expression, String message) {
-		if (!expression) {
-			throw new StandardConfigException(ASSERT_TITLE + message);
-		}
+	public static boolean isTrue(boolean expression, String message) {
+		return a.isTrue(expression, message);
 	}
 
 	/**
@@ -67,11 +64,10 @@ public final class AssertStandardConfig {
 	 * </p>
 	 * @param expression 判断的值
 	 * @param message 断言失败的信息
+	 * @return 传入的参数
 	 */
-	public static void isFalse(boolean expression, String message) {
-		if (expression) {
-			throw new StandardConfigException(ASSERT_TITLE + message);
-		}
+	public static boolean isFalse(boolean expression, String message) {
+		return a.isFalse(expression, message);
 	}
 
 	/**
@@ -80,11 +76,10 @@ public final class AssertStandardConfig {
 	 * </p>
 	 * @param text 判断的字符串
 	 * @param message 断言失败的信息
+	 * @return 传入的参数
 	 */
-	public static void isNotBlank(String text, String message) {
-		if (!StringUtils.isNotBlank(text)) {
-			throw new StandardConfigException(ASSERT_TITLE + message);
-		}
+	public static String isNotBlank(String text, String message) {
+		return a.isNotBlank(text, message);
 	}
 
 	/**
@@ -92,35 +87,44 @@ public final class AssertStandardConfig {
 	 * 判断不为空或空串（包括只有空字符的串），判断失败抛出StandardConfigException异常
 	 * </p>
 	 * @param text 判断的字符串
+	 * @return 传入的参数
 	 */
-	public static void isNotBlank(String text) {
-		isNotBlank(
-				text,
-				"参数必须是一个有效字符串;null，空字符串，只有空白字符的字符串都不是有效字符串");
+	public static String isNotBlank(String text) {
+		return a.isNotBlank(text);
 	}
 
 	/**
 	 * <p>
-	 * 判断不为空（自动识别String, Collection, Map, Array类型，并判断长度不为0），判断失败抛出StandardSysException异常
+	 * 判断不为空（String,Collection,Map,Array还要判断长度是否为0），判断失败抛出StandardConfigException异常
 	 * </p>
 	 * @param obj 判断的对象
 	 * @param message 断言失败的信息
+	 * @return 传入的参数
 	 */
-	public static void isNotEmpty(Object obj, String message) {
-		if (!LangUtils.isNotEmpty(obj)) {
-			throw new StandardConfigException(ASSERT_TITLE + message);
-		}
+	public static <T> T isNotEmpty(T obj, String message) {
+		return a.isNotEmpty(obj, message);
 	}
 
 	/**
 	 * <p>
-	 * 判断不为空（自动识别String, Collection, Map, Array类型，并判断长度不为0），判断失败抛出StandardSysException异常
+	 * 判断不为空（String,Collection,Map,Array还要判断长度是否为0），判断失败抛出StandardConfigException异常
 	 * </p>
 	 * @param obj 判断的对象
+	 * @return 传入的参数
 	 */
-	public static void isNotEmpty(Object obj) {
-		isNotEmpty(
-				obj, "参数不能为空（null，空字符串）");
+	public static <T> T isNotEmpty(T obj) {
+		return a.isNotEmpty(obj);
+	}
+	/**
+	 * <p>
+	 * 判断不为空或空串，判断失败抛出StandardConfigException异常
+	 * </p>
+	 * @param text 判断的字符串
+	 * @param message 断言失败的信息
+	 * @return 传入的参数
+	 */
+	public static String isNotEmpty(String text, String message) {
+		return a.isNotEmpty(text, message);
 	}
 
 	/**
@@ -128,23 +132,10 @@ public final class AssertStandardConfig {
 	 * 判断不为空或空串，判断失败抛出StandardConfigException异常
 	 * </p>
 	 * @param text 判断的字符串
-	 * @param message 断言失败的信息
+	 * @return 传入的参数
 	 */
-	public static void isNotEmpty(String text, String message) {
-		if (!LangUtils.isNotEmpty(text)) {
-			throw new StandardConfigException(ASSERT_TITLE + message);
-		}
-	}
-
-	/**
-	 * <p>
-	 * 判断不为空或空串，判断失败抛出StandardConfigException异常
-	 * </p>
-	 * @param text 判断的字符串
-	 */
-	public static void isNotEmpty(String text) {
-		isNotEmpty(
-				text, "参数不能为空（null，空字符串）");
+	public static String isNotEmpty(String text) {
+		return a.isNotEmpty(text);
 	}
 
 	/**
@@ -153,11 +144,10 @@ public final class AssertStandardConfig {
 	 * </p>
 	 * @param array 需要判断的数组
 	 * @param message 断言失败的信息
+	 * @return 传入的参数
 	 */
-	public static void isNotEmpty(Object[] array, String message) {
-		if (LangUtils.isEmpty(array)) {
-			throw new StandardConfigException(ASSERT_TITLE + message);
-		}
+	public static <T> T[] isNotEmpty(T[] array, String message) {
+		return a.isNotEmpty(array, message);
 	}
 
 	/**
@@ -165,10 +155,10 @@ public final class AssertStandardConfig {
 	 * 判断数组不为null或size不为0，判断失败抛出StandardConfigException异常
 	 * </p>
 	 * @param array 需要判断的数组
+	 * @return 传入的参数
 	 */
-	public static void isNotEmpty(Object[] array) {
-		isNotEmpty(array,
-				"参数数组不能为null且长度不能为0");
+	public static <T> T[] isNotEmpty(T[] array) {
+		return a.isNotEmpty(array);
 	}
 
 	/**
@@ -177,11 +167,10 @@ public final class AssertStandardConfig {
 	 * </p>
 	 * @param collection 判断的集合
 	 * @param message 断言失败的信息
+	 * @return 传入的参数
 	 */
-	public static void isNotEmpty(Collection<?> collection, String message) {
-		if (LangUtils.isEmpty(collection)) {
-			throw new StandardConfigException(ASSERT_TITLE + message);
-		}
+	public static Collection<?> isNotEmpty(Collection<?> collection, String message) {
+		return a.isNotEmpty(collection, message);
 	}
 
 	/**
@@ -189,10 +178,10 @@ public final class AssertStandardConfig {
 	 * 判断集合不为null或size不为0，判断失败抛出StandardConfigException异常
 	 * </p>
 	 * @param collection 判断的集合
+	 * @return 传入的参数
 	 */
-	public static void isNotEmpty(Collection<?> collection) {
-		isNotEmpty(collection,
-				"参数collection不能为null且长度不能为0");
+	public static Collection<?> isNotEmpty(Collection<?> collection) {
+		return a.isNotEmpty(collection);
 	}
 
 	/**
@@ -201,11 +190,10 @@ public final class AssertStandardConfig {
 	 * </p>
 	 * @param map 判断的集合
 	 * @param message 断言失败的信息
+	 * @return 传入的参数
 	 */
-	public static void isNotEmpty(Map<?, ?> map, String message) {
-		if (LangUtils.isEmpty(map)) {
-			throw new StandardConfigException(ASSERT_TITLE + message);
-		}
+	public static Map<?, ?> isNotEmpty(Map<?, ?> map, String message) {
+		return a.isNotEmpty(map, message);
 	}
 
 	/**
@@ -213,10 +201,10 @@ public final class AssertStandardConfig {
 	 * 判断MAP不为null或size不为0，判断失败抛出StandardConfigException异常
 	 * </p>
 	 * @param map 判断的集合
+	 * @return 传入的参数
 	 */
-	public static void isNotEmpty(Map<?, ?> map) {
-		isNotEmpty(map,
-			"参数map不能为null且长度不能为0");
+	public static Map<?, ?> isNotEmpty(Map<?, ?> map) {
+		return a.isNotEmpty(map);
 	}
 
 	/**
@@ -225,11 +213,10 @@ public final class AssertStandardConfig {
 	 * </p>
 	 * @param file 判断的文件对象
 	 * @param message 断言失败的信息
+	 * @return 传入的参数
 	 */
-	public static void isExists(File file , String message) {
-		if (!LangUtils.isExists(file)) {
-			throw new StandardConfigException(ASSERT_TITLE + message);
-		}
+	public static File isExists(File file , String message) {
+		return a.isExists(file, message);
 	}
 
 	/**
@@ -237,9 +224,10 @@ public final class AssertStandardConfig {
 	 * 判断传入文件对象代表的物理文件是否存在，判断失败抛出StandardConfigException异常
 	 * </p>
 	 * @param file 判断的文件对象
+	 * @return 传入的参数
 	 */
-	public static void isExists(File file) {
-		isExists(file, "参数file不能为null且文件必须存在");
+	public static File isExists(File file) {
+		return a.isExists(file);
 	}
 
 	/**
@@ -249,17 +237,10 @@ public final class AssertStandardConfig {
 	 * @param clazz 类型
 	 * @param obj 对象
 	 * @param message 断言失败的信息
+	 * @return 传入的参数
 	 */
-	public static void isInstanceOf(Class<?> clazz, Object obj, String message) {
-		isNotNull(clazz,
-				"参数clazz不能为空");
-		isTrue(clazz.isInstance(obj), (new StringBuilder(ASSERT_TITLE))
-				.append(message)
-				.append("参数obj '")
-				.append(obj == null ? "[null]" : obj.getClass().getName())
-				.append("' 必须是参数clazz '").append(clazz.getName())
-				.append("' 的实例！")
-				.toString());
+	public static <T> T isInstanceOf(Class<?> clazz, T obj, String message) {
+		return a.isInstanceOf(clazz, obj, message);
 	}
 
 	/**
@@ -268,8 +249,9 @@ public final class AssertStandardConfig {
 	 * </p>
 	 * @param clazz 类型
 	 * @param obj 对象
+	 * @return 传入的参数
 	 */
-	public static void isInstanceOf(Class<?> clazz, Object obj) {
-		isInstanceOf(clazz, obj, "");
+	public static <T> T isInstanceOf(Class<?> clazz, T obj) {
+		return a.isInstanceOf(clazz, obj);
 	}
 }

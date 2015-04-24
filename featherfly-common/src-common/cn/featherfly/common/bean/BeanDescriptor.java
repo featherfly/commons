@@ -85,7 +85,7 @@ public class BeanDescriptor<T> {
 			Method getter = ClassUtils.getGetter(field, this.type);
 			Method setter = ClassUtils.getSetter(field, this.type);
 			if (getter != null || setter != null) {
-				BeanProperty prop = FACTORY.create(this.type, field, setter, getter);
+				BeanProperty<?> prop = FACTORY.create(this.type, field, setter, getter);
 				beanProperties.put(prop.getName(), prop);
 				if (LOGGER.isTraceEnabled() && parent != this.type) {
 					LOGGER.trace("类{}从父类{}中继承的属性：[{}]",
@@ -114,7 +114,7 @@ public class BeanDescriptor<T> {
 	 * @return 返回beanProperties
 	 */
 	@SuppressWarnings("unchecked")
-	public Collection<BeanProperty> getBeanProperties() {
+	public Collection<BeanProperty<?>> getBeanProperties() {
 		return beanProperties.values();
 	}
 
@@ -125,8 +125,8 @@ public class BeanDescriptor<T> {
 	 * @param index 索引
 	 * @return 指定属性
 	 */
-	public BeanProperty getBeanProperty(int index) {
-		return (BeanProperty) beanProperties.getValue(index);
+	public BeanProperty<?> getBeanProperty(int index) {
+		return (BeanProperty<?>) beanProperties.getValue(index);
 	}
 
 	/**
@@ -137,8 +137,8 @@ public class BeanDescriptor<T> {
 	 * @param name 属性名
 	 * @return 指定属性
 	 */
-	public BeanProperty getBeanProperty(String name) {
-		BeanProperty property = (BeanProperty) beanProperties.get(name);
+	public BeanProperty<?> getBeanProperty(String name) {
+		BeanProperty<?> property = (BeanProperty<?>) beanProperties.get(name);
 		if (property == null) {
 			throw new NoSuchPropertyException(type, name);
 		}
@@ -153,11 +153,11 @@ public class BeanDescriptor<T> {
 	 * @param name 属性名
 	 * @return 指定属性
 	 */
-	public BeanProperty getChildBeanProperty(String name) {
+	public BeanProperty<?> getChildBeanProperty(String name) {
 		if (name.contains(DOT)) {
 			String currentPropertyName = name.substring(0, name.indexOf(DOT));
 			String innerPropertyName = name.substring(name.indexOf(DOT) + 1);
-			BeanProperty property = getBeanProperty(currentPropertyName);
+			BeanProperty<?> property = getBeanProperty(currentPropertyName);
 			BeanDescriptor<?> propertyDescriptor = getBeanDescriptor(property.getType());
 			return propertyDescriptor.getChildBeanProperty(innerPropertyName);
 		} else {
@@ -173,8 +173,8 @@ public class BeanDescriptor<T> {
 	 * @param condition 条件判断
 	 * @return 第一个符合条件BeanProperty
 	 */
-	public BeanProperty findBeanProperty(BeanPropertyMatcher condition) {
-		for (BeanProperty beanProperty : getBeanProperties()) {
+	public BeanProperty<?> findBeanProperty(BeanPropertyMatcher condition) {
+		for (BeanProperty<?> beanProperty : getBeanProperties()) {
 			if (condition.match(beanProperty)) {
 				return beanProperty;
 			}
@@ -189,9 +189,9 @@ public class BeanDescriptor<T> {
 	 * @param condition 条件判断
 	 * @return 所有符合条件BeanProperty的集合
 	 */
-	public Collection<BeanProperty> findBeanPropertys(BeanPropertyMatcher condition) {
-		Collection<BeanProperty> coll = new ArrayList<BeanProperty>();
-		for (BeanProperty beanProperty : getBeanProperties()) {
+	public Collection<BeanProperty<?>> findBeanPropertys(BeanPropertyMatcher condition) {
+		Collection<BeanProperty<?>> coll = new ArrayList<>();
+		for (BeanProperty<?> beanProperty : getBeanProperties()) {
 			if (condition.match(beanProperty)) {
 				coll.add(beanProperty);
 			}
@@ -211,7 +211,7 @@ public class BeanDescriptor<T> {
 		if (name.contains(DOT)) {
 			String currentPropertyName = name.substring(0, name.indexOf(DOT));
 			String innerPropertyName = name.substring(name.indexOf(DOT) + 1);
-			BeanProperty property = getBeanProperty(currentPropertyName);
+			BeanProperty<?> property = getBeanProperty(currentPropertyName);
 			@SuppressWarnings("rawtypes")
 			BeanDescriptor propertyDescriptor = getBeanDescriptor(property.getType());
 			Object propertyValue = property.getValue(obj);
@@ -244,7 +244,7 @@ public class BeanDescriptor<T> {
 			}
 			propertyDescriptor.setProperty(propertyValue, innerPropertyName, value);
 		} else {
-			BeanProperty p = getBeanProperty(name);
+			BeanProperty<?> p = getBeanProperty(name);
 			p.setValue(obj, value);
 		}
 	}
@@ -259,7 +259,7 @@ public class BeanDescriptor<T> {
 	 * @param value 属性值
 	 */
 	public void addProperty(T obj, String name, Object value) {
-		BeanProperty beanProperty = getChildBeanProperty(name);
+		BeanProperty<?> beanProperty = getChildBeanProperty(name);
 		if (ClassUtils.isParent(Collection.class, beanProperty.getType())) {
 			@SuppressWarnings("unchecked")
 			Collection<Object> collection = (Collection<Object>) getProperty(obj, name);
@@ -285,7 +285,7 @@ public class BeanDescriptor<T> {
 		if (name.contains(DOT)) {
 			String currentPropertyName = name.substring(0, name.indexOf(DOT));
 			String innerPropertyName = name.substring(name.indexOf(DOT) + 1);
-			BeanProperty property = getBeanProperty(currentPropertyName);
+			BeanProperty<?> property = getBeanProperty(currentPropertyName);
 			@SuppressWarnings("rawtypes")
 			BeanDescriptor propertyDescriptor = getBeanDescriptor(property.getType());
 			Object propertyValue = property.getValue(obj);
@@ -297,7 +297,7 @@ public class BeanDescriptor<T> {
 			}
 			return propertyDescriptor.getProperty(propertyValue, innerPropertyName);
 		} else {
-			BeanProperty p = getBeanProperty(name);
+			BeanProperty<?> p = getBeanProperty(name);
 			return p.getValue(obj);
 		}
 	}
@@ -370,11 +370,11 @@ public class BeanDescriptor<T> {
 	//	private method
 	// ********************************************************************
 
-//	private BeanProperty getTargetBeanProperty(Object obj, String name) {
+//	private BeanProperty<?> getTargetBeanProperty(Object obj, String name) {
 //		if (name.contains(DOT)) {
 //			String currentPropertyName = name.substring(0, name.indexOf(DOT));
 //			String innerPropertyName = name.substring(name.indexOf(DOT) + 1);
-//			BeanProperty property = getBeanProperty(currentPropertyName);
+//			BeanProperty<?> property = getBeanProperty(currentPropertyName);
 //			Object propertyValue = property.getValue(obj);
 //			//中间层次为空，使用默认构造函数生成一个空对象
 //			if (propertyValue == null) {
@@ -391,7 +391,7 @@ public class BeanDescriptor<T> {
 //			}
 //			return getTargetBeanProperty(propertyValue, innerPropertyName);
 //		} else {
-//			BeanProperty p = getBeanProperty(name);
+//			BeanProperty<?> p = getBeanProperty(name);
 //			return p;
 //		}
 //	}

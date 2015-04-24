@@ -3,15 +3,18 @@
 	xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:ecf="antlib:com.featherfly.ecf">
 
 	<!-- 版本名称 -->
+	<!--
 	<property name="version" value="1" />
 	<property name="subVersion" value="2" />
 	<property name="reversion" value="2" />
 	<property name="pubVersion" value="${version}.${subVersion}.${reversion}" />
+	-->
 	<!-- 项目名称 -->
 	<property name="projectName" value="featherfly-common"/>
 	<property name="artifact" value="${projectName}" />
-	
 	<property name="Built-By" value="zhongji" />
+	
+	<property file="gradle.properties" />
 
 	<!-- ivy setting -->
 	<property name="ivysettings" value="D:/programe/runtime/ivy/settings/ivysettings.xml" />
@@ -30,16 +33,16 @@
 	<property name="srcRelease" location="E:/svn_work_copy/featherfly/01.Commons/02.发布/02.归档包/${version}" />
 
 	<property name="jarFile"
-	          value="${projectName}-${pubVersion}.jar" />
+	          value="${projectName}-${version}.jar" />
 	<property name="docJarFile"
-			          value="${projectName}-${pubVersion}-javadoc.jar" />
+			          value="${projectName}-${version}-javadoc.jar" />
 	<property name="srcJarFile"
-			          value="${projectName}-${pubVersion}-sources.jar" />
+			          value="${projectName}-${version}-sources.jar" />
 		
 	<property name="releaseZipFile"
-	          value="${projectName}-${pubVersion}.zip" />
+	          value="${projectName}-${version}.zip" />
 	<property name="srcZipFile"
-	          value="${projectName}-src-${pubVersion}.zip" />
+	          value="${projectName}-src-${version}.zip" />
 
     <property name="ivy.lib.dir" value="${lib}" />
 
@@ -81,7 +84,7 @@
 	<target name="resolve">
 		<ivy:configure file="${ivysettings}"/>
 		<ivy:settings id="settings" file="${ivysettings}"/>
-		<ivy:resolve file="${ivy.dep.file}" conf="${ivy.configurations}" revision="${pubVersion}"/>
+		<ivy:resolve file="${ivy.dep.file}" conf="${ivy.configurations}" revision="${version}"/>
 		<ivy:retrieve pattern="${ivy.retrieve.pattern}" conf="${ivy.configurations}"/>
     </target>
 
@@ -125,7 +128,7 @@
 			<exclude name="**/*/JavassistBeanPropertyFactory.java"/>
 			<manifest>
 				<attribute name="Built-By" value="${Built-By}" />
-				<attribute name="Version" value="${pubVersion}"/>
+				<attribute name="Version" value="${version}"/>
 			</manifest>
 		</jar>
 	</target>
@@ -147,7 +150,7 @@
 			<include name="**" />
 			<manifest>
 				<attribute name="Built-By" value="${Built-By}" />
-				<attribute name="Version" value="${pubVersion}"/>
+				<attribute name="Version" value="${version}"/>
 			</manifest>
 		</jar>
 	</target>
@@ -156,7 +159,7 @@
 			<include name="**" />
 			<manifest>
 				<attribute name="Built-By" value="${Built-By}" />
-				<attribute name="Version" value="${pubVersion}"/>
+				<attribute name="Version" value="${version}"/>
 			</manifest>
 		</jar>
 	</target>
@@ -192,7 +195,7 @@
 	<target name="publish"
         description="--> Publish share" depends="resolve">
 		<ivy:publish resolver="share-publish"
-				revision="${pubVersion}"
+				revision="${version}"
 	            update="true"
 	            overwrite="true"
 				settingsref="settings">
@@ -206,7 +209,7 @@
 		<property name="ivysettings_gradle" value="${user.home}/.ivy2/ivysettings_gradle.xml" />
 		<ivy:settings id="settings_gradle" file="${ivysettings_gradle}"/>
 		<ivy:publish resolver="gradle-publish"
-				revision="${pubVersion}"
+				revision="${version}"
 	            update="true"
 	            overwrite="true"
 				settingsref="settings_gradle">			
@@ -226,8 +229,8 @@
 		<delete file="${docJarFile}" />
 		<delete file="${srcJarFile}" />
 		<delete file="${projectName}.pom" />
-		<delete file="ivy-${pubVersion}.xml" />
-		<delete file="ivy-${pubVersion}-ivy.xml" />
+		<delete file="ivy-${version}.xml" />
+		<delete file="ivy-${version}-ivy.xml" />
 	</target>
 
 

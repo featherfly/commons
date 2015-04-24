@@ -1,3 +1,15 @@
+2015-04-24
+1.2.4 发布
+	1.加入NumberUtils，把StringUtils.parse方法移动到NumberUtils
+	2.加入GenricType接口，GenericClass实现类
+	3.BeanProperty实现GenricType接口，加入泛型声明
+	
+2015-04-20
+1.2.3 发布
+	1.LangUtils加入equals hashcode方法
+	2.Assert类和其余几个Assert工具类方法都把传入参数进行返回了
+	3.StringUtils加入parse方法，用于parse各种数字
+	
 2015-03-16
 1.2.2 发布
 	1.去除Pagination接口的泛型参数

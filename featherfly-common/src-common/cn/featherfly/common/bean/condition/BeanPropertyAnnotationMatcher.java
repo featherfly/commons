@@ -44,7 +44,7 @@ public class BeanPropertyAnnotationMatcher implements BeanPropertyMatcher{
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public boolean match(BeanProperty beanProperty) {
+	public boolean match(BeanProperty<?> beanProperty) {
 		boolean result = false;
 		if (logic == Logic.AND) {
 			//并集，所有注解都要标注

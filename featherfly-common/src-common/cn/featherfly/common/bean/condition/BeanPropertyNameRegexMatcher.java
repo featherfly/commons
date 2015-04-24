@@ -45,7 +45,7 @@ public class BeanPropertyNameRegexMatcher implements BeanPropertyMatcher{
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean match(BeanProperty beanProperty) {
+	public boolean match(BeanProperty<?> beanProperty) {
 		LOGGER.debug("属性{}匹配正则{}", beanProperty.getName(), nameRegex);
 		Matcher m = namePattern.matcher(beanProperty.getName());
 		return m.matches();

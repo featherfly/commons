@@ -1,6 +1,6 @@
-2014-
+2015-04-27
 1.2.1 发布
-	
+	1.BeanPropertyFactory和BeanProperty加入泛型支持
 	
 2014-06-16
 1.2.0 发布

@@ -43,7 +43,7 @@ public class JavassistBeanPropertyFactory implements BeanPropertyFactory {
 	 * @return 动态创建的BeanProperty子类
 	 */
 	@Override
-	public BeanProperty create(Class<?> type, Field field, Method setMethod, Method getMethod) {
+	public <T> BeanProperty<T> create(Class<T> type, Field field, Method setMethod, Method getMethod) {
 		try {
 			return create(type, field.getName(), field, setMethod, getMethod);
 		} catch (Exception e) {
@@ -60,7 +60,7 @@ public class JavassistBeanPropertyFactory implements BeanPropertyFactory {
 	 * @return 动态创建的BeanProperty子类
 	 */
 	@Override
-	public BeanProperty create(Class<?> type, String propertyName) {
+	public <T> BeanProperty<T> create(Class<T> type, String propertyName) {
 		Field field;
 		try {
 			field = type.getDeclaredField(propertyName);
@@ -83,7 +83,8 @@ public class JavassistBeanPropertyFactory implements BeanPropertyFactory {
 	 * @param getMethod 属性读取方法
 	 * @return BeanProperty
 	 */
-	private BeanProperty create(Class<?> type, String name, Field field, Method setMethod, Method getMethod) {
+	@SuppressWarnings("unchecked")
+    private <T> BeanProperty<T> create(Class<T> type, String name, Field field, Method setMethod, Method getMethod) {
 		if (setMethod == null && getMethod == null) {
 			throw new NoSuchPropertyException(type, name, "没有读取和写入方法");
 		}
@@ -153,7 +154,7 @@ public class JavassistBeanPropertyFactory implements BeanPropertyFactory {
 
 			beanPropertyClass.toClass();
 			beanPropertyClass.detach();
-			return (BeanProperty) Class.forName(propertyClassName)
+			return (BeanProperty<T>) Class.forName(propertyClassName)
 					.getConstructor(Field.class, Method.class, Method.class)
 					.newInstance(field, setMethod, getMethod);
 		} catch (Exception e) {

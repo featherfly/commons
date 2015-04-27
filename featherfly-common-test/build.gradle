@@ -1,0 +1,111 @@
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'maven'  
+    apply plugin: 'maven-publish'  
+    
+    sourceCompatibility = 1.7  
+	targetCompatibility = 1.7  
+    
+    ext {
+		compileDependencies =[
+			"org.slf4j:slf4j-api:1.7.12"
+			,"commons-lang:commons-lang:2.6"
+			,'commons-io:commons-io:2.4'
+			,'commons-collections:commons-collections:3.2.1'
+			,"org.springframework:spring-core:4.1.6.RELEASE"
+			,'com.fasterxml.jackson.core:jackson-databind:2.5.2'		
+			]
+	}
+	
+	tasks.withType(JavaCompile) {
+	    options.encoding = "UTF-8"
+	}
+	tasks.withType(Javadoc) {
+	    options.encoding = "UTF-8"
+	}
+	
+	task sourcesJar(type: Jar) {
+        classifier "sources"
+        from sourceSets.main.java.srcDirs
+    }
+    
+    task javadocJar(type: Jar, dependsOn:javadoc) { 
+         classifier = "javadoc"
+         from javadoc.destinationDir 
+    }
+    
+    artifacts {  
+        archives jar  
+        archives javadocJar  
+        archives sourcesJar  
+    }  
+     
+    
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                artifact (sourcesJar) {
+                    classifier "sources"
+                }
+                artifact (javadocJar) {
+                    classifier "javadoc"
+                }
+            }
+        }    
+    }
+
+    repositories {
+		mavenCentral()
+        maven {
+            url  ant.properties['user.home'] +  "/.m2/repository"
+        }
+	}
+
+    dependencies {
+		for (def depend : compileDependencies)  {
+			compile (depend)
+		}
+	    testCompile (
+	    	'org.testng:testng:latest.integration'
+	    )
+	}
+
+    jar {
+	    manifest.attributes 'Build-By': "zhong ji"
+	    manifest.attributes 'Tool' : "gradle"
+	    manifest.attributes 'Build-Jdk' : ant.properties['java.runtime.version']
+	    manifest.attributes 'Bundle-License': 'http://www.apache.org/licenses/LICENSE-2.0'
+	}
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src"]
+        }
+    }
+}
+	
+dependencies {
+	compile project(':featherfly-common')
+	compile 'commons-beanutils:commons-beanutils:latest.integration'
+	compile 'javassist:javassist:3.12.1.GA'
+	compile 'com.alibaba:fastjson:1.1.41'
+}
+/*
+test {
+    useTestNG()
+    testLogging.showStandardStreams = true
+    minHeapSize = "128m"
+    maxHeapSize = "512m"
+    jvmArgs '-XX:MaxPermSize=256m'
+    beforeTest { descriptor ->
+        logger.lifecycle("Running test: " + descriptor)
+    }
+    onOutput { descriptor, event ->
+        logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message)
+    }
+}
+*/

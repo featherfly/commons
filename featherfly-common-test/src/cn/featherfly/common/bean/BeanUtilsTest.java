@@ -1,13 +1,9 @@
 
 package cn.featherfly.common.bean;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
-import org.apache.commons.collections.Bag;
-import org.apache.commons.lang.StringUtils;
 import org.testng.annotations.Test;
-
-import cn.featherfly.common.bean.BeanUtils;
 
 
 /**

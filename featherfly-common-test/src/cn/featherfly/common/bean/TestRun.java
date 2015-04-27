@@ -31,7 +31,7 @@ import cn.featherfly.common.bean.BeanProperty;
  * @since 1.0
  * @version 1.0
  */
-public class Test {
+public class TestRun {
 	public static void main(String[] args) {
 		BeanDescriptor<Person> bd = BeanDescriptor.getBeanDescriptor(Person.class);
 		Iterator<BeanProperty> iter = bd.getBeanProperties().iterator();

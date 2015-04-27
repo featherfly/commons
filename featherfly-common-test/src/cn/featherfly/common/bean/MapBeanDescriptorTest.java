@@ -6,12 +6,8 @@ import static org.testng.Assert.assertEquals;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.testng.annotations.Test;
-
 import cn.featherfly.common.bean.javassist.Person;
 import cn.featherfly.common.bean.vo.User;
-
-import cn.featherfly.common.bean.BeanDescriptor;
 
 
 public class MapBeanDescriptorTest {
@@ -116,7 +112,7 @@ public class MapBeanDescriptorTest {
 		);
 	}
 
-	@Test
+	@org.testng.annotations.Test
 	public void test(){
 		java.beans.BeanDescriptor bd = new java.beans.BeanDescriptor(User.class);
 		String addName = "人民南路";

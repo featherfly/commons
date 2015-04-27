@@ -1,0 +1,3 @@
+rootProject.name = 'featherfly-common-test'
+includeFlat 'featherfly-common'
+includeFlat 'featherfly-common-bean-javassist'

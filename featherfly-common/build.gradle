@@ -9,8 +9,6 @@ apply plugin: 'signing'
 //sourceCompatibility = 1.7  
 //targetCompatibility = 1.7  
 
-archivesBaseName = 'featherfly-common'
-
 sourceSets {
     main {
         java {
@@ -18,22 +16,6 @@ sourceSets {
         }
     }
 }
-
-task sourcesJar(type: Jar) {
-	classifier "sources"
-    from sourceSets.main.java.srcDirs
-}
-
-task javadocJar(type: Jar, dependsOn:javadoc) { 
-     classifier = "javadoc"
-     from javadoc.destinationDir 
-}
-
-artifacts {  
-    archives jar  
-    archives javadocJar  
-    archives sourcesJar  
-}  
   
 //为所有的jar包做数字签名  
 signing {  
@@ -73,20 +55,6 @@ uploadArchives {
             }  
         }  
     }  
-}
-
-publishing {
-    publications {
-		mavenJava(MavenPublication) {
-        	from components.java
-            artifact (sourcesJar) {
-             	classifier "sources"
-            }
-			artifact (javadocJar) {
-				classifier "javadoc"
-			}
-        }
-    }    
 }
 /*
 test {

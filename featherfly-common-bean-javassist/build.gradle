@@ -1,0 +1,26 @@
+apply plugin: "ivy-publish"
+apply plugin: 'maven'  
+apply plugin: 'maven-publish'  
+
+//group = 'cn.featherfly'
+//version = '1.2.2'
+
+//sourceCompatibility = 1.7  
+//targetCompatibility = 1.7  
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src"]
+        }
+    }
+}
+
+dependencies {
+    compile 'cn.featherfly:featherfly-common:latest.integration'
+    compile 'javassist:javassist:3.12.1.GA'
+}
+
+jar {
+    manifest.attributes 'Build-Name': archivesBaseName
+}

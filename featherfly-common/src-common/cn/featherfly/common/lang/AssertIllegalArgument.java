@@ -27,11 +27,10 @@ public final class AssertIllegalArgument {
      * </p>
      * @param object 判断的对象
      * @param message 断言失败的信息
-     * @return 传入的参数
-     * @param <T> 泛型
+     * @传入的参数
      */
-    public static <T> T isNotNull(T object, String message) {
-        return ASSERT.isNotNull(object, message);
+    public static void isNotNull(Object object, String message) {
+        ASSERT.isNotNull(object, message);
     }
 
     /**
@@ -39,11 +38,10 @@ public final class AssertIllegalArgument {
      * 判断不为空，如果为空，抛出IllegalArgumentException异常
      * </p>
      * @param object 判断的对象
-     * @param <T> 泛型
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static <T> T isNotNull(T object) {
-        return ASSERT.isNotNull(object);
+    public static void isNotNull(Object object) {
+        ASSERT.isNotNull(object);
     }
 
     /**
@@ -52,10 +50,10 @@ public final class AssertIllegalArgument {
      * </p>
      * @param expression 判断的值
      * @param message 断言失败的信息
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static boolean isTrue(boolean expression, String message) {
-        return ASSERT.isTrue(expression, message);
+    public static void isTrue(boolean expression, String message) {
+        ASSERT.isTrue(expression, message);
     }
 
     /**
@@ -64,10 +62,10 @@ public final class AssertIllegalArgument {
      * </p>
      * @param expression 判断的值
      * @param message 断言失败的信息
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static boolean isFalse(boolean expression, String message) {
-        return ASSERT.isFalse(expression, message);
+    public static void isFalse(boolean expression, String message) {
+        ASSERT.isFalse(expression, message);
     }
 
     /**
@@ -76,10 +74,10 @@ public final class AssertIllegalArgument {
      * </p>
      * @param text 判断的字符串
      * @param message 断言失败的信息
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static String isNotBlank(String text, String message) {
-        return ASSERT.isNotBlank(text, message);
+    public static void isNotBlank(String text, String message) {
+        ASSERT.isNotBlank(text, message);
     }
 
     /**
@@ -87,10 +85,10 @@ public final class AssertIllegalArgument {
      * 判断不为空或空串（包括只有空字符的串），判断失败抛出IllegalArgumentException异常
      * </p>
      * @param text 判断的字符串
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static String isNotBlank(String text) {
-        return ASSERT.isNotBlank(text);
+    public static void isNotBlank(String text) {
+        ASSERT.isNotBlank(text);
     }
 
     /**
@@ -99,11 +97,10 @@ public final class AssertIllegalArgument {
      * </p>
      * @param obj 判断的对象
      * @param message 断言失败的信息
-     * @param <T> 泛型
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static <T> T isNotEmpty(T obj, String message) {
-        return ASSERT.isNotEmpty(obj, message);
+    public static void isNotEmpty(Object obj, String message) {
+        ASSERT.isNotEmpty(obj, message);
     }
 
     /**
@@ -111,11 +108,10 @@ public final class AssertIllegalArgument {
      * 判断不为空（String,Collection,Map,Array还要判断长度是否为0），判断失败抛出IllegalArgumentException异常
      * </p>
      * @param obj 判断的对象
-     * @param <T> 泛型
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static <T> T isNotEmpty(T obj) {
-        return ASSERT.isNotEmpty(obj);
+    public static void isNotEmpty(Object obj) {
+        ASSERT.isNotEmpty(obj);
     }
     /**
      * <p>
@@ -123,10 +119,10 @@ public final class AssertIllegalArgument {
      * </p>
      * @param text 判断的字符串
      * @param message 断言失败的信息
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static String isNotEmpty(String text, String message) {
-        return ASSERT.isNotEmpty(text, message);
+    public static void isNotEmpty(String text, String message) {
+        ASSERT.isNotEmpty(text, message);
     }
 
     /**
@@ -134,10 +130,10 @@ public final class AssertIllegalArgument {
      * 判断不为空或空串，判断失败抛出IllegalArgumentException异常
      * </p>
      * @param text 判断的字符串
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static String isNotEmpty(String text) {
-        return ASSERT.isNotEmpty(text);
+    public static void isNotEmpty(String text) {
+        ASSERT.isNotEmpty(text);
     }
 
     /**
@@ -146,11 +142,10 @@ public final class AssertIllegalArgument {
      * </p>
      * @param array 需要判断的数组
      * @param message 断言失败的信息
-     * @param <T> 泛型
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static <T> T[] isNotEmpty(T[] array, String message) {
-        return ASSERT.isNotEmpty(array, message);
+    public static void isNotEmpty(Object[] array, String message) {
+        ASSERT.isNotEmpty(array, message);
     }
 
     /**
@@ -158,11 +153,10 @@ public final class AssertIllegalArgument {
      * 判断数组不为null或size不为0，判断失败抛出IllegalArgumentException异常
      * </p>
      * @param array 需要判断的数组
-     * @param <T> 泛型
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static <T> T[] isNotEmpty(T[] array) {
-        return ASSERT.isNotEmpty(array);
+    public static void isNotEmpty(Object[] array) {
+        ASSERT.isNotEmpty(array);
     }
 
     /**
@@ -171,10 +165,10 @@ public final class AssertIllegalArgument {
      * </p>
      * @param collection 判断的集合
      * @param message 断言失败的信息
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static Collection<?> isNotEmpty(Collection<?> collection, String message) {
-        return ASSERT.isNotEmpty(collection, message);
+    public static void isNotEmpty(Collection<?> collection, String message) {
+        ASSERT.isNotEmpty(collection, message);
     }
 
     /**
@@ -182,10 +176,10 @@ public final class AssertIllegalArgument {
      * 判断集合不为null或size不为0，判断失败抛出IllegalArgumentException异常
      * </p>
      * @param collection 判断的集合
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static Collection<?> isNotEmpty(Collection<?> collection) {
-        return ASSERT.isNotEmpty(collection);
+    public static void isNotEmpty(Collection<?> collection) {
+        ASSERT.isNotEmpty(collection);
     }
 
     /**
@@ -194,10 +188,10 @@ public final class AssertIllegalArgument {
      * </p>
      * @param map 判断的集合
      * @param message 断言失败的信息
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static Map<?, ?> isNotEmpty(Map<?, ?> map, String message) {
-        return ASSERT.isNotEmpty(map, message);
+    public static void isNotEmpty(Map<?, ?> map, String message) {
+        ASSERT.isNotEmpty(map, message);
     }
 
     /**
@@ -205,10 +199,10 @@ public final class AssertIllegalArgument {
      * 判断MAP不为null或size不为0，判断失败抛出IllegalArgumentException异常
      * </p>
      * @param map 判断的集合
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static Map<?, ?> isNotEmpty(Map<?, ?> map) {
-        return ASSERT.isNotEmpty(map);
+    public static void isNotEmpty(Map<?, ?> map) {
+        ASSERT.isNotEmpty(map);
     }
 
     /**
@@ -217,10 +211,10 @@ public final class AssertIllegalArgument {
      * </p>
      * @param file 判断的文件对象
      * @param message 断言失败的信息
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static File isExists(File file , String message) {
-        return ASSERT.isExists(file, message);
+    public static void isExists(File file , String message) {
+        ASSERT.isExists(file, message);
     }
 
     /**
@@ -228,10 +222,10 @@ public final class AssertIllegalArgument {
      * 判断传入文件对象代表的物理文件是否存在，判断失败抛出IllegalArgumentException异常
      * </p>
      * @param file 判断的文件对象
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static File isExists(File file) {
-        return ASSERT.isExists(file);
+    public static void isExists(File file) {
+        ASSERT.isExists(file);
     }
 
     /**
@@ -241,11 +235,10 @@ public final class AssertIllegalArgument {
      * @param clazz 类型
      * @param obj 对象
      * @param message 断言失败的信息
-     * @param <T> 泛型
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static <T> T isInstanceOf(Class<?> clazz, T obj, String message) {
-        return ASSERT.isInstanceOf(clazz, obj, message);
+    public static void isInstanceOf(Class<?> clazz, Object obj, String message) {
+        ASSERT.isInstanceOf(clazz, obj, message);
     }
 
     /**
@@ -254,10 +247,9 @@ public final class AssertIllegalArgument {
      * </p>
      * @param clazz 类型
      * @param obj 对象
-     * @param <T> 泛型
-     * @return 传入的参数
+     * @传入的参数
      */
-    public static <T> T isInstanceOf(Class<?> clazz, T obj) {
-        return ASSERT.isInstanceOf(clazz, obj);
+    public static void isInstanceOf(Class<?> clazz, Object obj) {
+        ASSERT.isInstanceOf(clazz, obj);
     }
 }

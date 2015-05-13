@@ -888,9 +888,9 @@ public final class DateUtils {
     public static int getAge(Date birthday, Date compareDay) {
         AssertIllegalArgument.isNotNull(birthday, "birthday不能为空");
         AssertIllegalArgument.isNotNull(compareDay, "compareDay不能为空");
-        AssertIllegalArgument.isTrue(afterDay(birthday, compareDay), "birthday必须早于compareDay"); 
+        AssertIllegalArgument.isTrue(beforeDay(birthday, compareDay), "birthday必须早于compareDay"); 
         int age = getYear(compareDay) - getYear(birthday);
-        if (compare(birthday, compareDay, "MMdd") == -1) {
+        if (compare(compareDay, birthday, "MMdd") == COMPARE_LT) {
             age -= 1;
         }
         return age;

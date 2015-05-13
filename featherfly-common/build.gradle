@@ -16,7 +16,7 @@ sourceSets {
         }
     }
 }
-  
+
 //为所有的jar包做数字签名  
 signing {  
     sign configurations.archives  

@@ -83,7 +83,7 @@ public class RandomUtilsTest {
 		System.out.println("testStringLowerCase -------------------------------");
 		for (int i = 0; i < 10; i++) {
 			String result = RandomUtils.getRandomString(i+5,
-					new CharType[]{CharType.lowerCase}
+					new CharType[]{CharType.LOWER_CASE}
 			);
 			System.out.println(result);
 		}
@@ -93,7 +93,7 @@ public class RandomUtilsTest {
 		System.out.println("testStringUpperCase -------------------------------");
 		for (int i = 0; i < 10; i++) {
 			String result = RandomUtils.getRandomString(i+5,
-					new CharType[]{CharType.upperCase}
+					new CharType[]{CharType.UPPER_CASE}
 			);
 			System.out.println(result);
 		}
@@ -103,7 +103,7 @@ public class RandomUtilsTest {
 		System.out.println("testStringNumberCase -------------------------------");
 		for (int i = 0; i < 10; i++) {
 			String result = RandomUtils.getRandomString(i+5,
-					new CharType[]{CharType.numberCase}
+					new CharType[]{CharType.NUMBER_CASE}
 			);
 			System.out.println(result);
 		}
@@ -113,7 +113,7 @@ public class RandomUtilsTest {
 		System.out.println("testStringLowerCaseNumberCase -------------------------------");
 		for (int i = 0; i < 10; i++) {
 			String result = RandomUtils.getRandomString(i+5,
-					new CharType[]{CharType.numberCase,CharType.lowerCase}
+					new CharType[]{CharType.NUMBER_CASE,CharType.LOWER_CASE}
 			);
 			System.out.println(result);
 		}
@@ -123,7 +123,7 @@ public class RandomUtilsTest {
 		System.out.println("testStringUpperCaseNumberCase -------------------------------");
 		for (int i = 0; i < 10; i++) {
 			String result = RandomUtils.getRandomString(i+5,
-					new CharType[]{CharType.numberCase,CharType.upperCase}
+					new CharType[]{CharType.NUMBER_CASE,CharType.UPPER_CASE}
 			);
 			System.out.println(result);
 		}
@@ -133,7 +133,7 @@ public class RandomUtilsTest {
 		System.out.println("testStringUpperCaseNumberCase -------------------------------");
 		for (int i = 0; i < 10; i++) {
 			String result = RandomUtils.getRandomString(i+5,
-					new CharType[]{CharType.lowerCase,CharType.upperCase}
+					new CharType[]{CharType.LOWER_CASE,CharType.UPPER_CASE}
 			);
 			System.out.println(result);
 		}
@@ -143,7 +143,7 @@ public class RandomUtilsTest {
 		System.out.println("testStringUpperCaseNumberCase -------------------------------");
 		for (int i = 0; i < 10; i++) {
 			String result = RandomUtils.getRandomString(i+5,
-					new CharType[]{CharType.lowerCase,CharType.upperCase,CharType.numberCase}
+					new CharType[]{CharType.LOWER_CASE,CharType.UPPER_CASE,CharType.NUMBER_CASE}
 			);
 			System.out.println(result);
 		}

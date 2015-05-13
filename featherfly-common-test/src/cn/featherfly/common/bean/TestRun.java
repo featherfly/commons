@@ -34,10 +34,10 @@ import cn.featherfly.common.bean.BeanProperty;
 public class TestRun {
 	public static void main(String[] args) {
 		BeanDescriptor<Person> bd = BeanDescriptor.getBeanDescriptor(Person.class);
-		Iterator<BeanProperty> iter = bd.getBeanProperties().iterator();
+		Iterator<BeanProperty<?>> iter = bd.getBeanProperties().iterator();
 		Person person = new Person();
 		while (iter.hasNext()) {
-			BeanProperty p = iter.next();
+			BeanProperty<?> p = iter.next();
 //			System.out.println(p + " --- " + p.getExtendsFrom().getName());
 		}
 		bd.getBeanProperty("name").setValue(person, "yufei");

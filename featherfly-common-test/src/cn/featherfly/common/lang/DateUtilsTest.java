@@ -880,4 +880,36 @@ public class DateUtilsTest {
     	Date startDate = DateUtils.getDate(2011, 1, 1);
     	assertEquals(1, DateUtils.getWorkDayNumber(startDate, null));
     }
+    @Test
+    public void testGetAge() {
+        Date birthday = DateUtils.getDate(2000, 5, 5);
+        
+        Date compareDay1 = DateUtils.getDate(2014, 5, 6);
+        Date compareDay2 = DateUtils.getDate(2014, 5, 5);
+        Date compareDay3 = DateUtils.getDate(2014, 5, 4);
+        
+        Date compareDay4 = DateUtils.getDate(2014, 6, 6);
+        Date compareDay5 = DateUtils.getDate(2014, 6, 5);
+        Date compareDay6 = DateUtils.getDate(2014, 6, 4);
+        
+        Date compareDay7 = DateUtils.getDate(2014, 4, 6);
+        Date compareDay8 = DateUtils.getDate(2014, 4, 5);
+        Date compareDay9 = DateUtils.getDate(2014, 4, 4);
+     
+        int age1 = 14;
+        int age2 = 13;
+        
+        assertEquals(age1, DateUtils.getAge(birthday, compareDay1));
+        assertEquals(age1, DateUtils.getAge(birthday, compareDay2));
+        assertEquals(age2, DateUtils.getAge(birthday, compareDay3));
+        
+        assertEquals(age1, DateUtils.getAge(birthday, compareDay4));
+        assertEquals(age1, DateUtils.getAge(birthday, compareDay5));
+        assertEquals(age1, DateUtils.getAge(birthday, compareDay6));
+        
+        assertEquals(age2, DateUtils.getAge(birthday, compareDay7));
+        assertEquals(age2, DateUtils.getAge(birthday, compareDay8));
+        assertEquals(age2, DateUtils.getAge(birthday, compareDay9));
+        
+    }
 }

@@ -78,7 +78,7 @@ public class BeanDescriptorTest {
 
 		assertEquals(bdPerson.getProperty(p, "name"), name);
 
-		Iterator<BeanProperty> iter = bdPerson.getBeanProperties().iterator();
+		Iterator<BeanProperty<?>> iter = bdPerson.getBeanProperties().iterator();
 		while(iter.hasNext()){
 			BeanProperty bp = iter.next();
 			System.out.println(bp.getName());

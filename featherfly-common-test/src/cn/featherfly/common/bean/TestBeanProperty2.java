@@ -67,7 +67,7 @@ class TestBeanProperty2 {
 	public static void main(String[] args) {
 		TestBeanProperty2 t = new TestBeanProperty2();
 		BeanDescriptor<TestBeanProperty2> bd = BeanDescriptor.getBeanDescriptor(TestBeanProperty2.class);
-		Collection<BeanProperty> bps = bd.getBeanProperties();
+		Collection<BeanProperty<?>> bps = bd.getBeanProperties();
 		for (BeanProperty bp : bps) {
 			System.out.println(bp.getAnnotation(Resource.class));
 		}

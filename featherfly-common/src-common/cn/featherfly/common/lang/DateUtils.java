@@ -864,6 +864,37 @@ public final class DateUtils {
         }
         return days;
     }
+    
+    /**
+     * <p>
+     * 使用系统当前日期与传入出生日期比较获得年龄
+     * </p>
+     * @param birthday 生日
+     * @return 年龄
+     */
+    public static int getAge(Date birthday) {
+        AssertIllegalArgument.isNotNull(birthday, "birthday不能为空");
+        return getAge(birthday, new Date());
+    }
+    
+    /**
+     * <p>
+     * 使用传入比较日期与传入出生日期比较获得年龄.参数只要有一个为null，则返回null
+     * </p>
+     * @param birthday 生日
+     * @param compareDay 比较日期
+     * @return 年龄
+     */
+    public static int getAge(Date birthday, Date compareDay) {
+        AssertIllegalArgument.isNotNull(birthday, "birthday不能为空");
+        AssertIllegalArgument.isNotNull(compareDay, "compareDay不能为空");
+        AssertIllegalArgument.isTrue(afterDay(birthday, compareDay), "birthday必须早于compareDay"); 
+        int age = getYear(compareDay) - getYear(birthday);
+        if (compare(birthday, compareDay, "MMdd") == -1) {
+            age -= 1;
+        }
+        return age;
+    }
 
     // ********************************************************************
     // private method

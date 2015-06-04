@@ -16,7 +16,8 @@ import java.util.Map;
  */
 public class Assert {
 
-    private static final String ASSERT_TITLE = "[断言失败] - ";
+//    private static final String ASSERT_TITLE = "[断言失败] - ";
+    private static final String ASSERT_TITLE = "";
 
     private Class<?> exception;
 

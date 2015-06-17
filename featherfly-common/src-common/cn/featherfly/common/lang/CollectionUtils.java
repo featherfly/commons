@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
 
 /**
  * <p>
@@ -105,11 +102,13 @@ public final class CollectionUtils {
         } else {
             if (type == Collection.class) {
                 return (C) new ArrayList<E>();
-            } else if (type == List.class) {
+            } else if (ClassUtils.isParent(type, ArrayList.class)) {//type == List.class
                 return (C) new ArrayList<E>();
-            } else if (type == Set.class) {
+//            } else if (type == Set.class) {
+            } else if (ClassUtils.isParent(type, HashSet.class)) {
                 return (C) new HashSet<E>();
-            } else if (type == Queue.class) {
+//            } else if (type == Queue.class) {
+            } else if (ClassUtils.isParent(type, ArrayDeque.class)) {
                 return (C) new ArrayDeque<E>();
             }
             throw new IllegalArgumentException("不支持的类型：" + type.getName());

@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.bean.condition.BeanPropertyMatcher;
 import cn.featherfly.common.lang.ClassUtils;
+import cn.featherfly.common.lang.CollectionUtils;
 import cn.featherfly.common.lang.ServiceLoaderUtils;
 
 
@@ -262,11 +263,12 @@ public class BeanDescriptor<T> {
      */
     public void addProperty(T obj, String name, Object value) {
         BeanProperty<?> beanProperty = getChildBeanProperty(name);
-        if (ClassUtils.isParent(Collection.class, beanProperty.getType())) {
+        if (ClassUtils.isCellection(beanProperty.getType())) {
             @SuppressWarnings("unchecked")
             Collection<Object> collection = (Collection<Object>) getProperty(obj, name);
             if (collection == null) {
-                collection = new ArrayList<Object>();
+                collection = CollectionUtils.newInstance(beanProperty.getType());
+                setProperty(obj, name, collection);
             }
             collection.add(value);
         } else {

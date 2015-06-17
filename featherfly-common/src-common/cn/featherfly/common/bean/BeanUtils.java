@@ -135,7 +135,6 @@ public final class BeanUtils {
             if (beanProperty.isReadable()) {
                 map.put(beanProperty.getName(), beanProperty.getValue(bean));
             }
-
         }
         return map;
     }
@@ -207,7 +206,60 @@ public final class BeanUtils {
     }
     /**
      * <p>
-     * 对象属性复制
+     * 对象属性合并
+     * </p>
+     * @param <E> 传入对象类型
+     * @param target 目标对象
+     * @param from 源对象
+     */
+    public static <E> void mergeProperties(E target, E from) {
+        mergeProperties(target, from, DEFAULT_RULE);
+    }
+
+    /**
+     * <p>
+     * 对象属性合并
+     * </p>
+     * @param <E> 传入对象类型
+     * @param target 目标对象
+     * @param from 源对象
+     * @param copyRuleEnum 已有的复制规则枚举对象
+     */
+    public static <E> void mergeProperties(E target, E from, CopyRuleEnum copyRuleEnum) {
+        copyProperties(target, from, copyRuleEnum.getCopyRule());
+    }
+    /**
+     * <p>
+     * 对象属性合并
+     * </p>
+     * @param <E> 传入对象类型
+     * @param target 目标对象
+     * @param from 源对象
+     * @param rule 复制规则
+     */
+    public static <E> void mergeProperties(E target, E from, CopyRule rule) {
+        if (target == null) {
+            LOGGER.debug("目标对象target为空");
+            return;
+        }
+        if (from == null) {
+            LOGGER.debug("来源对象from为空");
+            return;
+        }
+        BeanDescriptor<E> targetBeanDescriptor = BeanDescriptor.getBeanDescriptor(
+                        ClassUtils.castGenericType(target.getClass(), target));
+        BeanDescriptor<E> fromBeanDescriptor = BeanDescriptor.getBeanDescriptor(
+                        ClassUtils.castGenericType(from.getClass(), from));
+        Iterator<BeanProperty<?>> iter = fromBeanDescriptor.getBeanProperties().iterator();
+        while (iter.hasNext()) {
+            BeanProperty<?> fromProperty = iter.next();
+            String name = fromProperty.getName();
+            copyProperty(target, targetBeanDescriptor, from, fromProperty, name, rule);
+        }
+    }
+    /**
+     * <p>
+     * 对象属性复制，复制源和复制目标必须是一样的类型或者继承关系
      * </p>
      * @param <E> 传入对象类型
      * @param target 目标对象
@@ -219,7 +271,7 @@ public final class BeanUtils {
 
     /**
      * <p>
-     * 对象属性复制
+     * 对象属性复制，复制源和复制目标必须是一样的类型或者继承关系
      * </p>
      * @param <E> 传入对象类型
      * @param target 目标对象
@@ -232,7 +284,7 @@ public final class BeanUtils {
 
     /**
      * <p>
-     * 对象属性复制
+     * 对象属性复制，复制源和复制目标必须是一样的类型或者继承关系
      * </p>
      * @param <E> 传入对象类型
      * @param target 目标对象
@@ -277,7 +329,6 @@ public final class BeanUtils {
                     String.format("目标对象和源对象不是相同类型也不是继承关系target[%s]，from[%s]",
                             target.getClass().getName(), from.getClass().getName()));
         }
-
     }
 
     /**
@@ -328,16 +379,41 @@ public final class BeanUtils {
 
     private static <E> void copyProperty(E target, BeanDescriptor<?> targetBeanDescriptor,
                     E from, BeanProperty<?> fromProperty, String name, CopyRule rule) {
-        if (fromProperty.isReadable() && fromProperty.isWritable()) {
+        try {
+            BeanProperty<?> targetProperty = targetBeanDescriptor.getBeanProperty(name);
+            copyProperty(target, targetProperty, from, fromProperty, name, rule);
+        } catch (NoSuchPropertyException e) {
+            LOGGER.debug("类{}没有属性{}", new Object[]{target.getClass().getName()
+                    , name});
+            return;
+        }
+//        if (!fromProperty.isReadable()) {
+//            LOGGER.debug("类{}的属性{}不可读", new Object[]{from.getClass().getName()
+//                    , fromProperty.getName()});
+//        }
+//        Object value = fromProperty.getValue(from);
+//        if (rule.isCopyEnabled(target, from, name, value)) {
+//            targetBeanDescriptor.getBeanProperty(name)
+//                .setValue(target, value);
+//        }
+//            LOGGER.debug("类{}的属性{}不是可读写属性", new Object[]{from.getClass().getName()
+//                                , fromProperty.getName()});
+    }
+    
+    private static <E> void copyProperty(E target, BeanProperty<?> targetProperty,
+            E from, BeanProperty<?> fromProperty, String name, CopyRule rule) {
+        if (!fromProperty.isReadable()) {
+            LOGGER.debug("类{}的属性{}不可读", new Object[]{from.getClass().getName()
+                    , fromProperty.getName()});
+        } else if (!targetProperty.isWritable()) {
+            LOGGER.debug("类{}的属性{}不可写", new Object[]{target.getClass().getName()
+                    , targetProperty.getName()});
+        } else {
             Object value = fromProperty.getValue(from);
             if (rule.isCopyEnabled(target, from, name, value)) {
-                targetBeanDescriptor.getBeanProperty(name)
-                    .setValue(target, value);
-            }
-        } else {
-            LOGGER.debug("类{}的属性{}不是可读写属性", new Object[]{from.getClass().getName()
-                                , fromProperty.getName()});
-        }
+                targetProperty.setValue(target, value);
+            }    
+        } 
     }
 
     // ********************************************************************

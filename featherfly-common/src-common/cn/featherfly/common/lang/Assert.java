@@ -17,7 +17,6 @@ import java.util.Map;
 public class Assert {
 
 //    private static final String ASSERT_TITLE = "[断言失败] - ";
-    private static final String ASSERT_TITLE = "";
 
     private Class<?> exception;
 
@@ -39,7 +38,7 @@ public class Assert {
      */
     public void isNotNull(Object object, String message) {
         if (object == null) {
-            throwException(ASSERT_TITLE + message);
+            throwException(message);
         }
     }
     
@@ -65,7 +64,7 @@ public class Assert {
      */
     public void isTrue(boolean expression, String message) {
         if (!expression) {
-            throwException(ASSERT_TITLE + message);
+            throwException(message);
         }
     }
 
@@ -79,7 +78,7 @@ public class Assert {
      */
     public void isFalse(boolean expression, String message) {
         if (expression) {
-            throwException(ASSERT_TITLE + message);
+            throwException(message);
         }
     }
 
@@ -93,7 +92,7 @@ public class Assert {
      */
     public void isNotBlank(String text, String message) {
         if (!StringUtils.isNotBlank(text)) {
-            throwException(ASSERT_TITLE + message);
+            throwException(message);
         }
     }
 
@@ -120,7 +119,7 @@ public class Assert {
      */
     public void isNotEmpty(Object obj, String message) {
         if (!LangUtils.isNotEmpty(obj)) {
-            throwException(ASSERT_TITLE + message);
+            throwException(message);
         }
     }
 
@@ -145,7 +144,7 @@ public class Assert {
      */
     public void isNotEmpty(String text, String message) {
         if (!LangUtils.isNotEmpty(text)) {
-            throwException(ASSERT_TITLE + message);
+            throwException(message);
         }
     }
 
@@ -171,7 +170,7 @@ public class Assert {
      */
     public void isNotEmpty(Object[] array, String message) {
         if (LangUtils.isEmpty(array)) {
-            throwException(ASSERT_TITLE + message);
+            throwException(message);
         }
     }
 
@@ -197,7 +196,7 @@ public class Assert {
      */
     public void isNotEmpty(Collection<?> collection, String message) {
         if (LangUtils.isEmpty(collection)) {
-            throwException(ASSERT_TITLE + message);
+            throwException(message);
         }
     }
 
@@ -223,7 +222,7 @@ public class Assert {
      */
     public void isNotEmpty(Map<?, ?> map, String message) {
         if (LangUtils.isEmpty(map)) {
-            throwException(ASSERT_TITLE + message);
+            throwException(message);
         }
     }
 
@@ -249,7 +248,7 @@ public class Assert {
      */
     public void isExists(File file , String message) {
         if (!LangUtils.isExists(file)) {
-            throwException(ASSERT_TITLE + message);
+            throwException(message);
         }
     }
 
@@ -275,7 +274,7 @@ public class Assert {
      */
     public void isInstanceOf(Class<?> clazz, Object obj, String message) {
         isNotNull(clazz, "参数clazz不能为空");
-        isTrue(clazz.isInstance(obj), (new StringBuilder(ASSERT_TITLE))
+        isTrue(clazz.isInstance(obj), new StringBuilder()
                         .append(message)
                         .append("参数obj '")
                         .append(obj == null ? "[null]" : obj.getClass().getName())

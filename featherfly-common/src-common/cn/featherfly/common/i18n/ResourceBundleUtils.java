@@ -62,6 +62,15 @@ public class ResourceBundleUtils {
      * {@link java.util.ResourceBundle#getString(java.lang.String) getString}
      * @see java.util.ResourceBundle#getString(java.lang.String) getString
      * @param pattern 查找字符串的模式
+     * @return the string for the given key
+     */
+    public static String getString(String pattern) {
+        return getString(pattern, null);
+    }
+    /**
+     * {@link java.util.ResourceBundle#getString(java.lang.String) getString}
+     * @see java.util.ResourceBundle#getString(java.lang.String) getString
+     * @param pattern 查找字符串的模式
      * @param argus argus
      * @return the string for the given key
      */

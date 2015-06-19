@@ -1,4 +1,4 @@
-2015-06-
+2015-06-19
 1.2.8 发布
 	1.加入ResourceBundleUtils
 	

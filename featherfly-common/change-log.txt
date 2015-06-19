@@ -1,4 +1,8 @@
 2015-06-19
+1.2.9发布
+	1.修复ResourceBundleUtils获取KEY的BUG
+	
+2015-06-19
 1.2.8 发布
 	1.加入ResourceBundleUtils
 	

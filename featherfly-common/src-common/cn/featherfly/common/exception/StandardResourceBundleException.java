@@ -1,18 +1,14 @@
 package cn.featherfly.common.exception;
 
 import java.lang.reflect.Field;
-import java.text.MessageFormat;
 import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.featherfly.common.i18n.JdkResourceBundleFactory;
-import cn.featherfly.common.i18n.ResourceBundleFactory;
+import cn.featherfly.common.i18n.ResourceBundleUtils;
 import cn.featherfly.common.lang.ClassUtils;
-import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.lang.LogUtils;
-import cn.featherfly.common.lang.ServiceLoaderUtils;
 
 
 /**
@@ -28,14 +24,7 @@ public abstract class StandardResourceBundleException extends RuntimeException{
      */
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     
-    private ResourceBundleFactory resourceBundleFactory = ServiceLoaderUtils.load(ResourceBundleFactory.class
-                    , new JdkResourceBundleFactory());
-
     private static final long serialVersionUID = -580152334157640022L;
-    
-    private static final char RESOURCE_SIGN = '@';
-    
-    private static final char KEY_SIGN = '#';
     
     /**
      * 构造方法
@@ -123,18 +112,16 @@ public abstract class StandardResourceBundleException extends RuntimeException{
     }
     
     private void setMessage(String message, Object[] argus, Locale locale) {
-        String baseName = this.getClass().getSimpleName();
-        String key = null;
         String msg = null;
-        int keyIndex = message.indexOf(KEY_SIGN);
+        char keySign = ResourceBundleUtils.KEY_SIGN;
+        char resourceSign = ResourceBundleUtils.RESOURCE_SIGN;
+        int keyIndex = message.indexOf(keySign);
         char firstChar = message.charAt(0);
-        if (firstChar == RESOURCE_SIGN && keyIndex != -1) {
-            baseName = message.substring(1, message.indexOf(KEY_SIGN));
-            key = message.substring(message.indexOf(KEY_SIGN));
-            msg = getMessageFromBundle(message, baseName, key, argus, locale);
-        } else if (firstChar == KEY_SIGN) {
-            key = message.substring(1);
-            msg = getMessageFromBundle(message, baseName, key, argus, locale);
+        if (firstChar == resourceSign && keyIndex != -1) {
+            msg = ResourceBundleUtils.getString(message, argus, locale);
+        } else if (firstChar == keySign) {
+            msg = ResourceBundleUtils.getString(
+                    ResourceBundleUtils.RESOURCE_SIGN + this.getClass().getSimpleName() + message, argus, locale);
         } else {
             msg = message;
         }
@@ -146,16 +133,5 @@ public abstract class StandardResourceBundleException extends RuntimeException{
         } catch (Exception e) {        
             LogUtils.error(e, logger);
         }
-    }
-    
-    private String getMessageFromBundle(String message, String baseName, String key
-                    , Object[] argus, Locale locale) {
-        String msg = resourceBundleFactory.getBundle(baseName, locale).getString(key);
-        if (LangUtils.isNotEmpty(argus)) {
-            msg = MessageFormat.format(msg, argus);
-        }
-        logger.debug("match ResourceBundle pattern -> [{}] : baseName[{}] and key[{}], message -> {}"
-                        , new Object[]{message, baseName, key, msg});
-        return msg;
     }
 }

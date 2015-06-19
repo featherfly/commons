@@ -74,7 +74,7 @@ test {
 jar {
     manifest.attributes 'Build-Name': archivesBaseName
     manifest.attributes 'Build-By': "zhong ji"
-    manifest.attributes 'Tool' : "gradle"
+    manifest.attributes 'Build-Tool' : "gradle " + gradle.gradleVersion
     manifest.attributes 'Build-Jdk' : ant.properties['java.runtime.version']
     manifest.attributes 'Bundle-License': 'http://www.apache.org/licenses/LICENSE-2.0'
 }

@@ -92,7 +92,7 @@ public class ResourceBundleUtils {
         char firstChar = pattern.charAt(0);
         if (firstChar == RESOURCE_SIGN && keyIndex != -1) {
             baseName = pattern.substring(1, pattern.indexOf(KEY_SIGN));
-            key = pattern.substring(pattern.indexOf(KEY_SIGN));
+            key = pattern.substring(pattern.indexOf(KEY_SIGN) + 1);
             return getStringFromBundle(pattern, baseName, key, argus, locale);
         } else {
             throw new IllegalArgumentException(

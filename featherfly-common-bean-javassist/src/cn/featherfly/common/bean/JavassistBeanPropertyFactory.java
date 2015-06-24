@@ -43,34 +43,34 @@ public class JavassistBeanPropertyFactory implements BeanPropertyFactory {
 	 * @return 动态创建的BeanProperty子类
 	 */
 	@Override
-	public <T> BeanProperty<T> create(Class<T> type, Field field, Method setMethod, Method getMethod) {
+	public <T> BeanProperty<T> create(Class<?> type, Field field, Class<T> fieldType, Method setMethod, Method getMethod) {
 		try {
-			return create(type, field.getName(), field, setMethod, getMethod);
+			return create(type, field.getName(), field, fieldType, setMethod, getMethod);
 		} catch (Exception e) {
 			throw new NoSuchPropertyException(type, field.getName(), e);
 		}
 	}
 
-	/**
-	 * <p>
-	 * 动态创建指定类型指定属性对应的BeanProperty子类
-	 * </p>
-	 * @param type 类型
-	 * @param propertyName 属性名
-	 * @return 动态创建的BeanProperty子类
-	 */
-	@Override
-	public <T> BeanProperty<T> create(Class<T> type, String propertyName) {
-		Field field;
-		try {
-			field = type.getDeclaredField(propertyName);
-			Method getter = ClassUtils.getGetter(field, type);
-			Method setter = ClassUtils.getSetter(field, type);
-			return create(type, propertyName, field, setter, getter);
-		} catch (Exception e) {
-			throw new NoSuchPropertyException(type, propertyName, e);
-		}
-	}
+//	/**
+//	 * <p>
+//	 * 动态创建指定类型指定属性对应的BeanProperty子类
+//	 * </p>
+//	 * @param type 类型
+//	 * @param propertyName 属性名
+//	 * @return 动态创建的BeanProperty子类
+//	 */
+//	@Override
+//	public <T> BeanProperty<T> create(Class<T> type, String propertyName) {
+//		Field field;
+//		try {
+//			field = type.getDeclaredField(propertyName);
+//			Method getter = ClassUtils.getGetter(field, type);
+//			Method setter = ClassUtils.getSetter(field, type);
+//			return create(type, propertyName, field, setter, getter);
+//		} catch (Exception e) {
+//			throw new NoSuchPropertyException(type, propertyName, e);
+//		}
+//	}
 
 	/*
 	 * <p>
@@ -84,7 +84,7 @@ public class JavassistBeanPropertyFactory implements BeanPropertyFactory {
 	 * @return BeanProperty
 	 */
 	@SuppressWarnings("unchecked")
-    private <T> BeanProperty<T> create(Class<T> type, String name, Field field, Method setMethod, Method getMethod) {
+    private <T> BeanProperty<T> create(Class<?> type, String name, Field field, Class<T> fieldType, Method setMethod, Method getMethod) {
 		if (setMethod == null && getMethod == null) {
 			throw new NoSuchPropertyException(type, name, "没有读取和写入方法");
 		}
@@ -123,7 +123,7 @@ public class JavassistBeanPropertyFactory implements BeanPropertyFactory {
 						+ "%1$s value = (%1$s) $2;"
 						+ "%2$s obj = (%2$s)$1;"
 						+ "obj.%3$s(value);"
-						+ "}", field.getType().getName(), type.getName(), setterName);
+						+ "}", fieldType.getName(), type.getName(), setterName);
 			}
 			LOGGER.trace("类型{}属性{}的设置方法内容：{}", new Object[]{type.getName(), name, setterBody});
 			setter.setBody(setterBody);

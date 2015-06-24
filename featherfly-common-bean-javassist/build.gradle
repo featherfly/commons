@@ -16,7 +16,7 @@ sourceSets {
 }
 
 dependencies {
-    compile 'cn.featherfly:featherfly-common:1.2.6'
+    compile 'cn.featherfly:featherfly-common:1.3.0'
     compile 'javassist:javassist:3.12.1.GA'
 }
 

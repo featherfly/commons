@@ -1,3 +1,7 @@
+2015-06-24
+1.3.0 发布
+	1.featherfly-common升级1.3.0支持泛型
+	
 2015-04-27
 1.2.1 发布
 	1.BeanPropertyFactory和BeanProperty加入泛型支持

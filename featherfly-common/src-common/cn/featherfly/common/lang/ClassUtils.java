@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -518,6 +520,32 @@ public final class ClassUtils {
      */
     public static <T> Class<T> getSuperClassGenricType(Class<?> clazz) {
         return getSuperClassGenricType(clazz, 0);
+    }
+    
+    /**
+     * 通过反射,获得指定类的父类的泛型参数的实际类型与父类定义泛型是的定义之间的映射关系.
+     *
+     * @param clazz
+     *            clazz 需要反射的类,该类必须继承泛型父类
+     * @param <T> 泛型
+     * @return 使用父类定义泛型的参数名作为KEY,子类实例化泛型的TYPE作为VALUE作为
+     *         <code>Object.class</code>
+     */
+    public static Map<String, Type> getSuperClassGenricTypeMap(Class<?> clazz) {
+        Map<String, Type> typeGenericParams = new HashMap<>(0);
+        // 得到泛型父类
+        Type genType = clazz.getGenericSuperclass();
+        if (genType instanceof ParameterizedType) { 
+            // 如果是泛型父类拿到泛型父类定义中已经明确的泛型
+            ParameterizedType pt = (ParameterizedType) genType;
+            Type[] types = pt.getActualTypeArguments();
+            // 获取父类型的泛型定义
+            TypeVariable<?>[] tvs = clazz.getSuperclass().getTypeParameters();
+            for (int i = 0; i < types.length; i++) {
+                typeGenericParams.put(tvs[i].getName(), types[i]);
+            }
+        }
+        return typeGenericParams;
     }
 
     /**

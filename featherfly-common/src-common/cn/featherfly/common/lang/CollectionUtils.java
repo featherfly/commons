@@ -5,7 +5,9 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
  * <p>
@@ -110,6 +112,20 @@ public final class CollectionUtils {
 //            } else if (type == Queue.class) {
             } else if (ClassUtils.isParent(type, ArrayDeque.class)) {
                 return (C) new ArrayDeque<E>();
+            }
+            throw new IllegalArgumentException("不支持的类型：" + type.getName());
+         }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static <K, V> Map<K, V> newMap(Class<?> type) {
+        AssertIllegalArgument.isTrue(ClassUtils.isParent(Map.class, type)
+                        , "传入类型必须是Map接口的子接口或实现类");
+        if (ClassUtils.isInstanceClass(type)) {
+            return (Map<K, V>) ClassUtils.newInstance(type);
+        } else {
+            if (type == Map.class) {
+                return  new HashMap<K, V>();
             }
             throw new IllegalArgumentException("不支持的类型：" + type.getName());
          }

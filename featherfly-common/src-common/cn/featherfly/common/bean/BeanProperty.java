@@ -30,6 +30,7 @@ public class BeanProperty<T> implements GenericType<T> {
 
     private String name;
 
+    // 属性类型，支持泛型类型自动探测
     private Class<T> type;
 
     private Method setter;
@@ -50,12 +51,11 @@ public class BeanProperty<T> implements GenericType<T> {
      * @param setter 读取方法
      * @param getter 写入方法
      */
-    @SuppressWarnings("unchecked")
-    protected BeanProperty(Class<?> ownerType, Field field, Method setter, Method getter) {
+    protected BeanProperty(Class<?> ownerType, Field field, Class<T> fieldType, Method setter, Method getter) {
         this.ownerType = ownerType;
         this.field = field;
         this.name = field.getName();
-        this.type = (Class<T>) field.getType();
+        this.type = fieldType;
         this.setter = setter;
         this.getter = getter;
         initAnnotation();

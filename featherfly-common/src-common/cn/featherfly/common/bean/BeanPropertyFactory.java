@@ -24,16 +24,16 @@ public interface BeanPropertyFactory {
      * @param <T> 泛型
      * @return 创建的BeanProperty
      */
-    <T> BeanProperty<T> create(Class<T> type, Field field, Method setMethod, Method getMethod);
+    <T> BeanProperty<T> create(Class<?> type, Field field, Class<T> fieldType, Method setMethod, Method getMethod);
     
-    /**
-     * <p>
-     * 创建指定类型指定属性对应的BeanProperty
-     * </p>
-     * @param type 类型
-     * @param propertyName 属性名
-     * @param <T> 泛型
-     * @return 创建的BeanProperty子类
-     */
-    <T> BeanProperty<T> create(Class<T> type, String propertyName);    
+//    /**
+//     * <p>
+//     * 创建指定类型指定属性对应的BeanProperty
+//     * </p>
+//     * @param type 类型
+//     * @param propertyName 属性名
+//     * @param <T> 泛型
+//     * @return 创建的BeanProperty子类
+//     */
+//    <T> BeanProperty<T> create(Class<T> type, String propertyName);    
 }

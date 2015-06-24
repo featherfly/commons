@@ -7,9 +7,6 @@ import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.featherfly.common.lang.ClassUtils;
-import cn.featherfly.common.lang.LogUtils;
-
 /**
  * <p>
  * 动态创建指定类型指定属性对应的BeanProperty子类的工厂.<br/>
@@ -22,7 +19,7 @@ import cn.featherfly.common.lang.LogUtils;
  */
 public class ReflectionBeanPropertyFactory implements BeanPropertyFactory{
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReflectionBeanPropertyFactory.class);
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     /**
      */
     public ReflectionBeanPropertyFactory() {
@@ -33,25 +30,25 @@ public class ReflectionBeanPropertyFactory implements BeanPropertyFactory{
      * {@inheritDoc}
      */
     @Override
-    public <T> BeanProperty<T> create(Class<T> type, Field field, Method setMethod,
+    public <T> BeanProperty<T> create(Class<?> type, Field field, Class<T> fieldType, Method setMethod,
                     Method getMethod) {
-        return new BeanProperty<T>(type, field, setMethod, getMethod);
+        return new BeanProperty<T>(type, field, fieldType,setMethod, getMethod);
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T> BeanProperty<T> create(Class<T> type, String propertyName) {
-        try {
-            Field field = type.getDeclaredField(propertyName);
-            Method getter = ClassUtils.getGetter(field, type);
-            Method setter = ClassUtils.getSetter(field, type);
-            return create(type, field, setter, getter);
-        } catch (Exception e) {
-            LogUtils.debug(e, LOGGER);
-            throw new NoSuchPropertyException(type, propertyName, e);
-        }
-    }
+//    /**
+//     * {@inheritDoc}
+//     */
+//    @Override
+//    public <T> BeanProperty<T> create(Class<T> type, String propertyName) {
+//        try {
+//            Field field = type.getDeclaredField(propertyName);
+//            Method getter = ClassUtils.getGetter(field, type);
+//            Method setter = ClassUtils.getSetter(field, type);
+//            return create(type, field, setter, getter);
+//        } catch (Exception e) {
+//            LogUtils.debug(e, LOGGER);
+//            throw new NoSuchPropertyException(type, propertyName, e);
+//        }
+//    }
 }

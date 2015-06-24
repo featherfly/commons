@@ -1,3 +1,8 @@
+2015-06-24
+1.3.0发布
+	1.BeanDescriptor加入泛型支持
+	2.ClassUtils加入返回父类泛型映射的方法getSuperClassGenricTypeMap(Class<?> clazz)
+	
 2015-06-19
 1.2.9发布
 	1.修复ResourceBundleUtils获取KEY的BUG

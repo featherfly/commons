@@ -4,13 +4,11 @@ package cn.featherfly.common.bean;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.collections.map.ListOrderedMap;
@@ -62,6 +60,8 @@ public class BeanDescriptor<T> {
 //    private Map<String, BeanProperty> beanProperties = new HashMap<String, BeanProperty>(0);
 
     private ListOrderedMap beanProperties = new ListOrderedMap();
+    
+    private Map<String, Type> typeGenericParams = new HashMap<>(0);
 
     /**
      * 句号（.）
@@ -73,8 +73,16 @@ public class BeanDescriptor<T> {
      */
     protected BeanDescriptor(Class<T> type) {
         this.type = type;
+        
+        initTypeGenericParam(this.type);
         this.initField(this.type);
     }
+    
+    public void initTypeGenericParam(Class<T> type) {
+        // 得到泛型父类
+        typeGenericParams = ClassUtils.getSuperClassGenricTypeMap(type);
+    }
+
 
     //从field开始初始化
     private void initField(Class<?> parent) {
@@ -84,10 +92,18 @@ public class BeanDescriptor<T> {
         }
         Field[] fields = parent.getDeclaredFields();
         for (Field field : fields) {
+            Type genericType = typeGenericParams.get(field.getGenericType().toString());
+            Class<?> fieldType = null;
+            // 判断类型定义的泛型参数
+            if (genericType == null) {
+                fieldType = field.getType();
+            } else {
+                fieldType = (Class<?>) genericType;
+            }
             Method getter = ClassUtils.getGetter(field, this.type);
             Method setter = ClassUtils.getSetter(field, this.type);
             if (getter != null || setter != null) {
-                BeanProperty<?> prop = FACTORY.create(this.type, field, setter, getter);
+                BeanProperty<?> prop = FACTORY.create(this.type, field, fieldType, setter, getter);
                 beanProperties.put(prop.getName(), prop);
                 if (LOGGER.isTraceEnabled() && parent != this.type) {
                     LOGGER.trace("类{}从父类{}中继承的属性：[{}]", new Object[]{this.type.getName()
@@ -220,11 +236,17 @@ public class BeanDescriptor<T> {
             //中间层次为空，使用默认构造函数生成一个空对象
             if (propertyValue == null) {
                 try {
-                    if (property.getType() == Map.class) {
-                        LOGGER.trace("类{}的属性[{}]为空，对象为MAP接口，自动创建该属性对象[使用HashMap]", new Object[]
+                    if (ClassUtils.isCellection(property.getType())) {
+                        LOGGER.trace("类{}的属性[{}]为空，对象为Collection接口实现类，自动创建该属性对象"
+                                , new Object[]
+                                {property.getOwnerType().getName()
+                                        , property.getName()});
+                        propertyValue = CollectionUtils.newInstance(property.getType());
+                    } else if (ClassUtils.isMap(property.getType())) {
+                        LOGGER.trace("类{}的属性[{}]为空，对象为MAP接口，自动创建该属性对象", new Object[]
                         {property.getOwnerType().getName(), property.getName()});
-                        propertyValue = new HashMap<Object, Object>();
-                    } else if (property.getType() == List.class) {
+                        propertyValue = CollectionUtils.newMap(property.getType());
+                    }/* else if (property.getType() == List.class) {
                         LOGGER.trace("类{}的属性[{}]为空，对象为List接口，自动创建该属性对象[使用ArrayList]"
                                         , new Object[]
                                         {property.getOwnerType().getName()
@@ -234,7 +256,7 @@ public class BeanDescriptor<T> {
                         LOGGER.trace("类{}的属性[{}]为空，对象为Set接口，自动创建该属性对象[使用HashSet]", new Object[]
                         {property.getOwnerType().getName(), property.getName()});
                         propertyValue = new HashSet<Object>();
-                    } else {
+                    }*/ else {
                         LOGGER.trace("类{}的属性[{}]为空，自动创建该属性对象[使用newInstance()]", new Object[]
                         {property.getOwnerType().getName(), property.getName()});
                         propertyValue = property.getType().newInstance();

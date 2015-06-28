@@ -130,7 +130,7 @@ public class BeanDescriptor<T> {
         for (Method method : type.getMethods()) {
             if (ClassUtils.isGetter(method)) {
                 String propertyName = ClassUtils.getPropertyName(method);
-                if (getBeanProperty(propertyName) == null) {
+                if (!hasBeanProperty(propertyName)) {
                     Map<String, Object> prop = getProperty(properties,
                             propertyName);
                     prop.put("get", method);
@@ -152,7 +152,7 @@ public class BeanDescriptor<T> {
             }
             if (ClassUtils.isSetter(method)) {
                 String propertyName = ClassUtils.getPropertyName(method);
-                if (getBeanProperty(propertyName) == null) {
+                if (!hasBeanProperty(propertyName)) {
                     Map<String, Object> prop = getProperty(properties,
                             propertyName);
                     prop.put("set", method);
@@ -265,6 +265,18 @@ public class BeanDescriptor<T> {
             throw new NoSuchPropertyException(type, name);
         }
         return property;
+    }
+    /**
+     * <p>
+     * 返回指定属性是否存在
+     * </p>
+     * 
+     * @param name
+     *            属性名
+     * @return 指定属性是否存在
+     */
+    public boolean hasBeanProperty(String name) {
+        return beanProperties.get(name) != null;
     }
 
     /**

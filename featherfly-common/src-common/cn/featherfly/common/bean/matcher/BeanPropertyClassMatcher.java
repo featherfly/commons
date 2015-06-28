@@ -1,5 +1,5 @@
 
-package cn.featherfly.common.bean.condition;
+package cn.featherfly.common.bean.matcher;
 
 import cn.featherfly.common.bean.BeanProperty;
 

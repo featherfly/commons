@@ -41,21 +41,30 @@ public class BeanProperty<T> implements GenericType<T> {
 
     //属性所在的类的类型
     private Class<?> ownerType;
-    //属性定义所在的类（可以被子类继承）
-//    private Class<?> extendsFrom;
-    private Collection<Annotation> annotations;
     
+    //属性定义所在的类（可以被子类继承）
+    
+    private Class<?> declaringType;
+    
+    private Collection<Annotation> annotations;
+       
     /**
-     * @param ownerType 当前类的类型
-     * @param field 成员变量
-     * @param setter 读取方法
-     * @param getter 写入方法
+     * @param propertyName 属性名称
+     * @param field 存取数据的字段
+     * @param propertyType 属性类型
+     * @param setMethod 设置方法
+     * @param getMethod 读取方法
+     * @param ownerType 属性所在的类型
+     * @param declaringType 定义属性的类型 （可能是ownerType的父类，也可能一样）
+     * @param <T> 泛型
      */
-    protected BeanProperty(Class<?> ownerType, Field field, Class<T> fieldType, Method setter, Method getter) {
+    protected BeanProperty(String propertyName, Field field, Class<T> propertyType, Method setter, Method getter
+            , Class<?> ownerType, Class<?> declaringType) {
         this.ownerType = ownerType;
+        this.declaringType = declaringType;
         this.field = field;
-        this.name = field.getName();
-        this.type = fieldType;
+        this.name = propertyName;
+        this.type = propertyType;
         this.setter = setter;
         this.getter = getter;
         initAnnotation();
@@ -327,13 +336,6 @@ public class BeanProperty<T> implements GenericType<T> {
     public Field getField() {
         return field;
     }
-
-//    /**
-//     * @return 返回extendsFrom
-//     */
-//    public Class<?> getExtendsFrom() {
-//        return extendsFrom;
-//    }
     /**
      * 返回ownerType
      * @return ownerType
@@ -341,4 +343,14 @@ public class BeanProperty<T> implements GenericType<T> {
     public Class<?> getOwnerType() {
         return ownerType;
     }
+
+    /**
+     * 返回declaringType
+     * @return declaringType
+     */
+    public Class<?> getDeclaringType() {
+        return declaringType;
+    }
+    
+    
 }

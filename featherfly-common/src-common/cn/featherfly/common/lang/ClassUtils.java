@@ -202,16 +202,15 @@ public final class ClassUtils {
      */
     public static String getPropertyName(Method method) {
         String name = null;
-        final int startIndex = 3;
         if (isSetter(method)) {
-            name = method.getName().substring(startIndex);
+            name = method.getName().substring(SET.length());
         }
         if (isGetter(method)) {
             name = method.getName();
             if (name.startsWith(IS)) {
-                name = name.substring(2);
+                name = name.substring(IS.length());
             } else if (name.startsWith(GET)) {
-                name = name.substring(startIndex);
+                name = name.substring(GET.length());
             }
         }
         if (name != null) {
@@ -782,7 +781,7 @@ public final class ClassUtils {
      * @param matcher 匹配条件
      * @return 第一个符合条件Field
      */
-    public Field findField(Class<?> type, FieldMatcher matcher) {
+    public static Field findField(Class<?> type, FieldMatcher matcher) {
         if (type != null) {
             for (Field field : type.getDeclaredFields()) {
                 if (matcher.match(field)) {
@@ -801,7 +800,7 @@ public final class ClassUtils {
      * @param matcher 匹配条件
      * @return 所有符合条件Field的集合
      */
-    public Collection<Field> findFields(Class<?> type, FieldMatcher matcher) {
+    public static Collection<Field> findFields(Class<?> type, FieldMatcher matcher) {
         Collection<Field> fields = new ArrayList<Field>();
         if (type != null) {
             for (Field field : type.getDeclaredFields()) {
@@ -821,7 +820,7 @@ public final class ClassUtils {
      * @param matcher 匹配条件
      * @return 第一个符合条件Method
      */
-    public Method findMethod(Class<?> type, MethodMatcher matcher) {
+    public static Method findMethod(Class<?> type, MethodMatcher matcher) {
         if (type != null) {
             for (Method method : type.getDeclaredMethods()) {
                 if (matcher.match(method)) {
@@ -840,7 +839,7 @@ public final class ClassUtils {
      * @param matcher 匹配条件
      * @return 所有符合条件Method的集合
      */
-    public Collection<Method> findMethods(Class<?> type, MethodMatcher matcher) {
+    public static Collection<Method> findMethods(Class<?> type, MethodMatcher matcher) {
         Collection<Method> methods = new ArrayList<Method>();
         if (type != null) {
             for (Method method : type.getDeclaredMethods()) {

@@ -30,9 +30,9 @@ public class ReflectionBeanPropertyFactory implements BeanPropertyFactory{
      * {@inheritDoc}
      */
     @Override
-    public <T> BeanProperty<T> create(Class<?> type, Field field, Class<T> fieldType, Method setMethod,
-                    Method getMethod) {
-        return new BeanProperty<T>(type, field, fieldType,setMethod, getMethod);
+    public <T> BeanProperty<T> create(String propertyName, Field field, Class<T> propertyType, Method setMethod, Method getMethod
+            , Class<?> ownerType, Class<?> declaringType) {
+        return new BeanProperty<T>(propertyName, field, propertyType, setMethod, getMethod, ownerType, declaringType);
     }
 
 

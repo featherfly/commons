@@ -1,5 +1,5 @@
 
-package cn.featherfly.common.bean.condition;
+package cn.featherfly.common.bean.matcher;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

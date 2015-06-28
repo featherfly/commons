@@ -19,7 +19,6 @@ import cn.featherfly.common.bean.matcher.BeanPropertyMatcher;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.CollectionUtils;
 import cn.featherfly.common.lang.LangUtils;
-import cn.featherfly.common.lang.LogUtils;
 import cn.featherfly.common.lang.ServiceLoaderUtils;
 
 /**
@@ -136,12 +135,14 @@ public class BeanDescriptor<T> {
                         propertyName);
                 prop.put("get", method);
                 prop.put("ownerType", type);
-                try {
-                    Field field = ClassUtils
-                            .getField(method.getDeclaringClass(), propertyName);
-                    prop.put("field", field);
-                } catch (NoSuchFieldException e) {
-                    LogUtils.debug(e, LOGGER);
+                if (prop.get("field") == null) {
+                    try {
+                        Field field = ClassUtils
+                                .getField(method.getDeclaringClass(), propertyName);
+                        prop.put("field", field);
+                    } catch (NoSuchFieldException e) {
+                        LOGGER.debug(e.getMessage());
+                    }                    
                 }
             }
             if (ClassUtils.isSetter(method)) {
@@ -150,12 +151,14 @@ public class BeanDescriptor<T> {
                         propertyName);
                 prop.put("set", method);
                 prop.put("ownerType", type);
-                try {
-                    Field field = ClassUtils.getField(method.getDeclaringClass(),
-                            propertyName);
-                    prop.put("field", field);
-                } catch (NoSuchFieldException e) {
-                    LogUtils.debug(e, LOGGER);
+                if (prop.get("field") == null) {
+                    try {
+                        Field field = ClassUtils.getField(method.getDeclaringClass(),
+                                propertyName);
+                        prop.put("field", field);
+                    } catch (NoSuchFieldException e) {
+                        LOGGER.debug(e.getMessage());
+                    }    
                 }
             }
         }

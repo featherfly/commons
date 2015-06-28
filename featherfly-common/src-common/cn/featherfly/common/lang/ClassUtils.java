@@ -225,8 +225,8 @@ public final class ClassUtils {
      */
     public static boolean isSetter(Method method) {
         String set = SET;
-        String name = method.getName();
-        return (name.startsWith(set) && !set.equals(name));
+        String name = method.getName();        
+        return (name.startsWith(set) && !set.equals(name) && method.getParameterTypes().length == 1);
     }
 
     /**
@@ -238,10 +238,10 @@ public final class ClassUtils {
         String get = GET;
         String is = IS;
         String name = method.getName();
-        if (name.startsWith(get) && !get.equals(name)) {
+        if (name.startsWith(get) && !get.equals(name) && method.getReturnType() != void.class) {
             return true;
         }
-        if (name.startsWith(is) && !is.equals(name)) {
+        if (name.startsWith(is) && !is.equals(name) && method.getReturnType() != void.class) {
             return true;
         }
         return false;

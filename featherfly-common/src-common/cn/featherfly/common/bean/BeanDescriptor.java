@@ -82,7 +82,7 @@ public class BeanDescriptor<T> {
         this.type = type;
 
         initTypeGenericParam(this.type);
-//        this.initField(this.type);
+        this.initFromField(this.type);
         this.initFromMethod(this.type);
     }
 
@@ -92,38 +92,37 @@ public class BeanDescriptor<T> {
     }
 
     // 从field开始初始化
-//    private void initField(Class<?> parent) {
-//        // TODO 从field查找完成再查找set,get方法，单纯的设置、读取方法，没有field，用于动态读取、设置
-//        if (null == parent || parent == Object.class) {
-//            return;
-//        }
-//        Field[] fields = parent.getDeclaredFields();
-//        for (Field field : fields) {
-//            Type genericType = typeGenericParams
-//                    .get(field.getGenericType().toString());
-//            Class<?> fieldType = null;
-//            // 判断类型定义的泛型参数
-//            if (genericType == null) {
-//                fieldType = field.getType();
-//            } else {
-//                fieldType = (Class<?>) genericType;
-//            }
-//            Method getter = ClassUtils.getGetter(field, this.type);
-//            Method setter = ClassUtils.getSetter(field, this.type);
-//            if (getter != null || setter != null) {
-//                BeanProperty<?> prop = FACTORY.create(this.type, field,
-//                        fieldType, setter, getter);
-//                beanProperties.put(prop.getName(), prop);
-//                if (LOGGER.isTraceEnabled() && parent != this.type) {
-//                    LOGGER.trace("类{}从父类{}中继承的属性：[{}]",
-//                            new Object[] { this.type.getName(),
-//                                    parent.getName(), prop.getName() });
-//                }
-//            }
-//        }
-//        // 到父类中查找属性
-//        initField(parent.getSuperclass());
-//    }
+    private void initFromField(Class<?> parent) {
+        if (null == parent || parent == Object.class) {
+            return;
+        }
+        Field[] fields = parent.getDeclaredFields();
+        for (Field field : fields) {
+            Type genericType = typeGenericParams
+                    .get(field.getGenericType().toString());
+            Class<?> fieldType = null;
+            // 判断类型定义的泛型参数
+            if (genericType == null) {
+                fieldType = field.getType();
+            } else {
+                fieldType = (Class<?>) genericType;
+            }
+            Method getter = ClassUtils.getGetter(field, this.type);
+            Method setter = ClassUtils.getSetter(field, this.type);
+            if (getter != null || setter != null) {
+                BeanProperty<?> prop = FACTORY.create(field.getName(), field, fieldType
+                        , setter, getter, this.type, field.getDeclaringClass());
+                beanProperties.put(prop.getName(), prop);
+                if (LOGGER.isTraceEnabled() && parent != this.type) {
+                    LOGGER.trace("类{}从父类{}中继承的属性：[{}]",
+                            new Object[] { this.type.getName(),
+                                    parent.getName(), prop.getName() });
+                }
+            }
+        }
+        // 到父类中查找属性
+        initFromField(parent.getSuperclass());
+    }
 
     // 初始化动态set get方法
     private void initFromMethod(Class<?> type) {
@@ -131,26 +130,36 @@ public class BeanDescriptor<T> {
         for (Method method : type.getMethods()) {
             if (ClassUtils.isGetter(method)) {
                 String propertyName = ClassUtils.getPropertyName(method);
-                Map<String, Object> prop = getProperty(properties,
-                        propertyName);
-                prop.put("get", method);
-                prop.put("ownerType", type);
-                if (prop.get("field") == null) {
-                    try {
+                if (getBeanProperty(propertyName) == null) {
+                    Map<String, Object> prop = getProperty(properties,
+                            propertyName);
+                    prop.put("get", method);
+                    prop.put("ownerType", type);
+                    // 因为先使用field初始化了，所以现在都应该只剩动态getter或动态setter了
+                    /*try {
                         Field field = ClassUtils
                                 .getField(method.getDeclaringClass(), propertyName);
                         prop.put("field", field);
+                        if (field.getType() == method.getReturnType()) {
+                            prop.put("get", method);   
+                        } else {
+                            prop.put("get", method);
+                        }
                     } catch (NoSuchFieldException e) {
                         LOGGER.debug(e.getMessage());
-                    }                    
+                    }*/
                 }
             }
             if (ClassUtils.isSetter(method)) {
                 String propertyName = ClassUtils.getPropertyName(method);
-                Map<String, Object> prop = getProperty(properties,
-                        propertyName);
-                prop.put("set", method);
-                prop.put("ownerType", type);
+                if (getBeanProperty(propertyName) == null) {
+                    Map<String, Object> prop = getProperty(properties,
+                            propertyName);
+                    prop.put("set", method);
+                    prop.put("ownerType", type);
+                }
+                // 因为先使用field初始化了，所以现在都应该只剩动态getter或动态setter了
+                /*
                 if (prop.get("field") == null) {
                     try {
                         Field field = ClassUtils.getField(method.getDeclaringClass(),
@@ -159,22 +168,22 @@ public class BeanDescriptor<T> {
                     } catch (NoSuchFieldException e) {
                         LOGGER.debug(e.getMessage());
                     }    
-                }
+                }*/
             }
         }
         for(Map<String, Object> prop : properties.values()) {
             Class<?> propertyType = null;
             Class<?> declaringType = null;
             String propertyName = null;
-            Field field = null;
+//            Field field = null;
             Method setter = null; 
             Method getter = null;
-            if (prop.get("field") != null) {
+            /*if (prop.get("field") != null) {
                 field = (Field) prop.get("field");
                 declaringType = field.getDeclaringClass();
                 propertyName = field.getName();
                 propertyType = getGenericType(field.getGenericType(), field.getType());
-            } 
+            } */
             if (prop.get("get") != null) {
                 getter = (Method) prop.get("get");
                 declaringType = LangUtils.pick(declaringType, getter.getDeclaringClass()) ;
@@ -189,8 +198,8 @@ public class BeanDescriptor<T> {
                         , getGenericType(setter.getGenericParameterTypes()[0], setter.getParameterTypes()[0]));
                 propertyName = LangUtils.pick(propertyName, ClassUtils.getPropertyName(setter));
             }
-            BeanProperty<?> property = FACTORY.create(propertyName, field,
-                    propertyType, setter, getter, type, declaringType);            
+            BeanProperty<?> property = FACTORY.create(propertyName, null,
+                    propertyType, setter, getter, type, declaringType);
             beanProperties.put(property.getName(), property);
             if (LOGGER.isTraceEnabled()) {
                 LOGGER.trace("类{}的属性：[{}]， 定义子类{}",

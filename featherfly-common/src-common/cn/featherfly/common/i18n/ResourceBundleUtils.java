@@ -23,8 +23,12 @@ public class ResourceBundleUtils {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(ResourceBundleUtils.class);
     
-    private static ResourceBundleFactory resourceBundleFactory = ServiceLoaderUtils.load(ResourceBundleFactory.class
-            , new JdkResourceBundleFactory());
+    private static final ResourceBundleFactory RESOURCE_BUNDLE_FACTORY = ServiceLoaderUtils.load(
+            ResourceBundleFactory.class, new JdkResourceBundleFactory());
+    
+    private static final LocaleManager LOCALE_MANAGER = ServiceLoaderUtils.load(
+            LocaleManager.class, new DefaultLocaleManager());
+    
     /**
      * Bundle标识符
      */
@@ -36,6 +40,16 @@ public class ResourceBundleUtils {
     
     /**
      * <p>
+     * 获取ResourceBundleUtils在没有传入Locale时使用的默认Locale,默认Locale使用LocaleManager加载
+     * </p>
+     * @return Locale
+     */
+    public static Locale getLocale() {
+        return LOCALE_MANAGER.getLocale();
+    }
+    
+    /**
+     * <p>
      * getBundle,use default locale
      * </p>
      * @param baseName
@@ -43,7 +57,7 @@ public class ResourceBundleUtils {
      * @return ResourceBundle
      */
     public static ResourceBundle getBundle(String baseName) {
-        return resourceBundleFactory.getBundle(baseName, Locale.getDefault());
+        return RESOURCE_BUNDLE_FACTORY.getBundle(baseName, LOCALE_MANAGER.getLocale());
     }
     /**
      * <p>
@@ -56,7 +70,7 @@ public class ResourceBundleUtils {
      * @return ResourceBundle
      */
     public static ResourceBundle getBundle(String baseName, Locale locale) {
-        return resourceBundleFactory.getBundle(baseName, locale);
+        return RESOURCE_BUNDLE_FACTORY.getBundle(baseName, locale);
     }
     /**
      * {@link java.util.ResourceBundle#getString(java.lang.String) getString}
@@ -75,7 +89,7 @@ public class ResourceBundleUtils {
      * @return the string for the given key
      */
     public static String getString(String pattern, Object[] argus) {
-        return getString(pattern, argus, Locale.getDefault());                
+        return getString(pattern, argus, LOCALE_MANAGER.getLocale());                
     }
     /**
      * {@link java.util.ResourceBundle#getString(java.lang.String) getString}

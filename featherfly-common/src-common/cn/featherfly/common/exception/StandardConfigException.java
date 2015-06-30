@@ -12,7 +12,7 @@ import java.util.Locale;
  * 
  * @author 钟冀
  */
-public class StandardConfigException extends StandardResourceBundleException {
+public class StandardConfigException extends LocalizedException {
 
     private static final long serialVersionUID = -8304486676180024022L;
 

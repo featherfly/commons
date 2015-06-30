@@ -2,6 +2,7 @@ package cn.featherfly.common.lang;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -17,7 +18,10 @@ import java.util.Map;
 public final class AssertIllegalArgument {
     
     private static final Assert ASSERT = new Assert(IllegalArgumentException.class);
-
+public static void main(String[] args) {
+    
+    System.out.println(Locale.US);
+}
     private AssertIllegalArgument() {
     }
 

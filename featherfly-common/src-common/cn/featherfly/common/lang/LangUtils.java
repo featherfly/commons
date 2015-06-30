@@ -2,8 +2,11 @@ package cn.featherfly.common.lang;
 
 import java.io.File;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  *
@@ -289,5 +292,64 @@ public final class LangUtils {
      */
     public static String toString(Object obj) {
         return toString(obj, null);
+    }
+    
+    
+    public static StackTraceElement getInvoker() {
+        final String methodName = "getInvoker";
+        for (Entry<Thread, StackTraceElement[]> entry : Thread
+                .getAllStackTraces().entrySet()) {
+            StackTraceElement[] stackTraceElements = entry.getValue();
+            boolean findThis = false;
+            boolean findInvokeThis = false;
+            boolean findInvokor = false;
+            for (StackTraceElement stackTraceElement : stackTraceElements) {
+                if (findThis) {
+                    findInvokeThis = true;
+                    findThis = false;
+              }
+                if (stackTraceElement.getClassName().equals(LangUtils.class.getName())
+                        && stackTraceElement.getMethodName().equals(methodName)) {
+                    findThis = true;
+                }
+                if (findInvokor) {
+                    return stackTraceElement;
+                }
+                if (findInvokeThis) {
+                    findInvokeThis = false;
+                    findInvokor = true;
+                } 
+            }
+        }
+        return null;
+    }
+    public static List<StackTraceElement> getInvokers() {
+        final String methodName = "getInvokers";
+        List<StackTraceElement> invokers = new ArrayList<>();
+        for (Entry<Thread, StackTraceElement[]> entry : Thread
+                .getAllStackTraces().entrySet()) {
+            StackTraceElement[] stackTraceElements = entry.getValue();
+            boolean findThis = false;
+            boolean findInvokeThis = false;
+            boolean findInvokor = false;
+            for (StackTraceElement stackTraceElement : stackTraceElements) {
+                if (findThis) {
+                      findInvokeThis = true;
+                      findThis = false;
+                }
+                if (stackTraceElement.getClassName().equals(LangUtils.class.getName())
+                        && stackTraceElement.getMethodName().equals(methodName)) {
+                    findThis = true;
+                }
+                if (findInvokor) {
+                    invokers.add(stackTraceElement);
+                }
+                if (findInvokeThis) {
+                    findInvokeThis = false;
+                    findInvokor = true;
+                }                
+            }
+        }
+        return invokers;
     }
 }

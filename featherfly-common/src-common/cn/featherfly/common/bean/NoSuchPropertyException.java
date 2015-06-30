@@ -1,6 +1,7 @@
 
 package cn.featherfly.common.bean;
 
+import java.util.Locale;
 
 /**
  * <p>
@@ -10,13 +11,9 @@ package cn.featherfly.common.bean;
  *
  * @author 钟冀
  */
-public class NoSuchPropertyException extends RuntimeException{
+public class NoSuchPropertyException extends PropertyException{
 
     private static final long serialVersionUID = -8041655239720325546L;
-
-    private static final String MSG_START = "%s没有这样的属性：[%s]";
-
-    private static final String MSG_SPLITOR = " , ";
 
     /**
      *
@@ -24,28 +21,16 @@ public class NoSuchPropertyException extends RuntimeException{
      * @param propertyName 属性名
      */
     public NoSuchPropertyException(Class<?> clazz, String propertyName) {
-        super(String.format(MSG_START, clazz.getName(), propertyName));
+        super(clazz, propertyName, "no_property");
     }
-
     /**
      *
      * @param clazz 类型
      * @param propertyName 属性名
-     * @param message 信息
+     * @param locale locale
      */
-    public NoSuchPropertyException(Class<?> clazz, String propertyName, String message) {
-        super(String.format(MSG_START, clazz.getName(), propertyName) + MSG_SPLITOR + message);
-    }
-
-    /**
-     *
-     * @param clazz 类型
-     * @param propertyName 属性名
-     * @param message 信息
-     * @param cause 异常
-     */
-    public NoSuchPropertyException(Class<?> clazz, String propertyName, String message, Throwable cause) {
-        super(String.format(MSG_START, clazz.getName(), propertyName) + MSG_SPLITOR + message , cause);
+    public NoSuchPropertyException(Class<?> clazz, String propertyName, Locale locale) {
+        super(clazz, propertyName, "no_property", locale);
     }
 
     /**
@@ -55,26 +40,10 @@ public class NoSuchPropertyException extends RuntimeException{
      * @param cause 异常
      */
     public NoSuchPropertyException(Class<?> clazz, String propertyName, Throwable cause) {
-        super(String.format(MSG_START, clazz.getName(), propertyName), cause);
+        super(clazz, propertyName, "no_property", cause);
     }
 
     // ********************************************************************
     // property
     // ********************************************************************
-
-    private String propertyName;
-
-    /**
-     * @return 返回propertyName
-     */
-    public String getPropertyName() {
-        return propertyName;
-    }
-
-    /**
-     * @param propertyName 设置propertyName
-     */
-    public void setPropertyName(String propertyName) {
-        this.propertyName = propertyName;
-    }
 }

@@ -3,10 +3,9 @@ package cn.featherfly.common.bean;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cn.featherfly.common.lang.ClassUtils;
+import cn.featherfly.common.logging.Logger;
+import cn.featherfly.common.logging.LoggerManager;
 
 
 /**
@@ -19,8 +18,7 @@ import cn.featherfly.common.lang.ClassUtils;
  */
 public final class MapBeanDescriptor<T> extends BeanDescriptor<T>{
 
-    private static final Logger LOGGER = LoggerFactory
-                    .getLogger(MapBeanDescriptor.class);
+    private static final Logger LOGGER = LoggerManager.getLogger();
 
     /**
      * @param type 类型

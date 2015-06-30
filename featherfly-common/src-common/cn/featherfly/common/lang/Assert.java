@@ -18,7 +18,7 @@ public class Assert {
 
 //    private static final String ASSERT_TITLE = "[断言失败] - ";
 
-    protected Class<?> exception;
+    private Class<?> exception;
 
     /**
      * @param exceptionType 断言失败抛出的异常类型

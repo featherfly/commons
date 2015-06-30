@@ -13,12 +13,12 @@ import cn.featherfly.common.lang.LogUtils;
 
 /**
  * <p>
- * 支持国际化消息输出的异常
+ * 标准异常
  * </p>
  *
  * @author 钟冀
  */
-public abstract class LocalizedException extends RuntimeException{
+public abstract class StandardResourceBundleException extends RuntimeException{
     /**
      * logger
      */
@@ -29,7 +29,7 @@ public abstract class LocalizedException extends RuntimeException{
     /**
      * 构造方法
      */
-    protected LocalizedException() {
+    protected StandardResourceBundleException() {
     }
     /**
      * 构造方法
@@ -38,7 +38,7 @@ public abstract class LocalizedException extends RuntimeException{
      * @param locale locale
      * @param ex 异常
      */
-    protected LocalizedException(String message, Object[] argus, Locale locale, Throwable ex) {
+    protected StandardResourceBundleException(String message, Object[] argus, Locale locale, Throwable ex) {
         super(message, ex);
         setMessage(message, argus, locale);
     }
@@ -48,7 +48,7 @@ public abstract class LocalizedException extends RuntimeException{
      * @param locale locale
      * @param ex 异常
      */
-    protected LocalizedException(String message, Locale locale, Throwable ex) {
+    protected StandardResourceBundleException(String message, Locale locale, Throwable ex) {
         this(message, new Object[]{}, locale, ex);
     }
     /**
@@ -57,8 +57,8 @@ public abstract class LocalizedException extends RuntimeException{
      * @param argus 消息绑定参数
      * @param ex 异常
      */
-    protected LocalizedException(String message, Object[] argus, Throwable ex) {
-        this(message, argus, ResourceBundleUtils.getLocale(), ex);
+    protected StandardResourceBundleException(String message, Object[] argus, Throwable ex) {
+        this(message, argus, Locale.getDefault(), ex);
     }
     
     /**
@@ -66,7 +66,7 @@ public abstract class LocalizedException extends RuntimeException{
      * @param message 信息
      * @param ex 异常
      */
-    protected LocalizedException(String message, Throwable ex) {
+    protected StandardResourceBundleException(String message, Throwable ex) {
         this(message, new Object[]{}, ex);
     }
     /**
@@ -75,7 +75,7 @@ public abstract class LocalizedException extends RuntimeException{
      * @param argus 消息绑定参数
      * @param locale locale
      */
-    protected LocalizedException(String message, Object[] argus, Locale locale) {
+    protected StandardResourceBundleException(String message, Object[] argus, Locale locale) {
         super(message);
         setMessage(message, argus, locale);
     }
@@ -84,22 +84,22 @@ public abstract class LocalizedException extends RuntimeException{
      * @param message 信息
      * @param argus 消息绑定参数
      */
-    protected LocalizedException(String message, Object[] argus) {
-        this(message, argus, ResourceBundleUtils.getLocale());
+    protected StandardResourceBundleException(String message, Object[] argus) {
+        this(message, argus, Locale.getDefault());
     }
     /**
      * 构造方法
      * @param message 信息
      * @param locale locale
      */
-    protected LocalizedException(String message, Locale locale) {
+    protected StandardResourceBundleException(String message, Locale locale) {
         this(message, new Object[]{}, locale);
     }
     /**
      * 构造方法
      * @param message 信息
      */
-    protected LocalizedException(String message) {
+    protected StandardResourceBundleException(String message) {
         this(message, new Object[]{});
     }
 
@@ -107,7 +107,7 @@ public abstract class LocalizedException extends RuntimeException{
      * 构造方法
      * @param ex 异常
      */
-    protected LocalizedException(Throwable ex) {
+    protected StandardResourceBundleException(Throwable ex) {
         super(ex);
     }
     

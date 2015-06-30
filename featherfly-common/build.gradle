@@ -14,9 +14,6 @@ sourceSets {
         java {
             srcDirs = ["src-common", "src-structure"]
         }
-        resources {
-            srcDirs = ["resources"]
-        }
     }
 }
 

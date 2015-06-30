@@ -5,14 +5,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cn.featherfly.common.bean.rule.CopyRule;
 import cn.featherfly.common.bean.rule.CopyRuleAlwaysCopy;
 import cn.featherfly.common.bean.rule.CopyRuleEnum;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.LangUtils;
-import cn.featherfly.common.logging.Logger;
-import cn.featherfly.common.logging.LoggerManager;
 
 
 
@@ -28,7 +29,7 @@ public final class BeanUtils {
     private BeanUtils() {
     }
 
-    private static final Logger LOGGER = LoggerManager.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(BeanUtils.class);
 
     private static final CopyRule DEFAULT_RULE = new CopyRuleAlwaysCopy();
 

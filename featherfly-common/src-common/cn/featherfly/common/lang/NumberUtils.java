@@ -3,6 +3,7 @@ package cn.featherfly.common.lang;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 
 /**
  * <p>
@@ -18,6 +19,7 @@ public final class NumberUtils {
      */
     private NumberUtils() {
     }
+    
     @SuppressWarnings("unchecked")
     public static <T extends Number> T value(Number number, Class<T> targetType) {
         if (targetType == Integer.class
@@ -142,6 +144,30 @@ public final class NumberUtils {
             return Float.parseFloat(target);
         } catch (Exception e) {
             return defaultValue;
+        }
+    }
+    
+    /**
+     * <p>
+     * 传入数字长度低于传入最小长度则使用传入字符补全在开头使长度达到最小长度
+     * </p>
+     * @param number 数字
+     * @param minLength 最小长度
+     * @param sign 补全使用的字符
+     * @return 补全后的字符串
+     */
+    public static <N extends Number> String fillingAtStart(N number, int minLength, char sign) {
+        AssertIllegalArgument.isNotNull(number);
+        int requiredLength = minLength - number.toString().length();
+        if (requiredLength > 0) {
+            StringBuilder pattern = new StringBuilder("'");
+            for (int i = 0; i < requiredLength; i++) {
+                pattern.append(sign);
+            }
+            pattern.append("'#");
+            return new DecimalFormat(pattern.toString()).format(number);
+        } else {
+            return number.toString();
         }
     }
 }

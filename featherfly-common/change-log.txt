@@ -1,5 +1,9 @@
 FIXME 日志目前有问题，打印信息没有获取调用类，而是使用代理类
 
+2015-07-12
+1.4.2发布
+	1.修复mergeProperties(E target, E from, CopyRuleEnum copyRuleEnum)方法调用了copyProperties方法BUG
+	
 2015-07-08
 1.4.1发布
 	1.NumberUtils加入fillingAtStart方法

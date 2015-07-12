@@ -227,7 +227,7 @@ public final class BeanUtils {
      * @param copyRuleEnum 已有的复制规则枚举对象
      */
     public static <E> void mergeProperties(E target, E from, CopyRuleEnum copyRuleEnum) {
-        copyProperties(target, from, copyRuleEnum.getCopyRule());
+        mergeProperties(target, from, copyRuleEnum.getCopyRule());
     }
     /**
      * <p>

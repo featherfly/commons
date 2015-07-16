@@ -234,17 +234,30 @@ public final class LangUtils {
     public static <T extends Enum<T>> T toEnum(Class<T> toClass, Object object) {
         if (object != null) {
             if (object instanceof String[]) {
-                return Enum.valueOf(toClass, ((String[]) object)[0]);
+                return toEnum(toClass, ((String[]) object)[0]);
             } else if (object instanceof String) {
-                return Enum.valueOf(toClass, (String) object);
+                return toEnum(toClass, (String) object);
             } else if (object instanceof Integer || object.getClass() == int.class) {
                 Integer ordinal = (Integer) object;
-                T[] es = (T[]) toClass.getEnumConstants();
-                for (T e : es) {
-                    if (e.ordinal() == ordinal) {
-                        return (T) e;
-                    }
-                }
+                return toEnum(toClass, ordinal);
+            }
+        }
+        return null;
+    }
+    
+    private static <T extends Enum<T>> T toEnum(Class<T> toClass, String value) {
+        try {
+            int ordinal = Integer.parseInt(value);
+            return toEnum(toClass, ordinal);
+        } catch(NumberFormatException e) {
+            return Enum.valueOf(toClass, value); 
+        }    
+    }
+    private static <T extends Enum<T>> T toEnum(Class<T> toClass, Integer ordinal) {
+        T[] es = (T[]) toClass.getEnumConstants();
+        for (T e : es) {
+            if (e.ordinal() == ordinal) {
+                return (T) e;
             }
         }
         return null;

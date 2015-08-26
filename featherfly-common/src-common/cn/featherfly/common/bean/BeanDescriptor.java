@@ -128,6 +128,10 @@ public class BeanDescriptor<T> {
     private void initFromMethod(Class<?> type) {
         Map<String, Map<String, Object>> properties = new HashMap<>();
         for (Method method : type.getMethods()) {
+            // 忽略Object对象
+            if (method.getDeclaringClass() == Object.class) {
+                continue;
+            }
             if (ClassUtils.isGetter(method)) {
                 String propertyName = ClassUtils.getPropertyName(method);
                 if (!hasBeanProperty(propertyName)) {

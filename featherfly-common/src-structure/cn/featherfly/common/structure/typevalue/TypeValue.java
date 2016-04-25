@@ -1,5 +1,5 @@
 
-package cn.featherfly.common.structure.typeid;
+package cn.featherfly.common.structure.typevalue;
 
 import java.io.Serializable;
 
@@ -12,14 +12,14 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
  * 
  * @author 钟冀
  */
-public abstract class IdObject<V extends Serializable> {
+public abstract class TypeValue<V extends Serializable> {
 
     private V value;
     
     /**
      * @param value
      */
-    public IdObject(V value) {
+    public TypeValue(V value) {
         super();
         AssertIllegalArgument.isNotEmpty(value, "value can not be null or empty");
         this.value = value;

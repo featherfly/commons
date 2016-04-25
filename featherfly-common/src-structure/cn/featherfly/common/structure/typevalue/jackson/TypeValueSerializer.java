@@ -1,15 +1,15 @@
-package cn.featherfly.common.structure.typeid.jackson;
+package cn.featherfly.common.structure.typevalue.jackson;
 
 import java.io.IOException;
 
-import cn.featherfly.common.structure.typeid.IdObject;
+import cn.featherfly.common.structure.typevalue.TypeValue;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-public class IdObjectSerializer<ID extends IdObject> extends JsonSerializer<ID> {    
+public class TypeValueSerializer<ID extends TypeValue<?>> extends JsonSerializer<ID> {    
     /**
      * {@inheritDoc}
      */

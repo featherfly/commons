@@ -1,5 +1,13 @@
 FIXME 日志目前有问题，打印信息没有获取调用类，而是使用代理类
 
+2016-05-06
+1.5.1发布
+    1.PaginationResults加入getResultSize方法
+
+2016-04-25
+1.5.0发布
+    1.加入typevalue支持
+
 2015-07-30
 1.4.3发布
     1.BeanDescription修复把Object的getClass当做class属性了，直接忽略

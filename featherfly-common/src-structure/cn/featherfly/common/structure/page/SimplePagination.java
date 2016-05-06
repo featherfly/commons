@@ -21,6 +21,8 @@ public class SimplePagination<E> implements PaginationResults<E>{
     private Integer pageNumber;
 
     private Iterable<E> pageResults;
+    
+    private Integer resultSize;
 
     /**
      * {@inheritDoc}
@@ -95,6 +97,25 @@ public class SimplePagination<E> implements PaginationResults<E>{
     @Override
     public Iterable<E> getPageResults() {
         return pageResults;
+    }
+
+
+    /**
+     * 返回resultSize
+     * @return resultSize
+     */
+    @Override
+    public Integer getResultSize() {
+        return resultSize;
+    }
+
+
+    /**
+     * 设置resultSize
+     * @param resultSize resultSize
+     */
+    public void setResultSize(Integer resultSize) {
+        this.resultSize = resultSize;
     }
 //    /**
 //     * {@inheritDoc}

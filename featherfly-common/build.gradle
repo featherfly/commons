@@ -59,6 +59,44 @@ uploadArchives {
         }  
     }  
 }
+
+task("uploadNexusArchives", type: Upload) {
+    configuration = configurations.archives
+    uploadDescriptor = true
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            repository(url:"http://192.168.203.241:8081/nexus/content/repositories/releases/") {
+                authentication(userName: 'admin', password: 'admin123')
+            }
+            pom.project {
+                name project.name
+                packaging 'jar'
+                description 'common tool'
+                url 'https://github.com/featherfly/common.git'
+                scm {
+                    url 'scm:git@github.com:featherfly/common.git'
+                    connection 'scm:git@github.com:featherfly/common.git'
+                    developerConnection 'git@github.com:featherfly/common.git'
+                }
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'featherfly'
+                        name 'zhongji'
+                    }
+                }
+            }
+        }
+    }
+}
+
 /*
 test {
     useTestNG()

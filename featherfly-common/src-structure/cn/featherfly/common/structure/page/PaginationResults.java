@@ -24,6 +24,13 @@ public interface PaginationResults<E> extends Pagination{
      * @param pageReults 结果集
      */
     void setPageResults(Iterable<E> pageReults);
+    /**
+     * <p>
+     * 获取结果集数量
+     * </p>
+     * @return 结果数量 
+     */
+    Integer getResultSize();
 }
 
 

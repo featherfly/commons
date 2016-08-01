@@ -15,5 +15,10 @@ public interface TypeValue<V extends Serializable> {
      * 返回value
      * @return value
      */
-    public abstract V getValue();
+    V getValue();
+    /**
+     * 返回value.class
+     * @return value.class
+     */
+    Class<V> getValueType();
 }

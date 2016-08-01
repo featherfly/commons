@@ -3,8 +3,6 @@ package cn.featherfly.common.structure.typevalue;
 
 import java.io.Serializable;
 
-import cn.featherfly.common.lang.AssertIllegalArgument;
-
 /**
  * <p>
  * IdObject
@@ -21,7 +19,7 @@ public abstract class AbstractTypeValue<V extends Serializable> implements TypeV
      */
     public AbstractTypeValue(V value) {
         super();
-        AssertIllegalArgument.isNotEmpty(value, "value can not be null or empty");
+//        AssertIllegalArgument.isNotEmpty(value, "value can not be null or empty");
         this.value = value;
     }
 
@@ -38,6 +36,10 @@ public abstract class AbstractTypeValue<V extends Serializable> implements TypeV
      */
     @Override
     public String toString() {
-        return value.toString();
+        if (value != null) { 
+            return value.toString();
+        } else {
+            return "";
+        }
     }
 }

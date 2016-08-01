@@ -9,18 +9,23 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-public class TypeValueSerializer<ID extends TypeValue<?>> extends JsonSerializer<ID> {    
+public class TypeValueSerializer<T extends TypeValue<?>> extends JsonSerializer<T> {    
     /**
      * {@inheritDoc}
      */
     @Override
-    public void serialize(ID value, JsonGenerator gen,
+    public void serialize(T type, JsonGenerator gen,
             SerializerProvider serializers) throws IOException,
             JsonProcessingException {
-        if (value.getValue() instanceof Number) {
-            gen.writeRawValue(value.toString());
+        Object value = type.getValue();
+        if (value == null) {
+            gen.writeString("");
         } else {
-            gen.writeString(value.toString());
+            if (value instanceof Number) {
+                gen.writeRawValue(value.toString());
+            } else {
+                gen.writeString(value.toString());
+            }            
         }
     }
 }

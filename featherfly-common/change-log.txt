@@ -1,5 +1,9 @@
 FIXME 日志目前有问题，打印信息没有获取调用类，而是使用代理类
 
+2016-08-01
+1.5.2发布
+    1.加入TypeValue接口
+
 2016-05-06
 1.5.1发布
     1.PaginationResults加入getResultSize方法

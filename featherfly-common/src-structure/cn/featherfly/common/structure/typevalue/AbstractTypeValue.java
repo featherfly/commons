@@ -12,23 +12,23 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
  * 
  * @author 钟冀
  */
-public abstract class TypeValue<V extends Serializable> {
+public abstract class AbstractTypeValue<V extends Serializable> implements TypeValue<V> {
 
     private V value;
     
     /**
      * @param value
      */
-    public TypeValue(V value) {
+    public AbstractTypeValue(V value) {
         super();
         AssertIllegalArgument.isNotEmpty(value, "value can not be null or empty");
         this.value = value;
     }
 
     /**
-     * 返回value
-     * @return value
+     * {@inheritDoc}
      */
+    @Override
     public V getValue() {
         return value;
     }

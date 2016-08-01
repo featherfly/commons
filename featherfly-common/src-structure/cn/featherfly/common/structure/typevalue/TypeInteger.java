@@ -1,6 +1,6 @@
 package cn.featherfly.common.structure.typevalue;
 
-public class TypeInteger extends TypeValue<Integer>{
+public class TypeInteger extends AbstractTypeValue<Integer>{
     /**
      * @param value
      */

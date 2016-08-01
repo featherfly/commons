@@ -1,6 +1,6 @@
 package cn.featherfly.common.structure.typevalue;
 
-public class TypeString extends TypeValue<String>{
+public class TypeString extends AbstractTypeValue<String>{
     /**
      * @param value
      */

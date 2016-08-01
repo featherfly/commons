@@ -77,7 +77,7 @@ public final class NumberUtils {
      * </p>
      * @param target target
      * @param defaultValue defaultValue
-     * @return
+     * @return Byte
      */
     public static Byte parse(String target, Byte defaultValue) {
         try {
@@ -92,7 +92,7 @@ public final class NumberUtils {
      * </p>
      * @param target target
      * @param defaultValue defaultValue
-     * @return
+     * @return Integer
      */
     public static Integer parse(String target, Integer defaultValue) {
         try {
@@ -107,7 +107,7 @@ public final class NumberUtils {
      * </p>
      * @param target target
      * @param defaultValue defaultValue
-     * @return
+     * @return Long
      */
     public static Long parse(String target, Long defaultValue) {
         try {
@@ -122,7 +122,7 @@ public final class NumberUtils {
      * </p>
      * @param target target
      * @param defaultValue defaultValue
-     * @return
+     * @return Double
      */
     public static Double parse(String target, Double defaultValue) {
         try {
@@ -137,7 +137,7 @@ public final class NumberUtils {
      * </p>
      * @param target target
      * @param defaultValue defaultValue
-     * @return
+     * @return Float
      */
     public static Float parse(String target, Float defaultValue) {
         try {

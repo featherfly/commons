@@ -36,7 +36,7 @@ public class AssertLocalized {
      * </p>
      * @param object 判断的对象
      * @param arg 出错时对参数的描述信息，例如：user.id、username等等
-     * @传入的参数
+     * 
      */
     public void isNotNull(Object object, String arg) {
         if (object == null) {
@@ -50,7 +50,7 @@ public class AssertLocalized {
      * </p>
      * @param text 判断的字符串
      * @param arg 出错时对参数的描述信息，例如：user.id、username等等
-     * @传入的参数
+     * 
      */
     public void isNotBlank(String text, String arg) {
         if (!StringUtils.isNotBlank(text)) {
@@ -64,7 +64,7 @@ public class AssertLocalized {
      * </p>
      * @param obj 判断的对象
      * @param arg 出错时对参数的描述信息，例如：user.id、username等等
-     * @传入的参数
+     * 
      */
     public void isNotEmpty(Object obj, String args) {
         if (!LangUtils.isNotEmpty(obj)) {
@@ -78,7 +78,7 @@ public class AssertLocalized {
      * </p>
      * @param text 判断的字符串
      * @param arg 出错时对参数的描述信息，例如：user.id、username等等
-     * @传入的参数
+     * 
      */
     public void isNotEmpty(String text, String arg) {
         if (!LangUtils.isNotEmpty(text)) {
@@ -92,7 +92,7 @@ public class AssertLocalized {
      * </p>
      * @param array 需要判断的数组
      * @param arg 出错时对参数的描述信息，例如：user.id、username等等
-     * @传入的参数
+     * 
      */
     public void isNotEmpty(Object[] array, String arg) {
         if (LangUtils.isEmpty(array)) {
@@ -106,7 +106,7 @@ public class AssertLocalized {
      * </p>
      * @param collection 判断的集合
      * @param arg 出错时对参数的描述信息，例如：user.id、username等等
-     * @传入的参数
+     * 
      */
     public void isNotEmpty(Collection<?> collection, String arg) {
         if (LangUtils.isEmpty(collection)) {
@@ -120,7 +120,7 @@ public class AssertLocalized {
      * </p>
      * @param map 判断的集合
      * @param arg 出错时对参数的描述信息，例如：user.id、username等等
-     * @传入的参数
+     * 
      */
     public void isNotEmpty(Map<?, ?> map, String arg) {
         if (LangUtils.isEmpty(map)) {
@@ -134,7 +134,7 @@ public class AssertLocalized {
      * </p>
      * @param file 判断的文件对象
      * @param argu 出错时对参数的描述信息，例如：uploadFile等等
-     * @传入的参数
+     * 
      */
     public void isExists(File file , String args) {
         if (!LangUtils.isExists(file)) {

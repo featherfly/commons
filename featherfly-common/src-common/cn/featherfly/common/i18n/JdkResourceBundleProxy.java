@@ -49,7 +49,7 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.i18n.Resourc
 
     /**
      * @param key
-     * @return
+     * @return String
      * @see java.util.ResourceBundle#getString(java.lang.String)
      */
     @Override
@@ -59,7 +59,7 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.i18n.Resourc
 
     /**
      * @param key
-     * @return
+     * @return String
      * @see java.util.ResourceBundle#getStringArray(java.lang.String)
      */
     @Override
@@ -69,7 +69,7 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.i18n.Resourc
 
     /**
      * @param key
-     * @return
+     * @return String
      * @see java.util.ResourceBundle#getObject(java.lang.String)
      */
     @Override
@@ -78,7 +78,7 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.i18n.Resourc
     }
 
     /**
-     * @return
+     * @return Locale
      * @see java.util.ResourceBundle#getLocale()
      */
     @Override
@@ -97,7 +97,7 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.i18n.Resourc
 
     /**
      * @param key
-     * @return
+     * @return boolean
      * @see java.util.ResourceBundle#containsKey(java.lang.String)
      */
     @Override
@@ -106,7 +106,7 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.i18n.Resourc
     }
 
     /**
-     * @return
+     * @return keySet
      * @see java.util.ResourceBundle#keySet()
      */
     @Override

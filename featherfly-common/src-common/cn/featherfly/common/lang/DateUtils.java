@@ -84,15 +84,13 @@ public final class DateUtils {
      * <p>
      * 时间类型
      * </p>
+     * millisecond    毫秒
+     * second         秒
+     * minute        分钟
+     * hour            小时
+     * day            日
      */
-    public static enum TimeType{
-        /**
-         * millisecond    毫秒
-         * second         秒
-         * minute        分钟
-         * hour            小时
-         * day            日
-         */
+    public static enum TimeType{       
         millisecond, second, minute, hour, day
     }
     /**

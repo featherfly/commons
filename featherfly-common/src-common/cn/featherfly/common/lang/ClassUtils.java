@@ -526,7 +526,6 @@ public final class ClassUtils {
      *
      * @param clazz
      *            clazz 需要反射的类,该类必须继承泛型父类
-     * @param <T> 泛型
      * @return 使用父类定义泛型的参数名作为KEY,子类实例化泛型的TYPE作为VALUE作为
      *         <code>Object.class</code>
      */

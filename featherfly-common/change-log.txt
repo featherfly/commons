@@ -5,6 +5,7 @@ FIXME 日志目前有问题，打印信息没有获取调用类，而是使用�
     1.使用jdk8编译
     2.加入ExceptionCode,定义的几个标准异常加入ExceptionCode支持
     3.加入Executor、Executable、AutoAsyncExecutor
+    4.加入LocationPoint、LocationUtils、RectanglePoint
 
 2016-08-01
 1.5.2发布

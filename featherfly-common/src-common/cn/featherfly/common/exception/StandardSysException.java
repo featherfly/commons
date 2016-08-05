@@ -17,6 +17,78 @@ public class StandardSysException extends LocalizedException {
     private static final long serialVersionUID = 4425897945460700161L;
 
     /**
+     * @param exceptionCode
+     * @param locale
+     * @param ex
+     */
+    public StandardSysException(ExceptionCode exceptionCode, Locale locale,
+            Throwable ex) {
+        super(exceptionCode, locale, ex);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param locale
+     */
+    public StandardSysException(ExceptionCode exceptionCode, Locale locale) {
+        super(exceptionCode, locale);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param argus
+     * @param locale
+     * @param ex
+     */
+    public StandardSysException(ExceptionCode exceptionCode, Object[] argus,
+            Locale locale, Throwable ex) {
+        super(exceptionCode, argus, locale, ex);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param argus
+     * @param locale
+     */
+    public StandardSysException(ExceptionCode exceptionCode, Object[] argus,
+            Locale locale) {
+        super(exceptionCode, argus, locale);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param argus
+     * @param ex
+     */
+    public StandardSysException(ExceptionCode exceptionCode, Object[] argus,
+            Throwable ex) {
+        super(exceptionCode, argus, ex);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param argus
+     */
+    public StandardSysException(ExceptionCode exceptionCode, Object[] argus) {
+        super(exceptionCode, argus);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param ex
+     */
+    public StandardSysException(ExceptionCode exceptionCode, Throwable ex) {
+        super(exceptionCode, ex);
+    }
+
+    /**
+     * @param exceptionCode
+     */
+    public StandardSysException(ExceptionCode exceptionCode) {
+        super(exceptionCode);
+    }
+
+    /**
      * 构造方法
      */
     public StandardSysException() {

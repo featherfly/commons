@@ -99,21 +99,78 @@ public class StandardAppException extends LocalizedException{
     public StandardAppException(Throwable ex) {
         super(ex);
     }
+
+    /**
+     * @param exceptionCode
+     * @param locale
+     * @param ex
+     */
+    public StandardAppException(ExceptionCode exceptionCode, Locale locale,
+            Throwable ex) {
+        super(exceptionCode, locale, ex);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param locale
+     */
+    public StandardAppException(ExceptionCode exceptionCode, Locale locale) {
+        super(exceptionCode, locale);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param argus
+     * @param locale
+     * @param ex
+     */
+    public StandardAppException(ExceptionCode exceptionCode, Object[] argus,
+            Locale locale, Throwable ex) {
+        super(exceptionCode, argus, locale, ex);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param argus
+     * @param locale
+     */
+    public StandardAppException(ExceptionCode exceptionCode, Object[] argus,
+            Locale locale) {
+        super(exceptionCode, argus, locale);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param argus
+     * @param ex
+     */
+    public StandardAppException(ExceptionCode exceptionCode, Object[] argus,
+            Throwable ex) {
+        super(exceptionCode, argus, ex);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param argus
+     */
+    public StandardAppException(ExceptionCode exceptionCode, Object[] argus) {
+        super(exceptionCode, argus);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param ex
+     */
+    public StandardAppException(ExceptionCode exceptionCode, Throwable ex) {
+        super(exceptionCode, ex);
+    }
+
+    /**
+     * @param exceptionCode
+     */
+    public StandardAppException(ExceptionCode exceptionCode) {
+        super(exceptionCode);
+    }
     
-//    /**
-//     * 构造方法
-//     * @param messageCode 常量码与信息映射对象
-//     */
-//    public StandardAppException(MessageCode messageCode) {
-//        super(messageCode);
-//    }
-//    
-//    /**
-//     * 构造方法
-//     * @param messageCode 常量码与信息映射对象
-//     * @param ex 异常
-//     */
-//    public StandardAppException(MessageCode messageCode, Throwable ex) {
-//        super(messageCode, ex);
-//    }
+    
 }

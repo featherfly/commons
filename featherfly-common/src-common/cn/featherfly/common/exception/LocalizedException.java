@@ -26,6 +26,8 @@ public abstract class LocalizedException extends RuntimeException{
     
     private static final long serialVersionUID = -580152334157640022L;
     
+    private ExceptionCode exceptionCode;
+    
     /**
      * 构造方法
      */
@@ -111,6 +113,92 @@ public abstract class LocalizedException extends RuntimeException{
         super(ex);
     }
     
+    /**
+     * 构造方法
+     * @param exceptionCode 错误码
+     */
+    protected LocalizedException(ExceptionCode exceptionCode) {
+        super(exceptionCode.getMessage());
+        this.exceptionCode = exceptionCode;
+    }
+
+    /**
+     * 构造方法
+     * @param exceptionCode 错误码
+     * @param argus 信息绑定参数
+     * @param locale locale
+     * @param ex 异常
+     */
+    protected LocalizedException(ExceptionCode exceptionCode, Object[] argus, Locale locale, Throwable ex) {
+        this(exceptionCode.getMessage(), argus, locale, ex);
+        this.exceptionCode = exceptionCode;
+    }
+    /**
+     * 构造方法
+     * @param exceptionCode 错误码
+     * @param locale locale
+     * @param ex 异常
+     */
+    protected LocalizedException(ExceptionCode exceptionCode, Locale locale, Throwable ex) {
+        this(exceptionCode.getMessage(), locale, ex);
+        this.exceptionCode = exceptionCode;
+    }
+    /**
+     * 构造方法
+     * @param argus 信息绑定参数
+     * @param exceptionCode 错误码
+     * @param ex 异常
+     */
+    protected LocalizedException(ExceptionCode exceptionCode, Object[] argus, Throwable ex) {
+        this(exceptionCode.getMessage(), argus, ex);
+        this.exceptionCode = exceptionCode;
+    }
+
+    /**
+     * 构造方法
+     * @param exceptionCode 错误码
+     * @param ex 异常
+     */
+    protected LocalizedException(ExceptionCode exceptionCode, Throwable ex) {
+        this(exceptionCode.getMessage(), ex);
+        this.exceptionCode = exceptionCode;
+    }
+    /**
+     * 构造方法
+     * @param argus 信息绑定参数
+     * @param locale locale
+     * @param exceptionCode 错误码
+     */
+    protected LocalizedException(ExceptionCode exceptionCode, Object[] argus, Locale locale) {
+        this(exceptionCode.getMessage(), argus, locale);
+        this.exceptionCode = exceptionCode;
+    }
+    /**
+     * 构造方法
+     * @param argus 信息绑定参数
+     * @param exceptionCode 错误码
+     */
+    protected LocalizedException(ExceptionCode exceptionCode, Object[] argus) {
+        this(exceptionCode.getMessage(), argus);
+        this.exceptionCode = exceptionCode;
+    }
+    /**
+     * 构造方法
+     * @param locale locale
+     * @param exceptionCode 错误码
+     */
+    protected LocalizedException(ExceptionCode exceptionCode, Locale locale) {
+        this(exceptionCode.getMessage(), locale);
+        this.exceptionCode = exceptionCode;
+    }
+    
+    /**
+     * 返回exceptionCode
+     * @return exceptionCode
+     */
+    public ExceptionCode getExceptionCode() {
+        return exceptionCode;
+    }
     private void setMessage(String message, Object[] argus, Locale locale) {
         String msg = null;
         char keySign = ResourceBundleUtils.KEY_SIGN;

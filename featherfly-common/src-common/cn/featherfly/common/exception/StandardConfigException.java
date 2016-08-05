@@ -17,6 +17,78 @@ public class StandardConfigException extends LocalizedException {
     private static final long serialVersionUID = -8304486676180024022L;
 
     /**
+     * @param exceptionCode
+     * @param locale
+     * @param ex
+     */
+    public StandardConfigException(ExceptionCode exceptionCode, Locale locale,
+            Throwable ex) {
+        super(exceptionCode, locale, ex);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param locale
+     */
+    public StandardConfigException(ExceptionCode exceptionCode, Locale locale) {
+        super(exceptionCode, locale);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param argus
+     * @param locale
+     * @param ex
+     */
+    public StandardConfigException(ExceptionCode exceptionCode, Object[] argus,
+            Locale locale, Throwable ex) {
+        super(exceptionCode, argus, locale, ex);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param argus
+     * @param locale
+     */
+    public StandardConfigException(ExceptionCode exceptionCode, Object[] argus,
+            Locale locale) {
+        super(exceptionCode, argus, locale);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param argus
+     * @param ex
+     */
+    public StandardConfigException(ExceptionCode exceptionCode, Object[] argus,
+            Throwable ex) {
+        super(exceptionCode, argus, ex);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param argus
+     */
+    public StandardConfigException(ExceptionCode exceptionCode, Object[] argus) {
+        super(exceptionCode, argus);
+    }
+
+    /**
+     * @param exceptionCode
+     * @param ex
+     */
+    public StandardConfigException(ExceptionCode exceptionCode, Throwable ex) {
+        super(exceptionCode, ex);
+    }
+
+    /**
+     * @param exceptionCode
+     */
+    public StandardConfigException(ExceptionCode exceptionCode) {
+        super(exceptionCode);
+    }
+
+    /**
      * 构造方法
      */
     public StandardConfigException() {

@@ -38,7 +38,7 @@ public interface Chars {
      */
     String BXOR = "^";
     /**
-     * 符号 &
+     * 符号 &amp;
      */
     String AMP = "&";
     /**
@@ -110,11 +110,11 @@ public interface Chars {
      */
     String QM = "\'";
     /**
-     * 符号 <
+     * 符号&lt;
      */
     String LT = "<";
     /**
-     * 符号 >
+     * 符号 &gt;
      */
     String GT = ">";
     /**

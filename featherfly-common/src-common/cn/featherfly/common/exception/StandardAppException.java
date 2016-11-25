@@ -101,9 +101,9 @@ public class StandardAppException extends LocalizedException{
     }
 
     /**
-     * @param exceptionCode
-     * @param locale
-     * @param ex
+     * @param exceptionCode exceptionCode
+     * @param locale locale
+     * @param ex ex
      */
     public StandardAppException(ExceptionCode exceptionCode, Locale locale,
             Throwable ex) {
@@ -111,18 +111,18 @@ public class StandardAppException extends LocalizedException{
     }
 
     /**
-     * @param exceptionCode
-     * @param locale
+     * @param exceptionCode exceptionCode
+     * @param locale locale
      */
     public StandardAppException(ExceptionCode exceptionCode, Locale locale) {
         super(exceptionCode, locale);
     }
 
     /**
-     * @param exceptionCode
-     * @param argus
-     * @param locale
-     * @param ex
+     * @param exceptionCode exceptionCode
+     * @param argus argus
+     * @param locale locale
+     * @param ex ex
      */
     public StandardAppException(ExceptionCode exceptionCode, Object[] argus,
             Locale locale, Throwable ex) {
@@ -130,9 +130,9 @@ public class StandardAppException extends LocalizedException{
     }
 
     /**
-     * @param exceptionCode
-     * @param argus
-     * @param locale
+     * @param exceptionCode exceptionCode
+     * @param argus argus
+     * @param locale locale
      */
     public StandardAppException(ExceptionCode exceptionCode, Object[] argus,
             Locale locale) {
@@ -140,9 +140,9 @@ public class StandardAppException extends LocalizedException{
     }
 
     /**
-     * @param exceptionCode
-     * @param argus
-     * @param ex
+     * @param exceptionCode exceptionCode
+     * @param argus argus
+     * @param ex ex
      */
     public StandardAppException(ExceptionCode exceptionCode, Object[] argus,
             Throwable ex) {
@@ -150,23 +150,23 @@ public class StandardAppException extends LocalizedException{
     }
 
     /**
-     * @param exceptionCode
-     * @param argus
+     * @param exceptionCode exceptionCode
+     * @param argus argus
      */
     public StandardAppException(ExceptionCode exceptionCode, Object[] argus) {
         super(exceptionCode, argus);
     }
 
     /**
-     * @param exceptionCode
-     * @param ex
+     * @param exceptionCode exceptionCode
+     * @param ex ex
      */
     public StandardAppException(ExceptionCode exceptionCode, Throwable ex) {
         super(exceptionCode, ex);
     }
 
     /**
-     * @param exceptionCode
+     * @param exceptionCode exceptionCode
      */
     public StandardAppException(ExceptionCode exceptionCode) {
         super(exceptionCode);

@@ -44,6 +44,7 @@ public abstract class PropertyException extends LocalizedException{
      *
      * @param clazz 类型
      * @param propertyName 属性名
+     * @param key key
      * @param cause 异常
      */
     public PropertyException(Class<?> clazz, String propertyName, String key, Throwable cause) {

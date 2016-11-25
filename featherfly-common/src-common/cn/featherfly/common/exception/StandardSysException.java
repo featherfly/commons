@@ -17,9 +17,9 @@ public class StandardSysException extends LocalizedException {
     private static final long serialVersionUID = 4425897945460700161L;
 
     /**
-     * @param exceptionCode
-     * @param locale
-     * @param ex
+     * @param exceptionCode exceptionCode
+     * @param locale locale
+     * @param ex ex
      */
     public StandardSysException(ExceptionCode exceptionCode, Locale locale,
             Throwable ex) {
@@ -27,18 +27,18 @@ public class StandardSysException extends LocalizedException {
     }
 
     /**
-     * @param exceptionCode
-     * @param locale
+     * @param exceptionCode exceptionCode
+     * @param locale locale
      */
     public StandardSysException(ExceptionCode exceptionCode, Locale locale) {
         super(exceptionCode, locale);
     }
 
     /**
-     * @param exceptionCode
-     * @param argus
-     * @param locale
-     * @param ex
+     * @param exceptionCode exceptionCode
+     * @param argus argus
+     * @param locale locale
+     * @param ex ex
      */
     public StandardSysException(ExceptionCode exceptionCode, Object[] argus,
             Locale locale, Throwable ex) {
@@ -46,9 +46,9 @@ public class StandardSysException extends LocalizedException {
     }
 
     /**
-     * @param exceptionCode
-     * @param argus
-     * @param locale
+     * @param exceptionCode exceptionCode
+     * @param argus argus
+     * @param locale locale
      */
     public StandardSysException(ExceptionCode exceptionCode, Object[] argus,
             Locale locale) {
@@ -56,9 +56,9 @@ public class StandardSysException extends LocalizedException {
     }
 
     /**
-     * @param exceptionCode
-     * @param argus
-     * @param ex
+     * @param exceptionCode exceptionCode
+     * @param argus argus
+     * @param ex ex
      */
     public StandardSysException(ExceptionCode exceptionCode, Object[] argus,
             Throwable ex) {
@@ -66,23 +66,23 @@ public class StandardSysException extends LocalizedException {
     }
 
     /**
-     * @param exceptionCode
-     * @param argus
+     * @param exceptionCode exceptionCode
+     * @param argus argus
      */
     public StandardSysException(ExceptionCode exceptionCode, Object[] argus) {
         super(exceptionCode, argus);
     }
 
     /**
-     * @param exceptionCode
-     * @param ex
+     * @param exceptionCode exceptionCode
+     * @param ex ex
      */
     public StandardSysException(ExceptionCode exceptionCode, Throwable ex) {
         super(exceptionCode, ex);
     }
 
     /**
-     * @param exceptionCode
+     * @param exceptionCode exceptionCode
      */
     public StandardSysException(ExceptionCode exceptionCode) {
         super(exceptionCode);

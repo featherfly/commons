@@ -19,7 +19,7 @@ public abstract class AbstractTypeValue<V extends Serializable> implements TypeV
     private Class<V> type;
     
     /**
-     * @param value
+     * @param value value
      */
     public AbstractTypeValue(V value) {
         super();

@@ -124,7 +124,7 @@ public final class RandomUtils {
     /**
      * 返回一个不大于max的随机整数
      * @param max 返回随机整数的最大边界值（大于返回的数）
-     * @return 整数，0<=返回值<max
+     * @return 整数，0&lt;=返回值&lt;max
      */
     public static int getRandomInt(int max) {
         return random.nextInt(max);

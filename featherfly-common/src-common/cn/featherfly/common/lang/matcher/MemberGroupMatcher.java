@@ -24,15 +24,15 @@ public class MemberGroupMatcher<T extends Member> extends GroupMatcher<MemberMat
     }
 
     /**
-     * @param logic
-     * @param matchers
+     * @param logic logic
+     * @param matchers matchers
      */
     public MemberGroupMatcher(Logic logic, @SuppressWarnings("unchecked") MemberMatcher<T>... matchers) {
         super(logic, matchers);
     }
 
     /**
-     * @param matchers
+     * @param matchers matchers
      */
     public MemberGroupMatcher(@SuppressWarnings("unchecked") MemberMatcher<T>... matchers) {
         super(matchers);

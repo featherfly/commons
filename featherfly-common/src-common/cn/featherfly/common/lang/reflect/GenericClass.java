@@ -16,7 +16,7 @@ public class GenericClass<T> implements GenericType<T>{
     private Class<T> c;
 
     /**
-     * @param c
+     * @param c classType
      */
     public GenericClass(Class<T> c) {
         AssertIllegalArgument.isNotNull(c);

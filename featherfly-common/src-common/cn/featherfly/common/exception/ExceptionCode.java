@@ -7,7 +7,9 @@ package cn.featherfly.common.exception;
  * @version 1.0
  */
 public interface ExceptionCode {
-
+    /**
+     * 起始
+     */
     int START_NUM = 100001;
 
     /**

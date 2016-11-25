@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <p>
- * 动态创建指定类型指定属性对应的BeanProperty子类的工厂.<br/>
- * 优点：默认的反射BeanProperty比动态生成的设置慢一倍，读取慢几倍.<br/>
+ * 动态创建指定类型指定属性对应的BeanProperty子类的工厂.<br>
+ * 优点：默认的反射BeanProperty比动态生成的设置慢一倍，读取慢几倍.<br>
  * 缺点：生成大量类，占用内存空间，强类型.
  * </p>
  *

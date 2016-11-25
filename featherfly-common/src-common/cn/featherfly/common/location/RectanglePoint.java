@@ -35,7 +35,8 @@ public class RectanglePoint {
      * @param leftBottom the left bottom
      * @param rightBottom the right bottom
      */
-    public RectanglePoint(LocationPoint leftTop, LocationPoint rightTop, LocationPoint leftBottom, LocationPoint rightBottom) {
+    public RectanglePoint(LocationPoint leftTop, LocationPoint rightTop
+            , LocationPoint leftBottom, LocationPoint rightBottom) {
         this.leftTop = leftTop;
         this.rightTop = rightTop;
         this.leftBottom = leftBottom;

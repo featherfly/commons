@@ -447,7 +447,7 @@ public final class ClassUtils {
 
     /**
      * <p>
-     * 转换包模式为目录模式.xx.yy.Ttt -> xx/yy/Ttt
+     * 转换包模式为目录模式.xx.yy.Ttt -&gt; xx/yy/Ttt
      * </p>
      * @param type 类型
      * @return 目录模式
@@ -460,7 +460,7 @@ public final class ClassUtils {
     }
     /**
      * <p>
-     * 转换包模式为目录模式.xx.yy.Ttt -> xx/yy/Ttt
+     * 转换包模式为目录模式.xx.yy.Ttt -&gt; xx/yy/Ttt
      * </p>
      * @param className 类型名称
      * @return 目录模式
@@ -477,7 +477,7 @@ public final class ClassUtils {
     // ********************************************************************
 
     /**
-     * 通过反射,获得指定类的父类的泛型参数的实际类型. 如BuyerServiceBean extends DaoSupport<Buyer>
+     * 通过反射,获得指定类的父类的泛型参数的实际类型. 如BuyerServiceBean extends DaoSupport&lt;Buyer&gt;
      *
      * @param clazz
      *            clazz 需要反射的类,该类必须继承范型父类
@@ -509,7 +509,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 通过反射,获得指定类的父类的第一个泛型参数的实际类型. 如BuyerServiceBean extends DaoSupport<Buyer>
+     * 通过反射,获得指定类的父类的第一个泛型参数的实际类型. 如BuyerServiceBean extends DaoSupport&lt;Buyer&gt;
      *
      * @param clazz
      *            clazz 需要反射的类,该类必须继承泛型父类
@@ -547,7 +547,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 通过反射,获得方法返回值泛型参数的实际类型. 如: public Map<String, Buyer> getNames(){}
+     * 通过反射,获得方法返回值泛型参数的实际类型. 如: public Map&lt;String, Buyer&gt; getNames(){}
      *
      * @param method 方法
      * @param index 泛型参数所在索引,从0开始.
@@ -571,7 +571,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 通过反射,获得方法返回值第一个泛型参数的实际类型. 如: public Map<String, Buyer> getNames(){}
+     * 通过反射,获得方法返回值第一个泛型参数的实际类型. 如: public Map&lt;String, Buyer&gt; getNames(){}
      *
      * @param method 方法
      * @param <T> 泛型
@@ -583,8 +583,8 @@ public final class ClassUtils {
     }
 
     /**
-     * 通过反射,获得方法输入参数第index个输入参数的所有泛型参数的实际类型. 如: public void add(Map<String,
-     * Buyer> maps, List<String> names){}
+     * 通过反射,获得方法输入参数第index个输入参数的所有泛型参数的实际类型. 如: public void add(Map&lt;String,
+     * Buyer&gt; maps, List&lt;String&gt; names){}
      *
      * @param method 方法
      * @param index 第几个输入参数
@@ -611,8 +611,8 @@ public final class ClassUtils {
     }
 
     /**
-     * 通过反射,获得方法输入参数第一个输入参数的所有泛型参数的实际类型. 如: public void add(Map<String, Buyer>
-     * maps, List<String> names){}
+     * 通过反射,获得方法输入参数第一个输入参数的所有泛型参数的实际类型. 如: public void add(Map&lt;String, Buyer&gt;
+     * maps, List&lt;String&gt; names){}
      *
      * @param method 方法
      * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
@@ -622,7 +622,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 通过反射,获得Field泛型参数的实际类型. 如: public Map<String, Buyer> names;
+     * 通过反射,获得Field泛型参数的实际类型. 如: public Map&lt;String, Buyer&gt; names;
      *
      * @param field 字段
      * @param index 泛型参数所在索引,从0开始.
@@ -645,7 +645,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 通过反射,获得Field泛型参数的实际类型. 如: public Map<String, Buyer> names;
+     * 通过反射,获得Field泛型参数的实际类型. 如: public Map&lt;String, Buyer&gt; names;
      *
      * @param field 字段
      * @param <T> 泛型

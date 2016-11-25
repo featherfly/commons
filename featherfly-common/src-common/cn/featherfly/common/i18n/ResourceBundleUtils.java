@@ -13,12 +13,11 @@ import cn.featherfly.common.lang.ServiceLoaderUtils;
 /**
  * <p>
  * ResourceBundleUtils
- * 类的说明放这里
  * </p>
  * 
  * @author 钟冀
  */
-public class ResourceBundleUtils {
+public final class ResourceBundleUtils {
     
     private static final Logger LOGGER = LoggerFactory
             .getLogger(ResourceBundleUtils.class);
@@ -28,7 +27,15 @@ public class ResourceBundleUtils {
     
     private static final LocaleManager LOCALE_MANAGER = ServiceLoaderUtils.load(
             LocaleManager.class, new DefaultLocaleManager());
+
     
+    /**
+     * 
+     */
+    private ResourceBundleUtils() {
+        super();
+    }
+
     /**
      * Bundle标识符
      */
@@ -110,7 +117,7 @@ public class ResourceBundleUtils {
             return getStringFromBundle(pattern, baseName, key, argus, locale);
         } else {
             throw new IllegalArgumentException(
-                    "argu code must start with @ and split bundle baseName and key with #, example: @bundleBaseName#key");
+                "argu code must start with @ and split bundle baseName and key with #, example: @bundleBaseName#key");
         }
     }
     

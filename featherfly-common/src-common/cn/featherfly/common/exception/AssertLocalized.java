@@ -63,7 +63,7 @@ public class AssertLocalized {
      * 判断不为空（String,Collection,Map,Array还要判断长度是否为0），判断失败抛出指定异常
      * </p>
      * @param obj 判断的对象
-     * @param arg 出错时对参数的描述信息，例如：user.id、username等等
+     * @param args 出错时对参数的描述信息，例如：user.id、username等等
      * 
      */
     public void isNotEmpty(Object obj, String args) {
@@ -133,7 +133,7 @@ public class AssertLocalized {
      * 判断传入文件对象代表的物理文件是否存在，判断失败抛出指定异常
      * </p>
      * @param file 判断的文件对象
-     * @param argu 出错时对参数的描述信息，例如：uploadFile等等
+     * @param args 出错时对参数的描述信息，例如：uploadFile等等
      * 
      */
     public void isExists(File file , String args) {

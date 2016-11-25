@@ -18,7 +18,7 @@ public class TypeValueDeserializer<ID extends TypeValue<?>> extends JsonDeserial
     private Class<?> valueType;
     
     /**
-     * 
+     * @param type type
      */
     public TypeValueDeserializer(Class<ID> type) {
         this.type = type;
@@ -31,7 +31,7 @@ public class TypeValueDeserializer<ID extends TypeValue<?>> extends JsonDeserial
         // TODO 使用转换器在这里进行转换
         String text = p.getText();
         if (ClassUtils.isParent(Number.class, valueType)) {
-           return (ID) ClassUtils.newInstance(type, NumberUtils.parse(text, (Class<Number>) valueType));
+            return (ID) ClassUtils.newInstance(type, NumberUtils.parse(text, (Class<Number>) valueType));
         } else {
             return (ID) ClassUtils.newInstance(type, p.getText());
         }

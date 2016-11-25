@@ -21,6 +21,7 @@ public class FieldModifierMatcher extends MemberModifierMatcher<Field>
     }
     
     /**
+     * @param modifier modifier
      */
     public FieldModifierMatcher(Modifier modifier) {        
         super(modifier);

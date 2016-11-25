@@ -28,7 +28,7 @@ public final class StringUtils {
 
     /**
      * <p>
-     * null的字符串表示<br/> public static String NULL_STRING = "null"
+     * null的字符串表示<br> public static String NULL_STRING = "null"
      * </p>
      */
     public static final String NULL_STRING = "null";
@@ -1109,7 +1109,7 @@ public final class StringUtils {
     }
 
     /**
-     * 过滤<, >, " 等html字符的方法。
+     * 过滤&lt;, &gt;, " 等html字符的方法。
      *
      * @param str
      *            需要过滤的字符串

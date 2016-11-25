@@ -21,6 +21,7 @@ public class MethodModifierMatcher extends MemberModifierMatcher<Method>
     }
     
     /**
+     * @param modifier modifier
      */
     public MethodModifierMatcher(Modifier modifier) {        
         super(modifier);

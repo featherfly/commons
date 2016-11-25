@@ -34,7 +34,7 @@ public class HashChainMap<K, V> extends HashMap<K, V> {
     /**
      * <p>
      * 带链式调用的put方法.
-     * {@link #put(K,V)}
+     * {@link java.util.HashMap#put(K,V)}
      * </p>
      * @param key 指定值将要关联的键。
      * @param value 指定键将要关联的值。
@@ -47,7 +47,7 @@ public class HashChainMap<K, V> extends HashMap<K, V> {
     /**
      * <p>
      * 带链式调用的putAll方法.
-     * {@link #put(K,V)}
+     * {@link java.util.HashMap#put(K,V)}
      * </p>
      * @param m 要在此映射中存储的映射关系
      * @return 当前MAP

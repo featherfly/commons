@@ -23,15 +23,15 @@ public class MethodGroupMatcher extends MemberGroupMatcher<Method>
     }
 
     /**
-     * @param logic
-     * @param matchers
+     * @param logic logic
+     * @param matchers matchers
      */
     public MethodGroupMatcher(Logic logic, MethodMatcher... matchers) {
         super(logic, matchers);
     }
 
     /**
-     * @param matchers
+     * @param matchers matchers
      */
     public MethodGroupMatcher(MethodMatcher... matchers) {
         super(matchers);

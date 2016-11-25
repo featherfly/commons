@@ -9,7 +9,7 @@ package cn.featherfly.common.location;
  * @since 1.6
  * @version 1.0
  */
-public class LocationUtils {
+public final class LocationUtils {
   
     /* 地球半径 */
     private static final double EARTH_RADIUS = 6371000;  
@@ -61,11 +61,12 @@ public class LocationUtils {
         // double dlng = 2 * Math.asin(Math.sin(distance / (2 * EARTH_RADIUS)) / Math.cos(lat));
         double lat = point.getLatitude();
         double lng = point.getLongitude();
-        double dlng = 2 * Math.asin(Math.sin(distance/(2*EARTH_RADIUS))/Math.cos(Math.toRadians(lat)));
+        double dlng = 2 * Math.asin(Math.sin(distance / (2 * EARTH_RADIUS)) / Math.cos(Math.toRadians(lat)));
         dlng = Math.toDegrees(dlng);
 
         double dlat = distance / EARTH_RADIUS;
-        dlat = Math.toDegrees(dlat); // # 弧度转换成角度
+        // # 弧度转换成角度
+        dlat = Math.toDegrees(dlat); 
 
         RectanglePoint rectanglePoint = new RectanglePoint();
         rectanglePoint.setLeftTop(new LocationPoint(lat + dlat, lng - dlng));
@@ -74,32 +75,5 @@ public class LocationUtils {
         rectanglePoint.setRightBottom(new LocationPoint(lat - dlat, lng + dlng));
 
         return rectanglePoint ;
-    }  
-
-
-    /*public static void main(String[] args) {
-        double lat = 30.677644;
-        double lng = 104.058454;
-        System.out.println(30.677644 + " , " + 104.058454);
-        double distance = 1000d;
-
-        RectanglePoint rectanglePoint = LocationUtils.getRectanglePoint(new LocationPoint(lat, lng), distance);
-        String sql = "SELECT * FROM place WHERE lat > "
-                + rectanglePoint.getRightBottom().getLatitude() + " AND lat < "
-                + rectanglePoint.getLeftTop().getLatitude() + " AND lng > "
-                + rectanglePoint.getLeftTop().getLongitude()+ " AND lng < "
-                + rectanglePoint.getRightBottom().getLongitude();
-
-        System.out.println(sql);
-
-        System.out.println(rectanglePoint.getLeftTop().getLatitude() + " , " + rectanglePoint.getLeftTop().getLongitude());
-        System.out.println(rectanglePoint.getLeftBottom().getLatitude() + " , " + rectanglePoint.getLeftBottom().getLongitude());
-        System.out.println(rectanglePoint.getRightTop().getLatitude() + " , " + rectanglePoint.getRightTop().getLongitude());
-        System.out.println(rectanglePoint.getRightBottom().getLatitude() + " , " + rectanglePoint.getRightBottom().getLongitude());
-
-        double lat1 = 30.495503391970406;  
-        double lng1 = 120.49261708577215;  
-        double d = LocationUtils.getDistance(new LocationPoint(lat, lng), new LocationPoint(lat1, lng1));
-        System.out.println(d);  
-    }*/
+    }
 }

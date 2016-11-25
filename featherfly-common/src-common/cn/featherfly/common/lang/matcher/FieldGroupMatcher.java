@@ -23,15 +23,15 @@ public class FieldGroupMatcher extends MemberGroupMatcher<Field>
     }
 
     /**
-     * @param logic
-     * @param matchers
+     * @param logic logic
+     * @param matchers matchers
      */
     public FieldGroupMatcher(Logic logic, FieldMatcher... matchers) {
         super(logic, matchers);
     }
 
     /**
-     * @param matchers
+     * @param matchers matchers
      */
     public FieldGroupMatcher(FieldMatcher... matchers) {
         super(matchers);

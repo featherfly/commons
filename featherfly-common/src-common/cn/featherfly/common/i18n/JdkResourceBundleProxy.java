@@ -48,8 +48,8 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.i18n.Resourc
     }
 
     /**
-     * @param key
-     * @return String
+     * @param key key
+     * @return String String
      * @see java.util.ResourceBundle#getString(java.lang.String)
      */
     @Override
@@ -58,8 +58,8 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.i18n.Resourc
     }
 
     /**
-     * @param key
-     * @return String
+     * @param key key
+     * @return String String
      * @see java.util.ResourceBundle#getStringArray(java.lang.String)
      */
     @Override
@@ -68,8 +68,8 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.i18n.Resourc
     }
 
     /**
-     * @param key
-     * @return String
+     * @param key key
+     * @return String String
      * @see java.util.ResourceBundle#getObject(java.lang.String)
      */
     @Override
@@ -96,7 +96,7 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.i18n.Resourc
     }
 
     /**
-     * @param key
+     * @param key key
      * @return boolean
      * @see java.util.ResourceBundle#containsKey(java.lang.String)
      */

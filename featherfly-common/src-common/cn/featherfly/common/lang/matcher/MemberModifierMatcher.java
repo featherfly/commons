@@ -22,6 +22,8 @@ public class MemberModifierMatcher<T extends Member> extends AbstractMemberMatch
     }
     
     /**
+     * 
+     * @param modifier modifier
      */
     public MemberModifierMatcher(Modifier modifier) {        
         this.modifier = modifier;

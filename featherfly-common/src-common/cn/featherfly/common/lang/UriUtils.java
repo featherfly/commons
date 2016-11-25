@@ -117,7 +117,7 @@ public final class UriUtils {
     }
 
     /**
-     * remove start separator of uri /aaa/ -> aaa/
+     * remove start separator of uri /aaa/ -&gt; aaa/
      *
      * @param uri 待处理的uri
      * @return 移除开始/后的uri
@@ -131,7 +131,7 @@ public final class UriUtils {
     }
 
     /**
-     * remove end separator of uri /aaa/ -> /aaa
+     * remove end separator of uri /aaa/ -&gt; /aaa
      *
      * @param uri 待处理的uri
      * @return 移除结尾/后的uri
@@ -145,7 +145,7 @@ public final class UriUtils {
     }
 
     /**
-     * remove start and end separator of uri /aaa/ -> aaa
+     * remove start and end separator of uri /aaa/ -&gt; aaa
      *
      * @param uri 待处理的uri
      * @return 移除开始结束/后的uri

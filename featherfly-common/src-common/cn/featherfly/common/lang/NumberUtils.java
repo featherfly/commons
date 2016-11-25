@@ -25,6 +25,7 @@ public final class NumberUtils {
      * </p>
      * @param number 数字源
      * @param toType 转换目标类型
+     * @param <T> 目标类型泛型
      * @return 数字
      */
     @SuppressWarnings("unchecked")
@@ -64,6 +65,7 @@ public final class NumberUtils {
      * </p>
      * @param source 转换源字符串
      * @param toType 转换目标类型
+     * @param <T> 目标类型泛型
      * @return 数字
      */
     @SuppressWarnings("unchecked")
@@ -175,6 +177,7 @@ public final class NumberUtils {
      * @param number 数字
      * @param minLength 最小长度
      * @param sign 补全使用的字符
+     * @param <N> 泛型数字类型
      * @return 补全后的字符串
      */
     public static <N extends Number> String fillingAtStart(N number, int minLength, char sign) {

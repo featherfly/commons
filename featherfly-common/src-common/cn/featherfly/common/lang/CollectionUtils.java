@@ -32,7 +32,7 @@ public final class CollectionUtils {
     }
     /**
      * <p>
-     * 返回传入集合是否不为空（不是null或size>0）
+     * 返回传入集合是否不为空（不是null或size&gt;0）
      * </p>
      * @param collection
      *            传入的集合

@@ -1,11 +1,13 @@
 
 package cn.featherfly.common.bean.condition;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.bean.BeanDescriptor;
+import cn.featherfly.common.bean.matcher.BeanPropertyNameRegexMatcher;
 import cn.featherfly.common.bean.vo.Person;
 
 

@@ -1,7 +1,13 @@
 package cn.featherfly.common.location;
 
 /**
- * 矩形点
+ * <p>
+ * 矩形点 
+ * </p>
+ * 
+ * @author 钟冀
+ * @since 1.6
+ * @version 1.0
  */
 public class RectanglePoint {
 

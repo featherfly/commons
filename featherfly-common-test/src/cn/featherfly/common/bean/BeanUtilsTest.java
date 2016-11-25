@@ -60,6 +60,11 @@ public class BeanUtilsTest {
         System.out.println("d -> " + BeanUtils.toMap(d));
         assertEquals(d.getName(), c.getName());
     }
+    
+    @Test
+    public void testMergeNull() {
+        BeanUtils.mergeProperties(null, null);
+    }
 }
 
 class P {

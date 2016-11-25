@@ -1,7 +1,13 @@
 package cn.featherfly.common.location;
 
 /**
+ * <p>
  * 定位点（经度，纬度对应的一个点）
+ * </p>
+ * 
+ * @author 钟冀
+ * @since 1.6
+ * @version 1.0
  */
 public class LocationPoint {
 

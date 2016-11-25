@@ -3,16 +3,17 @@ package cn.featherfly.common.bean;
 
 import static org.testng.Assert.assertEquals;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.Iterator;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.bean.vo.Address;
+import cn.featherfly.common.bean.vo.ClassRoom;
 import cn.featherfly.common.bean.vo.Person;
+import cn.featherfly.common.bean.vo.Student;
 import cn.featherfly.common.bean.vo.User;
-
-import cn.featherfly.common.bean.BeanDescriptor;
-import cn.featherfly.common.bean.BeanProperty;
 
 
 public class BeanDescriptorTest {
@@ -105,9 +106,18 @@ public class BeanDescriptorTest {
 		User user = new User();
 		BeanDescriptor<User> bd = BeanDescriptor.getBeanDescriptor(User.class);
 
-		bd.setProperty(user, "addresses.name", "成都市");
+		System.out.println(bd.getBeanProperty("addresses").getType());
+		System.out.println(bd.getBeanProperty("addresses").getField().getGenericType().getClass());
+		System.out.println(bd.getBeanProperty("addresses").getField().getGenericType());
+		if(bd.getBeanProperty("addresses").getField().getGenericType() instanceof ParameterizedType) {
+		    ParameterizedType pt = (ParameterizedType) bd.getBeanProperty("addresses").getField().getGenericType();
+		    System.out.println(pt.getRawType());
+		    System.out.println(pt.getOwnerType());
+		    System.out.println(pt.getActualTypeArguments()[0]);
+		}
+//		bd.setProperty(user, "addresses.name", "成都市");
 
-		System.out.println(user.getAddresses());
+//		System.out.println(user.getAddresses());
 	}
 
 	@Test
@@ -118,6 +128,20 @@ public class BeanDescriptorTest {
 		bd.setProperty(user, "addresses.name", "成都市");
 
 		System.out.println(user.getAddresses());
+	}
+	@Test
+	public void testGeneric(){
+	    ClassRoom classRoom = new ClassRoom();
+	    BeanDescriptor<ClassRoom> bd = BeanDescriptor.getBeanDescriptor(ClassRoom.class);
+	    
+	    System.out.println(bd.getBeanProperty("person").getType());
+	    Assert.assertEquals(bd.getBeanProperty("person").getType(), Student.class);
+	    
+	    Student s = new Student();
+	    s.setAge(11);
+	    
+	    bd.setProperty(classRoom, "person", s);
+	    Assert.assertEquals(classRoom.getPerson().getAge(), s.getAge());
 	}
 
 	@Test

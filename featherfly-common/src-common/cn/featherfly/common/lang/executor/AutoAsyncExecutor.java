@@ -6,7 +6,13 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.ExecutorService;
 
 /**
+ * <p>
  * 执行者实现,如果设置了线程池则使用异步调用,否则同步调用.
+ * </p>
+ * 
+ * @author 钟冀
+ * @since 1.6
+ * @version 1.0
  */
 public class AutoAsyncExecutor implements Executor{
 

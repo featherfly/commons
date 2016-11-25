@@ -1,7 +1,13 @@
 package cn.featherfly.common.location;
 
 /**
+ * <p>
  * The type Location utils.
+ * </p>
+ * 
+ * @author 钟冀
+ * @since 1.6
+ * @version 1.0
  */
 public class LocationUtils {
   

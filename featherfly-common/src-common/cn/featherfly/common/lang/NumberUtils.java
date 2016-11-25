@@ -8,7 +8,6 @@ import java.text.DecimalFormat;
 /**
  * <p>
  * NumberUtils
- * 类的说明放这里
  * </p>
  * 
  * @author 钟冀
@@ -20,54 +19,76 @@ public final class NumberUtils {
     private NumberUtils() {
     }
     
+    /**
+     * <p>
+     * 将Number转换为指定数字类型，如果传入数字是null，则返回null
+     * </p>
+     * @param number 数字源
+     * @param toType 转换目标类型
+     * @return 数字
+     */
     @SuppressWarnings("unchecked")
-    public static <T extends Number> T value(Number number, Class<T> targetType) {
-        if (targetType == Integer.class
-                || targetType == Integer.TYPE) {
+    public static <T extends Number> T value(Number number, Class<T> toType) {
+        if (number == null) {
+            return  null;
+        }
+        if (toType == Integer.class
+                || toType == Integer.TYPE) {
             return (T) new Integer(number.intValue());
-        } else if (targetType == Long.class
-                || targetType == Long.TYPE) {
+        } else if (toType == Long.class
+                || toType == Long.TYPE) {
             return (T) new Long(number.longValue());
-        } else if (targetType == Double.class
-                || targetType == Double.TYPE) {
+        } else if (toType == Double.class
+                || toType == Double.TYPE) {
             return (T) new Double(number.doubleValue());
-        } else if (targetType == Float.class
-                || targetType == Float.TYPE) {
+        } else if (toType == Float.class
+                || toType == Float.TYPE) {
             return (T) new Float(number.floatValue());
-        } else if (targetType == BigInteger.class) {
+        } else if (toType == BigInteger.class) {
             return (T) new BigInteger(number.toString());
-        } else if (targetType == BigDecimal.class) {
+        } else if (toType == BigDecimal.class) {
             return (T) new BigDecimal(number.toString());
-        } else if (targetType == Byte.class
-                || targetType == Byte.TYPE) {
+        } else if (toType == Byte.class
+                || toType == Byte.TYPE) {
             return (T) new Byte(number.byteValue());
-        } else if (targetType == Short.class
-                || targetType == Short.TYPE) {
+        } else if (toType == Short.class
+                || toType == Short.TYPE) {
             return (T) new Short(number.shortValue());
         }
-        throw new IllegalArgumentException("不支持的目标类型：" + targetType.getName());
+        throw new IllegalArgumentException("不支持的目标类型：" + toType.getName());
     }
     
+    /**
+     * <p>
+     * 将字符串转换为对应的类型，如果传入字符串是null或者空字符串，则返回null
+     * </p>
+     * @param source 转换源字符串
+     * @param toType 转换目标类型
+     * @return 数字
+     */
     @SuppressWarnings("unchecked")
-    public static <T extends Number> T parse(String target, Class<T> targetType) {
-        if (targetType == Integer.class) {
-            return (T) new Integer(Integer.parseInt(target));
-        } else if (targetType == Long.class) {
-            return (T) new Long(Long.parseLong(target));
-        } else if (targetType == Double.class) {
-            return (T) new Double(Double.parseDouble(target));
-        } else if (targetType == Float.class) {
-            return (T) new Float(Float.parseFloat(target));
-        } else if (targetType == BigInteger.class) {
-            return (T) new BigInteger(target);
-        } else if (targetType == BigDecimal.class) {
-            return (T) new BigDecimal(target);
-        } else if (targetType == Byte.class) {
-            return (T) new Byte(Byte.parseByte(target));
-        } else if (targetType == Short.class) {
-            return (T) new Short(Short.parseShort(target));
+    public static <T extends Number> T parse(String source, Class<T> toType) {
+        if (LangUtils.isEmpty(source)) {
+            return null;
         }
-        throw new IllegalArgumentException("不支持的目标类型：" + targetType.getName());
+        if (toType == Integer.class || toType == Integer.TYPE) {
+            return (T) new Integer(Integer.parseInt(source));
+        } else if (toType == Long.class || toType == Long.TYPE) {
+            return (T) new Long(Long.parseLong(source));
+        } else if (toType == Double.class || toType == Double.TYPE) {
+            return (T) new Double(Double.parseDouble(source));
+        } else if (toType == Float.class || toType == Float.TYPE) {
+            return (T) new Float(Float.parseFloat(source));
+        } else if (toType == BigInteger.class) {
+            return (T) new BigInteger(source);
+        } else if (toType == BigDecimal.class) {
+            return (T) new BigDecimal(source);
+        } else if (toType == Byte.class || toType == Byte.TYPE) {
+            return (T) new Byte(Byte.parseByte(source));
+        } else if (toType == Short.class || toType == Short.TYPE) {
+            return (T) new Short(Short.parseShort(source));
+        }
+        throw new IllegalArgumentException("不支持的目标类型：" + toType.getName());
     }
     
 

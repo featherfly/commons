@@ -74,6 +74,22 @@ public class BeanUtilsTestPerformence {
 		end  = new Date();
 		time = end.getTime() - start.getTime();
 		System.out.println("getProperty:"+time);
+		
+		System.out.println(BeanUtils.class  + "第二轮，初始化过后");
+        start = new Date();
+        for (int i = 0; i < max; i++) {
+            BeanUtils.setProperty(user, "address.zipcode.code", "610000");
+        }
+        end  = new Date();
+        time = end.getTime() - start.getTime();
+        System.out.println("setProperty:"+time);
+        start = new Date();
+        for (int i = 0; i < max; i++) {
+            BeanUtils.getProperty(user, "address.zipcode.code");
+        }
+        end  = new Date();
+        time = end.getTime() - start.getTime();
+        System.out.println("getProperty:"+time);
 
 		// ********************************************************************
 		//	apache
@@ -93,6 +109,22 @@ public class BeanUtilsTestPerformence {
 		end  = new Date();
 		time = end.getTime() - start.getTime();
 		System.out.println("getProperty:"+time);
+		
+		System.out.println(org.apache.commons.beanutils.BeanUtils.class + "第二轮，初始化过后");
+        start = new Date();
+        for (int i = 0; i < max; i++) {
+            org.apache.commons.beanutils.BeanUtils.setProperty(user, "address.zipcode.code", "610000");
+        }
+        end  = new Date();
+        time = end.getTime() - start.getTime();
+        System.out.println("setProperty:"+time);
+        start = new Date();
+        for (int i = 0; i < max; i++) {
+            org.apache.commons.beanutils.BeanUtils.getProperty(user, "address.zipcode.code");
+        }
+        end  = new Date();
+        time = end.getTime() - start.getTime();
+        System.out.println("getProperty:"+time);
 	}
 
 	//@Test

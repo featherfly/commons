@@ -1,4 +1,5 @@
 #org.springsource.ide.eclipse.gradle.core.preferences.GradleProjectPreferences
-#Mon Apr 27 11:35:35 CST 2015
+#Wed May 13 17:33:48 CST 2015
 build.family.org.gradle.tooling.model.eclipse.HierarchicalEclipseProject=;../featherfly-common;../featherfly-common-bean-javassist;
+org.springsource.ide.eclipse.gradle.linkedresources=
 org.springsource.ide.eclipse.gradle.rootprojectloc=

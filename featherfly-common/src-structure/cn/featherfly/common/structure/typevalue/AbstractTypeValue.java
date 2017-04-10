@@ -14,6 +14,8 @@ import cn.featherfly.common.lang.ClassUtils;
  */
 public abstract class AbstractTypeValue<V extends Serializable> implements TypeValue<V> {
 
+    private static final long serialVersionUID = 5165367420053111628L;
+
     private V value;
     
     private Class<V> type;

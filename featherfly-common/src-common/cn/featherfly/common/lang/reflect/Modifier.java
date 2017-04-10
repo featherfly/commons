@@ -13,72 +13,78 @@ public enum Modifier {
      * The {@code int} value representing the {@code public}
      * modifier.
      */
-    PUBLIC,
+    PUBLIC(java.lang.reflect.Modifier.PUBLIC),
     /**
      * The {@code int} value representing the {@code private}
      * modifier.
      */
-    PRIVATE,
+    PRIVATE(java.lang.reflect.Modifier.PRIVATE),
 
     /**
      * The {@code int} value representing the {@code protected}
      * modifier.
      */
-    PROTECTED,
+    PROTECTED(java.lang.reflect.Modifier.PROTECTED),
 
     /**
      * The {@code int} value representing the {@code static}
      * modifier.
      */
-    STATIC,
+    STATIC(java.lang.reflect.Modifier.STATIC),
 
     /**
      * The {@code int} value representing the {@code final}
      * modifier.
      */
-    FINAL,
+    FINAL(java.lang.reflect.Modifier.FINAL),
 
     /**
      * The {@code int} value representing the {@code synchronized}
      * modifier.
      */
-    SYNCHRONIZED,
+    SYNCHRONIZED(java.lang.reflect.Modifier.SYNCHRONIZED),
 
     /**
      * The {@code int} value representing the {@code volatile}
      * modifier.
      */
-    VOLATILE,
+    VOLATILE(java.lang.reflect.Modifier.VOLATILE),
 
     /**
      * The {@code int} value representing the {@code transient}
      * modifier.
      */
-    TRANSIENT,
+    TRANSIENT(java.lang.reflect.Modifier.TRANSIENT),
 
     /**
      * The {@code int} value representing the {@code native}
      * modifier.
      */
-    NATIVE,
+    NATIVE(java.lang.reflect.Modifier.NATIVE),
 
     /**
      * The {@code int} value representing the {@code interface}
      * modifier.
      */
-    INTERFACE,
+    INTERFACE(java.lang.reflect.Modifier.INTERFACE),
 
     /**
      * The {@code int} value representing the {@code abstract}
      * modifier.
      */
-    ABSTRACT,
+    ABSTRACT(java.lang.reflect.Modifier.ABSTRACT),
 
     /**
      * The {@code int} value representing the {@code strictfp}
      * modifier.
      */
-    STRICT;
+    STRICT(java.lang.reflect.Modifier.STRICT);
+    
+    private int mod;
+    
+    private Modifier(int mod) {
+        this.mod = mod;
+    }
     
     public boolean isModifier(int mod) {
         boolean result = false;

@@ -6,6 +6,7 @@
     4.加入LocationPoint、LocationUtils、RectanglePoint
     5.加入VerifyCodeUtils
     6.删除logger包
+    7.StringUtils加入unicodeToString、stringToUnicode
 
 2016-08-01
 1.5.2发布

@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.constant.Charset;
@@ -22,6 +24,8 @@ import cn.featherfly.common.constant.Unit;
  * @version 1.0
  */
 public final class StringUtils {
+	
+	private static final Pattern UNICODE_PATTERN = Pattern.compile("(\\\\u(\\p{XDigit}{4}))");
 
     private StringUtils() {
     }
@@ -721,6 +725,38 @@ public final class StringUtils {
             throw new RuntimeException(e);
         }
     }
+    
+    /**
+     * string2Unicode
+     * @param string string
+     * @return unicode_string
+     */
+    public static String stringToUnicode(String string) {
+        StringBuffer unicode = new StringBuffer();
+        for (int i = 0; i < string.length(); i++) {
+            // 取出每一个字符
+            char c = string.charAt(i);
+            // 转换为unicode
+            unicode.append("\\u" + Integer.toHexString(c));
+        }
+
+        return unicode.toString();
+    }
+
+    /**
+     * unicode2String
+     * @param unicode unicode_string
+     * @return string
+     */
+    public static String unicodeToString(String unicode) {
+        Matcher matcher = UNICODE_PATTERN.matcher(unicode);
+        char ch;
+        while (matcher.find()) {
+            ch = (char) Integer.parseInt(matcher.group(2), 16);
+            unicode = unicode.replace(matcher.group(1), ch + "");
+        }
+        return unicode;
+    }
 
     /**
      * UTF-8编码.
@@ -1193,7 +1229,6 @@ public final class StringUtils {
         }
         return uri;
     }
-
 
 //    /**
 //     * 将阿拉伯数字转换为中文大写数字.

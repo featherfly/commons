@@ -9,7 +9,7 @@ import java.io.Serializable;
  * 
  * @author 钟冀
  */
-public interface TypeValue<V extends Serializable> {
+public interface TypeValue<V extends Serializable> extends Serializable{
 
     /**
      * 返回value

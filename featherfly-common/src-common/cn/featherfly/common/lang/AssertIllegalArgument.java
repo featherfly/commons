@@ -18,10 +18,7 @@ import java.util.Map;
 public final class AssertIllegalArgument {
     
     private static final Assert ASSERT = new Assert(IllegalArgumentException.class);
-public static void main(String[] args) {
-    
-    System.out.println(Locale.US);
-}
+
     private AssertIllegalArgument() {
     }
 

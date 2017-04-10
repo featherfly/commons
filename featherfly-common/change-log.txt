@@ -3,9 +3,9 @@
     1.使用jdk8编译
     2.加入ExceptionCode,定义的几个标准异常加入ExceptionCode支持
     3.加入Executor、Executable、AutoAsyncExecutor
-    4.加入LocationPoint、LocationUtils、RectanglePoint
-    5.加入VerifyCodeUtils
-    6.删除logger包
+    4.加入VerifyCodeUtils
+    5.删除logger包
+    6.删除TypeValue相关功能类和包
     7.StringUtils加入unicodeToString、stringToUnicode
 
 2016-08-01

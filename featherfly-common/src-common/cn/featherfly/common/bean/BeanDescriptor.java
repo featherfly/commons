@@ -32,13 +32,12 @@ import cn.featherfly.common.lang.ServiceLoaderUtils;
  */
 public class BeanDescriptor<T> {
 
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(BeanDescriptor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BeanDescriptor.class);
 
     private static final Map<Class<?>, BeanDescriptor<?>> BEAN_DESCRIPTORS = new ConcurrentHashMap<Class<?>, BeanDescriptor<?>>();
 
-    private static final BeanPropertyFactory FACTORY = ServiceLoaderUtils.load(
-            BeanPropertyFactory.class, new ReflectionBeanPropertyFactory());
+    private static final BeanPropertyFactory FACTORY = ServiceLoaderUtils.load(BeanPropertyFactory.class,
+            new ReflectionBeanPropertyFactory());
 
     // private static BeanPropertyFactory factory = new
     // ReflectionBeanPropertyFactory();
@@ -98,8 +97,7 @@ public class BeanDescriptor<T> {
         }
         Field[] fields = parent.getDeclaredFields();
         for (Field field : fields) {
-            Type genericType = typeGenericParams
-                    .get(field.getGenericType().toString());
+            Type genericType = typeGenericParams.get(field.getGenericType().toString());
             Class<?> fieldType = null;
             // 判断类型定义的泛型参数
             if (genericType == null) {
@@ -110,13 +108,12 @@ public class BeanDescriptor<T> {
             Method getter = ClassUtils.getGetter(field, this.type);
             Method setter = ClassUtils.getSetter(field, this.type);
             if (getter != null || setter != null) {
-                BeanProperty<?> prop = FACTORY.create(field.getName(), field, fieldType
-                        , setter, getter, this.type, field.getDeclaringClass());
+                BeanProperty<?> prop = FACTORY.create(field.getName(), field, fieldType, setter, getter, this.type,
+                        field.getDeclaringClass());
                 beanProperties.put(prop.getName(), prop);
                 if (LOGGER.isTraceEnabled() && parent != this.type) {
                     LOGGER.trace("类{}从父类{}中继承的属性：[{}]",
-                            new Object[] { this.type.getName(),
-                                    parent.getName(), prop.getName() });
+                            new Object[] { this.type.getName(), parent.getName(), prop.getName() });
                 }
             }
         }
@@ -135,86 +132,76 @@ public class BeanDescriptor<T> {
             if (ClassUtils.isGetter(method)) {
                 String propertyName = ClassUtils.getPropertyName(method);
                 if (!hasBeanProperty(propertyName)) {
-                    Map<String, Object> prop = getProperty(properties,
-                            propertyName);
+                    Map<String, Object> prop = getProperty(properties, propertyName);
                     prop.put("get", method);
                     prop.put("ownerType", type);
                     // 因为先使用field初始化了，所以现在都应该只剩动态getter或动态setter了
-                    /*try {
-                        Field field = ClassUtils
-                                .getField(method.getDeclaringClass(), propertyName);
-                        prop.put("field", field);
-                        if (field.getType() == method.getReturnType()) {
-                            prop.put("get", method);   
-                        } else {
-                            prop.put("get", method);
-                        }
-                    } catch (NoSuchFieldException e) {
-                        LOGGER.debug(e.getMessage());
-                    }*/
+                    /*
+                     * try { Field field = ClassUtils
+                     * .getField(method.getDeclaringClass(), propertyName);
+                     * prop.put("field", field); if (field.getType() ==
+                     * method.getReturnType()) { prop.put("get", method); } else
+                     * { prop.put("get", method); } } catch
+                     * (NoSuchFieldException e) { LOGGER.debug(e.getMessage());
+                     * }
+                     */
                 }
             }
             if (ClassUtils.isSetter(method)) {
                 String propertyName = ClassUtils.getPropertyName(method);
                 if (!hasBeanProperty(propertyName)) {
-                    Map<String, Object> prop = getProperty(properties,
-                            propertyName);
+                    Map<String, Object> prop = getProperty(properties, propertyName);
                     prop.put("set", method);
                     prop.put("ownerType", type);
                 }
                 // 因为先使用field初始化了，所以现在都应该只剩动态getter或动态setter了
                 /*
-                if (prop.get("field") == null) {
-                    try {
-                        Field field = ClassUtils.getField(method.getDeclaringClass(),
-                                propertyName);
-                        prop.put("field", field);
-                    } catch (NoSuchFieldException e) {
-                        LOGGER.debug(e.getMessage());
-                    }    
-                }*/
+                 * if (prop.get("field") == null) { try { Field field =
+                 * ClassUtils.getField(method.getDeclaringClass(),
+                 * propertyName); prop.put("field", field); } catch
+                 * (NoSuchFieldException e) { LOGGER.debug(e.getMessage()); } }
+                 */
             }
         }
-        for(Map<String, Object> prop : properties.values()) {
+        for (Map<String, Object> prop : properties.values()) {
             Class<?> propertyType = null;
             Class<?> declaringType = null;
             String propertyName = null;
-//            Field field = null;
-            Method setter = null; 
+            // Field field = null;
+            Method setter = null;
             Method getter = null;
-            /*if (prop.get("field") != null) {
-                field = (Field) prop.get("field");
-                declaringType = field.getDeclaringClass();
-                propertyName = field.getName();
-                propertyType = getGenericType(field.getGenericType(), field.getType());
-            } */
+            /*
+             * if (prop.get("field") != null) { field = (Field)
+             * prop.get("field"); declaringType = field.getDeclaringClass();
+             * propertyName = field.getName(); propertyType =
+             * getGenericType(field.getGenericType(), field.getType()); }
+             */
             if (prop.get("get") != null) {
                 getter = (Method) prop.get("get");
-                declaringType = LangUtils.pick(declaringType, getter.getDeclaringClass()) ;
-                propertyType = LangUtils.pick(propertyType
-                        , getGenericType(getter.getGenericReturnType(), getter.getReturnType()));
+                declaringType = LangUtils.pick(declaringType, getter.getDeclaringClass());
+                propertyType = LangUtils.pick(propertyType,
+                        getGenericType(getter.getGenericReturnType(), getter.getReturnType()));
                 propertyName = LangUtils.pick(propertyName, ClassUtils.getPropertyName(getter));
-            } 
+            }
             if (prop.get("set") != null) {
                 setter = (Method) prop.get("set");
-                declaringType = LangUtils.pick(declaringType, setter.getDeclaringClass()) ;
-                propertyType = LangUtils.pick(propertyType
-                        , getGenericType(setter.getGenericParameterTypes()[0], setter.getParameterTypes()[0]));
+                declaringType = LangUtils.pick(declaringType, setter.getDeclaringClass());
+                propertyType = LangUtils.pick(propertyType,
+                        getGenericType(setter.getGenericParameterTypes()[0], setter.getParameterTypes()[0]));
                 propertyName = LangUtils.pick(propertyName, ClassUtils.getPropertyName(setter));
             }
-            BeanProperty<?> property = FACTORY.create(propertyName, null,
-                    propertyType, setter, getter, type, declaringType);
+            BeanProperty<?> property = FACTORY.create(propertyName, null, propertyType, setter, getter, type,
+                    declaringType);
             beanProperties.put(property.getName(), property);
             if (LOGGER.isTraceEnabled()) {
-                LOGGER.trace("类{}的属性：[{}]， 定义子类{}",
-                        new Object[] { property.getOwnerType().getName(),
-                                property.getName(), property.getDeclaringType().getName()});
+                LOGGER.trace("类{}的属性：[{}]， 定义子类{}", new Object[] { property.getOwnerType().getName(),
+                        property.getName(), property.getDeclaringType().getName() });
             }
         }
     }
-    
+
     private Class<?> getGenericType(Type genericTypeDeclaring, Class<?> genericType) {
-        Type gt = typeGenericParams.get(genericTypeDeclaring.toString());                
+        Type gt = typeGenericParams.get(genericTypeDeclaring.toString());
         // 判断类型定义的泛型参数
         if (gt == null) {
             return genericType;
@@ -223,8 +210,7 @@ public class BeanDescriptor<T> {
         }
     }
 
-    private Map<String, Object> getProperty(
-            Map<String, Map<String, Object>> properties, String propertyName) {
+    private Map<String, Object> getProperty(Map<String, Map<String, Object>> properties, String propertyName) {
         Map<String, Object> prop = properties.get(propertyName);
         if (prop == null) {
             prop = new HashMap<>();
@@ -238,7 +224,7 @@ public class BeanDescriptor<T> {
      */
     @SuppressWarnings("unchecked")
     public Collection<BeanProperty<?>> getBeanProperties() {
-        return beanProperties.values();
+        return (Collection<BeanProperty<?>>) beanProperties.values();
     }
 
     /**
@@ -270,6 +256,7 @@ public class BeanDescriptor<T> {
         }
         return property;
     }
+
     /**
      * <p>
      * 返回指定属性是否存在
@@ -297,8 +284,7 @@ public class BeanDescriptor<T> {
             String currentPropertyName = name.substring(0, name.indexOf(DOT));
             String innerPropertyName = name.substring(name.indexOf(DOT) + 1);
             BeanProperty<?> property = getBeanProperty(currentPropertyName);
-            BeanDescriptor<?> propertyDescriptor = getBeanDescriptor(
-                    property.getType());
+            BeanDescriptor<?> propertyDescriptor = getBeanDescriptor(property.getType());
             return propertyDescriptor.getChildBeanProperty(innerPropertyName);
         } else {
             return getBeanProperty(name);
@@ -332,8 +318,7 @@ public class BeanDescriptor<T> {
      *            条件判断
      * @return 所有符合条件BeanProperty的集合
      */
-    public Collection<BeanProperty<?>> findBeanPropertys(
-            BeanPropertyMatcher condition) {
+    public Collection<BeanProperty<?>> findBeanPropertys(BeanPropertyMatcher condition) {
         Collection<BeanProperty<?>> coll = new ArrayList<>();
         for (BeanProperty<?> beanProperty : getBeanProperties()) {
             if (condition.match(beanProperty)) {
@@ -361,28 +346,21 @@ public class BeanDescriptor<T> {
             String currentPropertyName = name.substring(0, name.indexOf(DOT));
             String innerPropertyName = name.substring(name.indexOf(DOT) + 1);
             BeanProperty<?> property = getBeanProperty(currentPropertyName);
-            @SuppressWarnings("rawtypes")
-            BeanDescriptor propertyDescriptor = getBeanDescriptor(
-                    property.getType());
             Object propertyValue = property.getValue(obj);
+            @SuppressWarnings("rawtypes")
+            BeanDescriptor propertyDescriptor = null;
             // 中间层次为空，使用默认构造函数生成一个空对象
             if (propertyValue == null) {
+                propertyDescriptor = getBeanDescriptor(property.getType());
                 try {
                     if (ClassUtils.isCellection(property.getType())) {
-                        LOGGER.trace(
-                                "类{}的属性[{}]为空，对象为Collection接口实现类，自动创建该属性对象",
-                                new Object[] {
-                                        property.getOwnerType().getName(),
-                                        property.getName() });
-                        propertyValue = CollectionUtils
-                                .newInstance(property.getType());
+                        LOGGER.trace("类{}的属性[{}]为空，对象为Collection接口实现类，自动创建该属性对象",
+                                new Object[] { property.getOwnerType().getName(), property.getName() });
+                        propertyValue = CollectionUtils.newInstance(property.getType());
                     } else if (ClassUtils.isMap(property.getType())) {
                         LOGGER.trace("类{}的属性[{}]为空，对象为MAP接口，自动创建该属性对象",
-                                new Object[] {
-                                        property.getOwnerType().getName(),
-                                        property.getName() });
-                        propertyValue = CollectionUtils
-                                .newMap(property.getType());
+                                new Object[] { property.getOwnerType().getName(), property.getName() });
+                        propertyValue = CollectionUtils.newMap(property.getType());
                     } /*
                        * else if (property.getType() == List.class) {
                        * LOGGER.trace(
@@ -397,19 +375,18 @@ public class BeanDescriptor<T> {
                        * HashSet<Object>(); }
                        */ else {
                         LOGGER.trace("类{}的属性[{}]为空，自动创建该属性对象[使用newInstance()]",
-                                new Object[] {
-                                        property.getOwnerType().getName(),
-                                        property.getName() });
+                                new Object[] { property.getOwnerType().getName(), property.getName() });
                         propertyValue = property.getType().newInstance();
                     }
                     property.setValue(obj, propertyValue);
                 } catch (Exception e) {
-                    throw new IllegalArgumentException(String.format(
-                            "类%s缺少没有参数的构造函数", property.getType().getName()), e);
+                    throw new IllegalArgumentException(String.format("类%s缺少没有参数的构造函数", property.getType().getName()),
+                            e);
                 }
+            } else {
+                propertyDescriptor = getBeanDescriptor(propertyValue.getClass());
             }
-            propertyDescriptor.setProperty(propertyValue, innerPropertyName,
-                    value);
+            propertyDescriptor.setProperty(propertyValue, innerPropertyName, value);
         } else {
             BeanProperty<?> p = getBeanProperty(name);
             p.setValue(obj, value);
@@ -432,11 +409,9 @@ public class BeanDescriptor<T> {
         BeanProperty<?> beanProperty = getChildBeanProperty(name);
         if (ClassUtils.isCellection(beanProperty.getType())) {
             @SuppressWarnings("unchecked")
-            Collection<Object> collection = (Collection<Object>) getProperty(
-                    obj, name);
+            Collection<Object> collection = (Collection<Object>) getProperty(obj, name);
             if (collection == null) {
-                collection = CollectionUtils
-                        .newInstance(beanProperty.getType());
+                collection = CollectionUtils.newInstance(beanProperty.getType());
                 setProperty(obj, name, collection);
             }
             collection.add(value);
@@ -462,19 +437,17 @@ public class BeanDescriptor<T> {
             String currentPropertyName = name.substring(0, name.indexOf(DOT));
             String innerPropertyName = name.substring(name.indexOf(DOT) + 1);
             BeanProperty<?> property = getBeanProperty(currentPropertyName);
-            @SuppressWarnings("rawtypes")
-            BeanDescriptor propertyDescriptor = getBeanDescriptor(
-                    property.getType());
             Object propertyValue = property.getValue(obj);
+            @SuppressWarnings("rawtypes")
+            BeanDescriptor propertyDescriptor = null; 
             // 如果层次中间一个为空，返回空
             if (propertyValue == null) {
-                LOGGER.trace("类{}的属性[{}]为空",
-                        new Object[] { property.getOwnerType().getName(),
-                                property.getName() });
+                LOGGER.trace("类{}的属性[{}]为空", new Object[] { property.getOwnerType().getName(), property.getName() });
                 return null;
+            } else {
+                propertyDescriptor = getBeanDescriptor(propertyValue.getClass());
+                return propertyDescriptor.getProperty(propertyValue, innerPropertyName);
             }
-            return propertyDescriptor.getProperty(propertyValue,
-                    innerPropertyName);
         } else {
             BeanProperty<?> p = getBeanProperty(name);
             return p.getValue(obj);
@@ -492,8 +465,7 @@ public class BeanDescriptor<T> {
      *            注解类型
      * @return 是否含有指定注解
      */
-    public <A extends Annotation> boolean hasAnnotation(
-            Class<A> annotationClass) {
+    public <A extends Annotation> boolean hasAnnotation(Class<A> annotationClass) {
         return getAnnotation(annotationClass) != null;
     }
 

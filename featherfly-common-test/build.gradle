@@ -13,8 +13,8 @@ allprojects {
 			,"commons-lang:commons-lang:2.6"
 			,'commons-io:commons-io:2.4'
 			,'commons-collections:commons-collections:3.2.1'
-			,"org.springframework:spring-core:4.3.2.RELEASE"
-			,'com.fasterxml.jackson.core:jackson-databind:2.8.1'
+			,"org.springframework:spring-core:4.3.7.RELEASE"
+			,'com.fasterxml.jackson.core:jackson-databind:2.8.8'
 			]
 	}
 	
@@ -58,15 +58,12 @@ allprojects {
 
     repositories {
         maven {
-            url "http://192.168.203.241:8081/nexus/content/repositories/releases/"
-        }
-        maven {
-            url "http://192.168.203.241:8081/nexus/content/repositories/central/"
-        }
+			url  ant.properties['user.home'] +  "/.m2/repository"
+		}
+		maven {
+			url  "http://maven.aliyun.com/nexus/content/groups/public/"
+		}
 		mavenCentral()
-        maven {
-            url  ant.properties['user.home'] +  "/.m2/repository"
-        }
 	}
 
     dependencies {

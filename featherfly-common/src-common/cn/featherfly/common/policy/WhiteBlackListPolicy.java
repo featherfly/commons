@@ -1,68 +1,198 @@
 
 package cn.featherfly.common.policy;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
+
+import cn.featherfly.common.lang.CollectionUtils;
 
 /**
  * <p>
- * 白黑名单上传策略，白名单优先级更高
+ * 白黑名单策略，黑名单优先级更高
  * </p>
  * @param <T> 需要判断的类型
  * @author 钟冀
  */
-public abstract class WhiteBlackListPolicy<T> implements WhiteListPolicy<T>, BlackListPolicy<T>{
+public abstract class WhiteBlackListPolicy<T> implements WhiteListPolicy<T, WhiteBlackListPolicy<T>>, BlackListPolicy<T, WhiteBlackListPolicy<T>>{
 
     /**
      */
     public WhiteBlackListPolicy() {
     }
 
-    private List<T> blackList = new ArrayList<T>();
+    private Collection<T> blackList = new HashSet<T>();
 
-    private List<T> whiteList = new ArrayList<T>();
-
+    private Collection<T> whiteList = new HashSet<T>();
+    
+    private boolean enableBlackList = true;
+    
+    private boolean enableWhiteList = true;
+    
     /**
-     * {@inheritDoc}
-     */
+	 * {@inheritDoc}
+	 */
     @Override
-    public void setBlackList(List<T> policys) {
-        this.blackList = policys;
+	public WhiteBlackListPolicy<T> addBlack(T t) {
+    	this.blackList.add(t);
+    	return this;
     }
-
+        
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public WhiteBlackListPolicy<T> addBlack(@SuppressWarnings("unchecked") T...t) {
+    	CollectionUtils.addAll(blackList, t);
+    	return this;
+    }
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public WhiteBlackListPolicy<T> removeBlack(T t) {
+    	this.blackList.remove(t);
+    	return this;
+    }
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public WhiteBlackListPolicy<T> clearBlackList() {
+		this.blackList.clear();
+		return this;
+	}
+    
     /**
-     * {@inheritDoc}
-     */
+	 * {@inheritDoc}
+	 */
     @Override
-    public void setWhiteList(List<T> policys) {
-        this.whiteList = policys;
+	public WhiteBlackListPolicy<T> addWhite(T t) {
+    	this.whiteList.add(t);
+    	return this;
     }
-
+    
     /**
-     * 返回blackList
-     * @return blackList
+	 * {@inheritDoc}
+	 */
+    @Override
+	public WhiteBlackListPolicy<T> addWhite(@SuppressWarnings("unchecked") T...t) {
+    	CollectionUtils.addAll(whiteList, t);
+    	return this;
+    }
+    
+    /**
+	 * {@inheritDoc}
+	 */
+    @Override
+	public WhiteBlackListPolicy<T> removeWhite(T t) {
+    	this.whiteList.remove(t);
+    	return this;
+    }
+    
+    /**
+	 * {@inheritDoc}
+	 */
+    @Override
+	public WhiteBlackListPolicy<T> clearWhiteList() {
+    	this.whiteList.clear();
+    	return this;
+    }
+    
+    /**
+     * <p>
+     * 清除黑名单和白名单
+     * </p>
+     * @return this
      */
-    public List<T> getBlackList() {
-        return blackList;
+    public WhiteBlackListPolicy<T> clear() {
+    	this.blackList.clear();
+    	this.whiteList.clear();
+    	return this;
     }
-
+    
     /**
-     * 返回whiteList
-     * @return whiteList
-     */
-    public List<T> getWhiteList() {
-        return whiteList;
-    }
+	 * 返回blackList
+	 * @return blackList
+	 */
+	@Override
+	public Collection<T> getBlackList() {
+		return new HashSet<>(blackList);
+	}
 
-    /**
+	/**
+	 * 设置blackList
+	 * @param blackList blackList
+	 */
+	@Override
+	public WhiteBlackListPolicy<T> setBlackList(Collection<T> blackList) {
+		this.blackList = blackList;
+		return this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Collection<T> getWhiteList() {
+		return new HashSet<>(whiteList);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setWhiteList(Collection<T> whiteList) {
+		this.whiteList = whiteList;
+	}
+
+	/**
+	 * 返回enableBlackList
+	 * @return enableBlackList
+	 */
+	public boolean isEnableBlackList() {
+		return enableBlackList;
+	}
+
+	/**
+	 * 设置enableBlackList
+	 * @param enableBlackList enableBlackList
+	 */
+	public WhiteBlackListPolicy<T> setEnableBlackList(boolean enableBlackList) {
+		this.enableBlackList = enableBlackList;
+		return this;
+	}
+
+	/**
+	 * 返回enableWhiteList
+	 * @return enableWhiteList
+	 */
+	public boolean isEnableWhiteList() {
+		return enableWhiteList;
+	}
+
+	/**
+	 * 设置enableWhiteList
+	 * @param enableWhiteList enableWhiteList
+	 */
+	public WhiteBlackListPolicy<T> setEnableWhiteList(boolean enableWhiteList) {
+		this.enableWhiteList = enableWhiteList;
+		return this;
+	}
+
+	/**
      * {@inheritDoc}
      */
     @Override
     public boolean isAllow(T target) {
-        if (isInBlackList(target)) {
-            return false;
-        }
-        return isInWhiteList(target); 
+    	if (isEnableBlackList() && isInBlackList(target)) {
+    		return false;
+    	}
+    	if (isEnableWhiteList()) {
+    		return isInWhiteList(target);
+    	}
+    	return true; 
     }
     /**
      * <p>

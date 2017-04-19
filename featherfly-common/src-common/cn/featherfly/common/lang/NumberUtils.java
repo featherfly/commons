@@ -194,4 +194,16 @@ public final class NumberUtils {
             return number.toString();
         }
     }
+    
+    /**
+     * <p>
+     * 转换数字对象到指定数字类型
+     * </p>
+     * @param number 数字
+     * @param targetClass 转换目标数字类型
+     * @return 转换后的数字对象
+     */
+    public static <T extends Number> T convert(Number number, Class<T> targetClass) {
+        return org.springframework.util.NumberUtils.convertNumberToTargetClass(number, targetClass);
+    }
 }

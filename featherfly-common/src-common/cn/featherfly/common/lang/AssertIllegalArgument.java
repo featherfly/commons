@@ -2,7 +2,6 @@ package cn.featherfly.common.lang;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.Locale;
 import java.util.Map;
 
 /**

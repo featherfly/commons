@@ -1,4 +1,4 @@
-2016-11-25
+2017-4-10
 1.6.0发布
     1.使用jdk8编译
     2.加入ExceptionCode,定义的几个标准异常加入ExceptionCode支持
@@ -7,6 +7,9 @@
     5.删除logger包
     6.删除TypeValue相关功能类和包
     7.StringUtils加入unicodeToString、stringToUnicode
+    8.WhiteBlackListPolicy加入黑名单和白名单启用参数和逻辑
+    9.BeanDescriptor、BeanUtils的setProperty、getProperty使用obj.pro时，会动态根据当前获取的对象，再获取类型进行下一步设值（取值）
+    10.NumberUtils加入conver方法用于数字对象之间的转换
 
 2016-08-01
 1.5.2发布

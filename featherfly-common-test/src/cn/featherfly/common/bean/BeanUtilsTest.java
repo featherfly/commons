@@ -4,6 +4,10 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
+import cn.featherfly.common.bean.vo.Result;
+import cn.featherfly.common.bean.vo.ResultUser;
+import cn.featherfly.common.bean.vo.User;
+
 /**
  * <p>
  * BeanUtilsTest 类的说明放这里
@@ -64,6 +68,36 @@ public class BeanUtilsTest {
     @Test
     public void testMergeNull() {
         BeanUtils.mergeProperties(null, null);
+    }
+    
+    @Test
+    public void testSetInnerProperty() {
+        ResultUser user = new ResultUser();
+        user.setMessage("user.msg");
+        user.setData(new User());
+        user.getData().setAge(18);
+        user.getData().setName("featherfly");
+        
+        Object name = BeanUtils.getProperty(user, "data.name");
+        System.out.println("user.getData().getName() -> " + name);
+        assertEquals(user.getData().getName(), name);
+        
+        
+        Result<Object> result = new Result<Object>();
+        result.setMessage("result.msg");
+        User user2 = new User();
+        user2.setName("yufei");
+        user2.setAge(20);
+        result.setData(user2);
+        name = BeanUtils.getProperty(result, "data.name");
+        System.out.println("result.getData().getName() -> " + name);
+        assertEquals(user2.getName(), name);
+        
+        
+        String newname = "yi";
+        BeanUtils.setProperty(result, "data.name", newname);        
+        System.out.println("result.getData().getName() -> " + user2.getName());
+        assertEquals(newname, user2.getName());
     }
 }
 

@@ -13,6 +13,13 @@ import java.lang.reflect.Method;
  */
 public class MethodParameter {
 
+    /**
+     * 
+     */
+    public MethodParameter() {
+        super();
+    }
+
     private Method method;
     
     private String name;

@@ -10,7 +10,8 @@ import org.slf4j.LoggerFactory;
  * <p>
  * Member抽象匹配接口
  * </p>
- *
+ * 
+ * @param <T> Member泛型
  * @author 钟冀
  */
 public abstract class AbstractMemberMatcher<T extends Member> implements MemberMatcher<T>{

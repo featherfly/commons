@@ -23,7 +23,7 @@ public final class ServiceLoaderUtils {
      * </p>
      * @author 钟冀
      */
-    public static enum MultiPolicy {
+    public enum MultiPolicy {
         /**
          * 出现加载多个时抛出异常
          */
@@ -43,7 +43,7 @@ public final class ServiceLoaderUtils {
      * </p>
      * @author 钟冀
      */
-    public static enum NotFoundPolicy {
+    public enum NotFoundPolicy {
         /**
          * 没有可加载时抛出异常
          */

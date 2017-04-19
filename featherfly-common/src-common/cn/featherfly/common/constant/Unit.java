@@ -68,4 +68,8 @@ public interface Unit {
      * 365进制最大值364
      */
     int YEAR_MAX = 364;
+    /**
+     * 16进制
+     */
+    int SIXTEEN = 16;
 }

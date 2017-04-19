@@ -10,7 +10,7 @@ import cn.featherfly.common.enums.Logic;
  * <p>
  * Member匹配组
  * </p>
- *
+ * @param <T> Member泛型
  * @author 钟冀
  */
 public class MemberGroupMatcher<T extends Member> extends GroupMatcher<MemberMatcher<T>, T>

@@ -21,6 +21,19 @@ public final class NumberUtils {
     
     /**
      * <p>
+     * 转换数字对象到指定数字类型
+     * </p>
+     * @param number 数字
+     * @param targetClass 转换目标数字类型
+     * @param <T> 转换后的类型
+     * @return 转换后的数字对象
+     */
+    public static <T extends Number> T convert(Number number, Class<T> targetClass) {
+        return org.springframework.util.NumberUtils.convertNumberToTargetClass(number, targetClass);
+    }
+    
+    /**
+     * <p>
      * 将Number转换为指定数字类型，如果传入数字是null，则返回null
      * </p>
      * @param number 数字源
@@ -33,32 +46,36 @@ public final class NumberUtils {
         if (number == null) {
             return  null;
         }
+        T  value = null;
         if (toType == Integer.class
                 || toType == Integer.TYPE) {
-            return (T) new Integer(number.intValue());
+            value = (T) new Integer(number.intValue());
         } else if (toType == Long.class
                 || toType == Long.TYPE) {
-            return (T) new Long(number.longValue());
+            value = (T) new Long(number.longValue());
         } else if (toType == Double.class
                 || toType == Double.TYPE) {
-            return (T) new Double(number.doubleValue());
+            value = (T) new Double(number.doubleValue());
         } else if (toType == Float.class
                 || toType == Float.TYPE) {
-            return (T) new Float(number.floatValue());
+            value = (T) new Float(number.floatValue());
         } else if (toType == BigInteger.class) {
-            return (T) new BigInteger(number.toString());
+            value = (T) new BigInteger(number.toString());
         } else if (toType == BigDecimal.class) {
-            return (T) new BigDecimal(number.toString());
+            value = (T) new BigDecimal(number.toString());
         } else if (toType == Byte.class
                 || toType == Byte.TYPE) {
-            return (T) new Byte(number.byteValue());
+            value = (T) new Byte(number.byteValue());
         } else if (toType == Short.class
                 || toType == Short.TYPE) {
-            return (T) new Short(number.shortValue());
+            value = (T) new Short(number.shortValue());
+        }
+        if (value != null) {
+            return value;
         }
         throw new IllegalArgumentException("不支持的目标类型：" + toType.getName());
     }
-    
+
     /**
      * <p>
      * 将字符串转换为对应的类型，如果传入字符串是null或者空字符串，则返回null
@@ -73,22 +90,26 @@ public final class NumberUtils {
         if (LangUtils.isEmpty(source)) {
             return null;
         }
+        T value = null;
         if (toType == Integer.class || toType == Integer.TYPE) {
-            return (T) new Integer(Integer.parseInt(source));
+            value = (T) new Integer(Integer.parseInt(source));
         } else if (toType == Long.class || toType == Long.TYPE) {
-            return (T) new Long(Long.parseLong(source));
+            value =  (T) new Long(Long.parseLong(source));
         } else if (toType == Double.class || toType == Double.TYPE) {
-            return (T) new Double(Double.parseDouble(source));
+            value =  (T) new Double(Double.parseDouble(source));
         } else if (toType == Float.class || toType == Float.TYPE) {
-            return (T) new Float(Float.parseFloat(source));
+            value =  (T) new Float(Float.parseFloat(source));
         } else if (toType == BigInteger.class) {
-            return (T) new BigInteger(source);
+            value =  (T) new BigInteger(source);
         } else if (toType == BigDecimal.class) {
-            return (T) new BigDecimal(source);
+            value =  (T) new BigDecimal(source);
         } else if (toType == Byte.class || toType == Byte.TYPE) {
-            return (T) new Byte(Byte.parseByte(source));
+            value =  (T) new Byte(Byte.parseByte(source));
         } else if (toType == Short.class || toType == Short.TYPE) {
-            return (T) new Short(Short.parseShort(source));
+            value =  (T) new Short(Short.parseShort(source));
+        }
+        if (value != null) {
+            return value;
         }
         throw new IllegalArgumentException("不支持的目标类型：" + toType.getName());
     }
@@ -193,17 +214,5 @@ public final class NumberUtils {
         } else {
             return number.toString();
         }
-    }
-    
-    /**
-     * <p>
-     * 转换数字对象到指定数字类型
-     * </p>
-     * @param number 数字
-     * @param targetClass 转换目标数字类型
-     * @return 转换后的数字对象
-     */
-    public static <T extends Number> T convert(Number number, Class<T> targetClass) {
-        return org.springframework.util.NumberUtils.convertNumberToTargetClass(number, targetClass);
     }
 }

@@ -1,4 +1,4 @@
-package cn.featherfly.common.i18n;
+package cn.featherfly.common.locale;
 
 import java.util.Locale;
 

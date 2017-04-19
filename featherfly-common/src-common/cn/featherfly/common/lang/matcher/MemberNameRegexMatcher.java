@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  * <p>
  * 正则匹配Member名称的实现
  * </p>
- *
+ * @param <T> Member泛型
  * @author 钟冀
  */
 public class MemberNameRegexMatcher<T extends Member> extends AbstractMemberMatcher<T>{

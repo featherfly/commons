@@ -1,4 +1,4 @@
-package cn.featherfly.common.i18n;
+package cn.featherfly.common.locale;
 
 import java.util.Enumeration;
 import java.util.Locale;
@@ -12,7 +12,7 @@ import java.util.Set;
  * 
  * @author 钟冀
  */
-public class JdkResourceBundleProxy implements cn.featherfly.common.i18n.ResourceBundle {
+public class JdkResourceBundleProxy implements cn.featherfly.common.locale.ResourceBundle {
     
     private java.util.ResourceBundle bundle;
     
@@ -87,8 +87,8 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.i18n.Resourc
     }
 
     /**
-     * @return
      * @see java.util.ResourceBundle#getKeys()
+     * @return Key Enum
      */
     @Override
     public Enumeration<String> getKeys() {

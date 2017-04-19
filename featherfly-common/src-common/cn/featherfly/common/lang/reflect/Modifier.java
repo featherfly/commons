@@ -70,10 +70,23 @@ public enum Modifier {
 
     private int modifier;
 
-    private Modifier(int modifier) {
+    /**
+     * 
+     * @param modifier java.lang.reflect.Modifier
+     */
+    Modifier(int modifier) {
         this.modifier = modifier;
     }
 
+    /**
+     * <p>
+     * 判断是否是java.lang.reflect.Modifier
+     * </p>
+     * 
+     * @param modifier
+     *            java.lang.reflect.Modifier
+     * @return 是否是java.lang.reflect.Modifier
+     */
     public boolean isModifier(int modifier) {
         boolean result = false;
         switch (this) {
@@ -112,6 +125,8 @@ public enum Modifier {
                 break;
             case STRICT:
                 result = java.lang.reflect.Modifier.isStrict(modifier);
+                break;
+            default:
                 break;
         }
         return result;

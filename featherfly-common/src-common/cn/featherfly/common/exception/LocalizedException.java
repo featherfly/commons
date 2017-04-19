@@ -6,9 +6,9 @@ import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.featherfly.common.i18n.ResourceBundleUtils;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.LogUtils;
+import cn.featherfly.common.locale.ResourceBundleUtils;
 
 
 /**

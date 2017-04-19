@@ -14,24 +14,25 @@ import cn.featherfly.common.lang.LangUtils;
  * <p>
  * 匹配Method的返回类型的实现
  * </p>
+ * 
  * @author 钟冀
  */
-public class MethodParamTypeMatcher implements MethodMatcher{
-    
+public class MethodParamTypeMatcher implements MethodMatcher {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodParamTypeMatcher.class);
 
     private Class<?>[] parameterTypes;
-    
+
     private boolean matchSubType;
-    
+
     /**
-     * @param parameterTypes 请求参数类型
+     * @param parameterTypes
+     *            请求参数类型
      */
-    public MethodParamTypeMatcher(Class<?>...parameterTypes) {
+    public MethodParamTypeMatcher(Class<?>... parameterTypes) {
         this.parameterTypes = parameterTypes;
     }
-    
-    
+
     /**
      * {@inheritDoc}
      */
@@ -39,7 +40,7 @@ public class MethodParamTypeMatcher implements MethodMatcher{
     public boolean match(Method method) {
         if (LangUtils.isEmpty(parameterTypes) || method == null) {
             return false;
-        }        
+        }
         Class<?>[] types = method.getParameterTypes();
         if (parameterTypes.length != types.length) {
             return false;
@@ -55,9 +56,9 @@ public class MethodParamTypeMatcher implements MethodMatcher{
                 }
             }
         }
-        if (LOGGER.isDebugEnabled()) {            
-            LOGGER.debug("parameterTypes {} match {} ", ArrayUtils.toString(parameterTypes)
-                    ,  ArrayUtils.toString(types));
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("parameterTypes {} match {} ", ArrayUtils.toString(parameterTypes),
+                    ArrayUtils.toString(types));
         }
         return true;
     }

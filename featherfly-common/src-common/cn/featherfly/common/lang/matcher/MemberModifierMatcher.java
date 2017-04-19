@@ -9,7 +9,7 @@ import cn.featherfly.common.lang.reflect.Modifier;
  * <p>
  * 匹配Member Modifier的实现
  * </p>
- *
+ * @param <T> Member泛型
  * @author 钟冀
  */
 public class MemberModifierMatcher<T extends Member> extends AbstractMemberMatcher<T>{
@@ -35,7 +35,8 @@ public class MemberModifierMatcher<T extends Member> extends AbstractMemberMatch
     @Override
     public boolean match(T member) {
         if (logger.isDebugEnabled()) {
-            logger.debug("目标成员 Modifiers {} 匹配 {}", java.lang.reflect.Modifier.toString(member.getModifiers()), Modifier.PUBLIC);
+            logger.debug("目标成员 Modifiers {} 匹配 {}"
+                    , java.lang.reflect.Modifier.toString(member.getModifiers()), Modifier.PUBLIC);
         }
         return this.modifier.isModifier(member.getModifiers());
     }

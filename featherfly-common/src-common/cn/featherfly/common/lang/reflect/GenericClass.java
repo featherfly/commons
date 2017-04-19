@@ -8,7 +8,7 @@ import cn.featherfly.common.lang.GenericType;
  * <p>
  * GenericClass
  * </p>
- * 
+ * @param <T> 类型
  * @author 钟冀
  */
 public class GenericClass<T> implements GenericType<T>{

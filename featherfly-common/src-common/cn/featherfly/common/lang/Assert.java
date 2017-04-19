@@ -17,7 +17,9 @@ import java.util.Map;
 public class Assert {
 
 //    private static final String ASSERT_TITLE = "[断言失败] - ";
-
+    /**
+     * exception type
+     */
     protected Class<?> exception;
 
     /**

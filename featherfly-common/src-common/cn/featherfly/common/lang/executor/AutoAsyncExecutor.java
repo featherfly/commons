@@ -1,9 +1,9 @@
 package cn.featherfly.common.lang.executor;
 
+import java.util.concurrent.ExecutorService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.ExecutorService;
 
 /**
  * <p>
@@ -16,6 +16,17 @@ import java.util.concurrent.ExecutorService;
  */
 public class AutoAsyncExecutor implements Executor{
 
+    
+    /**
+     * 
+     */
+    public AutoAsyncExecutor() {
+        super();
+    }
+
+    /**
+     * logger
+     */
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
@@ -32,16 +43,29 @@ public class AutoAsyncExecutor implements Executor{
         return this;
     }
 
+    /**
+     * <p>
+     * 销毁
+     * </p>
+     */
     public void destroy() {
         executorService.shutdown();
     }
 
     private ExecutorService executorService;
 
+    /**
+     * 返回executorService
+     * @return executorService
+     */
     public ExecutorService getExecutorService() {
         return executorService;
     }
 
+    /**
+     * 设置executorService
+     * @param executorService executorService
+     */
     public void setExecutorService(ExecutorService executorService) {
         this.executorService = executorService;
     }

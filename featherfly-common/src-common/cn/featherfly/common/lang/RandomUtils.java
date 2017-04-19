@@ -38,7 +38,7 @@ public final class RandomUtils {
      * 字符类型.
      * </p>
      */
-    public static enum CharType {
+    public enum CharType {
         /**
          * lowerCase    小写字母
          */

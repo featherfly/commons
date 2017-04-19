@@ -1,4 +1,4 @@
-package cn.featherfly.common.i18n;
+package cn.featherfly.common.locale;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -21,7 +21,7 @@ public class JdkResourceBundleFactory implements ResourceBundleFactory{
      * {@inheritDoc}
      */
     @Override
-    public cn.featherfly.common.i18n.ResourceBundle getBundle(String baseName, Locale locale) {
+    public cn.featherfly.common.locale.ResourceBundle getBundle(String baseName, Locale locale) {
         return new JdkResourceBundleProxy(ResourceBundle.getBundle(baseName, locale));
     }
 }

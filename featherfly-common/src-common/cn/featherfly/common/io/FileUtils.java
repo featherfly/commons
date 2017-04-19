@@ -355,7 +355,7 @@ public final class FileUtils {
      * @return 目录内容的文件数组。
      */
     public static File[] listAll(File file,
-                                 javax.swing.filechooser.FileFilter filter) {
+                                 FileFilter filter) {
         ArrayList<File> list = new ArrayList<File>();
         File[] files;
         if (!file.exists() || file.isFile()) {
@@ -369,35 +369,35 @@ public final class FileUtils {
 
     /**
      * 将目录中的内容添加到列表。
-     *
      * @param list   文件列表
-     * @param filter 过滤器
      * @param file   目录
+     * @param filter 过滤器
      */
     private static void list(ArrayList<File> list, File file,
-                             javax.swing.filechooser.FileFilter filter) {
+                             FileFilter filter) {
         if (filter != null) {
             if (filter.accept(file)) {
-                list.add(file);
-                if (file.isFile()) {
-                    return;
+                if (file.isDirectory()) {
+                    File[] files = file.listFiles();
+                    for (int i = 0; i < files.length; i++) {
+                        list(list, files[i], filter);
+                    }
+                } else if (file.isFile()) {
+                    list.add(file);
                 }
             }
         } else {
-            list.add(file);
-            if (file.isFile()) {
-                return;
+            if (file.isDirectory()) {
+                File[] files = file.listFiles();
+                for (int i = 0; i < files.length; i++) {
+                    list(list, files[i], filter);
+                }
+            } else if (file.isFile()) {
+                list.add(file);
             }
         }
-        if (file.isDirectory()) {
-            File[] files = file.listFiles();
-            for (int i = 0; i < files.length; i++) {
-                list(list, files[i], filter);
-            }
-        }
-
     }
-
+    
     /**
      * <p>
      * 获取文件根目录

@@ -1,3 +1,7 @@
+2017-4-26
+1.6.1 发布
+    1.RandomUtils加入getRandomFromTotal(double total, int num)
+
 2017-4-10
 1.6.0发布
     1.使用jdk8编译

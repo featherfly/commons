@@ -2,6 +2,7 @@ package cn.featherfly.common.exception;
 
 import java.lang.reflect.Field;
 import java.util.Locale;
+import java.util.MissingResourceException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -208,8 +209,13 @@ public abstract class LocalizedException extends RuntimeException{
         if (firstChar == resourceSign && keyIndex != -1) {
             msg = ResourceBundleUtils.getString(message, argus, locale);
         } else if (firstChar == keySign) {
-            msg = ResourceBundleUtils.getString(
-                    ResourceBundleUtils.RESOURCE_SIGN + this.getClass().getSimpleName() + message, argus, locale);
+            try {
+                msg = ResourceBundleUtils.getString(
+                        ResourceBundleUtils.RESOURCE_SIGN + this.getClass().getName() + message, argus, locale);
+            } catch (MissingResourceException e) {
+                msg = ResourceBundleUtils.getString(
+                        ResourceBundleUtils.RESOURCE_SIGN + this.getClass().getSimpleName() + message, argus, locale);                
+            }
         } else {
             msg = message;
         }

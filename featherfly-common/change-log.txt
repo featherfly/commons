@@ -1,3 +1,7 @@
+2018-01-11
+1.6.3 发布
+    1.加入LimitQueue
+    
 2017-09-06
 1.6.2 发布
     1.LocalizedException获取ResourceBundle首先从异常同目录查找同名资源文件，找不到再从根目录超找同名文件

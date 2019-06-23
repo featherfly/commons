@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Test-class Suite" parallel="tests" thread-count="2">
+    <test name="Assert Test">
+        <parameter name="test-name" value="Assert Test" />
+        <classes>
+            <class name="cn.featherfly.common.lang.AssertIllegalArgumentTest" />
+            <class name="cn.featherfly.common.lang.AssertStandardAppTest" />
+            <class name="cn.featherfly.common.lang.AssertStandardConfigTest" />
+            <class name="cn.featherfly.common.lang.AssertStandardSysTest" />
+        </classes>
+    </test>
+<!--     <test name="Test-class test 2"> -->
+<!--         <parameter name="test-name" value="test-method One" /> -->
+<!--         <classes> -->
+<!--             <class name="com.howtodoinjava.parallelism.ParallelSuiteTest" /> -->
+<!--         </classes> -->
+<!--     </test> -->
+</suite>

@@ -1,0 +1,4 @@
+javaSrcDir: src/test/java
+resourceDir: src/test/resources 
+templateDir: cn/featherfly/common/gentool/exception/template/
+templateSuffix: .template

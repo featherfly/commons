@@ -1,0 +1,44 @@
+author: "zhongj"
+packageName: "com.yufei.practice"
+exception:
+  packageName: "com.yufei.practice"
+  name: "PracticeException"
+  descp: "practice exception"
+  author: "yufei"
+code:
+  parent: "cn.featherfly.common.exception.SimpleLocalizedExceptionCode"
+  packageName: "com.yufei.practice"
+  name: "PracticeExceptionCode"
+  descp: null
+  author: "featherfly"
+  module: "PA"
+  codes:
+  - num: 10000
+    key: "no_property"
+    name: "NoProperty"
+    messages:
+      zh: "{0}没有这样的属性：{1}"
+      en: "{0} has no such property：{1}"
+    argus:
+    - type: "String"
+      name: "className"
+    - type: "java.lang.String"
+      name: "propertyName"
+  - num: 10001
+    key: "property_access"
+    name: "PropertyAccess"
+    messages:
+      zh: "{0}的属性{1}读写异常"
+      en: "{0} property {1} read or write exception"
+    argus:
+    - type: "java.lang.String"
+      name: "className"
+    - type: "java.lang.String"
+      name: "propertyName"
+  - num: 10002
+    key: "not_null"
+    name: "NotNull"
+    messages:
+      zh: "不能为空"
+      en: "can not be null"
+

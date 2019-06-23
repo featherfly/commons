@@ -1,0 +1,59 @@
+
+package [(${exception.packageName})];
+
+/**
+ * <p>
+ * [(${exception.name})]
+ * </p>
+ * 
+ * @author [(${exception.author})]
+ */
+public class [(${exception.name})] extends [(${exception.parent.name})]{
+
+    private static final long serialVersionUID = -1;
+
+    /*[- */
+    /**
+     * 
+     */
+    public [(${exception.name})]() {
+        super();
+    }
+    
+    /**
+     * @param message message
+     */
+    public [(${exception.name})](String message) {
+        super(message);
+    }
+    
+    /**
+     * @param message message
+     * @param ex ex
+     */
+    public [(${exception.name})](String message, Throwable ex) {
+        super(message, ex);
+    }
+    
+    /**
+     * @param ex ex
+     */
+    public [(${exception.name})](Throwable ex) {
+        super(ex);
+    }
+    /* -]*/
+    /**
+     * @param exceptionCode exceptionCode
+     */
+    public [(${exception.name})]([(${code.name})] exceptionCode) {
+        super(exceptionCode);
+    }
+
+    /**
+     * @param exceptionCode exceptionCode
+     * @param ex ex
+     */
+    public [(${exception.name})]([(${code.name})] exceptionCode, Throwable ex) {
+        super(exceptionCode, ex);
+    }
+}

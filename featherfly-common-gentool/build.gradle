@@ -1,0 +1,25 @@
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    maven {
+        url  ant.properties['user.home'] +  "/.m2/repository"
+    }
+    maven {
+        url  "http://maven.aliyun.com/nexus/content/groups/public/"
+    }
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':featherfly-common')
+    
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+    compile group: 'cn.featherfly', name: 'featherfly-common', version: '1.6.3'
+    
+    compile group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.11.RELEASE'
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.9'
+
+    testCompile project(':featherfly-common')
+}

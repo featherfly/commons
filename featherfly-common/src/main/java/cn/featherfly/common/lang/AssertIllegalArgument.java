@@ -20,15 +20,6 @@ public final class AssertIllegalArgument {
     
     private static final IllegalArgumentAssert ASSERT = new IllegalArgumentAssert();
 
-    /**
-     * @param parentType
-     * @param subType
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isParent(java.lang.Class, java.lang.Class)
-     */
-    public static void isParent(Class<?> parentType, Class<?> subType) {
-        ASSERT.isParent(parentType, subType);
-    }
-
     private AssertIllegalArgument() {
     }
 
@@ -111,5 +102,14 @@ public final class AssertIllegalArgument {
      */
     public static void isInstanceOf(Class<?> clazz, Object obj) {
         ASSERT.isInstanceOf(clazz, obj);
+    }
+    
+    /**
+     * @param parentType
+     * @param subType
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isParent(java.lang.Class, java.lang.Class)
+     */
+    public static void isParent(Class<?> parentType, Class<?> subType) {
+        ASSERT.isParent(parentType, subType);
     }
 }

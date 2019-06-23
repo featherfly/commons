@@ -6,10 +6,10 @@ apply plugin: 'signing'
 sourceSets {
     main {
         java {
-            srcDirs = ["src-common", "src-structure"]
+            srcDirs = ["src/main/java-common", "src/main/java-structure"]
         }
         resources {
-            srcDirs = ["resources"]
+            srcDirs = ["src/main/resources"]
         }
     }
 }

@@ -7,6 +7,8 @@
 package cn.featherfly.common.lang;
 import static org.testng.Assert.*;
 
+import cn.featherfly.common.bean.NoSuchPropertyException;
+import cn.featherfly.common.exception.LocalizedException;
 import cn.featherfly.common.lang.LangUtils;
 import org.testng.annotations.Test;
 
@@ -54,4 +56,15 @@ public class LangUtilsTest {
 		result = LangUtils.pickLast(null,"yi",s,null);
 		assertEquals(s, result);
 	}
+	
+	public static void main(String[] args) {
+	    try {
+	        throw new NoSuchPropertyException(LangUtils.class, "yufei");    
+        } catch (LocalizedException e) {
+            System.err.println(e.getMessage());
+            System.err.println(e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+	    
+    }
 }

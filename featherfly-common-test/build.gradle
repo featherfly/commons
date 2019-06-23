@@ -71,7 +71,8 @@ allprojects {
 			compile (depend)
 		}
 	    testCompile (
-	    	'org.testng:testng:latest.integration'
+	    	'org.testng:testng:6.14.3',
+	    	'org.slf4j:slf4j-log4j12:1.6.1'
 	    )
 	}
 
@@ -85,11 +86,16 @@ allprojects {
 
 sourceSets {
     main {
+        resources {
+            srcDirs = ['src/main/resources'] + project(':featherfly-common').sourceSets.main.resources.srcDirs
+        }
+    }
+    genSrc {
         java {
-            srcDirs = ["src"]
+            srcDirs = ['src/gen/java']
         }
         resources {
-            srcDirs = ['resources'] + project(':featherfly-common').sourceSets.main.resources.srcDirs
+            srcDirs = ['src/gen/resources']
         }
     }
 }
@@ -101,7 +107,11 @@ dependencies {
 	compile 'javassist:javassist:3.12.1.GA'
 	compile 'com.alibaba:fastjson:1.1.41'
 	compile 'org.slf4j:slf4j-log4j12:1.6.1'
-    compile 'log4j:log4j:1.2.16'    
+    compile 'log4j:log4j:1.2.16'
+    compile group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.11.RELEASE'
+    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.9'
+    
+    genSrcCompile project(':featherfly-common')
 }
 /*
 test {

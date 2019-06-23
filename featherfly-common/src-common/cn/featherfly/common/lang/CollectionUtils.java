@@ -113,7 +113,8 @@ public final class CollectionUtils {
      */
     @SuppressWarnings("unchecked")
     public static <C extends Collection<E>, E> C newInstance(Class<?> type) {
-        AssertIllegalArgument.isTrue(ClassUtils.isParent(Collection.class, type), "传入类型必须是Collection接口的子接口或实现类");
+//        AssertIllegalArgument.isTrue(ClassUtils.isParent(Collection.class, type), "传入类型必须是Collection接口的子接口或实现类");
+        AssertIllegalArgument.isParent(Collection.class, type);
         if (ClassUtils.isInstanceClass(type)) {
             return (C) ClassUtils.newInstance(type);
         } else {
@@ -145,7 +146,8 @@ public final class CollectionUtils {
      */
     @SuppressWarnings("unchecked")
     public static <K, V> Map<K, V> newMap(Class<?> type) {
-        AssertIllegalArgument.isTrue(ClassUtils.isParent(Map.class, type), "传入类型必须是Map接口的子接口或实现类");
+//        AssertIllegalArgument.isTrue(ClassUtils.isParent(Map.class, type), "传入类型必须是Map接口的子接口或实现类");
+        AssertIllegalArgument.isParent(Map.class, type);
         if (ClassUtils.isInstanceClass(type)) {
             return (Map<K, V>) ClassUtils.newInstance(type);
         } else {

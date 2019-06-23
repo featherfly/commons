@@ -8,12 +8,11 @@ import java.net.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.featherfly.common.exception.AssertStandardSys;
-import cn.featherfly.common.exception.StandardSysException;
 import cn.featherfly.common.io.FileUtils;
 import cn.featherfly.common.io.file.RenamePolicy;
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.lang.UriUtils;
+import cn.featherfly.common.storage.StorageException;
 
 /**
  * <p>
@@ -45,14 +44,14 @@ public abstract class FileLocalDirStorage implements FileStorage{
      */
     @Override
     public String store(File file) {
-        AssertStandardSys.isNotNull(file, "参数文件不能为空");
+        ASSERT.isNotNull(file, "param file  ");
         try {
             String extDir = getExtDir();
             File targetFile = createTargetFile(file.getName(), extDir);
             FileUtils.copyFile(file, targetFile);
             return getId(targetFile, extDir);
         } catch (IOException e) {
-            throw new StandardSysException(e);
+            throw new StorageException(e);
         }
     }
 
@@ -61,7 +60,7 @@ public abstract class FileLocalDirStorage implements FileStorage{
      */
     @Override
     public File retrieve(String id) {
-        AssertStandardSys.isNotEmpty(id, "文件存储唯一标示不能为空");
+        ASSERT.isNotEmpty(id, "id");
         logger.debug("文件存储唯一标示：{}", id);
         File file = createRelativeDir();
         file = new File(UriUtils.linkUri(
@@ -112,7 +111,7 @@ public abstract class FileLocalDirStorage implements FileStorage{
     // ********************************************************************
 
     private File createRelativeDir() {
-        AssertStandardSys.isNotEmpty(getBaseDir(), "基础目录不能为空");
+        ASSERT.isNotEmpty(getBaseDir(), "baseDir");
         File file = null;
         // 设置基础目录
         String finalDir = getBaseDir();

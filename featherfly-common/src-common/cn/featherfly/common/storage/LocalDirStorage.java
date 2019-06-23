@@ -7,7 +7,6 @@ import java.net.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.featherfly.common.exception.AssertStandardSys;
 import cn.featherfly.common.io.FileUtils;
 import cn.featherfly.common.io.file.RenamePolicy;
 import cn.featherfly.common.lang.LangUtils;
@@ -90,7 +89,7 @@ public abstract class LocalDirStorage<E> implements Storage<E, String>{
      * @return 相对路径对象
      */
     protected File createRelativeDir() {
-        AssertStandardSys.isNotEmpty(getBaseDir(), "基础目录不能为空");
+        ASSERT.isNotEmpty(getBaseDir(), "BaseDir");
         File file = null;
         // 设置基础目录
         String finalDir = getBaseDir();

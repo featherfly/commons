@@ -7,7 +7,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.featherfly.common.exception.AssertStandardSys;
 import cn.featherfly.common.io.FileUtils;
 
 /**
@@ -34,8 +33,8 @@ public class FileLocalAndRemoteStorage implements FileStorage{
      * @param remoteStorages 远程存储
      */
     public FileLocalAndRemoteStorage(FileLocalDirStorage localDirStorage, List<RemoteFileStorage> remoteStorages) {
-        AssertStandardSys.isNotNull(localDirStorage, "localDirStorage本地存储不能为空");
-        AssertStandardSys.isNotEmpty(remoteStorages, "remoteStorages远程存储集合不能为空");
+        ASSERT.isNotNull(localDirStorage, "localDirStorage");
+        ASSERT.isNotEmpty(remoteStorages, "remoteStorages");
         this.localDirStorage = localDirStorage;
         this.remoteStorages = remoteStorages;
     }

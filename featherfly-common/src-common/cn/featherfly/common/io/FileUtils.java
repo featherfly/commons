@@ -861,7 +861,7 @@ public final class FileUtils {
      * @throws IOException IOException
      */
     public static boolean createFile(File file) throws IOException {
-        AssertIllegalArgument.isNotNull("请指定要创建的文件，传入对象为空");
+        AssertIllegalArgument.isNotNull(file, "createFile param file");
         if (file.isDirectory()) {
             createDirectory(file);
             return true;
@@ -877,7 +877,7 @@ public final class FileUtils {
      * @return 创建是否成功
      */
     public static boolean createDirectory(File file) {
-        AssertIllegalArgument.isNotNull("请指定要创建的路径，传入对象为空");
+        AssertIllegalArgument.isNotNull(file, "createDirectory param file");
         if (file.isFile()) {
             return file.getParentFile().mkdirs();
         } else {

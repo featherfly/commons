@@ -11,11 +11,10 @@ import java.io.OutputStream;
 
 import org.apache.commons.io.IOUtils;
 
-import cn.featherfly.common.exception.AssertStandardSys;
-import cn.featherfly.common.exception.StandardSysException;
 import cn.featherfly.common.io.FileUtils;
 import cn.featherfly.common.lang.UriUtils;
 import cn.featherfly.common.storage.DateLocalDirStorage;
+import cn.featherfly.common.storage.StorageException;
 
 /**
  * <p>
@@ -40,7 +39,7 @@ public class StreamDateLocalDirStorage extends DateLocalDirStorage<InputStream>
      */
     @Override
     public String store(InputStream is) {
-        AssertStandardSys.isNotNull(is, "参数流不能为空");
+        ASSERT.isNotNull(is, "param InputStream");
         try {
             File targetFile = createTargetFile("stream has no name");
             if (!targetFile.getParentFile().exists()) {
@@ -51,7 +50,7 @@ public class StreamDateLocalDirStorage extends DateLocalDirStorage<InputStream>
             IOUtils.closeQuietly(os);
             return getId(targetFile);
         } catch (IOException e) {
-            throw new StandardSysException(e);
+            throw new StorageException(e);
         }
     }
 
@@ -60,7 +59,7 @@ public class StreamDateLocalDirStorage extends DateLocalDirStorage<InputStream>
      */
     @Override
     public InputStream retrieve(String id) {
-        AssertStandardSys.isNotEmpty(id, "存储唯一标示不能为空");
+        ASSERT.isNotEmpty(id, "id");
         logger.debug("存储唯一标示：{}", id);
         File file = createRelativeDir();
         file = new File(UriUtils.linkUri(
@@ -69,7 +68,7 @@ public class StreamDateLocalDirStorage extends DateLocalDirStorage<InputStream>
         try {
             return new FileInputStream(file);
         } catch (FileNotFoundException e) {
-            throw new StandardSysException(e);
+            throw new StorageException(e);
         }
     }
 
@@ -78,7 +77,7 @@ public class StreamDateLocalDirStorage extends DateLocalDirStorage<InputStream>
      */
     @Override
     public boolean delete(String id) {
-        AssertStandardSys.isNotEmpty(id, "存储唯一标示不能为空");
+        ASSERT.isNotEmpty(id, "id");
         logger.debug("存储唯一标示：{}", id);
         File file = createRelativeDir();
         file = new File(UriUtils.linkUri(

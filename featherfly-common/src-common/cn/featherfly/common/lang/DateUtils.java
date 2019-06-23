@@ -746,7 +746,7 @@ public final class DateUtils {
         checkNull(startDate, endDate);
         int startYear = getYear(startDate);
         int endYear = getYear(endDate);
-        AssertIllegalArgument.isTrue(startYear <= endYear, MSG_START_AFTER_END);
+        isTrue(startYear <= endYear, MSG_START_AFTER_END);
         int years = endYear - startYear;
         if (computeMonth) {
             int startMonth = getMonth(startDate);
@@ -788,7 +788,7 @@ public final class DateUtils {
         int startMonth = getMonth(startDate);
         int endYear = getYear(endDate);
         int endMonth = getMonth(endDate);
-        AssertIllegalArgument.isTrue(startYear <= endYear, MSG_START_AFTER_END);
+        isTrue(startYear <= endYear, MSG_START_AFTER_END);
         int months = 0;
         for (int i = startYear; i <= endYear; i++) {
             if (i == startYear) {
@@ -817,7 +817,7 @@ public final class DateUtils {
         checkNull(startDate, endDate);
         int startYear = getYear(startDate);
         int endYear = getYear(endDate);
-        AssertIllegalArgument.isTrue(startYear <= endYear, MSG_START_AFTER_END);
+        isTrue(startYear <= endYear, MSG_START_AFTER_END);
         int days = 0;
         for (int i = 0; i < endYear - startYear; i++) {
             int maxDayOfMonth = getMaxDayOfMonth(startYear, 2);
@@ -829,7 +829,7 @@ public final class DateUtils {
         }
         int startDay = getDayOfYear(startDate);
         int endDay = getDayOfYear(endDate);
-        AssertIllegalArgument.isTrue(startDay <= endDay, MSG_START_AFTER_END);
+        isTrue(startDay <= endDay, MSG_START_AFTER_END);
         return days + endDay - startDay + 1;
     }
 
@@ -844,7 +844,7 @@ public final class DateUtils {
         checkNull(startDate, endDate);
         int startDay = getDayOfYear(startDate);
         int endDay = getDayOfYear(endDate);
-        AssertIllegalArgument.isTrue(startDay <= endDay, MSG_START_AFTER_END);
+        isTrue(startDay <= endDay, MSG_START_AFTER_END);
         int days = 0;
         Calendar cal = null;
         while (startDate.before(endDate) || startDate.equals(endDate)) {
@@ -886,7 +886,7 @@ public final class DateUtils {
     public static int getAge(Date birthday, Date compareDay) {
         AssertIllegalArgument.isNotNull(birthday, "birthday不能为空");
         AssertIllegalArgument.isNotNull(compareDay, "compareDay不能为空");
-        AssertIllegalArgument.isTrue(beforeDay(birthday, compareDay) || equalsDay(birthday, compareDay)
+        isTrue(beforeDay(birthday, compareDay) || equalsDay(birthday, compareDay)
                 , "birthday不能晚于compareDay"); 
         int age = getYear(compareDay) - getYear(birthday);
         if (compare(compareDay, birthday, "MMdd") == COMPARE_LT) {
@@ -943,4 +943,10 @@ public final class DateUtils {
 
     // 信息
     private static final String MSG_START_AFTER_END = "开始日期startDate不能晚于结束日期endDate";
+    
+    private static void isTrue(boolean exp, String msg) {
+        if (!exp) {            
+            throw new IllegalArgumentException(msg);
+        }
+    }
 }

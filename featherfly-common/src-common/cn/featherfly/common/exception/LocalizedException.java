@@ -2,10 +2,6 @@ package cn.featherfly.common.exception;
 
 import java.lang.reflect.Field;
 import java.util.Locale;
-import java.util.MissingResourceException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.LogUtils;
@@ -17,16 +13,12 @@ import cn.featherfly.common.locale.ResourceBundleUtils;
  * </p>
  *
  * @author 钟冀
+ * @deprecated 因为使用了hack手段，所以不建议使用  {@link LocalizedExceptionUtils#throwException}
  */
-public abstract class LocalizedException extends RuntimeException {
-    /**
-     * logger
-     */
-    protected Logger logger = LoggerFactory.getLogger(this.getClass());
+@Deprecated
+public abstract class LocalizedException extends BaseException {
 
     private static final long serialVersionUID = -580152334157640022L;
-
-    private ExceptionCode exceptionCode;
 
     /**
      * 构造方法
@@ -152,161 +144,25 @@ public abstract class LocalizedException extends RuntimeException {
         super(ex);
     }
 
-    /**
-     * 构造方法
-     * 
-     * @param exceptionCode
-     *            错误码
-     */
-    protected LocalizedException(ExceptionCode exceptionCode) {
-        this(exceptionCode.getMessage());
-        this.exceptionCode = exceptionCode;
-    }
-    
-    /**
-     * 构造方法
-     * 
-     * @param exceptionCode
-     *            错误码
-     * @param ex
-     *            异常
-     */
-    protected LocalizedException(ExceptionCode exceptionCode, Throwable ex) {
-        this(exceptionCode.getMessage(), ex);
-        this.exceptionCode = exceptionCode;
-    }
-
-    /**
-     * 构造方法
-     * 
-     * @param exceptionCode
-     *            错误码
-     * @param argus
-     *            信息绑定参数
-     * @param locale
-     *            locale
-     * @param ex
-     *            异常
-     * @deprecated {@link LocalizedCodeException#LocalizedCodeException(LocalizedExceptionCode, Throwable)}
-     */
-    @Deprecated
-    protected LocalizedException(ExceptionCode exceptionCode, Object[] argus,
-            Locale locale, Throwable ex) {
-        this(exceptionCode.getMessage(), argus, locale, ex);
-        this.exceptionCode = exceptionCode;
-    }
-
-    /**
-     * 构造方法
-     * 
-     * @param exceptionCode
-     *            错误码
-     * @param locale
-     *            locale
-     * @param ex
-     *            异常
-     * @deprecated {@link LocalizedCodeException#LocalizedCodeException(LocalizedExceptionCode, Throwable)}
-     */
-    @Deprecated
-    protected LocalizedException(ExceptionCode exceptionCode, Locale locale,
-            Throwable ex) {
-        this(exceptionCode.getMessage(), locale, ex);
-        this.exceptionCode = exceptionCode;
-    }
-
-    /**
-     * 构造方法
-     * 
-     * @param argus
-     *            信息绑定参数
-     * @param exceptionCode
-     *            错误码
-     * @param ex
-     *            异常
-     * @deprecated {@link LocalizedCodeException#LocalizedCodeException(LocalizedExceptionCode, Throwable)}
-     */
-    @Deprecated
-    protected LocalizedException(ExceptionCode exceptionCode, Object[] argus,
-            Throwable ex) {
-        this(exceptionCode.getMessage(), argus, ex);
-        this.exceptionCode = exceptionCode;
-    }
-
-    /**
-     * 构造方法
-     * 
-     * @param argus
-     *            信息绑定参数
-     * @param locale
-     *            locale
-     * @param exceptionCode
-     *            错误码
-     * @deprecated {@link LocalizedCodeException#LocalizedCodeException(LocalizedExceptionCode, Throwable)}
-     */
-    @Deprecated
-    protected LocalizedException(ExceptionCode exceptionCode, Object[] argus,
-            Locale locale) {
-        this(exceptionCode.getMessage(), argus, locale);
-        this.exceptionCode = exceptionCode;
-    }
-
-    /**
-     * 构造方法
-     * 
-     * @param argus
-     *            信息绑定参数
-     * @param exceptionCode
-     *            错误码
-     * @deprecated {@link LocalizedCodeException#LocalizedCodeException(LocalizedExceptionCode)}
-     */
-    @Deprecated
-    protected LocalizedException(ExceptionCode exceptionCode, Object[] argus) {
-        this(exceptionCode.getMessage(), argus);
-        this.exceptionCode = exceptionCode;
-    }
-
-    /**
-     * 构造方法
-     * 
-     * @param locale
-     *            locale
-     * @param exceptionCode
-     *            错误码
-     * @deprecated {@link LocalizedCodeException#LocalizedCodeException(LocalizedExceptionCode)}
-     */
-    @Deprecated
-    protected LocalizedException(ExceptionCode exceptionCode, Locale locale) {
-        this(exceptionCode.getMessage(), locale);
-        this.exceptionCode = exceptionCode;
-    }
-
-    /**
-     * 返回exceptionCode
-     * 
-     * @return exceptionCode
-     */
-    public ExceptionCode getExceptionCode() {
-        return exceptionCode;
-    }
-
     private void setMessage(String message, Object[] argus, Locale locale) {
-        String msg = null;
+        String msg = null;        
         int keyIndex = message.indexOf(ResourceBundleUtils.KEY_SIGN);
         char firstChar = message.charAt(0);
         if (firstChar == ResourceBundleUtils.RESOURCE_SIGN && keyIndex != -1) {
             msg = ResourceBundleUtils.getString(message, argus, locale);
         } else if (firstChar == ResourceBundleUtils.KEY_SIGN) {
-            try {
-                msg = ResourceBundleUtils.getString(
-                        ResourceBundleUtils.RESOURCE_SIGN
-                                + this.getClass().getName() + message,
-                        argus, locale);
-            } catch (MissingResourceException e) {
-                msg = ResourceBundleUtils.getString(
-                        ResourceBundleUtils.RESOURCE_SIGN
-                                + this.getClass().getSimpleName() + message,
-                        argus, locale);
-            }
+            msg = ResourceBundleUtils.getString(this.getClass(), message.substring(1), argus, locale);
+//            try {
+//                msg = ResourceBundleUtils.getString(
+//                        ResourceBundleUtils.RESOURCE_SIGN
+//                                + this.getClass().getName() + message,
+//                        argus, locale);
+//            } catch (MissingResourceException e) {
+//                msg = ResourceBundleUtils.getString(
+//                        ResourceBundleUtils.RESOURCE_SIGN
+//                                + this.getClass().getSimpleName() + message,
+//                        argus, locale);
+//            }
         } else {
             msg = message;
         }

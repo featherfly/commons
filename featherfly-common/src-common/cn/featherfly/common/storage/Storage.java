@@ -1,5 +1,7 @@
 package cn.featherfly.common.storage;
 
+import cn.featherfly.common.lang.asserts.LocalizedAssert;
+
 /**
  * <p>
  * 存储
@@ -13,6 +15,9 @@ package cn.featherfly.common.storage;
  *
  */
 public interface Storage<E, ID> {
+    
+    LocalizedAssert<StorageException> ASSERT = new LocalizedAssert<>(StorageException.class);
+    
     /**
      * <p>
      * 存储对象

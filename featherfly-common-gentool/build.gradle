@@ -1,6 +1,7 @@
-plugins {
-    id 'java-library'
-}
+apply plugin: "ivy-publish"
+apply plugin: 'maven'  
+apply plugin: 'maven-publish'  
+apply plugin: 'signing'
 
 repositories {
     maven {
@@ -20,6 +21,48 @@ dependencies {
     
     compile group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.11.RELEASE'
     compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.9'
+}
 
-    testCompile project(':featherfly-common')
+//为所有的jar包做数字签名  
+signing {  
+    sign configurations.archives  
+}  
+
+uploadArchives {  
+    repositories {
+        mavenDeployer {  
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) } 
+            repository(url:"https://oss.sonatype.org/service/local/staging/deploy/maven2") {  
+                authentication(userName: 'yufei', password: 'yufeimvn101')  
+            }  
+            pom.project {  
+                name project.name  
+                packaging 'jar'
+                description 'common bean tool use javassist'  
+                url 'https://github.com/featherfly/common.git'  
+                scm {  
+                    url 'scm:git@github.com:featherfly/common.git'  
+                    connection 'scm:git@github.com:featherfly/common.git'  
+                    developerConnection 'git@github.com:featherfly/common.git'  
+                }  
+                licenses {  
+                    license {  
+                        name 'The Apache Software License, Version 2.0'  
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'  
+                        distribution 'repo'  
+                    }  
+                }  
+                developers {  
+                    developer {  
+                        id 'featherfly'  
+                        name 'Yufei'
+                    }  
+                }  
+            }  
+        }  
+    }  
+}
+
+jar {
+    manifest.attributes 'Build-Name': archivesBaseName
 }

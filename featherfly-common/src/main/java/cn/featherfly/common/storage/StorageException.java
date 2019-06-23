@@ -1,9 +1,7 @@
 
 package cn.featherfly.common.storage;
 
-import cn.featherfly.common.exception.LocalizedCodeException;
 import cn.featherfly.common.exception.LocalizedException;
-import cn.featherfly.common.exception.LocalizedExceptionCode;
 
 /**
  * <p>

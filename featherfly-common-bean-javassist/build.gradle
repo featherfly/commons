@@ -4,9 +4,6 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 apply plugin: 'eclipse'
 
-sourceCompatibility = 1.8  
-targetCompatibility = 1.8
-
 sourceSets {
     main {
         java {

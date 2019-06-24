@@ -1,9 +1,12 @@
-2019
+2019-6-24
 1.7.0 发布
     1.加入LocalizedCodeException,LocalizedExceptionCode,SimpleExceptionCode,SimpleLocalizedExceptionCode
-    2.ResourceBundleUtils加入getString(Class<?> type, String key, Object[] argus,Locale locale)等一系列方法
-    3.删除StandardResourceBundleException,StandardAppException,StandardConfigException,StandardSysException,
+        ,LoadedMessageLocalizedExceptionCode,LocalizedExceptionUtils等一些列方法
+    2.加入cn.featherfly.common.lang.asserts包下一系列类
+    3.ResourceBundleUtils加入getString(Class<?> type, String key, Object[] argus,Locale locale)等一系列方法
+    4.删除StandardResourceBundleException,StandardAppException,StandardConfigException,StandardSysException,
         AssertStandardApp,AssertStandardConfig,AssertStandardSys
+    5.使用新的常规方法为LocalizedException实现了异常消息国际化实现取代以前的hack式实现方式
 
 2018-01-11
 1.6.3 发布

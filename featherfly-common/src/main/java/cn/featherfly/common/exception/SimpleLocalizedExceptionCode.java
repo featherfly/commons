@@ -48,7 +48,6 @@ public class SimpleLocalizedExceptionCode extends SimpleExceptionCode
      * @param num num 
      * @param key resource key
      * @param locale locale
-     * @param argus argus
      */
     public SimpleLocalizedExceptionCode(String module, Integer num, String key, Locale locale) {
         this(module, num, key, locale, new Object[] {});

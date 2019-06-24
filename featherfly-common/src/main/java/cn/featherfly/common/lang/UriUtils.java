@@ -5,8 +5,6 @@
  */
 package cn.featherfly.common.lang;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * <p>
  * uri的工具类
@@ -71,10 +69,10 @@ public final class UriUtils {
      * @return 连接后的uri
      */
     public static String linkUri(String startUri, String endUri, boolean ignoreCaseEmpty) {
-        if (ignoreCaseEmpty && StringUtils.isEmpty(startUri)) {
+        if (ignoreCaseEmpty && LangUtils.isEmpty(startUri)) {
             return endUri;
         }
-        if (ignoreCaseEmpty && StringUtils.isEmpty(endUri)) {
+        if (ignoreCaseEmpty && LangUtils.isEmpty(endUri)) {
             return startUri;
         }
         startUri = removeEndSeparator(startUri);

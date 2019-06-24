@@ -49,7 +49,6 @@ public class LoadedMessageLocalizedExceptionCode extends SimpleLocalizedExceptio
      * @param num num 
      * @param key resource key
      * @param locale locale
-     * @param argus argus
      */
     public LoadedMessageLocalizedExceptionCode(Class<? extends Throwable> forExceptionType
             , String module, Integer num, String key, Locale locale) {

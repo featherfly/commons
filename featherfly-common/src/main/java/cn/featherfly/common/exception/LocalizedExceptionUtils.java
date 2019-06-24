@@ -72,7 +72,7 @@ public final class LocalizedExceptionUtils {
      *            throw exception type
      * @param cause
      *            the cause (which is saved for later retrieval by the
-     *            {@link #getCause()} method). (A <tt>null</tt> value is
+     *            {@link Throwable#getCause()} method). (A <tt>null</tt> value is
      *            permitted, and indicates that the cause is nonexistent or
      *            unknown.)
      * @param message
@@ -80,7 +80,7 @@ public final class LocalizedExceptionUtils {
      * @param args
      *            消息绑定参数
      */
-    public static <T extends Throwable> void throwException(
+    public static void throwException(
             Class<? extends RuntimeException> exceptionType, Throwable cause,
             String message, Object... args) {
         throw ClassUtils.newInstance(exceptionType,
@@ -96,7 +96,7 @@ public final class LocalizedExceptionUtils {
      *            throw exception type
      * @param cause
      *            the cause (which is saved for later retrieval by the
-     *            {@link #getCause()} method). (A <tt>null</tt> value is
+     *            {@link Throwable#getCause()} method). (A <tt>null</tt> value is
      *            permitted, and indicates that the cause is nonexistent or
      *            unknown.)
      * @param locale

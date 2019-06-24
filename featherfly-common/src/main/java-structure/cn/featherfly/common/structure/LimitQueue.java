@@ -55,7 +55,7 @@ public class LimitQueue<E> implements Queue<E>{
 
     /**
      * 入队
-     * @param e
+     * @param e element
      */
     @Override
     public boolean offer(E e){
@@ -70,7 +70,7 @@ public class LimitQueue<E> implements Queue<E>{
 
     /**
      * 出队
-     * @return
+     * @return element
      */
     @Override
     public E poll() {
@@ -79,7 +79,7 @@ public class LimitQueue<E> implements Queue<E>{
 
     /**
      * 获取队列
-     * @return
+     * @return queue
      */
     public Queue<E> getQueue(){
         return queue;
@@ -87,7 +87,7 @@ public class LimitQueue<E> implements Queue<E>{
 
     /**
      * 获取限制大小
-     * @return
+     * @return limit
      */
     public int getLimit(){
         return limit;
@@ -175,8 +175,8 @@ public class LimitQueue<E> implements Queue<E>{
     }
 
     /**
-     * @param o
-     * @return
+     * @param o object
+     * @return <tt>true</tt> if the specified object is equal to this
      * @see java.util.Collection#equals(java.lang.Object)
      */
     @Override
@@ -185,7 +185,7 @@ public class LimitQueue<E> implements Queue<E>{
     }
 
     /**
-     * @return
+     *  @return the hash code value for this queue 
      * @see java.util.Collection#hashCode()
      */
     @Override

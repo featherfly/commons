@@ -1,8 +1,13 @@
-apply plugin: "ivy-publish"
+apply plugin: "java"
+
+/*
+apply from: '../featherfly-common-test/java_base.gradle'
+apply from: '../featherfly-common-test/maven_push.gradle'
+
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
-
+*/
 sourceSets {
     main {
         java {
@@ -25,6 +30,7 @@ repositories {
 }
 
 //为所有的jar包做数字签名  
+/*
 signing {  
     sign configurations.archives  
 }  
@@ -100,7 +106,7 @@ task("uploadNexusArchives", type: Upload) {
         }
     }
 }
-
+*/
 /*
 test {
     useTestNG()
@@ -115,11 +121,11 @@ test {
         logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message)
     }
 }
-*/
+
 jar {
     manifest.attributes 'Build-Name': archivesBaseName
     manifest.attributes 'Build-By': "zhong ji"
     manifest.attributes 'Build-Tool' : "gradle " + gradle.gradleVersion
     manifest.attributes 'Build-Jdk' : ant.properties['java.runtime.version']
     manifest.attributes 'Bundle-License': 'http://www.apache.org/licenses/LICENSE-2.0'
-}
+}*/

@@ -227,7 +227,7 @@ public final class StringUtils {
      * @return 传入字符串是否是空白字符串
      */
     public static boolean isBlank(String str) {
-        return org.apache.commons.lang.StringUtils.isBlank(str);
+        return org.apache.commons.lang3.StringUtils.isBlank(str);
     }
 
     /**
@@ -465,7 +465,7 @@ public final class StringUtils {
      * @return 替换完成的文本, 如果传入null返回null
      */
     public static String replace(String text, String searchString, String replacement, int max) {
-        return org.apache.commons.lang.StringUtils.replace(text, searchString, replacement, max);
+        return org.apache.commons.lang3.StringUtils.replace(text, searchString, replacement, max);
     }
 
     /**
@@ -499,7 +499,7 @@ public final class StringUtils {
      * @return 替换完成的文本, 如果传入null返回null
      */
     public static String replaceFirst(String text, String searchString, String replacement) {
-        return org.apache.commons.lang.StringUtils.replaceOnce(text, searchString, replacement);
+        return org.apache.commons.lang3.StringUtils.replaceOnce(text, searchString, replacement);
     }
 
     /**
@@ -513,7 +513,7 @@ public final class StringUtils {
      * @return abbreviated String, null if null String input
      */
     public static String abbreviate(String src, int index) {
-        return org.apache.commons.lang.StringUtils.abbreviate(src, index);
+        return org.apache.commons.lang3.StringUtils.abbreviate(src, index);
     }
 
     /**
@@ -1030,7 +1030,7 @@ public final class StringUtils {
      * @return 子串.
      */
     public static String substring(String str, int start) {
-        return org.apache.commons.lang.StringUtils.substring(str, start);
+        return org.apache.commons.lang3.StringUtils.substring(str, start);
     }
 
     /**
@@ -1045,7 +1045,7 @@ public final class StringUtils {
      * @return 子串.
      */
     public static String substring(String str, int start, int end) {
-        return org.apache.commons.lang.StringUtils.substring(str, start, end);
+        return org.apache.commons.lang3.StringUtils.substring(str, start, end);
     }
 
     /**
@@ -1097,7 +1097,7 @@ public final class StringUtils {
      * @return 第一次找到分隔字符串的位置之后的字符串.
      */
     public static String substringAfter(String str, String separator) {
-        return org.apache.commons.lang.StringUtils.substringAfter(str, separator);
+        return org.apache.commons.lang3.StringUtils.substringAfter(str, separator);
     }
 
     /**
@@ -1110,7 +1110,7 @@ public final class StringUtils {
      * @return 最后一次找到分隔字符串的位置之后的字符串.
      */
     public static String substringAfterLast(String str, String separator) {
-        return org.apache.commons.lang.StringUtils.substringAfterLast(str, separator);
+        return org.apache.commons.lang3.StringUtils.substringAfterLast(str, separator);
     }
 
     /**
@@ -1123,7 +1123,7 @@ public final class StringUtils {
      * @return 第一次找到分隔字符串的位置之前的字符串.
      */
     public static String substringBefore(String str, String separator) {
-        return org.apache.commons.lang.StringUtils.substringBefore(str, separator);
+        return org.apache.commons.lang3.StringUtils.substringBefore(str, separator);
     }
 
     /**
@@ -1136,7 +1136,7 @@ public final class StringUtils {
      * @return 最后一次找到分隔字符串的位置之前的字符串.
      */
     public static String substringBeforeLast(String str, String separator) {
-        return org.apache.commons.lang.StringUtils.substringBeforeLast(str, separator);
+        return org.apache.commons.lang3.StringUtils.substringBeforeLast(str, separator);
     }
 
     /**
@@ -1149,7 +1149,7 @@ public final class StringUtils {
      * @return 两次出现的标识字符串中间的字符串.
      */
     public static String substringBetween(String str, String tag) {
-        return org.apache.commons.lang.StringUtils.substringBetween(str, tag);
+        return org.apache.commons.lang3.StringUtils.substringBetween(str, tag);
     }
 
     /**
@@ -1164,7 +1164,7 @@ public final class StringUtils {
      * @return 开始字符串和结束字符串中间的字符串.
      */
     public static String substringBetween(String str, String start, String end) {
-        return org.apache.commons.lang.StringUtils.substringBetween(str, start, end);
+        return org.apache.commons.lang3.StringUtils.substringBetween(str, start, end);
     }
 
     /**

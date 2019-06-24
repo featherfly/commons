@@ -25,7 +25,6 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
 
     /**
      * @param exceptionType 断言失败抛出的异常类型
-     * @param <E> 泛型
      */
     public LocalizedAssert(Class<E> exceptionType) {
         this.exceptionType = exceptionType;

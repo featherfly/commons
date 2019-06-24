@@ -55,8 +55,6 @@ public abstract class ExceptionCodeException extends LocalizedException {
      *            错误码
      * @param args
      *            消息文本绑定参数
-     * @param locale
-     *            locale
      */
     protected ExceptionCodeException(ExceptionCode exceptionCode, Object[] args) {
         super(exceptionCode.getMessage(), args);
@@ -68,8 +66,6 @@ public abstract class ExceptionCodeException extends LocalizedException {
      * 
      * @param exceptionCode
      *            错误码
-     * @param args
-     *            消息文本绑定参数
      * @param locale
      *            locale
      */

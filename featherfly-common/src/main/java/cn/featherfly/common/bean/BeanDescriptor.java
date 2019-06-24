@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.collections.map.ListOrderedMap;
+import org.apache.commons.collections4.map.ListOrderedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +65,7 @@ public class BeanDescriptor<T> {
     // private Map<String, BeanProperty> beanProperties = new HashMap<String,
     // BeanProperty>(0);
 
-    private ListOrderedMap beanProperties = new ListOrderedMap();
+    private ListOrderedMap<String, BeanProperty<?>> beanProperties = new ListOrderedMap<>();
 
     private Map<String, Type> typeGenericParams = new HashMap<>(0);
 
@@ -231,9 +231,8 @@ public class BeanDescriptor<T> {
     /**
      * @return 返回beanProperties
      */
-    @SuppressWarnings("unchecked")
     public Collection<BeanProperty<?>> getBeanProperties() {
-        return (Collection<BeanProperty<?>>) beanProperties.values();
+        return beanProperties.values();
     }
 
     /**
@@ -246,7 +245,7 @@ public class BeanDescriptor<T> {
      * @return 指定属性
      */
     public BeanProperty<?> getBeanProperty(int index) {
-        return (BeanProperty<?>) beanProperties.getValue(index);
+        return beanProperties.getValue(index);
     }
 
     /**
@@ -259,7 +258,7 @@ public class BeanDescriptor<T> {
      * @return 指定属性
      */
     public BeanProperty<?> getBeanProperty(String name) {
-        BeanProperty<?> property = (BeanProperty<?>) beanProperties.get(name);
+        BeanProperty<?> property = beanProperties.get(name);
         if (property == null) {
             throw new NoSuchPropertyException(type, name);
         }

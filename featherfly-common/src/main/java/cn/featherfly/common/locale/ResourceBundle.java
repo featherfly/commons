@@ -14,37 +14,44 @@ import java.util.Set;
 public interface ResourceBundle {
     
     /**
-     * {@link java.util.ResourceBundle#getString(String)}
+     * @param key key {@link java.util.ResourceBundle#getString(String)}
+     * @return the string for the given key
      */
     String getString(String key);
 
     /**
-     * {@link java.util.ResourceBundle#getStringArray(String)}
+     * @param key key {@link java.util.ResourceBundle#getStringArray(String)}
+     * @return the string array for the given key
      */
     String[] getStringArray(String key);
 
     /**
-     * {@link java.util.ResourceBundle#getObject(java.lang.String)}
+     * @param key key {@link java.util.ResourceBundle#getObject(java.lang.String)}
+     * @return the object for the given key
      */
     Object getObject(String key);
 
     /**
      * {@link java.util.ResourceBundle#getLocale()}
+     * @return the locale of this resource bundle
      */
     Locale getLocale();
     
     /**
      * {@link java.util.ResourceBundle#getKeys()}
+     * @return Enumeration Kyes
      */
     Enumeration<String> getKeys();
 
     /**
-     * {@link java.util.ResourceBundle#containsKey(java.lang.String)}
+     * @param key key {@link java.util.ResourceBundle#containsKey(java.lang.String)}
+     * @return boolean containsKey
      */
     boolean containsKey(String key);
 
     /**
      * {@link java.util.ResourceBundle#keySet()}
+     * @return keySet
      */
     Set<String> keySet();     
 }

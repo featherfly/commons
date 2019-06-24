@@ -30,10 +30,10 @@ public abstract class BaseException extends RuntimeException{
     }
 
     /**
-     * @param message
-     * @param cause
-     * @param enableSuppression
-     * @param writableStackTrace
+     * @param message message
+     * @param cause cause
+     * @param enableSuppression enableSuppression
+     * @param writableStackTrace writableStackTrace
      */
     public BaseException(String message, Throwable cause,
             boolean enableSuppression, boolean writableStackTrace) {
@@ -41,22 +41,22 @@ public abstract class BaseException extends RuntimeException{
     }
 
     /**
-     * @param message
-     * @param cause
+     * @param message message
+     * @param cause cause
      */
     public BaseException(String message, Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * @param message
+     * @param message message
      */
     public BaseException(String message) {
         super(message);
     }
 
     /**
-     * @param cause
+     * @param cause cause
      */
     public BaseException(Throwable cause) {
         super(cause);

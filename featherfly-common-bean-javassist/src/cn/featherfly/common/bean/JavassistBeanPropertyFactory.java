@@ -16,12 +16,12 @@ import javassist.Modifier;
 
 /**
  * <p>
- * 动态创建指定类型指定属性对应的BeanProperty子类的工厂.<br/>
- * 优点：默认的反射BeanProperty比动态生成的设置慢一倍，读取慢几倍.<br/>
+ * 动态创建指定类型指定属性对应的BeanProperty子类的工厂.
+ * 优点：默认的反射BeanProperty比动态生成的设置慢一倍，读取慢几倍.
  * 缺点：生成大量类，占用内存空间.
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
 *
  */
 public class JavassistBeanPropertyFactory implements BeanPropertyFactory {
@@ -79,7 +79,7 @@ public class JavassistBeanPropertyFactory implements BeanPropertyFactory {
 	@SuppressWarnings("unchecked")
     private <T> BeanProperty<T> create(Class<?> ownerType, String name, Field field, Class<T> propertyType, Method setMethod, Method getMethod, Class<?> declaringType) {
 		if (setMethod == null && getMethod == null) {
-			throw new NoSuchPropertyException(ownerType, name, "没有读取和写入方法");
+			throw new NoSuchPropertyException(ownerType, name);
 		}
 
 		try {

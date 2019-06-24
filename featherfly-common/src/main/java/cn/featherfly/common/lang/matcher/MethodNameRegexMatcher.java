@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
  * <p>
  * 正则匹配Method名称的实现
  * </p>
- * @author 钟冀
+ * @author zhongj
  */
 public class MethodNameRegexMatcher extends MemberNameRegexMatcher<Method>
     implements MethodMatcher {

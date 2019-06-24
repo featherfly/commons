@@ -4,7 +4,7 @@ package cn.featherfly.common.lang;
  * <p>
  * 系统默认属性工具类
  * </p>
- * @author 钟冀
+ * @author zhongj
  * @since 1.0
  * @version 1.0
  */

@@ -7,7 +7,7 @@ import java.util.Locale;
  * ResourceBundleFactory
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public interface ResourceBundleFactory {
     /**

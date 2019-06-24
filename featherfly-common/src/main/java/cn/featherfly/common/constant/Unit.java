@@ -5,7 +5,7 @@ package cn.featherfly.common.constant;
  * <p>
  * 进制的常量
  * </p>
- * @author 钟冀
+ * @author zhongj
  */
 public interface Unit {
     /**

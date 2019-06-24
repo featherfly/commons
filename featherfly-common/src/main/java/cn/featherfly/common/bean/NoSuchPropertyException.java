@@ -9,7 +9,7 @@ import java.util.Locale;
  * 如果一个成员变量既没有set方法也没有get方法就会抛出该异常.
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public class NoSuchPropertyException extends PropertyException{
 

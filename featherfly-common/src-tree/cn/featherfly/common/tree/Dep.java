@@ -15,7 +15,7 @@ import cn.featherfly.common.structure.tree.annotation.TreeNode;
  * 类的说明放这里
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 @TreeNode
 public class Dep {

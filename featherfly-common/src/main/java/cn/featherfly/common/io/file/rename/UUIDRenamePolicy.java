@@ -8,7 +8,7 @@ import cn.featherfly.common.lang.UUIDGenerator;
  * UUID重命名策略
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public class UUIDRenamePolicy extends AbstractExtNameRenamePolicy{
 

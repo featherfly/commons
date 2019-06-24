@@ -7,7 +7,7 @@ package cn.featherfly.common.data;
  * </p>
  * @param <D> 泛型
  * @param <P> 泛型
- * @author 钟冀
+ * @author zhongj
  */
 public interface Collector<D, P> {
     /**

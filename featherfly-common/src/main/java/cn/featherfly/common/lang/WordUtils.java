@@ -9,7 +9,7 @@ import cn.featherfly.common.constant.Unit;
  * <p>
  * 一些单词的处理
  * </p>
- * @author 钟冀
+ * @author zhongj
  */
 public final class WordUtils {
     private WordUtils() {

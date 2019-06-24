@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
  * JdkResourceBundleFactory
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class JdkResourceBundleFactory implements ResourceBundleFactory{
 

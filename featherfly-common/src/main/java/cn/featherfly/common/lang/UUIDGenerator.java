@@ -7,7 +7,7 @@ import java.util.UUID;
  * 支持生成长度为22,32,36的UUID.<br>
  * 生成性能依次是36&gt;32&gt;22.
  * </p>
- * @author 钟冀
+ * @author zhongj
  */
 public final class UUIDGenerator {
 

@@ -14,7 +14,7 @@ import java.util.Map.Entry;
  * 对一些在语法上显得拖沓的常用操作进行封装的工具类
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  * @since 1.0
  * @version 1.0
  */

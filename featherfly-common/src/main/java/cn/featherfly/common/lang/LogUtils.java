@@ -1,6 +1,6 @@
 
 /**
- * @author 钟冀 - yufei
+ * @author zhongj - yufei
  *             Feb 25, 2009
  */
 package cn.featherfly.common.lang;
@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * @author 钟冀 - yufei
+ * @author zhongj - yufei
  *
  */
 public class LogUtils {

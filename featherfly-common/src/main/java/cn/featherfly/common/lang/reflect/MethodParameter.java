@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
  * MethodParameter
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class MethodParameter {
 

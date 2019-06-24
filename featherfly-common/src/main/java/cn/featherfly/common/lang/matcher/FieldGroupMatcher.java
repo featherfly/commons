@@ -10,7 +10,7 @@ import cn.featherfly.common.enums.Logic;
  * Field匹配组
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public class FieldGroupMatcher extends MemberGroupMatcher<Field>
     implements FieldMatcher{

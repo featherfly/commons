@@ -10,7 +10,7 @@ import java.util.Set;
  * SimpleResourceBundle
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class JdkResourceBundleProxy implements cn.featherfly.common.locale.ResourceBundle {
     

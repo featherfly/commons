@@ -10,7 +10,7 @@ import cn.featherfly.common.storage.stream.RemoteStorage;
  * 远程存储
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public abstract class RemoteFileStorage extends RemoteStorage<File, String> implements FileStorage{
 

@@ -9,7 +9,7 @@ import java.util.Map;
  * Parameter
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public interface Parameter {
     /**

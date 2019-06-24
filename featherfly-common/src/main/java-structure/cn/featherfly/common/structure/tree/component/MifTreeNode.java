@@ -1,6 +1,6 @@
 
 /**
- * @author 钟冀 - yufei
+ * @author zhongj - yufei
  *             Aug 25, 2009 
  */
 package cn.featherfly.common.structure.tree.component;
@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * <p>
  * MifTree节点
  * </p>
- * @author 钟冀
+ * @author zhongj
  */
 public class MifTreeNode {
 

@@ -24,7 +24,7 @@ import cn.featherfly.common.lang.LangUtils;
  * <p>
  * 类路径扫描器
  * </p>
- * @author 钟冀
+ * @author zhongj
  */
 public class ClassPathScanningProvider{
 

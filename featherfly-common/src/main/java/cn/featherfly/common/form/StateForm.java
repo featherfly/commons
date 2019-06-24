@@ -6,7 +6,7 @@ package cn.featherfly.common.form;
  * 有状态表单
  * </p>
  * @param <P> 泛型
- * @author 钟冀
+ * @author zhongj
  */
 public interface StateForm<P extends Parameter> {
     /**

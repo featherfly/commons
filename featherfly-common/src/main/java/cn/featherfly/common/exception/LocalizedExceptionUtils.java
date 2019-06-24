@@ -11,7 +11,7 @@ import cn.featherfly.common.locale.ResourceBundleUtils;
  * 抛出国际化支持的异常信息
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  * @since 1.7
  * @version 1.7
  */

@@ -11,7 +11,7 @@ import cn.featherfly.common.storage.Storage;
  * <p>
  * 文件存储
  * </p>
- * @author 钟冀 *
+ * @author zhongj *
  */
 public interface StreamStorage extends Storage<InputStream, String>{
 

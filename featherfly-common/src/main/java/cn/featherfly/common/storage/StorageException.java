@@ -8,7 +8,7 @@ import cn.featherfly.common.exception.LocalizedException;
  * StorageException
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class StorageException extends LocalizedException {
 

@@ -11,7 +11,7 @@ import cn.featherfly.common.lang.asserts.LocalizedAssert;
  *            存储的对象类型
  * @param <ID>
  *            存储后产生的唯一标示，用于取回该对象
- * @author 钟冀
+ * @author zhongj
  *
  */
 public interface Storage<E, ID> {

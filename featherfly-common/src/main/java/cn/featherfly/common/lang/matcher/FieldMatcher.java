@@ -8,7 +8,7 @@ import java.lang.reflect.Field;
  * Field匹配接口
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public interface FieldMatcher extends MemberMatcher<Field>{
     

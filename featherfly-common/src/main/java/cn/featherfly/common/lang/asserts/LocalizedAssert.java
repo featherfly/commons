@@ -17,7 +17,7 @@ import cn.featherfly.common.lang.StringUtils;
  *
  * @since 1.7
  * @version 1.7
- * @author 钟冀
+ * @author zhongj
  */
 public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAssert<E> {
     

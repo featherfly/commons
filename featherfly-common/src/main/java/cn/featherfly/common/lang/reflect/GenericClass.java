@@ -9,7 +9,7 @@ import cn.featherfly.common.lang.GenericType;
  * GenericClass
  * </p>
  * @param <T> 类型
- * @author 钟冀
+ * @author zhongj
  */
 public class GenericClass<T> implements GenericType<T>{
 

@@ -14,7 +14,7 @@ import cn.featherfly.common.lang.ClassUtils;
  * map 的描述信息
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  * @param <T> 描述的类型
  */
 public final class MapBeanDescriptor<T> extends BeanDescriptor<T>{

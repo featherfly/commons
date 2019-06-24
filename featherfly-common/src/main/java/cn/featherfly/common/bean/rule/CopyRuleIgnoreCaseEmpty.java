@@ -8,7 +8,7 @@ import cn.featherfly.common.lang.LangUtils;
  * 如果复制源属性值为null或empty则不复制（empty判断array,collection,map,string）
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public class CopyRuleIgnoreCaseEmpty implements CopyRule{
 

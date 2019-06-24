@@ -21,7 +21,7 @@ import cn.featherfly.common.lang.LangUtils;
  * JAVA BEAN 工具类.
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public final class BeanUtils {
 

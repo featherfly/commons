@@ -7,7 +7,7 @@ import java.util.Locale;
  * SimpleLocaleManager
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class DefaultLocaleManager implements LocaleManager{
 

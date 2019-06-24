@@ -7,7 +7,7 @@ package cn.featherfly.common.structure.page;
  * 分页模型
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public interface Pagination {
     /**

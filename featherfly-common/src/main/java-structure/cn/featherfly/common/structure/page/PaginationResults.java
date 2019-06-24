@@ -1,13 +1,13 @@
 package cn.featherfly.common.structure.page;
 
-
+import java.util.List;
 
 /**
  * <p>
  * 带结果集的分页模型
  * </p>
  * @param <E> 存放的对象类型
- * @author 钟冀
+ * @author zhongj
  */
 public interface PaginationResults<E> extends Pagination{
     /**
@@ -16,14 +16,14 @@ public interface PaginationResults<E> extends Pagination{
      * </p>
      * @return 结果集
      */
-    Iterable<E> getPageResults();
+    List<E> getPageResults();
     /**
      * <p>
      * 设置结果集
      * </p>
      * @param pageReults 结果集
      */
-    void setPageResults(Iterable<E> pageReults);
+    void setPageResults(List<E> pageReults);
     /**
      * <p>
      * 获取结果集数量

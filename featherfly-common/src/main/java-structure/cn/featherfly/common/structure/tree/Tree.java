@@ -1,5 +1,5 @@
 /**
- * @author 钟冀 - yufei
+ * @author zhongj - yufei
  *             Mar 19, 2009
  */
 package cn.featherfly.common.structure.tree;
@@ -19,10 +19,10 @@ import cn.featherfly.common.structure.tree.util.TreeNodeTestUtils;
  * 树的数据结构
  * </p>
  * <ul>
- * <li>修改人 钟冀 修改subtree方法，首先深度复制节点，再返回副本对象形成的树对象
+ * <li>修改人 zhongj 修改subtree方法，首先深度复制节点，再返回副本对象形成的树对象
  * </ul>
  * @param <E> 节点存放的对象类型
- * @author 钟冀 - yufei
+ * @author zhongj - yufei
  */
 public class Tree<E> {
 

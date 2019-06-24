@@ -19,7 +19,7 @@ import cn.featherfly.common.lang.GenericType;
  *
  * @param <T>
  *            泛型
- * @author 钟冀
+ * @author zhongj
  * @since 1.0
  * @version 1.0
  */

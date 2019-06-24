@@ -21,7 +21,7 @@ import javax.imageio.ImageIO;
  * VerifyCodeUtils
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  * @since 1.6
  * @version 1.0
  */

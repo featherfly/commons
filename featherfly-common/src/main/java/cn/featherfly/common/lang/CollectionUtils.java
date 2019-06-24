@@ -14,7 +14,7 @@ import java.util.Map;
  * 集合类工具
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public final class CollectionUtils {
 

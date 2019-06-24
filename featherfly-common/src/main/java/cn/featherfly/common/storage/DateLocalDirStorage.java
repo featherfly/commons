@@ -13,7 +13,7 @@ import cn.featherfly.common.lang.UriUtils;
  * </p>
  *
  * @param <E> 存储的对象类型
- * @author 钟冀
+ * @author zhongj
  */
 public abstract class DateLocalDirStorage<E> extends LocalDirStorage<E>{
 

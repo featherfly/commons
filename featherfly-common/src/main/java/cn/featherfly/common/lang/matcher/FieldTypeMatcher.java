@@ -12,7 +12,7 @@ import cn.featherfly.common.lang.ClassUtils;
  * <p>
  * 匹配Field的类型的实现
  * </p>
- * @author 钟冀
+ * @author zhongj
  */
 public class FieldTypeMatcher implements FieldMatcher{
     

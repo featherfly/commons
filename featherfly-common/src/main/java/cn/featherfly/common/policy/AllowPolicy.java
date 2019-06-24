@@ -7,7 +7,7 @@ package cn.featherfly.common.policy;
  * </p>
  *
  * @param <T> 泛型
- * @author 钟冀
+ * @author zhongj
  */
 public interface AllowPolicy<T> {
     /**

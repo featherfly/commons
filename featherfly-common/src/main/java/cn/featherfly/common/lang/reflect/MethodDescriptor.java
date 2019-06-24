@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
  * MethodDescriptor
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class MethodDescriptor {
     

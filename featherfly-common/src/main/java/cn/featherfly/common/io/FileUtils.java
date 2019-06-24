@@ -29,7 +29,7 @@ import cn.featherfly.common.lang.StringUtils;
  * 此类中封装一些常用的文件操作<br>
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public final class FileUtils {
 

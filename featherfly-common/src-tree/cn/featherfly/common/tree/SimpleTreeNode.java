@@ -14,7 +14,7 @@ import cn.featherfly.model.structure.TreeNode;
  * SimpleTreeNode
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class SimpleTreeNode<N> implements TreeNode<SimpleTreeNode<N>>{
     

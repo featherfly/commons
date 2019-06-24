@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  * </p>
  * 
  * @param <T> Member泛型
- * @author 钟冀
+ * @author zhongj
  */
 public abstract class AbstractMemberMatcher<T extends Member> implements MemberMatcher<T>{
     /**

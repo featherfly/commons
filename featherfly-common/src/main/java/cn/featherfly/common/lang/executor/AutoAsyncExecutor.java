@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  * 执行者实现,如果设置了线程池则使用异步调用,否则同步调用.
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  * @since 1.6
  * @version 1.0
  */

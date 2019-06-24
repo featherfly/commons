@@ -1,6 +1,6 @@
 
 /**
- * @author 钟冀 - yufei
+ * @author zhongj - yufei
  *             Jul 17, 2009 
  */
 package cn.featherfly.common.structure.tree;
@@ -10,7 +10,7 @@ package cn.featherfly.common.structure.tree;
  * 节点操作的接口
  * </p>
  * @param <T> 树模型对象
- * @author 钟冀
+ * @author zhongj
  */
 public interface NodeExecutor<T extends TreeNodeModel<T>> {
     /**

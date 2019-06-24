@@ -1,5 +1,5 @@
 /**
- * @author 钟冀 - yufei
+ * @author zhongj - yufei
  *             Mar 19, 2009
  */
 package cn.featherfly.common.structure.tree;
@@ -23,14 +23,14 @@ import cn.featherfly.common.structure.tree.matcher.TreeNodeEqualsMatcher;
  * </p>
  * <blockquote>
  * <ul>
- * <li>修改人 钟冀 构造参数已经确定必须有id，去掉setId()方法
- * <li>修改人 钟冀 去掉childNodes的setter方法，用appendChildNodes()来代替
- * <li>修改人 钟冀 去掉isLeafNode属性，通过childsize来判断
- * <li>修改人 钟冀 加入clone方法，实现深度复制
+ * <li>修改人 zhongj 构造参数已经确定必须有id，去掉setId()方法
+ * <li>修改人 zhongj 去掉childNodes的setter方法，用appendChildNodes()来代替
+ * <li>修改人 zhongj 去掉isLeafNode属性，通过childsize来判断
+ * <li>修改人 zhongj 加入clone方法，实现深度复制
  * </ul>
  * </blockquote>
  * @param <E> 树节点存放的类型
- * @author 钟冀
+ * @author zhongj
  */
 public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
 

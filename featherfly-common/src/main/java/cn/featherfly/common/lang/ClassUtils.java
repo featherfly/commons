@@ -1,6 +1,6 @@
 
 /**
- * @author 钟冀 - yufei
+ * @author zhongj - yufei
  *             Jan 5, 2009
  */
 package cn.featherfly.common.lang;
@@ -40,7 +40,7 @@ import cn.featherfly.common.lang.matcher.MethodMatcher;
  * <p>
  * class处理的工具类
  * </p>
- * @author 钟冀
+ * @author zhongj
  * @since 1.0
  * @version 1.0
  */

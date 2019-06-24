@@ -26,7 +26,7 @@ import cn.featherfly.common.lang.ServiceLoaderUtils;
  * java bean 的描述信息
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  * @param <T>
  *            描述的类型
  */

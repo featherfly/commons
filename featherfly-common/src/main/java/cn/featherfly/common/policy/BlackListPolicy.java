@@ -12,7 +12,7 @@ import java.util.Collection;
  *            需要判断的类型
  * @param <P>
  *            黑名单类型
- * @author 钟冀
+ * @author zhongj
  */
 public interface BlackListPolicy<T, P extends BlackListPolicy<T, P>> extends AllowPolicy<T> {
     /**

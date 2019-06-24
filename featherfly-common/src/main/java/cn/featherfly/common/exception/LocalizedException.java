@@ -10,7 +10,7 @@ import cn.featherfly.common.locale.ResourceBundleUtils;
  * 支持国际化消息输出的异常
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  * 
  */
 public abstract class LocalizedException extends BaseException {

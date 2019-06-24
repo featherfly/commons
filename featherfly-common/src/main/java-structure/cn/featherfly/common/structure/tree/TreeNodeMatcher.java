@@ -8,7 +8,7 @@ import cn.featherfly.common.data.Matcher;
  * 树节点匹配器
  * </p>
  * @param <T> 泛型
- * @author 钟冀
+ * @author zhongj
  */
 public interface TreeNodeMatcher<T extends TreeNodeModel<T>> extends Matcher<T>{
 }

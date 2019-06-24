@@ -1,11 +1,13 @@
 package cn.featherfly.common.structure.page;
 
+import java.util.List;
+
 /**
  * <p>
  * 简单分页模型实现
  * </p>
  * @param <E> 存放的对象类型
- * @author 钟冀
+ * @author zhongj
  */
 public class SimplePagination<E> implements PaginationResults<E>{
 
@@ -20,7 +22,7 @@ public class SimplePagination<E> implements PaginationResults<E>{
 
     private Integer pageNumber;
 
-    private Iterable<E> pageResults;
+    private List<E> pageResults;
     
     private Integer resultSize;
 
@@ -46,7 +48,7 @@ public class SimplePagination<E> implements PaginationResults<E>{
      * {@inheritDoc}
      */
     @Override
-    public void setPageResults(Iterable<E> pageResults) {
+    public void setPageResults(List<E> pageResults) {
         this.pageResults = pageResults;
     }
 
@@ -95,7 +97,7 @@ public class SimplePagination<E> implements PaginationResults<E>{
      * {@inheritDoc}
      */
     @Override
-    public Iterable<E> getPageResults() {
+    public List<E> getPageResults() {
         return pageResults;
     }
 

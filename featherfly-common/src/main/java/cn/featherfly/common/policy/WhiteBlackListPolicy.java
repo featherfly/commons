@@ -13,7 +13,7 @@ import cn.featherfly.common.lang.CollectionUtils;
  * 
  * @param <T>
  *            需要判断的类型
- * @author 钟冀
+ * @author zhongj
  */
 public abstract class WhiteBlackListPolicy<T>
         implements WhiteListPolicy<T, WhiteBlackListPolicy<T>>, BlackListPolicy<T, WhiteBlackListPolicy<T>> {

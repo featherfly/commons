@@ -6,7 +6,7 @@ package cn.featherfly.common.structure.tree;
  * TreeNode，树型数据结构，和List,Set是一个类型
  * </p>
  * @param <O> 节点保存的对象
- * @author 钟冀
+ * @author zhongj
  */
 public interface TreeNode<O> extends TreeNodeModel<TreeNode<O>>{
     /**

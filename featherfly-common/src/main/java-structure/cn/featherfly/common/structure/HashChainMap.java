@@ -10,7 +10,7 @@ import java.util.Map;
  * </p>
  * @param <K> 键的类型
  * @param <V> 值的类型
- * @author 钟冀
+ * @author zhongj
  */
 public class HashChainMap<K, V> extends HashMap<K, V> {
 

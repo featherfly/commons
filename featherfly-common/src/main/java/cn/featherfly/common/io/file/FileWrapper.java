@@ -11,7 +11,7 @@ import cn.featherfly.common.lang.WordUtils;
  * 文件包装类
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public class FileWrapper {
 

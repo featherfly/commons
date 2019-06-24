@@ -7,7 +7,7 @@ import cn.featherfly.common.bean.BeanProperty;
  * <p>
  * 类型匹配的属性查找条件类
  * </p>
- * @author 钟冀
+ * @author zhongj
  */
 public class BeanPropertyClassMatcher implements BeanPropertyMatcher{
 

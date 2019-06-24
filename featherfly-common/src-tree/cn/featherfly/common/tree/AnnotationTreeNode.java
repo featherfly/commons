@@ -12,7 +12,7 @@ import cn.featherfly.model.structure.TreeNode;
  * 类的说明放这里
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class AnnotationTreeNode<N, T extends TreeNode<T>> implements TreeNode<T>{
     

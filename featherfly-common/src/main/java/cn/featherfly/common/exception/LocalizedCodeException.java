@@ -7,7 +7,7 @@ import cn.featherfly.common.locale.ResourceBundleUtils;
  * 支持国际化消息输出的异常
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  * @since 1.7
  * @version 1.7
  */

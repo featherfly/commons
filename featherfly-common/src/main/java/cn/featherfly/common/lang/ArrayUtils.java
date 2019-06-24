@@ -12,7 +12,7 @@ import cn.featherfly.common.constant.Chars;
  * <p>
  * 数组的工具类
  * </p>
- * @author 钟冀
+ * @author zhongj
  * @since 1.0
  * @version 1.0
  */

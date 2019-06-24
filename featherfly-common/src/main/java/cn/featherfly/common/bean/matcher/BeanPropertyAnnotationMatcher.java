@@ -8,7 +8,7 @@ import cn.featherfly.common.enums.Logic;
  * <p>
  * 注解匹配的属性查找条件类
  * </p>
- * @author 钟冀
+ * @author zhongj
  */
 public class BeanPropertyAnnotationMatcher implements BeanPropertyMatcher{
 

@@ -9,7 +9,7 @@ import java.util.List;
  * </p>
  * 
  * @param <T> 树模型
- * @author 钟冀
+ * @author zhongj
  */
 public interface TreeNodeModel<T extends TreeNodeModel<T>> {
     /**

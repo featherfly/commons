@@ -1,6 +1,6 @@
 
 /**
- * @author 钟冀 - yufei
+ * @author zhongj - yufei
  *             Aug 22, 2008
  */
 package cn.featherfly.common.lang;
@@ -11,7 +11,7 @@ import org.apache.commons.lang.StringUtils;
  * <p>
  * uri的工具类
  * </p>
- * @author 钟冀
+ * @author zhongj
  */
 public final class UriUtils {
 

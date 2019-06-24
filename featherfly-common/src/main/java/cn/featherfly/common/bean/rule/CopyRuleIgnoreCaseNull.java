@@ -6,7 +6,7 @@ package cn.featherfly.common.bean.rule;
  * 如果复制源属性值为null则不复制
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class CopyRuleIgnoreCaseNull implements CopyRule{
     

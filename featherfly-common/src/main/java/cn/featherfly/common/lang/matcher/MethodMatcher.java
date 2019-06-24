@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
  * Method匹配接口
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public interface MethodMatcher extends MemberMatcher<Method>{
     

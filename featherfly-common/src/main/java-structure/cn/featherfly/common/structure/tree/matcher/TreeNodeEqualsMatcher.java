@@ -9,7 +9,7 @@ import cn.featherfly.common.structure.tree.TreeNodeModel;
  * TreeNodeIdMatcher
  * </p>
  * @param <T> 树模型对象
- * @author 钟冀
+ * @author zhongj
  */
 public class TreeNodeEqualsMatcher<T extends TreeNodeModel<T>> implements TreeNodeMatcher<T>{
     

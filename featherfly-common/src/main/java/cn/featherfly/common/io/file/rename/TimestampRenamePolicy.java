@@ -7,7 +7,7 @@ package cn.featherfly.common.io.file.rename;
  * 当前时间戳重命名策略
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public class TimestampRenamePolicy extends AbstractExtNameRenamePolicy{
 

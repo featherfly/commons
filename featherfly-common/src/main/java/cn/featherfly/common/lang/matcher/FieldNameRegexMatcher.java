@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
  * <p>
  * 正则匹配Field名称的实现
  * </p>
- * @author 钟冀
+ * @author zhongj
  */
 public class FieldNameRegexMatcher extends MemberNameRegexMatcher<Field>
     implements FieldMatcher {

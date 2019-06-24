@@ -15,7 +15,7 @@ import cn.featherfly.common.lang.asserts.LocalizedAssert;
  * 一般用于检查传入参数是否合法
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  * @since 1.3
  * @version 1.3
  * @deprecated {@link LocalizedAssert}

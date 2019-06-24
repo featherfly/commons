@@ -6,7 +6,7 @@ package cn.featherfly.common.bean.rule;
  * 始终复制
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class CopyRuleAlwaysCopy implements CopyRule{
     /**

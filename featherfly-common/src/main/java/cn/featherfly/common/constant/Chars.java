@@ -6,7 +6,7 @@ package cn.featherfly.common.constant;
  * 基本字符的常量
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public interface Chars {
     /**

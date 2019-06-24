@@ -17,7 +17,7 @@ import cn.featherfly.common.io.FileUtils;
  * copyright featherfly 2010-2020, all rights reserved.
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public class FileLocalAndRemoteStorage implements FileStorage{
 

@@ -16,7 +16,7 @@ import cn.featherfly.common.lang.LangUtils;
  * </p>
  * @param <M> 泛型
  * @param <O> 泛型
- * @author 钟冀
+ * @author zhongj
  */
 public class GroupMatcher<M extends Matcher<O>, O> implements Matcher<O>{
     

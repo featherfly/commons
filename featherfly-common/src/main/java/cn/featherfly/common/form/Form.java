@@ -6,7 +6,7 @@ package cn.featherfly.common.form;
  * 表单
  * </p>
  * @param <P> 泛型
- * @author 钟冀
+ * @author zhongj
  */
 public interface Form<P extends Parameter> {
     /**

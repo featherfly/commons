@@ -10,7 +10,7 @@ import cn.featherfly.common.lang.reflect.Modifier;
  * 匹配Field Modifier的实现
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public class FieldModifierMatcher extends MemberModifierMatcher<Field>
     implements FieldMatcher{

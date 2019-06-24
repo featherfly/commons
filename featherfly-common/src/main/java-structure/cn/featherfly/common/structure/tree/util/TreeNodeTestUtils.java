@@ -1,6 +1,6 @@
 
 /**
- * @author 钟冀 - yufei
+ * @author zhongj - yufei
  *             Jul 17, 2009 
  */
 package cn.featherfly.common.structure.tree.util;
@@ -18,7 +18,7 @@ import cn.featherfly.common.structure.tree.TreeNode;
  * 用来测试树的一些工具方法
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public final class TreeNodeTestUtils {
     

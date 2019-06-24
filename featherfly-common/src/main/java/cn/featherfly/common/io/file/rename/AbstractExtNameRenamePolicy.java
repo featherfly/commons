@@ -10,7 +10,7 @@ import cn.featherfly.common.lang.LangUtils;
  * 是否包含扩展名的抽象重命名策略
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public abstract class AbstractExtNameRenamePolicy implements RenamePolicy{
 

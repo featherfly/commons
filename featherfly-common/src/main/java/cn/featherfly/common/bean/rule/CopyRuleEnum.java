@@ -9,7 +9,7 @@ import java.util.Map;
  * 自带的复制规则类型的枚举
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public enum CopyRuleEnum {
     /**

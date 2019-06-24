@@ -10,7 +10,7 @@ import cn.featherfly.common.lang.reflect.Modifier;
  * 匹配Member Modifier的实现
  * </p>
  * @param <T> Member泛型
- * @author 钟冀
+ * @author zhongj
  */
 public class MemberModifierMatcher<T extends Member> extends AbstractMemberMatcher<T>{
     

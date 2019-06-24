@@ -1,6 +1,6 @@
 
 /**
- * @author 钟冀 - yufei
+ * @author zhongj - yufei
  *             Aug 25, 2009 
  */
 package cn.featherfly.common.structure.tree.component;
@@ -12,7 +12,7 @@ import cn.featherfly.common.structure.tree.TreeNode;
  * 每个节点数据生成操作的接口
  * </p>
  * @param <E> 树节点包含对象的类型
- * @author 钟冀
+ * @author zhongj
  */
 public interface MifTreeNodeCreator<E> {
     /**

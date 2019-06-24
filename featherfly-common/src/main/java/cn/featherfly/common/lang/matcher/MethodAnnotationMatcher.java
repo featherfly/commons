@@ -11,7 +11,7 @@ import cn.featherfly.common.lang.LangUtils;
  * <p>
  * 匹配Method的注解的实现
  * </p>
- * @author 钟冀
+ * @author zhongj
  */
 public class MethodAnnotationMatcher implements MethodMatcher{
 

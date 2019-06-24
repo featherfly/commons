@@ -11,7 +11,7 @@ import java.util.Map;
  * </p>
  * @since 1.7
  * @version 1.7
- * @author 钟冀
+ * @author zhongj
  */
 public interface ILocalizedAssert<E extends RuntimeException> {
 

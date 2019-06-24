@@ -9,7 +9,7 @@ import cn.featherfly.common.data.Matcher;
  * Member匹配接口
  * </p>
  * @param <T> Member泛型
- * @author 钟冀
+ * @author zhongj
  */
 public interface MemberMatcher<T extends Member> extends Matcher<T>{
     

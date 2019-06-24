@@ -13,7 +13,7 @@ import cn.featherfly.common.bean.BeanProperty;
  * <p>
  * 正则匹配名称的属性查找条件类
  * </p>
- * @author 钟冀
+ * @author zhongj
  */
 public class BeanPropertyNameRegexMatcher implements BeanPropertyMatcher{
 

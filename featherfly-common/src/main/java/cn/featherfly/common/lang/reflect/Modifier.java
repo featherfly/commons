@@ -6,7 +6,7 @@ package cn.featherfly.common.lang.reflect;
  * Modifier
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public enum Modifier {
     /**

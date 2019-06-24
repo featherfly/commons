@@ -10,7 +10,7 @@ import cn.featherfly.common.lang.reflect.Modifier;
  * 匹配Method Modifier的实现
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public class MethodModifierMatcher extends MemberModifierMatcher<Method>
     implements MethodMatcher{

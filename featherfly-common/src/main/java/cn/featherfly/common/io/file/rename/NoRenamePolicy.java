@@ -9,7 +9,7 @@ import cn.featherfly.common.io.file.RenamePolicy;
  * 不重名的策略（原样返回）
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public class NoRenamePolicy implements RenamePolicy{
 

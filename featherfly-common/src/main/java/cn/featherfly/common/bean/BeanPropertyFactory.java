@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
  * BeanPropertyFactory接口
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  *
  */
 public interface BeanPropertyFactory {

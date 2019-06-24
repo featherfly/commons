@@ -8,7 +8,7 @@ import java.util.Locale;
  * 属性存取异常. 如果一个属性不可读而又执行了读取操作时抛出（不可写同理）.
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public class PropertyAccessException extends PropertyException {
 

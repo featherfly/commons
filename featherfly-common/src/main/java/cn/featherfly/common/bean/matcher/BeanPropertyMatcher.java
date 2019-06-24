@@ -9,7 +9,7 @@ import cn.featherfly.common.data.Matcher;
  * 属性匹配接口
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public interface BeanPropertyMatcher extends Matcher<BeanProperty<?>>{
     

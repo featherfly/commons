@@ -22,7 +22,7 @@ import cn.featherfly.common.storage.StorageException;
  * copyright featherfly 2010-2020, all rights reserved.
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public abstract class FileLocalDirStorage implements FileStorage{
 

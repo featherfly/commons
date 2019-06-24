@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  * 缺点：生成大量类，占用内存空间，强类型.
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  *
  */
 public class ReflectionBeanPropertyFactory implements BeanPropertyFactory {

@@ -10,7 +10,7 @@ import cn.featherfly.common.exception.LocalizedException;
  * 属性异常.
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public abstract class PropertyException extends LocalizedException {
 

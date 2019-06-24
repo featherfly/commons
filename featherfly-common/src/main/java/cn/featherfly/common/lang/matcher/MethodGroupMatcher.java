@@ -10,7 +10,7 @@ import cn.featherfly.common.enums.Logic;
  * Method匹配组
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public class MethodGroupMatcher extends MemberGroupMatcher<Method>
     implements MethodMatcher{

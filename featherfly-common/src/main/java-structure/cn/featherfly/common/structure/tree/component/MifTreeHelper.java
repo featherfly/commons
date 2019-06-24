@@ -1,6 +1,6 @@
 
 /**
- * @author 钟冀 - yufei
+ * @author zhongj - yufei
  *             Aug 25, 2009 
  */
 package cn.featherfly.common.structure.tree.component;
@@ -22,7 +22,7 @@ import cn.featherfly.common.structure.tree.TreeNode;
  * 以Tree或TreeNode为MifTree生成生成需要的JSON数据
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class MifTreeHelper {
 

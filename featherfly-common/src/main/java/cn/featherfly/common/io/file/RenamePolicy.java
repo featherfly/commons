@@ -5,7 +5,7 @@ package cn.featherfly.common.io.file;
  * 重命名策略
  * </p>
  *
- * @author 钟冀
+ * @author zhongj
  */
 public interface RenamePolicy {
 

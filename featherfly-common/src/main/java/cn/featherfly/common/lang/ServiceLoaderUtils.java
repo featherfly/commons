@@ -10,7 +10,7 @@ import java.util.ServiceLoader;
  * ServiceLoaderUtils
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public final class ServiceLoaderUtils {
     /**
@@ -21,7 +21,7 @@ public final class ServiceLoaderUtils {
      * <p>
      * 找到多个服务时的策略
      * </p>
-     * @author 钟冀
+     * @author zhongj
      */
     public enum MultiPolicy {
         /**
@@ -41,7 +41,7 @@ public final class ServiceLoaderUtils {
      * <p>
      * 没有找到服务时的策略
      * </p>
-     * @author 钟冀
+     * @author zhongj
      */
     public enum NotFoundPolicy {
         /**

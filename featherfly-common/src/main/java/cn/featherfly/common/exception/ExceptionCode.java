@@ -2,7 +2,7 @@ package cn.featherfly.common.exception;
 
 /**
  * 异常code
- * @author 钟冀
+ * @author zhongj
  * @since 1.6.0
  * @version 1.0
  */

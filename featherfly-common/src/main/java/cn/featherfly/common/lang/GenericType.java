@@ -7,7 +7,7 @@ package cn.featherfly.common.lang;
  * @param <T> 泛型类型接口
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public interface GenericType<T> {
     /**

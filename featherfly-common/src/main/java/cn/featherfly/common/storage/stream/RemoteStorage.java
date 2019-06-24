@@ -13,7 +13,7 @@ import cn.featherfly.common.storage.Storage;
  * </p>
  * @param <E> 存储的对象类型
  * @param <ID> 存储后产生的唯一标示，用于取回该对象
- * @author 钟冀
+ * @author zhongj
  */
 public abstract class RemoteStorage<E, ID> implements Storage<E, ID>{
 

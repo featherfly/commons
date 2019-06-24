@@ -16,7 +16,7 @@ import cn.featherfly.common.lang.ServiceLoaderUtils;
  * ResourceBundleUtils
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public final class ResourceBundleUtils {
 

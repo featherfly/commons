@@ -8,7 +8,7 @@ import cn.featherfly.common.exception.LocalizedCodeException;
  * ExceptionModule
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class ExceptionModule extends ClassModule {
     

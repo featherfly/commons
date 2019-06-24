@@ -19,7 +19,7 @@ import cn.featherfly.common.structure.HashChainMap;
  * JavaTypeDeserializer
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class JavaTypeDeserializer extends JsonDeserializer<Class<?>> {
 

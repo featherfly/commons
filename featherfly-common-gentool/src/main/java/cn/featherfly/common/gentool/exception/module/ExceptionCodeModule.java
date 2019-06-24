@@ -17,7 +17,7 @@ import cn.featherfly.common.exception.SimpleLocalizedExceptionCode;
  * ExceptionCodeModule
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class ExceptionCodeModule extends ClassModule {
 

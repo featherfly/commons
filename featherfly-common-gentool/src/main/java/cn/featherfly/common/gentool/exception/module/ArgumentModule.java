@@ -10,7 +10,7 @@ import cn.featherfly.common.gentool.exception.jackson.JavaTypeDeserializer;
  * ArgumentModule
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class ArgumentModule {
 

@@ -6,7 +6,7 @@ package cn.featherfly.common.gentool.exception.module;
  * GenModule
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class GenModule {
 

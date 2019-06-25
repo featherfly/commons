@@ -52,6 +52,38 @@ public class [(${code.name})] extends [(${code.parent.name})] {
     public [(${code.name})](Integer num, String key, Locale locale, Object[] argus) {
         super(MODULE, num, key, locale, argus);
     }
+    
+    public enum [(${code.name})]s {
+        [# th:each="c,stat : ${code.codes}"]
+        [(${code.module})][(${c.num})]("[(${c.key})]", [(${c.num})])[# th:if="${!stat.last}"],[/][# th:if="${stat.last}"];[/]
+        [/]        
+        private String key;
+        
+        private Integer num;
+        
+        /**
+         * @param key key
+         * @param num num
+         */
+        private [(${code.name})]s(String key, Integer num) {
+            this.key = key;
+            this.num = num;
+        }
+        /**
+         * get key
+         * @return key
+         */
+        public String getKey() {
+            return key;
+        }
+        /**
+         * get num
+         * @return num
+         */
+        public Integer getNum() {
+            return num;
+        }
+    }
    
     [# th:each="c : ${code.codes}"]
     /**
@@ -62,9 +94,11 @@ public class [(${code.name})] extends [(${code.parent.name})] {
      * [/]
      * @return [(${c.name})]Code
      */
-    public static [(${code.name})] create[(${c.name})]Code([# th:each="argu,stat : ${c.argus}"][(${argu.type.name})] [(${argu.name})][# th:if="${!stat.last}"], [/][/]) {
-        return new [(${code.name})]([(${c.num})], "[(${c.key})]"[# th:if="${not #lists.isEmpty(c.argus)}"],
-                new Object[] {[# th:each="argu,stat : ${c.argus}"][(${argu.name})][# th:if="${!stat.last}"], [/][/]}[/]);
+    public static [(${code.name})] create[(${c.name})]Code(
+        [# th:each="argu,stat : ${c.argus}"][(${argu.type.name})] [(${argu.name})][# th:if="${!stat.last}"], [/][/]) {
+        return new [(${code.name})]([(${code.name})]s.[(${code.module})][(${c.num})].num
+                , [(${code.name})]s.[(${code.module})][(${c.num})].key[# th:if="${not #lists.isEmpty(c.argus)}"]
+                , new Object[] {[# th:each="argu,stat : ${c.argus}"][(${argu.name})][# th:if="${!stat.last}"], [/][/]}[/]);
     }
     
 [/]}

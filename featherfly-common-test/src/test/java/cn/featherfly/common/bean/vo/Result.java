@@ -7,7 +7,7 @@ package cn.featherfly.common.bean.vo;
  * 类的说明放这里
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class Result<D> {
 

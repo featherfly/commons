@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSON;
  * 类的说明放这里
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class FastJson {
 	public static void main(String[] args) {

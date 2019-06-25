@@ -1,6 +1,6 @@
 
 /**
- * @author 钟冀 - yufei
+ * @author zhongj - yufei
  *		 	Mar 19, 2009 
  */
 package cn.featherfly.common.tree;
@@ -19,7 +19,7 @@ import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
 /**
- * @author 钟冀 - yufei
+ * @author zhongj - yufei
  *
  */
 public class TreeTest {

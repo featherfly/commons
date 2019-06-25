@@ -6,7 +6,7 @@ package cn.featherfly.common.bean.vo;
  * Result
  * </p>
  * 
- * @author 钟冀
+ * @author zhongj
  */
 public class ResultUser extends Result<User> {
 

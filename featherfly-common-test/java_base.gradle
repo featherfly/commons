@@ -1,0 +1,16 @@
+apply plugin: 'java'
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+tasks.withType(Javadoc) {
+    options.encoding = "UTF-8"
+}
+
+jar {
+    manifest.attributes 'Build-Name': archivesBaseName
+    manifest.attributes 'Build-By': "zhong ji"
+    manifest.attributes 'Build-Tool' : "gradle " + gradle.gradleVersion
+    manifest.attributes 'Build-Jdk' : ant.properties['java.runtime.version']
+    manifest.attributes 'Bundle-License': 'http://www.apache.org/licenses/LICENSE-2.0'
+}

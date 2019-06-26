@@ -26,8 +26,8 @@ public class ArgumentModule {
     }
 
     /**
-     * @param type
-     * @param name
+     * @param type type
+     * @param name name
      */
     public ArgumentModule(Class<?> type, String name) {
         super();

@@ -55,7 +55,7 @@ public final class ExceptionCodeCheck {
     
     /**
      * checkCode
-     * @param exceptionCodeType exceptionCodeTypes
+     * @param exceptionCodeTypes exceptionCodeTypes
      */
     public static void checkCode(Collection<Class<?>> exceptionCodeTypes) {
         exceptionCodeTypes.forEach(e -> {

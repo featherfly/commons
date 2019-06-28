@@ -27,30 +27,30 @@ public interface Pagination extends Page {
      */
     Integer getTotal();
 
-    /**
-     * <p>
-     * 设置每页数量
-     * </p>
-     *
-     * @param pageSize 每页数量
-     */
-    void setPageSize(Integer pageSize);
-
-    /**
-     * <p>
-     * 设置页数
-     * </p>
-     *
-     * @param pageNumber 页数
-     */
-    void setPageNumber(Integer pageNumber);
-
-    /**
-     * <p>
-     * 设置总数
-     * </p>
-     *
-     * @param total 总数
-     */
-    void setTotal(Integer total);
+    //    /**
+    //     * <p>
+    //     * 设置每页数量
+    //     * </p>
+    //     *
+    //     * @param pageSize 每页数量
+    //     */
+    //    void setPageSize(Integer pageSize);
+    //
+    //    /**
+    //     * <p>
+    //     * 设置页数
+    //     * </p>
+    //     *
+    //     * @param pageNumber 页数
+    //     */
+    //    void setPageNumber(Integer pageNumber);
+    //
+    //    /**
+    //     * <p>
+    //     * 设置总数
+    //     * </p>
+    //     *
+    //     * @param total 总数
+    //     */
+    //    void setTotal(Integer total);
 }

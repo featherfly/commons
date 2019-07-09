@@ -26,8 +26,7 @@ import cn.featherfly.common.storage.StorageException;
  *
  * @author zhongj
  */
-public class StreamDateLocalDirStorage extends DateLocalDirStorage<InputStream>
-    implements StreamStorage{
+public class StreamDateLocalDirStorage extends DateLocalDirStorage<InputStream> implements StreamStorage {
 
     /**
      */
@@ -45,10 +44,10 @@ public class StreamDateLocalDirStorage extends DateLocalDirStorage<InputStream>
             if (!targetFile.getParentFile().exists()) {
                 targetFile.getParentFile().mkdirs();
             }
-            OutputStream os = new FileOutputStream(targetFile); 
-            IOUtils.copy(is, os);
-            IOUtils.closeQuietly(os);
-            return getId(targetFile);
+            try (OutputStream os = new FileOutputStream(targetFile)) {
+                IOUtils.copy(is, os);
+                return getId(targetFile);
+            }
         } catch (IOException e) {
             throw new StorageException(e);
         }
@@ -62,8 +61,7 @@ public class StreamDateLocalDirStorage extends DateLocalDirStorage<InputStream>
         ASSERT.isNotEmpty(id, "id");
         logger.debug("存储唯一标示：{}", id);
         File file = createRelativeDir();
-        file = new File(UriUtils.linkUri(
-                file.getAbsolutePath(), id));
+        file = new File(UriUtils.linkUri(file.getAbsolutePath(), id));
         logger.debug("获取文件：{}", file.getAbsolutePath());
         try {
             return new FileInputStream(file);
@@ -80,8 +78,7 @@ public class StreamDateLocalDirStorage extends DateLocalDirStorage<InputStream>
         ASSERT.isNotEmpty(id, "id");
         logger.debug("存储唯一标示：{}", id);
         File file = createRelativeDir();
-        file = new File(UriUtils.linkUri(
-                file.getAbsolutePath(), id));
+        file = new File(UriUtils.linkUri(file.getAbsolutePath(), id));
         logger.debug("获取文件：{}", file.getAbsolutePath());
         return FileUtils.delete(file);
     }

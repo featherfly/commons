@@ -12,7 +12,7 @@ public interface Page {
      * <p>
      * 获取每页数量
      * </p>
-     *
+     * 
      * @return 每页数量
      */
     Integer getPageSize();
@@ -21,7 +21,7 @@ public interface Page {
      * <p>
      * 获取页数
      * </p>
-     *
+     * 
      * @return 页数
      */
     Integer getPageNumber();

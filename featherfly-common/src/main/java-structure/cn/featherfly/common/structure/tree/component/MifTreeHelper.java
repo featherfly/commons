@@ -1,7 +1,6 @@
 
 /**
- * @author zhongj - yufei
- *             Aug 25, 2009 
+ * @author zhongj - yufei Aug 25, 2009
  */
 package cn.featherfly.common.structure.tree.component;
 
@@ -14,49 +13,47 @@ import java.util.Map;
 import cn.featherfly.common.structure.tree.Tree;
 import cn.featherfly.common.structure.tree.TreeNode;
 
-
 /**
- * 
  * <p>
- * JavaScript 树形组件 MifTree 的帮助类，
- * 以Tree或TreeNode为MifTree生成生成需要的JSON数据
+ * JavaScript 树形组件 MifTree 的帮助类， 以Tree或TreeNode为MifTree生成生成需要的JSON数据
  * </p>
- * 
+ *
  * @author zhongj
  */
 public class MifTreeHelper {
 
     private Tree<?> tree;
-    
+
     private TreeNode<?> treeNode;
 
     /**
-     * 
      * @param tree tree
      */
     public MifTreeHelper(Tree<?> tree) {
         this.tree = tree;
     }
-        
+
     /**
-     * 
      * @param treeNode treeNode
      */
     public MifTreeHelper(TreeNode<?> treeNode) {
         this.treeNode = treeNode;
     }
+
     /**
      * 用list和map封装前台js树需要用到的json格式,包含根
+     * 
      * @param creator 节点生成器
      * @return 用list和map封装前台js树需要用到的json格式
-     */    
+     */
     public List<Map<String, Object>> format(MifTreeNodeCreator<?> creator) {
         return format(creator, true);
     }
+
     /**
-     * 
      * 用list和map封装前台js树需要用到的json格式
-     * @param creator 节点生成器
+     * 
+     * @param creator     节点生成器
      * @param containRoot 是否包含根
      * @return 用list和map封装前台js树需要用到的json格式
      */
@@ -65,7 +62,7 @@ public class MifTreeHelper {
             if (containRoot) {
                 return format(tree.getRootNode(), new ArrayList<Map<String, Object>>(), creator);
             } else {
-                List<Map<String, Object>> firstNodes = new ArrayList<Map<String, Object>>();
+                List<Map<String, Object>> firstNodes = new ArrayList<>();
                 Iterator<?> iter = tree.getRootNode().getChildNodes().iterator();
                 while (iter.hasNext()) {
                     format((TreeNode<?>) iter.next(), firstNodes, creator);
@@ -76,7 +73,7 @@ public class MifTreeHelper {
             if (containRoot) {
                 return format(treeNode, new ArrayList<Map<String, Object>>(), creator);
             } else {
-                List<Map<String, Object>> firstNodes = new ArrayList<Map<String, Object>>();
+                List<Map<String, Object>> firstNodes = new ArrayList<>();
                 Iterator<?> iter = treeNode.getChildNodes().iterator();
                 while (iter.hasNext()) {
                     format((TreeNode<?>) iter.next(), firstNodes, creator);
@@ -86,20 +83,20 @@ public class MifTreeHelper {
         } else {
             throw new IllegalArgumentException("没有Tree或者没有TreeNode");
         }
-    }    
+    }
 
     @SuppressWarnings("unchecked")
-    private List<Map<String, Object>> format(TreeNode<?> treeNode, List<Map<String, Object>> nodeList
-                        , MifTreeNodeCreator creator) {
+    private List<Map<String, Object>> format(TreeNode<?> treeNode, List<Map<String, Object>> nodeList,
+            MifTreeNodeCreator creator) {
         MifTreeNode node = creator.createNode(treeNode);
-        Map<String, Object> nodeMap = new HashMap<String, Object>();
+        Map<String, Object> nodeMap = new HashMap<>();
         nodeList.add(nodeMap);
         nodeMap.put("property", node.getProperty());
         nodeMap.put("type", node.getType());
         nodeMap.put("state", node.getState());
         nodeMap.put("data", node.getData());
         if (!treeNode.isLeaf()) {
-            List<Map<String, Object>> childNodeList = new ArrayList<Map<String, Object>>();
+            List<Map<String, Object>> childNodeList = new ArrayList<>();
             nodeMap.put("children", childNodeList);
             Iterator<?> iter = treeNode.getChildNodes().iterator();
             while (iter.hasNext()) {

@@ -1,6 +1,8 @@
-2019-7-9
+2019-7-19
 1.7.1 发布
-    1.
+    1.加入limit
+    2.LangUtils.toEnum(Class<T> toClass, Object object)加入byte支持
+    3.SystemPropertyUtils加入isWindows, isLinux方法
     
 2019-6-24
 1.7.0 发布

@@ -55,11 +55,7 @@ allprojects {
 
     dependencies {
 		compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
-		compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
-		compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.3'
-		compile group: 'commons-io', name: 'commons-io', version: '2.6'
-		compile group: 'org.springframework', name: 'spring-core', version: '5.1.8.RELEASE'
-		compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9'
+		
 	    testCompile (
 	    	'org.testng:testng:6.14.3',
 	    	'org.slf4j:slf4j-log4j12:1.7.26'

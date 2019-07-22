@@ -253,7 +253,7 @@ public final class NumberUtils {
      * </p>
      * 
      * @param intSource
-     * @return
+     * @return byte[]
      */
     public static byte[] toByteArray(int intSource) {
         byte[] bLocalArr = new byte[Integer.BYTES];
@@ -274,6 +274,42 @@ public final class NumberUtils {
      */
     public static int toInt(byte[] bytes) {
         int iOutcome = 0;
+        byte bLoop;
+
+        for (int i = 0; i < bytes.length; i++) {
+            bLoop = bytes[i];
+            iOutcome += (bLoop & 0xFF) << (8 * i);
+        }
+        return iOutcome;
+    }
+
+    /**
+     * <p>
+     * 将传入的short转换为长度为2的字节数组
+     * </p>
+     * 
+     * @param shortSource
+     * @return byte[]
+     */
+    public static byte[] toByteArray(short shortSource) {
+        byte[] bLocalArr = new byte[Short.BYTES];
+        for (int i = 0; (i < 4) && (i < Short.BYTES); i++) {
+            bLocalArr[i] = (byte) (shortSource >> 8 * i & 0xFF);
+        }
+        return bLocalArr;
+    }
+
+    /**
+     * <p>
+     * 将传入的字节数组转换为short
+     * </p>
+     * 
+     * @param bytes
+     *            bytes
+     * @return short
+     */
+    public static short toShort(byte[] bytes) {
+        short iOutcome = 0;
         byte bLoop;
 
         for (int i = 0; i < bytes.length; i++) {

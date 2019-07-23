@@ -19,7 +19,6 @@ public class [(${code.name})] extends [(${code.parent.name})] {
     /**
      * @param num num
      * @param key key
-     * @param argus argus
      */
     public [(${code.name})](Integer num, String key) {
         this(num, key, new Object[] {});
@@ -37,7 +36,6 @@ public class [(${code.name})] extends [(${code.parent.name})] {
      * @param num num
      * @param key  key
      * @param locale locale
-     * @param argus argus
      */
     public [(${code.name})](Integer num, String key, Locale locale) {
         this(num, key, locale, new Object[]{});

@@ -1,6 +1,9 @@
 2019-
 1.7.2 发布
     1.删除MifTreeNode支持
+    2.NumberUtils 加入short与byte[]以及short与byte[]互相转换的方法
+    3.FileUtils加入 getPathInJar
+    4.SimplePagination加入 SimplePagination(Limit limit),SimplePagination(int offset, int limit)构造函数
     
     
 2019-7-19

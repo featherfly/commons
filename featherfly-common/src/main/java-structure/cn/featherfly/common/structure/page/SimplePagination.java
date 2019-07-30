@@ -6,7 +6,7 @@ import java.util.List;
  * <p>
  * 简单分页模型实现
  * </p>
- * 
+ *
  * @param <E> 存放的对象类型
  * @author zhongj
  */
@@ -17,6 +17,22 @@ public class SimplePagination<E> implements PaginationResults<E> {
     public SimplePagination() {
     }
 
+    /**
+     * @param limit limit
+     */
+    public SimplePagination(Limit limit) {
+        this(limit.getOffset(), limit.getLimit());
+    }
+
+    /**
+     * @param offset offset
+     * @param limit  limit
+     */
+    public SimplePagination(int offset, int limit) {
+        this.pageSize = limit;
+        this.pageNumber = (offset + limit) / limit;
+    }
+
     private Integer total;
 
     private Integer pageSize;
@@ -24,8 +40,6 @@ public class SimplePagination<E> implements PaginationResults<E> {
     private Integer pageNumber;
 
     private List<E> pageResults;
-
-    private Integer resultSize;
 
     /**
      * <p>
@@ -110,22 +124,18 @@ public class SimplePagination<E> implements PaginationResults<E> {
 
     /**
      * 返回resultSize
-     * 
+     *
      * @return resultSize
      */
     @Override
     public Integer getResultSize() {
-        return resultSize;
+        if (pageResults != null) {
+            return pageResults.size();
+        } else {
+            return null;
+        }
     }
 
-    /**
-     * 设置resultSize
-     * 
-     * @param resultSize resultSize
-     */
-    public void setResultSize(Integer resultSize) {
-        this.resultSize = resultSize;
-    }
     //    /**
     //     * {@inheritDoc}
     //     */

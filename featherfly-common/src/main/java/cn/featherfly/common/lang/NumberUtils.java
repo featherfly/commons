@@ -24,16 +24,12 @@ public final class NumberUtils {
      * 转换数字对象到指定数字类型
      * </p>
      *
-     * @param number
-     *            数字
-     * @param targetClass
-     *            转换目标数字类型
-     * @param <T>
-     *            转换后的类型
+     * @param number      数字
+     * @param targetClass 转换目标数字类型
+     * @param <T>         转换后的类型
      * @return 转换后的数字对象
      */
-    public static <T extends Number> T convert(Number number,
-            Class<T> targetClass) {
+    public static <T extends Number> T convert(Number number, Class<T> targetClass) {
         return value(number, targetClass);
     }
 
@@ -42,12 +38,9 @@ public final class NumberUtils {
      * 将Number转换为指定数字类型，如果传入数字是null，则返回null
      * </p>
      *
-     * @param number
-     *            数字源
-     * @param toType
-     *            转换目标类型
-     * @param <T>
-     *            目标类型泛型
+     * @param number 数字源
+     * @param toType 转换目标类型
+     * @param <T>    目标类型泛型
      * @return 数字
      */
     @SuppressWarnings("unchecked")
@@ -84,12 +77,9 @@ public final class NumberUtils {
      * 将字符串转换为对应的类型，如果传入字符串是null或者空字符串，则返回null
      * </p>
      *
-     * @param source
-     *            转换源字符串
-     * @param toType
-     *            转换目标类型
-     * @param <T>
-     *            目标类型泛型
+     * @param source 转换源字符串
+     * @param toType 转换目标类型
+     * @param <T>    目标类型泛型
      * @return 数字
      */
     @SuppressWarnings("unchecked")
@@ -126,10 +116,8 @@ public final class NumberUtils {
      * 将传入字符串转换为Byte，如果转换不了则返回传入的默认值
      * </p>
      *
-     * @param target
-     *            target
-     * @param defaultValue
-     *            defaultValue
+     * @param target       target
+     * @param defaultValue defaultValue
      * @return Byte
      */
     public static Byte parse(String target, Byte defaultValue) {
@@ -145,10 +133,8 @@ public final class NumberUtils {
      * 将传入字符串转换为Integer，如果转换不了则返回传入的默认值
      * </p>
      *
-     * @param target
-     *            target
-     * @param defaultValue
-     *            defaultValue
+     * @param target       target
+     * @param defaultValue defaultValue
      * @return Integer
      */
     public static Integer parse(String target, Integer defaultValue) {
@@ -164,10 +150,8 @@ public final class NumberUtils {
      * 将传入字符串转换为Long，如果转换不了则返回传入的默认值
      * </p>
      *
-     * @param target
-     *            target
-     * @param defaultValue
-     *            defaultValue
+     * @param target       target
+     * @param defaultValue defaultValue
      * @return Long
      */
     public static Long parse(String target, Long defaultValue) {
@@ -183,10 +167,8 @@ public final class NumberUtils {
      * 将传入字符串转换为Double，如果转换不了则返回传入的默认值
      * </p>
      *
-     * @param target
-     *            target
-     * @param defaultValue
-     *            defaultValue
+     * @param target       target
+     * @param defaultValue defaultValue
      * @return Double
      */
     public static Double parse(String target, Double defaultValue) {
@@ -202,10 +184,8 @@ public final class NumberUtils {
      * 将传入字符串转换为Float，如果转换不了则返回传入的默认值
      * </p>
      *
-     * @param target
-     *            target
-     * @param defaultValue
-     *            defaultValue
+     * @param target       target
+     * @param defaultValue defaultValue
      * @return Float
      */
     public static Float parse(String target, Float defaultValue) {
@@ -221,18 +201,13 @@ public final class NumberUtils {
      * 传入数字长度低于传入最小长度则使用传入字符补全在开头使长度达到最小长度
      * </p>
      *
-     * @param number
-     *            数字
-     * @param minLength
-     *            最小长度
-     * @param sign
-     *            补全使用的字符
-     * @param <N>
-     *            泛型数字类型
+     * @param number    数字
+     * @param minLength 最小长度
+     * @param sign      补全使用的字符
+     * @param <N>       泛型数字类型
      * @return 补全后的字符串
      */
-    public static <N extends Number> String fillingAtStart(N number,
-            int minLength, char sign) {
+    public static <N extends Number> String fillingAtStart(N number, int minLength, char sign) {
         AssertIllegalArgument.isNotNull(number, "number");
         int requiredLength = minLength - number.toString().length();
         if (requiredLength > 0) {
@@ -251,13 +226,13 @@ public final class NumberUtils {
      * <p>
      * 将传入的int转换为长度为4的字节数组
      * </p>
-     * 
-     * @param intSource
+     *
+     * @param intSource intSource
      * @return byte[]
      */
     public static byte[] toByteArray(int intSource) {
         byte[] bLocalArr = new byte[Integer.BYTES];
-        for (int i = 0; (i < 4) && (i < Integer.BYTES); i++) {
+        for (int i = 0; i < 4 && i < Integer.BYTES; i++) {
             bLocalArr[i] = (byte) (intSource >> 8 * i & 0xFF);
         }
         return bLocalArr;
@@ -267,9 +242,8 @@ public final class NumberUtils {
      * <p>
      * 将传入的字节数组转换为int
      * </p>
-     * 
-     * @param bytes
-     *            bytes
+     *
+     * @param bytes bytes
      * @return int
      */
     public static int toInt(byte[] bytes) {
@@ -278,7 +252,7 @@ public final class NumberUtils {
 
         for (int i = 0; i < bytes.length; i++) {
             bLoop = bytes[i];
-            iOutcome += (bLoop & 0xFF) << (8 * i);
+            iOutcome += (bLoop & 0xFF) << 8 * i;
         }
         return iOutcome;
     }
@@ -287,13 +261,13 @@ public final class NumberUtils {
      * <p>
      * 将传入的short转换为长度为2的字节数组
      * </p>
-     * 
-     * @param shortSource
+     *
+     * @param shortSource shortSource
      * @return byte[]
      */
     public static byte[] toByteArray(short shortSource) {
         byte[] bLocalArr = new byte[Short.BYTES];
-        for (int i = 0; (i < 4) && (i < Short.BYTES); i++) {
+        for (int i = 0; i < 4 && i < Short.BYTES; i++) {
             bLocalArr[i] = (byte) (shortSource >> 8 * i & 0xFF);
         }
         return bLocalArr;
@@ -303,9 +277,8 @@ public final class NumberUtils {
      * <p>
      * 将传入的字节数组转换为short
      * </p>
-     * 
-     * @param bytes
-     *            bytes
+     *
+     * @param bytes bytes
      * @return short
      */
     public static short toShort(byte[] bytes) {
@@ -314,7 +287,7 @@ public final class NumberUtils {
 
         for (int i = 0; i < bytes.length; i++) {
             bLoop = bytes[i];
-            iOutcome += (bLoop & 0xFF) << (8 * i);
+            iOutcome += (bLoop & 0xFF) << 8 * i;
         }
         return iOutcome;
     }

@@ -1054,10 +1054,23 @@ public final class FileUtils {
         if (resourceUrl == null) {
             return null;
         }
-        if ("jar".equalsIgnoreCase(resourceUrl.getProtocol())) {
+        if (isResourceInJar(resourceUrl)) {
             return StringUtils.substringAfter(resourceUrl.getPath(), "!");
         } else {
             return resourceUrl.getPath();
         }
+    }
+
+    /**
+     * 判断传入资源是否是jar包内的资源
+     * 
+     * @param resourceUrl 资源定位
+     * @return boolean
+     */
+    public static boolean isResourceInJar(URL resourceUrl) {
+        if (resourceUrl == null) {
+            return false;
+        }
+        return "jar".equalsIgnoreCase(resourceUrl.getProtocol());
     }
 }

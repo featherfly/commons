@@ -1,6 +1,7 @@
 2019-
 1.7.3 发布
     1.优化UUIDGenerator生成UUID效率
+    2.加入InitException
 
 2019-07-31
 1.7.2 发布

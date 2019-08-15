@@ -43,8 +43,8 @@ public final class AssertIllegalArgument {
     }
 
     /**
-     * @param obj obj
-     * @param arg arg
+     * @param obj       obj
+     * @param arguDescp arguDescp
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(java.lang.Object,
      *      java.lang.String)
      */
@@ -63,8 +63,8 @@ public final class AssertIllegalArgument {
     }
 
     /**
-     * @param array array
-     * @param arg   arg
+     * @param array     array
+     * @param arguDescp arguDescp
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(java.lang.Object[],
      *      java.lang.String)
      */
@@ -74,7 +74,7 @@ public final class AssertIllegalArgument {
 
     /**
      * @param collection collection
-     * @param arg        arg
+     * @param arguDescp  arguDescp
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(java.util.Collection,
      *      java.lang.String)
      */
@@ -83,8 +83,8 @@ public final class AssertIllegalArgument {
     }
 
     /**
-     * @param map map
-     * @param arg arg
+     * @param map       map
+     * @param arguDescp arguDescp
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(java.util.Map,
      *      java.lang.String)
      */

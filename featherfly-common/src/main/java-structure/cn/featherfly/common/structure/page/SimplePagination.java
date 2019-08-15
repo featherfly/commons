@@ -5,7 +5,6 @@ package cn.featherfly.common.structure.page;
  * 简单分页模型实现
  * </p>
  *
- * @param <E> 存放的对象类型
  * @author zhongj
  */
 public class SimplePagination implements Pagination {

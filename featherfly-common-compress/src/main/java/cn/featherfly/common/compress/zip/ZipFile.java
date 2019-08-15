@@ -86,7 +86,7 @@ public class ZipFile {
      * @return this
      */
     public ZipFile decompress(File decompressDir) {
-        AssertIllegalArgument.isNotNull(decompressDir, "decompressDir不能为空!");
+        AssertIllegalArgument.isNotNull(decompressDir, "decompressDir");
         assertIsNotFile(decompressDir);
         LOGGER.debug("开始解压ZIP文件：{}", file.getAbsolutePath());
         try {
@@ -119,7 +119,7 @@ public class ZipFile {
      * @return this
      */
     public ZipFile decompress(String decompressDir) {
-        AssertIllegalArgument.isNotEmpty(decompressDir, "decompressDir不能为空!");
+        AssertIllegalArgument.isNotEmpty(decompressDir, "decompressDir");
         decompress(new File(decompressDir));
         return this;
     }
@@ -135,8 +135,8 @@ public class ZipFile {
      * @return this
      */
     public ZipFile decompress(String filePath, String decompressDir) throws IOException {
-        AssertIllegalArgument.isNotEmpty(filePath, "filePath不能为空!");
-        AssertIllegalArgument.isNotEmpty(decompressDir, "decompressDir不能为空!");
+        AssertIllegalArgument.isNotEmpty(filePath, "filePath");
+        AssertIllegalArgument.isNotEmpty(decompressDir, "decompressDir");
         File dir = new File(decompressDir);
         assertIsNotFile(dir);
         try {
@@ -161,8 +161,8 @@ public class ZipFile {
      * @return this
      */
     public ZipFile decompress(String filePath, File decompressFile) {
-        AssertIllegalArgument.isNotEmpty(filePath, "filePath不能为空!");
-        AssertIllegalArgument.isNotNull(decompressFile, "decompressFile不能为空!");
+        AssertIllegalArgument.isNotEmpty(filePath, "filePath");
+        AssertIllegalArgument.isNotNull(decompressFile, "decompressFile");
         assertIsNotDir(decompressFile);
         try {
             writeFile(getResourceAsStream(filePath), decompressFile);
@@ -183,8 +183,8 @@ public class ZipFile {
      * @return this
      */
     public ZipFile decompress(String filePath, String decompressDir, String fileName) {
-        AssertIllegalArgument.isNotNull(decompressDir, "decompressDir不能为空!");
-        AssertIllegalArgument.isNotNull(fileName, "fileName不能为空!");
+        AssertIllegalArgument.isNotNull(decompressDir, "decompressDir");
+        AssertIllegalArgument.isNotNull(fileName, "fileName");
         decompress(filePath, new File(decompressDir + Chars.DIV + fileName));
         return this;
     }

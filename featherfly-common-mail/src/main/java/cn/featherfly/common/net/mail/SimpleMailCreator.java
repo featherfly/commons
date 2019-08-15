@@ -212,7 +212,7 @@ public class SimpleMailCreator implements MailCreator<Mail> {
      * <p>
      * 存储文件. 可以由子类覆盖.
      * </p>
-     * 
+     *
      * @param is 附件输入流
      * @return 存储的文件
      * @throws IOException

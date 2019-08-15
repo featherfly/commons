@@ -153,7 +153,7 @@ public class MailSender extends AbstractMailClient {
                     message.setHeader(PROPERTY_PREFIX + property.getKey(),
                             MimeUtility.encodeText(property.getValue(), getCharset(), getEncoding()));
                 } catch (UnsupportedEncodingException e) {
-                    logger.debug("参数[{}]编码出错：{}", property.getValue(), e.getMessage());
+                    logger.error("参数[{}]编码出错：{}", property.getValue(), e.getMessage());
                     message.setHeader(PROPERTY_PREFIX + property.getKey(), property.getValue());
                 }
             }
@@ -170,7 +170,7 @@ public class MailSender extends AbstractMailClient {
         try {
             return MimeUtility.encodeText(str, getCharset(), getEncoding());
         } catch (Exception e) {
-            logger.debug("编码字符串时[{}]出错：{}", str, e.getMessage());
+            logger.error("编码字符串时[{}]出错：{}", str, e.getMessage());
         }
         return str;
     }

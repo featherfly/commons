@@ -51,7 +51,9 @@ public class MailReceiver extends AbstractMailClient {
     }
 
     /**
-     * @throws MessagingException
+     * @param mailUser
+     * @param pop3MailServer
+     * @param props
      */
     public MailReceiver(MailUser mailUser, Pop3MailServer pop3MailServer, Map<String, Object> props) {
         super(mailUser, null, pop3MailServer, props);
@@ -60,7 +62,9 @@ public class MailReceiver extends AbstractMailClient {
     }
 
     /**
-     * @throws MessagingException
+     * @param mailUser
+     * @param imapMailServer
+     * @param props
      */
     public MailReceiver(MailUser mailUser, ImapMailServer imapMailServer, Map<String, Object> props) {
         super(mailUser, null, imapMailServer, props);

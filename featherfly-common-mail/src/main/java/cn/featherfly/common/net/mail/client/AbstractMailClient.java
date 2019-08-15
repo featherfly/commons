@@ -31,7 +31,7 @@ import cn.featherfly.common.net.mail.SmtpMailServer;
  * <p>
  * 抽象邮件发送客户端
  * </p>
- * 
+ *
  * @author 钟冀
  */
 public abstract class AbstractMailClient {
@@ -48,7 +48,8 @@ public abstract class AbstractMailClient {
     public static final String PROPERTY_PREFIX = "prop-";
 
     /**
-     * @throws MessagingException
+     * @param mailUser
+     * @param smtpMailServer
      */
     public AbstractMailClient(MailUser mailUser, SmtpMailServer smtpMailServer) {
         this(mailUser, smtpMailServer, null);
@@ -63,21 +64,27 @@ public abstract class AbstractMailClient {
     }
 
     /**
-     * @throws MessagingException
+     * @param mailUser
+     * @param imapMailServer
      */
     public AbstractMailClient(MailUser mailUser, ImapMailServer imapMailServer) {
         this(mailUser, null, imapMailServer);
     }
 
     /**
-     * @throws MessagingException
+     * @param mailUser
+     * @param smtpServer
+     * @param storeServer
      */
     public AbstractMailClient(MailUser mailUser, MailServer smtpServer, MailServer storeServer) {
         this(mailUser, smtpServer, storeServer, null);
     }
 
     /**
-     * @throws MessagingException
+     * @param mailUser
+     * @param smtpServer
+     * @param storeServer
+     * @param props
      */
     public AbstractMailClient(MailUser mailUser, MailServer smtpServer, MailServer storeServer,
             Map<String, Object> props) {
@@ -89,7 +96,7 @@ public abstract class AbstractMailClient {
     }
 
     /**
-     * @param mailClient mailClient
+     * @param mailClient
      */
     public AbstractMailClient(AbstractMailClient mailClient) {
         this(mailClient.mailUser, mailClient.smtpServer, mailClient.storeServer);
@@ -193,7 +200,7 @@ public abstract class AbstractMailClient {
 
     /**
      * 返回session
-     * 
+     *
      * @return session
      */
     protected Session getSession() {
@@ -202,7 +209,7 @@ public abstract class AbstractMailClient {
 
     /**
      * 返回smtpServer
-     * 
+     *
      * @return smtpServer
      */
     protected MailServer getSmtpServer() {
@@ -211,7 +218,7 @@ public abstract class AbstractMailClient {
 
     /**
      * 返回storeServer
-     * 
+     *
      * @return storeServer
      */
     protected MailServer getStoreServer() {
@@ -243,7 +250,7 @@ public abstract class AbstractMailClient {
 
     /**
      * 返回debug
-     * 
+     *
      * @return debug
      */
     public boolean isDebug() {
@@ -252,7 +259,7 @@ public abstract class AbstractMailClient {
 
     /**
      * 设置debug
-     * 
+     *
      * @param debug debug
      */
     public void setDebug(boolean debug) {
@@ -295,7 +302,7 @@ public abstract class AbstractMailClient {
 
     /**
      * 返回mailLogFile
-     * 
+     *
      * @return mailLogFile
      */
     public String getMailLogFile() {
@@ -304,7 +311,7 @@ public abstract class AbstractMailClient {
 
     /**
      * 设置mailLogFile
-     * 
+     *
      * @param mailLogFile mailLogFile
      */
     public void setMailLogFile(String mailLogFile) {
@@ -313,7 +320,7 @@ public abstract class AbstractMailClient {
 
     /**
      * 返回charset
-     * 
+     *
      * @return charset
      */
     public String getCharset() {
@@ -322,7 +329,7 @@ public abstract class AbstractMailClient {
 
     /**
      * 设置charset
-     * 
+     *
      * @param charset charset
      */
     public void setCharset(String charset) {
@@ -331,7 +338,7 @@ public abstract class AbstractMailClient {
 
     /**
      * 返回encoding
-     * 
+     *
      * @return encoding
      */
     public String getEncoding() {
@@ -340,7 +347,7 @@ public abstract class AbstractMailClient {
 
     /**
      * 设置encoding
-     * 
+     *
      * @param encoding encoding
      */
     public void setEncoding(String encoding) {
@@ -349,7 +356,7 @@ public abstract class AbstractMailClient {
 
     /**
      * 返回props
-     * 
+     *
      * @return props
      */
     public Map<String, Object> getProps() {
@@ -358,7 +365,7 @@ public abstract class AbstractMailClient {
 
     /**
      * 返回mailUser
-     * 
+     *
      * @return mailUser
      */
     public MailUser getMailUser() {

@@ -58,11 +58,10 @@ public class MailSender extends AbstractMailClient {
     }
 
     /**
-     * <p>
      * 发送邮件
-     * </p>
-     *
-     * @throws MessagingException
+     * 
+     * @param mailAddress
+     * @param mailBody
      */
     public void send(MailAddress mailAddress, MailBody mailBody) {
         setDebug();

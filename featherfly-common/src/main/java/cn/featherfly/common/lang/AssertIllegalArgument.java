@@ -23,23 +23,23 @@ public final class AssertIllegalArgument {
     }
 
     /**
-     * @param object object
-     * @param arg    arg
+     * @param object    object
+     * @param arguDescp argument descption
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotNull(java.lang.Object,
      *      java.lang.String)
      */
-    public static void isNotNull(Object object, String arg) {
-        ASSERT.isNotNull(object, arg);
+    public static void isNotNull(Object object, String arguDescp) {
+        ASSERT.isNotNull(object, arguDescp);
     }
 
     /**
-     * @param text text
-     * @param arg  arg
+     * @param text      text
+     * @param arguDescp argument descption
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotBlank(java.lang.String,
      *      java.lang.String)
      */
-    public static void isNotBlank(String text, String arg) {
-        ASSERT.isNotBlank(text, arg);
+    public static void isNotBlank(String text, String arguDescp) {
+        ASSERT.isNotBlank(text, arguDescp);
     }
 
     /**
@@ -48,18 +48,18 @@ public final class AssertIllegalArgument {
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(java.lang.Object,
      *      java.lang.String)
      */
-    public static void isNotEmpty(Object obj, String arg) {
-        ASSERT.isNotEmpty(obj, arg);
+    public static void isNotEmpty(Object obj, String arguDescp) {
+        ASSERT.isNotEmpty(obj, arguDescp);
     }
 
     /**
-     * @param text text
-     * @param arg  arg
+     * @param text      text
+     * @param arguDescp argument descption
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(java.lang.String,
      *      java.lang.String)
      */
-    public static void isNotEmpty(String text, String arg) {
-        ASSERT.isNotEmpty(text, arg);
+    public static void isNotEmpty(String text, String arguDescp) {
+        ASSERT.isNotEmpty(text, arguDescp);
     }
 
     /**
@@ -68,8 +68,8 @@ public final class AssertIllegalArgument {
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(java.lang.Object[],
      *      java.lang.String)
      */
-    public static void isNotEmpty(Object[] array, String arg) {
-        ASSERT.isNotEmpty(array, arg);
+    public static void isNotEmpty(Object[] array, String arguDescp) {
+        ASSERT.isNotEmpty(array, arguDescp);
     }
 
     /**
@@ -78,8 +78,8 @@ public final class AssertIllegalArgument {
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(java.util.Collection,
      *      java.lang.String)
      */
-    public static void isNotEmpty(Collection<?> collection, String arg) {
-        ASSERT.isNotEmpty(collection, arg);
+    public static void isNotEmpty(Collection<?> collection, String arguDescp) {
+        ASSERT.isNotEmpty(collection, arguDescp);
     }
 
     /**
@@ -88,18 +88,18 @@ public final class AssertIllegalArgument {
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(java.util.Map,
      *      java.lang.String)
      */
-    public static void isNotEmpty(Map<?, ?> map, String arg) {
-        ASSERT.isNotEmpty(map, arg);
+    public static void isNotEmpty(Map<?, ?> map, String arguDescp) {
+        ASSERT.isNotEmpty(map, arguDescp);
     }
 
     /**
-     * @param file file
-     * @param arg  arg
+     * @param file      file
+     * @param arguDescp argument descption
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isExists(java.io.File,
      *      java.lang.String)
      */
-    public static void isExists(File file, String arg) {
-        ASSERT.isExists(file, arg);
+    public static void isExists(File file, String arguDescp) {
+        ASSERT.isExists(file, arguDescp);
     }
 
     /**

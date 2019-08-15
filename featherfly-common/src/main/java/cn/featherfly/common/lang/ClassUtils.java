@@ -715,7 +715,7 @@ public final class ClassUtils {
      * @return 对象
      */
     public static <T> T newInstance(Class<T> clazz) {
-        AssertIllegalArgument.isNotNull(clazz, clazz.getName() + "不能为空");
+        AssertIllegalArgument.isNotNull(clazz, "Class<T> clazz");
         if (clazz.isInterface()) {
             throw new IllegalArgumentException(
                     StringUtils.format("传入 [#1] 是接口 不能实例化", new String[] { clazz.getName() }));
@@ -739,21 +739,60 @@ public final class ClassUtils {
      * @param <T>   泛型
      * @return 对象
      */
+    @SuppressWarnings("unchecked")
     public static <T> T newInstance(Class<T> clazz, Object... args) {
-        AssertIllegalArgument.isNotNull(clazz, clazz.getName() + "不能为空");
+        AssertIllegalArgument.isNotNull(clazz, "Class<T> clazz");
         if (LangUtils.isNotEmpty(args)) {
-            Class<?>[] types = new Class<?>[args.length];
+            List<Constructor<T>> matchConstructors = new ArrayList<>();
+            for (Constructor<?> constructor : clazz.getConstructors()) {
+                if (constructor.getParameterCount() == args.length) {
+                    matchConstructors.add((Constructor<T>) constructor);
+                }
+            }
+            Class<?>[] arguTypes = new Class<?>[args.length];
             for (int i = 0; i < args.length; i++) {
-                types[i] = args[i].getClass();
+                arguTypes[i] = args[i].getClass();
+            }
+            Constructor<T> matchConstructor = null;
+            for (Constructor<T> constructor : matchConstructors) {
+                boolean matchAllParamType = true;
+                Class<?>[] paramTypes = constructor.getParameterTypes();
+                for (int i = 0; i < arguTypes.length; i++) {
+                    if (paramTypes[i] != arguTypes[i]) {
+                        matchAllParamType = false;
+                        break;
+                    }
+                }
+                if (matchAllParamType) {
+                    matchConstructor = constructor;
+                    break;
+                }
+            }
+            if (matchConstructor == null) {
+                for (Constructor<T> constructor : matchConstructors) {
+                    boolean matchAllParamType = true;
+                    Class<?>[] paramTypes = constructor.getParameterTypes();
+                    for (int i = 0; i < arguTypes.length; i++) {
+                        if (!ClassUtils.isParent(paramTypes[i], arguTypes[i])) {
+                            matchAllParamType = false;
+                            break;
+                        }
+                    }
+                    if (matchAllParamType) {
+                        matchConstructor = constructor;
+                        break;
+                    }
+                }
+            }
+            if (matchConstructor == null) {
+                throw new RuntimeException(StringUtils.format("[#1{#2}] 此构造器不存在",
+                        new String[] { clazz.getName(), Arrays.asList(arguTypes).toString() }));
             }
             try {
-                return newInstance(clazz.getConstructor(types), args);
+                return newInstance(matchConstructor, args);
             } catch (SecurityException e) {
                 throw new RuntimeException(StringUtils.format("[#1{#2}] 此构造器不可访问",
-                        new String[] { clazz.getName(), Arrays.asList(types).toString() }));
-            } catch (NoSuchMethodException e) {
-                throw new RuntimeException(StringUtils.format("[#1{#2}] 此构造器不存在",
-                        new String[] { clazz.getName(), Arrays.asList(types).toString() }));
+                        new String[] { clazz.getName(), Arrays.asList(arguTypes).toString() }));
             }
         } else {
             return newInstance(clazz);
@@ -764,34 +803,35 @@ public final class ClassUtils {
     /**
      * 实例化.
      *
-     * @param ctor 构造器
-     * @param args 参数数组
-     * @param <T>  泛型
+     * @param constructor 构造器
+     * @param args        参数数组
+     * @param <T>         泛型
      * @return 对象
      */
-    public static <T> T newInstance(Constructor<T> ctor, Object... args) {
-        AssertIllegalArgument.isNotNull(ctor, "构造器不能为空");
-        if (!Modifier.isPublic(ctor.getModifiers()) || !Modifier.isPublic(ctor.getDeclaringClass().getModifiers())) {
-            ctor.setAccessible(true);
+    public static <T> T newInstance(Constructor<T> constructor, Object... args) {
+        AssertIllegalArgument.isNotNull(constructor, "Constructor<T> constructor");
+        if (!Modifier.isPublic(constructor.getModifiers())
+                || !Modifier.isPublic(constructor.getDeclaringClass().getModifiers())) {
+            constructor.setAccessible(true);
         }
         try {
-            return ctor.newInstance(args);
+            return constructor.newInstance(args);
         } catch (IllegalArgumentException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
-            throw new RuntimeException(
-                    StringUtils.format(" [#1] 是否定义成抽象类了 不能实例化", new String[] { ctor.getDeclaringClass().getName() }));
+            throw new RuntimeException(StringUtils.format(" [#1] 是否定义成抽象类了 不能实例化",
+                    new String[] { constructor.getDeclaringClass().getName() }));
         } catch (InstantiationException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
             throw new RuntimeException(
-                    StringUtils.format("[#1] 构造器是否为私有", new String[] { ctor.getDeclaringClass().getName() }));
+                    StringUtils.format("[#1] 构造器是否为私有", new String[] { constructor.getDeclaringClass().getName() }));
         } catch (IllegalAccessException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
             throw new RuntimeException(
-                    StringUtils.format("构造器参数不匹配", new String[] { ctor.getDeclaringClass().getName() }));
+                    StringUtils.format("构造器参数不匹配", new String[] { constructor.getDeclaringClass().getName() }));
         } catch (InvocationTargetException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
             throw new RuntimeException(
-                    StringUtils.format("[#1] 构造器抛出异常", new String[] { ctor.getDeclaringClass().getName() }));
+                    StringUtils.format("[#1] 构造器抛出异常", new String[] { constructor.getDeclaringClass().getName() }));
         }
     }
 
@@ -879,5 +919,20 @@ public final class ClassUtils {
             }
         }
         return methods;
+    }
+
+    /**
+     * getRawType
+     *
+     * @param type type
+     * @return raw type
+     */
+    public static Type getRawType(Type type) {
+        if (type instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) type;
+            return parameterizedType.getRawType();
+        } else {
+            return type;
+        }
     }
 }

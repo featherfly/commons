@@ -27,104 +27,77 @@ public final class LocalizedExceptionUtils {
      * <p>
      * 抛出指定类型的异常
      * </p>
-     * 
-     * @param exceptionType
-     *            throw exception type
-     * @param message
-     *            message
-     * @param args
-     *            消息绑定参数
+     *
+     * @param exceptionType throw exception type
+     * @param message       message
+     * @param args          消息绑定参数
      */
-    public static void throwException(
-            Class<? extends RuntimeException> exceptionType, String message,
+    public static void throwException(Class<? extends RuntimeException> exceptionType, String message, Object... args) {
+        throw ClassUtils.newInstance(exceptionType, getMessage(exceptionType, message, args, null));
+    }
+
+    /**
+     * <p>
+     * 抛出指定类型的异常
+     * </p>
+     *
+     * @param exceptionType throw exception type
+     * @param locale        locale
+     * @param message       message
+     * @param args          消息绑定参数
+     */
+    public static void throwException(Class<? extends RuntimeException> exceptionType, Locale locale, String message,
             Object... args) {
-        throw ClassUtils.newInstance(exceptionType,
-                getMessage(exceptionType, message, args, null));
+        throw ClassUtils.newInstance(exceptionType, getMessage(exceptionType, message, args, locale));
     }
 
     /**
      * <p>
      * 抛出指定类型的异常
      * </p>
-     * 
-     * @param exceptionType
-     *            throw exception type
-     * @param locale
-     *            locale
-     * @param message
-     *            message
-     * @param args
-     *            消息绑定参数
-     */    
-    public static void throwException(
-            Class<? extends RuntimeException> exceptionType, Locale locale,
-            String message, Object... args) {
-        throw ClassUtils.newInstance(exceptionType,
-                getMessage(exceptionType, message, args, locale));
-    }
-
-    /**
-     * <p>
-     * 抛出指定类型的异常
-     * </p>
-     * 
-     * @param exceptionType
-     *            throw exception type
-     * @param cause
-     *            the cause (which is saved for later retrieval by the
-     *            {@link Throwable#getCause()} method). (A <tt>null</tt> value is
-     *            permitted, and indicates that the cause is nonexistent or
-     *            unknown.)
-     * @param message
-     *            message
-     * @param args
-     *            消息绑定参数
+     *
+     * @param exceptionType throw exception type
+     * @param cause         the cause (which is saved for later retrieval by the
+     *                      {@link Throwable#getCause()} method). (A
+     *                      <tt>null</tt> value is permitted, and indicates that
+     *                      the cause is nonexistent or unknown.)
+     * @param message       message
+     * @param args          消息绑定参数
      */
-    public static void throwException(
-            Class<? extends RuntimeException> exceptionType, Throwable cause,
-            String message, Object... args) {
-        throw ClassUtils.newInstance(exceptionType,
-                getMessage(exceptionType, message, args, null), cause);
+    public static void throwException(Class<? extends RuntimeException> exceptionType, Throwable cause, String message,
+            Object... args) {
+        throw ClassUtils.newInstance(exceptionType, getMessage(exceptionType, message, args, null), cause);
     }
 
     /**
      * <p>
      * 抛出指定类型的异常
      * </p>
-     * 
-     * @param exceptionType
-     *            throw exception type
-     * @param cause
-     *            the cause (which is saved for later retrieval by the
-     *            {@link Throwable#getCause()} method). (A <tt>null</tt> value is
-     *            permitted, and indicates that the cause is nonexistent or
-     *            unknown.)
-     * @param locale
-     *            locale
-     * @param message
-     *            message
-     * @param args
-     *            消息绑定参数
+     *
+     * @param exceptionType throw exception type
+     * @param cause         the cause (which is saved for later retrieval by the
+     *                      {@link Throwable#getCause()} method). (A
+     *                      <tt>null</tt> value is permitted, and indicates that
+     *                      the cause is nonexistent or unknown.)
+     * @param locale        locale
+     * @param message       message
+     * @param args          消息绑定参数
      */
-    public static void throwException(
-            Class<? extends RuntimeException> exceptionType, Throwable cause,
-            Locale locale, String message, Object... args) {
-        throw ClassUtils.newInstance(exceptionType,
-                getMessage(exceptionType, message, args, locale), cause);
+    public static void throwException(Class<? extends RuntimeException> exceptionType, Throwable cause, Locale locale,
+            String message, Object... args) {
+        throw ClassUtils.newInstance(exceptionType, getMessage(exceptionType, message, args, locale), cause);
     }
 
-    private static String getMessage(
-            Class<? extends RuntimeException> exceptionType, String message,
-            Object[] args, Locale locale) {
-        AssertIllegalArgument.isNotNull(exceptionType, "exceptionType");
+    private static String getMessage(Class<? extends RuntimeException> exceptionType, String message, Object[] args,
+            Locale locale) {
+        AssertIllegalArgument.isNotNull(exceptionType, "Class<? extends RuntimeException> exceptionType");
         String msg = null;
         int keyIndex = message.indexOf(ResourceBundleUtils.KEY_SIGN);
         char firstChar = message.charAt(0);
         if (firstChar == ResourceBundleUtils.RESOURCE_SIGN && keyIndex != -1) {
             msg = ResourceBundleUtils.getString(message, args, locale);
         } else if (firstChar == ResourceBundleUtils.KEY_SIGN) {
-            msg = ResourceBundleUtils.getString(exceptionType,
-                    message.substring(1), args, locale);
+            msg = ResourceBundleUtils.getString(exceptionType, message.substring(1), args, locale);
         } else {
             msg = message;
         }

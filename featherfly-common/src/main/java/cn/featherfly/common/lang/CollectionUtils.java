@@ -13,7 +13,7 @@ import java.util.Map;
  * <p>
  * 集合类工具
  * </p>
- * 
+ *
  * @author zhongj
  */
 public final class CollectionUtils {
@@ -25,9 +25,8 @@ public final class CollectionUtils {
      * <p>
      * 返回传入集合是否为空（是null或size=0）
      * </p>
-     * 
-     * @param collection
-     *            传入的集合
+     *
+     * @param collection 传入的集合
      * @return 传入集合是否为空
      */
     public static boolean isEmpty(Collection<?> collection) {
@@ -38,9 +37,8 @@ public final class CollectionUtils {
      * <p>
      * 返回传入集合是否不为空（不是null或size&gt;0）
      * </p>
-     * 
-     * @param collection
-     *            传入的集合
+     *
+     * @param collection 传入的集合
      * @return 传入集合是否不为空
      */
     public static boolean isNotEmpty(Collection<?> collection) {
@@ -51,13 +49,10 @@ public final class CollectionUtils {
      * <p>
      * 批量添加元素到集合，如果collection==null返回false,或者elements为空返回false，其他情况请参考{@link java.util.Collections#addAll(Collection, Object...)}
      * </p>
-     * 
-     * @param collection
-     *            集合
-     * @param elements
-     *            需要批量添加的元素
-     * @param <T>
-     *            泛型
+     *
+     * @param collection 集合
+     * @param elements   需要批量添加的元素
+     * @param <T>        泛型
      * @return 是否添加
      */
     public static <T> boolean addAll(Collection<T> collection, @SuppressWarnings("unchecked") T... elements) {
@@ -74,20 +69,17 @@ public final class CollectionUtils {
      * <p>
      * 转换为数组. 如果传入集合为空（null或者size=0），返回长度为0的数组（不会返回null）.
      * </p>
-     * 
-     * @param <A>
-     *            泛型
-     * @param collection
-     *            集合
-     * @param type
-     *            类型
+     *
+     * @param <A>        泛型
+     * @param collection 集合
+     * @param type       类型
      * @return 数组
      */
     public static <A> A[] toArray(Collection<A> collection, Class<A> type) {
-        AssertIllegalArgument.isNotNull(type, "type不能为空");
+        AssertIllegalArgument.isNotNull(type, "Class<A> type");
         A[] results = null;
         if (collection == null) {
-            collection = new ArrayList<A>();
+            collection = new ArrayList<>();
         }
         results = ArrayUtils.create(type, collection.size());
         int i = 0;
@@ -102,31 +94,28 @@ public final class CollectionUtils {
      * <p>
      * 根据传入类型创建Collection实例
      * </p>
-     * 
-     * @param type
-     *            类型
-     * @param <C>
-     *            返回Collection实例泛型
-     * @param <E>
-     *            返回Collection的泛型
+     *
+     * @param type 类型
+     * @param <C>  返回Collection实例泛型
+     * @param <E>  返回Collection的泛型
      * @return Collection实例
      */
     @SuppressWarnings("unchecked")
     public static <C extends Collection<E>, E> C newInstance(Class<?> type) {
-//        AssertIllegalArgument.isTrue(ClassUtils.isParent(Collection.class, type), "传入类型必须是Collection接口的子接口或实现类");
+        //        AssertIllegalArgument.isTrue(ClassUtils.isParent(Collection.class, type), "传入类型必须是Collection接口的子接口或实现类");
         AssertIllegalArgument.isParent(Collection.class, type);
         if (ClassUtils.isInstanceClass(type)) {
             return (C) ClassUtils.newInstance(type);
         } else {
-            C collection = null; 
+            C collection = null;
             if (type == Collection.class) {
                 collection = (C) new ArrayList<E>();
             } else if (ClassUtils.isParent(type, ArrayList.class)) {
-                collection =  (C) new ArrayList<E>();
+                collection = (C) new ArrayList<E>();
             } else if (ClassUtils.isParent(type, HashSet.class)) {
-                collection =  (C) new HashSet<E>();
+                collection = (C) new HashSet<E>();
             } else if (ClassUtils.isParent(type, ArrayDeque.class)) {
-                collection =  (C) new ArrayDeque<E>();
+                collection = (C) new ArrayDeque<E>();
             }
             if (collection != null) {
                 return collection;
@@ -139,20 +128,21 @@ public final class CollectionUtils {
      * <p>
      * 根据传入的类型生成Map实例
      * </p>
+     * 
      * @param type 类型
-     * @param <K> Map Key泛型
-     * @param <V> Map Value泛型
+     * @param <K>  Map Key泛型
+     * @param <V>  Map Value泛型
      * @return Map实例
      */
     @SuppressWarnings("unchecked")
     public static <K, V> Map<K, V> newMap(Class<?> type) {
-//        AssertIllegalArgument.isTrue(ClassUtils.isParent(Map.class, type), "传入类型必须是Map接口的子接口或实现类");
+        //        AssertIllegalArgument.isTrue(ClassUtils.isParent(Map.class, type), "传入类型必须是Map接口的子接口或实现类");
         AssertIllegalArgument.isParent(Map.class, type);
         if (ClassUtils.isInstanceClass(type)) {
             return (Map<K, V>) ClassUtils.newInstance(type);
         } else {
             if (type == Map.class) {
-                return new HashMap<K, V>();
+                return new HashMap<>();
             }
             throw new IllegalArgumentException("不支持的类型：" + type.getName());
         }

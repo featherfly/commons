@@ -18,6 +18,14 @@ import cn.featherfly.common.bean.vo.User;
 public class BeanUtilsTest {
 
     @Test
+    public void testToString() {
+        User user = new User();
+        user.setName("yufei");
+        user.setAge(20);
+        System.out.println(BeanUtils.toString(user));
+    }
+
+    @Test
     public void testC2P() {
         P p = new P();
         C c = new C();
@@ -39,22 +47,22 @@ public class BeanUtilsTest {
         System.out.println(c.getName());
         assertEquals(p.getName(), c.getName());
     }
-    
+
     @Test
     public void testMerge() {
         C c = new C();
         D d = new D();
-        
+
         c.setN("c-N");
         c.setName("c->name");
         d.setName("d->name");
         d.setAge(18);
-        
+
         BeanUtils.mergeProperties(d, c);
         System.out.println("d -> " + BeanUtils.toMap(d));
         System.out.println("c -> " + BeanUtils.toMap(c));
         assertEquals(d.getName(), c.getName());
-        
+
         c.setN("c-N");
         c.setName("c->name");
         d.setName("d->name");
@@ -64,12 +72,12 @@ public class BeanUtilsTest {
         System.out.println("d -> " + BeanUtils.toMap(d));
         assertEquals(d.getName(), c.getName());
     }
-    
+
     @Test
     public void testMergeNull() {
         BeanUtils.mergeProperties(null, null);
     }
-    
+
     @Test
     public void testSetInnerProperty() {
         ResultUser user = new ResultUser();
@@ -77,13 +85,12 @@ public class BeanUtilsTest {
         user.setData(new User());
         user.getData().setAge(18);
         user.getData().setName("featherfly");
-        
+
         Object name = BeanUtils.getProperty(user, "data.name");
         System.out.println("user.getData().getName() -> " + name);
         assertEquals(user.getData().getName(), name);
-        
-        
-        Result<Object> result = new Result<Object>();
+
+        Result<Object> result = new Result<>();
         result.setMessage("result.msg");
         User user2 = new User();
         user2.setName("yufei");
@@ -92,10 +99,9 @@ public class BeanUtilsTest {
         name = BeanUtils.getProperty(result, "data.name");
         System.out.println("result.getData().getName() -> " + name);
         assertEquals(user2.getName(), name);
-        
-        
+
         String newname = "yi";
-        BeanUtils.setProperty(result, "data.name", newname);        
+        BeanUtils.setProperty(result, "data.name", newname);
         System.out.println("result.getData().getName() -> " + user2.getName());
         assertEquals(newname, user2.getName());
     }
@@ -107,7 +113,7 @@ class P {
 
     /**
      * 返回name
-     * 
+     *
      * @return name
      */
     public String getName() {
@@ -116,9 +122,8 @@ class P {
 
     /**
      * 设置name
-     * 
-     * @param name
-     *            name
+     *
+     * @param name name
      */
     public void setName(String name) {
         this.name = name;
@@ -133,7 +138,7 @@ class D {
 
     /**
      * 返回name
-     * 
+     *
      * @return name
      */
     public String getName() {
@@ -142,9 +147,8 @@ class D {
 
     /**
      * 设置name
-     * 
-     * @param name
-     *            name
+     *
+     * @param name name
      */
     public void setName(String name) {
         this.name = name;
@@ -152,7 +156,7 @@ class D {
 
     /**
      * 返回age
-     * 
+     *
      * @return age
      */
     public Integer getAge() {
@@ -161,9 +165,8 @@ class D {
 
     /**
      * 设置age
-     * 
-     * @param age
-     *            age
+     *
+     * @param age age
      */
     public void setAge(Integer age) {
         this.age = age;
@@ -176,7 +179,7 @@ class C extends P {
 
     /**
      * 返回n
-     * 
+     *
      * @return n
      */
     public String getN() {
@@ -185,9 +188,8 @@ class C extends P {
 
     /**
      * 设置n
-     * 
-     * @param n
-     *            n
+     *
+     * @param n n
      */
     public void setN(String n) {
         this.n = n;

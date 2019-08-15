@@ -208,7 +208,7 @@ public final class NumberUtils {
      * @return 补全后的字符串
      */
     public static <N extends Number> String fillingAtStart(N number, int minLength, char sign) {
-        AssertIllegalArgument.isNotNull(number, "number");
+        AssertIllegalArgument.isNotNull(number, "N number");
         int requiredLength = minLength - number.toString().length();
         if (requiredLength > 0) {
             StringBuilder pattern = new StringBuilder("'");

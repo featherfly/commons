@@ -213,7 +213,7 @@ public final class FileUtils {
      * @return 删除成功时返回true，否则返回false。
      */
     public static boolean deleteDirectory(String dirName) {
-        AssertIllegalArgument.isNotEmpty(dirName, "Argument is empty.");
+        AssertIllegalArgument.isNotEmpty(dirName, "String dirName");
         return deleteDirectory(new File(dirName));
     }
 
@@ -224,7 +224,7 @@ public final class FileUtils {
      * @return 删除成功时返回true，否则返回false。
      */
     public static boolean deleteDirectory(File dir) {
-        AssertIllegalArgument.isNotNull(dir, "Argument is empty.");
+        AssertIllegalArgument.isNotNull(dir, "File dir");
         if (!dir.exists()) {
             throw new IllegalArgumentException("Argument " + dir + " is not a exists. ");
         }
@@ -257,7 +257,7 @@ public final class FileUtils {
      * @return 删除成功时返回true，否则返回false。
      */
     public static boolean deleteFile(String fileName) {
-        AssertIllegalArgument.isNotEmpty(fileName, "Argument is empty.");
+        AssertIllegalArgument.isNotEmpty(fileName, "String fileName");
         return deleteFile(new File(fileName));
     }
 
@@ -268,7 +268,7 @@ public final class FileUtils {
      * @return 删除成功时返回true，否则返回false。
      */
     public static boolean deleteFile(File file) {
-        AssertIllegalArgument.isNotNull(file, "Argument is empty.");
+        AssertIllegalArgument.isNotNull(file, "File file");
         if (!file.exists()) {
             throw new IllegalArgumentException("Argument " + file + " is not a exists. ");
         }
@@ -285,7 +285,7 @@ public final class FileUtils {
      * @return 删除成功时返回true，否则返回false。
      */
     public static boolean delete(String fileName) {
-        AssertIllegalArgument.isNotEmpty(fileName, "Argument is empty.");
+        AssertIllegalArgument.isNotEmpty(fileName, "String fileName");
         return delete(new File(fileName));
     }
 
@@ -296,7 +296,7 @@ public final class FileUtils {
      * @return 删除成功时返回true，否则返回false。
      */
     public static boolean delete(File file) {
-        AssertIllegalArgument.isNotNull(file, "Argument is null.");
+        AssertIllegalArgument.isNotNull(file, "File file");
         if (!file.exists()) {
             throw new IllegalArgumentException("Argument " + file + " is not a exists. ");
         }
@@ -886,7 +886,7 @@ public final class FileUtils {
      * @throws IOException IOException
      */
     public static boolean createFile(File file) throws IOException {
-        AssertIllegalArgument.isNotNull(file, "createFile param file");
+        AssertIllegalArgument.isNotNull(file, "File file");
         if (file.isDirectory()) {
             createDirectory(file);
             return true;
@@ -904,7 +904,7 @@ public final class FileUtils {
      * @return 创建是否成功
      */
     public static boolean createDirectory(File file) {
-        AssertIllegalArgument.isNotNull(file, "createDirectory param file");
+        AssertIllegalArgument.isNotNull(file, "File file");
         if (file.isFile()) {
             return file.getParentFile().mkdirs();
         } else {
@@ -1063,7 +1063,7 @@ public final class FileUtils {
 
     /**
      * 判断传入资源是否是jar包内的资源
-     * 
+     *
      * @param resourceUrl 资源定位
      * @return boolean
      */

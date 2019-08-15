@@ -14,36 +14,38 @@ import cn.featherfly.common.lang.LangUtils;
  * <p>
  * 匹配器组
  * </p>
+ *
  * @param <M> 泛型
  * @param <O> 泛型
  * @author zhongj
  */
-public class GroupMatcher<M extends Matcher<O>, O> implements Matcher<O>{
-    
+public class GroupMatcher<M extends Matcher<O>, O> implements Matcher<O> {
+
     private Logic logic = Logic.AND;
-    
+
     private Set<M> matchers = new HashSet<>();
-    
+
     /**
      */
     public GroupMatcher() {
     }
-    
+
     /**
      * @param matchers matchers
      */
-    public GroupMatcher(@SuppressWarnings("unchecked") M...matchers) {        
+    public GroupMatcher(@SuppressWarnings("unchecked") M... matchers) {
         CollectionUtils.addAll(this.matchers, matchers);
     }
+
     /**
-     * @param logic match logic
+     * @param logic    match logic
      * @param matchers matchers
      */
-    public GroupMatcher(Logic logic, @SuppressWarnings("unchecked") M...matchers) {
+    public GroupMatcher(Logic logic, @SuppressWarnings("unchecked") M... matchers) {
         setLogic(logic);
         CollectionUtils.addAll(this.matchers, matchers);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -58,28 +60,34 @@ public class GroupMatcher<M extends Matcher<O>, O> implements Matcher<O>{
             return matchOr(o, this.matchers);
         }
     }
+
     /**
      * add matcher
+     *
      * @param matcher matcher
      */
     public void addMatcher(M matcher) {
         this.matchers.add(matcher);
     }
+
     /**
      * add matchers
+     *
      * @param matchers matchers
      */
-    public void addMatcher(@SuppressWarnings("unchecked") M...matchers) {
+    public void addMatcher(@SuppressWarnings("unchecked") M... matchers) {
         CollectionUtils.addAll(this.matchers, matchers);
     }
+
     /**
      * add matchers
+     *
      * @param matchers matchers
      */
     public void addMatcher(Collection<M> matchers) {
         this.matchers.addAll(matchers);
-    }    
-    
+    }
+
     private boolean matchAnd(O o, Collection<M> matchers) {
         boolean matchResult = false;
         for (M matcher : matchers) {
@@ -90,7 +98,7 @@ public class GroupMatcher<M extends Matcher<O>, O> implements Matcher<O>{
         }
         return true;
     }
-    
+
     private boolean matchOr(O o, Collection<M> matchers) {
         boolean matchResult = false;
         for (M matcher : matchers) {
@@ -101,13 +109,14 @@ public class GroupMatcher<M extends Matcher<O>, O> implements Matcher<O>{
         }
         return false;
     }
-    
+
     // ********************************************************************
     //    setter and getter
     // ********************************************************************
 
     /**
      * 返回logic
+     *
      * @return logic
      */
     public Logic getLogic() {
@@ -116,15 +125,17 @@ public class GroupMatcher<M extends Matcher<O>, O> implements Matcher<O>{
 
     /**
      * 设置logic
+     *
      * @param logic logic
      */
     public void setLogic(Logic logic) {
-        AssertIllegalArgument.isNotNull(logic, "logic can not be null");        
+        AssertIllegalArgument.isNotNull(logic, "Logic logic");
         this.logic = logic;
     }
 
     /**
      * 返回matchers
+     *
      * @return matchers
      */
     public Set<M> getMatchers() {
@@ -133,6 +144,7 @@ public class GroupMatcher<M extends Matcher<O>, O> implements Matcher<O>{
 
     /**
      * 设置matchers
+     *
      * @param matchers matchers
      */
     public void setMatchers(Set<M> matchers) {

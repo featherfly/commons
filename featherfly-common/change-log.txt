@@ -1,3 +1,8 @@
+2019-
+1.7.4
+    1.BeanUtils加入toString方法
+    2.ClassUtils加入getRawType(Type type)方法
+
 2019-8-7
 1.7.3 发布
     1.优化UUIDGenerator生成UUID效率

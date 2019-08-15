@@ -27,7 +27,7 @@ public class Limit {
         } else {
             this.offset = offset;
         }
-        AssertIllegalArgument.isNotNull(limit, "param limit can not be null");
+        AssertIllegalArgument.isNotNull(limit, "Integer limit");
         this.limit = limit;
     }
 
@@ -36,7 +36,7 @@ public class Limit {
      */
     public Limit(Page page) {
         super();
-        AssertIllegalArgument.isNotNull(page, "param page can not be null");
+        AssertIllegalArgument.isNotNull(page, "Page page");
         Integer pageNumber = page.getPageNumber();
         Integer pageSize = page.getPageSize();
         if (pageNumber == null) {
@@ -44,7 +44,7 @@ public class Limit {
         } else if (pageNumber < 1) {
             pageNumber = 1;
         }
-        AssertIllegalArgument.isNotNull(pageSize, "param page.pageSize can not be null");
+        AssertIllegalArgument.isNotNull(pageSize, "page.pageSize");
         limit = pageSize;
         offset = (pageNumber - 1) * pageSize;
     }

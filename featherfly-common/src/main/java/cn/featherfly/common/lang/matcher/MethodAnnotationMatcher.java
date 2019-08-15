@@ -11,35 +11,37 @@ import cn.featherfly.common.lang.LangUtils;
  * <p>
  * 匹配Method的注解的实现
  * </p>
+ * 
  * @author zhongj
  */
-public class MethodAnnotationMatcher implements MethodMatcher{
+public class MethodAnnotationMatcher implements MethodMatcher {
 
     private Class<?>[] annotationClasses;
 
     /**
      * 使用并集判断逻辑来匹配.
+     * 
      * @param annotationClasses 注解类型
      */
-    public MethodAnnotationMatcher(Class<?>...annotationClasses) {
-        for (@SuppressWarnings("rawtypes") Class annotationClass : annotationClasses) {
+    public MethodAnnotationMatcher(Class<?>... annotationClasses) {
+        for (@SuppressWarnings("rawtypes")
+        Class annotationClass : annotationClasses) {
             if (!annotationClass.isAnnotation()) {
-                throw new IllegalArgumentException(
-                        String.format("类%s不是注解", annotationClass.getName()));
+                throw new IllegalArgumentException(String.format("类%s不是注解", annotationClass.getName()));
             }
         }
         this.annotationClasses = annotationClasses;
     }
 
     /**
-     * 使用指定的判断逻辑来匹配.
-     * 并集，所有注解都要标注才算匹配；交集，只要有一个标注就算匹配。参见{@link Logic}
-     * @param logic 判断逻辑
+     * 使用指定的判断逻辑来匹配. 并集，所有注解都要标注才算匹配；交集，只要有一个标注就算匹配。参见{@link Logic}
+     * 
+     * @param logic             判断逻辑
      * @param annotationClasses 注解类型
      */
-    public MethodAnnotationMatcher(Logic logic, Class<?>...annotationClasses) {
+    public MethodAnnotationMatcher(Logic logic, Class<?>... annotationClasses) {
         this(annotationClasses);
-        AssertIllegalArgument.isNotNull(logic, "logic can not be null");
+        AssertIllegalArgument.isNotNull(logic, "Logic logic");
         this.logic = logic;
     }
 
@@ -48,8 +50,7 @@ public class MethodAnnotationMatcher implements MethodMatcher{
      */
     @Override
     public boolean match(Method field) {
-        if (LangUtils.isEmpty(annotationClasses)
-                || field == null) {
+        if (LangUtils.isEmpty(annotationClasses) || field == null) {
             return false;
         }
         if (logic == Logic.AND) {
@@ -57,23 +58,25 @@ public class MethodAnnotationMatcher implements MethodMatcher{
             return matchAnd(field);
         } else {
             //交集，只要有一个标注就行
-            return matchOr(field);            
+            return matchOr(field);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     private boolean matchAnd(Method field) {
-        for (@SuppressWarnings("rawtypes") Class annotationClass : annotationClasses) {
+        for (@SuppressWarnings("rawtypes")
+        Class annotationClass : annotationClasses) {
             if (field.getAnnotation(annotationClass) == null) {
                 return false;
             }
         }
         return true;
     }
-    
+
     @SuppressWarnings("unchecked")
     private boolean matchOr(Method field) {
-        for (@SuppressWarnings("rawtypes") Class annotationClass : annotationClasses) {
+        for (@SuppressWarnings("rawtypes")
+        Class annotationClass : annotationClasses) {
             if (field.getAnnotation(annotationClass) != null) {
                 return true;
             }

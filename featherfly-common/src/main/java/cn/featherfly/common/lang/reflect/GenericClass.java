@@ -8,10 +8,11 @@ import cn.featherfly.common.lang.GenericType;
  * <p>
  * GenericClass
  * </p>
+ * 
  * @param <T> 类型
  * @author zhongj
  */
-public class GenericClass<T> implements GenericType<T>{
+public class GenericClass<T> implements GenericType<T> {
 
     private Class<T> c;
 
@@ -19,7 +20,7 @@ public class GenericClass<T> implements GenericType<T>{
      * @param c classType
      */
     public GenericClass(Class<T> c) {
-        AssertIllegalArgument.isNotNull(c, "param class");
+        AssertIllegalArgument.isNotNull(c, "Class<T> c");
         this.c = c;
     }
 

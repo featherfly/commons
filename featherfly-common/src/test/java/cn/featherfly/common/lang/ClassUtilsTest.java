@@ -59,6 +59,6 @@ public class ClassUtilsTest {
 
     @Test
     public void testNewInstance2() {
-        User user = ClassUtils.newInstance(null);
+        ClassUtils.newInstance(null);
     }
 }

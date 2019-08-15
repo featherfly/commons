@@ -225,12 +225,8 @@ public final class FileUtils {
      */
     public static boolean deleteDirectory(File dir) {
         AssertIllegalArgument.isNotNull(dir, "File dir");
-        if (!dir.exists()) {
-            throw new IllegalArgumentException("Argument " + dir + " is not a exists. ");
-        }
-        if (!dir.isDirectory()) {
-            throw new IllegalArgumentException("Argument " + dir + " is not a directory. ");
-        }
+        AssertIllegalArgument.isExists(dir, "File dir");
+        AssertIllegalArgument.isDirectory(dir, "File dir");
         File[] entries = dir.listFiles();
         int sz = entries.length;
         for (int i = 0; i < sz; i++) {
@@ -269,12 +265,8 @@ public final class FileUtils {
      */
     public static boolean deleteFile(File file) {
         AssertIllegalArgument.isNotNull(file, "File file");
-        if (!file.exists()) {
-            throw new IllegalArgumentException("Argument " + file + " is not a exists. ");
-        }
-        if (!file.isFile()) {
-            throw new IllegalArgumentException("Argument " + file + " is not a file. ");
-        }
+        AssertIllegalArgument.isExists(file, "File dir");
+        AssertIllegalArgument.isFile(file, "File dir");
         return file.delete();
     }
 
@@ -297,9 +289,7 @@ public final class FileUtils {
      */
     public static boolean delete(File file) {
         AssertIllegalArgument.isNotNull(file, "File file");
-        if (!file.exists()) {
-            throw new IllegalArgumentException("Argument " + file + " is not a exists. ");
-        }
+        AssertIllegalArgument.isExists(file, "File file");
         if (file.isDirectory()) {
             return deleteDirectory(file);
         } else {

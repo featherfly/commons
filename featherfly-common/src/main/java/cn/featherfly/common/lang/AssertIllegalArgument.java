@@ -122,4 +122,88 @@ public final class AssertIllegalArgument {
         ASSERT.isParent(parentType, subType);
     }
 
+    /**
+     * @param file
+     * @param arguDescp
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isFile(java.io.File,
+     *      java.lang.String)
+     */
+    public static void isFile(File file, String arguDescp) {
+        ASSERT.isFile(file, arguDescp);
+    }
+
+    /**
+     * @param file
+     * @param arguDescp
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isDirectory(java.io.File,
+     *      java.lang.String)
+     */
+    public static void isDirectory(File file, String arguDescp) {
+        ASSERT.isDirectory(file, arguDescp);
+    }
+
+    /**
+     * @param classType
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotInterface(java.lang.Class)
+     */
+    public static void isNotInterface(Class<?> classType) {
+        ASSERT.isNotInterface(classType);
+    }
+
+    /**
+     * @param value
+     * @param min
+     * @param max
+     * @param arguDescp
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isInRange(int,
+     *      int, int, java.lang.String)
+     */
+    public static void isInRange(int value, int min, int max, String arguDescp) {
+        ASSERT.isInRange(value, min, max, arguDescp);
+    }
+
+    /**
+     * @param value
+     * @param min
+     * @param arguDescp
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGt(int, int,
+     *      java.lang.String)
+     */
+    public void isGt(int value, int min, String arguDescp) {
+        ASSERT.isGt(value, min, arguDescp);
+    }
+
+    /**
+     * @param value
+     * @param min
+     * @param arguDescp
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGe(int, int,
+     *      java.lang.String)
+     */
+    public void isGe(int value, int min, String arguDescp) {
+        ASSERT.isGe(value, min, arguDescp);
+    }
+
+    /**
+     * @param value
+     * @param max
+     * @param arguDescp
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLt(int, int,
+     *      java.lang.String)
+     */
+    public void isLt(int value, int max, String arguDescp) {
+        ASSERT.isLt(value, max, arguDescp);
+    }
+
+    /**
+     * @param value
+     * @param max
+     * @param arguDescp
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLe(int, int,
+     *      java.lang.String)
+     */
+    public void isLe(int value, int max, String arguDescp) {
+        ASSERT.isLe(value, max, arguDescp);
+    }
+
 }

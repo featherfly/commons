@@ -6,8 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.featherfly.common.lang.ClassUtils;
-
+import cn.featherfly.common.lang.AssertIllegalArgument;
 
 /**
  * <p>
@@ -17,7 +16,7 @@ import cn.featherfly.common.lang.ClassUtils;
  * @author zhongj
  * @param <T> 描述的类型
  */
-public final class MapBeanDescriptor<T> extends BeanDescriptor<T>{
+public final class MapBeanDescriptor<T> extends BeanDescriptor<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MapBeanDescriptor.class);
 
@@ -26,27 +25,30 @@ public final class MapBeanDescriptor<T> extends BeanDescriptor<T>{
      */
     protected MapBeanDescriptor(Class<T> type) {
         super(type);
-        if (!ClassUtils.isParent(Map.class, type)) {
-            throw new IllegalArgumentException(String.format("类型%s不是Map类型及其子类型", type.getName()));
-        }
+        AssertIllegalArgument.isParent(Map.class, type);
+        //        if (!ClassUtils.isParent(Map.class, type)) {
+        //            throw new IllegalArgumentException(String.format("类型%s不是Map类型及其子类型", type.getName()));
+        //        }
     }
 
     /**
      * <p>
      * 设置属性
-     * @param obj 目标对象
-     * @param name 属性名称
+     *
+     * @param obj   目标对象
+     * @param name  属性名称
      * @param value 属性值
      */
     @Override
     @SuppressWarnings("unchecked")
     public void setProperty(T obj, String name, Object value) {
         if (obj == null) {
-            return ;
+            return;
         }
-        if (!(obj instanceof Map)) {
-            throw new IllegalArgumentException(String.format("类型%s不是Map类型及其子类型", obj.getClass().getName()));
-        }
+        AssertIllegalArgument.isParent(Map.class, obj.getClass());
+        //        if (!(obj instanceof Map)) {
+        //            throw new IllegalArgumentException(String.format("类型%s不是Map类型及其子类型", obj.getClass().getName()));
+        //        }
         Map<String, Object> map = (Map<String, Object>) obj;
         if (name.contains(DOT)) {
             String currentPropertyName = name.substring(0, name.indexOf(DOT));
@@ -54,8 +56,7 @@ public final class MapBeanDescriptor<T> extends BeanDescriptor<T>{
             Object propertyValue = map.get(currentPropertyName);
             //中间层次为空，返回，因为不知道具体类型
             if (propertyValue == null) {
-                LOGGER.trace("类{}的属性[{}]为空，将忽略嵌套的赋值",
-                                new Object[]{type.getName(), name});
+                LOGGER.trace("类{}的属性[{}]为空，将忽略嵌套的赋值", new Object[] { type.getName(), name });
                 return;
             }
             // getBeanDescriptor 会根据类型自动返回相应的 BeanDescriptor
@@ -71,18 +72,21 @@ public final class MapBeanDescriptor<T> extends BeanDescriptor<T>{
      * <p>
      * 返回属性
      * </p>
-     * @param obj 目标对象
+     *
+     * @param obj  目标对象
      * @param name 属性名
      * @return 属性
      */
-    @Override @SuppressWarnings("unchecked")
+    @Override
+    @SuppressWarnings("unchecked")
     public Object getProperty(T obj, String name) {
         if (obj == null) {
             return null;
         }
-        if (!(obj instanceof Map)) {
-            throw new IllegalArgumentException(String.format("类型%s不是Map类型及其子类型", obj.getClass().getName()));
-        }
+        AssertIllegalArgument.isParent(Map.class, obj.getClass());
+        //        if (!(obj instanceof Map)) {
+        //            throw new IllegalArgumentException(String.format("类型%s不是Map类型及其子类型", obj.getClass().getName()));
+        //        }
         Map<String, Object> map = (Map<String, Object>) obj;
         if (name.contains(DOT)) {
             String currentPropertyName = name.substring(0, name.indexOf(DOT));
@@ -91,8 +95,7 @@ public final class MapBeanDescriptor<T> extends BeanDescriptor<T>{
             //如果层次中间一个为空，返回空
             Object result = null;
             if (propertyValue == null) {
-                LOGGER.trace("类{}的属性[{}]为空",
-                                new Object[]{type.getName(), currentPropertyName});
+                LOGGER.trace("类{}的属性[{}]为空", new Object[] { type.getName(), currentPropertyName });
             } else {
                 // getBeanDescriptor 会根据类型自动返回相应的 BeanDescriptor
                 @SuppressWarnings("rawtypes")

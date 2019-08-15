@@ -716,10 +716,11 @@ public final class ClassUtils {
      */
     public static <T> T newInstance(Class<T> clazz) {
         AssertIllegalArgument.isNotNull(clazz, "Class<T> clazz");
-        if (clazz.isInterface()) {
-            throw new IllegalArgumentException(
-                    StringUtils.format("传入 [#1] 是接口 不能实例化", new String[] { clazz.getName() }));
-        }
+        AssertIllegalArgument.isNotInterface(clazz);
+        //        if (clazz.isInterface()) {
+        //            throw new IllegalArgumentException(
+        //                    StringUtils.format("传入 [#1] 是接口 不能实例化", new String[] { clazz.getName() }));
+        //        }
         try {
             return clazz.newInstance();
         } catch (InstantiationException e) {

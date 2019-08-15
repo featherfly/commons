@@ -1,14 +1,17 @@
 
 package cn.featherfly.common.lang;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.lang.asserts.LocalizedAssert;
+import cn.featherfly.common.lang.vo.User;
 
 public class LocalizedAssertTest {
 
@@ -98,6 +101,96 @@ public class LocalizedAssertTest {
     @Test(expectedExceptions = { RuntimeException.class })
     public void testIsNotBlank4() {
         asserts.isNotBlank("     ", "s      e");
+    }
+
+    @Test
+    public void testIsExsits() {
+        asserts.isExists(new File("src"), "src");
+    }
+
+    @Test
+    public void testIsFile() {
+        asserts.isFile(new File("build.gradle"), "build.gradle");
+    }
+
+    @Test
+    public void testIsDir() {
+        asserts.isDirectory(new File("src"), "src");
+    }
+
+    @Test(expectedExceptions = { RuntimeException.class })
+    public void testIsExsits2() {
+        asserts.isExists(new File("src11"), "src11");
+    }
+
+    @Test(expectedExceptions = { RuntimeException.class })
+    public void testIsFile2() {
+        asserts.isFile(new File("build.gradle11"), "build.gradle11");
+    }
+
+    @Test(expectedExceptions = { RuntimeException.class })
+    public void testIsDir2() {
+        asserts.isDirectory(new File("src11"), "src11");
+    }
+
+    @Test
+    public void testIsNotInterface() {
+        asserts.isNotInterface(User.class);
+    }
+
+    @Test(expectedExceptions = { RuntimeException.class })
+    public void testIsNotInterface2() {
+        asserts.isNotInterface(List.class);
+    }
+
+    @Test
+    public void isInRange() {
+        asserts.isInRange(5, 1, 12, "month");
+    }
+
+    @Test(expectedExceptions = { RuntimeException.class })
+    public void isInRange2() {
+        asserts.isInRange(0, 1, 12, "month");
+    }
+
+    @Test
+    public void isGt() {
+        asserts.isGt(5, 1, "month");
+    }
+
+    @Test(expectedExceptions = { RuntimeException.class })
+    public void isGt2() {
+        asserts.isGt(5, 5, "month");
+    }
+
+    @Test
+    public void isGe() {
+        asserts.isGe(5, 5, "month");
+    }
+
+    @Test(expectedExceptions = { RuntimeException.class })
+    public void isGe2() {
+        asserts.isGe(5, 12, "month");
+    }
+
+    @Test
+    public void isLt() {
+        asserts.isLt(5, 12, "month");
+    }
+
+    @Test(expectedExceptions = { RuntimeException.class })
+    public void isLt2() {
+        asserts.isLt(5, 5, "month");
+    }
+
+    @Test
+    public void isLe() {
+        asserts.isLe(5, 5, "month");
+    }
+
+    @Test(expectedExceptions = { RuntimeException.class })
+    public void isLe2() {
+        asserts.isLe(5, 1, "month");
     }
 
     //	@Test

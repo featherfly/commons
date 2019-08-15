@@ -11,8 +11,7 @@ import cn.featherfly.common.lang.StringUtils;
 
 /**
  * <p>
- * 断言工具类，对于满足断言的情况，抛出支持国际化消息输出的异常
- * 一般用于检查传入参数是否合法
+ * 断言工具类，对于满足断言的情况，抛出支持国际化消息输出的异常 一般用于检查传入参数是否合法
  * </p>
  *
  * @since 1.7
@@ -20,7 +19,7 @@ import cn.featherfly.common.lang.StringUtils;
  * @author zhongj
  */
 public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAssert<E> {
-    
+
     private Class<E> exceptionType;
 
     /**
@@ -36,7 +35,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     @Override
     public void isNotNull(Object object, String arg) {
         if (object == null) {
-            throwException("#isNotNull", new Object[] {arg});
+            throwException("#isNotNull", new Object[] { arg });
         }
     }
 
@@ -46,7 +45,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     @Override
     public void isNotBlank(String text, String arg) {
         if (!StringUtils.isNotBlank(text)) {
-            throwException("#isNotBlank", new Object[] {arg});
+            throwException("#isNotBlank", new Object[] { arg });
         }
     }
 
@@ -56,7 +55,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     @Override
     public void isNotEmpty(Object obj, String args) {
         if (!LangUtils.isNotEmpty(obj)) {
-            throwException("#isNotEmpty", new Object[] {args});
+            throwException("#isNotEmpty", new Object[] { args });
         }
     }
 
@@ -66,7 +65,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     @Override
     public void isNotEmpty(String text, String arg) {
         if (!LangUtils.isNotEmpty(text)) {
-            throwException("#isNotEmpty", new Object[] {arg});
+            throwException("#isNotEmpty", new Object[] { arg });
         }
     }
 
@@ -76,7 +75,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     @Override
     public void isNotEmpty(Object[] array, String arg) {
         if (LangUtils.isEmpty(array)) {
-            throwException("#isNotEmpty", new Object[] {arg});
+            throwException("#isNotEmpty", new Object[] { arg });
         }
     }
 
@@ -86,7 +85,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     @Override
     public void isNotEmpty(Collection<?> collection, String arg) {
         if (LangUtils.isEmpty(collection)) {
-            throwException("#isNotEmpty", new Object[] {arg});
+            throwException("#isNotEmpty", new Object[] { arg });
         }
     }
 
@@ -96,7 +95,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     @Override
     public void isNotEmpty(Map<?, ?> map, String arg) {
         if (LangUtils.isEmpty(map)) {
-            throwException("#isNotEmpty", new Object[] {arg});
+            throwException("#isNotEmpty", new Object[] { arg });
         }
     }
 
@@ -104,12 +103,38 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      * {@inheritDoc}
      */
     @Override
-    public void isExists(File file , String args) {
-        if (!LangUtils.isExists(file)) {
-            throwException("#isExists", new Object[] {args});
+    public void isExists(File file, String args) {
+        if (file == null) {
+            throwException("#isExists", args, "null");
+        } else if (!file.exists()) {
+            throwException("#isExists", args, file.getAbsolutePath());
         }
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isFile(File file, String args) {
+        if (file == null) {
+            throwException("#isFile", args, "null");
+        } else if (!file.isFile()) {
+            throwException("#isFile", args, file.getAbsolutePath());
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isDirectory(File file, String args) {
+        if (file == null) {
+            throwException("#isDirectory", args, "null");
+        } else if (!file.isDirectory()) {
+            throwException("#isDirectory", args, file.getAbsolutePath());
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -130,7 +155,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
             throwException("#isInstanceOf", args);
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -152,9 +177,69 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
         }
     }
 
-    private void throwException(String msg, Object[] args) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isNotInterface(Class<?> classType) {
+        if (classType != null && classType.isInterface()) {
+            throwException("#isNotInterface", classType.getName());
+        }
+    }
+
+    private void throwException(String msg, Object... args) {
         msg = "@assert" + msg;
         LocalizedExceptionUtils.throwException(exceptionType, msg, args);
-//        throw ClassUtils.newInstance(exceptionType, ResourceBundleUtils.getString(msg, args));
+        //        throw ClassUtils.newInstance(exceptionType, ResourceBundleUtils.getString(msg, args));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isInRange(int value, int min, int max, String arguDescp) {
+        if (value < min || value > max) {
+            throwException("#isInRange", value, min, max, arguDescp);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isGt(int value, int min, String arguDescp) {
+        if (value <= min) {
+            throwException("#isGt", value, min, arguDescp);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isGe(int value, int min, String arguDescp) {
+        if (value < min) {
+            throwException("#isGe", value, min, arguDescp);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isLt(int value, int max, String arguDescp) {
+        if (value >= max) {
+            throwException("#isLt", value, max, arguDescp);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isLe(int value, int max, String arguDescp) {
+        if (value > max) {
+            throwException("#isLe", value, max, arguDescp);
+        }
     }
 }

@@ -784,9 +784,10 @@ public final class DateUtils {
      */
     public static int getMaxDayOfMonth(int year, int month) {
         final int lastMonth = 12;
-        if (month < 1 || month > lastMonth) {
-            throw new IllegalArgumentException("month 必须是 1-12 的整数 ");
-        }
+        AssertIllegalArgument.isInRange(month, 1, lastMonth, "month");
+        //        if (month < 1 || month > lastMonth) {
+        //            throw new IllegalArgumentException("month 必须是 1-12 的整数 ");
+        //        }
         return getMaxDayOfMonth(getDate(year, month, 1));
     }
 

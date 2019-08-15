@@ -1,4 +1,4 @@
-2019-
+2019-8-15
 1.7.4
     1.BeanUtils加入toString方法
     2.ClassUtils加入getRawType(Type type)方法

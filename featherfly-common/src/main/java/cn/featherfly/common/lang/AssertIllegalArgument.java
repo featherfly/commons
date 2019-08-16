@@ -169,7 +169,7 @@ public final class AssertIllegalArgument {
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGt(int, int,
      *      java.lang.String)
      */
-    public void isGt(int value, int min, String arguDescp) {
+    public static void isGt(int value, int min, String arguDescp) {
         ASSERT.isGt(value, min, arguDescp);
     }
 
@@ -180,7 +180,7 @@ public final class AssertIllegalArgument {
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGe(int, int,
      *      java.lang.String)
      */
-    public void isGe(int value, int min, String arguDescp) {
+    public static void isGe(int value, int min, String arguDescp) {
         ASSERT.isGe(value, min, arguDescp);
     }
 
@@ -191,7 +191,7 @@ public final class AssertIllegalArgument {
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLt(int, int,
      *      java.lang.String)
      */
-    public void isLt(int value, int max, String arguDescp) {
+    public static void isLt(int value, int max, String arguDescp) {
         ASSERT.isLt(value, max, arguDescp);
     }
 
@@ -202,7 +202,7 @@ public final class AssertIllegalArgument {
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLe(int, int,
      *      java.lang.String)
      */
-    public void isLe(int value, int max, String arguDescp) {
+    public static void isLe(int value, int max, String arguDescp) {
         ASSERT.isLe(value, max, arguDescp);
     }
 

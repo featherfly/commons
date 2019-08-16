@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +29,7 @@ import cn.featherfly.common.lang.StringUtils;
  *
  * @author zhongj
  */
-public final class FileUtils {
+public final class FileUtils extends org.apache.commons.io.FileUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FileUtils.class);
 
@@ -212,9 +211,9 @@ public final class FileUtils {
      * @param dirName 要删除的目录的目录名
      * @return 删除成功时返回true，否则返回false。
      */
-    public static boolean deleteDirectory(String dirName) {
+    public static boolean deleteDir(String dirName) {
         AssertIllegalArgument.isNotEmpty(dirName, "String dirName");
-        return deleteDirectory(new File(dirName));
+        return deleteDir(new File(dirName));
     }
 
     /**
@@ -223,7 +222,7 @@ public final class FileUtils {
      * @param dir 要删除的目录
      * @return 删除成功时返回true，否则返回false。
      */
-    public static boolean deleteDirectory(File dir) {
+    public static boolean deleteDir(File dir) {
         AssertIllegalArgument.isNotNull(dir, "File dir");
         AssertIllegalArgument.isExists(dir, "File dir");
         AssertIllegalArgument.isDirectory(dir, "File dir");
@@ -231,7 +230,7 @@ public final class FileUtils {
         int sz = entries.length;
         for (int i = 0; i < sz; i++) {
             if (entries[i].isDirectory()) {
-                if (!deleteDirectory(entries[i])) {
+                if (!deleteDir(entries[i])) {
                     return false;
                 }
             } else {
@@ -291,7 +290,7 @@ public final class FileUtils {
         AssertIllegalArgument.isNotNull(file, "File file");
         AssertIllegalArgument.isExists(file, "File file");
         if (file.isDirectory()) {
-            return deleteDirectory(file);
+            return deleteDir(file);
         } else {
             return deleteFile(file);
         }
@@ -674,17 +673,6 @@ public final class FileUtils {
     /**
      * 复制文件夹
      *
-     * @param srcDir  源文件夹
-     * @param destDir 目标文件夹
-     * @throws IOException IOException
-     */
-    public static void copyDirectory(File srcDir, File destDir) throws IOException {
-        org.apache.commons.io.FileUtils.copyDirectory(srcDir, destDir);
-    }
-
-    /**
-     * 复制文件夹
-     *
      * @param srcDir     源文件夹
      * @param destDir    目标文件夹
      * @param fileFilter 过滤器
@@ -692,18 +680,6 @@ public final class FileUtils {
      */
     public static void copyDirectory(String srcDir, String destDir, FileFilter fileFilter) throws IOException {
         copyDirectory(new File(srcDir), new File(destDir), fileFilter);
-    }
-
-    /**
-     * 复制文件夹
-     *
-     * @param srcDir     源文件夹
-     * @param destDir    目标文件夹
-     * @param fileFilter 过滤器
-     * @throws IOException IOException
-     */
-    public static void copyDirectory(File srcDir, File destDir, FileFilter fileFilter) throws IOException {
-        org.apache.commons.io.FileUtils.copyDirectory(srcDir, destDir, fileFilter);
     }
 
     /**
@@ -718,29 +694,6 @@ public final class FileUtils {
     }
 
     /**
-     * 移动文件夹
-     *
-     * @param srcDir  源文件夹
-     * @param destDir 目标文件夹
-     * @throws IOException IOException
-     */
-    public static void moveDirectory(File srcDir, File destDir) throws IOException {
-        org.apache.commons.io.FileUtils.moveDirectory(srcDir, destDir);
-    }
-
-    /**
-     * 移动文件夹
-     *
-     * @param srcDir        源文件夹
-     * @param destDir       目标文件夹
-     * @param createDestDir 创建目标目录
-     * @throws IOException IOException
-     */
-    public static void moveDirectoryToDirectory(File srcDir, File destDir, boolean createDestDir) throws IOException {
-        org.apache.commons.io.FileUtils.moveDirectoryToDirectory(srcDir, destDir, createDestDir);
-    }
-
-    /**
      * 复制文件
      *
      * @param srcFile  源文件
@@ -749,17 +702,6 @@ public final class FileUtils {
      */
     public static void copyFile(String srcFile, String destFile) throws IOException {
         copyFile(new File(srcFile), new File(destFile));
-    }
-
-    /**
-     * 复制文件
-     *
-     * @param srcFile  源文件
-     * @param destFile 目标文件
-     * @throws IOException IOException
-     */
-    public static void copyFile(File srcFile, File destFile) throws IOException {
-        org.apache.commons.io.FileUtils.copyFile(srcFile, destFile);
     }
 
     /**
@@ -774,17 +716,6 @@ public final class FileUtils {
     }
 
     /**
-     * 复制文件到指定文件夹
-     *
-     * @param srcFile 源文件（夹）
-     * @param destDir 目标文件夹，作为源文件（夹）的父目录
-     * @throws IOException IOException
-     */
-    public static void copyFileToDirectory(File srcFile, File destDir) throws IOException {
-        org.apache.commons.io.FileUtils.copyFileToDirectory(srcFile, destDir);
-    }
-
-    /**
      * 移动文件
      *
      * @param srcFile  源文件
@@ -793,29 +724,6 @@ public final class FileUtils {
      */
     public static void moveFile(String srcFile, String destFile) throws IOException {
         moveDirectory(new File(srcFile), new File(destFile));
-    }
-
-    /**
-     * 移动文件
-     *
-     * @param srcFile  源文件
-     * @param destFile 目标文件
-     * @throws IOException IOException
-     */
-    public static void moveFile(File srcFile, File destFile) throws IOException {
-        org.apache.commons.io.FileUtils.moveFile(srcFile, destFile);
-    }
-
-    /**
-     * 移动文件
-     *
-     * @param srcFile       源文件
-     * @param destDir       目标目录
-     * @param createDestDir 创建目标目录
-     * @throws IOException IOException
-     */
-    public static void moveFile(File srcFile, File destDir, boolean createDestDir) throws IOException {
-        org.apache.commons.io.FileUtils.moveFileToDirectory(srcFile, destDir, createDestDir);
     }
 
     /**
@@ -900,138 +808,6 @@ public final class FileUtils {
         } else {
             return file.mkdirs();
         }
-    }
-
-    /**
-     * <p>
-     * 将文本数据写入文件
-     * </p>
-     *
-     * @param file 文件
-     * @param data 文本数据
-     * @throws IOException IOException
-     */
-    public static void write(File file, String data) throws IOException {
-        write(file, data, null);
-    }
-
-    /**
-     * <p>
-     * 将文本数据使用指定编码写入文件
-     * </p>
-     *
-     * @param file     文件
-     * @param data     文本数据
-     * @param encoding 编码
-     * @throws IOException IOException
-     */
-    public static void write(File file, String data, String encoding) throws IOException {
-        org.apache.commons.io.FileUtils.writeStringToFile(file, data, encoding);
-    }
-
-    /**
-     * <p>
-     * 将字符序列写入文件
-     * </p>
-     *
-     * @param file 文件
-     * @param data 字符序列
-     * @throws IOException IOException
-     */
-    public static void write(File file, CharSequence data) throws IOException {
-        write(file, data, null);
-    }
-
-    /**
-     * <p>
-     * 将字符序列使用指定编码写入文件
-     * </p>
-     *
-     * @param file     文件
-     * @param data     字符序列
-     * @param encoding 编码
-     * @throws IOException IOException
-     */
-    public static void write(File file, CharSequence data, String encoding) throws IOException {
-        org.apache.commons.io.FileUtils.write(file, data, encoding);
-    }
-
-    /**
-     * <p>
-     * 将字节数组写入文件
-     * </p>
-     *
-     * @param file 文件
-     * @param data 字符序列
-     * @throws IOException IOException
-     */
-    public static void write(File file, byte[] data) throws IOException {
-        org.apache.commons.io.FileUtils.writeByteArrayToFile(file, data);
-    }
-
-    /**
-     * <p>
-     * 将文本行序列写入文件
-     * </p>
-     *
-     * @param file  文件
-     * @param lines 文本行序列
-     * @throws IOException IOException
-     */
-    public static void writeLines(File file, Collection<String> lines) throws IOException {
-        writeLines(file, null, lines);
-    }
-
-    /**
-     * <p>
-     * 将文本行序列使用指定编码写入文件
-     * </p>
-     *
-     * @param file     文件
-     * @param encoding 编码
-     * @param lines    文本行序列
-     * @throws IOException IOException
-     */
-    public static void writeLines(File file, String encoding, Collection<String> lines) throws IOException {
-        org.apache.commons.io.FileUtils.writeLines(file, encoding, lines);
-    }
-
-    /**
-     * <p>
-     * 将文本行序列使用指定编码写入文件
-     * </p>
-     *
-     * @param file         文件
-     * @param encoding     编码
-     * @param lines        文本行序列
-     * @param lineEncoding 文本行的编码
-     * @throws IOException IOException
-     */
-    public static void writeLines(File file, String encoding, Collection<String> lines, String lineEncoding)
-            throws IOException {
-        org.apache.commons.io.FileUtils.writeLines(file, encoding, lines, lineEncoding);
-    }
-
-    /**
-     * <p>
-     * 获取用户目录
-     * </p>
-     *
-     * @return 用户目录
-     */
-    public static File getUserDirectory() {
-        return org.apache.commons.io.FileUtils.getUserDirectory();
-    }
-
-    /**
-     * <p>
-     * 获取临时目录
-     * </p>
-     *
-     * @return 临时目录
-     */
-    public static File getTempDirectory() {
-        return org.apache.commons.io.FileUtils.getTempDirectory();
     }
 
     /**

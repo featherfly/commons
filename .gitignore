@@ -4,3 +4,4 @@
 **/.settings
 .classpath
 .project
+/featherfly-common-locale-database

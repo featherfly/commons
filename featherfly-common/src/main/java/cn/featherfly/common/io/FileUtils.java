@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.LogUtils;
-import cn.featherfly.common.lang.StringUtils;
 
 /**
  * <p>
@@ -31,11 +30,12 @@ import cn.featherfly.common.lang.StringUtils;
  */
 public final class FileUtils extends org.apache.commons.io.FileUtils {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileUtils.class);
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(FileUtils.class);
 
     private static final Map<String, Long> FILES = new HashMap<>();
 
-    //私有构造方法，防止类的实例化，因为工具类不需要实例化。
+    // 私有构造方法，防止类的实例化，因为工具类不需要实例化。
     private FileUtils() {
     }
 
@@ -45,7 +45,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * 如果传入的文件是系统启动后对该文件的非第一次判断，则返回上一次判断时文件的修改时间和这次文件的修改时间是否一致。
      * </p>
      *
-     * @param file 文件
+     * @param file
+     *            文件
      * @return 文件自系统启动后是否修改过
      */
     public static boolean isChanged(File file) {
@@ -64,7 +65,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * 修改文件的最后访问时间。 如果文件不存在则创建该文件。
      * <b>目前这个方法的行为方式还不稳定，主要是方法有些信息输出，这些信息输出是否保留还在考虑中。</b>
      *
-     * @param file 需要修改最后访问时间的文件。
+     * @param file
+     *            需要修改最后访问时间的文件。
      */
     public static void touch(File file) {
         long currentTime = System.currentTimeMillis();
@@ -91,7 +93,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * 修改文件的最后访问时间。 如果文件不存在则创建该文件。
      * <b>目前这个方法的行为方式还不稳定，主要是方法有些信息输出，这些信息输出是否保留还在考虑中。</b>
      *
-     * @param fileName 需要修改最后访问时间的文件的文件名。
+     * @param fileName
+     *            需要修改最后访问时间的文件的文件名。
      */
     public static void touch(String fileName) {
         File file = new File(fileName);
@@ -102,7 +105,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * 修改文件的最后访问时间。 如果文件不存在则创建该文件。
      * <b>目前这个方法的行为方式还不稳定，主要是方法有些信息输出，这些信息输出是否保留还在考虑中。</b>
      *
-     * @param files 需要修改最后访问时间的文件数组。
+     * @param files
+     *            需要修改最后访问时间的文件数组。
      */
     public static void touch(File[] files) {
         for (int i = 0; i < files.length; i++) {
@@ -114,7 +118,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * 修改文件的最后访问时间。 如果文件不存在则创建该文件。
      * <b>目前这个方法的行为方式还不稳定，主要是方法有些信息输出，这些信息输出是否保留还在考虑中。</b>
      *
-     * @param fileNames 需要修改最后访问时间的文件名数组。
+     * @param fileNames
+     *            需要修改最后访问时间的文件名数组。
      */
     public static void touch(String[] fileNames) {
         File[] files = new File[fileNames.length];
@@ -127,7 +132,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 创建指定的目录。 如果指定的目录的父目录不存在则创建其目录书上所有需要的父目录。 <b>注意：可能会在返回false的时候创建部分父目录。</b>
      *
-     * @param file 要创建的目录
+     * @param file
+     *            要创建的目录
      * @return 完全创建成功时返回true，否则返回false。
      */
     public static boolean makeDirectory(File file) {
@@ -141,7 +147,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 创建指定的目录。 如果指定的目录的父目录不存在则创建其目录书上所有需要的父目录。 <b>注意：可能会在返回false的时候创建部分父目录。</b>
      *
-     * @param fileName 要创建的目录的目录名
+     * @param fileName
+     *            要创建的目录的目录名
      * @return 完全创建成功时返回true，否则返回false。
      */
     public static boolean makeDirectory(String fileName) {
@@ -153,7 +160,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * 清空指定目录中的文件。 这个方法将尽可能删除所有的文件，但是只要有一个文件没有被删除都会返回false。
      * 另外这个方法不会迭代删除，即不会删除子目录及其内容。
      *
-     * @param directory 要清空的目录
+     * @param directory
+     *            要清空的目录
      * @return 目录下的所有文件都被成功删除时返回true，否则返回false.
      */
     public static boolean clearDirectory(File directory) {
@@ -170,8 +178,10 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 清空指定目录中的文件。 这个方法将尽可能删除所有的文件，但是只要有一个文件没有被删除都会返回false。
      *
-     * @param directory 要清空的目录
-     * @param cascade   是否级联删除子目录
+     * @param directory
+     *            要清空的目录
+     * @param cascade
+     *            是否级联删除子目录
      * @return 目录下的所有文件都被成功删除时返回true，否则返回false.
      */
     public static boolean clearDirectory(File directory, boolean cascade) {
@@ -197,7 +207,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * 清空指定目录中的文件。 这个方法将尽可能删除所有的文件，但是只要有一个文件没有被删除都会返回false。
      * 另外这个方法不会迭代删除，即不会删除子目录及其内容。
      *
-     * @param directoryName 要清空的目录的目录名
+     * @param directoryName
+     *            要清空的目录的目录名
      * @return 目录下的所有文件都被成功删除时返回true，否则返回false。
      */
     public static boolean clearDirectory(String directoryName) {
@@ -208,7 +219,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 删除指定目录及其中的所有内容。
      *
-     * @param dirName 要删除的目录的目录名
+     * @param dirName
+     *            要删除的目录的目录名
      * @return 删除成功时返回true，否则返回false。
      */
     public static boolean deleteDir(String dirName) {
@@ -219,7 +231,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 删除指定目录及其中的所有内容。
      *
-     * @param dir 要删除的目录
+     * @param dir
+     *            要删除的目录
      * @return 删除成功时返回true，否则返回false。
      */
     public static boolean deleteDir(File dir) {
@@ -248,7 +261,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 删除指定文件。
      *
-     * @param fileName 要删除的文件名
+     * @param fileName
+     *            要删除的文件名
      * @return 删除成功时返回true，否则返回false。
      */
     public static boolean deleteFile(String fileName) {
@@ -259,7 +273,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 删除指定文件。
      *
-     * @param file 要删除的文件
+     * @param file
+     *            要删除的文件
      * @return 删除成功时返回true，否则返回false。
      */
     public static boolean deleteFile(File file) {
@@ -272,7 +287,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 删除指定文件或目录。
      *
-     * @param fileName 要删除的文件或目录
+     * @param fileName
+     *            要删除的文件或目录
      * @return 删除成功时返回true，否则返回false。
      */
     public static boolean delete(String fileName) {
@@ -283,7 +299,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 删除指定文件或目录。
      *
-     * @param file 要删除的文件或目录
+     * @param file
+     *            要删除的文件或目录
      * @return 删除成功时返回true，否则返回false。
      */
     public static boolean delete(File file) {
@@ -299,7 +316,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 列出目录中的所有内容，包括其子目录中的内容。
      *
-     * @param fileName 要列出的目录的目录名
+     * @param fileName
+     *            要列出的目录的目录名
      * @return 目录内容的文件数组。
      */
     public static File[] listAll(String fileName) {
@@ -309,7 +327,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 列出目录中的所有内容，包括其子目录中的内容。
      *
-     * @param file 要列出的目录
+     * @param file
+     *            要列出的目录
      * @return 目录内容的文件数组。
      */
     public static File[] listAll(File file) {
@@ -321,15 +340,16 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
         list(list, file, null);
         list.remove(file);
         files = new File[list.size()];
-        list.toArray(files);
-        return files;
+        return list.toArray(files);
     }
 
     /**
      * 列出目录中的所有内容，包括其子目录中的内容。
      *
-     * @param file   要列出的目录
-     * @param filter 过滤器
+     * @param file
+     *            要列出的目录
+     * @param filter
+     *            过滤器
      * @return 目录内容的文件数组。
      */
     public static File[] listAll(File file, FileFilter filter) {
@@ -340,36 +360,33 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
         }
         list(list, file, filter);
         files = new File[list.size()];
-        list.toArray(files);
-        return files;
+        return list.toArray(files);
     }
 
     /**
      * 将目录中的内容添加到列表。
      *
-     * @param list   文件列表
-     * @param file   目录
-     * @param filter 过滤器
+     * @param list
+     *            文件列表
+     * @param file
+     *            目录
+     * @param filter
+     *            过滤器
      */
-    private static void list(ArrayList<File> list, File file, FileFilter filter) {
-        if (filter != null) {
-            if (filter.accept(file)) {
-                if (file.isDirectory()) {
-                    File[] files = file.listFiles();
-                    for (int i = 0; i < files.length; i++) {
-                        list(list, files[i], filter);
-                    }
-                } else if (file.isFile()) {
+    private static void list(ArrayList<File> list, File file,
+            FileFilter filter) {
+        System.out.println(file.getAbsolutePath());
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                list(list, files[i], filter);
+            }
+        } else if (file.isFile()) {
+            if (filter != null) {
+                if (filter.accept(file)) {
                     list.add(file);
                 }
-            }
-        } else {
-            if (file.isDirectory()) {
-                File[] files = file.listFiles();
-                for (int i = 0; i < files.length; i++) {
-                    list(list, files[i], filter);
-                }
-            } else if (file.isFile()) {
+            } else {
                 list.add(file);
             }
         }
@@ -380,7 +397,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * 获取文件根目录
      * </p>
      *
-     * @param file 文件
+     * @param file
+     *            文件
      * @return 根目录
      */
     public static File getRootDir(File file) {
@@ -401,7 +419,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     public static File getRootDir() {
         URL resource = FileUtils.class.getResource("/");
         if (resource == null) {
-            resource = Thread.currentThread().getContextClassLoader().getResource(".");
+            resource = Thread.currentThread().getContextClassLoader()
+                    .getResource(".");
         }
         return getRootDir(new File(resource.getPath()));
     }
@@ -409,7 +428,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 返回文件的URI地址. 如果传入对象为null则返回null
      *
-     * @param file 文件
+     * @param file
+     *            文件
      * @return 文件对应的的URI地址
      */
     public static URI getURI(File file) {
@@ -424,7 +444,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * 返回文件大小（速度快）.如果文件不存在返回-1.
      * </p>
      *
-     * @param file 文件
+     * @param file
+     *            文件
      * @return 文件大小
      */
     public static long getLength(File file) {
@@ -438,7 +459,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 从文件路径得到文件名。
      *
-     * @param filePath 文件的路径，可以是相对路径也可以是绝对路径
+     * @param filePath
+     *            文件的路径，可以是相对路径也可以是绝对路径
      * @return 对应的文件名
      */
     public static String getFileName(String filePath) {
@@ -448,7 +470,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 从文件路径得到文件名.
      *
-     * @param file 文件对象
+     * @param file
+     *            文件对象
      * @return 对应的文件名
      */
     public static String getFileName(File file) {
@@ -461,7 +484,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 从文件名得到文件绝对路径。
      *
-     * @param fileName 文件名
+     * @param fileName
+     *            文件名
      * @return 对应的文件路径
      */
     public static String getFilePath(String fileName) {
@@ -471,7 +495,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 从文件得到文件绝对路径。
      *
-     * @param file 文件
+     * @param file
+     *            文件
      * @return 对应的文件路径
      */
     public static String getFilePath(File file) {
@@ -484,7 +509,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 得到上级路径. 就是得到文件（文件夹）所在的路径.
      *
-     * @param path 路径
+     * @param path
+     *            路径
      * @return 上级路径
      */
     public static String getParentPath(String path) {
@@ -494,7 +520,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 得到上级路径. 就是得到文件（文件夹）所在的路径.
      *
-     * @param file 文件
+     * @param file
+     *            文件
      * @return 上级路径
      */
     public static String getParentPath(File file) {
@@ -507,17 +534,20 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 得到文件的扩展名. 实际上就是得到文件名中最后一个“.”后面的部分。
      *
-     * @param fileName 文件名
+     * @param fileName
+     *            文件名
      * @return 文件名中的类型部分
      */
     public static String getFileExtName(String fileName) {
-        return StringUtils.substringAfterLast(fileName, Chars.DOT);
+        return org.apache.commons.lang3.StringUtils.substringAfterLast(fileName,
+                Chars.DOT);
     }
 
     /**
      * 得到文件的扩展名.
      *
-     * @param file 文件
+     * @param file
+     *            文件
      * @return 文件名中的类型部分
      * @see #getFileExtName(String filename) getFileExtName
      */
@@ -533,7 +563,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * 其实就是将路径中的"\"全部换为"/"，因为在某些情况下我们转换为这种方式比较方便，
      * 某中程度上说"/"比"\"更适合作为路径分隔符，而且DOS/Windows也将它当作路径分隔符。
      *
-     * @param filePath 转换前的路径
+     * @param filePath
+     *            转换前的路径
      * @return 转换后的路径
      */
     public static String toUnixPath(String filePath) {
@@ -546,7 +577,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 从文件名得到UNIX风格的文件绝对路径。
      *
-     * @param fileName 文件名
+     * @param fileName
+     *            文件名
      * @return 对应的UNIX风格的文件路径
      * @see #toUnixPath(String filePath) toUNIXpath
      */
@@ -561,7 +593,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 得到路径分隔符在文件路径中首次出现的位置。 对于DOS或者UNIX风格的分隔符都可以。
      *
-     * @param fileName 文件路径
+     * @param fileName
+     *            文件路径
      * @return 路径分隔符在路径中首次出现的位置，没有出现时返回-1。
      */
     public static int getPathIndex(String fileName) {
@@ -578,8 +611,10 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 得到路径分隔符在文件路径中指定位置后首次出现的位置。 对于DOS或者UNIX风格的分隔符都可以。
      *
-     * @param fileName  文件路径
-     * @param fromIndex 开始查找的位置
+     * @param fileName
+     *            文件路径
+     * @param fromIndex
+     *            开始查找的位置
      * @return 路径分隔符在路径中指定位置后首次出现的位置，没有出现时返回-1。
      */
     public static int getPathIndex(String fileName, int fromIndex) {
@@ -596,7 +631,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 得到路径分隔符在文件路径中最后出现的位置。 对于DOS或者UNIX风格的分隔符都可以。
      *
-     * @param fileName 文件路径
+     * @param fileName
+     *            文件路径
      * @return 路径分隔符在路径中最后出现的位置，没有出现时返回-1。
      */
     public static int getPathLsatIndex(String fileName) {
@@ -613,8 +649,10 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 得到路径分隔符在文件路径中指定位置前最后出现的位置。 对于DOS或者UNIX风格的分隔符都可以。
      *
-     * @param fileName  文件路径
-     * @param fromIndex 开始查找的位置
+     * @param fileName
+     *            文件路径
+     * @param fromIndex
+     *            开始查找的位置
      * @return 路径分隔符在路径中指定位置前最后出现的位置，没有出现时返回-1。
      */
     public static int getPathLsatIndex(String fileName, int fromIndex) {
@@ -631,7 +669,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 将文件名中的扩展名部分去掉.
      *
-     * @param fileName 文件名
+     * @param fileName
+     *            文件名
      * @return 去掉类型部分的结果
      */
     public static String trimExtName(String fileName) {
@@ -646,8 +685,10 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 得到相对路径。 文件名不是目录名的子节点时返回文件名。
      *
-     * @param pathName 目录名
-     * @param fileName 文件名
+     * @param pathName
+     *            目录名
+     * @param fileName
+     *            文件名
      * @return 得到文件名相对于目录名的相对路径，目录下不存在该文件时返回文件名
      */
     public static String getSubpath(String pathName, String fileName) {
@@ -662,82 +703,112 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 复制文件夹
      *
-     * @param srcDir  源文件夹
-     * @param destDir 目标文件夹
-     * @throws IOException IOException
+     * @param srcDir
+     *            源文件夹
+     * @param destDir
+     *            目标文件夹
+     * @throws IOException
+     *             IOException
      */
-    public static void copyDirectory(String srcDir, String destDir) throws IOException {
+    public static void copyDirectory(String srcDir, String destDir)
+            throws IOException {
         copyDirectory(new File(srcDir), new File(destDir));
     }
 
     /**
      * 复制文件夹
      *
-     * @param srcDir     源文件夹
-     * @param destDir    目标文件夹
-     * @param fileFilter 过滤器
-     * @throws IOException IOException
+     * @param srcDir
+     *            源文件夹
+     * @param destDir
+     *            目标文件夹
+     * @param fileFilter
+     *            过滤器
+     * @throws IOException
+     *             IOException
      */
-    public static void copyDirectory(String srcDir, String destDir, FileFilter fileFilter) throws IOException {
+    public static void copyDirectory(String srcDir, String destDir,
+            FileFilter fileFilter) throws IOException {
         copyDirectory(new File(srcDir), new File(destDir), fileFilter);
     }
 
     /**
      * 移动文件夹
      *
-     * @param srcDir  源文件夹
-     * @param destDir 目标文件夹
-     * @throws IOException IOException
+     * @param srcDir
+     *            源文件夹
+     * @param destDir
+     *            目标文件夹
+     * @throws IOException
+     *             IOException
      */
-    public static void moveDirectory(String srcDir, String destDir) throws IOException {
+    public static void moveDirectory(String srcDir, String destDir)
+            throws IOException {
         moveDirectory(new File(srcDir), new File(destDir));
     }
 
     /**
      * 复制文件
      *
-     * @param srcFile  源文件
-     * @param destFile 目标文件
-     * @throws IOException IOException
+     * @param srcFile
+     *            源文件
+     * @param destFile
+     *            目标文件
+     * @throws IOException
+     *             IOException
      */
-    public static void copyFile(String srcFile, String destFile) throws IOException {
+    public static void copyFile(String srcFile, String destFile)
+            throws IOException {
         copyFile(new File(srcFile), new File(destFile));
     }
 
     /**
      * 复制文件到指定文件夹
      *
-     * @param srcFile 源文件（夹）
-     * @param destDir 目标文件夹，作为源文件（夹）的父目录
-     * @throws IOException IOException
+     * @param srcFile
+     *            源文件（夹）
+     * @param destDir
+     *            目标文件夹，作为源文件（夹）的父目录
+     * @throws IOException
+     *             IOException
      */
-    public static void copyFileToDirectory(String srcFile, String destDir) throws IOException {
+    public static void copyFileToDirectory(String srcFile, String destDir)
+            throws IOException {
         copyFileToDirectory(new File(srcFile), new File(destDir));
     }
 
     /**
      * 移动文件
      *
-     * @param srcFile  源文件
-     * @param destFile 目标文件
-     * @throws IOException IOException
+     * @param srcFile
+     *            源文件
+     * @param destFile
+     *            目标文件
+     * @throws IOException
+     *             IOException
      */
-    public static void moveFile(String srcFile, String destFile) throws IOException {
+    public static void moveFile(String srcFile, String destFile)
+            throws IOException {
         moveDirectory(new File(srcFile), new File(destFile));
     }
 
     /**
      * 读取文档正文
      *
-     * @param filePath 文件路径
-     * @param charset  字符集
+     * @param filePath
+     *            文件路径
+     * @param charset
+     *            字符集
      * @return 文档正文
-     * @throws IOException IOException
+     * @throws IOException
+     *             IOException
      */
-    public static String getFileContent(String filePath, String charset) throws IOException {
+    public static String getFileContent(String filePath, String charset)
+            throws IOException {
         String tempStr = "";
         StringBuilder tempStr2 = new StringBuilder();
-        BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), charset));
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(new FileInputStream(filePath), charset));
         while ((tempStr = in.readLine()) != null) {
             tempStr2.append(tempStr).append("\n");
         }
@@ -748,15 +819,20 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 读取文档正文
      *
-     * @param filePath 文件路径
-     * @param charset  字符集
+     * @param filePath
+     *            文件路径
+     * @param charset
+     *            字符集
      * @return 文档正文
-     * @throws IOException IOException
+     * @throws IOException
+     *             IOException
      */
-    public static List<String> getFileContentLines(String filePath, String charset) throws IOException {
+    public static List<String> getFileContentLines(String filePath,
+            String charset) throws IOException {
         List<String> lines = new ArrayList<>();
         String line = "";
-        BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), charset));
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(new FileInputStream(filePath), charset));
         while ((line = in.readLine()) != null) {
             lines.add(line);
         }
@@ -767,7 +843,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 判断指定的文件是否存在。
      *
-     * @param fileName 要判断的文件的文件名
+     * @param fileName
+     *            要判断的文件的文件名
      * @return 存在时返回true，否则返回false。
      */
     public static boolean isExist(String fileName) {
@@ -779,9 +856,11 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * 文件的创建 如果路经不存在，则自动创建路经
      * </p>
      *
-     * @param file 需要创建的文件
+     * @param file
+     *            需要创建的文件
      * @return 创建是否成功
-     * @throws IOException IOException
+     * @throws IOException
+     *             IOException
      */
     public static boolean createFile(File file) throws IOException {
         AssertIllegalArgument.isNotNull(file, "File file");
@@ -798,7 +877,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 创建文件夹，自动创建不存在的父目录.
      *
-     * @param file 需要创建的目录
+     * @param file
+     *            需要创建的目录
      * @return 创建是否成功
      */
     public static boolean createDirectory(File file) {
@@ -813,7 +893,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 获取jar包内的path. 如果resourceUrl为空，则返回空，如果不是jar包内资源，则直接返回path
      *
-     * @param resourceUrl resource url
+     * @param resourceUrl
+     *            resource url
      * @return path
      */
     public static String getPathInJar(URL resourceUrl) {
@@ -821,7 +902,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
             return null;
         }
         if (isResourceInJar(resourceUrl)) {
-            return StringUtils.substringAfter(resourceUrl.getPath(), "!");
+            return org.apache.commons.lang3.StringUtils
+                    .substringAfter(resourceUrl.getPath(), "!");
         } else {
             return resourceUrl.getPath();
         }
@@ -830,7 +912,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 判断传入资源是否是jar包内的资源
      *
-     * @param resourceUrl 资源定位
+     * @param resourceUrl
+     *            资源定位
      * @return boolean
      */
     public static boolean isResourceInJar(URL resourceUrl) {

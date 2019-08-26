@@ -118,19 +118,18 @@ public final class ClassUtils {
     /**
      * 返回目标类型的指定名称的字段，支持多层嵌套 例如, user.address.no
      *
-     * @param target    目标类型
+     * @param type      目标类型
      * @param fieldName 字段名
-     * @throws NoSuchFieldException 没有找到传入字段时抛出
      * @return 目标类型的指定名称的字段，支持多层嵌套
      */
-    public static Field getField(Class<?> target, String fieldName) {
+    public static Field getField(Class<?> type, String fieldName) {
         try {
             if (fieldName.contains(DOT)) {
                 String currentFieldName = fieldName.substring(0, fieldName.indexOf(DOT));
                 String innerFieldName = fieldName.substring(fieldName.indexOf(DOT) + 1);
-                return getField(target.getDeclaredField(currentFieldName).getType(), innerFieldName);
+                return getField(type.getDeclaredField(currentFieldName).getType(), innerFieldName);
             } else {
-                return target.getDeclaredField(fieldName);
+                return type.getDeclaredField(fieldName);
             }
         } catch (NoSuchFieldException | SecurityException e) {
             throw new ReflectException(e);
@@ -140,9 +139,8 @@ public final class ClassUtils {
     /**
      * 返回目标类型的指定类型的静态字段值，支持多层嵌套 例如, user.address.no
      *
-     * @param target    目标类型
+     * @param type      目标类型
      * @param fieldName 字段名
-     * @throws NoSuchFieldException 没有找到传入字段时抛出
      * @return 目标类型的指定名称的字段，支持多层嵌套
      */
     public static Object getFieldValue(Class<?> type, String fieldName) {
@@ -156,9 +154,8 @@ public final class ClassUtils {
     /**
      * 返回目标对象的指定类型的字段值，支持多层嵌套 例如, user.address.no
      *
-     * @param target    目标对象
+     * @param object    目标对象
      * @param fieldName 字段名
-     * @throws NoSuchFieldException 没有找到传入字段时抛出
      * @return 目标类型的指定名称的字段，支持多层嵌套
      */
     public static Object getFieldValue(Object object, String fieldName) {
@@ -200,7 +197,7 @@ public final class ClassUtils {
     /**
      * invoke object method
      *
-     * @param type       type
+     * @param object     object
      * @param methodName method name
      * @return method return value
      */
@@ -211,7 +208,7 @@ public final class ClassUtils {
     /**
      * invoke object method
      *
-     * @param type       type
+     * @param object     object
      * @param methodName method name
      * @param args       method arguments
      * @return method return value

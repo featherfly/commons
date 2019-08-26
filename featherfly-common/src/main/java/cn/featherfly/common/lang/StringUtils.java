@@ -1,7 +1,6 @@
 package cn.featherfly.common.lang;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,7 +13,6 @@ import java.util.regex.Pattern;
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.constant.Charset;
 import cn.featherfly.common.constant.Unit;
-import cn.featherfly.common.lang.number.ChineseNumber;
 
 /**
  * <p>
@@ -896,7 +894,7 @@ public final class StringUtils extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * 取字符串的后X个字符,X为传入参数.
+     * 取字符串从x开始后的字符,X为传入参数.
      *
      * @param str   字符串
      * @param index 序号
@@ -910,7 +908,25 @@ public final class StringUtils extends org.apache.commons.lang3.StringUtils {
         if (length <= index) {
             return str;
         }
-        return str.substring(length - index, length - 1);
+        return str.substring(index + 1, length);
+    }
+
+    /**
+     * 取字符串的后X个字符,X为传入参数.
+     *
+     * @param str    字符串
+     * @param length 长度
+     * @return 子串.
+     */
+    public static String substringLast(String str, int length) {
+        if (isEmpty(str)) {
+            return str;
+        }
+        int len = str.length();
+        if (len <= length) {
+            return str;
+        }
+        return str.substring(len - length);
     }
 
     /**
@@ -1124,67 +1140,5 @@ public final class StringUtils extends org.apache.commons.lang3.StringUtils {
             uri += name + "=" + value;
         }
         return uri;
-    }
-
-    /**
-     * 将阿拉伯数字转换为中文大写的金额数字.
-     *
-     * @param value 阿拉伯数字的金额
-     * @return 中文大写数字
-     */
-    public static String toChineseMoneyNumber(BigDecimal value) {
-        return toChineseMoneyNumber(value.doubleValue());
-    }
-
-    /**
-     * 将阿拉伯数字转换为中文大写的金额数字.
-     *
-     * @param value 阿拉伯数字的金额
-     * @return 中文大写数字
-     */
-    public static String toChineseMoneyNumber(double value) {
-        return new ChineseNumber(false).toMoneyNumberWord(value);
-    }
-
-    /**
-     * 将阿拉伯数字转换为中文大写数字.
-     *
-     * @param number 阿拉伯数字
-     * @return 中文大写数字
-     */
-    public static String toChineseNumber(long number) {
-        return toChineseNumber(number, false);
-    }
-
-    /**
-     * 将阿拉伯数字转换为中文数字.
-     *
-     * @param number 阿拉伯数字
-     * @param simple 是否简写中文数字
-     * @return 中文数字
-     */
-    public static String toChineseNumber(long number, boolean simple) {
-        return new ChineseNumber(simple).toNumberWord(number);
-    }
-
-    /**
-     * 将阿拉伯数字转换为中文大写数字.
-     *
-     * @param number 阿拉伯数字
-     * @return 中文大写数字
-     */
-    public static String toChineseNumber(int number) {
-        return toChineseNumber(number, false);
-    }
-
-    /**
-     * 将阿拉伯数字转换为中文数字.
-     *
-     * @param number 阿拉伯数字
-     * @param simple 是否简写中文数字
-     * @return 中文数字
-     */
-    public static String toChineseNumber(int number, boolean simple) {
-        return new ChineseNumber(simple).toNumberWord(number);
     }
 }

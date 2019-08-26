@@ -1,7 +1,6 @@
 
 /**
- * @author zhongj - yufei
- *             Feb 25, 2009
+ * @author zhongj - yufei Feb 25, 2009
  */
 package cn.featherfly.common.lang;
 
@@ -11,25 +10,89 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * @author zhongj - yufei
- *
  */
 public class LogUtils {
-    
-    private static final Logger LOGGER = LoggerFactory
-                    .getLogger(LogUtils.class);
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogUtils.class);
+
     /**
      */
     public LogUtils() {
     }
 
     /**
+     * trace
+     *
+     * @param logger
+     * @param msg
+     * @param loggerEnabled
+     */
+    public static void trace(Logger logger, String msg, LoggerEnabled loggerEnabled) {
+        if (logger.isTraceEnabled()) {
+            logger.trace(msg, loggerEnabled.arguments());
+        }
+    }
+
+    /**
+     * debug
+     *
+     * @param logger
+     * @param msg
+     * @param loggerEnabled
+     */
+    public static void debug(Logger logger, String msg, LoggerEnabled loggerEnabled) {
+        if (logger.isDebugEnabled()) {
+            logger.debug(msg, loggerEnabled.arguments());
+        }
+    }
+
+    /**
+     * info
+     *
+     * @param logger
+     * @param msg
+     * @param loggerEnabled
+     */
+    public static void info(Logger logger, String msg, LoggerEnabled loggerEnabled) {
+        if (logger.isInfoEnabled()) {
+            logger.info(msg, loggerEnabled.arguments());
+        }
+    }
+
+    /**
+     * info
+     *
+     * @param logger
+     * @param msg
+     * @param loggerEnabled
+     */
+    public static void warn(Logger logger, String msg, LoggerEnabled loggerEnabled) {
+        if (logger.isWarnEnabled()) {
+            logger.warn(msg, loggerEnabled.arguments());
+        }
+    }
+
+    /**
+     * error
+     *
+     * @param logger
+     * @param msg
+     * @param loggerEnabled
+     */
+    public static void error(Logger logger, String msg, LoggerEnabled loggerEnabled) {
+        if (logger.isErrorEnabled()) {
+            logger.error(msg, loggerEnabled.arguments());
+        }
+    }
+
+    /**
      * <p>
      * 记录日志（debug级别）
      * </p>
-     * @param e 异常信息
+     *
+     * @param e   异常信息
      * @param log 日志对象
      */
     public static void debug(Exception e, Logger log) {
@@ -37,11 +100,13 @@ public class LogUtils {
             log.debug(ExceptionUtils.getStackTrace(e));
         }
     }
+
     /**
      * <p>
      * 记录日志（warn级别）
      * </p>
-     * @param e 异常信息
+     *
+     * @param e   异常信息
      * @param log 日志对象
      */
     public static void warn(Exception e, Logger log) {
@@ -49,11 +114,13 @@ public class LogUtils {
             log.warn(ExceptionUtils.getStackTrace(e));
         }
     }
+
     /**
      * <p>
      * 记录日志（error级别）
      * </p>
-     * @param e 异常信息
+     *
+     * @param e   异常信息
      * @param log 日志对象
      */
     public static void error(Exception e, Logger log) {
@@ -61,11 +128,13 @@ public class LogUtils {
             log.error(ExceptionUtils.getStackTrace(e));
         }
     }
+
     /**
      * <p>
      * 记录日志（info级别）
      * </p>
-     * @param e 异常信息
+     *
+     * @param e   异常信息
      * @param log 日志对象
      */
     public static void info(Exception e, Logger log) {
@@ -73,11 +142,13 @@ public class LogUtils {
             log.info(ExceptionUtils.getStackTrace(e));
         }
     }
+
     /**
      * <p>
      * 记录日志（trace级别）
      * </p>
-     * @param e 异常信息
+     *
+     * @param e   异常信息
      * @param log 日志对象
      */
     public static void trace(Exception e, Logger log) {
@@ -90,8 +161,9 @@ public class LogUtils {
      * <p>
      * 将对象属性信息图输出到日志
      * </p>
+     *
      * @param target 对象
-     * @param log 日志
+     * @param log    日志
      */
     public void debugObject(Object target, Logger log) {
         debugObject(target, log, null);
@@ -101,9 +173,10 @@ public class LogUtils {
      * <p>
      * 将对象属性信息图输出到日志
      * </p>
+     *
      * @param target 对象
      * @param logger 日志
-     * @param desc 前置描述
+     * @param desc   前置描述
      */
     public void debugObject(Object target, Logger logger, String desc) {
         try {
@@ -121,6 +194,7 @@ public class LogUtils {
      * <p>
      * 返回对象属性信息.发生异常返回null
      * </p>
+     *
      * @param target 目标对象
      * @return 对象属性信息
      */
@@ -142,8 +216,7 @@ public class LogUtils {
         String spliter = "\n";
         String tab = "   ";
         Field[] fs = tc.getDeclaredFields();
-        sb.append(tc.getName())
-            .append(" {");
+        sb.append(tc.getName()).append(" {");
         for (Field field : fs) {
             field.setAccessible(true);
             sb.append(spliter);
@@ -153,9 +226,8 @@ public class LogUtils {
             sb.append(field.getName()).append(" = ");
             Object value = field.get(target);
             Class<?> filedType = field.getType();
-            if (ClassUtils.isBasicType(filedType)
-                            || ClassUtils.isCellection(filedType)
-                            || ClassUtils.isMap(filedType)) {
+            if (ClassUtils.isBasicType(filedType) || ClassUtils.isCellection(filedType)
+                    || ClassUtils.isMap(filedType)) {
                 sb.append(value);
             } else {
                 if (level > getRecursionLevel()) {

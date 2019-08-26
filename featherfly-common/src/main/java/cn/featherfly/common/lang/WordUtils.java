@@ -4,23 +4,27 @@ package cn.featherfly.common.lang;
 import java.math.BigDecimal;
 
 import cn.featherfly.common.constant.Unit;
+import cn.featherfly.common.lang.number.ChineseNumber;
 
 /**
  * <p>
  * 一些单词的处理
  * </p>
+ * 
  * @author zhongj
  */
 public final class WordUtils {
     private WordUtils() {
     }
+
     /**
      * 转换第一个字符为大写
+     * 
      * @param word 需要转换的字符串
      * @return 转换完成的字符串
      */
     public static String upperCaseFirst(String word) {
-        if (StringUtils.isBlank(word)) {
+        if (org.apache.commons.lang3.StringUtils.isBlank(word)) {
             return word;
         }
         word = word.trim();
@@ -30,8 +34,10 @@ public final class WordUtils {
             return Character.toUpperCase(word.charAt(0)) + word.substring(1);
         }
     }
+
     /**
      * 将传入字符串中含有相应符号后的首个字符转换为大写，并去符号
+     * 
      * @param word 需要转换的字符串
      * @param sign 符号
      * @return 转换完成的字符串
@@ -62,11 +68,10 @@ public final class WordUtils {
     }
 
     /**
-     * 将驼峰的单词改为指定符号连接的单词.
-     * 如果upperToLower为true，则将大写转换为小写
+     * 将驼峰的单词改为指定符号连接的单词. 如果upperToLower为true，则将大写转换为小写
      *
-     * @param word 需要转换的字符串
-     * @param sign 符号
+     * @param word         需要转换的字符串
+     * @param sign         符号
      * @param upperToLower 是否转换大写为小写
      * @return 转换完成的字符串
      */
@@ -92,9 +97,9 @@ public final class WordUtils {
 
     /**
      * <p>
-     * 将传入的数值转换为带单位（KB,MB,GB等）的字符串
-     * 如2032转换为1.98 KB，254855398转换为243.04 MB
+     * 将传入的数值转换为带单位（KB,MB,GB等）的字符串 如2032转换为1.98 KB，254855398转换为243.04 MB
      * </p>
+     * 
      * @param total 数值
      * @return 带单位（KB,MB,GB等）的字符串
      */
@@ -138,7 +143,8 @@ public final class WordUtils {
      * <p>
      * 转换为百分比表示的字符串
      * </p>
-     * @param num 待转换的数值
+     * 
+     * @param num       待转换的数值
      * @param precision 转换后保密几位小数精度
      * @return 转换后的百分比表示字符串
      */
@@ -149,14 +155,78 @@ public final class WordUtils {
         String result = "%" + bd.toString();
         return result;
     }
+
     /**
      * <p>
      * 转换为百分比表示的字符串，不保留小数精度.
      * </p>
+     * 
      * @param num 待转换的数值
      * @return 转换后的百分比表示字符串
      */
     public static String parseToPercent(double num) {
         return parseToPercent(num, 0);
+    }
+
+    /**
+     * 将阿拉伯数字转换为中文大写的金额数字.
+     *
+     * @param value 阿拉伯数字的金额
+     * @return 中文大写数字
+     */
+    public static String toChineseMoneyNumber(BigDecimal value) {
+        return toChineseMoneyNumber(value.doubleValue());
+    }
+
+    /**
+     * 将阿拉伯数字转换为中文大写的金额数字.
+     *
+     * @param value 阿拉伯数字的金额
+     * @return 中文大写数字
+     */
+    public static String toChineseMoneyNumber(double value) {
+        return new ChineseNumber(false).toMoneyNumberWord(value);
+    }
+
+    /**
+     * 将阿拉伯数字转换为中文大写数字.
+     *
+     * @param number 阿拉伯数字
+     * @return 中文大写数字
+     */
+    public static String toChineseNumber(long number) {
+        return toChineseNumber(number, false);
+    }
+
+    /**
+     * 将阿拉伯数字转换为中文数字.
+     *
+     * @param number 阿拉伯数字
+     * @param simple 是否简写中文数字
+     * @return 中文数字
+     */
+    public static String toChineseNumber(long number, boolean simple) {
+        return new ChineseNumber(simple).toNumberWord(number);
+    }
+
+    /**
+     * 将阿拉伯数字转换为中文大写数字.
+     *
+     * @param number 阿拉伯数字
+     * @return 中文大写数字
+     */
+    public static String toChineseNumber(int number) {
+        return toChineseNumber(number, false);
+    }
+
+    /**
+     * 将阿拉伯数字转换为中文数字.
+     *
+     * @param number 阿拉伯数字
+     * @param simple 是否简写中文数字
+     * @return 中文数字
+     */
+    public static String toChineseNumber(int number, boolean simple) {
+        return new ChineseNumber(simple).toNumberWord(number);
     }
 }

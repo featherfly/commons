@@ -12,7 +12,7 @@ public interface Chars {
     /**
      * 符号 ~
      */
-    String NOT_B  = "~";
+    String NOT_B = "~";
     /**
      * 符号 !
      */
@@ -94,7 +94,7 @@ public interface Chars {
      */
     String TL = "\\";
     /**
-     * 符号  :
+     * 符号 :
      */
     String COLON = ":";
     /**
@@ -108,7 +108,7 @@ public interface Chars {
     /**
      * 符号 '
      */
-    String QM = "\'";
+    String QM = "'";
     /**
      * 符号&lt;
      */
@@ -389,4 +389,341 @@ public interface Chars {
      * 小写 z
      */
     String Z_LOWER = "z";
+    /**
+     * 符号 ~
+     */
+    char NOT_B_CHAR = '~';
+    /**
+     * 符号 !
+     */
+    char NOT_L_CHAR = '!';
+    /**
+     * 符号 @
+     */
+    char AT_CHAR = '@';
+    /**
+     * 符号 #
+     */
+    char SHARP_CHAR = '#';
+    /**
+     * 符号 $
+     */
+    char DOLLAR_CHAR = '$';
+    /**
+     * 符号 %
+     */
+    char MOD_CHAR = '%';
+    /**
+     * 符号 ^
+     */
+    char BXOR_CHAR = '^';
+    /**
+     * 符号 &amp;
+     */
+    char AMP_CHAR = '&';
+    /**
+     * 符号 *
+     */
+    char STAR_CHAR = '*';
+    /**
+     * 符号 (
+     */
+    char PAREN_L_CHAR = '(';
+    /**
+     * 符号 )
+     */
+    char PAREN_R_CHAR = ')';
+    /**
+     * 符号 _
+     */
+    char UNDER_LINE_CHAR = '_';
+    /**
+     * 符号 -
+     */
+    char MINUS_CHAR = '-';
+    /**
+     * 符号 +
+     */
+    char PLUS_CHAR = '+';
+    /**
+     * 符号 =
+     */
+    char EQ_CHAR = '=';
+    /**
+     * 符号 {
+     */
+    char CURLY_L_CHAR = '{';
+    /**
+     * 符号 }
+     */
+    char CURLY_R_CHAR = '}';
+    /**
+     * 符号 [
+     */
+    char BRACK_L_CHAR = '[';
+    /**
+     * 符号 ]
+     */
+    char BRACK_R_CHAR = ']';
+    /**
+     * 符号 |
+     */
+    char OR_CHAR = '|';
+    /**
+     * 符号 \
+     */
+    char TL_CHAR = '\\';
+    /**
+     * 符号 :
+     */
+    char COLON_CHAR = ':';
+    /**
+     * 符号 ;
+     */
+    char SEMI_CHAR = ';';
+    /**
+     * 符号 "
+     */
+    char DQM_CHAR = '"';
+    /**
+     * 符号 '
+     */
+    char QM_CHAR = '\'';
+    /**
+     * 符号&lt;
+     */
+    char LT_CHAR = '<';
+    /**
+     * 符号 &gt;
+     */
+    char GT_CHAR = '>';
+    /**
+     * 符号 .
+     */
+    char DOT_CHAR = '.';
+    /**
+     * 符号 ,
+     */
+    char COMMA_CHAR = ',';
+    /**
+     * 符号 ?
+     */
+    char QUESTION_CHAR = '?';
+    /**
+     * 符号 /
+     */
+    char DIV_CHAR = '/';
+    /**
+     * 空格
+     */
+    char SPACE_CHAR = ' ';
+
+    /**
+     * 大写 A
+     */
+    char A_UPPER_CHAR = 'A';
+    /**
+     * 大写 B
+     */
+    char B_UPPER_CHAR = 'B';
+    /**
+     * 大写 C
+     */
+    char C_UPPER_CHAR = 'C';
+    /**
+     * 大写 D
+     */
+    char D_UPPER_CHAR = 'D';
+    /**
+     * 大写 E
+     */
+    char E_UPPER_CHAR = 'E';
+    /**
+     * 大写 F
+     */
+    char F_UPPER_CHAR = 'F';
+    /**
+     * 大写 G
+     */
+    char G_UPPER_CHAR = 'G';
+    /**
+     * 大写 H
+     */
+    char H_UPPER_CHAR = 'H';
+    /**
+     * 大写 I
+     */
+    char I_UPPER_CHAR = 'I';
+    /**
+     * 大写 J
+     */
+    char J_UPPER_CHAR = 'J';
+    /**
+     * 大写 K
+     */
+    char K_UPPER_CHAR = 'K';
+    /**
+     * 大写 L
+     */
+    char L_UPPER_CHAR = 'L';
+    /**
+     * 大写 M
+     */
+    char M_UPPER_CHAR = 'M';
+    /**
+     * 大写 N
+     */
+    char N_UPPER_CHAR = 'N';
+    /**
+     * 大写 O
+     */
+    char O_UPPER_CHAR = 'O';
+    /**
+     * 大写 P
+     */
+    char P_UPPER_CHAR = 'P';
+    /**
+     * 大写 Q
+     */
+    char Q_UPPER_CHAR = 'Q';
+    /**
+     * 大写 R
+     */
+    char R_UPPER_CHAR = 'R';
+    /**
+     * 大写 S
+     */
+    char S_UPPER_CHAR = 'S';
+    /**
+     * 大写 T
+     */
+    char T_UPPER_CHAR = 'T';
+    /**
+     * 大写 U
+     */
+    char U_UPPER_CHAR = 'U';
+    /**
+     * 大写 V
+     */
+    char V_UPPER_CHAR = 'V';
+    /**
+     * 大写 W
+     */
+    char W_UPPER_CHAR = 'W';
+    /**
+     * 大写 X
+     */
+    char X_UPPER_CHAR = 'X';
+    /**
+     * 大写 Y
+     */
+    char Y_UPPER_CHAR = 'Y';
+    /**
+     * 大写 Z
+     */
+    char Z_UPPER_CHAR = 'Z';
+    /**
+     * 小写 a
+     */
+    char A_LOWER_CHAR = 'a';
+    /**
+     * 小写 b
+     */
+    char B_LOWER_CHAR = 'b';
+    /**
+     * 小写 c
+     */
+    char C_LOWER_CHAR = 'c';
+    /**
+     * 小写 d
+     */
+    char D_LOWER_CHAR = 'd';
+    /**
+     * 小写 e
+     */
+    char E_LOWER_CHAR = 'e';
+    /**
+     * 小写 f
+     */
+    char F_LOWER_CHAR = 'f';
+    /**
+     * 小写 g
+     */
+    char G_LOWER_CHAR = 'g';
+    /**
+     * 小写 h
+     */
+    char H_LOWER_CHAR = 'h';
+    /**
+     * 小写 i
+     */
+    char I_LOWER_CHAR = 'i';
+    /**
+     * 小写 j
+     */
+    char J_LOWER_CHAR = 'j';
+    /**
+     * 小写 k
+     */
+    char K_LOWER_CHAR = 'k';
+    /**
+     * 小写 l
+     */
+    char L_LOWER_CHAR = 'l';
+    /**
+     * 小写 m
+     */
+    char M_LOWER_CHAR = 'm';
+    /**
+     * 小写 n
+     */
+    char N_LOWER_CHAR = 'n';
+    /**
+     * 小写 o
+     */
+    char O_LOWER_CHAR = 'o';
+    /**
+     * 小写 p
+     */
+    char P_LOWER_CHAR = 'p';
+    /**
+     * 小写 q
+     */
+    char Q_LOWER_CHAR = 'q';
+    /**
+     * 小写 r
+     */
+    char R_LOWER_CHAR = 'r';
+    /**
+     * 小写 s
+     */
+    char S_LOWER_CHAR = 's';
+    /**
+     * 小写 t
+     */
+    char T_LOWER_CHAR = 't';
+    /**
+     * 小写 u
+     */
+    char U_LOWER_CHAR = 'u';
+    /**
+     * 小写 v
+     */
+    char V_LOWER_CHAR = 'v';
+    /**
+     * 小写 w
+     */
+    char W_LOWER_CHAR = 'w';
+    /**
+     * 小写 x
+     */
+    char X_LOWER_CHAR = 'x';
+    /**
+     * 小写 y
+     */
+    char Y_LOWER_CHAR = 'y';
+    /**
+     * 小写 z
+     */
+    char Z_LOWER_CHAR = 'z';
 }

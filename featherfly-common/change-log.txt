@@ -1,4 +1,12 @@
-2019-
+2019-8-26
+1.7.7
+    1.ClassUtils加入getFiled,getFiledValue,invokeMethod等方法
+    2.将StringUtils中的toChineseMoneyNumber toChineseNumber方法移动到WordUtils中
+    3.修正StringUtils.substringAfter方法，加入substringLast方法
+    4.加入LoggerWrapper,LogUtils加入对应方法
+    5.Chars的常量加入char类型
+
+2019-8-20
 1.7.6
     1.移除spring依赖，移除类ClassPathScanningProvider到common-spring
 

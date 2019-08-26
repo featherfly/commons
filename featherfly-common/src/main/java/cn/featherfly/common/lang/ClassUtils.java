@@ -7,6 +7,7 @@ package cn.featherfly.common.lang;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -31,6 +32,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cn.featherfly.common.exception.ReflectException;
 import cn.featherfly.common.lang.matcher.FieldMatcher;
 import cn.featherfly.common.lang.matcher.MethodMatcher;
 
@@ -121,13 +123,105 @@ public final class ClassUtils {
      * @throws NoSuchFieldException 没有找到传入字段时抛出
      * @return 目标类型的指定名称的字段，支持多层嵌套
      */
-    public static Field getField(Class<?> target, String fieldName) throws NoSuchFieldException {
-        if (fieldName.contains(DOT)) {
-            String currentFieldName = fieldName.substring(0, fieldName.indexOf(DOT));
-            String innerFieldName = fieldName.substring(fieldName.indexOf(DOT) + 1);
-            return getField(target.getDeclaredField(currentFieldName).getType(), innerFieldName);
-        } else {
-            return target.getDeclaredField(fieldName);
+    public static Field getField(Class<?> target, String fieldName) {
+        try {
+            if (fieldName.contains(DOT)) {
+                String currentFieldName = fieldName.substring(0, fieldName.indexOf(DOT));
+                String innerFieldName = fieldName.substring(fieldName.indexOf(DOT) + 1);
+                return getField(target.getDeclaredField(currentFieldName).getType(), innerFieldName);
+            } else {
+                return target.getDeclaredField(fieldName);
+            }
+        } catch (NoSuchFieldException | SecurityException e) {
+            throw new ReflectException(e);
+        }
+    }
+
+    /**
+     * 返回目标类型的指定类型的静态字段值，支持多层嵌套 例如, user.address.no
+     *
+     * @param target    目标类型
+     * @param fieldName 字段名
+     * @throws NoSuchFieldException 没有找到传入字段时抛出
+     * @return 目标类型的指定名称的字段，支持多层嵌套
+     */
+    public static Object getFieldValue(Class<?> type, String fieldName) {
+        try {
+            return getField(type, fieldName).get(type);
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            throw new ReflectException(e);
+        }
+    }
+
+    /**
+     * 返回目标对象的指定类型的字段值，支持多层嵌套 例如, user.address.no
+     *
+     * @param target    目标对象
+     * @param fieldName 字段名
+     * @throws NoSuchFieldException 没有找到传入字段时抛出
+     * @return 目标类型的指定名称的字段，支持多层嵌套
+     */
+    public static Object getFieldValue(Object object, String fieldName) {
+        try {
+            return getField(object.getClass(), fieldName).get(object);
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            throw new ReflectException(e);
+        }
+    }
+
+    /**
+     * invoke static method
+     *
+     * @param type       type
+     * @param methodName method name
+     * @return method return value
+     */
+    public static Object invokeMethod(Class<?> type, String methodName) {
+        return invokeMethod(type, methodName, new Object[0]);
+    }
+
+    /**
+     * invoke static method
+     *
+     * @param type       type
+     * @param methodName method name
+     * @param args       method arguments
+     * @return method return value
+     */
+    public static Object invokeMethod(Class<?> type, String methodName, Object... args) {
+        try {
+            Method method = match(args, type, true);
+            return method.invoke(null, args);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
+            throw new ReflectException(e);
+        }
+    }
+
+    /**
+     * invoke object method
+     *
+     * @param type       type
+     * @param methodName method name
+     * @return method return value
+     */
+    public static Object invokeMethod(Object object, String methodName) {
+        return invokeMethod(object, methodName, new Object[0]);
+    }
+
+    /**
+     * invoke object method
+     *
+     * @param type       type
+     * @param methodName method name
+     * @param args       method arguments
+     * @return method return value
+     */
+    public static Object invokeMethod(Object object, String methodName, Object... args) {
+        try {
+            Method method = match(args, object.getClass(), true);
+            return method.invoke(object, args);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
+            throw new ReflectException(e);
         }
     }
 
@@ -481,14 +575,14 @@ public final class ClassUtils {
             if (path.startsWith(filePrefix)) {
                 String os = System.getProperty("os.name");
                 if (os.startsWith("Windows")) {
-                    path = StringUtils.substringBetween(path, "file:/", excalmatoryMark);
+                    path = org.apache.commons.lang3.StringUtils.substringBetween(path, "file:/", excalmatoryMark);
                 } else if (os.startsWith("Linux")) {
-                    path = StringUtils.substringBetween(path, filePrefix, excalmatoryMark);
+                    path = org.apache.commons.lang3.StringUtils.substringBetween(path, filePrefix, excalmatoryMark);
                 } else {
-                    path = StringUtils.substringBetween(path, filePrefix, excalmatoryMark);
+                    path = org.apache.commons.lang3.StringUtils.substringBetween(path, filePrefix, excalmatoryMark);
                 }
             } else {
-                path = StringUtils.substringBefore(path, excalmatoryMark);
+                path = org.apache.commons.lang3.StringUtils.substringBefore(path, excalmatoryMark);
             }
             return new File(path);
         }
@@ -551,7 +645,7 @@ public final class ClassUtils {
         // DaoSupport<Buyer,Contact>就返回Buyer和Contact类型
         Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
         if (index >= params.length || index < 0) {
-            throw new RuntimeException("你输入的索引" + (index < 0 ? "不能小于0" : "超出了参数的总数"));
+            throw new IllegalArgumentException("你输入的索引" + (index < 0 ? "不能小于0" : "超出了参数的总数"));
         }
         if (!(params[index] instanceof Class)) {
             return (Class<T>) Object.class;
@@ -611,7 +705,7 @@ public final class ClassUtils {
             ParameterizedType type = (ParameterizedType) returnType;
             Type[] typeArguments = type.getActualTypeArguments();
             if (index >= typeArguments.length || index < 0) {
-                throw new RuntimeException("你输入的索引" + (index < 0 ? "不能小于0" : "超出了参数的总数"));
+                throw new IllegalArgumentException("你输入的索引" + (index < 0 ? "不能小于0" : "超出了参数的总数"));
             }
             return (Class<T>) typeArguments[index];
         }
@@ -642,7 +736,7 @@ public final class ClassUtils {
         List<Class<?>> results = new ArrayList<>();
         Type[] genericParameterTypes = method.getGenericParameterTypes();
         if (index >= genericParameterTypes.length || index < 0) {
-            throw new RuntimeException("你输入的索引" + (index < 0 ? "不能小于0" : "超出了参数的总数"));
+            throw new IllegalArgumentException("你输入的索引" + (index < 0 ? "不能小于0" : "超出了参数的总数"));
         }
         Type genericParameterType = genericParameterTypes[index];
         if (genericParameterType instanceof ParameterizedType) {
@@ -684,7 +778,7 @@ public final class ClassUtils {
             ParameterizedType aType = (ParameterizedType) genericFieldType;
             Type[] fieldArgTypes = aType.getActualTypeArguments();
             if (index >= fieldArgTypes.length || index < 0) {
-                throw new RuntimeException("你输入的索引" + (index < 0 ? "不能小于0" : "超出了参数的总数"));
+                throw new IllegalArgumentException("你输入的索引" + (index < 0 ? "不能小于0" : "超出了参数的总数"));
             }
             return (Class<T>) fieldArgTypes[index];
         }
@@ -725,10 +819,10 @@ public final class ClassUtils {
             return clazz.newInstance();
         } catch (InstantiationException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
-            throw new RuntimeException(StringUtils.format("[#1] 构造器是否为私有", new String[] { clazz.getName() }));
+            throw new ReflectException(StringUtils.format("[#1] 构造器是否为私有", new String[] { clazz.getName() }));
         } catch (IllegalAccessException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
-            throw new RuntimeException(StringUtils.format("构造器参数不匹配", new String[] { clazz.getName() }));
+            throw new ReflectException(StringUtils.format("构造器参数不匹配", new String[] { clazz.getName() }));
         }
     }
 
@@ -740,65 +834,73 @@ public final class ClassUtils {
      * @param <T>   泛型
      * @return 对象
      */
-    @SuppressWarnings("unchecked")
     public static <T> T newInstance(Class<T> clazz, Object... args) {
         AssertIllegalArgument.isNotNull(clazz, "Class<T> clazz");
         if (LangUtils.isNotEmpty(args)) {
-            List<Constructor<T>> matchConstructors = new ArrayList<>();
-            for (Constructor<?> constructor : clazz.getConstructors()) {
-                if (constructor.getParameterCount() == args.length) {
-                    matchConstructors.add((Constructor<T>) constructor);
+            Constructor<T> matchConstructor = match(args, clazz, false);
+            return newInstance(matchConstructor, args);
+        } else {
+            return newInstance(clazz);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <E extends Executable> E match(Object[] args, Class<?> type, boolean isMethod) {
+        List<Executable> matchConstructors = new ArrayList<>();
+        if (isMethod) {
+            for (Method method : type.getMethods()) {
+                if (method.getParameterCount() == args.length) {
+                    matchConstructors.add(method);
                 }
             }
-            Class<?>[] arguTypes = new Class<?>[args.length];
-            for (int i = 0; i < args.length; i++) {
-                arguTypes[i] = args[i].getClass();
+        } else {
+            for (Constructor<?> constructor : type.getConstructors()) {
+                if (constructor.getParameterCount() == args.length) {
+                    matchConstructors.add(constructor);
+                }
             }
-            Constructor<T> matchConstructor = null;
-            for (Constructor<T> constructor : matchConstructors) {
+        }
+
+        Class<?>[] arguTypes = new Class<?>[args.length];
+        for (int i = 0; i < args.length; i++) {
+            arguTypes[i] = args[i].getClass();
+        }
+        Executable matchExecutable = null;
+        for (Executable executable : matchConstructors) {
+            boolean matchAllParamType = true;
+            Class<?>[] paramTypes = executable.getParameterTypes();
+            for (int i = 0; i < arguTypes.length; i++) {
+                if (paramTypes[i] != arguTypes[i]) {
+                    matchAllParamType = false;
+                    break;
+                }
+            }
+            if (matchAllParamType) {
+                matchExecutable = executable;
+                break;
+            }
+        }
+        if (matchExecutable == null) {
+            for (Executable executable : matchConstructors) {
                 boolean matchAllParamType = true;
-                Class<?>[] paramTypes = constructor.getParameterTypes();
+                Class<?>[] paramTypes = executable.getParameterTypes();
                 for (int i = 0; i < arguTypes.length; i++) {
-                    if (paramTypes[i] != arguTypes[i]) {
+                    if (!ClassUtils.isParent(paramTypes[i], arguTypes[i])) {
                         matchAllParamType = false;
                         break;
                     }
                 }
                 if (matchAllParamType) {
-                    matchConstructor = constructor;
+                    matchExecutable = executable;
                     break;
                 }
             }
-            if (matchConstructor == null) {
-                for (Constructor<T> constructor : matchConstructors) {
-                    boolean matchAllParamType = true;
-                    Class<?>[] paramTypes = constructor.getParameterTypes();
-                    for (int i = 0; i < arguTypes.length; i++) {
-                        if (!ClassUtils.isParent(paramTypes[i], arguTypes[i])) {
-                            matchAllParamType = false;
-                            break;
-                        }
-                    }
-                    if (matchAllParamType) {
-                        matchConstructor = constructor;
-                        break;
-                    }
-                }
-            }
-            if (matchConstructor == null) {
-                throw new RuntimeException(StringUtils.format("[#1{#2}] 此构造器不存在",
-                        new String[] { clazz.getName(), Arrays.asList(arguTypes).toString() }));
-            }
-            try {
-                return newInstance(matchConstructor, args);
-            } catch (SecurityException e) {
-                throw new RuntimeException(StringUtils.format("[#1{#2}] 此构造器不可访问",
-                        new String[] { clazz.getName(), Arrays.asList(arguTypes).toString() }));
-            }
-        } else {
-            return newInstance(clazz);
         }
-
+        if (matchExecutable == null) {
+            throw new ReflectException(StringUtils.format("[#1{#2}] 此[#3]不存在",
+                    new String[] { type.getName(), Arrays.asList(arguTypes).toString(), isMethod ? "方法" : "构造器" }));
+        }
+        return (E) matchExecutable;
     }
 
     /**
@@ -819,19 +921,19 @@ public final class ClassUtils {
             return constructor.newInstance(args);
         } catch (IllegalArgumentException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
-            throw new RuntimeException(StringUtils.format(" [#1] 是否定义成抽象类了 不能实例化",
+            throw new ReflectException(StringUtils.format(" [#1] 是否定义成抽象类了 不能实例化",
                     new String[] { constructor.getDeclaringClass().getName() }));
         } catch (InstantiationException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
-            throw new RuntimeException(
+            throw new ReflectException(
                     StringUtils.format("[#1] 构造器是否为私有", new String[] { constructor.getDeclaringClass().getName() }));
         } catch (IllegalAccessException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
-            throw new RuntimeException(
+            throw new ReflectException(
                     StringUtils.format("构造器参数不匹配", new String[] { constructor.getDeclaringClass().getName() }));
         } catch (InvocationTargetException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
-            throw new RuntimeException(
+            throw new ReflectException(
                     StringUtils.format("[#1] 构造器抛出异常", new String[] { constructor.getDeclaringClass().getName() }));
         }
     }

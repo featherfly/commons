@@ -1,3 +1,7 @@
+2019-8-27
+0.2.0
+    1.把ReadWriteDataSource从单独模块移植到当前包
+
 2019-8-20
 0.1.0
     1.从common和web-spring移植过来

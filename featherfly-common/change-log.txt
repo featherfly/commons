@@ -1,3 +1,8 @@
+2019-
+1.7.9
+    1.加入Watcher,WatchListener
+    2.FileUtils加入watch一些列方法
+
 2019-8-27
 1.7.8
     1.修复FileUtils.listAll的问题

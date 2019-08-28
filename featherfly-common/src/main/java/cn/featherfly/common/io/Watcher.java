@@ -4,7 +4,6 @@ package cn.featherfly.common.io;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
@@ -35,17 +34,21 @@ public class Watcher {
 
     private WatchKey watchKey;
 
+    private WatchEvent.Kind<?>[] events;
+
     public Watcher() {
     }
 
     /**
-     * @param listener
      * @param directory
+     * @param listener
+     * @param events
      */
-    public Watcher(Path directory, WatchListener listener) {
+    public Watcher(Path directory, WatchListener listener, WatchEvent.Kind<?>... events) {
         super();
         this.listener = listener;
         this.directory = directory;
+        this.events = events;
     }
 
     /**
@@ -84,12 +87,29 @@ public class Watcher {
         this.directory = directory;
     }
 
+    /**
+     * 返回events
+     *
+     * @return events
+     */
+    public WatchEvent.Kind<?>[] getEvents() {
+        return events;
+    }
+
+    /**
+     * 设置events
+     *
+     * @param events events
+     */
+    public void setEvents(WatchEvent.Kind<?>[] events) {
+        this.events = events;
+    }
+
     public void watch() {
         // 监听新文件
         try {
             WatchService watchService = FileSystems.getDefault().newWatchService();
-            directory.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY,
-                    StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.OVERFLOW);
+            directory.register(watchService, events);
             @SuppressWarnings("unchecked")
             Thread thread = new Thread(() -> {
                 try {

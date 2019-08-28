@@ -10,6 +10,8 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -831,7 +833,20 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * @return Watcher
      */
     public static Watcher watch(File dir, WatchListener listener) {
-        return watch(Paths.get(dir.toURI()), listener);
+        return watch(dir, listener, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY,
+                StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.OVERFLOW);
+    }
+
+    /**
+     * 监控传入目录
+     *
+     * @param dir      目录
+     * @param listener WatchListener
+     * @param events   events
+     * @return Watcher
+     */
+    public static Watcher watch(File dir, WatchListener listener, WatchEvent.Kind<?>... events) {
+        return watch(Paths.get(dir.toURI()), listener, events);
     }
 
     /**
@@ -842,9 +857,22 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * @return Watcher List
      */
     public static List<Watcher> watchAll(File dir, WatchListener listener) {
+        return watchAll(dir, listener, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY,
+                StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.OVERFLOW);
+    }
+
+    /**
+     * 监控传入目录及其子目录
+     *
+     * @param dir      目录
+     * @param listener WatchListener
+     * @param events   events
+     * @return Watcher List
+     */
+    public static List<Watcher> watchAll(File dir, WatchListener listener, WatchEvent.Kind<?>... events) {
         return watchAll(dir, listener, v -> {
             return true;
-        });
+        }, events);
     }
 
     /**
@@ -856,23 +884,39 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * @return Watcher List
      */
     public static List<Watcher> watchAll(File dir, WatchListener listener, FileFilter filter) {
+        return watchAll(dir, listener, filter, StandardWatchEventKinds.ENTRY_CREATE,
+                StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE,
+                StandardWatchEventKinds.OVERFLOW);
+    }
+
+    /**
+     * 监控由传入过滤器过滤后的传入目录及其子目录
+     *
+     * @param dir      目录
+     * @param listener WatchListener
+     * @param filter   FileFilter
+     * @param events   events
+     * @return Watcher List
+     */
+    public static List<Watcher> watchAll(File dir, WatchListener listener, FileFilter filter,
+            WatchEvent.Kind<?>... events) {
         return watch(Arrays.stream(FileUtils.listAll(dir, v -> {
             return v.isDirectory() && filter.accept(v);
         })).map(d -> {
             return Paths.get(d.toURI());
-        }).collect(Collectors.toList()), listener);
+        }).collect(Collectors.toList()), listener, events);
     }
 
-    private static List<Watcher> watch(List<Path> paths, WatchListener listener) {
+    private static List<Watcher> watch(List<Path> paths, WatchListener listener, WatchEvent.Kind<?>[] events) {
         List<Watcher> watchers = new ArrayList<>();
         for (Path path : paths) {
-            watchers.add(watch(path, listener));
+            watchers.add(watch(path, listener, events));
         }
         return watchers;
     }
 
-    private static Watcher watch(Path watchDirectory, WatchListener listener) {
-        Watcher watcher = new Watcher(watchDirectory, listener);
+    private static Watcher watch(Path watchDirectory, WatchListener listener, WatchEvent.Kind<?>[] events) {
+        Watcher watcher = new Watcher(watchDirectory, listener, events);
         watcher.watch();
         return watcher;
     }

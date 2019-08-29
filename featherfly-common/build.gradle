@@ -14,4 +14,6 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     //compile group: 'org.springframework', name: 'spring-core', version: '5.1.8.RELEASE'
+    
+    compile group: 'org.javassist', name: 'javassist', version: '3.25.0-GA'
 }

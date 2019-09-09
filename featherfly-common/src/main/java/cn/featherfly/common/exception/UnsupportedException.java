@@ -13,7 +13,7 @@ import java.util.Locale;
  * .
  *
  * @author zhongj
- * @since 1.7.10
+ * @since 1.7.9
  */
 public class UnsupportedException extends LocalizedException {
 

@@ -248,6 +248,9 @@ public final class LangUtils {
             } else if (object instanceof Byte || object.getClass() == byte.class) {
                 Byte ordinal = (Byte) object;
                 return toEnum(toClass, new Integer(ordinal));
+            } else if (object instanceof Short || object.getClass() == short.class) {
+                Short ordinal = (Short) object;
+                return toEnum(toClass, new Integer(ordinal));
             }
         }
         return null;

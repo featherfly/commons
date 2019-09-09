@@ -24,7 +24,7 @@ public class UnsupportedException extends LocalizedException {
      * Instantiates a new inits the exception.
      */
     public UnsupportedException() {
-        super();
+        super("#unsupported");
     }
 
     /**

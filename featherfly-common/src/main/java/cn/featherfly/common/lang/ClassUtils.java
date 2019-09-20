@@ -186,8 +186,19 @@ public final class ClassUtils {
      * @return method return value
      */
     public static Object invokeMethod(Class<?> type, String methodName, Object... args) {
+        return invokeMethod(type, match(args, type, true), args);
+    }
+
+    /**
+     * invoke static method
+     *
+     * @param type       type
+     * @param methodName method name
+     * @param args       method arguments
+     * @return method return value
+     */
+    public static Object invokeMethod(Class<?> type, Method method, Object... args) {
         try {
-            Method method = match(args, type, true);
             return method.invoke(null, args);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
             throw new ReflectException(e);
@@ -214,8 +225,19 @@ public final class ClassUtils {
      * @return method return value
      */
     public static Object invokeMethod(Object object, String methodName, Object... args) {
+        return invokeMethod(object, match(args, object.getClass(), true), args);
+    }
+
+    /**
+     * invoke object method
+     *
+     * @param object object
+     * @param method method
+     * @param args   method arguments
+     * @return method return value
+     */
+    public static Object invokeMethod(Object object, Method method, Object... args) {
         try {
-            Method method = match(args, object.getClass(), true);
             return method.invoke(object, args);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
             throw new ReflectException(e);

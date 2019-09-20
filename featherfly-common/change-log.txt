@@ -1,3 +1,8 @@
+2019-9-20
+1.7.11
+    1.LambdaUtils加入getLambdaInfo,getLambdaMethod,getSerializedLambda
+    2.ClassUtils加入两个重载的invokeMethod
+
 2019-9-17
 1.7.10
     1.加入location相关的类

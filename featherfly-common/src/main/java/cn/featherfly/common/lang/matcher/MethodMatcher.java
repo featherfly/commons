@@ -10,6 +10,6 @@ import java.lang.reflect.Method;
  *
  * @author zhongj
  */
-public interface MethodMatcher extends MemberMatcher<Method>{
-    
+public interface MethodMatcher extends MemberMatcher<Method> {
+
 }

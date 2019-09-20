@@ -145,7 +145,7 @@ public class User {
 
     /**
      * 返回locked
-     * 
+     *
      * @return locked
      */
     public boolean isLocked() {
@@ -154,11 +154,15 @@ public class User {
 
     /**
      * 设置locked
-     * 
+     *
      * @param locked locked
      */
     public void setLocked(boolean locked) {
         this.locked = locked;
+    }
+
+    public void setObject(Object o) {
+        System.out.println("setObject " + o);
     }
 
     /**

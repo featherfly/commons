@@ -192,9 +192,9 @@ public final class ClassUtils {
     /**
      * invoke static method
      *
-     * @param type       type
-     * @param methodName method name
-     * @param args       method arguments
+     * @param type   type
+     * @param method method
+     * @param args   method arguments
      * @return method return value
      */
     public static Object invokeMethod(Class<?> type, Method method, Object... args) {

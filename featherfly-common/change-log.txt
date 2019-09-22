@@ -1,3 +1,7 @@
+2019-9-22
+1.7.12
+    1.LambdaUtils加入getLambdaPropertyName,getLambdaMethodName重载方法
+    
 2019-9-20
 1.7.11
     1.LambdaUtils加入getLambdaInfo,getLambdaMethod,getSerializedLambda

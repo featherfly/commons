@@ -21,9 +21,11 @@ import cn.featherfly.common.exception.ReflectException;
  */
 public class LambdaUtils {
 
-    private static final Map<SerializedLambda, String> CACHE_LAMBDA_NAME = new ConcurrentHashMap<>(8);
+    private static final Map<SerializedLambda, String> CACHE_LAMBDA_NAME = new ConcurrentHashMap<>(
+            8);
 
-    //    private static final Map<SerializedLambda, String> CACHE_FIELD_NAME = new ConcurrentHashMap<>(8);
+    // private static final Map<SerializedLambda, String> CACHE_FIELD_NAME = new
+    // ConcurrentHashMap<>(8);
 
     public static class SerializedLambdaInfo {
 
@@ -87,9 +89,11 @@ public class LambdaUtils {
          */
         @Override
         public String toString() {
-            return "SerializedLambdaInfo [methodName=" + methodName + ", methodDeclaredClassName="
-                    + methodDeclaredClassName + ", methodInstanceClassName=" + methodInstanceClassName + ", method="
-                    + method + ", serializedLambda=" + serializedLambda + "]";
+            return "SerializedLambdaInfo [methodName=" + methodName
+                    + ", methodDeclaredClassName=" + methodDeclaredClassName
+                    + ", methodInstanceClassName=" + methodInstanceClassName
+                    + ", method=" + method + ", serializedLambda="
+                    + serializedLambda + "]";
         }
 
     }
@@ -101,12 +105,16 @@ public class LambdaUtils {
     public static SerializedLambdaInfo getLambdaInfo(SerializedLambda lambda) {
         SerializedLambdaInfo info = new SerializedLambdaInfo();
         info.serializedLambda = lambda;
-        info.methodDeclaredClassName = lambda.getImplClass().replaceAll("/", ".");
+        info.methodDeclaredClassName = lambda.getImplClass().replaceAll("/",
+                ".");
         info.methodName = lambda.getImplMethodName();
         info.methodInstanceClassName = org.apache.commons.lang3.StringUtils
-                .substringBefore(lambda.getInstantiatedMethodType(), ";").substring(2).replaceAll("/", ".");
-        info.method = ClassUtils.findMethod(ClassUtils.forName(info.methodDeclaredClassName),
-                o -> lambda.getCapturedArgCount() == o.getParameterCount() && o.getName().equals(info.methodName));
+                .substringBefore(lambda.getInstantiatedMethodType(), ";")
+                .substring(2).replaceAll("/", ".");
+        info.method = ClassUtils.findMethod(
+                ClassUtils.forName(info.methodDeclaredClassName),
+                o -> lambda.getCapturedArgCount() == o.getParameterCount()
+                        && o.getName().equals(info.methodName));
         return info;
     }
 
@@ -118,7 +126,8 @@ public class LambdaUtils {
         String className = lambda.getImplClass().replaceAll("/", ".");
         String methodName = lambda.getImplMethodName();
         Method method = ClassUtils.findMethod(ClassUtils.forName(className),
-                o -> lambda.getCapturedArgCount() == o.getParameterCount() && o.getName().equals(methodName));
+                o -> lambda.getCapturedArgCount() == o.getParameterCount()
+                        && o.getName().equals(methodName));
         return method;
     }
 
@@ -128,15 +137,24 @@ public class LambdaUtils {
 
     public static String getLambdaMethodName(Serializable lambda) {
         SerializedLambda serializedLambda = computeSerializedLambda(lambda);
-        return getMethodName(serializedLambda);
+        return getLambdaMethodName(serializedLambda);
+    }
+
+    public static String getLambdaMethodName(SerializedLambda lambda) {
+        return getMethodName(lambda);
     }
 
     public static String getLambdaPropertyName(Serializable lambda) {
         SerializedLambda serializedLambda = computeSerializedLambda(lambda);
-        return getPropertyName(serializedLambda);
+        return getLambdaPropertyName(serializedLambda);
     }
 
-    private static SerializedLambda computeSerializedLambda(Serializable lambda) {
+    public static String getLambdaPropertyName(SerializedLambda lambda) {
+        return getPropertyName(lambda);
+    }
+
+    private static SerializedLambda computeSerializedLambda(
+            Serializable lambda) {
         try {
             Class<?> cl = lambda.getClass();
             Method m = cl.getDeclaredMethod("writeReplace");
@@ -164,14 +182,14 @@ public class LambdaUtils {
     private static String getPropertyName(SerializedLambda serializedLambda) {
         String methodName = getMethodName(serializedLambda);
         return methodToPropertyName(methodName);
-        //        String name = CACHE_FIELD_NAME.get(serializedLambda);
-        //        if (null != name) {
-        //            return name;
-        //        }
-        //        String methodName = serializedLambda.getImplMethodName();
-        //        String fieldName = methodToPropertyName(methodName);
-        //        CACHE_FIELD_NAME.put(serializedLambda, fieldName);
-        //        return fieldName;
+        // String name = CACHE_FIELD_NAME.get(serializedLambda);
+        // if (null != name) {
+        // return name;
+        // }
+        // String methodName = serializedLambda.getImplMethodName();
+        // String fieldName = methodToPropertyName(methodName);
+        // CACHE_FIELD_NAME.put(serializedLambda, fieldName);
+        // return fieldName;
     }
 
     private static String methodToPropertyName(String methodName) {

@@ -73,6 +73,13 @@ public class LambdaUtilsTest {
         assertEquals(true, ClassUtils.invokeMethod(user2, info.getMethod(), new Object[0]));
     }
 
+    @Test
+    public void test5() {
+        propertyName(User::getAge);
+        propertyNumberName(User::getAge);
+        //        propertyNumberName(User::getName);
+    }
+
     public static void main(String[] args) {
         SerializedLambda s;
         s = get(User::isLocked);
@@ -121,6 +128,10 @@ public class LambdaUtilsTest {
     private static <T, R> void eq(SerializableFunction<T, R> f, SerializableFunction<T, R> f2) {
         System.err.println(f == f2);
         System.err.println(f.equals(f2));
+    }
+
+    private <T, R extends Number> String propertyNumberName(SerializableFunction<T, R> f) {
+        return LambdaUtils.getLambdaPropertyName(f);
     }
 
     private <T, R> String propertyName(SerializableFunction<T, R> f) {

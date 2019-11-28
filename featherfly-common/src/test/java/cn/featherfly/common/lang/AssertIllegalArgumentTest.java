@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 
 import cn.featherfly.common.lang.asserts.IllegalArgumentAssert;
 import cn.featherfly.common.lang.vo.User;
+import cn.featherfly.common.lang.vo.User2;
 
 public class AssertIllegalArgumentTest {
 
@@ -28,6 +29,12 @@ public class AssertIllegalArgumentTest {
     @Test(expectedExceptions = { IllegalArgumentException.class })
     public void testIsNotNull3() {
         User user = new User();
+        illegalArgumentAssert.isNotNull(user::getAge);
+    }
+
+    @Test(expectedExceptions = { IllegalArgumentException.class })
+    public void testIsNotNull4() {
+        User2 user = new User2();
         illegalArgumentAssert.isNotNull(user::getAge);
     }
 

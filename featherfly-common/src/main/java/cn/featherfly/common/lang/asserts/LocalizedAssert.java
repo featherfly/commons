@@ -4,10 +4,14 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 
+import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.exception.LocalizedExceptionUtils;
 import cn.featherfly.common.lang.ClassUtils;
+import cn.featherfly.common.lang.LambdaUtils;
+import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.lang.StringUtils;
+import cn.featherfly.common.lang.function.SerializableSupplier;
 
 /**
  * <p>
@@ -241,5 +245,42 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
         if (value > max) {
             throwException("#isLe", value, max, arguDescp);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T> void isNotNull(SerializableSupplier<T> propertySupplier) {
+        SerializedLambdaInfo info = LambdaUtils.getLambdaInfo(propertySupplier);
+        Object value = BeanUtils.getProperty(info.getSerializedLambda().getCapturedArg(0), info.getPropertyName());
+        isNotNull(value, createDescp(info));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isNotBlank(SerializableSupplier<String> propertySupplier) {
+        SerializedLambdaInfo info = LambdaUtils.getLambdaInfo(propertySupplier);
+        Object value = BeanUtils.getProperty(info.getSerializedLambda().getCapturedArg(0), info.getPropertyName());
+        String descp = createDescp(info);
+        isNotNull(value, descp);
+        isNotBlank(value.toString(), descp);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T> void isNotEmpty(SerializableSupplier<T> propertySupplier) {
+        SerializedLambdaInfo info = LambdaUtils.getLambdaInfo(propertySupplier);
+        Object value = BeanUtils.getProperty(info.getSerializedLambda().getCapturedArg(0), info.getPropertyName());
+        isNotEmpty(value, createDescp(info));
+    }
+
+    private String createDescp(SerializedLambdaInfo info) {
+        return org.apache.commons.lang3.StringUtils.substringAfterLast(info.getMethodInstanceClassName(), ".") + "."
+                + info.getPropertyName();
     }
 }

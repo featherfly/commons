@@ -132,8 +132,8 @@ public class LambdaUtils {
         return info2;
     }
 
-    public static Method getLambdaMethod(Serializable lambda) {
-        return getLambdaMethod(getSerializedLambda(lambda));
+    public static SerializedLambda getSerializedLambda(Serializable lambda) {
+        return computeSerializedLambda(lambda);
     }
 
     public static Method getLambdaMethod(SerializedLambda lambda) {
@@ -144,26 +144,24 @@ public class LambdaUtils {
         return method;
     }
 
-    public static SerializedLambda getSerializedLambda(Serializable lambda) {
-        return computeSerializedLambda(lambda);
+    public static Method getLambdaMethod(Serializable lambda) {
+        return getLambdaMethod(getSerializedLambda(lambda));
     }
 
     public static String getLambdaMethodName(Serializable lambda) {
-        SerializedLambda serializedLambda = computeSerializedLambda(lambda);
-        return getLambdaMethodName(serializedLambda);
+        return getLambdaMethodName(computeSerializedLambda(lambda));
     }
 
     public static String getLambdaMethodName(SerializedLambda lambda) {
-        return getLambdaInfo(lambda).getMethodName();
+        return lambda.getImplMethodName();
     }
 
     public static String getLambdaPropertyName(Serializable lambda) {
-        SerializedLambda serializedLambda = computeSerializedLambda(lambda);
-        return getLambdaPropertyName(serializedLambda);
+        return getLambdaPropertyName(computeSerializedLambda(lambda));
     }
 
     public static String getLambdaPropertyName(SerializedLambda lambda) {
-        return getLambdaInfo(lambda).getPropertyName();
+        return methodToPropertyName(getLambdaMethodName(lambda));
     }
 
     private static SerializedLambda computeSerializedLambda(Serializable lambda) {

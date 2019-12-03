@@ -76,8 +76,8 @@ public class LambdaUtilsTest {
 
     @Test
     public void test5() {
-        propertyName(User::getAge);
-        propertyNumberName(User::getAge);
+        assertEquals(propertyName(User::getAge), "age");
+        assertEquals(propertyNumberName(User::getAge), "age");
         //        propertyNumberName(User::getName);
     }
 
@@ -88,10 +88,13 @@ public class LambdaUtilsTest {
 
         String p = propertyName(user::getAge);
         System.out.println(p);
+        assertEquals(p, "age");
         p = propertyNumberName(user::getAge);
         System.out.println(p);
+        assertEquals(p, "age");
         p = propertyStrName(user::getName);
         System.out.println(p);
+        assertEquals(p, "name");
 
         SerializedLambdaInfo info = info(User::getAge);
         System.out.println(info);
@@ -116,6 +119,21 @@ public class LambdaUtilsTest {
         System.out.println(info2.getSerializedLambda().getCapturedArgCount());
         System.out.println(info2.getSerializedLambda().getCapturedArg(0));
         //        propertyNumberName(User::getName);
+    }
+
+    @Test
+    public void test8() {
+        User2 user = new User2();
+        user.setAge(18);
+        SerializedLambda sl = null;
+        sl = get(user::getAge);
+        assertEquals(LambdaUtils.getLambdaMethodName(sl), "getAge");
+        assertEquals(LambdaUtils.getLambdaPropertyName(sl), "age");
+
+        sl = get(User::getAge);
+        assertEquals(LambdaUtils.getLambdaMethodName(sl), "getAge");
+        assertEquals(LambdaUtils.getLambdaPropertyName(sl), "age");
+
     }
 
     public static void main(String[] args) {

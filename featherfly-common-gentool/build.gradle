@@ -1,5 +1,5 @@
 dependencies {
-    compile group: 'cn.featherfly', name: 'featherfly-common', version: '1.7.12'
+    compile project(":featherfly-common")
     
     compile group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.11.RELEASE'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.0'

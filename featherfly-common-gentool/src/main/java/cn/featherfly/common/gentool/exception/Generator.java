@@ -19,8 +19,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
+import cn.featherfly.common.constant.Charset;
 import cn.featherfly.common.gentool.exception.module.GenModule;
-import cn.featherfly.common.io.FileUtils;
 import cn.featherfly.common.lang.ClassLoaderUtils;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.UriUtils;
@@ -29,11 +29,11 @@ import cn.featherfly.common.lang.UriUtils;
  * <p>
  * Generator
  * </p>
- * 
+ *
  * @author zhongj
  */
 public class Generator {
-    
+
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     TemplateEngine templateEngine;
@@ -52,7 +52,7 @@ public class Generator {
         templateResolver.setSuffix(config.getTemplateSuffix());
         // Template cache TTL=1h. If not set, entries would be cached until
         // expelled
-//        templateResolver.setCacheTTLMs(Long.valueOf(3600000L));
+        //        templateResolver.setCacheTTLMs(Long.valueOf(3600000L));
         templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(templateResolver);
     }
@@ -72,47 +72,40 @@ public class Generator {
         String resourceRootPath = config.getResourceDir();
 
         String exceptionJavaFile = UriUtils.linkUri(javaRootPath,
-                ClassUtils.packageToDir(
-                        genModule.getException().getPackageName()),
+                ClassUtils.packageToDir(genModule.getException().getPackageName()),
                 genModule.getException().getName() + ".java");
         logger.debug("generated exceptionJavaFile -> {}", exceptionJavaFile);
 
         String codeJavaFile = UriUtils.linkUri(javaRootPath,
-                ClassUtils.packageToDir(genModule.getCode().getPackageName()),
-                genModule.getCode().getName() + ".java");
+                ClassUtils.packageToDir(genModule.getCode().getPackageName()), genModule.getCode().getName() + ".java");
         logger.debug("generated exceptionCodeJavaFile -> {}", codeJavaFile);
-        
-        FileUtils.write(new File(exceptionJavaFile),
-                templateEngine.process("exception", context));
-        FileUtils.write(new File(codeJavaFile),
-                templateEngine.process("code", context));
+
+        org.apache.commons.io.FileUtils.write(new File(exceptionJavaFile), templateEngine.process("exception", context),
+                Charset.UTF_8);
+        org.apache.commons.io.FileUtils.write(new File(codeJavaFile), templateEngine.process("code", context),
+                Charset.UTF_8);
 
         String propertiesFile = UriUtils.linkUri(resourceRootPath,
-                ClassUtils.packageToDir(
-                        genModule.getException().getPackageName()),
-                genModule.getException().getName());
+                ClassUtils.packageToDir(genModule.getException().getPackageName()), genModule.getException().getName());
 
         genModule.getCode().getLocales().forEach((locale, properties) -> {
             // context.setVariable("locale", locale);
             // context.setVariable("properties", properties);
             try {
-                File file = new File(
-                        propertiesFile + "_" + locale + ".properties");
+                File file = new File(propertiesFile + "_" + locale + ".properties");
                 if (!file.exists()) {
-                    FileUtils.write(file, new byte[] {});
+                    org.apache.commons.io.FileUtils.writeByteArrayToFile(file, new byte[] {});
                 }
                 OutputStream out = new FileOutputStream(file);
                 logger.debug("generated properties file -> {}", file.getAbsolutePath());
-                properties.store(out,
-                        genModule.getCode().getModule() + " " + locale);
+                properties.store(out, genModule.getCode().getModule() + " " + locale);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    private GenModule read(String filePath)
-            throws JsonProcessingException, IOException {
+    private GenModule read(String filePath) throws JsonProcessingException, IOException {
         logger.debug("read genfile file -> {}", filePath);
         YAMLFactory yamlFactory = new YAMLFactory();
         ObjectMapper mapper = new ObjectMapper(yamlFactory);

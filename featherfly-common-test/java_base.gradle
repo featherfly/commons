@@ -8,6 +8,7 @@ tasks.withType(Javadoc) {
 }
 
 jar {
+    archiveBaseName = archivesBaseName
     manifest.attributes 'Build-Name': archivesBaseName
     manifest.attributes 'Build-By': "zhong ji"
     manifest.attributes 'Build-Tool' : "gradle " + gradle.gradleVersion

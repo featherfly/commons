@@ -1,3 +1,7 @@
+2019-12-03
+0.1.5
+    1.修改group名称
+    
 2014-06-17 0.1.4
 	1.移植到cn.featherfly
 	2.加入CompressProvider，实现了ZipCompressProvider

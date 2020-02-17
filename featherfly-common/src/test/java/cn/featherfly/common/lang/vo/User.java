@@ -103,8 +103,9 @@ public class User {
      *
      * @param age age
      */
-    public void setAge(Integer age) {
+    public User setAge(Integer age) {
         this.age = age;
+        return this;
     }
 
     /**

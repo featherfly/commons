@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
 import cn.featherfly.common.lang.function.SerializableFunction;
+import cn.featherfly.common.lang.function.SerializableSupplier;
 import cn.featherfly.common.lang.vo.User;
 import cn.featherfly.common.lang.vo.User2;
 
@@ -73,6 +74,68 @@ public class LambdaUtilsTest {
         assertEquals(true, ClassUtils.invokeMethod(user2, info.getMethod(), new Object[0]));
     }
 
+    @Test
+    public void test5() {
+        assertEquals(propertyName(User::getAge), "age");
+        assertEquals(propertyNumberName(User::getAge), "age");
+        //        propertyNumberName(User::getName);
+    }
+
+    @Test
+    public void test6() {
+        User user = new User();
+        user.setAge(18);
+
+        String p = propertyName(user::getAge);
+        System.out.println(p);
+        assertEquals(p, "age");
+        p = propertyNumberName(user::getAge);
+        System.out.println(p);
+        assertEquals(p, "age");
+        p = propertyStrName(user::getName);
+        System.out.println(p);
+        assertEquals(p, "name");
+
+        SerializedLambdaInfo info = info(User::getAge);
+        System.out.println(info);
+        System.out.println(info.getSerializedLambda().getCapturedArgCount());
+        SerializedLambdaInfo info2 = info(user::getAge);
+        System.out.println(info2);
+        System.out.println(info2.getSerializedLambda().getCapturedArgCount());
+        System.out.println(info2.getSerializedLambda().getCapturedArg(0));
+        //        propertyNumberName(User::getName);
+    }
+
+    @Test
+    public void test7() {
+        User2 user = new User2();
+        user.setAge(18);
+
+        SerializedLambdaInfo info = info(User2::getAge);
+        System.out.println(info);
+        System.out.println(info.getSerializedLambda().getCapturedArgCount());
+        SerializedLambdaInfo info2 = info(user::getAge);
+        System.out.println(info2);
+        System.out.println(info2.getSerializedLambda().getCapturedArgCount());
+        System.out.println(info2.getSerializedLambda().getCapturedArg(0));
+        //        propertyNumberName(User::getName);
+    }
+
+    @Test
+    public void test8() {
+        User2 user = new User2();
+        user.setAge(18);
+        SerializedLambda sl = null;
+        sl = get(user::getAge);
+        assertEquals(LambdaUtils.getLambdaMethodName(sl), "getAge");
+        assertEquals(LambdaUtils.getLambdaPropertyName(sl), "age");
+
+        sl = get(User::getAge);
+        assertEquals(LambdaUtils.getLambdaMethodName(sl), "getAge");
+        assertEquals(LambdaUtils.getLambdaPropertyName(sl), "age");
+
+    }
+
     public static void main(String[] args) {
         SerializedLambda s;
         s = get(User::isLocked);
@@ -123,6 +186,10 @@ public class LambdaUtilsTest {
         System.err.println(f.equals(f2));
     }
 
+    private <T, R extends Number> String propertyNumberName(SerializableFunction<T, R> f) {
+        return LambdaUtils.getLambdaPropertyName(f);
+    }
+
     private <T, R> String propertyName(SerializableFunction<T, R> f) {
         return LambdaUtils.getLambdaPropertyName(f);
     }
@@ -136,6 +203,30 @@ public class LambdaUtilsTest {
     }
 
     public static <T, R> SerializedLambda get(SerializableFunction<T, R> f) {
+        return LambdaUtils.getSerializedLambda(f);
+    }
+
+    private <T extends Number> String propertyNumberName(SerializableSupplier<T> f) {
+        return LambdaUtils.getLambdaPropertyName(f);
+    }
+
+    private <T> String propertyName(SerializableSupplier<T> f) {
+        return LambdaUtils.getLambdaPropertyName(f);
+    }
+
+    private <T> String propertyStrName(SerializableSupplier<String> f) {
+        return LambdaUtils.getLambdaPropertyName(f);
+    }
+
+    private <T> SerializedLambdaInfo info(SerializableSupplier<T> f) {
+        return LambdaUtils.getLambdaInfo(f);
+    }
+
+    private <T> String methodName(SerializableSupplier<T> f) {
+        return LambdaUtils.getLambdaMethodName(f);
+    }
+
+    public static <T> SerializedLambda get(SerializableSupplier<T> f) {
         return LambdaUtils.getSerializedLambda(f);
     }
 

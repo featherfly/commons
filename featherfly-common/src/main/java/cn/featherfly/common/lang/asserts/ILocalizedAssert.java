@@ -5,6 +5,8 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 
+import cn.featherfly.common.lang.function.SerializableSupplier;
+
 /**
  * <p>
  * IAssertLocalized
@@ -27,6 +29,15 @@ public interface ILocalizedAssert<E extends RuntimeException> {
 
     /**
      * <p>
+     * if null, throw exception
+     * </p>
+     *
+     * @param propertySupplier object property lambda
+     */
+    <T> void isNotNull(SerializableSupplier<T> propertySupplier);
+
+    /**
+     * <p>
      * 判断不为空或空串（包括只有空字符的串），判断失败抛出指定异常
      * </p>
      *
@@ -37,6 +48,15 @@ public interface ILocalizedAssert<E extends RuntimeException> {
 
     /**
      * <p>
+     * 判断不为空或空串（包括只有空字符的串），判断失败抛出指定异常
+     * </p>
+     *
+     * @param propertySupplier object property lambda
+     */
+    void isNotBlank(SerializableSupplier<String> propertySupplier);
+
+    /**
+     * <p>
      * 判断不为空（String,Collection,Map,Array还要判断长度是否为0），判断失败抛出指定异常
      * </p>
      *
@@ -44,6 +64,15 @@ public interface ILocalizedAssert<E extends RuntimeException> {
      * @param arguDescps 出错时对参数的描述信息，例如：user.id、username等等
      */
     void isNotEmpty(Object obj, String arguDescps);
+
+    /**
+     * <p>
+     * 判断不为空（String,Collection,Map,Array还要判断长度是否为0），判断失败抛出指定异常
+     * </p>
+     *
+     * @param propertySupplier object property lambda
+     */
+    <T> void isNotEmpty(SerializableSupplier<T> propertySupplier);
 
     /**
      * <p>

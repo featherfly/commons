@@ -1,3 +1,16 @@
+2019-12-03
+1.7.15
+    1.修复LambdaUtils的bug
+    
+2019-12-03
+1.7.14
+    1.修改group名称
+    
+2019-11-28
+1.7.13
+    1.加入SerializableSupplier
+    2.ILocalizedAssert中的isNotNull,isNotEmpty,isNotBlank加入传入SerializableSupplier参数的重载方法
+    
 2019-9-22
 1.7.12
     1.LambdaUtils加入getLambdaPropertyName,getLambdaMethodName重载方法

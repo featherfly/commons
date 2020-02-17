@@ -1,6 +1,5 @@
 dependencies {
-	compile 'cn.featherfly:featherfly-common:latest.integration'
+    compile project(":featherfly-common")
 	compile group: 'org.apache.ant', name: 'ant', version: '1.10.6'
 	compile group: 'org.apache.commons', name: 'commons-compress', version: '1.18'
-	
 }

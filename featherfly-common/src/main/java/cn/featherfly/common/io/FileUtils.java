@@ -1,5 +1,6 @@
 package cn.featherfly.common.io;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.constant.Chars;
+import cn.featherfly.common.lang.AlgorithmUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.LogUtils;
 
@@ -823,6 +825,17 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
             return false;
         }
         return "jar".equalsIgnoreCase(resourceUrl.getProtocol());
+    }
+
+    /**
+     * generate crc32 long number
+     *
+     * @param file file
+     * @return crc32 long number
+     * @throws IOException
+     */
+    public static long crc32(File file) throws IOException {
+        return AlgorithmUtils.crc32(new BufferedInputStream(new FileInputStream(file)));
     }
 
     /**

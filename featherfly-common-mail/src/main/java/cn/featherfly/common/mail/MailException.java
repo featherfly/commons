@@ -1,5 +1,5 @@
 
-package cn.featherfly.common.net;
+package cn.featherfly.common.mail;
 
 import java.util.Locale;
 

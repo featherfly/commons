@@ -1,5 +1,5 @@
 
-package cn.featherfly.common.net.mail;
+package cn.featherfly.common.mail;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,8 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.lang.UUIDGenerator;
-import cn.featherfly.common.net.MailException;
-import cn.featherfly.common.net.mail.client.AbstractMailClient;
+import cn.featherfly.common.mail.client.AbstractMailClient;
 
 /**
  * <p>

@@ -1,4 +1,4 @@
-package cn.featherfly.common.net.mail;
+package cn.featherfly.common.mail;
 
 import cn.featherfly.common.lang.LangUtils;
 

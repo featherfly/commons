@@ -1,4 +1,4 @@
-package cn.featherfly.common.net.mail.client;
+package cn.featherfly.common.mail.client;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,14 +16,14 @@ import javax.mail.search.MessageIDTerm;
 import javax.mail.search.SearchTerm;
 
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.net.MailException;
-import cn.featherfly.common.net.mail.ImapMailServer;
-import cn.featherfly.common.net.mail.Mail;
-import cn.featherfly.common.net.mail.MailApiUtils;
-import cn.featherfly.common.net.mail.MailCreator;
-import cn.featherfly.common.net.mail.MailHandler;
-import cn.featherfly.common.net.mail.MailUser;
-import cn.featherfly.common.net.mail.Pop3MailServer;
+import cn.featherfly.common.mail.ImapMailServer;
+import cn.featherfly.common.mail.Mail;
+import cn.featherfly.common.mail.MailApiUtils;
+import cn.featherfly.common.mail.MailCreator;
+import cn.featherfly.common.mail.MailException;
+import cn.featherfly.common.mail.MailHandler;
+import cn.featherfly.common.mail.MailUser;
+import cn.featherfly.common.mail.Pop3MailServer;
 
 /**
  * <p>

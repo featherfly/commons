@@ -1,11 +1,11 @@
 
 package mail;
 
-import cn.featherfly.common.net.mail.MailAddress;
-import cn.featherfly.common.net.mail.MailBody;
-import cn.featherfly.common.net.mail.MailUser;
-import cn.featherfly.common.net.mail.SmtpMailServer;
-import cn.featherfly.common.net.mail.client.MailSender;
+import cn.featherfly.common.mail.MailAddress;
+import cn.featherfly.common.mail.MailBody;
+import cn.featherfly.common.mail.MailUser;
+import cn.featherfly.common.mail.SmtpMailServer;
+import cn.featherfly.common.mail.client.MailSender;
 
 /**
  * <p>

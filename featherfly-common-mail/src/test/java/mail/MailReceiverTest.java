@@ -1,10 +1,10 @@
 
 package mail;
 
-import cn.featherfly.common.net.mail.ImapMailServer;
-import cn.featherfly.common.net.mail.MailUser;
-import cn.featherfly.common.net.mail.SimpleMailCreator;
-import cn.featherfly.common.net.mail.client.MailReceiver;
+import cn.featherfly.common.mail.ImapMailServer;
+import cn.featherfly.common.mail.MailUser;
+import cn.featherfly.common.mail.SimpleMailCreator;
+import cn.featherfly.common.mail.client.MailReceiver;
 
 /**
  * <p>

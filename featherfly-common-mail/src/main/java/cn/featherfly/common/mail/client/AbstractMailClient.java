@@ -1,4 +1,4 @@
-package cn.featherfly.common.net.mail.client;
+package cn.featherfly.common.mail.client;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -20,12 +20,12 @@ import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.StringUtils;
-import cn.featherfly.common.net.MailException;
-import cn.featherfly.common.net.mail.ImapMailServer;
-import cn.featherfly.common.net.mail.MailServer;
-import cn.featherfly.common.net.mail.MailUser;
-import cn.featherfly.common.net.mail.Pop3MailServer;
-import cn.featherfly.common.net.mail.SmtpMailServer;
+import cn.featherfly.common.mail.ImapMailServer;
+import cn.featherfly.common.mail.MailException;
+import cn.featherfly.common.mail.MailServer;
+import cn.featherfly.common.mail.MailUser;
+import cn.featherfly.common.mail.Pop3MailServer;
+import cn.featherfly.common.mail.SmtpMailServer;
 
 /**
  * <p>

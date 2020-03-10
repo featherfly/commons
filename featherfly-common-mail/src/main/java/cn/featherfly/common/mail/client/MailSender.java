@@ -1,5 +1,5 @@
 
-package cn.featherfly.common.net.mail.client;
+package cn.featherfly.common.mail.client;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -22,12 +22,12 @@ import javax.mail.internet.MimeUtility;
 
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.UUIDGenerator;
-import cn.featherfly.common.net.MailException;
-import cn.featherfly.common.net.mail.MailAddress;
-import cn.featherfly.common.net.mail.MailAttach;
-import cn.featherfly.common.net.mail.MailBody;
-import cn.featherfly.common.net.mail.MailUser;
-import cn.featherfly.common.net.mail.SmtpMailServer;
+import cn.featherfly.common.mail.MailAddress;
+import cn.featherfly.common.mail.MailAttach;
+import cn.featherfly.common.mail.MailBody;
+import cn.featherfly.common.mail.MailException;
+import cn.featherfly.common.mail.MailUser;
+import cn.featherfly.common.mail.SmtpMailServer;
 
 /**
  * <p>

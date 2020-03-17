@@ -245,6 +245,20 @@ public final class ClassUtils {
     }
 
     /**
+     * 获取标注的注解实力对象，如果没有标注，返回null
+     *
+     * @param <A1>              被标注的注解泛型
+     * @param <A2>              标注的注解泛型
+     * @param annotation        被标注的注解实例对象
+     * @param annotationPresent 标注的注解类型
+     * @return 返回标注的注解实力对象
+     */
+    public static <A1 extends Annotation, A2 extends Annotation> A2 getAnnotation(A1 annotation,
+            Class<A2> annotationPresent) {
+        return getAnnotation(annotation.annotationType(), annotationPresent, false);
+    }
+
+    /**
      * 返回指定类型(objectType)的指定注解类型(annotationType), 会把父类里有被标注的字段也进行返回
      *
      * @param <A>            注解泛型
@@ -272,6 +286,55 @@ public final class ClassUtils {
             A a = objectType.getAnnotation(annotationType);
             if (a == null && fromSuper) {
                 return getAnnotation(objectType.getSuperclass(), annotationType, fromSuper);
+            } else {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取标注的注解实力对象，如果没有标注，返回null
+     *
+     * @param <A1>              被标注的注解泛型
+     * @param <A2>              标注的注解泛型
+     * @param annotation        被标注的注解实例对象
+     * @param annotationPresent 标注的注解类型
+     * @return 返回标注的注解实力对象数组
+     */
+    public static <A1 extends Annotation, A2 extends Annotation> A2[] getAnnotations(A1 annotation,
+            Class<A2> annotationPresent) {
+        return getAnnotations(annotation.annotationType(), annotationPresent, false);
+    }
+
+    /**
+     * 返回指定类型(objectType)的指定注解类型(annotationType), 会把父类里有被标注的字段也进行返回
+     *
+     * @param <A>            注解泛型
+     * @param objectType     对象类型
+     * @param annotationType 注解类型
+     * @return 指定注解类型数组
+     */
+    public static <A extends Annotation> A[] getAnnotations(Class<?> objectType, Class<A> annotationType) {
+        return getAnnotations(objectType, annotationType, true);
+    }
+
+    /**
+     * 返回指定类型(objectType)的指定注解类型(annotationType), fromSuper 为 true
+     * 时如果没有找到annotionType,则继续从父类查找
+     *
+     * @param <A>            注解泛型
+     * @param objectType     对象类型
+     * @param annotationType 注解类型
+     * @param fromSuper      是否从父类型查找
+     * @return 指定注解类型数组
+     */
+    public static <A extends Annotation> A[] getAnnotations(Class<?> objectType, Class<A> annotationType,
+            boolean fromSuper) {
+        if (objectType != null && objectType != Object.class) {
+            A[] a = objectType.getAnnotationsByType(annotationType);
+            if (a == null && fromSuper) {
+                return getAnnotations(objectType.getSuperclass(), annotationType, fromSuper);
             } else {
                 return a;
             }

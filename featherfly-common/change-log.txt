@@ -1,7 +1,9 @@
-2020-
+2020-3-17
 1.7.16
     1.加入AlgorithmUtils类，实现了crc32方法
     2.FileUtils加入crc32(file)方法
+    3.ClassUtils加入Annotation getAnnotation(Annotation a, Class<Annotation> type)方法，getAnnotaions三个对应getAnnotation的方法
+    4.ServiceLoaderUtils的NotFoundPolicy枚举类中的枚举项都改为大写
 
 2019-12-03
 1.7.15

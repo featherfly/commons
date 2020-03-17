@@ -47,11 +47,11 @@ public final class ServiceLoaderUtils {
         /**
          * 没有可加载时抛出异常
          */
-        exception
+        EXCEPTION
         /**
          * 忽略，返回null
          */
-        , ignore
+        , IGNORE
     } 
     
     /**
@@ -75,7 +75,7 @@ public final class ServiceLoaderUtils {
      * @return 服务实现
      */
     public static <T> T load(Class<T> serviceType, T defaultService) {
-        return load(serviceType, defaultService, MultiPolicy.EXCEPTION, NotFoundPolicy.exception);
+        return load(serviceType, defaultService, MultiPolicy.EXCEPTION, NotFoundPolicy.EXCEPTION);
     }
     /**
      * <p>
@@ -112,7 +112,7 @@ public final class ServiceLoaderUtils {
     private static <T> T loadOnNotFound(Class<T> serviceType, T defaultService, NotFoundPolicy notFoundPolicy) {
         if (defaultService == null) {
             switch (notFoundPolicy) {
-                case ignore: return null;    
+                case IGNORE: return null;    
                 default:
                     throw new IllegalArgumentException("没有找到" + serviceType.getName() + "实现");
             }

@@ -7,8 +7,10 @@ package cn.featherfly.common.lang;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
+import java.lang.annotation.Documented;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +20,9 @@ import java.util.Map;
 
 import org.testng.annotations.Test;
 
+import cn.featherfly.common.lang.vo.Bar;
+import cn.featherfly.common.lang.vo.Coo;
+import cn.featherfly.common.lang.vo.Foo;
 import cn.featherfly.common.lang.vo.User;
 
 public class ClassUtilsTest {
@@ -57,8 +62,16 @@ public class ClassUtilsTest {
         assertEquals(user.construct, "LinkedList");
     }
 
-    @Test
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testNewInstance2() {
         ClassUtils.newInstance(null);
+    }
+
+    @Test
+    public void testGetAnnotation() {
+        Bar bar = Coo.class.getAnnotation(Bar.class);
+        Foo foo = ClassUtils.getAnnotation(bar, Foo.class);
+        assertEquals("test", foo.value());
+        assertNull(ClassUtils.getAnnotation(bar, Documented.class));
     }
 }

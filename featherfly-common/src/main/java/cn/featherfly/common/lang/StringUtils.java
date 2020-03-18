@@ -1,6 +1,7 @@
 package cn.featherfly.common.lang;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -649,6 +650,16 @@ public final class StringUtils extends org.apache.commons.lang3.StringUtils {
             }
         }
         return -1;
+    }
+
+    /**
+     * use ISO8859-1 as the input str charset, encode it to UTF-8
+     *
+     * @param str encoding str
+     * @return UTF-8 str
+     */
+    public static String encode(String str) {
+        return encode(str, StandardCharsets.ISO_8859_1.displayName(), StandardCharsets.UTF_8.displayName());
     }
 
     /**

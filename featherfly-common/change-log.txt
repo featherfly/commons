@@ -1,3 +1,8 @@
+2020-3-18
+1.8.0
+    1.ResouceBundleJdkProxy实现传入字符集自动转码功能，如果没有指定则不操作
+    2.LocalizedException加入charset属性，用于设置国际化输出是否需要转码
+    
 2020-3-17
 1.7.16
     1.加入AlgorithmUtils类，实现了crc32方法

@@ -1,5 +1,6 @@
 package cn.featherfly.common.exception;
 
+import java.nio.charset.Charset;
 import java.util.Locale;
 
 import cn.featherfly.common.lang.LangUtils;
@@ -21,6 +22,8 @@ public abstract class LocalizedException extends BaseException {
     private Locale locale;
 
     private String localizedMessage;
+
+    protected Charset charset;
 
     /**
      * 构造方法
@@ -139,13 +142,32 @@ public abstract class LocalizedException extends BaseException {
             int keyIndex = message.indexOf(ResourceBundleUtils.KEY_SIGN);
             char firstChar = message.charAt(0);
             if (firstChar == ResourceBundleUtils.RESOURCE_SIGN && keyIndex != -1) {
-                localizedMessage = ResourceBundleUtils.getString(message, args, locale);
+                localizedMessage = ResourceBundleUtils.getString(message, args, locale, charset);
             } else if (firstChar == ResourceBundleUtils.KEY_SIGN) {
-                localizedMessage = ResourceBundleUtils.getString(this.getClass(), message.substring(1), args, locale);
+                localizedMessage = ResourceBundleUtils.getString(this.getClass(), message.substring(1), args, locale,
+                        charset);
             } else {
                 localizedMessage = message;
             }
         }
         return localizedMessage;
+    }
+
+    /**
+     * 返回charset
+     * 
+     * @return charset
+     */
+    public Charset getCharset() {
+        return charset;
+    }
+
+    /**
+     * 设置charset
+     * 
+     * @param charset charset
+     */
+    public void setCharset(Charset charset) {
+        this.charset = charset;
     }
 }

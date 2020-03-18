@@ -1,28 +1,48 @@
 package cn.featherfly.common.locale;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.StringUtils;
 
 /**
  * <p>
  * SimpleResourceBundle
  * </p>
- * 
+ *
  * @author zhongj
  */
 public class JdkResourceBundleProxy implements cn.featherfly.common.locale.ResourceBundle {
-    
+
+    private static final Charset DEFAULT_CHARSET = StandardCharsets.ISO_8859_1;
+
     private java.util.ResourceBundle bundle;
-    
+
+    private Charset charset;
+
     /**
      * @param bundle java.util.ResourceBundle
      */
     public JdkResourceBundleProxy(ResourceBundle bundle) {
         this.bundle = bundle;
     }
-    
+
+    /**
+     * @param bundle  java.util.ResourceBundle
+     * @param charset text charset
+     */
+    public JdkResourceBundleProxy(ResourceBundle bundle, Charset charset) {
+        this.bundle = bundle;
+        this.charset = charset;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -44,7 +64,7 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.locale.Resou
      */
     @Override
     public String toString() {
-        return bundle.toString();
+        return encode(bundle.toString());
     }
 
     /**
@@ -54,7 +74,7 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.locale.Resou
      */
     @Override
     public final String getString(String key) {
-        return bundle.getString(key);
+        return encode(bundle.getString(key));
     }
 
     /**
@@ -64,18 +84,20 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.locale.Resou
      */
     @Override
     public final String[] getStringArray(String key) {
-        return bundle.getStringArray(key);
+        return Stream.of(bundle.getStringArray(key)).map(value -> {
+            return encode(value);
+        }).collect(Collectors.toList()).toArray(new String[] {});
     }
 
-    /**
-     * @param key key
-     * @return String String
-     * @see java.util.ResourceBundle#getObject(java.lang.String)
-     */
-    @Override
-    public final Object getObject(String key) {
-        return bundle.getObject(key);
-    }
+    //    /**
+    //     * getObject
+    //     * @param key
+    //     * @return
+    //     */
+    //    @Override
+    //    public final Object getObject(String key) {
+    //        return bundle.getObject(key);
+    //    }
 
     /**
      * @return Locale
@@ -112,5 +134,12 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.locale.Resou
     @Override
     public Set<String> keySet() {
         return bundle.keySet();
+    }
+
+    private String encode(String str) {
+        if (LangUtils.isNotEmpty(str) && charset != null) {
+            return StringUtils.encode(str, DEFAULT_CHARSET.displayName(), charset.displayName());
+        }
+        return str;
     }
 }

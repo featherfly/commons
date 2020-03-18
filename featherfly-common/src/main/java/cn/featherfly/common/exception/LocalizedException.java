@@ -155,7 +155,7 @@ public abstract class LocalizedException extends BaseException {
 
     /**
      * 返回charset
-     * 
+     *
      * @return charset
      */
     public Charset getCharset() {
@@ -164,10 +164,11 @@ public abstract class LocalizedException extends BaseException {
 
     /**
      * 设置charset
-     * 
+     *
      * @param charset charset
      */
-    public void setCharset(Charset charset) {
+    public LocalizedException setCharset(Charset charset) {
         this.charset = charset;
+        return this;
     }
 }

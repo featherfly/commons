@@ -47,6 +47,7 @@ public abstract class HMACSHA extends Algorithm {
      * HMACSHA1编码
      *
      * @param data 待编码数据
+     * @param key  编码使用的key
      * @return String 消息摘要
      * @throws AlgorithmException
      */
@@ -92,6 +93,7 @@ public abstract class HMACSHA extends Algorithm {
      * HMACSHA224编码
      *
      * @param data 待编码数据
+     * @param key  编码使用的key
      * @return String 消息摘要
      * @throws AlgorithmException
      */
@@ -137,6 +139,7 @@ public abstract class HMACSHA extends Algorithm {
      * HMACSHA256编码
      *
      * @param data 待编码数据
+     * @param key  编码使用的key
      * @return String 消息摘要
      * @throws AlgorithmException
      */
@@ -182,6 +185,7 @@ public abstract class HMACSHA extends Algorithm {
      * HMACSHA384编码
      *
      * @param data 待编码数据
+     * @param key  编码使用的key
      * @return String 消息摘要
      * @throws AlgorithmException
      */
@@ -227,6 +231,7 @@ public abstract class HMACSHA extends Algorithm {
      * HMACSHA512编码
      *
      * @param data 待编码数据
+     * @param key  编码使用的key
      * @return String 消息摘要
      * @throws AlgorithmException
      */

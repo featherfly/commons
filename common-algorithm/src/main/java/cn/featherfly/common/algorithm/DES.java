@@ -148,6 +148,7 @@ public abstract class DES extends Algorithm {
     /**
      * 生成密钥 <br>
      *
+     * @param seed seed for SecureRandom
      * @return byte[] 二进制密钥
      * @throws AlgorithmException
      */

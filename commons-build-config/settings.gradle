@@ -1,6 +1,6 @@
-rootProject.name = 'build-config'
+rootProject.name = 'commons-build-config'
 includeFlat 'common-algorithm'
-includeFlat 'featherfly-common'
+includeFlat 'common-core'
 includeFlat 'common-bean-javassist'
 includeFlat 'common-mail'
 includeFlat 'common-compress'

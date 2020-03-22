@@ -387,7 +387,6 @@ public final class LangUtils {
      *
      * @param file     判断的文件
      * @param consumer 需要执行的方法
-     * @return 传入文件对象代表的物理文件是否存在
      */
     public static void isExists(File file, Consumer<File> consumer) {
         if (isExists(file)) {
@@ -402,7 +401,6 @@ public final class LangUtils {
      *
      * @param file     判断的文件
      * @param consumer 需要执行的方法
-     * @return 传入文件对象代表的物理文件是否存在
      */
     public static void isNotExists(File file, Consumer<File> consumer) {
         if (isNotExists(file)) {

@@ -10,6 +10,6 @@ sourceSets {
 }
 
 dependencies {
-    compile project(":featherfly-common")
+    compile project(":common-core")
     compile group: 'org.javassist', name: 'javassist', version: '3.25.0-GA'
 }

@@ -3,7 +3,7 @@ ext {
 }
   
 dependencies {
-	compile project(":featherfly-common")
+    compile project(":common-core")
     compile group: 'org.springframework', name: 'spring-core', version: sv    
     compile 'org.springframework:spring-context-support:' + sv
     compile 'org.springframework:spring-jdbc:' + sv

@@ -21,14 +21,33 @@ public class LogTest2 {
 
     @Test
     public void test() {
-        logger.info("test");
-        logger.info("test {}, {}", () -> {
+        logger.info("info");
+        logger.info("info {}, {}", () -> {
             return new Object[] { "argu1", "argu2" };
         });
-        logger2.info("test");
-        logger2.info("test {}, {}", () -> {
+        logger2.info("info");
+        logger2.info("info {}, {}", () -> {
             return new Object[] { "argu1", "argu2" };
         });
+
+        logger.debug("debug");
+        logger.debug("debug {}, {}", () -> {
+            return new Object[] { "argu1", "argu2" };
+        });
+        logger2.debug("debug");
+        logger2.debug("debug {}, {}", () -> {
+            return new Object[] { "argu1", "argu2" };
+        });
+
+        logger.error("error");
+        logger.error("error {}, {}", () -> {
+            return new Object[] { "argu1", "argu2" };
+        });
+        logger2.error("error");
+        logger2.error("error {}, {}", () -> {
+            return new Object[] { "argu1", "argu2" };
+        });
+
         //        Integer a = null;
         //        try {
         //            a.intValue();
@@ -40,7 +59,7 @@ public class LogTest2 {
     @Test
     public void test2() {
         LoggerUtils.logger().debug("test2");
-        LoggerUtils.logger().error("test2", () -> {
+        LoggerUtils.logger().error("test2 {}, {}", () -> {
             return new Object[] { "argu1", "argu2" };
         });
     }

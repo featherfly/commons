@@ -5,12 +5,11 @@
 package cn.featherfly.common.lang;
 
 import java.lang.reflect.Field;
+import java.util.function.Supplier;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import cn.featherfly.common.log.LoggerEnabled;
 
 /**
  * @author zhongj - yufei
@@ -29,11 +28,11 @@ public class LogUtils {
      *
      * @param logger
      * @param msg
-     * @param loggerEnabled
+     * @param supplier
      */
-    public static void trace(Logger logger, String msg, LoggerEnabled loggerEnabled) {
+    public static void trace(Logger logger, String msg, Supplier<Object[]> supplier) {
         if (logger.isTraceEnabled()) {
-            logger.trace(msg, loggerEnabled.arguments());
+            logger.trace(msg, supplier.get());
         }
     }
 
@@ -42,11 +41,11 @@ public class LogUtils {
      *
      * @param logger
      * @param msg
-     * @param loggerEnabled
+     * @param supplier
      */
-    public static void debug(Logger logger, String msg, LoggerEnabled loggerEnabled) {
+    public static void debug(Logger logger, String msg, Supplier<Object[]> supplier) {
         if (logger.isDebugEnabled()) {
-            logger.debug(msg, loggerEnabled.arguments());
+            logger.debug(msg, supplier.get());
         }
     }
 
@@ -55,11 +54,11 @@ public class LogUtils {
      *
      * @param logger
      * @param msg
-     * @param loggerEnabled
+     * @param supplier
      */
-    public static void info(Logger logger, String msg, LoggerEnabled loggerEnabled) {
+    public static void info(Logger logger, String msg, Supplier<Object[]> supplier) {
         if (logger.isInfoEnabled()) {
-            logger.info(msg, loggerEnabled.arguments());
+            logger.info(msg, supplier.get());
         }
     }
 
@@ -68,11 +67,11 @@ public class LogUtils {
      *
      * @param logger
      * @param msg
-     * @param loggerEnabled
+     * @param supplier
      */
-    public static void warn(Logger logger, String msg, LoggerEnabled loggerEnabled) {
+    public static void warn(Logger logger, String msg, Supplier<Object[]> supplier) {
         if (logger.isWarnEnabled()) {
-            logger.warn(msg, loggerEnabled.arguments());
+            logger.warn(msg, supplier.get());
         }
     }
 
@@ -81,11 +80,11 @@ public class LogUtils {
      *
      * @param logger
      * @param msg
-     * @param loggerEnabled
+     * @param supplier
      */
-    public static void error(Logger logger, String msg, LoggerEnabled loggerEnabled) {
+    public static void error(Logger logger, String msg, Supplier<Object[]> supplier) {
         if (logger.isErrorEnabled()) {
-            logger.error(msg, loggerEnabled.arguments());
+            logger.error(msg, supplier.get());
         }
     }
 

@@ -73,7 +73,7 @@ public class LoggerFactory {
     private static void addMethods(CtClass ctClass, ClassPool pool) throws NotFoundException, CannotCompileException {
         for (Method method : Logger.class.getDeclaredMethods()) {
             CtMethod ctMethod = JavassistUtils.createMethod(method, ctClass, pool);
-            ctMethod.setBody(String.format("if (is%sEnabled()) {this.%s($1, $2.arguments());}",
+            ctMethod.setBody(String.format("if (is%sEnabled()) {this.%s($1, $2.get());}",
                     WordUtils.upperCaseFirst(ctMethod.getName()), ctMethod.getName()));
             ctClass.addMethod(ctMethod);
         }

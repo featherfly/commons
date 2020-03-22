@@ -677,7 +677,22 @@ public final class ClassUtils {
      * </p>
      *
      * @param type 类型
-     * @return 目录模式
+     * @return 目录模式表示的type文件
+     */
+    public static String packageToFile(Class<?> type) {
+        if (type == null) {
+            return null;
+        }
+        return packageToDir(type.getName()) + ".class";
+    }
+
+    /**
+     * <p>
+     * 转换包模式为目录模式.xx.yy.Ttt -&gt; xx/yy/Ttt
+     * </p>
+     *
+     * @param type 类型
+     * @return 目录模式字符串
      */
     public static String packageToDir(Class<?> type) {
         if (type == null) {
@@ -691,14 +706,14 @@ public final class ClassUtils {
      * 转换包模式为目录模式.xx.yy.Ttt -&gt; xx/yy/Ttt
      * </p>
      *
-     * @param className 类型名称
-     * @return 目录模式
+     * @param packageString 包模式字符串
+     * @return 目录模式字符串
      */
-    public static String packageToDir(String className) {
-        if (LangUtils.isEmpty(className)) {
+    public static String packageToDir(String packageString) {
+        if (LangUtils.isEmpty(packageString)) {
             return null;
         }
-        return className.replace(".", "/");
+        return packageString.replace(".", "/");
     }
 
     // ********************************************************************

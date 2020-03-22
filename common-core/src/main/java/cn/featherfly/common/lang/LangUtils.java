@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.function.Consumer;
 
 /**
  * <p>
@@ -108,6 +108,20 @@ public final class LangUtils {
 
     /**
      * <p>
+     * 判断传入对象是否为空，（String、Collection、Map、Array还要判断长度是否为0），如果不空则执行传入的方法
+     * </p>
+     *
+     * @param object   传入的对象
+     * @param consumer 需要执行的方法
+     */
+    public static <O> void isEmpty(O object, Consumer<O> consumer) {
+        if (isEmpty(object)) {
+            consumer.accept(object);
+        }
+    }
+
+    /**
+     * <p>
      * 返回传入对象是否不为空（String、Collection、Map、Array还要判断长度是否为0）
      * </p>
      *
@@ -116,6 +130,20 @@ public final class LangUtils {
      */
     public static boolean isNotEmpty(Object object) {
         return !isEmpty(object);
+    }
+
+    /**
+     * <p>
+     * 判断传入对象是否不为空，（String、Collection、Map、Array还要判断长度是否为0），如果不为空则执行传入的方法
+     * </p>
+     *
+     * @param object   传入的对象
+     * @param consumer 需要执行的方法
+     */
+    public static <O> void isNotEmpty(O object, Consumer<O> consumer) {
+        if (isNotEmpty(object)) {
+            consumer.accept(object);
+        }
     }
 
     /**
@@ -132,6 +160,21 @@ public final class LangUtils {
 
     /**
      * <p>
+     * 判断传入字符串是否为空（是null或是空字符串），如果为空，则执行传入的方法
+     * </p>
+     *
+     * @param string   传入的字符串
+     * @param consumer 需要执行的方法
+     * @param consumer 判断为空时执行的方法
+     */
+    public static void isEmpty(String string, Consumer<String> consumer) {
+        if (isEmpty(string)) {
+            consumer.accept(string);
+        }
+    }
+
+    /**
+     * <p>
      * 返回传入字符串是否不为空（不是null或不是空字符串）
      * </p>
      *
@@ -140,6 +183,21 @@ public final class LangUtils {
      */
     public static boolean isNotEmpty(String string) {
         return !isEmpty(string);
+    }
+
+    /**
+     * <p>
+     * 判断传入字符串是否不为空（是null或是空字符串），如果不为空，则执行传入的方法
+     * </p>
+     *
+     * @param string   传入的字符串
+     * @param consumer 需要执行的方法
+     * @param consumer 判断为空时执行的方法
+     */
+    public static void isNotEmpty(String string, Consumer<String> consumer) {
+        if (isNotEmpty(string)) {
+            consumer.accept(string);
+        }
     }
 
     /**
@@ -156,6 +214,20 @@ public final class LangUtils {
 
     /**
      * <p>
+     * 判断数组是否为空（是null或是空数组），如果为空，则执行传入的方法
+     * </p>
+     *
+     * @param array    传入的数组
+     * @param consumer 需要执行的方法
+     */
+    public static <E> void isEmpty(E[] array, Consumer<E[]> consumer) {
+        if (isEmpty(array)) {
+            consumer.accept(array);
+        }
+    }
+
+    /**
+     * <p>
      * 返回数组是否不为空（null或空数组）
      * </p>
      *
@@ -164,6 +236,20 @@ public final class LangUtils {
      */
     public static boolean isNotEmpty(Object[] array) {
         return !isEmpty(array);
+    }
+
+    /**
+     * <p>
+     * 判断数组是否不为空（是null或是空数组），如果不为空，则执行传入的方法
+     * </p>
+     *
+     * @param array    传入的数组
+     * @param consumer 需要执行的方法
+     */
+    public static <E> void isNotEmpty(E[] array, Consumer<E[]> consumer) {
+        if (isNotEmpty(array)) {
+            consumer.accept(array);
+        }
     }
 
     /**
@@ -180,6 +266,20 @@ public final class LangUtils {
 
     /**
      * <p>
+     * 判断集合是否为空（是null或size=0），如果为空，则执行传入的方法
+     * </p>
+     *
+     * @param collection 传入的集合
+     * @param consumer   需要执行的方法
+     */
+    public static <E> void isEmpty(Collection<E> collection, Consumer<Collection<E>> consumer) {
+        if (isEmpty(collection)) {
+            consumer.accept(collection);
+        }
+    }
+
+    /**
+     * <p>
      * 返回传入集合是否不为空（不是null或size&gt;0）
      * </p>
      *
@@ -188,6 +288,20 @@ public final class LangUtils {
      */
     public static boolean isNotEmpty(Collection<?> collection) {
         return !isEmpty(collection);
+    }
+
+    /**
+     * <p>
+     * 判断集合是否不为空（是null或size&gt;0），如果不为空，则执行传入的方法
+     * </p>
+     *
+     * @param collection 传入的集合
+     * @param consumer   需要执行的方法
+     */
+    public static <E> void isNotEmpty(Collection<E> collection, Consumer<Collection<E>> consumer) {
+        if (isNotEmpty(collection)) {
+            consumer.accept(collection);
+        }
     }
 
     /**
@@ -216,6 +330,34 @@ public final class LangUtils {
 
     /**
      * <p>
+     * 判断map是否为空（是null或size=0），如果为空，则执行传入的方法
+     * </p>
+     *
+     * @param map      传入的map
+     * @param consumer 需要执行的方法
+     */
+    public static <K, V> void isEmpty(Map<K, V> map, Consumer<Map<K, V>> consumer) {
+        if (isEmpty(map)) {
+            consumer.accept(map);
+        }
+    }
+
+    /**
+     * <p>
+     * 判断map是否不为空（是null或size=0），如果不为空，则执行传入的方法
+     * </p>
+     *
+     * @param map      传入的map
+     * @param consumer 需要执行的方法
+     */
+    public static <K, V> void isNotEmpty(Map<K, V> map, Consumer<Map<K, V>> consumer) {
+        if (isNotEmpty(map)) {
+            consumer.accept(map);
+        }
+    }
+
+    /**
+     * <p>
      * 判断传入文件对象代表的物理文件是否存在
      * </p>
      *
@@ -224,6 +366,48 @@ public final class LangUtils {
      */
     public static boolean isExists(File file) {
         return file != null && file.exists();
+    }
+
+    /**
+     * <p>
+     * 判断传入文件对象代表的物理文件是否不存在
+     * </p>
+     *
+     * @param file 判断的文件
+     * @return 传入文件对象代表的物理文件是否存在
+     */
+    public static boolean isNotExists(File file) {
+        return !isExists(file);
+    }
+
+    /**
+     * <p>
+     * 判断传入文件对象代表的物理文件是否不存在，不存在则执行传入方法
+     * </p>
+     *
+     * @param file     判断的文件
+     * @param consumer 需要执行的方法
+     * @return 传入文件对象代表的物理文件是否存在
+     */
+    public static void isExists(File file, Consumer<File> consumer) {
+        if (isExists(file)) {
+            consumer.accept(file);
+        }
+    }
+
+    /**
+     * <p>
+     * 判断传入文件对象代表的物理文件是否不存在，不存在则执行传入方法
+     * </p>
+     *
+     * @param file     判断的文件
+     * @param consumer 需要执行的方法
+     * @return 传入文件对象代表的物理文件是否存在
+     */
+    public static void isNotExists(File file, Consumer<File> consumer) {
+        if (isNotExists(file)) {
+            consumer.accept(file);
+        }
     }
 
     /**
@@ -333,28 +517,13 @@ public final class LangUtils {
      */
     public static StackTraceElement getInvoker() {
         final String methodName = "getInvoker";
-        for (Entry<Thread, StackTraceElement[]> entry : Thread.getAllStackTraces().entrySet()) {
-            StackTraceElement[] stackTraceElements = entry.getValue();
-            boolean findThis = false;
-            boolean findInvokeThis = false;
-            boolean findInvokor = false;
-            for (StackTraceElement stackTraceElement : stackTraceElements) {
-                if (findThis) {
-                    findInvokeThis = true;
-                    findThis = false;
-                }
-                if (stackTraceElement.getClassName().equals(LangUtils.class.getName())
-                        && stackTraceElement.getMethodName().equals(methodName)) {
-                    findThis = true;
-                }
-                if (findInvokor) {
-                    return stackTraceElement;
-                }
-                if (findInvokeThis) {
-                    findInvokeThis = false;
-                    findInvokor = true;
-                }
+        boolean findThis = false;
+        for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()) {
+            if (findThis) {
+                return stackTraceElement;
             }
+            findThis = stackTraceElement.getClassName().equals(LangUtils.class.getName())
+                    && stackTraceElement.getMethodName().equals(methodName);
         }
         return null;
     }
@@ -369,29 +538,86 @@ public final class LangUtils {
     public static List<StackTraceElement> getInvokers() {
         final String methodName = "getInvokers";
         List<StackTraceElement> invokers = new ArrayList<>();
-        for (Entry<Thread, StackTraceElement[]> entry : Thread.getAllStackTraces().entrySet()) {
-            StackTraceElement[] stackTraceElements = entry.getValue();
-            boolean findThis = false;
-            boolean findInvokeThis = false;
-            boolean findInvokor = false;
-            for (StackTraceElement stackTraceElement : stackTraceElements) {
-                if (findThis) {
-                    findInvokeThis = true;
-                    findThis = false;
-                }
-                if (stackTraceElement.getClassName().equals(LangUtils.class.getName())
-                        && stackTraceElement.getMethodName().equals(methodName)) {
-                    findThis = true;
-                }
-                if (findInvokor) {
-                    invokers.add(stackTraceElement);
-                }
-                if (findInvokeThis) {
-                    findInvokeThis = false;
-                    findInvokor = true;
-                }
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        boolean findThis = false;
+        for (StackTraceElement stackTraceElement : stackTraceElements) {
+            if (findThis) {
+                invokers.add(stackTraceElement);
             }
+            findThis = stackTraceElement.getClassName().equals(LangUtils.class.getName())
+                    && stackTraceElement.getMethodName().equals(methodName);
         }
         return invokers;
     }
+
+    //    /**
+    //     * <p>
+    //     * 获取调用getInvoker方法所在的方法被调用的信息（即调用方法、类等）
+    //     * </p>
+    //     *
+    //     * @return StackTraceElement
+    //     */
+    //    public static StackTraceElement getInvokerAll() {
+    //        final String methodName = "getInvokerAll";
+    //        for (Entry<Thread, StackTraceElement[]> entry : Thread.getAllStackTraces().entrySet()) {
+    //            StackTraceElement[] stackTraceElements = entry.getValue();
+    //            boolean findThis = false;
+    //            boolean findInvokeThis = false;
+    //            boolean findInvokor = false;
+    //            for (StackTraceElement stackTraceElement : stackTraceElements) {
+    //                if (findThis) {
+    //                    findInvokeThis = true;
+    //                    findThis = false;
+    //                }
+    //                if (stackTraceElement.getClassName().equals(LangUtils.class.getName())
+    //                        && stackTraceElement.getMethodName().equals(methodName)) {
+    //                    findThis = true;
+    //                }
+    //                if (findInvokor) {
+    //                    return stackTraceElement;
+    //                }
+    //                if (findInvokeThis) {
+    //                    findInvokeThis = false;
+    //                    findInvokor = true;
+    //                }
+    //            }
+    //        }
+    //        return null;
+    //    }
+    //
+    //    /**
+    //     * <p>
+    //     * 获取调用此方法的调用方法栈
+    //     * </p>
+    //     *
+    //     * @return List&lt;StackTraceElement&gt;
+    //     */
+    //    public static List<StackTraceElement> getInvokersAll() {
+    //        final String methodName = "getInvokersAll";
+    //        List<StackTraceElement> invokers = new ArrayList<>();
+    //        for (Entry<Thread, StackTraceElement[]> entry : Thread.getAllStackTraces().entrySet()) {
+    //            StackTraceElement[] stackTraceElements = entry.getValue();
+    //            boolean findThis = false;
+    //            boolean findInvokeThis = false;
+    //            boolean findInvokor = false;
+    //            for (StackTraceElement stackTraceElement : stackTraceElements) {
+    //                if (findThis) {
+    //                    findInvokeThis = true;
+    //                    findThis = false;
+    //                }
+    //                if (stackTraceElement.getClassName().equals(LangUtils.class.getName())
+    //                        && stackTraceElement.getMethodName().equals(methodName)) {
+    //                    findThis = true;
+    //                }
+    //                if (findInvokor) {
+    //                    invokers.add(stackTraceElement);
+    //                }
+    //                if (findInvokeThis) {
+    //                    findInvokeThis = false;
+    //                    findInvokor = true;
+    //                }
+    //            }
+    //        }
+    //        return invokers;
+    //    }
 }

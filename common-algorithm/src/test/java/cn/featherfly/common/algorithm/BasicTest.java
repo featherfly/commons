@@ -28,12 +28,23 @@ public class BasicTest {
         System.out.println(new sun.misc.BASE64Encoder().encode("123".getBytes("UTF-8")));
     }*/
 
+    String data = "123";
+
     @Test
     public void testBase64() {
         String src = "123";
         String target = "MTIz";
         assertEquals(Base64.encodeToString(src), target);
         assertEquals(Base64.decodeToString(target), src);
+    }
+
+    @Test
+    public void testCRC() {
+        Long result32 = 2286445522l;
+        Long result64 = 3138064834360563487l;
+
+        assertEquals(new Long(CRC.crc32(data)), result32);
+        assertEquals(new Long(CRC.crc64(data)), result64);
     }
 
     @Test

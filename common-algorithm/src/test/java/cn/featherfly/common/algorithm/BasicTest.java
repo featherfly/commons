@@ -48,7 +48,9 @@ public class BasicTest {
         assertEquals(new Long(CRC.crc64(data)), result64);
 
         System.out.println(CRC.crc16Ccitt(data));
+        System.out.println(Integer.toHexString(CRC.crc16Ccitt(data)));
         System.out.println(CRC.crc16CcittReverse(data));
+        System.out.println(Integer.toHexString(CRC.crc16CcittReverse(data)));
         System.out.println(CRC.crc16DNP(data));
         System.out.println(CRC.crc16IBM(data));
         System.out.println(CRC.crc16Maxim(data));
@@ -56,6 +58,7 @@ public class BasicTest {
         System.out.println(CRC.crc16USB(data));
         System.out.println(CRC.crc16X25(data));
         System.out.println(CRC.crc16Xmodem(data));
+        System.out.println(Integer.toHexString(CRC.crc16Xmodem(data)));
     }
 
     @Test

@@ -14,17 +14,12 @@ import java.util.zip.CheckedInputStream;
  */
 public abstract class CRC extends Algorithm {
     /**
-     * algorithm name
-     */
-    public static final String NAME = "CRC32";
-
-    /**
      * generate crc32 long number
      *
      * @param data data bytes
      * @return crc32 long number
      */
-    public static long crc32(byte[] data) {
+    public static final long crc32(byte[] data) {
         CRC32 crc = new CRC32();
         crc.update(data);
         return crc.getValue();
@@ -36,7 +31,7 @@ public abstract class CRC extends Algorithm {
      * @param data data string
      * @return crc32 long number
      */
-    public static long crc32(String data) {
+    public static final long crc32(String data) {
         return crc32(getBytes(data));
     }
 
@@ -47,7 +42,7 @@ public abstract class CRC extends Algorithm {
      * @return crc32 long number
      * @throws IOException
      */
-    public static long crc32(InputStream inputStream) throws IOException {
+    public static final long crc32(InputStream inputStream) throws IOException {
         CRC32 crc32 = new CRC32();
         CheckedInputStream checkedinputstream = new CheckedInputStream(inputStream, crc32);
         while (checkedinputstream.read() != -1) {
@@ -63,8 +58,50 @@ public abstract class CRC extends Algorithm {
      * @return crc32 long number
      * @throws IOException
      */
-    public static long crc32(File file) throws IOException {
+    public static final long crc32(File file) throws IOException {
         return crc32(new FileInputStream(file));
+    }
+
+    /**
+     * generate crc32 hex string
+     *
+     * @param data data bytes
+     * @return crc32 hex string
+     */
+    public static final String crc32Hex(byte[] data) {
+        return Long.toHexString(crc32(data));
+    }
+
+    /**
+     * generate crc32 hex string
+     *
+     * @param data data string
+     * @return crc32 hex string
+     */
+    public static final String crc32Hex(String data) {
+        return Long.toHexString(crc32(data));
+    }
+
+    /**
+     * generate crc32 hex string
+     *
+     * @param inputStream inputStream
+     * @return crc32 hex string
+     * @throws IOException
+     */
+    public static final String crc32Hex(InputStream inputStream) throws IOException {
+        return Long.toHexString(crc32(inputStream));
+    }
+
+    /**
+     * generate crc32 hex string
+     *
+     * @param filepath filepath
+     * @return crc32 hex string
+     * @throws IOException
+     */
+    public static String crc32Hex(File file) throws IOException {
+        return Long.toHexString(crc32(file));
     }
 
     private static final long INITIALCRC = 0xFFFFFFFFFFFFFFFFL;
@@ -90,10 +127,10 @@ public abstract class CRC extends Algorithm {
      * @param data data byte[]
      * @return crc64 long number
      */
-    public static final long crc64(byte[] bytes) {
+    public static final long crc64(byte[] data) {
         long crc = INITIALCRC;
-        for (int k = 0, n = bytes.length; k < n; ++k) {
-            crc = sCrcTable[((int) crc ^ bytes[k]) & 0xff] ^ crc >> 8;
+        for (int k = 0, n = data.length; k < n; ++k) {
+            crc = sCrcTable[((int) crc ^ data[k]) & 0xff] ^ crc >> 8;
         }
         return crc;
     }
@@ -104,8 +141,28 @@ public abstract class CRC extends Algorithm {
      * @param data data string
      * @return crc64 long number
      */
-    public static long crc64(String data) {
+    public static final long crc64(String data) {
         return crc64(getBytes(data));
+    }
+
+    /**
+     * generate crc64 hex string
+     *
+     * @param data data byte[]
+     * @return crc64 hex string
+     */
+    public static final String crc64Hex(byte[] data) {
+        return Long.toHexString(crc64(data));
+    }
+
+    /**
+     * generate crc64 hex string
+     *
+     * @param data data string
+     * @return crc64 hex string
+     */
+    public static final String crc64Hex(String data) {
+        return Long.toHexString(crc64(data));
     }
 
     /**

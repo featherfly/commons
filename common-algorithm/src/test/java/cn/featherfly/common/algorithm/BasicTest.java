@@ -5,6 +5,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertTrue;
 
+import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 
 import org.testng.annotations.Test;
@@ -28,7 +29,7 @@ public class BasicTest {
         System.out.println(new sun.misc.BASE64Encoder().encode("123".getBytes("UTF-8")));
     }*/
 
-    String data = "123";
+    byte[] data = "123".getBytes(StandardCharsets.UTF_8);
 
     @Test
     public void testBase64() {
@@ -45,6 +46,16 @@ public class BasicTest {
 
         assertEquals(new Long(CRC.crc32(data)), result32);
         assertEquals(new Long(CRC.crc64(data)), result64);
+
+        System.out.println(CRC.crc16Ccitt(data));
+        System.out.println(CRC.crc16CcittReverse(data));
+        System.out.println(CRC.crc16DNP(data));
+        System.out.println(CRC.crc16IBM(data));
+        System.out.println(CRC.crc16Maxim(data));
+        System.out.println(CRC.crc16Modbus(data));
+        System.out.println(CRC.crc16USB(data));
+        System.out.println(CRC.crc16X25(data));
+        System.out.println(CRC.crc16Xmodem(data));
     }
 
     @Test

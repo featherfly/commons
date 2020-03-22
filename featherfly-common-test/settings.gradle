@@ -1,8 +1,0 @@
-rootProject.name = 'featherfly-common-test'
-includeFlat 'featherfly-common'
-includeFlat 'featherfly-common-bean-javassist'
-includeFlat 'featherfly-common-mail'
-includeFlat 'featherfly-common-compress'
-//includeFlat 'featherfly-common-locale-database'
-includeFlat 'featherfly-common-spring'
-includeFlat 'featherfly-common-gentool'

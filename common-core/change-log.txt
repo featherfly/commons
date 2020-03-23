@@ -4,6 +4,7 @@
     2.LocalizedException加入charset属性，用于设置国际化输出是否需要转码
     3.删除AlgorithmUtils，引入common-algorithm包
     4.LangUtils加入isEmpty(o, Consumer), isNotEmpty(o, Consumer)方法
+    5.加入Properties,PropertiesImpl,PropertiesPlus
     
 2020-3-17
 1.7.16

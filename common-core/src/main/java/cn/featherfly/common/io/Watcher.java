@@ -18,9 +18,6 @@ import cn.featherfly.common.lang.LogUtils;
  * <p>
  * Watcher
  * </p>
- * <p>
- * 2019-08-28
- * </p>
  *
  * @author zhongj
  */

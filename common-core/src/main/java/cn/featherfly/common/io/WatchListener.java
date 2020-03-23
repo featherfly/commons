@@ -8,9 +8,7 @@ import java.nio.file.WatchEvent;
  * <p>
  * FileListener
  * </p>
- * <p>
- * 2019-08-28
- * </p>
+
  *
  * @author zhongj
  */

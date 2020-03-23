@@ -142,6 +142,18 @@ public interface Chars {
      */
     String EMPTY_STR = "";
     /**
+     * 换行符号
+     */
+    String NEW_LINE = "\n";
+    /**
+     * 回车符号
+     */
+    String CARRIAGE_RETURN = "\r";
+    /**
+     * 制表符
+     */
+    String TAB = "\t";
+    /**
      * 数字 0
      */
     int ZERO = 0;
@@ -726,4 +738,17 @@ public interface Chars {
      * 小写 z
      */
     char Z_LOWER_CHAR = 'z';
+
+    /**
+     * 换行符号
+     */
+    char NEW_LINEZ_CHAR = '\n';
+    /**
+     * 回车符号
+     */
+    char CARRIAGE_RETURN_CHAR = '\r';
+    /**
+     * 制表符
+     */
+    char TAB_CHAR = '\t';
 }

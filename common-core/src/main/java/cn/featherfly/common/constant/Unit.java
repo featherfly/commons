@@ -5,6 +5,7 @@ package cn.featherfly.common.constant;
  * <p>
  * 进制的常量
  * </p>
+ * 
  * @author zhongj
  */
 public interface Unit {
@@ -63,7 +64,7 @@ public interface Unit {
     /**
      * 365进制
      */
-    int YEAR = 7;
+    int YEAR = 365;
     /**
      * 365进制最大值364
      */

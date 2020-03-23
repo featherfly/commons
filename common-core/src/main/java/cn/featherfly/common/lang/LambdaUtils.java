@@ -121,12 +121,12 @@ public class LambdaUtils {
                 o -> serializedLambda.getCapturedArgCount() == o.getParameterCount()
                         && o.getName().equals(info2.methodName));
         info2.propertyName = methodToPropertyName(info2.methodName);
-        if (lambda instanceof java.util.function.Supplier) {
-            info2.methodInstanceClassName = lambda.getClass().getDeclaredMethods()[2].getParameterTypes()[0].getName();
-        } else {
+        if (lambda instanceof java.util.function.Function) {
             info2.methodInstanceClassName = org.apache.commons.lang3.StringUtils
                     .substringBefore(serializedLambda.getInstantiatedMethodType(), ";").substring(2)
                     .replaceAll("/", ".");
+        } else {
+            info2.methodInstanceClassName = lambda.getClass().getDeclaredMethods()[2].getParameterTypes()[0].getName();
         }
         CACHE_LAMBDA_INFO.put(serializedLambda, info2);
         return info2;

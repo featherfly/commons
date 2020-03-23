@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
+import cn.featherfly.common.lang.function.SerializableConsumer;
 import cn.featherfly.common.lang.function.SerializableFunction;
 import cn.featherfly.common.lang.function.SerializableSupplier;
 import cn.featherfly.common.lang.vo.User;
@@ -136,6 +137,14 @@ public class LambdaUtilsTest {
 
     }
 
+    @Test
+    public void test9() {
+        User2 user = new User2();
+        user.setAge(18);
+        SerializedLambdaInfo info = consumerInfo(user::setAge);
+        assertEquals(info.getMethodInstanceClassName(), user.getClass().getName());
+    }
+
     public static void main(String[] args) {
         SerializedLambda s;
         s = get(User::isLocked);
@@ -228,6 +237,10 @@ public class LambdaUtilsTest {
 
     public static <T> SerializedLambda get(SerializableSupplier<T> f) {
         return LambdaUtils.getSerializedLambda(f);
+    }
+
+    public static <T> SerializedLambdaInfo consumerInfo(SerializableConsumer<T> f) {
+        return LambdaUtils.getLambdaInfo(f);
     }
 
     public static <T> void t(Consumer<T> c) {

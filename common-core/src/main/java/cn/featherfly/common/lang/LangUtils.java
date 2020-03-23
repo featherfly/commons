@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * <p>
@@ -122,6 +123,22 @@ public final class LangUtils {
 
     /**
      * <p>
+     * 判断传入对象是否为空，（String、Collection、Map、Array还要判断长度是否为0），如果为空则执行传入的方法
+     * </p>
+     *
+     * @param object   传入的对象
+     * @param function 需要执行的方法
+     * @return object
+     */
+    public static <O, R> R isEmpty(O object, Function<O, R> function) {
+        if (isEmpty(object)) {
+            return function.apply(object);
+        }
+        return null;
+    }
+
+    /**
+     * <p>
      * 返回传入对象是否不为空（String、Collection、Map、Array还要判断长度是否为0）
      * </p>
      *
@@ -148,6 +165,22 @@ public final class LangUtils {
 
     /**
      * <p>
+     * 判断传入对象是否不为空，（String、Collection、Map、Array还要判断长度是否为0），如果不为空则执行传入的方法
+     * </p>
+     *
+     * @param object   传入的对象
+     * @param function 需要执行的方法
+     * @return object
+     */
+    public static <O, R> R isNotEmpty(O object, Function<O, R> function) {
+        if (isNotEmpty(object)) {
+            return function.apply(object);
+        }
+        return null;
+    }
+
+    /**
+     * <p>
      * 返回传入字符串是否为空（是null或是空字符串）
      * </p>
      *
@@ -158,20 +191,20 @@ public final class LangUtils {
         return string == null || "".equals(string);
     }
 
-    /**
-     * <p>
-     * 判断传入字符串是否为空（是null或是空字符串），如果为空，则执行传入的方法
-     * </p>
-     *
-     * @param string   传入的字符串
-     * @param consumer 需要执行的方法
-     * @param consumer 判断为空时执行的方法
-     */
-    public static void isEmpty(String string, Consumer<String> consumer) {
-        if (isEmpty(string)) {
-            consumer.accept(string);
-        }
-    }
+    //    /**
+    //     * <p>
+    //     * 判断传入字符串是否为空（是null或是空字符串），如果为空，则执行传入的方法
+    //     * </p>
+    //     *
+    //     * @param string   传入的字符串
+    //     * @param consumer 需要执行的方法
+    //     * @param consumer 判断为空时执行的方法
+    //     */
+    //    public static void isEmpty(String string, Consumer<String> consumer) {
+    //        if (isEmpty(string)) {
+    //            consumer.accept(string);
+    //        }
+    //    }
 
     /**
      * <p>
@@ -185,20 +218,20 @@ public final class LangUtils {
         return !isEmpty(string);
     }
 
-    /**
-     * <p>
-     * 判断传入字符串是否不为空（是null或是空字符串），如果不为空，则执行传入的方法
-     * </p>
-     *
-     * @param string   传入的字符串
-     * @param consumer 需要执行的方法
-     * @param consumer 判断为空时执行的方法
-     */
-    public static void isNotEmpty(String string, Consumer<String> consumer) {
-        if (isNotEmpty(string)) {
-            consumer.accept(string);
-        }
-    }
+    //    /**
+    //     * <p>
+    //     * 判断传入字符串是否不为空（是null或是空字符串），如果不为空，则执行传入的方法
+    //     * </p>
+    //     *
+    //     * @param string   传入的字符串
+    //     * @param consumer 需要执行的方法
+    //     * @param consumer 判断为空时执行的方法
+    //     */
+    //    public static void isNotEmpty(String string, Consumer<String> consumer) {
+    //        if (isNotEmpty(string)) {
+    //            consumer.accept(string);
+    //        }
+    //    }
 
     /**
      * <p>
@@ -212,19 +245,19 @@ public final class LangUtils {
         return array == null || array.length == 0;
     }
 
-    /**
-     * <p>
-     * 判断数组是否为空（是null或是空数组），如果为空，则执行传入的方法
-     * </p>
-     *
-     * @param array    传入的数组
-     * @param consumer 需要执行的方法
-     */
-    public static <E> void isEmpty(E[] array, Consumer<E[]> consumer) {
-        if (isEmpty(array)) {
-            consumer.accept(array);
-        }
-    }
+    //    /**
+    //     * <p>
+    //     * 判断数组是否为空（是null或是空数组），如果为空，则执行传入的方法
+    //     * </p>
+    //     *
+    //     * @param array    传入的数组
+    //     * @param consumer 需要执行的方法
+    //     */
+    //    public static <E> void isEmpty(E[] array, Consumer<E[]> consumer) {
+    //        if (isEmpty(array)) {
+    //            consumer.accept(array);
+    //        }
+    //    }
 
     /**
      * <p>
@@ -238,19 +271,19 @@ public final class LangUtils {
         return !isEmpty(array);
     }
 
-    /**
-     * <p>
-     * 判断数组是否不为空（是null或是空数组），如果不为空，则执行传入的方法
-     * </p>
-     *
-     * @param array    传入的数组
-     * @param consumer 需要执行的方法
-     */
-    public static <E> void isNotEmpty(E[] array, Consumer<E[]> consumer) {
-        if (isNotEmpty(array)) {
-            consumer.accept(array);
-        }
-    }
+    //    /**
+    //     * <p>
+    //     * 判断数组是否不为空（是null或是空数组），如果不为空，则执行传入的方法
+    //     * </p>
+    //     *
+    //     * @param array    传入的数组
+    //     * @param consumer 需要执行的方法
+    //     */
+    //    public static <E> void isNotEmpty(E[] array, Consumer<E[]> consumer) {
+    //        if (isNotEmpty(array)) {
+    //            consumer.accept(array);
+    //        }
+    //    }
 
     /**
      * <p>
@@ -264,19 +297,19 @@ public final class LangUtils {
         return collection == null || collection.isEmpty();
     }
 
-    /**
-     * <p>
-     * 判断集合是否为空（是null或size=0），如果为空，则执行传入的方法
-     * </p>
-     *
-     * @param collection 传入的集合
-     * @param consumer   需要执行的方法
-     */
-    public static <E> void isEmpty(Collection<E> collection, Consumer<Collection<E>> consumer) {
-        if (isEmpty(collection)) {
-            consumer.accept(collection);
-        }
-    }
+    //    /**
+    //     * <p>
+    //     * 判断集合是否为空（是null或size=0），如果为空，则执行传入的方法
+    //     * </p>
+    //     *
+    //     * @param collection 传入的集合
+    //     * @param consumer   需要执行的方法
+    //     */
+    //    public static <E> void isEmpty(Collection<E> collection, Consumer<Collection<E>> consumer) {
+    //        if (isEmpty(collection)) {
+    //            consumer.accept(collection);
+    //        }
+    //    }
 
     /**
      * <p>
@@ -290,19 +323,19 @@ public final class LangUtils {
         return !isEmpty(collection);
     }
 
-    /**
-     * <p>
-     * 判断集合是否不为空（是null或size&gt;0），如果不为空，则执行传入的方法
-     * </p>
-     *
-     * @param collection 传入的集合
-     * @param consumer   需要执行的方法
-     */
-    public static <E> void isNotEmpty(Collection<E> collection, Consumer<Collection<E>> consumer) {
-        if (isNotEmpty(collection)) {
-            consumer.accept(collection);
-        }
-    }
+    //    /**
+    //     * <p>
+    //     * 判断集合是否不为空（是null或size&gt;0），如果不为空，则执行传入的方法
+    //     * </p>
+    //     *
+    //     * @param collection 传入的集合
+    //     * @param consumer   需要执行的方法
+    //     */
+    //    public static <E> void isNotEmpty(Collection<E> collection, Consumer<Collection<E>> consumer) {
+    //        if (isNotEmpty(collection)) {
+    //            consumer.accept(collection);
+    //        }
+    //    }
 
     /**
      * <p>
@@ -328,33 +361,33 @@ public final class LangUtils {
         return !isEmpty(map);
     }
 
-    /**
-     * <p>
-     * 判断map是否为空（是null或size=0），如果为空，则执行传入的方法
-     * </p>
-     *
-     * @param map      传入的map
-     * @param consumer 需要执行的方法
-     */
-    public static <K, V> void isEmpty(Map<K, V> map, Consumer<Map<K, V>> consumer) {
-        if (isEmpty(map)) {
-            consumer.accept(map);
-        }
-    }
+    //    /**
+    //     * <p>
+    //     * 判断map是否为空（是null或size=0），如果为空，则执行传入的方法
+    //     * </p>
+    //     *
+    //     * @param map      传入的map
+    //     * @param consumer 需要执行的方法
+    //     */
+    //    public static <K, V> void isEmpty(Map<K, V> map, Consumer<Map<K, V>> consumer) {
+    //        if (isEmpty(map)) {
+    //            consumer.accept(map);
+    //        }
+    //    }
 
-    /**
-     * <p>
-     * 判断map是否不为空（是null或size=0），如果不为空，则执行传入的方法
-     * </p>
-     *
-     * @param map      传入的map
-     * @param consumer 需要执行的方法
-     */
-    public static <K, V> void isNotEmpty(Map<K, V> map, Consumer<Map<K, V>> consumer) {
-        if (isNotEmpty(map)) {
-            consumer.accept(map);
-        }
-    }
+    //    /**
+    //     * <p>
+    //     * 判断map是否不为空（是null或size=0），如果不为空，则执行传入的方法
+    //     * </p>
+    //     *
+    //     * @param map      传入的map
+    //     * @param consumer 需要执行的方法
+    //     */
+    //    public static <K, V> void isNotEmpty(Map<K, V> map, Consumer<Map<K, V>> consumer) {
+    //        if (isNotEmpty(map)) {
+    //            consumer.accept(map);
+    //        }
+    //    }
 
     /**
      * <p>

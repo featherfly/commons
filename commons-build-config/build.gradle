@@ -1,7 +1,7 @@
 allprojects {
     apply plugin: 'java'
-    apply from: '../' + rootProject.name + '/java_base.gradle'   
-    apply from: '../' + rootProject.name + '/maven_push.gradle'
+    apply from: rootDir.getAbsolutePath() + '/java_base.gradle'   
+    apply from: rootDir.getAbsolutePath() + '/maven_push.gradle'
         
     ext {
 	}

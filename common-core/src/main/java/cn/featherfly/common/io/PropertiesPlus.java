@@ -4,8 +4,15 @@ package cn.featherfly.common.io;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Collection;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cn.featherfly.common.exception.UnsupportedException;
 
 /**
  * <p>
@@ -15,9 +22,9 @@ import java.util.Collection;
  * @author zhongj
  */
 public class PropertiesPlus extends java.util.Properties implements cn.featherfly.common.io.Properties {
-    /**
-     *
-     */
+
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private static final long serialVersionUID = 6262816075822880224L;
 
     private Properties properties;
@@ -166,7 +173,33 @@ public class PropertiesPlus extends java.util.Properties implements cn.featherfl
      * {@inheritDoc}
      */
     @Override
+    public void store(OutputStream out, String comment) throws IOException {
+        logger.warn("comment argu is ignore");
+        properties.store(out);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void store(Writer writer, String comment) throws IOException {
+        throw new UnsupportedException("use store(OutputStream out) instead");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void load(InputStream is) throws IOException {
         properties.load(is);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized void load(Reader reader) throws IOException {
+        throw new UnsupportedException("use load(InputStream is) instead");
+    }
+
 }

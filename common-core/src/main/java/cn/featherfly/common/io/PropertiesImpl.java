@@ -46,7 +46,6 @@ public class PropertiesImpl implements Properties {
      * Creates an empty property list with the specified defaults.
      *
      * @param defaults the defaults.
-     * @param charset  charset
      */
     public PropertiesImpl(Properties defaults) {
         this(defaults.getCharset());

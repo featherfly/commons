@@ -11,6 +11,7 @@ import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import java.lang.annotation.Documented;
+import java.lang.reflect.Method;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,24 +77,30 @@ public class ClassUtilsTest {
     }
 
     @Test
-    public void testGenericType() throws NoSuchFieldException, SecurityException {
-        System.out.println(User.class.getDeclaredField("optional").getGenericType());
-        System.out.println(User.class.getDeclaredField("obj").getGenericType());
-        System.out.println(User.class.getDeclaredField("obj1").getGenericType());
-        System.out.println(User.class.getDeclaredField("obj2").getGenericType());
-        System.out.println(User.class.getDeclaredField("obj3").getGenericType());
-        System.out.println();
-        System.out.println(
-                "optional.genericType-> " + ClassUtils.getFieldGenericType(User.class.getDeclaredField("optional")));
-        System.out.println("obj.genericType-> " + ClassUtils.getFieldGenericType(User.class.getDeclaredField("obj")));
-        System.out.println("obj1.genericType-> " + ClassUtils.getFieldGenericType(User.class.getDeclaredField("obj1")));
-        System.out.println("obj2.genericType-> " + ClassUtils.getFieldGenericType(User.class.getDeclaredField("obj2")));
-        System.out.println("obj3.genericType-> " + ClassUtils.getFieldGenericType(User.class.getDeclaredField("obj3")));
-
+    public void testGetGenericType() throws NoSuchFieldException, SecurityException, NoSuchMethodException {
+        assertEquals(ClassUtils.getFieldGenericType(User.class.getDeclaredField("list")), String.class);
+        assertEquals(ClassUtils.getFieldGenericType(User.class.getDeclaredField("map")), String.class);
+        assertEquals(ClassUtils.getFieldGenericType(User.class.getDeclaredField("map"), 1), Integer.class);
         assertEquals(ClassUtils.getFieldGenericType(User.class.getDeclaredField("optional")), String.class);
         assertEquals(ClassUtils.getFieldGenericType(User.class.getDeclaredField("obj")), Object.class);
         assertEquals(ClassUtils.getFieldGenericType(User.class.getDeclaredField("obj1")), Number.class);
         assertEquals(ClassUtils.getFieldGenericType(User.class.getDeclaredField("obj2")), User.class);
         assertEquals(ClassUtils.getFieldGenericType(User.class.getDeclaredField("obj3")), Object.class);
+
+        assertEquals(ClassUtils.getMethodGenericReturnType(User.class.getMethod("getList", new Class[0])),
+                String.class);
+        assertEquals(ClassUtils.getMethodGenericReturnType(User.class.getMethod("getMap", new Class[0])), String.class);
+        assertEquals(ClassUtils.getMethodGenericReturnType(User.class.getMethod("getMap", new Class[0]), 1),
+                Integer.class);
+
+        Method setList = User.class.getMethod("setList", new Class[] { List.class });
+        Method setMap = User.class.getMethod("setMap", new Class[] { Map.class });
+        assertEquals(ClassUtils.getMethodGenericParameterType(setList), String.class);
+        assertEquals(ClassUtils.getMethodGenericParameterType(setMap), String.class);
+        assertEquals(ClassUtils.getMethodGenericParameterType(setMap, 0, 1), Integer.class);
+
+        assertEquals(ClassUtils.getMethodGenericParameterTypes(setList).size(), 1);
+        assertEquals(ClassUtils.getMethodGenericParameterTypes(setMap).size(), 2);
+
     }
 }

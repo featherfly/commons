@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.lang.AssertIllegalArgument;
+import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.GenericType;
 
 /**
@@ -222,6 +223,21 @@ public class BeanProperty<T> implements GenericType<T> {
     }
 
     /**
+     * 如果属性是一个支持的对象，返回其泛型，如属性为类型java.util.Optional<java.lang.String>，则返回java.lang.String.
+     *
+     * @return 泛型的定义类型
+     */
+    public Class<?> getGenericType() {
+        if (field != null) {
+            return ClassUtils.getFieldGenericType(field);
+        } else if (getter != null) {
+            return ClassUtils.getMethodGenericReturnType(getter);
+        } else {
+            return ClassUtils.getMethodGenericParameterType(setter);
+        }
+    }
+
+    /**
      * <p>
      * 返回当前属性是否含有指定注解.
      * </p>
@@ -243,7 +259,6 @@ public class BeanProperty<T> implements GenericType<T> {
      * @param annotationClass 注解类型
      * @return 注解
      */
-
     public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
         if (annotationClass == null) {
             return null;

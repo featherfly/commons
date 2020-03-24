@@ -796,18 +796,8 @@ public final class ClassUtils {
      * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
      *         <code>Object.class</code>
      */
-    @SuppressWarnings("unchecked")
     public static <T> Class<T> getMethodGenericReturnType(Method method, int index) {
-        Type returnType = method.getGenericReturnType();
-        if (returnType instanceof ParameterizedType) {
-            ParameterizedType type = (ParameterizedType) returnType;
-            Type[] typeArguments = type.getActualTypeArguments();
-            if (index >= typeArguments.length || index < 0) {
-                throw new IllegalArgumentException("你输入的索引" + (index < 0 ? "不能小于0" : "超出了参数的总数"));
-            }
-            return (Class<T>) typeArguments[index];
-        }
-        return (Class<T>) Object.class;
+        return getGenericType(method.getGenericReturnType(), index);
     }
 
     /**
@@ -823,30 +813,44 @@ public final class ClassUtils {
     }
 
     /**
-     * 通过反射,获得方法输入参数第index个输入参数的所有泛型参数的实际类型. 如: public void add(Map&lt;String,
+     * 通过反射,获得方法输入参数第一个输入参数的第一个泛型参数的实际类型. 如: public void add(Map&lt;String,
+     * Buyer&gt; maps, List&lt;String&gt; names){}
+     *
+     * @param method 方法
+     * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
+     */
+    public static Class<?> getMethodGenericParameterType(Method method) {
+        return getMethodGenericParameterType(method, 0);
+    }
+
+    /**
+     * 通过反射,获得方法输入参数第index个输入参数的第一个泛型参数的实际类型. 如: public void add(Map&lt;String,
      * Buyer&gt; maps, List&lt;String&gt; names){}
      *
      * @param method 方法
      * @param index  第几个输入参数
      * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
      */
-    public static List<Class<?>> getMethodGenericParameterTypes(Method method, int index) {
-        List<Class<?>> results = new ArrayList<>();
+    public static Class<?> getMethodGenericParameterType(Method method, int index) {
+        return getMethodGenericParameterType(method, index, 0);
+    }
+
+    /**
+     * 通过反射,获得方法输入参数第index个输入参数的所有泛型参数的实际类型. 如: public void add(Map&lt;String,
+     * Buyer&gt; maps, List&lt;String&gt; names){}
+     *
+     * @param method           方法
+     * @param paramIndex       第几个输入参数
+     * @param genericTypeIndex 第几个泛型参数
+     * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
+     */
+    public static <T> Class<T> getMethodGenericParameterType(Method method, int paramIndex, int genericTypeIndex) {
         Type[] genericParameterTypes = method.getGenericParameterTypes();
-        if (index >= genericParameterTypes.length || index < 0) {
-            throw new IllegalArgumentException("你输入的索引" + (index < 0 ? "不能小于0" : "超出了参数的总数"));
+        if (paramIndex >= genericParameterTypes.length || paramIndex < 0) {
+            throw new IllegalArgumentException(
+                    "你输入的索引" + (paramIndex < 0 ? "不能小于0" : "超出了参数的总数" + genericParameterTypes.length));
         }
-        Type genericParameterType = genericParameterTypes[index];
-        if (genericParameterType instanceof ParameterizedType) {
-            ParameterizedType aType = (ParameterizedType) genericParameterType;
-            Type[] parameterArgTypes = aType.getActualTypeArguments();
-            for (Type parameterArgType : parameterArgTypes) {
-                Class<?> parameterArgClass = (Class<?>) parameterArgType;
-                results.add(parameterArgClass);
-            }
-            return results;
-        }
-        return results;
+        return getGenericType(genericParameterTypes[paramIndex], genericTypeIndex);
     }
 
     /**
@@ -861,6 +865,50 @@ public final class ClassUtils {
     }
 
     /**
+     * 通过反射,获得方法输入参数第index个输入参数的所有泛型参数的实际类型. 如: public void add(Map&lt;String,
+     * Buyer&gt; maps, List&lt;String&gt; names){}
+     *
+     * @param method 方法
+     * @param index  第几个输入参数
+     * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
+     */
+    public static List<Class<?>> getMethodGenericParameterTypes(Method method, int index) {
+        Type[] genericParameterTypes = method.getGenericParameterTypes();
+        if (index >= genericParameterTypes.length || index < 0) {
+            throw new IllegalArgumentException("你输入的索引" + (index < 0 ? "不能小于0" : "超出了参数的总数"));
+        }
+        Type genericParameterType = genericParameterTypes[index];
+        return getGenericTypes(genericParameterType);
+        //        List<Class<?>> results = new ArrayList<>();
+        //        for (int i = 0; i < genericParameterTypes.length; i++) {
+        //            Class<?> parameterArgClass = getGenericType(genericParameterType, index);
+        //            results.add(parameterArgClass);
+        //        }
+        //        if (genericParameterType instanceof ParameterizedType) {
+        //            ParameterizedType aType = (ParameterizedType) genericParameterType;
+        //            Type[] parameterArgTypes = aType.getActualTypeArguments();
+        //            for (Type parameterArgType : parameterArgTypes) {
+        //                Class<?> parameterArgClass = (Class<?>) parameterArgType;
+        //                results.add(parameterArgClass);
+        //            }
+        //            return results;
+        //        }
+        //        return results;
+    }
+
+    /**
+     * 通过反射,获得Field泛型参数的实际类型. 如: public Map&lt;String, Buyer&gt; names;
+     *
+     * @param field 字段
+     * @param <T>   泛型
+     * @return 泛型参数的实际类型,
+     *         如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
+     */
+    public static <T> Class<T> getFieldGenericType(Field field) {
+        return getFieldGenericType(field, 0);
+    }
+
+    /**
      * 通过反射,获得Field泛型参数的实际类型. 如: public Map&lt;String, Buyer&gt; names;
      *
      * @param field 字段
@@ -869,14 +917,18 @@ public final class ClassUtils {
      * @return 泛型参数的实际类型,
      *         如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
      */
-    @SuppressWarnings("unchecked")
     public static <T> Class<T> getFieldGenericType(Field field, int index) {
-        Type genericFieldType = field.getGenericType();
-        if (genericFieldType instanceof ParameterizedType) {
-            ParameterizedType aType = (ParameterizedType) genericFieldType;
+        return getGenericType(field.getGenericType(), index);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> Class<T> getGenericType(Type type, int index) {
+        if (type instanceof ParameterizedType) {
+            ParameterizedType aType = (ParameterizedType) type;
             Type[] fieldArgTypes = aType.getActualTypeArguments();
             if (index >= fieldArgTypes.length || index < 0) {
-                throw new IllegalArgumentException("你输入的索引" + (index < 0 ? "不能小于0" : "超出了参数的总数"));
+                throw new IllegalArgumentException(
+                        "你输入的索引" + (index < 0 ? "不能小于0" : "超出了泛型参数的总数" + fieldArgTypes.length));
             }
             Type genericType = fieldArgTypes[index];
             if (genericType instanceof Class) {
@@ -893,16 +945,25 @@ public final class ClassUtils {
         return (Class<T>) Object.class;
     }
 
-    /**
-     * 通过反射,获得Field泛型参数的实际类型. 如: public Map&lt;String, Buyer&gt; names;
-     *
-     * @param field 字段
-     * @param <T>   泛型
-     * @return 泛型参数的实际类型,
-     *         如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
-     */
-    public static <T> Class<T> getFieldGenericType(Field field) {
-        return getFieldGenericType(field, 0);
+    private static List<Class<?>> getGenericTypes(Type type) {
+        List<Class<?>> results = new ArrayList<>();
+        if (type instanceof ParameterizedType) {
+            ParameterizedType aType = (ParameterizedType) type;
+            Type[] fieldArgTypes = aType.getActualTypeArguments();
+            for (Type genericType : fieldArgTypes) {
+                if (genericType instanceof Class) {
+                    results.add((Class<?>) genericType);
+                } else if (genericType instanceof WildcardType) {
+                    WildcardType w = (WildcardType) genericType;
+                    if (LangUtils.isNotEmpty(w.getLowerBounds())) {
+                        results.add((Class<?>) w.getLowerBounds()[0]);
+                    } else if (LangUtils.isNotEmpty(w.getUpperBounds())) {
+                        results.add((Class<?>) w.getUpperBounds()[0]);
+                    }
+                }
+            }
+        }
+        return results;
     }
 
     // ********************************************************************

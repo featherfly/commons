@@ -1,5 +1,5 @@
 
-package cn.featherfly.common.bean;
+package cn.featherfly.common.bean.vo;
 
 import java.util.ArrayList;
 import java.util.List;

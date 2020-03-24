@@ -4,6 +4,9 @@ import java.util.Collection;
 
 import javax.annotation.Resource;
 
+import cn.featherfly.common.bean.BeanDescriptor;
+import cn.featherfly.common.bean.BeanProperty;
+
 class TestBeanProperty2 {
 
 	@Resource(name = "name field")

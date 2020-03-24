@@ -4,6 +4,7 @@ package cn.featherfly.common.bean.vo;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.xml.ws.BindingType;
 
@@ -34,9 +35,11 @@ public class User {
 
     private List<String> names = new ArrayList<>();
 
+    private Optional<String> username;
+
     /**
      * 返回addresses
-     * 
+     *
      * @return addresses
      */
     public List<Address> getAddresses() {
@@ -45,7 +48,7 @@ public class User {
 
     /**
      * 设置addresses
-     * 
+     *
      * @param addresses addresses
      */
     public void setAddresses(List<Address> addresses) {
@@ -54,7 +57,7 @@ public class User {
 
     /**
      * 返回names
-     * 
+     *
      * @return names
      */
     public List<String> getNames() {
@@ -63,7 +66,7 @@ public class User {
 
     /**
      * 设置names
-     * 
+     *
      * @param names names
      */
     public void setNames(List<String> names) {
@@ -72,7 +75,7 @@ public class User {
 
     /**
      * 返回birthDay
-     * 
+     *
      * @return birthDay
      */
     public Date getBirthDay() {
@@ -81,7 +84,7 @@ public class User {
 
     /**
      * 设置birthDay
-     * 
+     *
      * @param birthDay birthDay
      */
     public void setBirthDay(Date birthDay) {
@@ -158,4 +161,32 @@ public class User {
     public void isAvailable(Boolean available) {
         this.available = available;
     }
+
+    /**
+     * 返回username
+     * 
+     * @return username
+     */
+    public Optional<String> getUsername() {
+        return username;
+    }
+
+    /**
+     * 设置available
+     * 
+     * @param available available
+     */
+    public void setAvailable(Boolean available) {
+        this.available = available;
+    }
+
+    /**
+     * 设置username
+     * 
+     * @param username username
+     */
+    public void setUsername(Optional<String> username) {
+        this.username = username;
+    }
+
 }

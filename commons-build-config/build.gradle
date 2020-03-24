@@ -17,8 +17,8 @@ allprojects {
 }
 	
 dependencies {
-	//compile project(':featherfly-common')
-	compile 'cn.featherfly:featherfly-common:1.7.4'
+	compile project(':common-core')
+	//compile 'cn.featherfly:featherfly-common:1.7.4'
 	compile 'cn.featherfly:featherfly-common-bean-javassist:1.4.0'
 	compile 'commons-beanutils:commons-beanutils:latest.integration'
 	compile 'javassist:javassist:3.12.1.GA'

@@ -223,7 +223,7 @@ public class BeanProperty<T> implements GenericType<T> {
     }
 
     /**
-     * 如果属性是一个支持的对象，返回其泛型，如属性为类型java.util.Optional<java.lang.String>，则返回java.lang.String.
+     * 如果属性是一个支持的对象，返回其泛型，如属性为类型java.util.Optional&lt;java.lang.String&gt;，则返回java.lang.String.
      *
      * @return 泛型的定义类型
      */

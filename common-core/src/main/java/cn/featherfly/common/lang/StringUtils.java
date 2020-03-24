@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -405,6 +407,30 @@ public final class StringUtils extends org.apache.commons.lang3.StringUtils {
         } else {
             return str;
         }
+    }
+
+    /**
+     * <p>
+     * format str.
+     * </p>
+     * <p>
+     * StringUtils.format("我的名字是：{name}, 今年{age}岁", new HashChainMap&lt;String,
+     * String&gt;().putChain("name", "羽飞").putChain("age", "18"));
+     * </p>
+     *
+     * @param content str content
+     * @param params  param map
+     * @return formated str
+     */
+    public static String format(String content, Map<String, String> params) {
+        Set<Map.Entry<String, String>> sets = params.entrySet();
+        for (Map.Entry<String, String> entry : sets) {
+            String regex = "\\{" + entry.getKey() + "\\}";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(content);
+            content = matcher.replaceAll(entry.getValue());
+        }
+        return content;
     }
 
     /**

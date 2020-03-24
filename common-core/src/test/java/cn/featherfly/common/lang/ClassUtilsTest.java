@@ -74,4 +74,26 @@ public class ClassUtilsTest {
         assertEquals("test", foo.value());
         assertNull(ClassUtils.getAnnotation(bar, Documented.class));
     }
+
+    @Test
+    public void testGenericType() throws NoSuchFieldException, SecurityException {
+        System.out.println(User.class.getDeclaredField("optional").getGenericType());
+        System.out.println(User.class.getDeclaredField("obj").getGenericType());
+        System.out.println(User.class.getDeclaredField("obj1").getGenericType());
+        System.out.println(User.class.getDeclaredField("obj2").getGenericType());
+        System.out.println(User.class.getDeclaredField("obj3").getGenericType());
+        System.out.println();
+        System.out.println(
+                "optional.genericType-> " + ClassUtils.getFieldGenericType(User.class.getDeclaredField("optional")));
+        System.out.println("obj.genericType-> " + ClassUtils.getFieldGenericType(User.class.getDeclaredField("obj")));
+        System.out.println("obj1.genericType-> " + ClassUtils.getFieldGenericType(User.class.getDeclaredField("obj1")));
+        System.out.println("obj2.genericType-> " + ClassUtils.getFieldGenericType(User.class.getDeclaredField("obj2")));
+        System.out.println("obj3.genericType-> " + ClassUtils.getFieldGenericType(User.class.getDeclaredField("obj3")));
+
+        assertEquals(ClassUtils.getFieldGenericType(User.class.getDeclaredField("optional")), String.class);
+        assertEquals(ClassUtils.getFieldGenericType(User.class.getDeclaredField("obj")), Object.class);
+        assertEquals(ClassUtils.getFieldGenericType(User.class.getDeclaredField("obj1")), Number.class);
+        assertEquals(ClassUtils.getFieldGenericType(User.class.getDeclaredField("obj2")), User.class);
+        assertEquals(ClassUtils.getFieldGenericType(User.class.getDeclaredField("obj3")), Object.class);
+    }
 }

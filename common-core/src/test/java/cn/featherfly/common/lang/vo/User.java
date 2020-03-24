@@ -3,6 +3,7 @@ package cn.featherfly.common.lang.vo;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * <p>
@@ -70,6 +71,16 @@ public class User {
     public String construct;
 
     private boolean locked;
+
+    private Optional<String> optional;
+
+    private Optional<?> obj;
+
+    private Optional<? extends Number> obj1;
+
+    private Optional<? super User> obj2;
+
+    private Optional obj3;
 
     /**
      * 返回name

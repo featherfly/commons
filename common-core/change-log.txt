@@ -5,6 +5,7 @@
     3.删除AlgorithmUtils，引入common-algorithm包
     4.LangUtils加入isEmpty(o, Consumer), isNotEmpty(o, Consumer)方法
     5.加入Properties,PropertiesImpl,PropertiesPlus
+    6.StringUtils加入format(String content, Map<String, String> params)方法
     
 2020-3-17
 1.7.16

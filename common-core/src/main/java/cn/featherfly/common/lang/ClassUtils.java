@@ -15,6 +15,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
@@ -877,7 +878,17 @@ public final class ClassUtils {
             if (index >= fieldArgTypes.length || index < 0) {
                 throw new IllegalArgumentException("你输入的索引" + (index < 0 ? "不能小于0" : "超出了参数的总数"));
             }
-            return (Class<T>) fieldArgTypes[index];
+            Type genericType = fieldArgTypes[index];
+            if (genericType instanceof Class) {
+                return (Class<T>) genericType;
+            } else if (genericType instanceof WildcardType) {
+                WildcardType w = (WildcardType) genericType;
+                if (LangUtils.isNotEmpty(w.getLowerBounds())) {
+                    return (Class<T>) w.getLowerBounds()[0];
+                } else if (LangUtils.isNotEmpty(w.getUpperBounds())) {
+                    return (Class<T>) w.getUpperBounds()[0];
+                }
+            }
         }
         return (Class<T>) Object.class;
     }

@@ -158,7 +158,8 @@ public final class LangUtils {
      * </p>
      *
      * @param object   传入的对象
-     * @param supplier 需要执行的方法
+     * @param empty    exec when empty
+     * @param notEmpty exec when not empty
      * @return object
      */
     public static <O, R> R ifEmpty(O object, Supplier<R> empty, Supplier<R> notEmpty) {
@@ -175,7 +176,8 @@ public final class LangUtils {
      * </p>
      *
      * @param object   传入的对象
-     * @param supplier 需要执行的方法
+     * @param empty    exec when empty
+     * @param notEmpty exec when not empty
      * @return object
      */
     public static <O, R> R ifEmpty(O object, Supplier<R> empty, Function<O, R> notEmpty) {

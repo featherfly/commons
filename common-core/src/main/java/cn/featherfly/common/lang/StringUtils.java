@@ -1,6 +1,5 @@
 package cn.featherfly.common.lang;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,7 +13,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.featherfly.common.constant.Chars;
-import cn.featherfly.common.constant.Charset;
 import cn.featherfly.common.constant.Unit;
 
 /**
@@ -685,30 +683,18 @@ public final class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @return UTF-8 str
      */
     public static String encode(String str) {
-        return encode(str, StandardCharsets.ISO_8859_1.displayName(), StandardCharsets.UTF_8.displayName());
+        return encode(str, StandardCharsets.UTF_8.displayName());
     }
 
     /**
-     * 将一个字符串进行转码处理.
+     * 将一个字符串进行转码处理,使用系统默认字符集解码并使用传入字符集进行编码.
      *
      * @param str     输入字符串
      * @param charset 输出字符转编码时使用的字符集
      * @return 输出转换后的字符串.
      */
-    public static String encode(String str, String charset) {
-        if (isEmpty(charset)) {
-            charset = Charset.UTF_8;
-        }
-        try {
-            if (str == null) {
-                return null;
-            } else {
-                str = new String(str.getBytes(), charset);
-                return str;
-            }
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+    public static String encode(String str, java.nio.charset.Charset charset) {
+        return encode(str, StandardCharsets.ISO_8859_1, charset);
     }
 
     /**
@@ -719,23 +705,45 @@ public final class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @param toCharset   输出字符转编码时使用的字符集
      * @return 输出转换后的字符串.
      */
-    public static String encode(String str, String fromCharset, String toCharset) {
-        try {
-            if (isEmpty(toCharset)) {
-                toCharset = Charset.UTF_8;
-            }
-            if (toCharset.equals(fromCharset)) {
-                return str;
-            }
-            if (str == null) {
-                return null;
-            } else {
-                str = new String(str.getBytes(fromCharset), toCharset);
-                return str;
-            }
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
+    public static String encode(String str, java.nio.charset.Charset fromCharset, java.nio.charset.Charset toCharset) {
+        if (isEmpty(str)) {
+            return str;
         }
+        fromCharset = LangUtils.pick(fromCharset, StandardCharsets.UTF_8);
+        toCharset = LangUtils.pick(toCharset, StandardCharsets.UTF_8);
+        if (fromCharset.equals(toCharset)) {
+            return str;
+        }
+        return new String(str.getBytes(fromCharset), toCharset);
+    }
+
+    /**
+     * 将一个字符串进行转码处理.
+     *
+     * @param str         输入字符串
+     * @param charsetName 输出字符转编码时使用的字符集
+     * @return 输出转换后的字符串.
+     */
+    public static String encode(String str, String charsetName) {
+        java.nio.charset.Charset charset = LangUtils.ifEmpty(charsetName, () -> StandardCharsets.UTF_8,
+                () -> java.nio.charset.Charset.forName(charsetName));
+        return encode(str, charset);
+    }
+
+    /**
+     * 将一个字符串进行转码处理.
+     *
+     * @param str             输入字符串
+     * @param fromCharsetName 输入字符串解码时使用的字符集
+     * @param toCharsetName   输出字符转编码时使用的字符集
+     * @return 输出转换后的字符串.
+     */
+    public static String encode(String str, String fromCharsetName, String toCharsetName) {
+        java.nio.charset.Charset fromCharset = LangUtils.ifEmpty(fromCharsetName, () -> StandardCharsets.UTF_8,
+                () -> java.nio.charset.Charset.forName(fromCharsetName));
+        java.nio.charset.Charset toCharset = LangUtils.ifEmpty(toCharsetName, () -> StandardCharsets.UTF_8,
+                () -> java.nio.charset.Charset.forName(fromCharsetName));
+        return encode(str, fromCharset, toCharset);
     }
 
     /**
@@ -779,7 +787,7 @@ public final class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @return 输出转换后的字符串.
      */
     public static String toUTF8(String str) {
-        return encode(str, Charset.UTF_8);
+        return encode(str, StandardCharsets.UTF_8);
     }
 
     /**
@@ -790,30 +798,7 @@ public final class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @return 输出转换后的字符串.
      */
     public static String toUTF8(String str, String fromEncode) {
-        return encode(str, fromEncode, Charset.UTF_8);
-    }
-
-    /**
-     * 将一个字符串进行中文处理.
-     * <p>
-     * 解决中文名不能下载的问题.
-     *
-     * @param str     输入字符串
-     * @param charset 输入字符串解码时使用的字符集
-     * @return 输出转换后的字符串，如果出错，返回null。
-     */
-    public static String transCode(String str, String charset) {
-        try {
-            if (str == null) {
-                return null;
-            } else {
-                str = str.trim();
-                str = new String(str.getBytes(Charset.ISO8859_1), charset);
-                return str;
-            }
-        } catch (Exception e) {
-            return null;
-        }
+        return encode(str, fromEncode, StandardCharsets.UTF_8.displayName());
     }
 
     /**

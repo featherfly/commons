@@ -9,7 +9,9 @@ import java.nio.charset.StandardCharsets;
  * </p>
  *
  * @author zhongj
+ * @deprecated {@link Charsets}
  */
+@Deprecated
 public interface Charset {
     /**
      * ISO-8859-1
@@ -41,28 +43,28 @@ public interface Charset {
     String UTF_16 = "UTF-16";
     /**
      * GBK
-     * 
+     *
      * @deprecated {@link Charsets#GBK}
      */
     @Deprecated
     String GBK = "GBK";
     /**
      * GB2312
-     * 
+     *
      * @deprecated {@link Charsets#GB2312}
      */
     @Deprecated
     String GB2312 = "GB2312";
     /**
      * GB18030
-     * 
+     *
      * @deprecated {@link Charsets#GB18030}
      */
     @Deprecated
     String GB18030 = "GB18030";
     /**
      * BIG5
-     * 
+     *
      * @deprecated {@link Charsets#BIG5}
      */
     @Deprecated

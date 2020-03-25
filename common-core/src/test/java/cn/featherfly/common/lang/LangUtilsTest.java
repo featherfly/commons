@@ -21,27 +21,19 @@ public class LangUtilsTest {
     public void testObjectEmpty() {
         List<Object> list = new ArrayList<>();
         Object obj = null;
-        LangUtils.isEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 1);
 
         obj = "123";
-        LangUtils.isEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 1);
 
         obj = null;
-        LangUtils.isNotEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifNotEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 1);
 
         obj = "123";
-        LangUtils.isNotEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifNotEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 2);
     }
 
@@ -49,27 +41,19 @@ public class LangUtilsTest {
     public void testStringEmpty() {
         List<Object> list = new ArrayList<>();
         String obj = "";
-        LangUtils.isEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 1);
 
         obj = "123";
-        LangUtils.isEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 1);
 
         obj = null;
-        LangUtils.isNotEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifNotEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 1);
 
         obj = "123";
-        LangUtils.isNotEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifNotEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 2);
     }
 
@@ -77,27 +61,19 @@ public class LangUtilsTest {
     public void testArrayEmpty() {
         List<Object> list = new ArrayList<>();
         String[] obj = new String[] {};
-        LangUtils.isEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 1);
 
         obj = new String[1];
-        LangUtils.isEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 1);
 
         obj = null;
-        LangUtils.isNotEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifNotEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 1);
 
         obj = new String[1];
-        LangUtils.isNotEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifNotEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 2);
     }
 
@@ -105,28 +81,20 @@ public class LangUtilsTest {
     public void testCollectionEmpty() {
         List<Object> list = new ArrayList<>();
         List<String> obj = new ArrayList<>();
-        LangUtils.isEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 1);
 
         obj.add("a");
-        LangUtils.isEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 1);
 
         obj = null;
-        LangUtils.isNotEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifNotEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 1);
 
         obj = new ArrayList<>();
         obj.add("b");
-        LangUtils.isNotEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifNotEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 2);
     }
 
@@ -134,28 +102,20 @@ public class LangUtilsTest {
     public void testMapEmpty() {
         List<Object> list = new ArrayList<>();
         Map<String, String> obj = new HashMap<>();
-        LangUtils.isEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 1);
 
         obj.put("a", "a");
-        LangUtils.isEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 1);
 
         obj = null;
-        LangUtils.isNotEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifNotEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 1);
 
         obj = new HashMap<>();
         obj.put("b", "b");
-        LangUtils.isNotEmpty(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifNotEmpty(obj, () -> list.add("1"), () -> null);
         assertEquals(list.size(), 2);
     }
 
@@ -163,28 +123,26 @@ public class LangUtilsTest {
     public void testFileExist() {
         List<Object> list = new ArrayList<>();
         File obj = null;
-        LangUtils.isExists(obj, t -> {
-            list.add("1");
-        });
+        LangUtils.ifExists(obj, f -> list.add("1"));
         assertEquals(list.size(), 0);
 
         obj = new File(
                 ClassLoaderUtils.getResource(ClassUtils.packageToFile(this.getClass()), this.getClass()).getFile());
         System.out.println(obj.getAbsolutePath());
-        LangUtils.isExists(obj, t -> {
+        LangUtils.ifExists(obj, t -> {
             list.add("1");
         });
         assertEquals(list.size(), 1);
 
         obj = new File("z:/aabbccddeeffgg");
-        LangUtils.isNotExists(obj, t -> {
+        LangUtils.ifNotExists(obj, t -> {
             list.add("1");
         });
         assertEquals(list.size(), 2);
 
         obj = new File(
                 ClassLoaderUtils.getResource(ClassUtils.packageToFile(this.getClass()), this.getClass()).getFile());
-        LangUtils.isNotExists(obj, t -> {
+        LangUtils.ifNotExists(obj, t -> {
             list.add("1");
         });
         assertEquals(list.size(), 2);

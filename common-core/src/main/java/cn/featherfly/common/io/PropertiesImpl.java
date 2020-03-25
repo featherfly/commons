@@ -401,9 +401,8 @@ public class PropertiesImpl implements Properties {
                     String key = saveConvert(property.getKey(), true, escUnicode);
                     String val = saveConvert(property.getValue(), false, escUnicode);
                     //                    String comment = saveConvert(property.getComment(), false, escUnicode);
-                    Property np = new Property(key, val, LangUtils.isNotEmpty(property.getComment(), comm -> {
-                        return saveConvert(comm, false, escUnicode);
-                    }));
+                    Property np = new Property(key, val, LangUtils.ifNotEmpty(property.getComment(),
+                            comm -> saveConvert(comm, false, escUnicode), () -> ""));
                     bw.write(np.toPart());
                     bw.write(Chars.NEW_LINE);
                     //                    bw.newLine();

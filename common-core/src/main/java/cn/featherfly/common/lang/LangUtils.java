@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * <p>
@@ -109,36 +110,6 @@ public final class LangUtils {
 
     /**
      * <p>
-     * 判断传入对象是否为空，（String、Collection、Map、Array还要判断长度是否为0），如果不空则执行传入的方法
-     * </p>
-     *
-     * @param object   传入的对象
-     * @param consumer 需要执行的方法
-     */
-    public static <O> void isEmpty(O object, Consumer<O> consumer) {
-        if (isEmpty(object)) {
-            consumer.accept(object);
-        }
-    }
-
-    /**
-     * <p>
-     * 判断传入对象是否为空，（String、Collection、Map、Array还要判断长度是否为0），如果为空则执行传入的方法
-     * </p>
-     *
-     * @param object   传入的对象
-     * @param function 需要执行的方法
-     * @return object
-     */
-    public static <O, R> R isEmpty(O object, Function<O, R> function) {
-        if (isEmpty(object)) {
-            return function.apply(object);
-        }
-        return null;
-    }
-
-    /**
-     * <p>
      * 返回传入对象是否不为空（String、Collection、Map、Array还要判断长度是否为0）
      * </p>
      *
@@ -150,6 +121,72 @@ public final class LangUtils {
     }
 
     /**
+     * ifTrue
+     *
+     * @param bool    bool
+     * @param isTrue  exec when bool is true
+     * @param isFalse exec when bool is false
+     * @return obj
+     */
+    public static <O, R> R ifTrue(boolean bool, Supplier<R> isTrue, Supplier<R> isFalse) {
+        if (bool) {
+            return isTrue.get();
+        } else {
+            return isFalse.get();
+        }
+    }
+
+    /**
+     * ifTrue
+     *
+     * @param bool    bool
+     * @param isFalse exec when bool is false
+     * @param isTrue  exec when bool is true
+     * @return obj
+     */
+    public static <O, R> R ifFalse(boolean bool, Supplier<R> isFalse, Supplier<R> isTrue) {
+        if (bool) {
+            return isTrue.get();
+        } else {
+            return isFalse.get();
+        }
+    }
+
+    /**
+     * <p>
+     * 判断传入对象是否为空，（String、Collection、Map、Array还要判断长度是否为0），如果为空则执行传入的方法
+     * </p>
+     *
+     * @param object   传入的对象
+     * @param supplier 需要执行的方法
+     * @return object
+     */
+    public static <O, R> R ifEmpty(O object, Supplier<R> empty, Supplier<R> notEmpty) {
+        if (isEmpty(object)) {
+            return empty.get();
+        } else {
+            return notEmpty.get();
+        }
+    }
+
+    /**
+     * <p>
+     * 判断传入对象是否为空，（String、Collection、Map、Array还要判断长度是否为0），如果为空则执行传入的方法
+     * </p>
+     *
+     * @param object   传入的对象
+     * @param supplier 需要执行的方法
+     * @return object
+     */
+    public static <O, R> R ifEmpty(O object, Supplier<R> empty, Function<O, R> notEmpty) {
+        if (isEmpty(object)) {
+            return empty.get();
+        } else {
+            return notEmpty.apply(object);
+        }
+    }
+
+    /**
      * <p>
      * 判断传入对象是否不为空，（String、Collection、Map、Array还要判断长度是否为0），如果不为空则执行传入的方法
      * </p>
@@ -157,8 +194,8 @@ public final class LangUtils {
      * @param object   传入的对象
      * @param consumer 需要执行的方法
      */
-    public static <O> void isNotEmpty(O object, Consumer<O> consumer) {
-        if (isNotEmpty(object)) {
+    public static <O> void ifNotEmpty(O object, Consumer<O> consumer) {
+        if (LangUtils.isNotEmpty(object)) {
             consumer.accept(object);
         }
     }
@@ -169,14 +206,32 @@ public final class LangUtils {
      * </p>
      *
      * @param object   传入的对象
-     * @param function 需要执行的方法
+     * @param notEmpty 需要执行的方法
      * @return object
      */
-    public static <O, R> R isNotEmpty(O object, Function<O, R> function) {
+    public static <O, R> R ifNotEmpty(O object, Supplier<R> notEmpty, Supplier<R> empty) {
         if (isNotEmpty(object)) {
-            return function.apply(object);
+            return notEmpty.get();
+        } else {
+            return empty.get();
         }
-        return null;
+    }
+
+    /**
+     * <p>
+     * 判断传入对象是否不为空，（String、Collection、Map、Array还要判断长度是否为0），如果不为空则执行传入的方法
+     * </p>
+     *
+     * @param object   传入的对象
+     * @param notEmpty 需要执行的方法
+     * @return object
+     */
+    public static <O, R> R ifNotEmpty(O object, Function<O, R> notEmpty, Supplier<R> empty) {
+        if (isNotEmpty(object)) {
+            return notEmpty.apply(object);
+        } else {
+            return empty.get();
+        }
     }
 
     /**
@@ -415,15 +470,33 @@ public final class LangUtils {
 
     /**
      * <p>
-     * 判断传入文件对象代表的物理文件是否不存在，不存在则执行传入方法
+     * 判断传入文件对象代表的物理文件是否存在，存在则执行传入方法
      * </p>
      *
      * @param file     判断的文件
      * @param consumer 需要执行的方法
      */
-    public static void isExists(File file, Consumer<File> consumer) {
+    public static void ifExists(File file, Consumer<File> consumer) {
         if (isExists(file)) {
             consumer.accept(file);
+        }
+    }
+
+    /**
+     * <p>
+     * 判断传入文件对象代表的物理文件是否存在，存在则执行传入方法
+     * </p>
+     *
+     * @param file      判断的文件
+     * @param exists    exec when exists
+     * @param notExists exec when not exists
+     * @return obj
+     */
+    public static <R> R ifExists(File file, Function<File, R> exists, Function<File, R> notExists) {
+        if (isExists(file)) {
+            return exists.apply(file);
+        } else {
+            return notExists.apply(file);
         }
     }
 
@@ -435,10 +508,44 @@ public final class LangUtils {
      * @param file     判断的文件
      * @param consumer 需要执行的方法
      */
-    public static void isNotExists(File file, Consumer<File> consumer) {
+    public static void ifNotExists(File file, Consumer<File> consumer) {
         if (isNotExists(file)) {
             consumer.accept(file);
         }
+    }
+
+    /**
+     * <p>
+     * 判断传入文件对象代表的物理文件是否不存在，不存在则执行传入方法
+     * </p>
+     *
+     * @param file      判断的文件
+     * @param notExists exec when not exists
+     * @param exists    exec when exists
+     * @return obj
+     */
+    public static <R> R ifNotExists(File file, Function<File, R> notExists, Function<File, R> exists) {
+        if (isNotExists(file)) {
+            return notExists.apply(file);
+        } else {
+            return exists.apply(file);
+        }
+    }
+
+    /**
+     * <p>
+     * 判断传入文件对象代表的物理文件是否不存在，不存在则执行传入方法
+     * </p>
+     *
+     * @param file     判断的文件
+     * @param supplier 需要执行的方法
+     * @return obj
+     */
+    public static <R> R ifNotExists(File file, Supplier<R> supplier) {
+        if (isNotExists(file)) {
+            return supplier.get();
+        }
+        return null;
     }
 
     /**

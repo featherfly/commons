@@ -1,8 +1,6 @@
 
 /*
- * Thgk-Commons
- *
- * created on May 21, 2010 12:06:27 AM
+ * Thgk-Commons created on May 21, 2010 12:06:27 AM
  */
 package cn.featherfly.common.lang;
 
@@ -35,29 +33,63 @@ public final class ClassLoaderUtils {
 
     /**
      * 加载给定名称的所有资源，将搜索类加载器或得的所有结果汇总.
-     * 如果没有发现结果，如果资源文件不是以'/'开头，则在资源名称前加前缀'/'，并再次查找。
-     *
-     * 此方法将尝试加载资源的顺序如下：
+     * 如果没有发现结果，如果资源文件不是以'/'开头，则在资源名称前加前缀'/'，并再次查找。 此方法将尝试加载资源的顺序如下：
      * <ul>
      * <li>Thread.currentThread().getContextClassLoader()
      * <li>ResourceLoader.class.getClassLoader()
      * <li>callingClass.getClassLoader()
      * </ul>
      *
-     * @param resourceName
-     *            需要加载的资源名称
-     * @param callingClass
-     *            调用对象的class
-     * @param aggregate
-     *            aggregate
-     * @throws IOException
-     *             IO异常
+     * @param resourceName 需要加载的资源名称
+     * @param aggregate    aggregate
+     * @throws IOException IO异常
+     * @return 资源路径的迭代器
+     */
+    public static Iterator<URL> getResources(String resourceName, boolean aggregate) throws IOException {
+        AggregateIterator<URL> iterator = new AggregateIterator<>();
+
+        iterator.addEnumeration(Thread.currentThread().getContextClassLoader().getResources(resourceName));
+
+        if (!iterator.hasNext() || aggregate) {
+            iterator.addEnumeration(ClassLoaderUtils.class.getClassLoader().getResources(resourceName));
+        }
+
+        Class<?> callingClass = ClassUtils.forName(LangUtils.getInvoker().getClassName());
+
+        if (!iterator.hasNext() || aggregate) {
+            ClassLoader cl = callingClass.getClassLoader();
+
+            if (cl != null) {
+                iterator.addEnumeration(cl.getResources(resourceName));
+            }
+        }
+
+        if (!iterator.hasNext() && resourceName != null && resourceName.charAt(0) != '/') {
+            return getResources('/' + resourceName, callingClass, aggregate);
+        }
+
+        return iterator;
+    }
+
+    /**
+     * 加载给定名称的所有资源，将搜索类加载器或得的所有结果汇总.
+     * 如果没有发现结果，如果资源文件不是以'/'开头，则在资源名称前加前缀'/'，并再次查找。 此方法将尝试加载资源的顺序如下：
+     * <ul>
+     * <li>Thread.currentThread().getContextClassLoader()
+     * <li>ResourceLoader.class.getClassLoader()
+     * <li>callingClass.getClassLoader()
+     * </ul>
+     *
+     * @param resourceName 需要加载的资源名称
+     * @param callingClass 调用对象的class
+     * @param aggregate    aggregate
+     * @throws IOException IO异常
      * @return 资源路径的迭代器
      */
     public static Iterator<URL> getResources(String resourceName, Class<?> callingClass, boolean aggregate)
             throws IOException {
 
-        AggregateIterator<URL> iterator = new AggregateIterator<URL>();
+        AggregateIterator<URL> iterator = new AggregateIterator<>();
 
         iterator.addEnumeration(Thread.currentThread().getContextClassLoader().getResources(resourceName));
 
@@ -73,7 +105,7 @@ public final class ClassLoaderUtils {
             }
         }
 
-        if (!iterator.hasNext() && (resourceName != null) && (resourceName.charAt(0) != '/')) {
+        if (!iterator.hasNext() && resourceName != null && resourceName.charAt(0) != '/') {
             return getResources('/' + resourceName, callingClass, aggregate);
         }
 
@@ -81,19 +113,66 @@ public final class ClassLoaderUtils {
     }
 
     /**
-     * 加载给定的资源.
-     *
-     * 此方法将尝试加载资源的顺序如下：
+     * 加载给定的资源. 此方法将尝试加载资源的顺序如下：
      * <ul>
      * <li>从 Thread.currentThread().getContextClassLoader() 加载
      * <li>从 ResourceLoader.class.getClassLoader() 加载
      * <li>callingClass.getClassLoader()
      * </ul>
      *
-     * @param resourceName
-     *            需要加载的资源名称
-     * @param callingClass
-     *            调用对象的class
+     * @param resourceName 需要加载的资源名称
+     * @return 资源路径
+     */
+    public static URL getResource(String resourceName) {
+        URL url = Thread.currentThread().getContextClassLoader().getResource(resourceName);
+
+        if (url == null) {
+            url = ClassLoaderUtils.class.getClassLoader().getResource(resourceName);
+        }
+        if (url != null) {
+            return url;
+        }
+        Class<?> callingClass = ClassUtils.forName(LangUtils.getInvoker().getClassName());
+        if (url == null) {
+            ClassLoader cl = callingClass.getClassLoader();
+
+            if (cl != null) {
+                url = cl.getResource(resourceName);
+            }
+        }
+
+        if (url == null && resourceName != null && resourceName.charAt(0) != '/') {
+            return getResource('/' + resourceName, callingClass);
+        }
+
+        return url;
+    }
+
+    /**
+     * 这是一个用来方便的加载流资源的方法. 用于查找资源的算法在getResource（）中给出了
+     *
+     * @param resourceName 需要加载的资源名称
+     * @return 资源输入流
+     */
+    public static InputStream getResourceAsStream(String resourceName) {
+        URL url = getResource(resourceName);
+        try {
+            return url != null ? url.openStream() : null;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    /**
+     * 加载给定的资源. 此方法将尝试加载资源的顺序如下：
+     * <ul>
+     * <li>从 Thread.currentThread().getContextClassLoader() 加载
+     * <li>从 ResourceLoader.class.getClassLoader() 加载
+     * <li>callingClass.getClassLoader()
+     * </ul>
+     *
+     * @param resourceName 需要加载的资源名称
+     * @param callingClass 调用对象的class
      * @return 资源路径
      */
     public static URL getResource(String resourceName, Class<?> callingClass) {
@@ -111,7 +190,7 @@ public final class ClassLoaderUtils {
             }
         }
 
-        if ((url == null) && (resourceName != null) && (resourceName.charAt(0) != '/')) {
+        if (url == null && resourceName != null && resourceName.charAt(0) != '/') {
             return getResource('/' + resourceName, callingClass);
         }
 
@@ -119,30 +198,24 @@ public final class ClassLoaderUtils {
     }
 
     /**
-     * 这是一个用来方便的加载流资源的方法.
+     * 这是一个用来方便的加载流资源的方法. 用于查找资源的算法在getResource（）中给出了
      *
-     * 用于查找资源的算法在getResource（）中给出了
-     *
-     * @param resourceName
-     *            需要加载的资源名称
-     * @param callingClass
-     *            调用对象的class
+     * @param resourceName 需要加载的资源名称
+     * @param callingClass 调用对象的class
      * @return 资源输入流
      */
     public static InputStream getResourceAsStream(String resourceName, Class<?> callingClass) {
         URL url = getResource(resourceName, callingClass);
 
         try {
-            return (url != null) ? url.openStream() : null;
+            return url != null ? url.openStream() : null;
         } catch (IOException e) {
             return null;
         }
     }
 
     /**
-     * 使用传入的名称加载类（class）.
-     *
-     * 加载的顺序如下所示：
+     * 使用传入的名称加载类（class）. 加载的顺序如下所示：
      * <ul>
      * <li>从 Thread.currentThread().getContextClassLoader() 加载
      * <li>使用 Class.forName() 加载
@@ -150,25 +223,22 @@ public final class ClassLoaderUtils {
      * <li>callingClass.getClassLoader()
      * </ul>
      *
-     * @param className
-     *            需要加载的类（class）名称
-     * @param callingClass
-     *            调用类或对象的class属性
-     * @throws ClassNotFoundException
-     *             如果从以上提供的几个地方都未加载到，则抛出.
+     * @param className    需要加载的类（class）名称
+     * @param callingClass 调用类或对象的class属性
+     * @throws ClassNotFoundException 如果从以上提供的几个地方都未加载到，则抛出.
      * @return 加载的类
      */
     public static Class<?> loadClass(String className, Class<?> callingClass) throws ClassNotFoundException {
         try {
-            return (Class<?>) Thread.currentThread().getContextClassLoader().loadClass(className);
+            return Thread.currentThread().getContextClassLoader().loadClass(className);
         } catch (ClassNotFoundException e) {
             try {
-                return (Class<?>) Class.forName(className);
+                return Class.forName(className);
             } catch (ClassNotFoundException ex) {
                 try {
-                    return (Class<?>) ClassLoaderUtils.class.getClassLoader().loadClass(className);
+                    return ClassLoaderUtils.class.getClassLoader().loadClass(className);
                 } catch (ClassNotFoundException exc) {
-                    return (Class<?>) callingClass.getClassLoader().loadClass(className);
+                    return callingClass.getClassLoader().loadClass(className);
                 }
             }
         }
@@ -184,9 +254,8 @@ public final class ClassLoaderUtils {
 
     /**
      * 打印输出给定类加载器的层次结构 - 调试很有用
-     * 
-     * @param cl
-     *            给定的类加载器
+     *
+     * @param cl 给定的类加载器
      */
     public static void printClassLoader(ClassLoader cl) {
         System.out.println("ClassLoaderUtils.printClassLoader(cl = " + cl + ")");
@@ -198,10 +267,8 @@ public final class ClassLoaderUtils {
     /**
      * 显示类加载器的层次结构. 使用默认换行符和制表符的文本字符.
      *
-     * @param obj
-     *            对象层次结构的分析装载机
-     * @param role
-     *            当前类在应用程序中作用的说明 （例如，"servlet"或"EJB"的引用）
+     * @param obj  对象层次结构的分析装载机
+     * @param role 当前类在应用程序中作用的说明 （例如，"servlet"或"EJB"的引用）
      * @return 一个字符串，显示这个类的类加载器层次结构
      */
     public static String showClassLoaderHierarchy(Object obj, String role) {
@@ -210,15 +277,11 @@ public final class ClassLoaderUtils {
 
     /**
      * 显示类加载器的层次结构.
-     * 
-     * @param obj
-     *            对象层次结构的分析装载机
-     * @param role
-     *            当前类在应用程序中作用的说明 （例如，"servlet"或"EJB"的引用）
-     * @param lineBreak
-     *            设置断行符
-     * @param tabText
-     *            设置tabText文本使用的标签
+     *
+     * @param obj       对象层次结构的分析装载机
+     * @param role      当前类在应用程序中作用的说明 （例如，"servlet"或"EJB"的引用）
+     * @param lineBreak 设置断行符
+     * @param tabText   设置tabText文本使用的标签
      * @return 一个字符串，显示这个类的类加载器层次结构
      */
     public static String showClassLoaderHierarchy(Object obj, String role, String lineBreak, String tabText) {
@@ -228,9 +291,8 @@ public final class ClassLoaderUtils {
 
     /**
      * 显示给定类加载器的层次结构. 使用默认换行符和制表符的文本字符.
-     * 
-     * @param cl
-     *            需要分析的classLoader
+     *
+     * @param cl 需要分析的classLoader
      * @return 一个字符串，显示这个类的类加载器层次结构
      */
     public static String showClassLoaderHierarchy(ClassLoader cl) {
@@ -239,13 +301,10 @@ public final class ClassLoaderUtils {
 
     /**
      * 显示给定类加载器的层次结构.
-     * 
-     * @param cl
-     *            需要分析的classLoader
-     * @param lineBreak
-     *            设置断行符
-     * @param tabText
-     *            设置tabText文本使用的标签
+     *
+     * @param cl        需要分析的classLoader
+     * @param lineBreak 设置断行符
+     * @param tabText   设置tabText文本使用的标签
      * @return 一个字符串，显示这个类的类加载器层次结构
      */
     public static String showClassLoaderHierarchy(ClassLoader cl, String lineBreak, String tabText) {
@@ -254,15 +313,11 @@ public final class ClassLoaderUtils {
 
     /**
      * 显示给定类加载器的层次结构.
-     * 
-     * @param c1
-     *            需要分析的classLoader
-     * @param lineBreak
-     *            设置断行符
-     * @param tabText
-     *            设置tabText文本使用的标签
-     * @param indent
-     *            当前loader的嵌套级别（从0开始）;用于格式化打印输出
+     *
+     * @param c1        需要分析的classLoader
+     * @param lineBreak 设置断行符
+     * @param tabText   设置tabText文本使用的标签
+     * @param indent    当前loader的嵌套级别（从0开始）;用于格式化打印输出
      * @return 一个字符串，显示这个类的类加载器层次结构
      */
     private static String showClassLoaderHierarchy(ClassLoader cl, String lineBreak, String tabText, int indent) {
@@ -284,10 +339,10 @@ public final class ClassLoaderUtils {
      */
     protected static class AggregateIterator<E> implements Iterator<E> {
 
-        LinkedList<Enumeration<E>> enums = new LinkedList<Enumeration<E>>();
+        LinkedList<Enumeration<E>> enums = new LinkedList<>();
         Enumeration<E> cur = null;
         E next = null;
-        Set<E> loaded = new HashSet<E>();
+        Set<E> loaded = new HashSet<>();
 
         @SuppressWarnings("rawtypes")
         public AggregateIterator addEnumeration(Enumeration<E> e) {
@@ -305,7 +360,7 @@ public final class ClassLoaderUtils {
 
         @Override
         public boolean hasNext() {
-            return (next != null);
+            return next != null;
         }
 
         @Override

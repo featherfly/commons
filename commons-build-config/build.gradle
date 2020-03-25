@@ -10,9 +10,10 @@ allprojects {
 		compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
 		
 	    testCompile (
-	    	'org.testng:testng:6.14.3',
+	    	'org.testng:testng:7.1.0',
 	    	'org.slf4j:slf4j-log4j12:1.7.30'
 	    )
+        testCompile group: 'com.google.inject', name: 'guice', version: '4.2.3'
 	}
 }
 	

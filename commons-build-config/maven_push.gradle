@@ -29,6 +29,7 @@ def getRepositoryPassword() {
 
 task sourcesJar(type: Jar) {
     classifier = 'sources'
+    println sourceSets.main.java.srcDirs
     from sourceSets.main.java.srcDirs
 }
 

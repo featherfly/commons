@@ -29,7 +29,7 @@ import cn.featherfly.common.lang.StringUtils;
  */
 public class PropertiesImpl implements Properties {
 
-    private Charset charset = StandardCharsets.ISO_8859_1;
+    private Charset charset = StandardCharsets.UTF_8;
 
     private Map<String, Part> partMap = new LinkedHashMap<>();
 

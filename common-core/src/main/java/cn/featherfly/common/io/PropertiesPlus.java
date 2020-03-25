@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
 import org.slf4j.Logger;
@@ -53,6 +54,10 @@ public class PropertiesPlus extends java.util.Properties implements cn.featherfl
      */
     public PropertiesPlus(java.util.Properties defaults, Charset charset) {
         super(defaults);
+        // 为了兼容java.util.Properties
+        if (charset == null) {
+            charset = StandardCharsets.ISO_8859_1;
+        }
         properties = new PropertiesImpl(defaults, charset);
     }
 

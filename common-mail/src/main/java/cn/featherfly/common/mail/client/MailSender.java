@@ -59,7 +59,18 @@ public class MailSender extends AbstractMailClient {
 
     /**
      * 发送邮件
-     * 
+     *
+     * @param address mail address
+     * @param subject mail subject
+     * @param content mail content
+     */
+    public void send(String address, String subject, String content) {
+        send(new MailAddress(address), new MailBody(subject, content));
+    }
+
+    /**
+     * 发送邮件
+     *
      * @param mailAddress
      * @param mailBody
      */

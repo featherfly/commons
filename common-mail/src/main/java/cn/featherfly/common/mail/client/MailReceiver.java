@@ -17,7 +17,6 @@ import javax.mail.search.SearchTerm;
 
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.mail.ImapMailServer;
-import cn.featherfly.common.mail.Mail;
 import cn.featherfly.common.mail.MailApiUtils;
 import cn.featherfly.common.mail.MailCreator;
 import cn.featherfly.common.mail.MailException;
@@ -72,16 +71,15 @@ public class MailReceiver extends AbstractMailClient {
         AssertIllegalArgument.isNotNull(imapMailServer, "smtpServer");
     }
 
-    /**
-     * <p>
-     * 获取指定folder指定messageId的邮件.
-     * </p>
-     *
-     * @param messageId messageId
+    /*
+     * <p> 查询指定folder的邮件. </p>
+     * @param searchTerm 查询条件，如果为空则返回所有
+     * @param mailCreator 邮件创建器
      * @return 邮件
      */
-    public Mail get(String messageId) {
-        return get(messageId, mailCreator);
+    private <E> List<E> search(SearchTerm searchTerm, MailCreator<E> mailCreator) {
+        AssertIllegalArgument.isNotNull(mailCreator, "mailCreator");
+        return search(searchTerm, 0, mailCreator, null);
     }
 
     /**
@@ -106,35 +104,13 @@ public class MailReceiver extends AbstractMailClient {
         }
     }
 
-    /*
-     * <p> 查询指定folder的邮件. </p>
-     * @param searchTerm 查询条件，如果为空则返回所有
-     * @param mailCreator 邮件创建器
-     * @return 邮件
-     */
-    private <E> List<E> search(SearchTerm searchTerm, MailCreator<E> mailCreator) {
-        AssertIllegalArgument.isNotNull(mailCreator, "mailCreator");
-        return search(searchTerm, 0, mailCreator, null);
-    }
-
     /**
      * <p>
      * 处理从指定folder的所有邮件.
      * </p>
      */
-    public void handle() {
-        handle(null);
-    }
-
-    /**
-     * <p>
-     * 处理从指定folder查询出的邮件.
-     * </p>
-     *
-     * @param searchTerm 查询条件，如果为空则返回所有
-     */
-    public void handle(SearchTerm searchTerm) {
-        handle(searchTerm, mailCreator, mailHandler);
+    public <E> void receive(MailCreator<E> mailCreator, MailHandler<E> mailHandler) {
+        receive(null, mailCreator, mailHandler);
     }
 
     /**
@@ -146,7 +122,7 @@ public class MailReceiver extends AbstractMailClient {
      * @param mailCreator 邮件创建器
      * @param mailHandler 处理对象
      */
-    public <E> void handle(SearchTerm searchTerm, MailCreator<E> mailCreator, MailHandler<E> mailHandler) {
+    public <E> void receive(SearchTerm searchTerm, MailCreator<E> mailCreator, MailHandler<E> mailHandler) {
         AssertIllegalArgument.isNotNull(mailCreator, "mailCreator");
         AssertIllegalArgument.isNotNull(mailHandler, "mailHandler");
         search(searchTerm, 0, mailCreator, mailHandler);
@@ -349,10 +325,6 @@ public class MailReceiver extends AbstractMailClient {
     //	field
     // ********************************************************************
 
-    private MailCreator<Mail> mailCreator;
-
-    private MailHandler<Mail> mailHandler;
-
     private int allowCacheSize = -1;
 
     private String folder = "INBOX";
@@ -373,42 +345,6 @@ public class MailReceiver extends AbstractMailClient {
      */
     public void setFolder(String folder) {
         this.folder = folder;
-    }
-
-    /**
-     * 返回mailCreator
-     *
-     * @return mailCreator
-     */
-    public MailCreator<Mail> getMailCreator() {
-        return mailCreator;
-    }
-
-    /**
-     * 设置mailCreator
-     *
-     * @param mailCreator mailCreator
-     */
-    public void setMailCreator(MailCreator<Mail> mailCreator) {
-        this.mailCreator = mailCreator;
-    }
-
-    /**
-     * 返回mailHandler
-     *
-     * @return mailHandler
-     */
-    public MailHandler<Mail> getMailHandler() {
-        return mailHandler;
-    }
-
-    /**
-     * 设置mailHandler
-     *
-     * @param mailHandler mailHandler
-     */
-    public void setMailHandler(MailHandler<Mail> mailHandler) {
-        this.mailHandler = mailHandler;
     }
 
     /**

@@ -19,5 +19,6 @@ public class MailSenderTest {
         MailSender client = new MailSender(new MailUser("robot", "cdmhzx.com", "q123456"),
                 new SmtpMailServer("smtp.exmail.qq.com"));
         client.send(new MailAddress("admin@cdmhzx.com"), new MailBody("中文", "中文"));
+
     }
 }

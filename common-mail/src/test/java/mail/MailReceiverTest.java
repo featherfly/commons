@@ -17,8 +17,6 @@ public class MailReceiverTest {
     public static void main(String[] args) {
         MailReceiver client = new MailReceiver(new MailUser("robot", "cdmhzx.com", "q123456"),
                 new ImapMailServer("imap.exmail.qq.com"));
-        client.setMailCreator(new SimpleMailCreator());
-        client.setMailHandler(e -> System.out.println(e.getMailBody().getSubject()));
-        client.handle();
+        client.receive(new SimpleMailCreator(), e -> System.out.println(e.getMailBody().getSubject()));
     }
 }

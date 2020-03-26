@@ -657,13 +657,13 @@ public final class LangUtils {
      */
     public static StackTraceElement getInvoker() {
         final String methodName = "getInvoker";
-        boolean findThis = false;
+        int i = 0;
         for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()) {
-            if (findThis) {
-                return stackTraceElement;
+            if (stackTraceElement.getClassName().equals(LangUtils.class.getName())
+                    && stackTraceElement.getMethodName().equals(methodName)) {
+                return Thread.currentThread().getStackTrace()[i + 2];
             }
-            findThis = stackTraceElement.getClassName().equals(LangUtils.class.getName())
-                    && stackTraceElement.getMethodName().equals(methodName);
+            i++;
         }
         return null;
     }
@@ -679,13 +679,16 @@ public final class LangUtils {
         final String methodName = "getInvokers";
         List<StackTraceElement> invokers = new ArrayList<>();
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        boolean findThis = false;
+        int i = 0;
         for (StackTraceElement stackTraceElement : stackTraceElements) {
-            if (findThis) {
-                invokers.add(stackTraceElement);
+            if (stackTraceElement.getClassName().equals(LangUtils.class.getName())
+                    && stackTraceElement.getMethodName().equals(methodName)) {
+                for (int j = i + 2; j < stackTraceElements.length; j++) {
+                    invokers.add(stackTraceElements[j]);
+                }
+                return invokers;
             }
-            findThis = stackTraceElement.getClassName().equals(LangUtils.class.getName())
-                    && stackTraceElement.getMethodName().equals(methodName);
+            i++;
         }
         return invokers;
     }

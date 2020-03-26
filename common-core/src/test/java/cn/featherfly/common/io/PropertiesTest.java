@@ -24,9 +24,10 @@ public class PropertiesTest {
     Charset charset = StandardCharsets.UTF_8;
 
     @Test
-    public void writeAndReadWithCharset() throws IOException, InterruptedException {
+    public void writeAndReadWithoutCharset() throws IOException, InterruptedException {
         String filePath = Properties.class.getResource("/").getPath() + "writeAndReadWithCharset.properties";
-        Properties pp = new PropertiesImpl(charset);
+        // 默认使用UTF-8
+        Properties pp = new PropertiesImpl();
         setProperties(pp);
         OutputStream os = new FileOutputStream(filePath);
         pp.store(os);
@@ -35,7 +36,7 @@ public class PropertiesTest {
 
         Thread.sleep(100);
 
-        Properties p = new PropertiesImpl(charset);
+        Properties p = new PropertiesImpl();
         p.load(new FileInputStream(filePath));
         showProperties(p);
 
@@ -53,9 +54,10 @@ public class PropertiesTest {
     }
 
     @Test
-    public void writeAndReadWithoutCharset() throws IOException {
+    public void writeAndReadWithCharset() throws IOException {
         String filePath = Properties.class.getResource("/").getPath() + "writeAndReadWithOutCharset.properties";
-        Properties pp = new PropertiesImpl();
+        // java 默认使用的编码
+        Properties pp = new PropertiesImpl(StandardCharsets.ISO_8859_1);
         setProperties(pp);
         OutputStream os = new FileOutputStream(filePath);
         pp.store(os);

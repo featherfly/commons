@@ -8,7 +8,6 @@ import java.nio.charset.Charset;
 import java.util.Collection;
 
 import cn.featherfly.common.constant.Chars;
-import cn.featherfly.common.lang.LangUtils;
 
 /**
  * <p>
@@ -109,10 +108,9 @@ public interface Properties {
         private Charset charset;
 
         public static CharsetComment createIfCan(String comment) {
-            String charset;
-            if (LangUtils.isNotEmpty(
-                    charset = org.apache.commons.lang3.StringUtils.substringAfter(comment, "charset=").trim())) {
-                return new CharsetComment(Charset.forName(charset));
+            String[] tokens = comment.split("=");
+            if (tokens.length == 2 && "charset".equalsIgnoreCase(tokens[0].trim())) {
+                return new CharsetComment(Charset.forName(tokens[1].trim()));
             }
             return null;
         }

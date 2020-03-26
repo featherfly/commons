@@ -17,7 +17,7 @@ import cn.featherfly.common.exception.UnsupportedException;
 
 /**
  * <p>
- * Properties
+ * java.util.Properties Plus
  * </p>
  *
  * @author zhongj

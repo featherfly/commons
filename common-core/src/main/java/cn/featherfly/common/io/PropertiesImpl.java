@@ -29,7 +29,7 @@ import cn.featherfly.common.lang.StringUtils;
  */
 public class PropertiesImpl implements Properties {
 
-    private Charset charset = StandardCharsets.UTF_8;
+    private Charset charset = StandardCharsets.ISO_8859_1;
 
     private Map<String, Part> partMap = new LinkedHashMap<>();
 
@@ -261,12 +261,12 @@ public class PropertiesImpl implements Properties {
             if (Chars.SHARP_CHAR == lr.lineBuf[0] || Chars.NOT_L_CHAR == lr.lineBuf[0]) {
                 comment = loadConvert(lr.lineBuf, 0, limit, convtBuf).substring(1);
                 if (LangUtils.isNotEmpty(comment)) {
-                    comment = StringUtils.encode(comment, StandardCharsets.ISO_8859_1.displayName(),
-                            charset.displayName());
+                    comment = StringUtils.encode(comment, StandardCharsets.ISO_8859_1, charset);
                     CharsetComment cc;
                     if (firstLine && (cc = CharsetComment.createIfCan(comment)) != null) {
                         charset = cc.getCharset();
                         firstLine = false;
+                        //                        charsetFromFile = true;
                         continue;
                     }
                     commentKey = addComment(comment);
@@ -307,9 +307,8 @@ public class PropertiesImpl implements Properties {
             }
             String key = loadConvert(lr.lineBuf, 0, keyLen, convtBuf);
             String value = loadConvert(lr.lineBuf, valueStart, limit - valueStart, convtBuf);
-            setProperty(StringUtils.encode(key, StandardCharsets.ISO_8859_1.displayName(), charset.displayName()),
-                    StringUtils.encode(value, StandardCharsets.ISO_8859_1.displayName(), charset.displayName()),
-                    comment);
+            setProperty(StringUtils.encode(key, StandardCharsets.ISO_8859_1, charset),
+                    StringUtils.encode(value, StandardCharsets.ISO_8859_1, charset), comment);
             partMap.remove(commentKey);
             comment = null;
         }

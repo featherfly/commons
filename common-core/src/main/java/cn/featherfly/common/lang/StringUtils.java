@@ -1,5 +1,6 @@
 package cn.featherfly.common.lang;
 
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -693,7 +694,7 @@ public final class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @param charset 输出字符转编码时使用的字符集
      * @return 输出转换后的字符串.
      */
-    public static String encode(String str, java.nio.charset.Charset charset) {
+    public static String encode(String str, Charset charset) {
         return encode(str, StandardCharsets.ISO_8859_1, charset);
     }
 
@@ -742,7 +743,7 @@ public final class StringUtils extends org.apache.commons.lang3.StringUtils {
         java.nio.charset.Charset fromCharset = LangUtils.ifEmpty(fromCharsetName, () -> StandardCharsets.UTF_8,
                 () -> java.nio.charset.Charset.forName(fromCharsetName));
         java.nio.charset.Charset toCharset = LangUtils.ifEmpty(toCharsetName, () -> StandardCharsets.UTF_8,
-                () -> java.nio.charset.Charset.forName(fromCharsetName));
+                () -> java.nio.charset.Charset.forName(toCharsetName));
         return encode(str, fromCharset, toCharset);
     }
 

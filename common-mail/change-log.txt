@@ -1,3 +1,8 @@
+2020-4-11
+0.4.1
+    1.移除MailReceive.setHandler，MailReceiver.handle方法
+    2.加入MailReceive.receive方法
+    
 2020-3-10
 0.4.0
     1.修改包名为cn.featherfly.common.mail

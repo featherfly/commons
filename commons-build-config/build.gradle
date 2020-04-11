@@ -7,28 +7,27 @@ allprojects {
 	}
 
     dependencies {
-		compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+		implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
 		
-	    testCompile (
+	    testImplementation (
 	    	'org.testng:testng:7.1.0',
 	    	'org.slf4j:slf4j-log4j12:1.7.30'
 	    )
-        testCompile group: 'com.google.inject', name: 'guice', version: '4.2.3'
+        testImplementation group: 'com.google.inject', name: 'guice', version: '4.2.3'
 	}
 }
 	
 dependencies {
-	compile project(':common-core')
+	implementation project(':common-core')
 	//compile 'cn.featherfly:featherfly-common:1.7.4'
-	compile 'cn.featherfly:featherfly-common-bean-javassist:1.4.0'
-	compile 'commons-beanutils:commons-beanutils:latest.integration'
-	compile 'javassist:javassist:3.12.1.GA'
-	compile 'com.alibaba:fastjson:1.1.41'
-	compile 'org.slf4j:slf4j-log4j12:1.6.1'
-    compile 'log4j:log4j:1.2.16'
-    compile group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.11.RELEASE'
-    compile group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.9'
-    
+	implementation 'cn.featherfly:featherfly-common-bean-javassist:1.4.0'
+	implementation 'commons-beanutils:commons-beanutils:latest.integration'
+	implementation 'javassist:javassist:3.12.1.GA'
+	implementation 'com.alibaba:fastjson:1.1.41'
+	implementation 'org.slf4j:slf4j-log4j12:1.6.1'
+    implementation 'log4j:log4j:1.2.16'
+    implementation group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.11.RELEASE'
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.9.9'
 }
 /*
 test {

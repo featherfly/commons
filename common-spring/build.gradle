@@ -3,12 +3,12 @@ ext {
 }
   
 dependencies {
-    compile project(":common-core")
-    compile group: 'org.springframework', name: 'spring-core', version: sv    
-    compile 'org.springframework:spring-context-support:' + sv
-    compile 'org.springframework:spring-jdbc:' + sv
-    compile 'org.springframework:spring-tx:' + sv
+    implementation project(":common-core")
+    implementation group: 'org.springframework', name: 'spring-core', version: sv    
+    implementation 'org.springframework:spring-context-support:' + sv
+    implementation 'org.springframework:spring-jdbc:' + sv
+    implementation 'org.springframework:spring-tx:' + sv
     //compile 'org.springframework:spring-aop:5.1.8.RELEASE'
     //compile 'org.springframework:spring-context:5.1.8.RELEASE'
-    compile group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.4'
+    implementation group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.4'
 }

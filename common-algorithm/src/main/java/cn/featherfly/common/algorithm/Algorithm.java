@@ -33,7 +33,7 @@ public abstract class Algorithm {
                     .newInstance();
             Security.addProvider(provider);
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            LOGGER.debug("org.bouncycastle.jce.provider.BouncyCastleProvider not found, use jdk default Provider");
+            LOGGER.info("org.bouncycastle.jce.provider.BouncyCastleProvider not found, use jdk default Provider");
         }
     }
 

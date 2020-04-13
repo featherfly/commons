@@ -1,3 +1,8 @@
+2020-
+1.8.1
+    1. AssertIllegalArgument加入IllegalArgumentAssert新增加方法
+    2. ExceptionCodeException加入更多包含Throwable的构造方法
+
 2020-4-11
 1.8.0
     1.ResouceBundleJdkProxy实现传入字符集自动转码功能，如果没有指定则不操作

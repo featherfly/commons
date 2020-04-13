@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import cn.featherfly.common.lang.asserts.IllegalArgumentAssert;
+import cn.featherfly.common.lang.function.SerializableSupplier;
 
 /**
  * <p>
@@ -204,6 +205,32 @@ public final class AssertIllegalArgument {
      */
     public static void isLe(int value, int max, String arguDescp) {
         ASSERT.isLe(value, max, arguDescp);
+    }
+
+    /**
+     * @param <T>
+     * @param propertySupplier
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotNull(cn.featherfly.common.lang.function.SerializableSupplier)
+     */
+    public static <T> void isNotNull(SerializableSupplier<T> propertySupplier) {
+        ASSERT.isNotNull(propertySupplier);
+    }
+
+    /**
+     * @param propertySupplier
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotBlank(cn.featherfly.common.lang.function.SerializableSupplier)
+     */
+    public static void isNotBlank(SerializableSupplier<String> propertySupplier) {
+        ASSERT.isNotBlank(propertySupplier);
+    }
+
+    /**
+     * @param <T>
+     * @param propertySupplier
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(cn.featherfly.common.lang.function.SerializableSupplier)
+     */
+    public static <T> void isNotEmpty(SerializableSupplier<T> propertySupplier) {
+        ASSERT.isNotEmpty(propertySupplier);
     }
 
 }

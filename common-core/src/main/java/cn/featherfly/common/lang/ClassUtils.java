@@ -684,7 +684,27 @@ public final class ClassUtils {
         if (type == null) {
             return null;
         }
-        return packageToDir(type.getName()) + ".class";
+        return packageToFile(type, true);
+    }
+
+    /**
+     * <p>
+     * 转换包模式为目录模式.xx.yy.Ttt -&gt; xx/yy/Ttt
+     * </p>
+     *
+     * @param type       类型
+     * @param containExt 包含扩展名
+     * @return 目录模式表示的type文件
+     */
+    public static String packageToFile(Class<?> type, boolean containExt) {
+        if (type == null) {
+            return null;
+        }
+        if (containExt) {
+            return packageToDir(type.getName()) + ".class";
+        } else {
+            return packageToDir(type.getName());
+        }
     }
 
     /**
@@ -699,7 +719,22 @@ public final class ClassUtils {
         if (type == null) {
             return null;
         }
-        return packageToDir(type.getPackage().getName());
+        return packageToDir(type.getPackage());
+    }
+
+    /**
+     * <p>
+     * 转换包模式为目录模式.xx.yy.Ttt -&gt; xx/yy/Ttt
+     * </p>
+     *
+     * @param pack 包
+     * @return 目录模式字符串
+     */
+    public static String packageToDir(Package pack) {
+        if (pack == null) {
+            return null;
+        }
+        return packageToDir(pack.getName());
     }
 
     /**

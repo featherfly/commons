@@ -2,7 +2,7 @@ package cn.featherfly.common.algorithm;
 
 /**
  * <p>
- * SHA安全编码组件
+ * SHA algorithm
  * </p>
  *
  * @author zhongj
@@ -10,112 +10,112 @@ package cn.featherfly.common.algorithm;
 public abstract class SHA extends Algorithm {
 
     /**
-     * SHA-1编码
+     * SHA-1 encrypt
      *
-     * @param data 待编码数据
-     * @return byte[] 消息摘要
+     * @param data data to encrypt
+     * @return encrypted result with byte[]
      * @throws AlgorithmException
      */
-    public static byte[] encode(byte[] data) {
+    public static byte[] encrypt(byte[] data) {
         return messageDigestEncode(data, MessageDigestAlgorithms.SHA);
     }
 
     /**
-     * SHA-1编码
+     * SHA-1 encrypt
      *
-     * @param data 待编码数据
-     * @return String 消息摘要
+     * @param data data to encrypt
+     * @return encrypt result with String
      * @throws AlgorithmException
      */
-    public static String encode(String data) {
-        return toHexString(encode(getBytes(data)));
+    public static String encrypt(String data) {
+        return toHexString(encrypt(getBytes(data)));
     }
 
     /**
-     * SHA-224编码
+     * SHA-224 encrypt
      *
-     * @param data 待编码数据
-     * @return byte[] 消息摘要
+     * @param data data to encrypt
+     * @return encrypted result with byte[]
      * @throws AlgorithmException
      */
-    public static byte[] encode224(byte[] data) {
+    public static byte[] encrypt224(byte[] data) {
         return messageDigestEncode(data, MessageDigestAlgorithms.SHA224);
     }
 
     /**
-     * SHA-224编码
+     * SHA-224 encrypt
      *
-     * @param data 待编码数据
-     * @return String 消息摘要
+     * @param data data to encrypt
+     * @return encrypt result with String
      * @throws AlgorithmException
      */
-    public static String encode224(String data) {
-        return toHexString(encode224(getBytes(data)));
+    public static String encrypt224(String data) {
+        return toHexString(encrypt224(getBytes(data)));
     }
 
     /**
-     * SHA-256编码
+     * SHA-256 encrypt
      *
-     * @param data 待编码数据
-     * @return byte[] 消息摘要
+     * @param data data to encrypt
+     * @return encrypted result with byte[]
      * @throws AlgorithmException
      */
-    public static byte[] encode256(byte[] data) {
+    public static byte[] encrypt256(byte[] data) {
         return messageDigestEncode(data, MessageDigestAlgorithms.SHA256);
     }
 
     /**
-     * SHA-256编码
+     * SHA-256 encrypt
      *
-     * @param data 待编码数据
-     * @return String 消息摘要
+     * @param data data to encrypt
+     * @return encrypt result with String
      * @throws AlgorithmException
      */
-    public static String encode256(String data) {
-        return toHexString(encode256(getBytes(data)));
+    public static String encrypt256(String data) {
+        return toHexString(encrypt256(getBytes(data)));
     }
 
     /**
-     * SHA-384编码
+     * SHA-384 encrypt
      *
-     * @param data 待编码数据
-     * @return byte[] 消息摘要
+     * @param data data to encrypt
+     * @return encrypted result with byte[]
      * @throws AlgorithmException
      */
-    public static byte[] encode384(byte[] data) {
+    public static byte[] encrypt384(byte[] data) {
         return messageDigestEncode(data, MessageDigestAlgorithms.SHA384);
     }
 
     /**
-     * SHA-384编码
+     * SHA-384 encrypt
      *
-     * @param data 待编码数据
-     * @return String 消息摘要
+     * @param data data to encrypt
+     * @return encrypt result with String
      * @throws AlgorithmException
      */
-    public static String encode384(String data) {
-        return toHexString(encode384(getBytes(data)));
+    public static String encrypt384(String data) {
+        return toHexString(encrypt384(getBytes(data)));
     }
 
     /**
-     * SHA-512编码
+     * SHA-512 encrypt
      *
-     * @param data 待编码数据
-     * @return byte[] 消息摘要
+     * @param data data to encrypt
+     * @return encrypted result with byte[]
      * @throws AlgorithmException
      */
-    public static byte[] encode512(byte[] data) {
+    public static byte[] encrypt512(byte[] data) {
         return messageDigestEncode(data, MessageDigestAlgorithms.SHA512);
     }
 
     /**
-     * SHA-512编码
+     * SHA-512 encrypt
      *
-     * @param data 待编码数据
-     * @return String 消息摘要
+     * @param data data to encrypt
+     * @return encrypt result with String
      * @throws AlgorithmException
      */
-    public static String encode512(String data) {
-        return toHexString(encode512(getBytes(data)));
+    public static String encrypt512(String data) {
+        return toHexString(encrypt512(getBytes(data)));
     }
 }

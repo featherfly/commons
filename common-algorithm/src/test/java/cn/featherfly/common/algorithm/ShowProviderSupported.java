@@ -3,12 +3,12 @@ package cn.featherfly.common.algorithm;
 import java.security.Provider;
 import java.security.Security;
 
-import org.testng.annotations.Test;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class ShowProviderSupported {
 
-    @Test
-    public void test() {
+    public static void main(String[] args) {
+        Security.addProvider(new BouncyCastleProvider());
         System.out.println("-------列出加密服务提供者-----");
         Provider[] pro = Security.getProviders();
         for (Provider p : pro) {

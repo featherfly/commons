@@ -1,17 +1,14 @@
 package cn.featherfly.common.algorithm;
 
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
 /**
- * DES安全编码组件
+ * DES algorithm
  *
  * @author zhongj
  */
@@ -20,15 +17,15 @@ public abstract class DES extends Algorithm {
     /**
      * 密钥算法 <br>
      */
-    public static final String KEY_ALGORITHM = "DES";
+    public static final String ALGORITHM_NAME = "DES";
 
     /**
-     * 加密/解密算法 / 工作模式 / 填充方式
+     * DES encrypt/解密算法 / 工作模式 / 填充方式
      */
     public static final String CIPHER_ALGORITHM = "DES/ECB/PKCS5PADDING";
 
     /**
-     * 解密
+     * DES decrypt
      *
      * @param data 待解密数据
      * @param key  密钥
@@ -51,7 +48,7 @@ public abstract class DES extends Algorithm {
     }
 
     /**
-     * 解密
+     * DES decrypt
      *
      * @param data 待解密数据，使用encryptToString加密的字符串
      * @param key  密钥
@@ -59,11 +56,11 @@ public abstract class DES extends Algorithm {
      * @throws AlgorithmException
      */
     public static byte[] decrypt(String data, byte[] key) {
-        return decrypt(Base64.decode(data), key);
+        return decrypt(encryptResultToBytes(data), key);
     }
 
     /**
-     * 解密
+     * DES decrypt
      *
      * @param data 待解密数据
      * @param key  密钥
@@ -75,7 +72,7 @@ public abstract class DES extends Algorithm {
     }
 
     /**
-     * 解密
+     * DES decrypt
      *
      * @param data 待解密数据，使用encryptToString加密的字符串
      * @param key  密钥
@@ -83,11 +80,11 @@ public abstract class DES extends Algorithm {
      * @throws AlgorithmException
      */
     public static String decryptToString(String data, byte[] key) {
-        return decryptToString(Base64.decode(data), key);
+        return decryptToString(encryptResultToBytes(data), key);
     }
 
     /**
-     * 加密
+     * DES encrypt
      *
      * @param data 待加密数据
      * @param key  密钥
@@ -110,7 +107,7 @@ public abstract class DES extends Algorithm {
     }
 
     /**
-     * 加密
+     * DES encrypt
      *
      * @param data 待加密数据
      * @param key  密钥
@@ -122,7 +119,7 @@ public abstract class DES extends Algorithm {
     }
 
     /**
-     * 加密
+     * DES encrypt
      *
      * @param data 待加密数据
      * @param key  密钥
@@ -130,11 +127,11 @@ public abstract class DES extends Algorithm {
      * @throws AlgorithmException
      */
     public static String encryptToString(byte[] data, byte[] key) {
-        return Base64.encodeToString(encrypt(data, key));
+        return encryptResultToString(encrypt(data, key));
     }
 
     /**
-     * 加密
+     * DES encrypt
      *
      * @param data 待加密数据
      * @param key  密钥
@@ -146,32 +143,24 @@ public abstract class DES extends Algorithm {
     }
 
     /**
-     * 生成密钥 <br>
+     * generate key.
      *
      * @param seed seed for SecureRandom
-     * @return byte[] 二进制密钥
+     * @return byte[] key
      * @throws AlgorithmException
      */
-    public static byte[] initKey(byte... seed) {
-        // 实例化密钥生成器
-        try {
-            KeyGenerator kg = KeyGenerator.getInstance(KEY_ALGORITHM);
-            SecureRandom secureRandom = null;
-            if (seed != null && seed.length > 0) {
-                secureRandom = new SecureRandom(seed);
-            } else {
-                secureRandom = new SecureRandom();
-            }
-            // 初始化密钥生成器
-            //		kg.init(64);
-            kg.init(secureRandom);
-            // 生成秘密密钥
-            SecretKey secretKey = kg.generateKey();
-            // 获得密钥的二进制编码形式
-            return secretKey.getEncoded();
-        } catch (NoSuchAlgorithmException e) {
-            throw new AlgorithmException(e);
-        }
+    public static byte[] generateKey(byte... seed) {
+        return generateKey(ALGORITHM_NAME, seed);
+    }
+
+    /**
+     * generate key.
+     *
+     * @return byte[] key
+     * @throws AlgorithmException
+     */
+    public static byte[] generateKey() {
+        return generateKey(ALGORITHM_NAME, 56);
     }
 
     // ********************************************************************
@@ -182,7 +171,7 @@ public abstract class DES extends Algorithm {
         // 实例化DES密钥材料
         DESKeySpec dks = new DESKeySpec(key);
         // 实例化秘密密钥工厂
-        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(KEY_ALGORITHM);
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ALGORITHM_NAME);
         // 生成秘密密钥
         SecretKey secretKey = keyFactory.generateSecret(dks);
         return secretKey;

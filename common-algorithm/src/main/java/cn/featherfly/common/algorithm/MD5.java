@@ -8,25 +8,24 @@ package cn.featherfly.common.algorithm;
 public abstract class MD5 extends Algorithm {
 
     /**
-     * MD5 encode
+     * MD5 encrypt
      *
-     * @param data data to encode
-     * @return encoded result with byte[]
+     * @param data data to encrypt
+     * @return encryptd result with byte[]
      * @throws AlgorithmException
      */
-    public static byte[] encode(byte[] data) {
+    public static byte[] encrypt(byte[] data) {
         return messageDigestEncode(data, MessageDigestAlgorithms.MD5);
     }
 
     /**
-     * MD5 encode
+     * MD5 encrypt
      *
-     * @param data data to encode
-     * @return encoded result with string
+     * @param data data to encrypt
+     * @return encryptd result with string
      * @throws AlgorithmException
      */
-    public static String encode(String data) {
-        // 执行消息摘要
-        return toHexString(encode(getBytes(data)));
+    public static String encrypt(String data) {
+        return toHexString(encrypt(getBytes(data)));
     }
 }

@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * <p>
- * Coders
+ * URL Coder
  * </p>
  *
  * @author zhongj

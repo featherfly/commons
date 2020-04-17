@@ -1,3 +1,8 @@
+2020-4-17
+1.1.0
+    1.加入国密sm2,sm3,sm4
+    2.把Base64,MD5,SHA等算法之前的encode decode方法名统一改为encrypt,decrypt方法名
+    
 2020-3-22
 1.0.0
     1.从featherfly-algorithm迁移过来

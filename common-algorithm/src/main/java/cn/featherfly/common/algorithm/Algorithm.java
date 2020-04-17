@@ -5,6 +5,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.Provider;
+import java.security.SecureRandom;
 import java.security.Security;
 
 import javax.crypto.KeyGenerator;
@@ -28,10 +29,12 @@ public abstract class Algorithm {
     static {
         // 添加BouncyCastle实现
         try {
-            // 使用反射可以处理没有添加BouncyCastleProvider实现JAR包时，这里出错的问题
-            Provider provider = (Provider) Class.forName("org.bouncycastle.jce.provider.BouncyCastleProvider")
-                    .newInstance();
-            Security.addProvider(provider);
+            if (Security.getProvider("BC") == null) {
+                // 使用反射可以处理没有添加BouncyCastleProvider实现JAR包时，这里出错的问题
+                Provider provider = (Provider) Class.forName("org.bouncycastle.jce.provider.BouncyCastleProvider")
+                        .newInstance();
+                Security.addProvider(provider);
+            }
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             LOGGER.info("org.bouncycastle.jce.provider.BouncyCastleProvider not found, use jdk default Provider");
         }
@@ -41,6 +44,12 @@ public abstract class Algorithm {
      * 字符编码
      */
     public final static Charset CHARSET = StandardCharsets.UTF_8;
+
+    //  128-32位16进制；256-64位16进制
+    /**
+     * default key size
+     */
+    public static final int DEFAULT_KEY_SIZE = 128;
 
     /**
      * <p>
@@ -59,8 +68,113 @@ public abstract class Algorithm {
         return sb.toString();
     }
 
+    /**
+     * convert HexString to byte[]
+     *
+     * @param hexStr hex string
+     * @return byte[]
+     */
+    public static byte[] hexStringToByte(String hexStr) {
+        /*对输入值进行规范化整理*/
+        hexStr = hexStr.trim();
+        //处理值初始化
+        int m = 0, n = 0;
+        int iLen = hexStr.length() / 2; //计算长度
+        byte[] ret = new byte[iLen]; //分配存储空间
+        for (int i = 0; i < iLen; i++) {
+            m = i * 2 + 1;
+            n = m + 1;
+            ret[i] = (byte) (Integer.decode("0x" + hexStr.substring(i * 2, m) + hexStr.substring(m, n)) & 0xFF);
+        }
+        return ret;
+    }
+
+    /**
+     * generate key with DEFAULT_KEY_SIZE {@link #DEFAULT_KEY_SIZE}.
+     *
+     * @param algorithmName algorithm name
+     * @return byte[] key
+     * @throws AlgorithmException
+     */
+    static byte[] generateKey(String algorithmName) {
+        return generateKey(algorithmName, DEFAULT_KEY_SIZE);
+    }
+
+    /**
+     * generate key.
+     *
+     * @param algorithmName algorithm name
+     * @param keySize       key size
+     * @return byte[] key
+     * @throws AlgorithmException
+     */
+    static byte[] generateKey(String algorithmName, int keySize) {
+        try {
+            KeyGenerator kg = KeyGenerator.getInstance(algorithmName);
+            kg.init(keySize, new SecureRandom());
+            return kg.generateKey().getEncoded();
+        } catch (Exception e) {
+            throw new AlgorithmException(e);
+        }
+    }
+
+    /**
+     * generate key.
+     *
+     * @param algorithmName algorithm name
+     * @param seed          seed for SecureRandom
+     * @return byte[] key
+     * @throws AlgorithmException
+     */
+    static byte[] generateKey(String algorithmName, byte... seed) {
+        // 实例化密钥生成器
+        try {
+            KeyGenerator kg = KeyGenerator.getInstance(algorithmName);
+            SecureRandom secureRandom = null;
+            if (seed != null && seed.length > 0) {
+                secureRandom = new SecureRandom(seed);
+            } else {
+                secureRandom = new SecureRandom();
+            }
+            // 初始化密钥生成器
+            kg.init(secureRandom);
+            // 生成秘密密钥
+            SecretKey secretKey = kg.generateKey();
+            // 获得密钥的二进制编码形式
+            return secretKey.getEncoded();
+        } catch (Exception e) {
+            throw new AlgorithmException(e);
+        }
+    }
+
+    /**
+     * get bytes from string data
+     *
+     * @param data string data
+     * @return byte[]
+     */
     static byte[] getBytes(String data) {
         return data.getBytes(CHARSET);
+    }
+
+    /**
+     * encrypted result byte[] to String
+     *
+     * @param encryptResult encrypted result
+     * @return String
+     */
+    static String encryptResultToString(byte[] encryptResult) {
+        return Base64.encryptToString(encryptResult);
+    }
+
+    /**
+     * encrypted result String to byte[]
+     *
+     * @param encryptResult encrypted result
+     * @return byte[]
+     */
+    static byte[] encryptResultToBytes(String encryptResult) {
+        return Base64.decrypt(encryptResult);
     }
 
     /**
@@ -70,7 +184,7 @@ public abstract class Algorithm {
      * @param algorithm 消息摘要算法
      * @return 编码的结果
      */
-    public static byte[] messageDigestEncode(byte[] data, MessageDigestAlgorithm algorithm) {
+    static byte[] messageDigestEncode(byte[] data, MessageDigestAlgorithm algorithm) {
         try {
             // 初始化MessageDigest
             MessageDigest md = MessageDigest.getInstance(algorithm.getName());
@@ -88,7 +202,7 @@ public abstract class Algorithm {
      * @param algorithm mac算法
      * @return 编码的结果
      */
-    public static byte[] macEncode(byte[] data, MacAlgorithms algorithm) {
+    static byte[] macEncode(byte[] data, MacAlgorithms algorithm) {
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance(algorithm.getName());
             SecretKey key = keyGen.generateKey();
@@ -109,7 +223,7 @@ public abstract class Algorithm {
      * @param algorithm mac算法
      * @return 编码的结果
      */
-    public static byte[] macEncode(byte[] data, byte[] key, MacAlgorithms algorithm) {
+    static byte[] macEncode(byte[] data, byte[] key, MacAlgorithms algorithm) {
         try {
             SecretKeySpec secretKey = new SecretKeySpec(key, algorithm.getName());
             Mac mac = Mac.getInstance(algorithm.getName());
@@ -127,7 +241,8 @@ public abstract class Algorithm {
         SHA224("SHA-224"),
         SHA256("SHA-256"),
         SHA384("SHA-384"),
-        SHA512("SHA-512");
+        SHA512("SHA-512"),
+        SM3("SHA");
 
         private MessageDigestAlgorithms(String name) {
             this.name = name;

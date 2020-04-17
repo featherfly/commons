@@ -1,55 +1,56 @@
 package cn.featherfly.common.algorithm;
 
 /**
- * MD5 algorithm
+ * HMACMD5 algorithm
  *
  * @author zhongj
  */
 public abstract class HMACMD5 extends Algorithm {
 
     /**
-     * use a random key, every encoded result is different with same data.
+     * HMACMD5 encrypt. use a random key, every encoded result is different with
+     * same data.
      *
      * @param data data to encode
      * @return encoded result with byte[]
      * @throws AlgorithmException
      */
-    public static byte[] encode(byte[] data) {
+    public static byte[] encrypt(byte[] data) {
         return macEncode(data, MacAlgorithms.HMACMD5);
     }
 
     /**
-     * {@link #encode(byte[])}
+     * {@link #encrypt(byte[])}
      *
      * @param data data to encode
      * @return encoded result with string
      * @throws AlgorithmException
      */
-    public static String encode(String data) {
-        return toHexString(encode(data.getBytes(CHARSET)));
+    public static String encrypt(String data) {
+        return toHexString(encrypt(data.getBytes(CHARSET)));
     }
 
     /**
-     * use gived key to encde.
+     * HMACMD5 encrypt.use gived key to encrypt.
      *
-     * @param data data to encode
+     * @param data data to encrypt
      * @param key  key
      * @return encoded result with byte[]
      * @throws AlgorithmException
      */
-    public static byte[] encode(byte[] data, byte[] key) {
+    public static byte[] encrypt(byte[] data, byte[] key) {
         return macEncode(data, key, MacAlgorithms.HMACMD5);
     }
 
     /**
-     * use gived key to encde.
+     * {@link #encrypt(byte[], byte[])}
      *
-     * @param data data to encode
+     * @param data data to encrypt
      * @param key  key
      * @return encoded result with string
      * @throws AlgorithmException
      */
-    public static String encode(String data, String key) {
-        return toHexString(encode(getBytes(data), getBytes(key)));
+    public static String encrypt(String data, String key) {
+        return toHexString(encrypt(getBytes(data), getBytes(key)));
     }
 }

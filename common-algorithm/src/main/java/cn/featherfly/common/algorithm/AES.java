@@ -3,12 +3,11 @@ package cn.featherfly.common.algorithm;
 import java.security.Key;
 
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * AES安全编码组件
+ * AES algorithm
  *
  * @author zhongj
  */
@@ -17,7 +16,7 @@ public abstract class AES extends Algorithm {
     /**
      * 密钥算法
      */
-    public static final String KEY_ALGORITHM = "AES";
+    public static final String ALGORITHM_NAME = "AES";
 
     /**
      * 加密/解密算法 / 工作模式 / 填充方式
@@ -56,7 +55,7 @@ public abstract class AES extends Algorithm {
      * @throws AlgorithmException
      */
     public static byte[] decrypt(String data, byte[] key) {
-        return decrypt(Base64.decode(data), key);
+        return decrypt(encryptResultToBytes(data), key);
     }
 
     /**
@@ -80,7 +79,7 @@ public abstract class AES extends Algorithm {
      * @throws AlgorithmException
      */
     public static String decryptToString(String data, byte[] key) {
-        return decryptToString(Base64.decode(data), key);
+        return decryptToString(encryptResultToBytes(data), key);
     }
 
     /**
@@ -129,7 +128,7 @@ public abstract class AES extends Algorithm {
      * @throws AlgorithmException
      */
     public static String encryptToString(byte[] data, byte[] key) {
-        return Base64.encodeToString(encrypt(data, key));
+        return encryptResultToString(encrypt(data, key));
     }
 
     /**
@@ -145,25 +144,35 @@ public abstract class AES extends Algorithm {
     }
 
     /**
-     * 生成密钥 <br>
+     * generate key.
      *
-     * @return byte[] 二进制密钥
+     * @param seed seed for SecureRandom
+     * @return byte[] key
      * @throws AlgorithmException
      */
-    public static byte[] initKey() {
-        try {
-            // 实例化
-            KeyGenerator kg = KeyGenerator.getInstance(KEY_ALGORITHM);
-            // AES 要求密钥长度为 128位、192位或 256位
-            //		kg.init(256); 256为KEY没搞定
-            kg.init(128);
-            // 生成秘密密钥
-            SecretKey secretKey = kg.generateKey();
-            // 获得密钥的二进制编码形式
-            return secretKey.getEncoded();
-        } catch (Exception e) {
-            throw new AlgorithmException(e);
-        }
+    public static byte[] generateKey(byte... seed) {
+        return generateKey(ALGORITHM_NAME, seed);
+    }
+
+    /**
+     * generate key.
+     *
+     * @return byte[] key
+     * @throws AlgorithmException
+     */
+    public static byte[] generateKey() {
+        return generateKey(ALGORITHM_NAME);
+    }
+
+    /**
+     * generate key.
+     *
+     * @param keySize key size
+     * @return byte[] key
+     * @throws AlgorithmException
+     */
+    public static byte[] generateKey(int keySize) {
+        return generateKey(ALGORITHM_NAME, keySize);
     }
 
     // ********************************************************************
@@ -179,7 +188,7 @@ public abstract class AES extends Algorithm {
      */
     private static Key toKey(byte[] key) {
         // 实例化AES密钥材料
-        SecretKey secretKey = new SecretKeySpec(key, KEY_ALGORITHM);
+        SecretKey secretKey = new SecretKeySpec(key, ALGORITHM_NAME);
         return secretKey;
     }
 }

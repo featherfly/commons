@@ -1,92 +1,92 @@
 package cn.featherfly.common.algorithm;
 
 /**
- * Base64组件
+ * Base64 algorithm
  *
  * @author zhongj
  */
 public abstract class Base64 extends Algorithm {
 
     /**
-     * Base64 encde
+     * Base64 encrypt
      *
-     * @param data 待编码数据
-     * @return byte[] 编码数据
+     * @param data data to encrypt
+     * @return encrypted result with byte[]
      */
-    public static byte[] encode(byte[] data) {
+    public static byte[] encrypt(byte[] data) {
         // 执行编码
         return java.util.Base64.getEncoder().encode(data);
     }
 
     /**
-     * Base64编码
+     * Base64 encrypt
      *
-     * @param data 待编码数据
-     * @return byte[] 编码数据
+     * @param data data to encrypt
+     * @return encrypted result with byte[]
      */
-    public static byte[] encode(String data) {
-        return encode(getBytes(data));
+    public static byte[] encrypt(String data) {
+        return encrypt(getBytes(data));
     }
 
     /**
-     * Base64编码
+     * Base64 encrypt
      *
-     * @param data 待编码数据
-     * @return String 编码数据
+     * @param data data to encrypt
+     * @return encrypted result with String
      */
-    public static String encodeToString(byte[] data) {
-        return new String(encode(data), CHARSET);
+    public static String encryptToString(byte[] data) {
+        return new String(encrypt(data), CHARSET);
     }
 
     /**
-     * Base64编码
+     * Base64 encrypt
      *
-     * @param data 待编码数据
-     * @return String 编码数据
+     * @param data data to encrypt
+     * @return encrypted result with String
      */
-    public static String encodeToString(String data) {
-        return encodeToString(getBytes(data));
+    public static String encryptToString(String data) {
+        return encryptToString(getBytes(data));
     }
 
     /**
-     * Base64解码
+     * Base64 decrypt
      *
-     * @param data 待解码数据
-     * @return byte[] 解码数据
+     * @param data data to decrypt
+     * @return decrypted result with byte[]
      */
-    public static byte[] decode(byte[] data) {
+    public static byte[] decrypt(byte[] data) {
         // 执行解码
         return java.util.Base64.getDecoder().decode(data);
         //        return org.bouncycastle.util.encoders.Base64.decode(data);
     }
 
     /**
-     * Base64解码
+     * Base64 decrypt
      *
-     * @param data 待解码数据
-     * @return byte[] 解码数据
+     * @param data data to decrypt
+     * @return decrypted result with byte[]
      */
-    public static byte[] decode(String data) {
-        return decode(getBytes(data));
+    public static byte[] decrypt(String data) {
+        return decrypt(getBytes(data));
     }
 
     /**
-     * Base64解码
+     * Base64 decrypt
      *
-     * @param data 待解码数据
-     * @return String 解码数据
+     * @param data data to decrypt
+     * @return decrypted result with String
      */
-    public static String decodeToString(byte[] data) {
-        return new String(decode(data), CHARSET);
+    public static String decryptToString(byte[] data) {
+        return new String(decrypt(data), CHARSET);
     }
 
     /**
-     * Base64解码
+     * Base64 decrypt
      *
-     * @param data 待解码数据
-     * @return String 解码数据
+     * @param data data to decrypt
+     * @return decrypted result with String
      */
-    public static String decodeToString(String data) {
-        return decodeToString(getBytes(data));
+    public static String decryptToString(String data) {
+        return decryptToString(getBytes(data));
     }
 }

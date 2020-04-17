@@ -3,17 +3,19 @@ package cn.featherfly.common.algorithm;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Signature;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.Cipher;
 
 /**
- * RSA安全编码组件
+ * RSA algorithm
  *
  * @author zhongj
  */
@@ -22,7 +24,7 @@ public abstract class RSA extends Algorithm {
     /**
      * 非对称加密密钥算法
      */
-    public static final String KEY_ALGORITHM = "RSA";
+    public static final String ALGORITHM_NAME = "RSA";
 
     /**
      * 数字签名 签名/验证算法
@@ -35,23 +37,17 @@ public abstract class RSA extends Algorithm {
     private static final int KEY_SIZE = 1024;
 
     /**
-     * 私钥解密
+     * decrypt with private key
      *
-     * @param data 待解密数据
-     * @param key  私钥
-     * @return byte[] 解密数据
+     * @param data data to decrypt
+     * @param key  private Key
+     * @return decrypted byte[]
      * @throws AlgorithmException
      */
-    public static byte[] decryptByPrivateKey(byte[] data, byte[] key) {
+    public static byte[] decrypt(byte[] data, PrivateKey key) {
         try {
-            // 取得私钥
-            PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(key);
-            KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
-            // 生成私钥
-            PrivateKey privateKey = keyFactory.generatePrivate(pkcs8KeySpec);
-            // 对数据解密
-            Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
-            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+            Cipher cipher = getChipher();
+            cipher.init(Cipher.DECRYPT_MODE, key);
             return cipher.doFinal(data);
         } catch (Exception e) {
             throw new AlgorithmException(e);
@@ -59,15 +55,72 @@ public abstract class RSA extends Algorithm {
     }
 
     /**
-     * 私钥解密
+     * decrypt with private key
      *
-     * @param data 待解密数据
-     * @param key  私钥
-     * @return byte[] 解密数据
+     * @param data data to decrypt
+     * @param key  private Key
+     * @return decrypted byte[]
+     * @throws AlgorithmException
+     */
+    public static byte[] decrypt(String data, PrivateKey key) {
+        return decrypt(getBytes(data), key);
+    }
+
+    /**
+     * decrypt with private key
+     *
+     * @param data data to decrypt
+     * @param key  private Key
+     * @return decrypted byte[]
+     * @throws AlgorithmException
+     */
+    public static byte[] decryptByPrivateKey(byte[] data, byte[] key) {
+        try {
+            // 取得私钥
+            PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(key);
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_NAME);
+            // 生成私钥
+            PrivateKey privateKey = keyFactory.generatePrivate(pkcs8KeySpec);
+            return decrypt(data, privateKey);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new AlgorithmException(e);
+        }
+    }
+
+    /**
+     * decrypt with private key
+     *
+     * @param data data to decrypt
+     * @param key  private Key
+     * @return decrypted byte[]
      * @throws AlgorithmException
      */
     public static byte[] decryptByPrivateKey(String data, byte[] key) {
-        return decryptByPrivateKey(Base64.decode(data), key);
+        return decryptByPrivateKey(encryptResultToBytes(data), key);
+    }
+
+    /**
+     * decrypt with private key
+     *
+     * @param data data to decrypt
+     * @param key  private Key
+     * @return decrypted String
+     * @throws AlgorithmException
+     */
+    public static String decryptToString(byte[] data, PrivateKey key) {
+        return decryptByPrivateKeyToString(data, key.getEncoded());
+    }
+
+    /**
+     * decrypt with private key
+     *
+     * @param data data to decrypt
+     * @param key  private Key
+     * @return decrypted String
+     * @throws AlgorithmException
+     */
+    public static String decryptToString(String data, PrivateKey key) {
+        return decryptByPrivateKeyToString(data, key.getEncoded());
     }
 
     /**
@@ -91,7 +144,37 @@ public abstract class RSA extends Algorithm {
      * @throws AlgorithmException
      */
     public static String decryptByPrivateKeyToString(String data, byte[] key) {
-        return decryptByPrivateKeyToString(Base64.decode(data), key);
+        return decryptByPrivateKeyToString(encryptResultToBytes(data), key);
+    }
+
+    /**
+     * decrypt with public key
+     *
+     * @param data data to decrypt
+     * @param key  public Key
+     * @return decrypted byte[]
+     * @throws AlgorithmException
+     */
+    public static byte[] decrypt(byte[] data, PublicKey key) {
+        try {
+            Cipher cipher = getChipher();
+            cipher.init(Cipher.DECRYPT_MODE, key);
+            return cipher.doFinal(data);
+        } catch (Exception e) {
+            throw new AlgorithmException(e);
+        }
+    }
+
+    /**
+     * decrypt with public key
+     *
+     * @param data data to decrypt
+     * @param key  public Key
+     * @return decrypted byte[]
+     * @throws AlgorithmException
+     */
+    public static byte[] decrypt(String data, PublicKey key) {
+        return decrypt(getBytes(data), key);
     }
 
     /**
@@ -99,21 +182,18 @@ public abstract class RSA extends Algorithm {
      *
      * @param data 待解密数据
      * @param key  公钥
-     * @return byte[] 解密数据
+     * @return decrypted byte[]
      * @throws AlgorithmException
      */
     public static byte[] decryptByPublicKey(byte[] data, byte[] key) {
         try {
             // 取得公钥
             X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(key);
-            KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_NAME);
             // 生成公钥
             PublicKey publicKey = keyFactory.generatePublic(x509KeySpec);
-            // 对数据解密
-            Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
-            cipher.init(Cipher.DECRYPT_MODE, publicKey);
-            return cipher.doFinal(data);
-        } catch (Exception e) {
+            return decrypt(data, publicKey);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new AlgorithmException(e);
         }
     }
@@ -123,11 +203,35 @@ public abstract class RSA extends Algorithm {
      *
      * @param data 待解密数据
      * @param key  公钥
-     * @return byte[] 解密数据
+     * @return decrypted byte[]
      * @throws AlgorithmException
      */
     public static byte[] decryptByPublicKey(String data, byte[] key) {
-        return decryptByPublicKey(Base64.decode(data), key);
+        return decryptByPublicKey(encryptResultToBytes(data), key);
+    }
+
+    /**
+     * decrypt with public key
+     *
+     * @param data data to decrypt
+     * @param key  public Key
+     * @return decrypted String
+     * @throws AlgorithmException
+     */
+    public static String decryptToString(byte[] data, PublicKey key) {
+        return decryptByPublicKeyToString(data, key.getEncoded());
+    }
+
+    /**
+     * decrypt with public key
+     *
+     * @param data data to decrypt
+     * @param key  public Key
+     * @return decrypted String
+     * @throws AlgorithmException
+     */
+    public static String decryptToString(String data, PublicKey key) {
+        return decryptByPublicKeyToString(data, key.getEncoded());
     }
 
     /**
@@ -151,7 +255,117 @@ public abstract class RSA extends Algorithm {
      * @throws AlgorithmException
      */
     public static String decryptByPublicKeyToString(String data, byte[] key) {
-        return decryptByPublicKeyToString(Base64.decode(data), key);
+        return decryptByPublicKeyToString(encryptResultToBytes(data), key);
+    }
+
+    /**
+     * encrypt with private key
+     *
+     * @param data data to encrypt
+     * @param key  private Key
+     * @return encrypted byte[]
+     * @throws AlgorithmException
+     */
+    public static byte[] encrypt(byte[] data, PrivateKey key) {
+        // 对数据加密
+        try {
+            Cipher cipher = getChipher();
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            return cipher.doFinal(data);
+        } catch (Exception e) {
+            throw new AlgorithmException(e);
+        }
+    }
+
+    /**
+     * encrypt with private key
+     *
+     * @param data data to encrypt
+     * @param key  private Key
+     * @return encrypted byte[]
+     * @throws AlgorithmException
+     */
+    public static byte[] encrypt(String data, PrivateKey key) {
+        return encrypt(getBytes(data), key);
+    }
+
+    /**
+     * encrypt with public key
+     *
+     * @param data data to encrypt
+     * @param key  public Key
+     * @return encrypted byte[]
+     * @throws AlgorithmException
+     */
+    public static byte[] encrypt(byte[] data, PublicKey key) {
+        // 对数据加密
+        try {
+            Cipher cipher = getChipher();
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            return cipher.doFinal(data);
+        } catch (Exception e) {
+            throw new AlgorithmException(e);
+        }
+    }
+
+    /**
+     * encrypt with public key
+     *
+     * @param data data to encrypt
+     * @param key  public Key
+     * @return encrypted String
+     * @throws AlgorithmException
+     */
+    public static byte[] encrypt(String data, PublicKey key) {
+        return encrypt(getBytes(data), key);
+    }
+
+    /**
+     * encrypt with private key
+     *
+     * @param data data to encrypt
+     * @param key  private Key
+     * @return encrypted String
+     * @throws AlgorithmException
+     */
+    public static String encryptToString(byte[] data, PrivateKey key) {
+        return encryptByPrivateKeyToString(data, key.getEncoded());
+    }
+
+    /**
+     * encrypt with private key
+     *
+     * @param data data to encrypt
+     * @param key  private Key
+     * @return encrypted String
+     * @throws AlgorithmException
+     */
+    public static String encryptToString(String data, PrivateKey key) {
+        return encryptByPrivateKeyToString(data, key.getEncoded());
+    }
+
+    /**
+     * encrypt with public key
+     *
+     * @param data data to encrypt
+     * @param key  public Key
+     * @return encrypted String
+     * @throws AlgorithmException
+     */
+    public static String encryptToString(byte[] data, PublicKey key) {
+        return encryptByPublicKeyToString(data, key.getEncoded());
+    }
+
+    /**
+     * encrypt with public key
+     *
+     * @param data data to encrypt
+     * @param key  public Key
+     * @return encrypted String
+     * @throws AlgorithmException
+     */
+    public static String encryptToString(String data, PublicKey key) {
+        return encryptByPublicKeyToString(data, key.getEncoded());
     }
 
     /**
@@ -166,13 +380,11 @@ public abstract class RSA extends Algorithm {
         try {
             // 取得公钥
             X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(key);
-            KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_NAME);
             PublicKey publicKey = keyFactory.generatePublic(x509KeySpec);
             // 对数据加密
-            Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
-            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-            return cipher.doFinal(data);
-        } catch (Exception e) {
+            return encrypt(data, publicKey);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new AlgorithmException(e);
         }
     }
@@ -198,7 +410,7 @@ public abstract class RSA extends Algorithm {
      * @throws AlgorithmException
      */
     public static String encryptByPublicKeyToString(byte[] data, byte[] key) {
-        return Base64.encodeToString(encryptByPublicKey(data, key));
+        return encryptResultToString(encryptByPublicKey(data, key));
     }
 
     /**
@@ -225,14 +437,12 @@ public abstract class RSA extends Algorithm {
         try {
             // 取得私钥
             PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(key);
-            KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_NAME);
             // 生成私钥
             PrivateKey privateKey = keyFactory.generatePrivate(pkcs8KeySpec);
             // 对数据加密
-            Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
-            cipher.init(Cipher.ENCRYPT_MODE, privateKey);
-            return cipher.doFinal(data);
-        } catch (Exception e) {
+            return encrypt(data, privateKey);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new AlgorithmException(e);
         }
     }
@@ -258,7 +468,7 @@ public abstract class RSA extends Algorithm {
      * @throws AlgorithmException
      */
     public static String encryptByPrivateKeyToString(byte[] data, byte[] key) {
-        return Base64.encodeToString(encryptByPrivateKey(data, key));
+        return encryptResultToString(encryptByPrivateKey(data, key));
     }
 
     /**
@@ -274,15 +484,37 @@ public abstract class RSA extends Algorithm {
     }
 
     /**
-     * 初始化密钥
+     * generate KeyPair
      *
+     * @param keySize key size
      * @return KeyPair KeyPair
      * @throws AlgorithmException
      */
-    public static KeyPair initKeyPair(byte... seed) {
+    public static KeyPair generateKeyPair(int keySize) {
         try {
             // 实例化密钥对生成器
-            KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(KEY_ALGORITHM);
+            KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(ALGORITHM_NAME);
+            // 初始化密钥对生成器
+            keyPairGen.initialize(KEY_SIZE);
+            // 生成密钥对
+            KeyPair keyPair = keyPairGen.generateKeyPair();
+            return keyPair;
+        } catch (Exception e) {
+            throw new AlgorithmException(e);
+        }
+    }
+
+    /**
+     * generate KeyPair
+     *
+     * @param seed seed for SecureRandom
+     * @return KeyPair KeyPair
+     * @throws AlgorithmException
+     */
+    public static KeyPair generateKeyPair(byte... seed) {
+        try {
+            // 实例化密钥对生成器
+            KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(ALGORITHM_NAME);
             SecureRandom secureRandom = null;
             if (seed != null && seed.length > 0) {
                 secureRandom = new SecureRandom(seed);
@@ -304,6 +536,77 @@ public abstract class RSA extends Algorithm {
     // ********************************************************************
 
     /**
+     * 签名. {@link #sign(byte[], PrivateKey)}
+     *
+     * @param data       待签名数据
+     * @param privateKey 私钥
+     * @return byte[] 数字签名
+     * @throws AlgorithmException
+     */
+    public static String signToString(byte[] data, PrivateKey privateKey) {
+        return encryptResultToString(sign(data, privateKey));
+    }
+
+    /**
+     * 签名. {@link #sign(String, PrivateKey)}
+     *
+     * @param data       待签名数据
+     * @param privateKey 私钥
+     * @return byte[] 数字签名
+     * @throws AlgorithmException
+     */
+    public static String signToString(String data, PrivateKey privateKey) {
+        return signToString(getBytes(data), privateKey);
+    }
+
+    /**
+     * 签名. {@link #sign(byte[], PrivateKey)}
+     *
+     * @param data       待签名数据
+     * @param privateKey 私钥
+     * @return byte[] 数字签名
+     * @throws AlgorithmException
+     */
+    public static byte[] sign(String data, PrivateKey privateKey) {
+        return sign(getBytes(data), privateKey);
+    }
+
+    /**
+     * 签名. {@link #sign(byte[], byte[])}
+     *
+     * @param data       待签名数据
+     * @param privateKey 私钥
+     * @return byte[] 数字签名
+     * @throws AlgorithmException
+     */
+    public static byte[] sign(String data, byte[] privateKey) {
+        return sign(getBytes(data), privateKey);
+    }
+
+    /**
+     * 签名
+     *
+     * @param data       待签名数据
+     * @param privateKey 私钥
+     * @return byte[] 数字签名
+     * @throws AlgorithmException
+     */
+    public static byte[] sign(byte[] data, PrivateKey privateKey) {
+        try {
+            // 实例化Signature
+            Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM);
+            // 初始化Signature
+            signature.initSign(privateKey);
+            // 更新
+            signature.update(data);
+            // 签名
+            return signature.sign();
+        } catch (Exception e) {
+            throw new AlgorithmException(e);
+        }
+    }
+
+    /**
      * 签名
      *
      * @param data       待签名数据
@@ -316,7 +619,7 @@ public abstract class RSA extends Algorithm {
             // 转换私钥材料
             PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(privateKey);
             // 实例化密钥工厂
-            KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_NAME);
             // 取私钥匙对象
             PrivateKey priKey = keyFactory.generatePrivate(pkcs8KeySpec);
             // 实例化Signature
@@ -333,20 +636,70 @@ public abstract class RSA extends Algorithm {
     }
 
     /**
-     * 校验
+     * 校验. {@link #verify(byte[], byte[], PublicKey)}
      *
      * @param data      待校验数据
-     * @param publicKey 公钥
      * @param sign      数字签名
+     * @param publicKey 公钥
      * @return boolean 校验成功返回true 失败返回false
      * @throws AlgorithmException
      */
-    public static boolean verify(byte[] data, byte[] publicKey, byte[] sign) {
+    public static boolean verify(String data, String sign, PublicKey publicKey) {
+        return verify(getBytes(data), encryptResultToBytes(sign), publicKey);
+    }
+
+    /**
+     * 校验. {@link #verify(byte[], byte[], byte[])}
+     *
+     * @param data      待校验数据
+     * @param sign      数字签名
+     * @param publicKey 公钥
+     * @return boolean 校验成功返回true 失败返回false
+     * @throws AlgorithmException
+     */
+    public static boolean verify(String data, String sign, byte[] publicKey) {
+        return verify(getBytes(data), encryptResultToBytes(sign), publicKey);
+    }
+
+    /**
+     * 校验
+     *
+     * @param data      待校验数据
+     * @param sign      数字签名
+     * @param publicKey 公钥
+     * @return boolean 校验成功返回true 失败返回false
+     * @throws AlgorithmException
+     */
+    public static boolean verify(byte[] data, byte[] sign, PublicKey publicKey) {
+        try {
+            // 实例化Signature
+            Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM);
+            // 初始化Signature
+            signature.initVerify(publicKey);
+            // 更新
+            signature.update(data);
+            // 验证
+            return signature.verify(sign);
+        } catch (Exception e) {
+            throw new AlgorithmException(e);
+        }
+    }
+
+    /**
+     * 校验
+     *
+     * @param data      待校验数据
+     * @param sign      数字签名
+     * @param publicKey 公钥
+     * @return boolean 校验成功返回true 失败返回false
+     * @throws AlgorithmException
+     */
+    public static boolean verify(byte[] data, byte[] sign, byte[] publicKey) {
         try {
             // 转换公钥材料
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKey);
             // 实例化密钥工厂
-            KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_NAME);
             // 生成公钥
             PublicKey pubKey = keyFactory.generatePublic(keySpec);
             // 实例化Signature
@@ -360,5 +713,12 @@ public abstract class RSA extends Algorithm {
         } catch (Exception e) {
             throw new AlgorithmException(e);
         }
+    }
+
+    private static Cipher getChipher() throws Exception {
+        // 取得私钥
+        KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_NAME);
+        // 对数据解密
+        return Cipher.getInstance(keyFactory.getAlgorithm());
     }
 }

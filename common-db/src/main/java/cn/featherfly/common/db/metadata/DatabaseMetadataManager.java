@@ -239,7 +239,7 @@ public class DatabaseMetadataManager {
                         columnMetadata.setNullable(false);
                     }
                     // 是否空
-                    String isAutoincrement = rc.getString("IS_AUTOINCREMENT ");
+                    String isAutoincrement = rc.getString("IS_AUTOINCREMENT");
                     if ("YES".equals(isAutoincrement)) {
                         columnMetadata.setAutoincrement(true);
                     } else {

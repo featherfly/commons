@@ -70,8 +70,8 @@ public class BuilderUtils {
      * 条件添加工具
      * </p>
      *
-     * @param sqlPart      sql part
-     * @param linkSqlParts to link sql part
+     * @param sqlPart     sql part
+     * @param linkSqlPart to link sql part
      */
     public static void link(StringBuilder sqlPart, String linkSqlPart) {
         if (sqlPart != null && linkSqlPart != null) {

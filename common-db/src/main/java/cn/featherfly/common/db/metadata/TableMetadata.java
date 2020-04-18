@@ -67,7 +67,8 @@ public class TableMetadata implements Table {
      *
      * @return 所有主键列元数据对象的列表.
      */
-    public List<ColumnMetadata> getPrimaryColumns() {
+    @Override
+    public List<Column> getPrimaryColumns() {
         return primaryColumns;
     }
 
@@ -162,7 +163,7 @@ public class TableMetadata implements Table {
 
     private DatabaseMetadata databaseMetadata;
 
-    private List<ColumnMetadata> primaryColumns = new ArrayList<>(1);
+    private List<Column> primaryColumns = new ArrayList<>(1);
 
     private Map<String, Column> columnMap = new HashMap<>(0);
 

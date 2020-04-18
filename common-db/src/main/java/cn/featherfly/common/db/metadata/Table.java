@@ -2,6 +2,7 @@
 package cn.featherfly.common.db.metadata;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +21,15 @@ public interface Table {
     String getRemark();
 
     String getCatalog();
+
+    /**
+     * <p>
+     * 返回所有主键列元数据对象的列表.
+     * </p>
+     *
+     * @return 所有主键列元数据对象的列表.
+     */
+    List<Column> getPrimaryColumns();
 
     /**
      * <p>

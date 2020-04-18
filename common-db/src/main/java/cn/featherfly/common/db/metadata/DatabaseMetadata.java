@@ -58,10 +58,10 @@ public class DatabaseMetadata {
      * 添加表元数据.
      * </p>
      *
-     * @param Table 表元数据对象
+     * @param table 表元数据对象
      */
-    void addTable(Table Table) {
-        tableMap.put(Table.getName().toUpperCase(), Table);
+    void addTable(Table table) {
+        tableMap.put(table.getName().toUpperCase(), table);
     }
 
     /**
@@ -69,10 +69,10 @@ public class DatabaseMetadata {
      * 添加表元数据.
      * </p>
      *
-     * @param Tables 表元数据对象数组
+     * @param tables 表元数据对象数组
      */
-    void addTable(Table... Tables) {
-        for (Table Table : Tables) {
+    void addTable(Table... tables) {
+        for (Table Table : tables) {
             addTable(Table);
         }
     }
@@ -82,10 +82,10 @@ public class DatabaseMetadata {
      * 添加表元数据.
      * </p>
      *
-     * @param Tables 表元数据对象集合
+     * @param tables 表元数据对象集合
      */
-    void addTable(Collection<Table> Tables) {
-        for (Table Table : Tables) {
+    void addTable(Collection<Table> tables) {
+        for (Table Table : tables) {
             addTable(Table);
         }
     }

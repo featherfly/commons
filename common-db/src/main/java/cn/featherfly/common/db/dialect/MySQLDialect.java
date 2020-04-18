@@ -3,9 +3,6 @@ package cn.featherfly.common.db.dialect;
 import java.sql.Types;
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cn.featherfly.common.db.SqlUtils;
 import cn.featherfly.common.db.metadata.Column;
 import cn.featherfly.common.lang.DateUtils;
@@ -19,8 +16,6 @@ import cn.featherfly.common.lang.LangUtils;
  * @author zhongj
  */
 public class MySQLDialect extends AbstractDialect {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MySQLDialect.class);
 
     /**
      */
@@ -69,8 +64,8 @@ public class MySQLDialect extends AbstractDialect {
         if (isForUpdate) {
             pagingSelect.append(UPDATE_STRING);
         }
-        LOGGER.debug("原始Sql：{}", sql);
-        LOGGER.debug("分页Sql：{}", pagingSelect);
+        logger.debug("原始Sql：{}", sql);
+        logger.debug("分页Sql：{}", pagingSelect);
         return pagingSelect.toString();
     }
 

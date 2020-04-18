@@ -1,8 +1,10 @@
 
 package cn.featherfly.common.db.builder.ddl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.featherfly.common.db.metadata.Column;
@@ -24,6 +26,8 @@ public class TableModel implements Table {
     private String remark;
 
     private String catalog;
+
+    private List<Column> primaryColumns = new ArrayList<>(1);
 
     private Map<String, Column> columnMap = new LinkedHashMap<>(0);
 
@@ -135,6 +139,9 @@ public class TableModel implements Table {
      * @param column column
      */
     public void addColumn(Column column) {
+        if (column.isPrimaryKey()) {
+            primaryColumns.add(column);
+        }
         columnMap.put(column.getName().toUpperCase(), column);
     }
 
@@ -163,4 +170,13 @@ public class TableModel implements Table {
             addColumn(columnMetadata);
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Column> getPrimaryColumns() {
+        return primaryColumns;
+    }
+
 }

@@ -5,9 +5,18 @@ package cn.featherfly.common.db.dialect;
  * <p>
  * Join Types
  * </p>
+ * .
  *
  * @author zhongj
  */
 public enum Join {
-    INNER_JOIN, LEFT_JOIN, RIGHT_JOIN, FULL_JOIN,;
+
+    /** The inner join. */
+    INNER_JOIN,
+    /** The left join. */
+    LEFT_JOIN,
+    /** The right join. */
+    RIGHT_JOIN,
+    /** The full join. */
+    FULL_JOIN,;
 }

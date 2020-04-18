@@ -57,16 +57,6 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
             BuilderUtils.link(result, condition);
         }
         BuilderUtils.link(result, sortBuilder.build());
-
-        //        if (pagination != null) {
-        //            if (dialect == null) {
-        //                throw new BuilderException("需要分页时，dialect不能为空");
-        //            }
-        //            PaginationWrapper<Object> pw = new PaginationWrapper<>(pagination);
-        //            return dialect.getPaginationSql(result.toString(), pw.getStart(), pw.getLimit()).trim();
-        //        } else {
-        //            return result.toString().trim();
-        //        }
         return result.toString().trim();
     }
 

@@ -26,6 +26,7 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.repository.Execution;
 import cn.featherfly.common.repository.Query;
+import cn.featherfly.common.repository.mapping.RowMapper;
 
 /**
  * <p>
@@ -188,6 +189,44 @@ public class SqlExecutor {
             }
         }
         return result;
+    }
+
+    /**
+     * sql query.
+     *
+     * @param <E>    the element type
+     * @param query  query
+     * @param mapper the mapper
+     * @return query result list
+     */
+    public <E> List<E> query(Query query, RowMapper<E> mapper) {
+        if (query != null) {
+            return query(query.getExecution(), mapper, query.getParams());
+        }
+        return new ArrayList<>();
+    }
+
+    /**
+     * sql query.
+     *
+     * @param sql    sql
+     * @param params params
+     * @return query result list
+     */
+    public <E> List<E> query(String sql, RowMapper<E> mapper, Object... params) {
+        if (LangUtils.isNotEmpty(sql)) {
+            sql = sql.trim();
+            try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
+                    PreparedStatementWrapper prep = connection.prepareStatement(sql)) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("execute sql -> {} , params -> {}", sql, ArrayUtils.toString(params));
+                }
+                JdbcUtils.setParameters(prep, params);
+                ResultSetWrapper rs = prep.executeQuery();
+                return JdbcUtils.getResultSetObjects(rs, mapper);
+            }
+        }
+        return new ArrayList<>();
     }
 
     /**

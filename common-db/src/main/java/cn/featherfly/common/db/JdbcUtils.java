@@ -24,12 +24,14 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cn.featherfly.common.db.mapping.SqlResultSet;
 import cn.featherfly.common.db.wrapper.ConnectionWrapper;
 import cn.featherfly.common.db.wrapper.DataSourceWrapper;
 import cn.featherfly.common.db.wrapper.PreparedStatementWrapper;
 import cn.featherfly.common.db.wrapper.ResultSetWrapper;
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.lang.LogUtils;
+import cn.featherfly.common.repository.mapping.RowMapper;
 
 /**
  * <p>
@@ -629,6 +631,24 @@ public final class JdbcUtils {
                 resultMap.put(name, value);
             }
             return resultMap;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static <E> List<E> getResultSetObjects(ResultSetWrapper rs, RowMapper<E> mapper) {
+        return getResultSetObjects(rs.getResultSet(), mapper);
+    }
+
+    public static <E> List<E> getResultSetObjects(ResultSet rs, RowMapper<E> mapper) {
+        try {
+            List<E> list = new ArrayList<>();
+            int index = 1;
+            while (rs.next()) {
+                list.add(mapper.mapRow(new SqlResultSet(rs), index));
+                index++;
+            }
+            return list;
         } catch (SQLException e) {
             throw new JdbcException(e);
         }

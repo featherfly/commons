@@ -3,9 +3,6 @@ package cn.featherfly.common.db.dialect;
 import java.sql.Types;
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.SqlUtils;
 import cn.featherfly.common.db.builder.BuilderUtils;
@@ -24,8 +21,6 @@ import cn.featherfly.common.lang.LangUtils;
  * @author zhongj
  */
 public class PostgreSQLDialect extends AbstractDialect {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(PostgreSQLDialect.class);
 
     /**
      */
@@ -56,19 +51,19 @@ public class PostgreSQLDialect extends AbstractDialect {
     public Object[] getPaginationSqlParameter(Object[] params, int start, int limit) {
         Object[] pagingParams = null;
         if (limit > Chars.ZERO) {
-            LOGGER.debug("limit > 0 , use limit {}", limit);
+            logger.debug("limit > 0 , use limit {}", limit);
         } else if (limit == Chars.ZERO) {
-            LOGGER.debug("limit = 0 , use default limit {}", DEFAULT_LIMIT);
+            logger.debug("limit = 0 , use default limit {}", DEFAULT_LIMIT);
             limit = DEFAULT_LIMIT;
         } else {
-            LOGGER.debug("limit < 0 , don't use limit");
+            logger.debug("limit < 0 , don't use limit");
             limit = Integer.MAX_VALUE;
         }
         if (start > 0) {
-            LOGGER.debug("start > 0 , use start {}", start);
+            logger.debug("start > 0 , use start {}", start);
             pagingParams = new Object[] { Integer.valueOf(limit), Integer.valueOf(start) };
         } else {
-            LOGGER.debug("start < 0 , don't use start");
+            logger.debug("start < 0 , don't use start");
             pagingParams = new Object[] { Integer.valueOf(limit) };
         }
         return (Object[]) ArrayUtils.concat(params, pagingParams);
@@ -100,8 +95,8 @@ public class PostgreSQLDialect extends AbstractDialect {
         if (isForUpdate) {
             pagingSelect.append(UPDATE_STRING);
         }
-        LOGGER.debug("原始Sql：{}", sql);
-        LOGGER.debug("分页Sql：{}", pagingSelect);
+        logger.debug("原始Sql：{}", sql);
+        logger.debug("分页Sql：{}", pagingSelect);
         return pagingSelect.toString();
     }
 

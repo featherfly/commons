@@ -11,6 +11,7 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.lang.StringUtils;
 import cn.featherfly.common.repository.builder.BuilderException;
+import cn.featherfly.common.repository.builder.BuilderExceptionCode;
 import cn.featherfly.common.repository.builder.dml.ConditionBuilder;
 import cn.featherfly.common.repository.builder.dml.ConditionGroup;
 import cn.featherfly.common.repository.builder.dml.Expression;
@@ -241,7 +242,8 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
         if (conditions.size() > 0) {
             Expression last = conditions.get(conditions.size() - 1);
             if (last instanceof SqlLogicExpression) {
-                throw new BuilderException(((SqlLogicExpression) last).getLogicOperator() + " 后没有跟条件表达式");
+                throw new BuilderException(BuilderExceptionCode
+                        .createNoConditionBehindCode(((SqlLogicExpression) last).getLogicOperator().name()));
             }
         }
 
@@ -321,7 +323,8 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
     private void addCondition(Expression condition) {
         if (previousCondition != null) {
             if (previousCondition.getClass().isInstance(condition)) {
-                throw new BuilderException("语法错误，连续相同类型的表达式：" + condition.getClass().getName());
+                throw new BuilderException(
+                        BuilderExceptionCode.createNextToSameConditionCode(condition.getClass().getName()));
             }
         }
         previousCondition = condition;

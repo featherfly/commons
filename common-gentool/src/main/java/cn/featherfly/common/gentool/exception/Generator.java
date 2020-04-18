@@ -110,7 +110,12 @@ public class Generator {
         YAMLFactory yamlFactory = new YAMLFactory();
         ObjectMapper mapper = new ObjectMapper(yamlFactory);
         mapper.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        InputStream input = ClassLoaderUtils.getResourceAsStream(filePath, this.getClass());
-        return mapper.readerFor(GenModule.class).readValue(input);
+        File file = new File(filePath);
+        if (file.exists()) {
+            return mapper.readerFor(GenModule.class).readValue(file);
+        } else {
+            InputStream input = ClassLoaderUtils.getResourceAsStream(filePath, this.getClass());
+            return mapper.readerFor(GenModule.class).readValue(input);
+        }
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
  * <p>
  * GeneratorRunner
  * </p>
- * 
+ *
  * @author zhongj
  */
 public class GeneratorRunner {
@@ -18,10 +18,10 @@ public class GeneratorRunner {
         List<String> yamlFiles = new ArrayList<>();
         if (args.length == 0) {
             throw new IllegalArgumentException("args error args.length must > 0");
-        }   
+        }
         if (args.length == 1) {
             yamlFiles.add(args[0]);
-        } else if (args.length > 1) {            
+        } else if (args.length > 1) {
             configFile = args[0];
             for (int i = 0; i < args.length; i++) {
                 if (i > 0) {
@@ -29,9 +29,12 @@ public class GeneratorRunner {
                 }
             }
         }
-        
-        GenerateConfig config = GenerateConfig.create(configFile);
-        
+
+        GenerateConfig config = new GenerateConfig();
+        if (configFile != null) {
+            config = GenerateConfig.create(configFile);
+        }
+
         Generator generator = new Generator(config);
         yamlFiles.forEach(yamlFile -> {
             try {

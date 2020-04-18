@@ -1,6 +1,7 @@
 
 package cn.featherfly.common.gentool.exception;
 
+import java.io.File;
 import java.io.InputStream;
 
 import org.slf4j.Logger;
@@ -17,23 +18,24 @@ import cn.featherfly.common.lang.LangUtils;
  * <p>
  * GenerateConfig
  * </p>
- * 
+ *
  * @author zhongj
  */
 public class GenerateConfig {
-    
+
     protected static final Logger logger = LoggerFactory.getLogger(GenerateConfig.class);
-    
-    private String javaSrcDir;
-    
-    private String resourceDir;
-    
+
+    private String javaSrcDir = "src/main/java";
+
+    private String resourceDir = "src/main/resources";
+
     private String templateDir = "cn/featherfly/common/gentool/exception/template/";
-    
+
     private String templateSuffix = ".template";
 
     /**
      * 返回javaSrcDir
+     *
      * @return javaSrcDir
      */
     public String getJavaSrcDir() {
@@ -42,6 +44,7 @@ public class GenerateConfig {
 
     /**
      * 设置javaSrcDir
+     *
      * @param javaSrcDir javaSrcDir
      */
     public void setJavaSrcDir(String javaSrcDir) {
@@ -50,6 +53,7 @@ public class GenerateConfig {
 
     /**
      * 返回resourceDir
+     *
      * @return resourceDir
      */
     public String getResourceDir() {
@@ -58,6 +62,7 @@ public class GenerateConfig {
 
     /**
      * 设置resourceDir
+     *
      * @param resourceDir resourceDir
      */
     public void setResourceDir(String resourceDir) {
@@ -66,6 +71,7 @@ public class GenerateConfig {
 
     /**
      * 返回templateDir
+     *
      * @return templateDir
      */
     public String getTemplateDir() {
@@ -74,6 +80,7 @@ public class GenerateConfig {
 
     /**
      * 设置templateDir
+     *
      * @param templateDir templateDir
      */
     public void setTemplateDir(String templateDir) {
@@ -82,6 +89,7 @@ public class GenerateConfig {
 
     /**
      * 返回templateSuffix
+     *
      * @return templateSuffix
      */
     public String getTemplateSuffix() {
@@ -90,12 +98,13 @@ public class GenerateConfig {
 
     /**
      * 设置templateSuffix
+     *
      * @param templateSuffix templateSuffix
      */
     public void setTemplateSuffix(String templateSuffix) {
         this.templateSuffix = templateSuffix;
     }
-    
+
     public static GenerateConfig create(String filePath) throws Exception {
         if (LangUtils.isEmpty(filePath)) {
             filePath = "gentool/config.yaml";
@@ -104,7 +113,12 @@ public class GenerateConfig {
         YAMLFactory yamlFactory = new YAMLFactory();
         ObjectMapper mapper = new ObjectMapper(yamlFactory);
         mapper.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        InputStream input = ClassLoaderUtils.getResourceAsStream(filePath, GenerateConfig.class);
-        return mapper.readerFor(GenerateConfig.class).readValue(input);
+        File file = new File(filePath);
+        if (file.exists()) {
+            return mapper.readerFor(GenerateConfig.class).readValue(file);
+        } else {
+            InputStream input = ClassLoaderUtils.getResourceAsStream(filePath, GenerateConfig.class);
+            return mapper.readerFor(GenerateConfig.class).readValue(input);
+        }
     }
 }

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.metadata.Column;
+import cn.featherfly.common.db.metadata.SqlType;
 import cn.featherfly.common.db.metadata.Table;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
@@ -22,27 +23,30 @@ import cn.featherfly.common.lang.LangUtils;
  */
 public abstract class AbstractDialect implements Dialect {
 
+    /** The logger. */
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /** The keyworld. */
     private Keyworld keyworld;
 
-    /**
-     * for update的后置
-     */
+    /** for update的后置. */
     protected static final String UPDATE_STRING = " for update";
 
+    /** The keywords uppercase. */
     private boolean keywordsUppercase = true;
 
+    /** The table and column name uppercase. */
     private boolean tableAndColumnNameUppercase = false;
 
     /**
+     * Instantiates a new abstract dialect.
      */
     public AbstractDialect() {
         keyworld = new Keyworld(this);
     }
 
     /**
-     * 返回keywordsUppercase
+     * 返回keywordsUppercase.
      *
      * @return keywordsUppercase
      */
@@ -52,7 +56,7 @@ public abstract class AbstractDialect implements Dialect {
     }
 
     /**
-     * 设置keywordsUppercase
+     * 设置keywordsUppercase.
      *
      * @param keywordsUppercase keywordsUppercase
      */
@@ -61,7 +65,7 @@ public abstract class AbstractDialect implements Dialect {
     }
 
     /**
-     * 返回tableAndColumnNameUppercase
+     * 返回tableAndColumnNameUppercase.
      *
      * @return tableAndColumnNameUppercase
      */
@@ -71,12 +75,72 @@ public abstract class AbstractDialect implements Dialect {
     }
 
     /**
-     * 设置tableAndColumnNameUppercase
+     * 设置tableAndColumnNameUppercase.
      *
      * @param tableAndColumnNameUppercase tableAndColumnNameUppercase
      */
     public void setTableAndColumnNameUppercase(boolean tableAndColumnNameUppercase) {
         this.tableAndColumnNameUppercase = tableAndColumnNameUppercase;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String buildAlterTableAddColumnDDL(String databaseName, String tableName, Column... columns) {
+        StringBuilder ddl = new StringBuilder(buildAlterTableDDL(databaseName, tableName));
+        ddl.append(Chars.NEW_LINE);
+        for (Column column : columns) {
+            BuilderUtils.link(ddl, getKeyword(Keywords.ADD), getKeyword(Keywords.COLUMN), getColumnDDL(column));
+            ddl.append(Chars.COMMA);
+            ddl.append(Chars.NEW_LINE);
+        }
+        ddl.deleteCharAt(ddl.length() - 1).deleteCharAt(ddl.length() - 1);
+        return ddl.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String buildAlterTableModifyColumnDDL(String databaseName, String tableName, Column... columns) {
+        StringBuilder ddl = new StringBuilder(buildAlterTableDDL(databaseName, tableName));
+        ddl.append(Chars.NEW_LINE);
+        for (Column column : columns) {
+            BuilderUtils.link(ddl, getKeyword(Keywords.MODIFY), getKeyword(Keywords.COLUMN), getColumnDDL(column));
+            ddl.append(Chars.COMMA);
+            ddl.append(Chars.NEW_LINE);
+        }
+        ddl.deleteCharAt(ddl.length() - 1).deleteCharAt(ddl.length() - 1);
+        return ddl.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String buildAlterTableDropColumnDDL(String databaseName, String tableName, Column... columns) {
+        String[] columnNames = new String[columns.length];
+        for (int i = 0; i < columns.length; i++) {
+            columnNames[i] = columns[i].getName();
+        }
+        return buildAlterTableDropColumnDDL(databaseName, tableName, columnNames);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String buildAlterTableDropColumnDDL(String databaseName, String tableName, String... columnNames) {
+        StringBuilder ddl = new StringBuilder(buildAlterTableDDL(databaseName, tableName));
+        ddl.append(Chars.NEW_LINE);
+        for (String columnName : columnNames) {
+            BuilderUtils.link(ddl, getKeyword(Keywords.DROP), getKeyword(Keywords.COLUMN), wrapName(columnName));
+            ddl.append(Chars.COMMA);
+            ddl.append(Chars.NEW_LINE);
+        }
+        ddl.deleteCharAt(ddl.length() - 1).deleteCharAt(ddl.length() - 1);
+        return ddl.toString();
     }
 
     /**
@@ -87,36 +151,82 @@ public abstract class AbstractDialect implements Dialect {
      * @return the string
      */
     @Override
-    public String buildCreateTableSql(String dataBaseName, Table table) {
-        boolean formatSql = true;
+    public String buildCreateTableDDL(String dataBaseName, Table table) {
         AssertIllegalArgument.isNotEmpty(table, "table");
         StringBuilder sql = new StringBuilder();
         String tableName = LangUtils.isEmpty(dataBaseName) ? wrapName(table.getName())
                 : wrapName(dataBaseName) + Chars.DOT + wrapName(table.getName());
         BuilderUtils.link(sql, getKeyword(Keywords.CREATE), getKeyword(Keywords.TABLE), tableName, Chars.PAREN_L);
-        if (formatSql) {
-            sql.append(Chars.NEW_LINE);
-        }
-
-        for (Column column : table.getColumns()) {
-            BuilderUtils.link(sql, wrapName(column.getName()), getColumnTypeDDL(column), getColumnNotNull(column),
-                    getDefaultValue(column), getAutoIncrement(column), getColumnComment(column));
-            sql.append(Chars.COMMA);
-            if (formatSql) {
-                sql.append(Chars.NEW_LINE);
-            }
-        }
-        BuilderUtils.link(sql, getPrimaryKeyDDL(table));
-        if (formatSql) {
-            sql.append(Chars.NEW_LINE);
-        }
-        BuilderUtils.link(sql, Chars.PAREN_R, LangUtils.isEmpty(table.getRemark()) ? ""
-                : BuilderUtils.link(getKeyword(Keywords.COMMENT), "'" + table.getRemark() + "'"));
+        sql.append(Chars.NEW_LINE);
+        BuilderUtils.link(sql, getTableColumnsDDL(table));
+        sql.append(Chars.NEW_LINE);
+        BuilderUtils.link(sql, Chars.PAREN_R, getTableComment(table));
         return sql.toString();
     }
 
-    protected abstract String getPrimaryKeyDDL(Table table);
+    /**
+     * Gets the table comment.
+     *
+     * @param table the table
+     * @return the table comment
+     */
+    protected String getTableComment(Table table) {
+        return LangUtils.isEmpty(table.getRemark()) ? ""
+                : BuilderUtils.link(getKeyword(Keywords.COMMENT), "'" + table.getRemark() + "'");
+    }
 
+    /**
+     * Gets the table columns DDL.
+     *
+     * @param table the table
+     * @return the table columns DDL
+     */
+    protected String getTableColumnsDDL(Table table) {
+        StringBuilder ddl = new StringBuilder();
+        for (Column column : table.getColumns()) {
+            BuilderUtils.link(ddl, getColumnDDL(column));
+            ddl.append(Chars.COMMA);
+            ddl.append(Chars.NEW_LINE);
+        }
+        BuilderUtils.link(ddl, getPrimaryKeyDDL(table));
+        return ddl.toString();
+    }
+
+    /**
+     * Gets the column DDL.
+     *
+     * @param column the column
+     * @return the column DDL
+     */
+    protected String getColumnDDL(Column column) {
+        return BuilderUtils.link(wrapName(column.getName()), getColumnTypeDDL(column), getColumnNotNull(column),
+                getDefaultValue(column), getAutoIncrement(column), getColumnComment(column));
+    }
+
+    /**
+     * Gets the primary key DDL.
+     *
+     * @param table the table
+     * @return the primary key DDL
+     */
+    protected String getPrimaryKeyDDL(Table table) {
+        StringBuilder result = new StringBuilder(Chars.PAREN_L);
+        for (Column column : table.getColumns()) {
+            if (column.isPrimaryKey()) {
+                result.append(wrapName(column.getName())).append(Chars.COMMA);
+            }
+        }
+        result.deleteCharAt(result.length() - 1);
+        result.append(Chars.PAREN_R);
+        return BuilderUtils.link(getKeyword(Keywords.PRIMARY), getKeyword(Keywords.KEY), result.toString());
+    }
+
+    /**
+     * Gets the default value.
+     *
+     * @param column the column
+     * @return the default value
+     */
     protected String getDefaultValue(Column column) {
         if (LangUtils.isEmpty(column.getDefaultValue())) {
             return "";
@@ -125,15 +235,33 @@ public abstract class AbstractDialect implements Dialect {
         }
     }
 
+    /**
+     * Gets the auto increment.
+     *
+     * @param column the column
+     * @return the auto increment
+     */
     protected String getAutoIncrement(Column column) {
         return "";
     }
 
+    /**
+     * Gets the column comment.
+     *
+     * @param column the column
+     * @return the column comment
+     */
     protected String getColumnComment(Column column) {
         return LangUtils.isEmpty(column.getRemark()) ? ""
                 : BuilderUtils.link(getKeyword(Keywords.COMMENT), "'" + column.getRemark() + "'");
     }
 
+    /**
+     * Gets the column not null.
+     *
+     * @param column the column
+     * @return the column not null
+     */
     protected String getColumnNotNull(Column column) {
         if (column.isNullable()) {
             return "";
@@ -142,14 +270,27 @@ public abstract class AbstractDialect implements Dialect {
         }
     }
 
+    /**
+     * Gets the column type DDL.
+     *
+     * @param column the column
+     * @return the column type DDL
+     */
     protected String getColumnTypeDDL(Column column) {
         return getColumnTypeDDL(column, null);
     }
 
+    /**
+     * Gets the column type DDL.
+     *
+     * @param column the column
+     * @param extra  the extra
+     * @return the column type DDL
+     */
     protected String getColumnTypeDDL(Column column, String extra) {
         int size = column.getSize();
         int decimalDigits = column.getDecimalDigits();
-        String result = column.getSqlType().getName();
+        String result = getColumnTypeName(column.getSqlType());
         if (size > 0) {
             result += Chars.PAREN_L + size;
             if (decimalDigits > 0) {
@@ -161,7 +302,16 @@ public abstract class AbstractDialect implements Dialect {
             result = BuilderUtils.link(result, extra);
         }
         return result;
+    }
 
+    /**
+     * Gets the column type name.
+     *
+     * @param sqlType the sql type
+     * @return the column type name
+     */
+    protected String getColumnTypeName(SqlType sqlType) {
+        return sqlType.getName();
     }
 
     /**
@@ -227,6 +377,7 @@ public abstract class AbstractDialect implements Dialect {
      * <p>
      * 判断传入sql是否带有使用for update语法
      * </p>
+     * .
      *
      * @param sql sql
      * @return sql是否带有使用for update语法
@@ -247,6 +398,7 @@ public abstract class AbstractDialect implements Dialect {
      * <p>
      * 转换值为字符串
      * </p>
+     * .
      *
      * @param value   value
      * @param sqlType sqlType

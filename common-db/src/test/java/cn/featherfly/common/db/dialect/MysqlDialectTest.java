@@ -3,12 +3,7 @@ package cn.featherfly.common.db.dialect;
 
 import static org.testng.Assert.assertEquals;
 
-import java.sql.Types;
-
 import org.testng.annotations.Test;
-
-import cn.featherfly.common.db.builder.ddl.ColumnModel;
-import cn.featherfly.common.db.builder.ddl.TableModel;
 
 /**
  * <p>
@@ -17,118 +12,110 @@ import cn.featherfly.common.db.builder.ddl.TableModel;
  *
  * @author zhongj
  */
-public class MysqlDialectTest {
-
-    String database = "db_test";
-    String table = "user";
-    String view = "user_view";
-    String index = "username_uq";
+public class MysqlDialectTest extends DialectTest {
 
     Dialect dialect = Dialects.MYSQL;
 
+    @Override
     @Test
     void testCreateDatabase() {
         String database = "db_test";
-        String sql = dialect.buildCreateDataBaseSql(database);
+        String sql = dialect.buildCreateDataBaseDDL(database);
         assertEquals(sql, "CREATE DATABASE `db_test`");
     }
 
+    @Override
     @Test
     void testDrop() {
-        String sql = dialect.buildDropDataBaseSql(database);
+        String sql = dialect.buildDropDataBaseDDL(database);
         assertEquals(sql, "DROP DATABASE `db_test`");
 
-        sql = dialect.buildDropTableSql(table);
+        sql = dialect.buildDropTableDDL(table);
         assertEquals(sql, "DROP TABLE `user`");
 
-        sql = dialect.buildDropTableSql(database, table);
+        sql = dialect.buildDropTableDDL(database, table);
         assertEquals(sql, "DROP TABLE `db_test`.`user`");
 
-        sql = dialect.buildDropViewSql(view);
+        sql = dialect.buildDropViewDDL(view);
         assertEquals(sql, "DROP VIEW `user_view`");
 
-        sql = dialect.buildDropViewSql(database, view);
+        sql = dialect.buildDropViewDDL(database, view);
         assertEquals(sql, "DROP VIEW `db_test`.`user_view`");
 
-        sql = dialect.buildDropIndexSql(table, index);
+        sql = dialect.buildDropIndexDDL(table, index);
         assertEquals(sql, "ALTER TABLE `user` DROP INDEX `username_uq`");
 
-        sql = dialect.buildDropIndexSql(database, table, index);
+        sql = dialect.buildDropIndexDDL(database, table, index);
         assertEquals(sql, "ALTER TABLE `db_test`.`user` DROP INDEX `username_uq`");
     }
 
+    @Override
     @Test
     void testDropIfExists() {
-        String sql = dialect.buildDropDataBaseSql(database, true);
+        String sql = dialect.buildDropDataBaseDDL(database, true);
         assertEquals(sql, "DROP DATABASE IF EXISTS `db_test`");
 
-        sql = dialect.buildDropTableSql(table, true);
+        sql = dialect.buildDropTableDDL(table, true);
         assertEquals(sql, "DROP TABLE IF EXISTS `user`");
 
-        sql = dialect.buildDropTableSql(database, table, true);
+        sql = dialect.buildDropTableDDL(database, table, true);
         assertEquals(sql, "DROP TABLE IF EXISTS `db_test`.`user`");
     }
 
+    @Override
     @Test
     void testCreateTable() {
-        TableModel tableModel = new TableModel();
-        tableModel.setName("user");
-        tableModel.setRemark("user用户表");
-        tableModel.setCatalog(database);
-
-        int index = 0;
-        ColumnModel id = new ColumnModel();
-        id.setName("id");
-        id.setPrimaryKey(true);
-        id.setAutoincrement(true);
-        id.setColumnIndex(index);
-        id.setType(Types.INTEGER);
-        id.setSize(11);
-        id.setNullable(false);
-        id.setRemark("id主键");
-
-        index++;
-        ColumnModel name = new ColumnModel();
-        name.setName("name");
-        name.setColumnIndex(index);
-        name.setType(Types.VARCHAR);
-        name.setSize(255);
-        name.setNullable(false);
-        name.setRemark("name名称");
-
-        index++;
-        ColumnModel money = new ColumnModel();
-        money.setName("money");
-        money.setColumnIndex(index);
-        money.setType(Types.DECIMAL);
-        money.setSize(11);
-        money.setDecimalDigits(2);
-        money.setNullable(false);
-        money.setRemark("money金额");
-
-        index++;
-        ColumnModel state = new ColumnModel();
-        state.setName("state");
-        state.setColumnIndex(index);
-        state.setType(Types.TINYINT);
-        state.setSize(4);
-        state.setDefaultValue("0");
-        state.setNullable(false);
-        state.setRemark("state状态：0禁用，1启用");
-
-        index++;
-        ColumnModel descp = new ColumnModel();
-        descp.setName("descp");
-        descp.setColumnIndex(index);
-        descp.setType(Types.VARCHAR);
-        descp.setSize(255);
-        descp.setNullable(true);
-        descp.setRemark("descp描述");
-
-        tableModel.addColumn(id, name, money, state, descp);
-
-        String sql = dialect.buildCreateTableSql(tableModel);
-
+        String sql = dialect.buildCreateTableDDL(getTableModel());
         System.out.println(sql);
+        String s = "CREATE TABLE `db_test`.`user` (\n" + " `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id主键',\n"
+                + " `name` VARCHAR(255) NOT NULL COMMENT 'name名称',\n"
+                + " `money` DECIMAL(11.2) NOT NULL COMMENT 'money金额',\n"
+                + " `state` TINYINT(4) NOT NULL DEFAULT '0' COMMENT 'state状态：0禁用，1启用',\n"
+                + " `descp` VARCHAR(255) COMMENT 'descp描述',\n" + " PRIMARY KEY (`id`)\n" + " ) COMMENT 'user用户表'";
+        assertEquals(sql, s);
+    }
+
+    @Override
+    @Test
+    void testCreateTableMulitiKey() {
+        String sql = dialect.buildCreateTableDDL(getMultiKeyTableModel());
+        System.out.println(sql);
+        String s = "CREATE TABLE `user_role` (\n" + " `user_id` int(11) NOT NULL COMMENT 'user id',\n"
+                + " `role_id` int(11) NOT NULL COMMENT 'role id',\n" + " `descp` VARCHAR(255) COMMENT 'descp描述',\n"
+                + " PRIMARY KEY (`user_id`,`role_id`)\n" + " ) COMMENT 'user role 关系表'";
+        assertEquals(sql, s);
+    }
+
+    @Override
+    @Test
+    void testAlterTableDropColumn() {
+        String sql = dialect.buildAlterTableDropColumnDDL(table, getColumnModels());
+        System.out.println(sql);
+        String s = "ALTER TABLE `user`\n" + " DROP COLUMN `user_id`,\n" + " DROP COLUMN `role_id`,\n"
+                + " DROP COLUMN `descp`";
+        assertEquals(sql, s);
+    }
+
+    @Override
+    @Test
+    void testAlterTableAddColumns() {
+        String sql = dialect.buildAlterTableAddColumnDDL(table, getColumnModels());
+        System.out.println(sql);
+        String s = "ALTER TABLE `user`\n" + " ADD COLUMN `user_id` int(11) NOT NULL COMMENT 'user id',\n"
+                + " ADD COLUMN `role_id` int(11) NOT NULL COMMENT 'role id',\n"
+                + " ADD COLUMN `descp` VARCHAR(255) COMMENT 'descp描述'";
+        assertEquals(sql, s);
+    }
+
+    @Override
+    @Test
+    void testAlterTableModifyColumns() {
+        String sql = dialect.buildAlterTableModifyColumnDDL("user_info", getModifyColumnModels());
+        System.out.println(sql);
+        String s = "ALTER TABLE `user_info`\n" + " MODIFY COLUMN `descp` VARCHAR(222) COMMENT 'descp',\n"
+                + " MODIFY COLUMN `province` VARCHAR(222) COMMENT '省',\n"
+                + " MODIFY COLUMN `city` VARCHAR(222) COMMENT '市',\n"
+                + " MODIFY COLUMN `district` VARCHAR(222) COMMENT '区'";
+        assertEquals(sql, s);
     }
 }

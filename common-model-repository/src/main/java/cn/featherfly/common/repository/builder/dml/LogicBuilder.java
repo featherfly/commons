@@ -32,7 +32,7 @@ public interface LogicBuilder {
      *
      * @return parent LogicBuilder
      */
-    LogicBuilder parent();
+    LogicBuilder endGroup();
 
     /**
      * 结束当前条件并进入排序器

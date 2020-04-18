@@ -5,6 +5,7 @@ import java.util.Map;
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.builder.model.TableElement;
+import cn.featherfly.common.db.metadata.Column;
 import cn.featherfly.common.db.metadata.Table;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.LangUtils;
@@ -378,7 +379,7 @@ public interface Dialect {
      * @param dataBaseName the data base name
      * @return the string
      */
-    default String buildCreateDataBaseSql(String dataBaseName) {
+    default String buildCreateDataBaseDDL(String dataBaseName) {
         AssertIllegalArgument.isNotEmpty(dataBaseName, "dataBaseName");
         return BuilderUtils.link(getKeyword(Keywords.CREATE), getKeyword(Keywords.DATABASE), wrapName(dataBaseName));
     }
@@ -389,8 +390,8 @@ public interface Dialect {
      * @param dataBaseName the data base name
      * @return the string
      */
-    default String buildDropDataBaseSql(String dataBaseName) {
-        return buildDropDataBaseSql(dataBaseName, false);
+    default String buildDropDataBaseDDL(String dataBaseName) {
+        return buildDropDataBaseDDL(dataBaseName, false);
     }
 
     /**
@@ -400,7 +401,7 @@ public interface Dialect {
      * @param ifExists     the if exists
      * @return the string
      */
-    default String buildDropDataBaseSql(String dataBaseName, boolean ifExists) {
+    default String buildDropDataBaseDDL(String dataBaseName, boolean ifExists) {
         AssertIllegalArgument.isNotEmpty(dataBaseName, "dataBaseName");
         if (ifExists) {
             return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.DATABASE), getKeyword(Keywords.IF),
@@ -416,8 +417,8 @@ public interface Dialect {
      * @param table the table
      * @return the string
      */
-    default String buildCreateTableSql(Table table) {
-        return buildCreateTableSql(table.getCatalog(), table);
+    default String buildCreateTableDDL(Table table) {
+        return buildCreateTableDDL(table.getCatalog(), table);
     }
 
     /**
@@ -427,7 +428,7 @@ public interface Dialect {
      * @param table        the table
      * @return the string
      */
-    String buildCreateTableSql(String dataBaseName, Table table);
+    String buildCreateTableDDL(String dataBaseName, Table table);
 
     /**
      * Builds the drop table sql.
@@ -435,8 +436,8 @@ public interface Dialect {
      * @param tableName the table name
      * @return the string
      */
-    default String buildDropTableSql(String tableName) {
-        return buildDropTableSql(null, tableName);
+    default String buildDropTableDDL(String tableName) {
+        return buildDropTableDDL(null, tableName);
     }
 
     /**
@@ -446,8 +447,8 @@ public interface Dialect {
      * @param ifExists  the if exists
      * @return the string
      */
-    default String buildDropTableSql(String tableName, boolean ifExists) {
-        return buildDropTableSql(null, tableName, ifExists);
+    default String buildDropTableDDL(String tableName, boolean ifExists) {
+        return buildDropTableDDL(null, tableName, ifExists);
     }
 
     /**
@@ -457,8 +458,8 @@ public interface Dialect {
      * @param tableName    the table name
      * @return the string
      */
-    default String buildDropTableSql(String databaseName, String tableName) {
-        return buildDropTableSql(databaseName, tableName, false);
+    default String buildDropTableDDL(String databaseName, String tableName) {
+        return buildDropTableDDL(databaseName, tableName, false);
     }
 
     /**
@@ -469,7 +470,7 @@ public interface Dialect {
      * @param ifExists     the if exists
      * @return the string
      */
-    default String buildDropTableSql(String databaseName, String tableName, boolean ifExists) {
+    default String buildDropTableDDL(String databaseName, String tableName, boolean ifExists) {
         AssertIllegalArgument.isNotEmpty(tableName, "tableName");
         String tn = LangUtils.isEmpty(databaseName) ? wrapName(tableName)
                 : wrapName(databaseName) + Chars.DOT + wrapName(tableName);
@@ -487,8 +488,8 @@ public interface Dialect {
      * @param tableName the table name
      * @return the string
      */
-    default String buildAlterTableSql(String tableName) {
-        return buildAlterTableSql(null, tableName);
+    default String buildAlterTableDDL(String tableName) {
+        return buildAlterTableDDL(null, tableName);
     }
 
     /**
@@ -498,7 +499,7 @@ public interface Dialect {
      * @param tableName    the table name
      * @return the string
      */
-    default String buildAlterTableSql(String databaseName, String tableName) {
+    default String buildAlterTableDDL(String databaseName, String tableName) {
         AssertIllegalArgument.isNotEmpty(tableName, "tableName");
         if (LangUtils.isEmpty(databaseName)) {
             return BuilderUtils.link(getKeyword(Keywords.ALTER), getKeyword(Keywords.TABLE), wrapName(tableName));
@@ -509,13 +510,86 @@ public interface Dialect {
     }
 
     /**
+     * Builds the alter table add column DDL.
+     *
+     * @param tableName the table name
+     * @param columns   the columns
+     * @return the string
+     */
+    default String buildAlterTableAddColumnDDL(String tableName, Column... columns) {
+        return buildAlterTableAddColumnDDL(null, tableName, columns);
+    }
+
+    /**
+     * Builds the alter table add column DDL.
+     *
+     * @param databaseName the database name
+     * @param tableName    the table name
+     * @param columns      the columns
+     * @return the string
+     */
+    String buildAlterTableAddColumnDDL(String databaseName, String tableName, Column... columns);
+
+    /**
+     * Builds the alter table modify column DDL.
+     *
+     * @param tableName the table name
+     * @param columns   the columns
+     * @return the string
+     */
+    default String buildAlterTableModifyColumnDDL(String tableName, Column... columns) {
+        return buildAlterTableModifyColumnDDL(null, tableName, columns);
+    }
+
+    /**
+     * Builds the alter table modify column DDL.
+     *
+     * @param databaseName the database name
+     * @param tableName    the table name
+     * @param columns      the columns
+     * @return the string
+     */
+    String buildAlterTableModifyColumnDDL(String databaseName, String tableName, Column... columns);
+
+    /**
+     * Builds the alter table drop column DDL.
+     *
+     * @param tableName the table name
+     * @param columns   the columns
+     * @return the string
+     */
+    default String buildAlterTableDropColumnDDL(String tableName, Column... columns) {
+        return buildAlterTableDropColumnDDL(null, tableName, columns);
+    }
+
+    /**
+     * Builds the alter table drop column DDL.
+     *
+     * @param databaseName the database name
+     * @param tableName    the table name
+     * @param columns      the columns
+     * @return the string
+     */
+    String buildAlterTableDropColumnDDL(String databaseName, String tableName, Column... columns);
+
+    /**
+     * Builds the alter table drop column DDL.
+     *
+     * @param databaseName the database name
+     * @param tableName    the table name
+     * @param columnNames  the column names
+     * @return the string
+     */
+    String buildAlterTableDropColumnDDL(String databaseName, String tableName, String... columnNames);
+
+    /**
      * Builds the drop view sql.
      *
      * @param viewName the view name
      * @return the string
      */
-    default String buildDropViewSql(String viewName) {
-        return buildDropViewSql(null, viewName);
+    default String buildDropViewDDL(String viewName) {
+        return buildDropViewDDL(null, viewName);
     }
 
     /**
@@ -525,7 +599,7 @@ public interface Dialect {
      * @param viewName     the view name
      * @return the string
      */
-    default String buildDropViewSql(String databaseName, String viewName) {
+    default String buildDropViewDDL(String databaseName, String viewName) {
         AssertIllegalArgument.isNotEmpty(viewName, "viewName");
         if (LangUtils.isEmpty(databaseName)) {
             return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.VIEW), wrapName(viewName));
@@ -542,8 +616,8 @@ public interface Dialect {
      * @param indexName the index name
      * @return the string
      */
-    default String buildDropIndexSql(String tableName, String indexName) {
-        return buildDropIndexSql(null, tableName, indexName);
+    default String buildDropIndexDDL(String tableName, String indexName) {
+        return buildDropIndexDDL(null, tableName, indexName);
     }
 
     /**
@@ -554,14 +628,14 @@ public interface Dialect {
      * @param indexName the index name
      * @return the string
      */
-    default String buildDropIndexSql(String database, String tableName, String indexName) {
+    default String buildDropIndexDDL(String database, String tableName, String indexName) {
         AssertIllegalArgument.isNotEmpty(tableName, "tableName");
         AssertIllegalArgument.isNotEmpty(indexName, "indexName");
         if (LangUtils.isEmpty(tableName)) {
-            return BuilderUtils.link(buildAlterTableSql(database, tableName), getKeyword(Keywords.DROP),
+            return BuilderUtils.link(buildAlterTableDDL(database, tableName), getKeyword(Keywords.DROP),
                     getKeyword(Keywords.INDEX), wrapName(indexName));
         } else {
-            return BuilderUtils.link(buildAlterTableSql(database, tableName), getKeyword(Keywords.DROP),
+            return BuilderUtils.link(buildAlterTableDDL(database, tableName), getKeyword(Keywords.DROP),
                     getKeyword(Keywords.INDEX), wrapName(indexName));
         }
     }

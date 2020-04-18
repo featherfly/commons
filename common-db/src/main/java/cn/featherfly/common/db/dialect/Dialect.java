@@ -17,23 +17,21 @@ import cn.featherfly.common.repository.operate.SortOperator;
  * @author zhongj
  */
 public interface Dialect {
-    /**
-     * 命名参数查询的查询条件默认起始位置名称
-     */
+
+    /** 命名参数查询的查询条件默认起始位置名称. */
     String START_PARAM_NAME = "dialect_paging_start";
-    /**
-     * 命名参数查询的查询条件默认数量名称
-     */
+
+    /** 命名参数查询的查询条件默认数量名称. */
     String LIMIT_PARAM_NAME = "dialect_paging_limit";
-    /**
-     * 默认的查询返回条数
-     */
+
+    /** 默认的查询返回条数. */
     int DEFAULT_LIMIT = 10;
 
     /**
      * <p>
      * 转换普通sql为带分页的sql
      * </p>
+     * .
      *
      * @param sql   带转换的sql
      * @param start 起始数
@@ -46,6 +44,7 @@ public interface Dialect {
      * <p>
      * 返回分页参数的数组
      * </p>
+     * .
      *
      * @param params 参数数组
      * @param start  起始数
@@ -58,6 +57,7 @@ public interface Dialect {
      * <p>
      * 返回分页参数的MAP
      * </p>
+     * .
      *
      * @param params 参数MAP
      * @param start  起始数
@@ -71,6 +71,7 @@ public interface Dialect {
      * 转换普通命名sql为带分页的sql,此sql为带命名参数sql, 如select * from user where user_name =
      * :username
      * </p>
+     * .
      *
      * @param sql   带转换的sql
      * @param start 起始数
@@ -83,9 +84,11 @@ public interface Dialect {
      * <p>
      * 转换为SQL语句中使用的字符串
      * </p>
+     * .
      *
      * @param value   值
      * @param sqlType sql类型
+     * @return the string
      */
     String valueToSql(Object value, int sqlType);
 
@@ -93,6 +96,7 @@ public interface Dialect {
      * <p>
      * 包装名称，避免关键字问题
      * </p>
+     * .
      *
      * @param name 名称（列明，表名等）
      * @return 包装后的名称
@@ -103,22 +107,33 @@ public interface Dialect {
      * <p>
      * 返回设值外检检查SQL语句
      * </p>
+     * .
      *
      * @param check 是否检查外检
      * @return 设值外检检查SQL语句
      */
     String getFkCheck(boolean check);
 
+    /**
+     * Checks if is keywords uppercase.
+     *
+     * @return true, if is keywords uppercase
+     */
     default boolean isKeywordsUppercase() {
         return true;
     }
 
+    /**
+     * Checks if is table and column name uppercase.
+     *
+     * @return true, if is table and column name uppercase
+     */
     default boolean isTableAndColumnNameUppercase() {
         return false;
     }
 
     /**
-     * get converted keywords
+     * get converted keywords.
      *
      * @return sql key words
      */
@@ -127,7 +142,7 @@ public interface Dialect {
     }
 
     /**
-     * get converted keywords
+     * get converted keywords.
      *
      * @param keywords sql keywords
      * @return sql key words
@@ -141,7 +156,7 @@ public interface Dialect {
     }
 
     /**
-     * get converted keywords
+     * get converted keywords.
      *
      * @param keywords sql keywords
      * @return sql key words
@@ -155,7 +170,7 @@ public interface Dialect {
     }
 
     /**
-     * get converted keywords
+     * get converted keywords.
      *
      * @param keywords sql keywords
      * @return sql key words
@@ -169,7 +184,7 @@ public interface Dialect {
     }
 
     /**
-     * get converted aggregate function
+     * get converted aggregate function.
      *
      * @param function aggregate function
      * @return sql aggregate function
@@ -194,7 +209,7 @@ public interface Dialect {
     //    }
     //
     /**
-     * build sql for column with aggregate function
+     * build sql for column with aggregate function.
      *
      * @param columnName columnName
      * @param function   function
@@ -205,7 +220,7 @@ public interface Dialect {
     }
 
     /**
-     * build sql for column with aggregate function
+     * build sql for column with aggregate function.
      *
      * @param columnName        columnName
      * @param aggregateFunction aggregateFunction
@@ -216,7 +231,7 @@ public interface Dialect {
     }
 
     /**
-     * build sql for column with aggregate function
+     * build sql for column with aggregate function.
      *
      * @param columnName columnName
      * @param tableAlias tableAlias
@@ -227,7 +242,7 @@ public interface Dialect {
     }
 
     /**
-     * build sql for column with aggregate function
+     * build sql for column with aggregate function.
      *
      * @param columnName columnName
      * @param tableAlias tableAlias
@@ -239,7 +254,7 @@ public interface Dialect {
     }
 
     /**
-     * build sql for column with tableAlias and aggregate function
+     * build sql for column with tableAlias and aggregate function.
      *
      * @param columnName        columnName
      * @param tableAlias        tableAlias
@@ -251,7 +266,7 @@ public interface Dialect {
     }
 
     /**
-     * build sql for column with tableAlias and aggregate function
+     * build sql for column with tableAlias and aggregate function.
      *
      * @param columnName        columnName
      * @param tableAlias        tableAlias
@@ -284,7 +299,7 @@ public interface Dialect {
     }
 
     /**
-     * build sql for column with tableAlias and aggregate function
+     * build sql for column with tableAlias and aggregate function.
      *
      * @param columnName columnName
      * @param tableAlias tableAlias
@@ -300,7 +315,7 @@ public interface Dialect {
     }
 
     /**
-     * convert column or table name if necessary
+     * convert column or table name if necessary.
      *
      * @param tableOrColumnName column or table name
      * @return sql
@@ -319,7 +334,7 @@ public interface Dialect {
     }
 
     /**
-     * build sql for table
+     * build sql for table.
      *
      * @param tableName tableName
      * @return sql
@@ -329,7 +344,7 @@ public interface Dialect {
     }
 
     /**
-     * build sql for table with tableAlias
+     * build sql for table with tableAlias.
      *
      * @param tableName  tableName
      * @param tableAlias tableAlias
@@ -343,62 +358,135 @@ public interface Dialect {
         return result;
     }
 
+    /**
+     * Gets the wrap sign.
+     *
+     * @return the wrap sign
+     */
     String getWrapSign();
 
+    /**
+     * The Class Keyworld.
+     */
     public static class Keyworld {
+
+        /** The dialect. */
         private Dialect dialect;
 
         /**
-         * @param dialect
+         * Instantiates a new keyworld.
+         *
+         * @param dialect the dialect
          */
         Keyworld(Dialect dialect) {
             this.dialect = dialect;
         }
 
+        /**
+         * Select.
+         *
+         * @return the string
+         */
         public String select() {
             return dialect.getKeyword(Keywords.SELECT);
         }
 
+        /**
+         * From.
+         *
+         * @return the string
+         */
         public String from() {
             return dialect.getKeyword(Keywords.FROM);
         }
 
+        /**
+         * Where.
+         *
+         * @return the string
+         */
         public String where() {
             return dialect.getKeyword(Keywords.WHERE);
         }
 
+        /**
+         * Update.
+         *
+         * @return the string
+         */
         public String update() {
             return dialect.getKeyword(Keywords.UPDATE);
         }
 
+        /**
+         * Sets the.
+         *
+         * @return the string
+         */
         public String set() {
             return dialect.getKeyword(Keywords.SET);
         }
 
+        /**
+         * Delete.
+         *
+         * @return the string
+         */
         public String delete() {
             return dialect.getKeyword(Keywords.DELETE);
         }
 
+        /**
+         * Delete from.
+         *
+         * @return the string
+         */
         public String deleteFrom() {
             return delete() + Chars.SPACE + from();
         }
 
+        /**
+         * Insert.
+         *
+         * @return the string
+         */
         public String insert() {
             return dialect.getKeyword(Keywords.INSERT);
         }
 
+        /**
+         * Into.
+         *
+         * @return the string
+         */
         public String into() {
             return dialect.getKeyword(Keywords.INTO);
         }
 
+        /**
+         * Values.
+         *
+         * @return the string
+         */
         public String values() {
             return dialect.getKeyword(Keywords.VALUES);
         }
 
+        /**
+         * Join.
+         *
+         * @return the string
+         */
         public String join() {
             return dialect.getKeyword(Keywords.JOIN);
         }
 
+        /**
+         * Join.
+         *
+         * @param join the join
+         * @return the string
+         */
         public String join(Join join) {
             switch (join) {
                 case INNER_JOIN:
@@ -414,162 +502,362 @@ public interface Dialect {
             }
         }
 
+        /**
+         * On.
+         *
+         * @return the string
+         */
         public String on() {
             return dialect.getKeyword(Keywords.ON);
         }
 
+        /**
+         * Inner.
+         *
+         * @return the string
+         */
         public String inner() {
             return dialect.getKeyword(Keywords.INNER);
         }
 
+        /**
+         * Left.
+         *
+         * @return the string
+         */
         public String left() {
             return dialect.getKeyword(Keywords.LEFT);
         }
 
+        /**
+         * Right.
+         *
+         * @return the string
+         */
         public String right() {
             return dialect.getKeyword(Keywords.RIGHT);
         }
 
+        /**
+         * Creates the.
+         *
+         * @return the string
+         */
         public String create() {
             return dialect.getKeyword(Keywords.CREATE);
         }
 
+        /**
+         * Drop.
+         *
+         * @return the string
+         */
         public String drop() {
             return dialect.getKeyword(Keywords.DROP);
         }
 
+        /**
+         * After.
+         *
+         * @return the string
+         */
         public String after() {
             return dialect.getKeyword(Keywords.AFTER);
         }
 
+        /**
+         * Table.
+         *
+         * @return the string
+         */
         public String table() {
             return dialect.getKeyword(Keywords.TABLE);
         }
 
+        /**
+         * Adds the.
+         *
+         * @return the string
+         */
         public String add() {
             return dialect.getKeyword(Keywords.ADD);
         }
 
+        /**
+         * Truncate.
+         *
+         * @return the string
+         */
         public String truncate() {
             return dialect.getKeyword(Keywords.TRUNCATE);
         }
 
+        /**
+         * Outer.
+         *
+         * @return the string
+         */
         public String outer() {
             return dialect.getKeyword(Keywords.OUTER);
         }
 
+        /**
+         * Full.
+         *
+         * @return the string
+         */
         public String full() {
             return dialect.getKeyword(Keywords.FULL);
         }
 
+        /**
+         * Cross.
+         *
+         * @return the string
+         */
         public String cross() {
             return dialect.getKeyword(Keywords.CORSS);
         }
 
+        /**
+         * Order.
+         *
+         * @return the string
+         */
         public String order() {
             return dialect.getKeyword(Keywords.ORDER);
         }
 
+        /**
+         * By.
+         *
+         * @return the string
+         */
         public String by() {
             return dialect.getKeyword(Keywords.BY);
         }
 
+        /**
+         * Order by.
+         *
+         * @return the string
+         */
         public String orderBy() {
             return order() + Chars.SPACE + by();
         }
 
+        /**
+         * Desc.
+         *
+         * @return the string
+         */
         public String desc() {
             return dialect.getKeyword(Keywords.DESC);
         }
 
+        /**
+         * Asc.
+         *
+         * @return the string
+         */
         public String asc() {
             return dialect.getKeyword(Keywords.ASC);
         }
 
+        /**
+         * In.
+         *
+         * @return the string
+         */
         public String in() {
             return dialect.getKeyword(Keywords.IN);
         }
 
+        /**
+         * Checks if is.
+         *
+         * @return the string
+         */
         public String is() {
             return dialect.getKeyword(Keywords.IS);
         }
 
+        /**
+         * Checks if is null.
+         *
+         * @return the string
+         */
         public String isNull() {
             return is() + Chars.SPACE + nullText();
         }
 
+        /**
+         * Checks if is not null.
+         *
+         * @return the string
+         */
         public String isNotNull() {
             return is() + Chars.SPACE + not() + Chars.SPACE + nullText();
         }
 
+        /**
+         * Like.
+         *
+         * @return the string
+         */
         public String like() {
             return dialect.getKeyword(Keywords.LIKE);
         }
 
+        /**
+         * Null text.
+         *
+         * @return the string
+         */
         public String nullText() {
             return dialect.getKeyword(Keywords.NULL);
         }
 
+        /**
+         * Not.
+         *
+         * @return the string
+         */
         public String not() {
             return dialect.getKeyword(Keywords.NOT);
         }
 
+        /**
+         * Not in.
+         *
+         * @return the string
+         */
         public String notIn() {
             return not() + Chars.SPACE + in();
         }
 
+        /**
+         * Between.
+         *
+         * @return the string
+         */
         public String between() {
             return dialect.getKeyword(Keywords.BETWEEN);
         }
 
+        /**
+         * Union.
+         *
+         * @return the string
+         */
         public String union() {
             return dialect.getKeyword(Keywords.UNION);
         }
 
+        /**
+         * Intersect.
+         *
+         * @return the string
+         */
         public String intersect() {
             return dialect.getKeyword(Keywords.INTERSECT);
         }
 
+        /**
+         * Except.
+         *
+         * @return the string
+         */
         public String except() {
             return dialect.getKeyword(Keywords.EXCEPT);
         }
 
+        /**
+         * And.
+         *
+         * @return the string
+         */
         public String and() {
             return dialect.getKeyword(Keywords.AND);
         }
 
+        /**
+         * Or.
+         *
+         * @return the string
+         */
         public String or() {
             return dialect.getKeyword(Keywords.OR);
         }
 
+        /**
+         * All.
+         *
+         * @return the string
+         */
         public String all() {
             return dialect.getKeyword(Keywords.ALL);
         }
 
+        /**
+         * As.
+         *
+         * @return the string
+         */
         public String as() {
             return dialect.getKeyword(Keywords.AS);
         }
 
+        /**
+         * Count.
+         *
+         * @return the string
+         */
         public String count() {
             return dialect.getKeyword(Keywords.COUNT);
         }
 
+        /**
+         * Sum.
+         *
+         * @return the string
+         */
         public String sum() {
             return dialect.getKeyword(Keywords.SUM);
         }
 
+        /**
+         * Max.
+         *
+         * @return the string
+         */
         public String max() {
             return dialect.getKeyword(Keywords.MAX);
         }
 
+        /**
+         * Min.
+         *
+         * @return the string
+         */
         public String min() {
             return dialect.getKeyword(Keywords.MIN);
         }
 
+        /**
+         * Avg.
+         *
+         * @return the string
+         */
         public String avg() {
             return dialect.getKeyword(Keywords.AVG);
         }
 
+        /**
+         * Distinct.
+         *
+         * @return the string
+         */
         public String distinct() {
             return dialect.getKeyword(Keywords.DISTINCT);
         }

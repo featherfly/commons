@@ -8,21 +8,25 @@ import cn.featherfly.common.db.JdbcException;
  * <p>
  * export异常
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class ExportException extends JdbcException {
 
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = -7034897190745766939L;
 
     /**
-     *
+     * Instantiates a new export exception.
      */
     public ExportException() {
         super();
     }
 
     /**
+     * Instantiates a new export exception.
+     *
      * @param message message
      * @param locale  locale
      * @param ex      ex
@@ -32,6 +36,8 @@ public class ExportException extends JdbcException {
     }
 
     /**
+     * Instantiates a new export exception.
+     *
      * @param message message
      * @param locale  locale
      */
@@ -40,6 +46,8 @@ public class ExportException extends JdbcException {
     }
 
     /**
+     * Instantiates a new export exception.
+     *
      * @param message message
      * @param argus   argus
      * @param locale  locale
@@ -50,6 +58,8 @@ public class ExportException extends JdbcException {
     }
 
     /**
+     * Instantiates a new export exception.
+     *
      * @param message message
      * @param argus   argus
      * @param locale  locale
@@ -59,6 +69,8 @@ public class ExportException extends JdbcException {
     }
 
     /**
+     * Instantiates a new export exception.
+     *
      * @param message message
      * @param argus   argus
      * @param ex      ex
@@ -68,6 +80,8 @@ public class ExportException extends JdbcException {
     }
 
     /**
+     * Instantiates a new export exception.
+     *
      * @param message message
      * @param argus   argus
      */
@@ -76,6 +90,8 @@ public class ExportException extends JdbcException {
     }
 
     /**
+     * Instantiates a new export exception.
+     *
      * @param message message
      * @param ex      ex
      */
@@ -84,6 +100,8 @@ public class ExportException extends JdbcException {
     }
 
     /**
+     * Instantiates a new export exception.
+     *
      * @param message message
      */
     public ExportException(String message) {
@@ -91,6 +109,8 @@ public class ExportException extends JdbcException {
     }
 
     /**
+     * Instantiates a new export exception.
+     *
      * @param ex ex
      */
     public ExportException(Throwable ex) {

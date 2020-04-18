@@ -35,11 +35,15 @@ import cn.featherfly.common.db.JdbcException;
  */
 public class CallableStatementWrapper implements AutoCloseable {
 
+    /** The callable statement. */
     private CallableStatement callableStatement;
 
+    /** The connection wrapper. */
     private ConnectionWrapper connectionWrapper;
 
     /**
+     * Instantiates a new callable statement wrapper.
+     *
      * @param callableStatement callableStatement
      * @param connectionWrapper connectionWrapper
      */
@@ -49,6 +53,8 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Adds the batch.
+     *
      * @see java.sql.PreparedStatement
      */
     public void addBatch() {
@@ -60,6 +66,8 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Clear parameters.
+     *
      * @see java.sql.PreparedStatement
      */
     public void clearParameters() {
@@ -71,6 +79,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Execute.
+     *
+     * @return true, if successful
      * @see java.sql.PreparedStatement
      */
     public boolean execute() {
@@ -82,6 +93,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Execute query.
+     *
+     * @return the result set
      * @see java.sql.PreparedStatement
      */
     public ResultSet executeQuery() {
@@ -93,6 +107,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Execute update.
+     *
+     * @return the int
      * @see java.sql.PreparedStatement
      */
     public int executeUpdate() {
@@ -104,6 +121,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the meta data.
+     *
+     * @return the meta data
      * @see java.sql.PreparedStatement
      */
     public ResultSetMetaData getMetaData() {
@@ -115,6 +135,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the parameter meta data.
+     *
+     * @return the parameter meta data
      * @see java.sql.PreparedStatement
      */
     public ParameterMetaData getParameterMetaData() {
@@ -126,6 +149,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the array.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setArray(int parameterIndex, Array x) {
@@ -137,6 +164,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the ascii stream.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setAsciiStream(int parameterIndex, InputStream x) {
@@ -148,6 +179,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the ascii stream.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
+     * @param length         the length
      * @see java.sql.PreparedStatement
      */
     public void setAsciiStream(int parameterIndex, InputStream x, int length) {
@@ -159,6 +195,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the ascii stream.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
+     * @param length         the length
      * @see java.sql.PreparedStatement
      */
     public void setAsciiStream(int parameterIndex, InputStream x, long length) {
@@ -170,6 +211,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the big decimal.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setBigDecimal(int parameterIndex, BigDecimal x) {
@@ -181,6 +226,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the binary stream.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setBinaryStream(int parameterIndex, InputStream x) {
@@ -192,6 +241,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the binary stream.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
+     * @param length         the length
      * @see java.sql.PreparedStatement
      */
     public void setBinaryStream(int parameterIndex, InputStream x, int length) {
@@ -203,6 +257,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the binary stream.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
+     * @param length         the length
      * @see java.sql.PreparedStatement
      */
     public void setBinaryStream(int parameterIndex, InputStream x, long length) {
@@ -214,6 +273,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the blob.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setBlob(int parameterIndex, Blob x) {
@@ -225,6 +288,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the blob.
+     *
+     * @param parameterIndex the parameter index
+     * @param inputStream    the input stream
      * @see java.sql.PreparedStatement
      */
     public void setBlob(int parameterIndex, InputStream inputStream) {
@@ -236,6 +303,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the blob.
+     *
+     * @param parameterIndex the parameter index
+     * @param inputStream    the input stream
+     * @param length         the length
      * @see java.sql.PreparedStatement
      */
     public void setBlob(int parameterIndex, InputStream inputStream, long length) {
@@ -247,6 +319,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the boolean.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setBoolean(int parameterIndex, boolean x) {
@@ -258,6 +334,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the byte.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setByte(int parameterIndex, byte x) {
@@ -269,6 +349,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the bytes.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setBytes(int parameterIndex, byte[] x) {
@@ -280,6 +364,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the character stream.
+     *
+     * @param parameterIndex the parameter index
+     * @param reader         the reader
      * @see java.sql.PreparedStatement
      */
     public void setCharacterStream(int parameterIndex, Reader reader) {
@@ -291,6 +379,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the character stream.
+     *
+     * @param parameterIndex the parameter index
+     * @param reader         the reader
+     * @param length         the length
      * @see java.sql.PreparedStatement
      */
     public void setCharacterStream(int parameterIndex, Reader reader, int length) {
@@ -302,6 +395,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the character stream.
+     *
+     * @param parameterIndex the parameter index
+     * @param reader         the reader
+     * @param length         the length
      * @see java.sql.PreparedStatement
      */
     public void setCharacterStream(int parameterIndex, Reader reader, long length) {
@@ -313,6 +411,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the clob.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setClob(int parameterIndex, Clob x) {
@@ -324,6 +426,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the clob.
+     *
+     * @param parameterIndex the parameter index
+     * @param reader         the reader
      * @see java.sql.PreparedStatement
      */
     public void setClob(int parameterIndex, Reader reader) {
@@ -335,6 +441,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the clob.
+     *
+     * @param parameterIndex the parameter index
+     * @param reader         the reader
+     * @param length         the length
      * @see java.sql.PreparedStatement
      */
     public void setClob(int parameterIndex, Reader reader, long length) {
@@ -346,6 +457,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the date.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setDate(int parameterIndex, Date x) {
@@ -357,6 +472,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the date.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
+     * @param cal            the cal
      * @see java.sql.PreparedStatement
      */
     public void setDate(int parameterIndex, Date x, Calendar cal) {
@@ -368,6 +488,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the double.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setDouble(int parameterIndex, double x) {
@@ -379,6 +503,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the float.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setFloat(int parameterIndex, float x) {
@@ -390,6 +518,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the int.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setInt(int parameterIndex, int x) {
@@ -401,6 +533,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the long.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setLong(int parameterIndex, long x) {
@@ -412,6 +548,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the N character stream.
+     *
+     * @param parameterIndex the parameter index
+     * @param value          the value
      * @see java.sql.PreparedStatement
      */
     public void setNCharacterStream(int parameterIndex, Reader value) {
@@ -423,6 +563,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the N character stream.
+     *
+     * @param parameterIndex the parameter index
+     * @param value          the value
+     * @param length         the length
      * @see java.sql.PreparedStatement
      */
     public void setNCharacterStream(int parameterIndex, Reader value, long length) {
@@ -434,6 +579,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the N clob.
+     *
+     * @param parameterIndex the parameter index
+     * @param value          the value
      * @see java.sql.PreparedStatement
      */
     public void setNClob(int parameterIndex, NClob value) {
@@ -445,6 +594,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the N clob.
+     *
+     * @param parameterIndex the parameter index
+     * @param reader         the reader
      * @see java.sql.PreparedStatement
      */
     public void setNClob(int parameterIndex, Reader reader) {
@@ -456,6 +609,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the N clob.
+     *
+     * @param parameterIndex the parameter index
+     * @param reader         the reader
+     * @param length         the length
      * @see java.sql.PreparedStatement
      */
     public void setNClob(int parameterIndex, Reader reader, long length) {
@@ -467,6 +625,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the N string.
+     *
+     * @param parameterIndex the parameter index
+     * @param value          the value
      * @see java.sql.PreparedStatement
      */
     public void setNString(int parameterIndex, String value) {
@@ -478,6 +640,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the null.
+     *
+     * @param parameterIndex the parameter index
+     * @param sqlType        the sql type
      * @see java.sql.PreparedStatement
      */
     public void setNull(int parameterIndex, int sqlType) {
@@ -489,6 +655,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the null.
+     *
+     * @param parameterIndex the parameter index
+     * @param sqlType        the sql type
+     * @param typeName       the type name
      * @see java.sql.PreparedStatement
      */
     public void setNull(int parameterIndex, int sqlType, String typeName) {
@@ -500,6 +671,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the object.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setObject(int parameterIndex, Object x) {
@@ -511,6 +686,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the object.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
+     * @param targetSqlType  the target sql type
      * @see java.sql.PreparedStatement
      */
     public void setObject(int parameterIndex, Object x, int targetSqlType) {
@@ -522,6 +702,12 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the object.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
+     * @param targetSqlType  the target sql type
+     * @param scaleOrLength  the scale or length
      * @see java.sql.PreparedStatement
      */
     public void setObject(int parameterIndex, Object x, int targetSqlType, int scaleOrLength) {
@@ -533,6 +719,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the ref.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setRef(int parameterIndex, Ref x) {
@@ -544,6 +734,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the row id.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setRowId(int parameterIndex, RowId x) {
@@ -555,6 +749,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the SQLXML.
+     *
+     * @param parameterIndex the parameter index
+     * @param xmlObject      the xml object
      * @see java.sql.PreparedStatement
      */
     public void setSQLXML(int parameterIndex, SQLXML xmlObject) {
@@ -566,6 +764,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the short.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setShort(int parameterIndex, short x) {
@@ -577,6 +779,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the string.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setString(int parameterIndex, String x) {
@@ -588,6 +794,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the time.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setTime(int parameterIndex, Time x) {
@@ -599,6 +809,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the time.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
+     * @param cal            the cal
      * @see java.sql.PreparedStatement
      */
     public void setTime(int parameterIndex, Time x, Calendar cal) {
@@ -610,6 +825,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the timestamp.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setTimestamp(int parameterIndex, Timestamp x) {
@@ -621,6 +840,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the timestamp.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
+     * @param cal            the cal
      * @see java.sql.PreparedStatement
      */
     public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal) {
@@ -632,6 +856,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the URL.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
      * @see java.sql.PreparedStatement
      */
     public void setURL(int parameterIndex, URL x) {
@@ -643,6 +871,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the unicode stream.
+     *
+     * @param parameterIndex the parameter index
+     * @param x              the x
+     * @param length         the length
      * @see java.sql.PreparedStatement
      * @deprecated
      */
@@ -656,6 +889,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Adds the batch.
+     *
+     * @param sql the sql
      * @see java.sql.PreparedStatement
      */
     public void addBatch(String sql) {
@@ -667,6 +903,8 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Cancel.
+     *
      * @see java.sql.PreparedStatement
      */
     public void cancel() {
@@ -678,6 +916,8 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Clear batch.
+     *
      * @see java.sql.PreparedStatement
      */
     public void clearBatch() {
@@ -689,6 +929,8 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Clear warnings.
+     *
      * @see java.sql.PreparedStatement
      */
     public void clearWarnings() {
@@ -700,6 +942,8 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Close.
+     *
      * @see java.sql.PreparedStatement
      */
     @Override
@@ -712,6 +956,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Execute.
+     *
+     * @param sql the sql
+     * @return true, if successful
      * @see java.sql.PreparedStatement
      */
     public boolean execute(String sql) {
@@ -723,6 +971,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Execute.
+     *
+     * @param sql               the sql
+     * @param autoGeneratedKeys the auto generated keys
+     * @return true, if successful
      * @see java.sql.PreparedStatement
      */
     public boolean execute(String sql, int autoGeneratedKeys) {
@@ -734,6 +987,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Execute.
+     *
+     * @param sql           the sql
+     * @param columnIndexes the column indexes
+     * @return true, if successful
      * @see java.sql.PreparedStatement
      */
     public boolean execute(String sql, int[] columnIndexes) {
@@ -745,6 +1003,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Execute.
+     *
+     * @param sql         the sql
+     * @param columnNames the column names
+     * @return true, if successful
      * @see java.sql.PreparedStatement
      */
     public boolean execute(String sql, String[] columnNames) {
@@ -756,6 +1019,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Execute batch.
+     *
+     * @return the int[]
      * @see java.sql.PreparedStatement
      */
     public int[] executeBatch() {
@@ -767,6 +1033,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Execute query.
+     *
+     * @param sql the sql
+     * @return the result set
      * @see java.sql.PreparedStatement
      */
     public ResultSet executeQuery(String sql) {
@@ -778,6 +1048,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Execute update.
+     *
+     * @param sql the sql
+     * @return the int
      * @see java.sql.PreparedStatement
      */
     public int executeUpdate(String sql) {
@@ -789,6 +1063,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Execute update.
+     *
+     * @param sql               the sql
+     * @param autoGeneratedKeys the auto generated keys
+     * @return the int
      * @see java.sql.PreparedStatement
      */
     public int executeUpdate(String sql, int autoGeneratedKeys) {
@@ -800,6 +1079,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Execute update.
+     *
+     * @param sql           the sql
+     * @param columnIndexes the column indexes
+     * @return the int
      * @see java.sql.PreparedStatement
      */
     public int executeUpdate(String sql, int[] columnIndexes) {
@@ -811,6 +1095,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Execute update.
+     *
+     * @param sql         the sql
+     * @param columnNames the column names
+     * @return the int
      * @see java.sql.PreparedStatement
      */
     public int executeUpdate(String sql, String[] columnNames) {
@@ -822,6 +1111,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the connection.
+     *
+     * @return the connection
      * @see java.sql.PreparedStatement
      */
     public ConnectionWrapper getConnection() {
@@ -829,6 +1121,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the fetch direction.
+     *
+     * @return the fetch direction
      * @see java.sql.PreparedStatement
      */
     public int getFetchDirection() {
@@ -840,6 +1135,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the fetch size.
+     *
+     * @return the fetch size
      * @see java.sql.PreparedStatement
      */
     public int getFetchSize() {
@@ -851,6 +1149,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the generated keys.
+     *
+     * @return the generated keys
      * @see java.sql.PreparedStatement
      */
     public ResultSet getGeneratedKeys() {
@@ -862,6 +1163,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the max field size.
+     *
+     * @return the max field size
      * @see java.sql.PreparedStatement
      */
     public int getMaxFieldSize() {
@@ -873,6 +1177,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the max rows.
+     *
+     * @return the max rows
      * @see java.sql.PreparedStatement
      */
     public int getMaxRows() {
@@ -884,6 +1191,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the more results.
+     *
+     * @return the more results
      * @see java.sql.PreparedStatement
      */
     public boolean getMoreResults() {
@@ -895,6 +1205,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the more results.
+     *
+     * @param current the current
+     * @return the more results
      * @see java.sql.PreparedStatement
      */
     public boolean getMoreResults(int current) {
@@ -906,6 +1220,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the query timeout.
+     *
+     * @return the query timeout
      * @see java.sql.PreparedStatement
      */
     public int getQueryTimeout() {
@@ -917,6 +1234,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the result set.
+     *
+     * @return the result set
      * @see java.sql.PreparedStatement
      */
     public ResultSet getResultSet() {
@@ -928,6 +1248,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the result set concurrency.
+     *
+     * @return the result set concurrency
      * @see java.sql.PreparedStatement
      */
     public int getResultSetConcurrency() {
@@ -939,6 +1262,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the result set holdability.
+     *
+     * @return the result set holdability
      * @see java.sql.PreparedStatement
      */
     public int getResultSetHoldability() {
@@ -950,6 +1276,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the result set type.
+     *
+     * @return the result set type
      * @see java.sql.PreparedStatement
      */
     public int getResultSetType() {
@@ -961,6 +1290,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the update count.
+     *
+     * @return the update count
      * @see java.sql.PreparedStatement
      */
     public int getUpdateCount() {
@@ -972,6 +1304,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the warnings.
+     *
+     * @return the warnings
      * @see java.sql.PreparedStatement
      */
     public SQLWarning getWarnings() {
@@ -983,6 +1318,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Checks if is closed.
+     *
+     * @return true, if is closed
      * @see java.sql.PreparedStatement
      */
     public boolean isClosed() {
@@ -994,6 +1332,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Checks if is poolable.
+     *
+     * @return true, if is poolable
      * @see java.sql.PreparedStatement
      */
     public boolean isPoolable() {
@@ -1005,6 +1346,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the cursor name.
+     *
+     * @param name the new cursor name
      * @see java.sql.PreparedStatement
      */
     public void setCursorName(String name) {
@@ -1016,6 +1360,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the escape processing.
+     *
+     * @param enable the new escape processing
      * @see java.sql.PreparedStatement
      */
     public void setEscapeProcessing(boolean enable) {
@@ -1027,6 +1374,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the fetch direction.
+     *
+     * @param direction the new fetch direction
      * @see java.sql.PreparedStatement
      */
     public void setFetchDirection(int direction) {
@@ -1038,6 +1388,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the fetch size.
+     *
+     * @param rows the new fetch size
      * @see java.sql.PreparedStatement
      */
     public void setFetchSize(int rows) {
@@ -1049,6 +1402,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the max field size.
+     *
+     * @param max the new max field size
      * @see java.sql.PreparedStatement
      */
     public void setMaxFieldSize(int max) {
@@ -1060,6 +1416,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the max rows.
+     *
+     * @param max the new max rows
      * @see java.sql.PreparedStatement
      */
     public void setMaxRows(int max) {
@@ -1071,6 +1430,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the poolable.
+     *
+     * @param poolable the new poolable
      * @see java.sql.PreparedStatement
      */
     public void setPoolable(boolean poolable) {
@@ -1082,6 +1444,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the query timeout.
+     *
+     * @param seconds the new query timeout
      * @see java.sql.PreparedStatement
      */
     public void setQueryTimeout(int seconds) {
@@ -1093,6 +1458,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Checks if is wrapper for.
+     *
+     * @param iface the iface
+     * @return true, if is wrapper for
      * @see java.sql.PreparedStatement
      */
     public boolean isWrapperFor(Class<?> iface) {
@@ -1104,6 +1473,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Unwrap.
+     *
+     * @param <T>   the generic type
+     * @param iface the iface
+     * @return the t
      * @see java.sql.PreparedStatement
      */
     public <T> T unwrap(Class<T> iface) {
@@ -1115,6 +1489,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the array.
+     *
+     * @param parameterIndex the parameter index
+     * @return the array
      * @see java.sql.PreparedStatement
      */
     public Array getArray(int parameterIndex) {
@@ -1126,6 +1504,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the array.
+     *
+     * @param parameterName the parameter name
+     * @return the array
      * @see java.sql.PreparedStatement
      */
     public Array getArray(String parameterName) {
@@ -1137,6 +1519,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the big decimal.
+     *
+     * @param parameterIndex the parameter index
+     * @return the big decimal
      * @see java.sql.PreparedStatement
      */
     public BigDecimal getBigDecimal(int parameterIndex) {
@@ -1148,6 +1534,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the big decimal.
+     *
+     * @param parameterName the parameter name
+     * @return the big decimal
      * @see java.sql.PreparedStatement
      */
     public BigDecimal getBigDecimal(String parameterName) {
@@ -1159,6 +1549,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the big decimal.
+     *
+     * @param parameterIndex the parameter index
+     * @param scale          the scale
+     * @return the big decimal
      * @see java.sql.PreparedStatement
      * @deprecated
      */
@@ -1172,6 +1567,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the blob.
+     *
+     * @param parameterIndex the parameter index
+     * @return the blob
      * @see java.sql.PreparedStatement
      */
     public Blob getBlob(int parameterIndex) {
@@ -1183,6 +1582,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the blob.
+     *
+     * @param parameterName the parameter name
+     * @return the blob
      * @see java.sql.PreparedStatement
      */
     public Blob getBlob(String parameterName) {
@@ -1194,6 +1597,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the boolean.
+     *
+     * @param parameterIndex the parameter index
+     * @return the boolean
      * @see java.sql.PreparedStatement
      */
     public boolean getBoolean(int parameterIndex) {
@@ -1205,6 +1612,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the boolean.
+     *
+     * @param parameterName the parameter name
+     * @return the boolean
      * @see java.sql.PreparedStatement
      */
     public boolean getBoolean(String parameterName) {
@@ -1216,6 +1627,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the byte.
+     *
+     * @param parameterIndex the parameter index
+     * @return the byte
      * @see java.sql.PreparedStatement
      */
     public byte getByte(int parameterIndex) {
@@ -1227,6 +1642,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the byte.
+     *
+     * @param parameterName the parameter name
+     * @return the byte
      * @see java.sql.PreparedStatement
      */
     public byte getByte(String parameterName) {
@@ -1238,6 +1657,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the bytes.
+     *
+     * @param parameterIndex the parameter index
+     * @return the bytes
      * @see java.sql.PreparedStatement
      */
     public byte[] getBytes(int parameterIndex) {
@@ -1249,6 +1672,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the bytes.
+     *
+     * @param parameterName the parameter name
+     * @return the bytes
      * @see java.sql.PreparedStatement
      */
     public byte[] getBytes(String parameterName) {
@@ -1260,6 +1687,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the character stream.
+     *
+     * @param parameterIndex the parameter index
+     * @return the character stream
      * @see java.sql.PreparedStatement
      */
     public Reader getCharacterStream(int parameterIndex) {
@@ -1271,6 +1702,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the character stream.
+     *
+     * @param parameterName the parameter name
+     * @return the character stream
      * @see java.sql.PreparedStatement
      */
     public Reader getCharacterStream(String parameterName) {
@@ -1282,6 +1717,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the clob.
+     *
+     * @param parameterIndex the parameter index
+     * @return the clob
      * @see java.sql.PreparedStatement
      */
     public Clob getClob(int parameterIndex) {
@@ -1293,6 +1732,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the clob.
+     *
+     * @param parameterName the parameter name
+     * @return the clob
      * @see java.sql.PreparedStatement
      */
     public Clob getClob(String parameterName) {
@@ -1304,6 +1747,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the date.
+     *
+     * @param parameterIndex the parameter index
+     * @return the date
      * @see java.sql.PreparedStatement
      */
     public Date getDate(int parameterIndex) {
@@ -1315,6 +1762,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the date.
+     *
+     * @param parameterName the parameter name
+     * @return the date
      * @see java.sql.PreparedStatement
      */
     public Date getDate(String parameterName) {
@@ -1326,6 +1777,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the date.
+     *
+     * @param parameterIndex the parameter index
+     * @param cal            the cal
+     * @return the date
      * @see java.sql.PreparedStatement
      */
     public Date getDate(int parameterIndex, Calendar cal) {
@@ -1337,6 +1793,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the date.
+     *
+     * @param parameterName the parameter name
+     * @param cal           the cal
+     * @return the date
      * @see java.sql.PreparedStatement
      */
     public Date getDate(String parameterName, Calendar cal) {
@@ -1348,6 +1809,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the double.
+     *
+     * @param parameterIndex the parameter index
+     * @return the double
      * @see java.sql.PreparedStatement
      */
     public double getDouble(int parameterIndex) {
@@ -1359,6 +1824,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the double.
+     *
+     * @param parameterName the parameter name
+     * @return the double
      * @see java.sql.PreparedStatement
      */
     public double getDouble(String parameterName) {
@@ -1370,6 +1839,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the float.
+     *
+     * @param parameterIndex the parameter index
+     * @return the float
      * @see java.sql.PreparedStatement
      */
     public float getFloat(int parameterIndex) {
@@ -1381,6 +1854,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the float.
+     *
+     * @param parameterName the parameter name
+     * @return the float
      * @see java.sql.PreparedStatement
      */
     public float getFloat(String parameterName) {
@@ -1392,6 +1869,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the int.
+     *
+     * @param parameterIndex the parameter index
+     * @return the int
      * @see java.sql.PreparedStatement
      */
     public int getInt(int parameterIndex) {
@@ -1403,6 +1884,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the int.
+     *
+     * @param parameterName the parameter name
+     * @return the int
      * @see java.sql.PreparedStatement
      */
     public int getInt(String parameterName) {
@@ -1414,6 +1899,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the long.
+     *
+     * @param parameterIndex the parameter index
+     * @return the long
      * @see java.sql.PreparedStatement
      */
     public long getLong(int parameterIndex) {
@@ -1425,6 +1914,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the long.
+     *
+     * @param parameterName the parameter name
+     * @return the long
      * @see java.sql.PreparedStatement
      */
     public long getLong(String parameterName) {
@@ -1436,6 +1929,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the n character stream.
+     *
+     * @param parameterIndex the parameter index
+     * @return the n character stream
      * @see java.sql.PreparedStatement
      */
     public Reader getNCharacterStream(int parameterIndex) {
@@ -1447,6 +1944,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the n character stream.
+     *
+     * @param parameterName the parameter name
+     * @return the n character stream
      * @see java.sql.PreparedStatement
      */
     public Reader getNCharacterStream(String parameterName) {
@@ -1458,6 +1959,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the n clob.
+     *
+     * @param parameterIndex the parameter index
+     * @return the n clob
      * @see java.sql.PreparedStatement
      */
     public NClob getNClob(int parameterIndex) {
@@ -1469,6 +1974,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the n clob.
+     *
+     * @param parameterName the parameter name
+     * @return the n clob
      * @see java.sql.PreparedStatement
      */
     public NClob getNClob(String parameterName) {
@@ -1480,6 +1989,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the n string.
+     *
+     * @param parameterIndex the parameter index
+     * @return the n string
      * @see java.sql.PreparedStatement
      */
     public String getNString(int parameterIndex) {
@@ -1491,6 +2004,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the n string.
+     *
+     * @param parameterName the parameter name
+     * @return the n string
      * @see java.sql.PreparedStatement
      */
     public String getNString(String parameterName) {
@@ -1502,6 +2019,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the object.
+     *
+     * @param parameterIndex the parameter index
+     * @return the object
      * @see java.sql.PreparedStatement
      */
     public Object getObject(int parameterIndex) {
@@ -1513,6 +2034,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the object.
+     *
+     * @param parameterName the parameter name
+     * @return the object
      * @see java.sql.PreparedStatement
      */
     public Object getObject(String parameterName) {
@@ -1524,6 +2049,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the object.
+     *
+     * @param parameterIndex the parameter index
+     * @param map            the map
+     * @return the object
      * @see java.sql.PreparedStatement
      */
     public Object getObject(int parameterIndex, Map<String, Class<?>> map) {
@@ -1535,6 +2065,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the object.
+     *
+     * @param parameterName the parameter name
+     * @param map           the map
+     * @return the object
      * @see java.sql.PreparedStatement
      */
     public Object getObject(String parameterName, Map<String, Class<?>> map) {
@@ -1546,6 +2081,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the ref.
+     *
+     * @param parameterIndex the parameter index
+     * @return the ref
      * @see java.sql.PreparedStatement
      */
     public Ref getRef(int parameterIndex) {
@@ -1557,6 +2096,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the ref.
+     *
+     * @param parameterName the parameter name
+     * @return the ref
      * @see java.sql.PreparedStatement
      */
     public Ref getRef(String parameterName) {
@@ -1568,6 +2111,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the row id.
+     *
+     * @param parameterIndex the parameter index
+     * @return the row id
      * @see java.sql.PreparedStatement
      */
     public RowId getRowId(int parameterIndex) {
@@ -1579,6 +2126,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the row id.
+     *
+     * @param parameterName the parameter name
+     * @return the row id
      * @see java.sql.PreparedStatement
      */
     public RowId getRowId(String parameterName) {
@@ -1590,6 +2141,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the sqlxml.
+     *
+     * @param parameterIndex the parameter index
+     * @return the sqlxml
      * @see java.sql.PreparedStatement
      */
     public SQLXML getSQLXML(int parameterIndex) {
@@ -1601,6 +2156,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the sqlxml.
+     *
+     * @param parameterName the parameter name
+     * @return the sqlxml
      * @see java.sql.PreparedStatement
      */
     public SQLXML getSQLXML(String parameterName) {
@@ -1612,6 +2171,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the short.
+     *
+     * @param parameterIndex the parameter index
+     * @return the short
      * @see java.sql.PreparedStatement
      */
     public short getShort(int parameterIndex) {
@@ -1623,6 +2186,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the short.
+     *
+     * @param parameterName the parameter name
+     * @return the short
      * @see java.sql.PreparedStatement
      */
     public short getShort(String parameterName) {
@@ -1634,6 +2201,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the string.
+     *
+     * @param parameterIndex the parameter index
+     * @return the string
      * @see java.sql.PreparedStatement
      */
     public String getString(int parameterIndex) {
@@ -1645,6 +2216,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the string.
+     *
+     * @param parameterName the parameter name
+     * @return the string
      * @see java.sql.PreparedStatement
      */
     public String getString(String parameterName) {
@@ -1656,6 +2231,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the time.
+     *
+     * @param parameterIndex the parameter index
+     * @return the time
      * @see java.sql.PreparedStatement
      */
     public Time getTime(int parameterIndex) {
@@ -1667,6 +2246,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the time.
+     *
+     * @param parameterName the parameter name
+     * @return the time
      * @see java.sql.PreparedStatement
      */
     public Time getTime(String parameterName) {
@@ -1678,6 +2261,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the time.
+     *
+     * @param parameterIndex the parameter index
+     * @param cal            the cal
+     * @return the time
      * @see java.sql.PreparedStatement
      */
     public Time getTime(int parameterIndex, Calendar cal) {
@@ -1689,6 +2277,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the time.
+     *
+     * @param parameterName the parameter name
+     * @param cal           the cal
+     * @return the time
      * @see java.sql.PreparedStatement
      */
     public Time getTime(String parameterName, Calendar cal) {
@@ -1700,6 +2293,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the timestamp.
+     *
+     * @param parameterIndex the parameter index
+     * @return the timestamp
      * @see java.sql.PreparedStatement
      */
     public Timestamp getTimestamp(int parameterIndex) {
@@ -1711,6 +2308,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the timestamp.
+     *
+     * @param parameterName the parameter name
+     * @return the timestamp
      * @see java.sql.PreparedStatement
      */
     public Timestamp getTimestamp(String parameterName) {
@@ -1722,6 +2323,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the timestamp.
+     *
+     * @param parameterIndex the parameter index
+     * @param cal            the cal
+     * @return the timestamp
      * @see java.sql.PreparedStatement
      */
     public Timestamp getTimestamp(int parameterIndex, Calendar cal) {
@@ -1733,6 +2339,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the timestamp.
+     *
+     * @param parameterName the parameter name
+     * @param cal           the cal
+     * @return the timestamp
      * @see java.sql.PreparedStatement
      */
     public Timestamp getTimestamp(String parameterName, Calendar cal) {
@@ -1744,6 +2355,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the url.
+     *
+     * @param parameterIndex the parameter index
+     * @return the url
      * @see java.sql.PreparedStatement
      */
     public URL getURL(int parameterIndex) {
@@ -1755,6 +2370,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the url.
+     *
+     * @param parameterName the parameter name
+     * @return the url
      * @see java.sql.PreparedStatement
      */
     public URL getURL(String parameterName) {
@@ -1766,6 +2385,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Register out parameter.
+     *
+     * @param parameterIndex the parameter index
+     * @param sqlType        the sql type
      * @see java.sql.PreparedStatement
      */
     public void registerOutParameter(int parameterIndex, int sqlType) {
@@ -1777,6 +2400,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Register out parameter.
+     *
+     * @param parameterName the parameter name
+     * @param sqlType       the sql type
      * @see java.sql.PreparedStatement
      */
     public void registerOutParameter(String parameterName, int sqlType) {
@@ -1788,6 +2415,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Register out parameter.
+     *
+     * @param parameterIndex the parameter index
+     * @param sqlType        the sql type
+     * @param scale          the scale
      * @see java.sql.PreparedStatement
      */
     public void registerOutParameter(int parameterIndex, int sqlType, int scale) {
@@ -1799,6 +2431,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Register out parameter.
+     *
+     * @param parameterIndex the parameter index
+     * @param sqlType        the sql type
+     * @param typeName       the type name
      * @see java.sql.PreparedStatement
      */
     public void registerOutParameter(int parameterIndex, int sqlType, String typeName) {
@@ -1810,6 +2447,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Register out parameter.
+     *
+     * @param parameterName the parameter name
+     * @param sqlType       the sql type
+     * @param scale         the scale
      * @see java.sql.PreparedStatement
      */
     public void registerOutParameter(String parameterName, int sqlType, int scale) {
@@ -1821,6 +2463,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Register out parameter.
+     *
+     * @param parameterName the parameter name
+     * @param sqlType       the sql type
+     * @param typeName      the type name
      * @see java.sql.PreparedStatement
      */
     public void registerOutParameter(String parameterName, int sqlType, String typeName) {
@@ -1832,6 +2479,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the ascii stream.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setAsciiStream(String parameterName, InputStream x) {
@@ -1843,6 +2494,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the ascii stream.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
+     * @param length        the length
      * @see java.sql.PreparedStatement
      */
     public void setAsciiStream(String parameterName, InputStream x, int length) {
@@ -1854,6 +2510,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the ascii stream.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
+     * @param length        the length
      * @see java.sql.PreparedStatement
      */
     public void setAsciiStream(String parameterName, InputStream x, long length) {
@@ -1865,6 +2526,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the big decimal.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setBigDecimal(String parameterName, BigDecimal x) {
@@ -1876,6 +2541,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the binary stream.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setBinaryStream(String parameterName, InputStream x) {
@@ -1887,6 +2556,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the binary stream.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
+     * @param length        the length
      * @see java.sql.PreparedStatement
      */
     public void setBinaryStream(String parameterName, InputStream x, int length) {
@@ -1898,6 +2572,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the binary stream.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
+     * @param length        the length
      * @see java.sql.PreparedStatement
      */
     public void setBinaryStream(String parameterName, InputStream x, long length) {
@@ -1909,6 +2588,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the blob.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setBlob(String parameterName, Blob x) {
@@ -1920,6 +2603,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the blob.
+     *
+     * @param parameterName the parameter name
+     * @param inputStream   the input stream
      * @see java.sql.PreparedStatement
      */
     public void setBlob(String parameterName, InputStream inputStream) {
@@ -1931,6 +2618,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the blob.
+     *
+     * @param parameterName the parameter name
+     * @param inputStream   the input stream
+     * @param length        the length
      * @see java.sql.PreparedStatement
      */
     public void setBlob(String parameterName, InputStream inputStream, long length) {
@@ -1942,6 +2634,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the boolean.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setBoolean(String parameterName, boolean x) {
@@ -1953,6 +2649,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the byte.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setByte(String parameterName, byte x) {
@@ -1964,6 +2664,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the bytes.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setBytes(String parameterName, byte[] x) {
@@ -1975,6 +2679,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the character stream.
+     *
+     * @param parameterName the parameter name
+     * @param reader        the reader
      * @see java.sql.PreparedStatement
      */
     public void setCharacterStream(String parameterName, Reader reader) {
@@ -1986,6 +2694,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the character stream.
+     *
+     * @param parameterName the parameter name
+     * @param reader        the reader
+     * @param length        the length
      * @see java.sql.PreparedStatement
      */
     public void setCharacterStream(String parameterName, Reader reader, int length) {
@@ -1997,6 +2710,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the character stream.
+     *
+     * @param parameterName the parameter name
+     * @param reader        the reader
+     * @param length        the length
      * @see java.sql.PreparedStatement
      */
     public void setCharacterStream(String parameterName, Reader reader, long length) {
@@ -2008,6 +2726,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the clob.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setClob(String parameterName, Clob x) {
@@ -2019,6 +2741,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the clob.
+     *
+     * @param parameterName the parameter name
+     * @param reader        the reader
      * @see java.sql.PreparedStatement
      */
     public void setClob(String parameterName, Reader reader) {
@@ -2030,6 +2756,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the clob.
+     *
+     * @param parameterName the parameter name
+     * @param reader        the reader
+     * @param length        the length
      * @see java.sql.PreparedStatement
      */
     public void setClob(String parameterName, Reader reader, long length) {
@@ -2041,6 +2772,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the date.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setDate(String parameterName, Date x) {
@@ -2052,6 +2787,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the date.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
+     * @param cal           the cal
      * @see java.sql.PreparedStatement
      */
     public void setDate(String parameterName, Date x, Calendar cal) {
@@ -2063,6 +2803,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the double.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setDouble(String parameterName, double x) {
@@ -2074,6 +2818,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the float.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setFloat(String parameterName, float x) {
@@ -2085,6 +2833,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the int.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setInt(String parameterName, int x) {
@@ -2096,6 +2848,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the long.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setLong(String parameterName, long x) {
@@ -2107,6 +2863,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the N character stream.
+     *
+     * @param parameterName the parameter name
+     * @param value         the value
      * @see java.sql.PreparedStatement
      */
     public void setNCharacterStream(String parameterName, Reader value) {
@@ -2118,6 +2878,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the N character stream.
+     *
+     * @param parameterName the parameter name
+     * @param value         the value
+     * @param length        the length
      * @see java.sql.PreparedStatement
      */
     public void setNCharacterStream(String parameterName, Reader value, long length) {
@@ -2129,6 +2894,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the N clob.
+     *
+     * @param parameterName the parameter name
+     * @param value         the value
      * @see java.sql.PreparedStatement
      */
     public void setNClob(String parameterName, NClob value) {
@@ -2140,6 +2909,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the N clob.
+     *
+     * @param parameterName the parameter name
+     * @param reader        the reader
      * @see java.sql.PreparedStatement
      */
     public void setNClob(String parameterName, Reader reader) {
@@ -2151,6 +2924,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the N clob.
+     *
+     * @param parameterName the parameter name
+     * @param reader        the reader
+     * @param length        the length
      * @see java.sql.PreparedStatement
      */
     public void setNClob(String parameterName, Reader reader, long length) {
@@ -2162,6 +2940,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the N string.
+     *
+     * @param parameterName the parameter name
+     * @param value         the value
      * @see java.sql.PreparedStatement
      */
     public void setNString(String parameterName, String value) {
@@ -2173,6 +2955,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the null.
+     *
+     * @param parameterName the parameter name
+     * @param sqlType       the sql type
      * @see java.sql.PreparedStatement
      */
     public void setNull(String parameterName, int sqlType) {
@@ -2184,6 +2970,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the null.
+     *
+     * @param parameterName the parameter name
+     * @param sqlType       the sql type
+     * @param typeName      the type name
      * @see java.sql.PreparedStatement
      */
     public void setNull(String parameterName, int sqlType, String typeName) {
@@ -2195,6 +2986,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the object.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setObject(String parameterName, Object x) {
@@ -2206,6 +3001,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the object.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
+     * @param targetSqlType the target sql type
      * @see java.sql.PreparedStatement
      */
     public void setObject(String parameterName, Object x, int targetSqlType) {
@@ -2217,6 +3017,12 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the object.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
+     * @param targetSqlType the target sql type
+     * @param scale         the scale
      * @see java.sql.PreparedStatement
      */
     public void setObject(String parameterName, Object x, int targetSqlType, int scale) {
@@ -2228,6 +3034,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the row id.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setRowId(String parameterName, RowId x) {
@@ -2239,6 +3049,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the SQLXML.
+     *
+     * @param parameterName the parameter name
+     * @param xmlObject     the xml object
      * @see java.sql.PreparedStatement
      */
     public void setSQLXML(String parameterName, SQLXML xmlObject) {
@@ -2250,6 +3064,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the short.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setShort(String parameterName, short x) {
@@ -2261,6 +3079,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the string.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setString(String parameterName, String x) {
@@ -2272,6 +3094,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the time.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setTime(String parameterName, Time x) {
@@ -2283,6 +3109,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the time.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
+     * @param cal           the cal
      * @see java.sql.PreparedStatement
      */
     public void setTime(String parameterName, Time x, Calendar cal) {
@@ -2294,6 +3125,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the timestamp.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
      * @see java.sql.PreparedStatement
      */
     public void setTimestamp(String parameterName, Timestamp x) {
@@ -2305,6 +3140,11 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the timestamp.
+     *
+     * @param parameterName the parameter name
+     * @param x             the x
+     * @param cal           the cal
      * @see java.sql.PreparedStatement
      */
     public void setTimestamp(String parameterName, Timestamp x, Calendar cal) {
@@ -2316,6 +3156,10 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the URL.
+     *
+     * @param parameterName the parameter name
+     * @param val           the val
      * @see java.sql.PreparedStatement
      */
     public void setURL(String parameterName, URL val) {
@@ -2327,6 +3171,9 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Was null.
+     *
+     * @return true, if successful
      * @see java.sql.PreparedStatement
      */
     public boolean wasNull() {
@@ -2338,6 +3185,8 @@ public class CallableStatementWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the callable statement.
+     *
      * @return 返回callableStatement（java.sql.CallableStatement）
      */
     public CallableStatement getCallableStatement() {

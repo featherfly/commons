@@ -21,15 +21,20 @@ import cn.featherfly.common.lang.DateUtils;
  * <p>
  * JsonDataFormat
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class JsonDataFormat implements DataFormat {
 
+    /** The generator. */
     private JsonGenerator generator;
     //	private JsonParser parser;
 
     /**
+     * Instantiates a new json data format.
+     *
+     * @param writer the writer
      */
     public JsonDataFormat(Writer writer) {
         generator = createJsonGenerator(writer);
@@ -133,6 +138,12 @@ public class JsonDataFormat implements DataFormat {
     // private method
     // ********************************************************************
 
+    /**
+     * Creates the json generator.
+     *
+     * @param writer the writer
+     * @return the json generator
+     */
     private JsonGenerator createJsonGenerator(Writer writer) {
         try {
             return new JsonFactory().createGenerator(writer);

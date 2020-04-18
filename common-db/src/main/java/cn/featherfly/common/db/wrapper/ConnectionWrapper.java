@@ -27,13 +27,21 @@ import cn.featherfly.common.db.JdbcException;
  */
 public class ConnectionWrapper implements AutoCloseable {
 
+    /** The connection. */
     private Connection connection;
 
+    /**
+     * Instantiates a new connection wrapper.
+     *
+     * @param connection the connection
+     */
     public ConnectionWrapper(Connection connection) {
         this.connection = connection;
     }
 
     /**
+     * Clear warnings.
+     *
      * @see java.sql.Connection
      */
     public void clearWarnings() {
@@ -45,6 +53,8 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Close.
+     *
      * @see java.sql.Connection
      */
     @Override
@@ -57,6 +67,8 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Commit.
+     *
      * @see java.sql.Connection
      */
     public void commit() {
@@ -68,6 +80,12 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Creates the array of.
+     *
+     * @param typeName the type name
+     * @param elements the elements
+     * @return the array
+     * @throws SQLException the SQL exception
      * @see java.sql.Connection
      */
     public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
@@ -79,6 +97,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Creates the blob.
+     *
+     * @return the blob
      * @see java.sql.Connection
      */
     public Blob createBlob() {
@@ -90,6 +111,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Creates the clob.
+     *
+     * @return the clob
      * @see java.sql.Connection
      */
     public Clob createClob() {
@@ -101,6 +125,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Creates the N clob.
+     *
+     * @return the n clob
      * @see java.sql.Connection
      */
     public NClob createNClob() {
@@ -112,6 +139,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Creates the SQLXML.
+     *
+     * @return the sqlxml
      * @see java.sql.Connection
      */
     public SQLXML createSQLXML() {
@@ -123,6 +153,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Creates the statement.
+     *
+     * @return the statement wrapper
      * @see java.sql.Connection
      */
     public StatementWrapper createStatement() {
@@ -134,6 +167,12 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Creates the statement.
+     *
+     * @param resultSetType        the result set type
+     * @param resultSetConcurrency the result set concurrency
+     * @return the statement wrapper
+     * @throws SQLException the SQL exception
      * @see java.sql.Connection
      */
     public StatementWrapper createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
@@ -145,6 +184,13 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Creates the statement.
+     *
+     * @param resultSetType        the result set type
+     * @param resultSetConcurrency the result set concurrency
+     * @param resultSetHoldability the result set holdability
+     * @return the statement wrapper
+     * @throws SQLException the SQL exception
      * @see java.sql.Connection
      */
     public StatementWrapper createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability)
@@ -158,6 +204,12 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Creates the struct.
+     *
+     * @param typeName   the type name
+     * @param attributes the attributes
+     * @return the struct
+     * @throws SQLException the SQL exception
      * @see java.sql.Connection
      */
     public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
@@ -169,6 +221,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the auto commit.
+     *
+     * @return the auto commit
      * @see java.sql.Connection
      */
     public boolean getAutoCommit() {
@@ -180,6 +235,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the catalog.
+     *
+     * @return the catalog
      * @see java.sql.Connection
      */
     public String getCatalog() {
@@ -191,6 +249,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the client info.
+     *
+     * @return the client info
      * @see java.sql.Connection
      */
     public Properties getClientInfo() {
@@ -202,6 +263,10 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the client info.
+     *
+     * @param name the name
+     * @return the client info
      * @see java.sql.Connection
      */
     public String getClientInfo(String name) {
@@ -213,6 +278,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the holdability.
+     *
+     * @return the holdability
      * @see java.sql.Connection
      */
     public int getHoldability() {
@@ -224,6 +292,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the meta data.
+     *
+     * @return the meta data
      * @see java.sql.Connection
      */
     public DatabaseMetaData getMetaData() {
@@ -235,6 +306,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the transaction isolation.
+     *
+     * @return the transaction isolation
      * @see java.sql.Connection
      */
     public int getTransactionIsolation() {
@@ -246,6 +320,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the type map.
+     *
+     * @return the type map
      * @see java.sql.Connection
      */
     public Map<String, Class<?>> getTypeMap() {
@@ -257,6 +334,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the warnings.
+     *
+     * @return the warnings
      * @see java.sql.Connection
      */
     public SQLWarning getWarnings() {
@@ -268,6 +348,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Checks if is closed.
+     *
+     * @return true, if is closed
      * @see java.sql.Connection
      */
     public boolean isClosed() {
@@ -279,6 +362,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Checks if is read only.
+     *
+     * @return true, if is read only
      * @see java.sql.Connection
      */
     public boolean isReadOnly() {
@@ -290,6 +376,10 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Checks if is valid.
+     *
+     * @param timeout the timeout
+     * @return true, if is valid
      * @see java.sql.Connection
      */
     public boolean isValid(int timeout) {
@@ -301,6 +391,10 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Native SQL.
+     *
+     * @param sql the sql
+     * @return the string
      * @see java.sql.Connection
      */
     public String nativeSQL(String sql) {
@@ -312,6 +406,10 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Prepare call.
+     *
+     * @param sql the sql
+     * @return the callable statement wrapper
      * @see java.sql.Connection
      */
     public CallableStatementWrapper prepareCall(String sql) {
@@ -323,6 +421,12 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Prepare call.
+     *
+     * @param sql                  the sql
+     * @param resultSetType        the result set type
+     * @param resultSetConcurrency the result set concurrency
+     * @return the callable statement wrapper
      * @see java.sql.Connection
      */
     public CallableStatementWrapper prepareCall(String sql, int resultSetType, int resultSetConcurrency) {
@@ -334,6 +438,13 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Prepare call.
+     *
+     * @param sql                  the sql
+     * @param resultSetType        the result set type
+     * @param resultSetConcurrency the result set concurrency
+     * @param resultSetHoldability the result set holdability
+     * @return the callable statement wrapper
      * @see java.sql.Connection
      */
     public CallableStatementWrapper prepareCall(String sql, int resultSetType, int resultSetConcurrency,
@@ -347,6 +458,10 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Prepare statement.
+     *
+     * @param sql the sql
+     * @return the prepared statement wrapper
      * @see java.sql.Connection
      */
     public PreparedStatementWrapper prepareStatement(String sql) {
@@ -358,6 +473,11 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Prepare statement.
+     *
+     * @param sql               the sql
+     * @param autoGeneratedKeys the auto generated keys
+     * @return the prepared statement wrapper
      * @see java.sql.Connection
      */
     public PreparedStatementWrapper prepareStatement(String sql, int autoGeneratedKeys) {
@@ -369,6 +489,11 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Prepare statement.
+     *
+     * @param sql           the sql
+     * @param columnIndexes the column indexes
+     * @return the prepared statement wrapper
      * @see java.sql.Connection
      */
     public PreparedStatementWrapper prepareStatement(String sql, int[] columnIndexes) {
@@ -380,6 +505,11 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Prepare statement.
+     *
+     * @param sql         the sql
+     * @param columnNames the column names
+     * @return the prepared statement wrapper
      * @see java.sql.Connection
      */
     public PreparedStatementWrapper prepareStatement(String sql, String[] columnNames) {
@@ -391,6 +521,12 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Prepare statement.
+     *
+     * @param sql                  the sql
+     * @param resultSetType        the result set type
+     * @param resultSetConcurrency the result set concurrency
+     * @return the prepared statement wrapper
      * @see java.sql.Connection
      */
     public PreparedStatementWrapper prepareStatement(String sql, int resultSetType, int resultSetConcurrency) {
@@ -403,6 +539,13 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Prepare statement.
+     *
+     * @param sql                  the sql
+     * @param resultSetType        the result set type
+     * @param resultSetConcurrency the result set concurrency
+     * @param resultSetHoldability the result set holdability
+     * @return the prepared statement wrapper
      * @see java.sql.Connection
      */
     public PreparedStatementWrapper prepareStatement(String sql, int resultSetType, int resultSetConcurrency,
@@ -416,6 +559,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Release savepoint.
+     *
+     * @param savepoint the savepoint
      * @see java.sql.Connection
      */
     public void releaseSavepoint(Savepoint savepoint) {
@@ -427,6 +573,8 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Rollback.
+     *
      * @see java.sql.Connection
      */
     public void rollback() {
@@ -438,6 +586,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Rollback.
+     *
+     * @param savepoint the savepoint
      * @see java.sql.Connection
      */
     public void rollback(Savepoint savepoint) {
@@ -449,6 +600,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the auto commit.
+     *
+     * @param autoCommit the new auto commit
      * @see java.sql.Connection
      */
     public void setAutoCommit(boolean autoCommit) {
@@ -460,6 +614,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the catalog.
+     *
+     * @param catalog the new catalog
      * @see java.sql.Connection
      */
     public void setCatalog(String catalog) {
@@ -471,6 +628,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the client info.
+     *
+     * @param properties the new client info
      * @see java.sql.Connection
      */
     public void setClientInfo(Properties properties) {
@@ -482,6 +642,11 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the client info.
+     *
+     * @param name  the name
+     * @param value the value
+     * @throws SQLClientInfoException the SQL client info exception
      * @see java.sql.Connection
      */
     public void setClientInfo(String name, String value) throws SQLClientInfoException {
@@ -493,6 +658,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the holdability.
+     *
+     * @param holdability the new holdability
      * @see java.sql.Connection
      */
     public void setHoldability(int holdability) {
@@ -504,6 +672,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the read only.
+     *
+     * @param readOnly the new read only
      * @see java.sql.Connection
      */
     public void setReadOnly(boolean readOnly) {
@@ -515,6 +686,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the savepoint.
+     *
+     * @return the savepoint
      * @see java.sql.Connection
      */
 
@@ -527,6 +701,10 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the savepoint.
+     *
+     * @param name the name
+     * @return the savepoint
      * @see java.sql.Connection
      */
     public Savepoint setSavepoint(String name) {
@@ -538,6 +716,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the transaction isolation.
+     *
+     * @param level the new transaction isolation
      * @see java.sql.Connection
      */
     public void setTransactionIsolation(int level) {
@@ -549,6 +730,9 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the type map.
+     *
+     * @param map the map
      * @see java.sql.Connection
      */
     public void setTypeMap(Map<String, Class<?>> map) {
@@ -560,6 +744,10 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Checks if is wrapper for.
+     *
+     * @param iface the iface
+     * @return true, if is wrapper for
      * @see java.sql.Connection
      */
     public boolean isWrapperFor(Class<?> iface) {
@@ -571,6 +759,11 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Unwrap.
+     *
+     * @param <T>   the generic type
+     * @param iface the iface
+     * @return the t
      * @see java.sql.Connection
      */
     public <T> T unwrap(Class<T> iface) {
@@ -582,6 +775,8 @@ public class ConnectionWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the connection.
+     *
      * @return 返回connection（java.sql.Connection）
      */
     public ConnectionWrapper getConnection() {

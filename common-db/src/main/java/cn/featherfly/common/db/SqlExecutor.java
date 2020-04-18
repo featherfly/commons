@@ -3,6 +3,7 @@ package cn.featherfly.common.db;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,19 +31,25 @@ import cn.featherfly.common.repository.Query;
  * <p>
  * SqlExecutor
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class SqlExecutor {
 
+    /** The logger. */
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /** The Constant END_SQL_SIGN. */
     private static final String END_SQL_SIGN = ";";
 
+    /** The data source. */
     private DataSource dataSource;
 
     /**
-     * @param dataSource
+     * Instantiates a new sql executor.
+     *
+     * @param dataSource the data source
      */
     public SqlExecutor(DataSource dataSource) {
         super();
@@ -49,21 +57,21 @@ public class SqlExecutor {
     }
 
     /**
-     * read sql from file with UTF-8 and execute
+     * read sql from file with UTF-8 and execute.
      *
-     * @param sqlFile
-     * @throws IOException
+     * @param sqlFile the sql file
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void execute(File sqlFile) throws IOException {
         execute(sqlFile, StandardCharsets.UTF_8);
     }
 
     /**
-     * read sql from file with assgin encoding and execute
+     * read sql from file with assgin encoding and execute.
      *
-     * @param sqlFile
-     * @param encoding
-     * @throws IOException
+     * @param sqlFile  the sql file
+     * @param encoding the encoding
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void execute(File sqlFile, String encoding) throws IOException {
         AssertIllegalArgument.isExists(sqlFile, "sqlFile");
@@ -73,11 +81,11 @@ public class SqlExecutor {
     }
 
     /**
-     * read sql from file with assgin encoding and execute
+     * read sql from file with assgin encoding and execute.
      *
-     * @param sqlFile
-     * @param encoding
-     * @throws IOException
+     * @param sqlFile sqlFile
+     * @param charset charset
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void execute(File sqlFile, Charset charset) throws IOException {
         AssertIllegalArgument.isExists(sqlFile, "sqlFile");
@@ -87,9 +95,23 @@ public class SqlExecutor {
     }
 
     /**
-     * read sql from string sqlContent
+     * read sql from file with assgin encoding and execute.
      *
-     * @param sqlContent
+     * @param sqlResource sqlResource
+     * @param charset     charset
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public void execute(InputStream sqlResource, Charset charset) throws IOException {
+        AssertIllegalArgument.isNotNull(sqlResource, "sqlFile");
+        String content = IOUtils.toString(sqlResource, charset);
+        String[] sqls = content.split(END_SQL_SIGN);
+        execute(sqls);
+    }
+
+    /**
+     * read sql from string sqlContent.
+     *
+     * @param sqlContent the sql content
      */
     public void execute(String sqlContent) {
         String[] sqls = sqlContent.split(END_SQL_SIGN);
@@ -97,9 +119,9 @@ public class SqlExecutor {
     }
 
     /**
-     * execute sqls
+     * execute sqls.
      *
-     * @param sqls
+     * @param sqls the sqls
      */
     public void execute(String[] sqls) {
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
@@ -116,7 +138,7 @@ public class SqlExecutor {
     }
 
     /**
-     * sql execute
+     * sql execute.
      *
      * @param sql    sql
      * @param params params
@@ -140,7 +162,7 @@ public class SqlExecutor {
     }
 
     /**
-     * sql execute
+     * sql execute.
      *
      * @param execution execution
      * @return exuecute success amount
@@ -153,9 +175,9 @@ public class SqlExecutor {
     }
 
     /**
-     * sql execute
+     * sql execute.
      *
-     * @param execution execution
+     * @param executions executions
      * @return exuecute success amount
      */
     public int execute(Execution... executions) {
@@ -169,7 +191,7 @@ public class SqlExecutor {
     }
 
     /**
-     * sql query
+     * sql query.
      *
      * @param query query
      * @return query result list
@@ -182,7 +204,7 @@ public class SqlExecutor {
     }
 
     /**
-     * sql query
+     * sql query.
      *
      * @param sql    sql
      * @param params params
@@ -205,7 +227,7 @@ public class SqlExecutor {
     }
 
     /**
-     * sql query
+     * sql query.
      *
      * @param query query
      * @return query result list
@@ -218,7 +240,7 @@ public class SqlExecutor {
     }
 
     /**
-     * sql query
+     * sql query.
      *
      * @param sql    sql
      * @param params params

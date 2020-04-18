@@ -1,102 +1,119 @@
 package cn.featherfly.common.db.metadata;
 
-import java.sql.SQLException;
 import java.util.Locale;
 
 import cn.featherfly.common.db.JdbcException;
 
 /**
  * <p>
- * DatabaseMetadata异常
+ * database metadata exception
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class DatabaseMetadataException extends JdbcException {
-	
-	private static final long serialVersionUID = -7034897190745766939L;
 
+    /** The Constant serialVersionUID. */
+    private static final long serialVersionUID = -7034897190745766939L;
 
     /**
-     * 
+     * Instantiates a new database metadata exception.
      */
     public DatabaseMetadataException() {
         super();
     }
 
     /**
-     * @param message
-     * @param locale
-     * @param ex
+     * Instantiates a new database metadata exception.
+     *
+     * @param message the message
+     * @param locale  the locale
+     * @param ex      the ex
      */
-    public DatabaseMetadataException(String message, Locale locale, SQLException ex) {
+    public DatabaseMetadataException(String message, Locale locale, Throwable ex) {
         super(message, locale, ex);
     }
 
     /**
-     * @param message
-     * @param locale
+     * Instantiates a new database metadata exception.
+     *
+     * @param message the message
+     * @param locale  the locale
      */
     public DatabaseMetadataException(String message, Locale locale) {
         super(message, locale);
     }
 
     /**
-     * @param message
-     * @param argus
-     * @param locale
-     * @param ex
+     * Instantiates a new database metadata exception.
+     *
+     * @param message the message
+     * @param argus   the argus
+     * @param locale  the locale
+     * @param ex      the ex
      */
-    public DatabaseMetadataException(String message, Object[] argus, Locale locale,
-            SQLException ex) {
+    public DatabaseMetadataException(String message, Object[] argus, Locale locale, Throwable ex) {
         super(message, argus, locale, ex);
     }
 
     /**
-     * @param message
-     * @param argus
-     * @param locale
+     * Instantiates a new database metadata exception.
+     *
+     * @param message the message
+     * @param argus   the argus
+     * @param locale  the locale
      */
     public DatabaseMetadataException(String message, Object[] argus, Locale locale) {
         super(message, argus, locale);
     }
 
     /**
-     * @param message
-     * @param argus
-     * @param ex
+     * Instantiates a new database metadata exception.
+     *
+     * @param message the message
+     * @param argus   the argus
+     * @param ex      the ex
      */
-    public DatabaseMetadataException(String message, Object[] argus, SQLException ex) {
+    public DatabaseMetadataException(String message, Object[] argus, Throwable ex) {
         super(message, argus, ex);
     }
 
     /**
-     * @param message
-     * @param argus
+     * Instantiates a new database metadata exception.
+     *
+     * @param message the message
+     * @param argus   the argus
      */
     public DatabaseMetadataException(String message, Object[] argus) {
         super(message, argus);
     }
 
     /**
-     * @param message
-     * @param ex
+     * Instantiates a new database metadata exception.
+     *
+     * @param message the message
+     * @param ex      the ex
      */
-    public DatabaseMetadataException(String message, SQLException ex) {
+    public DatabaseMetadataException(String message, Throwable ex) {
         super(message, ex);
     }
 
     /**
-     * @param message
+     * Instantiates a new database metadata exception.
+     *
+     * @param message the message
      */
     public DatabaseMetadataException(String message) {
         super(message);
     }
 
     /**
-     * @param ex
+     * Instantiates a new database metadata exception.
+     *
+     * @param ex the ex
      */
-    public DatabaseMetadataException(SQLException ex) {
+    public DatabaseMetadataException(Throwable ex) {
         super(ex);
     }
 }

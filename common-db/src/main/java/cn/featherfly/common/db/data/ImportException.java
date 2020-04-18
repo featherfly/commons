@@ -8,19 +8,22 @@ import cn.featherfly.common.db.JdbcException;
  * <p>
  * import异常
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class ImportException extends JdbcException {
 
     /**
-     *
+     * Instantiates a new import exception.
      */
     public ImportException() {
         super();
     }
 
     /**
+     * Instantiates a new import exception.
+     *
      * @param message message
      * @param locale  locale
      * @param ex      ex
@@ -30,6 +33,8 @@ public class ImportException extends JdbcException {
     }
 
     /**
+     * Instantiates a new import exception.
+     *
      * @param message message
      * @param locale  locale
      */
@@ -38,6 +43,8 @@ public class ImportException extends JdbcException {
     }
 
     /**
+     * Instantiates a new import exception.
+     *
      * @param message message
      * @param argus   argus
      * @param locale  locale
@@ -48,6 +55,8 @@ public class ImportException extends JdbcException {
     }
 
     /**
+     * Instantiates a new import exception.
+     *
      * @param message message
      * @param argus   argus
      * @param locale  locale
@@ -57,6 +66,8 @@ public class ImportException extends JdbcException {
     }
 
     /**
+     * Instantiates a new import exception.
+     *
      * @param message message
      * @param argus   argus
      * @param ex      ex
@@ -66,6 +77,8 @@ public class ImportException extends JdbcException {
     }
 
     /**
+     * Instantiates a new import exception.
+     *
      * @param message message
      * @param argus   argus
      */
@@ -74,27 +87,34 @@ public class ImportException extends JdbcException {
     }
 
     /**
-     * @param message
-     * @param ex
+     * Instantiates a new import exception.
+     *
+     * @param message the message
+     * @param ex      the ex
      */
     public ImportException(String message, Throwable ex) {
         super(message, ex);
     }
 
     /**
-     * @param message
+     * Instantiates a new import exception.
+     *
+     * @param message the message
      */
     public ImportException(String message) {
         super(message);
     }
 
     /**
-     * @param ex
+     * Instantiates a new import exception.
+     *
+     * @param ex the ex
      */
     public ImportException(Throwable ex) {
         super(ex);
     }
 
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = -7034897190745766939L;
 
 }

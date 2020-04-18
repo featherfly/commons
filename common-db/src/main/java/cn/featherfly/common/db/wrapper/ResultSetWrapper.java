@@ -34,13 +34,23 @@ import cn.featherfly.common.db.JdbcException;
  */
 public class ResultSetWrapper implements AutoCloseable {
 
+    /** The result set. */
     private ResultSet resultSet;
 
+    /**
+     * Instantiates a new result set wrapper.
+     *
+     * @param res the res
+     */
     public ResultSetWrapper(ResultSet res) {
         resultSet = res;
     }
 
     /**
+     * Absolute.
+     *
+     * @param row the row
+     * @return true, if successful
      * @see java.sql.ResultSet
      */
     public boolean absolute(int row) {
@@ -52,6 +62,8 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * After last.
+     *
      * @see java.sql.ResultSet
      */
     public void afterLast() {
@@ -63,6 +75,8 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Before first.
+     *
      * @see java.sql.ResultSet
      */
     public void beforeFirst() {
@@ -74,6 +88,8 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Cancel row updates.
+     *
      * @see java.sql.ResultSet
      */
     public void cancelRowUpdates() {
@@ -85,6 +101,8 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Clear warnings.
+     *
      * @see java.sql.ResultSet
      */
     public void clearWarnings() {
@@ -96,6 +114,8 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Close.
+     *
      * @see java.sql.ResultSet
      */
     @Override
@@ -108,6 +128,8 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Delete row.
+     *
      * @see java.sql.ResultSet
      */
     public void deleteRow() {
@@ -119,6 +141,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Find column.
+     *
+     * @param columnLabel the column label
+     * @return the int
      * @see java.sql.ResultSet
      */
     public int findColumn(String columnLabel) {
@@ -130,6 +156,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * First.
+     *
+     * @return true, if successful
      * @see java.sql.ResultSet
      */
     public boolean first() {
@@ -141,6 +170,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the array.
+     *
+     * @param columnIndex the column index
+     * @return the array
      * @see java.sql.ResultSet
      */
     public Array getArray(int columnIndex) {
@@ -152,6 +185,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the array.
+     *
+     * @param columnLabel the column label
+     * @return the array
      * @see java.sql.ResultSet
      */
     public Array getArray(String columnLabel) {
@@ -163,6 +200,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the ascii stream.
+     *
+     * @param columnIndex the column index
+     * @return the ascii stream
      * @see java.sql.ResultSet
      */
     public InputStream getAsciiStream(int columnIndex) {
@@ -174,6 +215,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the ascii stream.
+     *
+     * @param columnLabel the column label
+     * @return the ascii stream
      * @see java.sql.ResultSet
      */
     public InputStream getAsciiStream(String columnLabel) {
@@ -185,6 +230,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the big decimal.
+     *
+     * @param columnIndex the column index
+     * @return the big decimal
      * @see java.sql.ResultSet
      */
     public BigDecimal getBigDecimal(int columnIndex) {
@@ -196,6 +245,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the big decimal.
+     *
+     * @param columnLabel the column label
+     * @return the big decimal
      * @see java.sql.ResultSet
      */
     public BigDecimal getBigDecimal(String columnLabel) {
@@ -207,6 +260,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the big decimal.
+     *
+     * @param columnIndex the column index
+     * @param scale       the scale
+     * @return the big decimal
      * @see java.sql.ResultSet
      * @deprecated
      */
@@ -220,6 +278,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the big decimal.
+     *
+     * @param columnLabel the column label
+     * @param scale       the scale
+     * @return the big decimal
      * @see java.sql.ResultSet
      * @deprecated
      */
@@ -233,6 +296,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the binary stream.
+     *
+     * @param columnIndex the column index
+     * @return the binary stream
      * @see java.sql.ResultSet
      */
     public InputStream getBinaryStream(int columnIndex) {
@@ -244,6 +311,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the binary stream.
+     *
+     * @param columnLabel the column label
+     * @return the binary stream
      * @see java.sql.ResultSet
      */
     public InputStream getBinaryStream(String columnLabel) {
@@ -255,6 +326,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the blob.
+     *
+     * @param columnIndex the column index
+     * @return the blob
      * @see java.sql.ResultSet
      */
     public Blob getBlob(int columnIndex) {
@@ -266,6 +341,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the blob.
+     *
+     * @param columnLabel the column label
+     * @return the blob
      * @see java.sql.ResultSet
      */
     public Blob getBlob(String columnLabel) {
@@ -277,6 +356,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the boolean.
+     *
+     * @param columnIndex the column index
+     * @return the boolean
      * @see java.sql.ResultSet
      */
     public boolean getBoolean(int columnIndex) {
@@ -288,6 +371,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the boolean.
+     *
+     * @param columnLabel the column label
+     * @return the boolean
      * @see java.sql.ResultSet
      */
     public boolean getBoolean(String columnLabel) {
@@ -299,6 +386,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the byte.
+     *
+     * @param columnIndex the column index
+     * @return the byte
      * @see java.sql.ResultSet
      */
     public byte getByte(int columnIndex) {
@@ -310,6 +401,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the byte.
+     *
+     * @param columnLabel the column label
+     * @return the byte
      * @see java.sql.ResultSet
      */
     public byte getByte(String columnLabel) {
@@ -321,6 +416,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the bytes.
+     *
+     * @param columnIndex the column index
+     * @return the bytes
      * @see java.sql.ResultSet
      */
     public byte[] getBytes(int columnIndex) {
@@ -332,6 +431,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the bytes.
+     *
+     * @param columnLabel the column label
+     * @return the bytes
      * @see java.sql.ResultSet
      */
     public byte[] getBytes(String columnLabel) {
@@ -343,6 +446,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the character stream.
+     *
+     * @param columnIndex the column index
+     * @return the character stream
      * @see java.sql.ResultSet
      */
     public Reader getCharacterStream(int columnIndex) {
@@ -354,6 +461,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the character stream.
+     *
+     * @param columnLabel the column label
+     * @return the character stream
      * @see java.sql.ResultSet
      */
     public Reader getCharacterStream(String columnLabel) {
@@ -365,6 +476,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the clob.
+     *
+     * @param columnIndex the column index
+     * @return the clob
      * @see java.sql.ResultSet
      */
     public Clob getClob(int columnIndex) {
@@ -376,6 +491,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the clob.
+     *
+     * @param columnLabel the column label
+     * @return the clob
      * @see java.sql.ResultSet
      */
     public Clob getClob(String columnLabel) {
@@ -387,6 +506,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the concurrency.
+     *
+     * @return the concurrency
      * @see java.sql.ResultSet
      */
     public int getConcurrency() {
@@ -398,6 +520,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the cursor name.
+     *
+     * @return the cursor name
      * @see java.sql.ResultSet
      */
     public String getCursorName() {
@@ -409,6 +534,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the date.
+     *
+     * @param columnIndex the column index
+     * @return the date
      * @see java.sql.ResultSet
      */
     public Date getDate(int columnIndex) {
@@ -420,6 +549,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the date.
+     *
+     * @param columnLabel the column label
+     * @return the date
      * @see java.sql.ResultSet
      */
     public Date getDate(String columnLabel) {
@@ -431,6 +564,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the date.
+     *
+     * @param columnIndex the column index
+     * @param cal         the cal
+     * @return the date
      * @see java.sql.ResultSet
      */
     public Date getDate(int columnIndex, Calendar cal) {
@@ -442,6 +580,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the date.
+     *
+     * @param columnLabel the column label
+     * @param cal         the cal
+     * @return the date
      * @see java.sql.ResultSet
      */
     public Date getDate(String columnLabel, Calendar cal) {
@@ -453,6 +596,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the double.
+     *
+     * @param columnIndex the column index
+     * @return the double
      * @see java.sql.ResultSet
      */
     public double getDouble(int columnIndex) {
@@ -464,6 +611,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the double.
+     *
+     * @param columnLabel the column label
+     * @return the double
      * @see java.sql.ResultSet
      */
     public double getDouble(String columnLabel) {
@@ -475,6 +626,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the fetch direction.
+     *
+     * @return the fetch direction
      * @see java.sql.ResultSet
      */
     public int getFetchDirection() {
@@ -486,6 +640,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the fetch size.
+     *
+     * @return the fetch size
      * @see java.sql.ResultSet
      */
     public int getFetchSize() {
@@ -497,6 +654,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the float.
+     *
+     * @param columnIndex the column index
+     * @return the float
      * @see java.sql.ResultSet
      */
     public float getFloat(int columnIndex) {
@@ -508,6 +669,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the float.
+     *
+     * @param columnLabel the column label
+     * @return the float
      * @see java.sql.ResultSet
      */
     public float getFloat(String columnLabel) {
@@ -519,6 +684,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the holdability.
+     *
+     * @return the holdability
      * @see java.sql.ResultSet
      */
     public int getHoldability() {
@@ -530,6 +698,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the int.
+     *
+     * @param columnIndex the column index
+     * @return the int
      * @see java.sql.ResultSet
      */
     public int getInt(int columnIndex) {
@@ -541,6 +713,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the int.
+     *
+     * @param columnLabel the column label
+     * @return the int
      * @see java.sql.ResultSet
      */
     public int getInt(String columnLabel) {
@@ -552,6 +728,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the long.
+     *
+     * @param columnIndex the column index
+     * @return the long
      * @see java.sql.ResultSet
      */
     public long getLong(int columnIndex) {
@@ -563,6 +743,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the long.
+     *
+     * @param columnLabel the column label
+     * @return the long
      * @see java.sql.ResultSet
      */
     public long getLong(String columnLabel) {
@@ -574,6 +758,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the meta data.
+     *
+     * @return the meta data
      * @see java.sql.ResultSet
      */
     public ResultSetMetaData getMetaData() {
@@ -585,6 +772,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the n character stream.
+     *
+     * @param columnIndex the column index
+     * @return the n character stream
      * @see java.sql.ResultSet
      */
     public Reader getNCharacterStream(int columnIndex) {
@@ -596,6 +787,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the n character stream.
+     *
+     * @param columnLabel the column label
+     * @return the n character stream
      * @see java.sql.ResultSet
      */
     public Reader getNCharacterStream(String columnLabel) {
@@ -607,6 +802,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the n clob.
+     *
+     * @param columnIndex the column index
+     * @return the n clob
      * @see java.sql.ResultSet
      */
     public NClob getNClob(int columnIndex) {
@@ -618,6 +817,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the n clob.
+     *
+     * @param columnLabel the column label
+     * @return the n clob
      * @see java.sql.ResultSet
      */
     public NClob getNClob(String columnLabel) {
@@ -629,6 +832,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the n string.
+     *
+     * @param columnIndex the column index
+     * @return the n string
      * @see java.sql.ResultSet
      */
     public String getNString(int columnIndex) {
@@ -640,6 +847,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the n string.
+     *
+     * @param columnLabel the column label
+     * @return the n string
      * @see java.sql.ResultSet
      */
     public String getNString(String columnLabel) {
@@ -651,6 +862,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the object.
+     *
+     * @param columnIndex the column index
+     * @return the object
      * @see java.sql.ResultSet
      */
     public Object getObject(int columnIndex) {
@@ -662,6 +877,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the object.
+     *
+     * @param columnLabel the column label
+     * @return the object
      * @see java.sql.ResultSet
      */
     public Object getObject(String columnLabel) {
@@ -673,6 +892,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the object.
+     *
+     * @param columnIndex the column index
+     * @param map         the map
+     * @return the object
      * @see java.sql.ResultSet
      */
     public Object getObject(int columnIndex, Map<String, Class<?>> map) {
@@ -684,6 +908,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the object.
+     *
+     * @param columnLabel the column label
+     * @param map         the map
+     * @return the object
      * @see java.sql.ResultSet
      */
     public Object getObject(String columnLabel, Map<String, Class<?>> map) {
@@ -695,6 +924,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the ref.
+     *
+     * @param columnIndex the column index
+     * @return the ref
      * @see java.sql.ResultSet
      */
     public Ref getRef(int columnIndex) {
@@ -706,6 +939,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the ref.
+     *
+     * @param columnLabel the column label
+     * @return the ref
      * @see java.sql.ResultSet
      */
     public Ref getRef(String columnLabel) {
@@ -717,6 +954,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the row.
+     *
+     * @return the row
      * @see java.sql.ResultSet
      */
     public int getRow() {
@@ -728,6 +968,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the row id.
+     *
+     * @param columnIndex the column index
+     * @return the row id
      * @see java.sql.ResultSet
      */
     public RowId getRowId(int columnIndex) {
@@ -739,6 +983,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the row id.
+     *
+     * @param columnLabel the column label
+     * @return the row id
      * @see java.sql.ResultSet
      */
     public RowId getRowId(String columnLabel) {
@@ -750,6 +998,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the sqlxml.
+     *
+     * @param columnIndex the column index
+     * @return the sqlxml
      * @see java.sql.ResultSet
      */
     public SQLXML getSQLXML(int columnIndex) {
@@ -761,6 +1013,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the sqlxml.
+     *
+     * @param columnLabel the column label
+     * @return the sqlxml
      * @see java.sql.ResultSet
      */
     public SQLXML getSQLXML(String columnLabel) {
@@ -772,6 +1028,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the short.
+     *
+     * @param columnIndex the column index
+     * @return the short
      * @see java.sql.ResultSet
      */
     public short getShort(int columnIndex) {
@@ -783,6 +1043,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the short.
+     *
+     * @param columnLabel the column label
+     * @return the short
      * @see java.sql.ResultSet
      */
     public short getShort(String columnLabel) {
@@ -794,6 +1058,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the statement.
+     *
+     * @return the statement
      * @see java.sql.ResultSet
      */
     public Statement getStatement() {
@@ -805,6 +1072,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the string.
+     *
+     * @param columnIndex the column index
+     * @return the string
      * @see java.sql.ResultSet
      */
     public String getString(int columnIndex) {
@@ -816,6 +1087,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the string.
+     *
+     * @param columnLabel the column label
+     * @return the string
      * @see java.sql.ResultSet
      */
     public String getString(String columnLabel) {
@@ -827,6 +1102,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the time.
+     *
+     * @param columnIndex the column index
+     * @return the time
      * @see java.sql.ResultSet
      */
     public Time getTime(int columnIndex) {
@@ -838,6 +1117,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the time.
+     *
+     * @param columnLabel the column label
+     * @return the time
      * @see java.sql.ResultSet
      */
     public Time getTime(String columnLabel) {
@@ -849,6 +1132,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the time.
+     *
+     * @param columnIndex the column index
+     * @param cal         the cal
+     * @return the time
      * @see java.sql.ResultSet
      */
     public Time getTime(int columnIndex, Calendar cal) {
@@ -860,6 +1148,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the time.
+     *
+     * @param columnLabel the column label
+     * @param cal         the cal
+     * @return the time
      * @see java.sql.ResultSet
      */
     public Time getTime(String columnLabel, Calendar cal) {
@@ -871,6 +1164,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the timestamp.
+     *
+     * @param columnIndex the column index
+     * @return the timestamp
      * @see java.sql.ResultSet
      */
     public Timestamp getTimestamp(int columnIndex) {
@@ -882,6 +1179,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the timestamp.
+     *
+     * @param columnLabel the column label
+     * @return the timestamp
      * @see java.sql.ResultSet
      */
     public Timestamp getTimestamp(String columnLabel) {
@@ -893,6 +1194,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the timestamp.
+     *
+     * @param columnIndex the column index
+     * @param cal         the cal
+     * @return the timestamp
      * @see java.sql.ResultSet
      */
     public Timestamp getTimestamp(int columnIndex, Calendar cal) {
@@ -904,6 +1210,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the timestamp.
+     *
+     * @param columnLabel the column label
+     * @param cal         the cal
+     * @return the timestamp
      * @see java.sql.ResultSet
      */
     public Timestamp getTimestamp(String columnLabel, Calendar cal) {
@@ -915,6 +1226,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the type.
+     *
+     * @return the type
      * @see java.sql.ResultSet
      */
     public int getType() {
@@ -926,6 +1240,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the url.
+     *
+     * @param columnIndex the column index
+     * @return the url
      * @see java.sql.ResultSet
      */
     public URL getURL(int columnIndex) {
@@ -937,6 +1255,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the url.
+     *
+     * @param columnLabel the column label
+     * @return the url
      * @see java.sql.ResultSet
      */
     public URL getURL(String columnLabel) {
@@ -948,6 +1270,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the unicode stream.
+     *
+     * @param columnIndex the column index
+     * @return the unicode stream
      * @see java.sql.ResultSet
      * @deprecated
      */
@@ -961,6 +1287,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the unicode stream.
+     *
+     * @param columnLabel the column label
+     * @return the unicode stream
      * @see java.sql.ResultSet
      * @deprecated
      */
@@ -974,6 +1304,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the warnings.
+     *
+     * @return the warnings
      * @see java.sql.ResultSet
      */
     public SQLWarning getWarnings() {
@@ -985,6 +1318,8 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Insert row.
+     *
      * @see java.sql.ResultSet
      */
     public void insertRow() {
@@ -996,6 +1331,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Checks if is after last.
+     *
+     * @return true, if is after last
      * @see java.sql.ResultSet
      */
     public boolean isAfterLast() {
@@ -1007,6 +1345,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Checks if is before first.
+     *
+     * @return true, if is before first
      * @see java.sql.ResultSet
      */
     public boolean isBeforeFirst() {
@@ -1018,6 +1359,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Checks if is closed.
+     *
+     * @return true, if is closed
      * @see java.sql.ResultSet
      */
     public boolean isClosed() {
@@ -1029,6 +1373,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Checks if is first.
+     *
+     * @return true, if is first
      * @see java.sql.ResultSet
      */
     public boolean isFirst() {
@@ -1040,6 +1387,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Checks if is last.
+     *
+     * @return true, if is last
      * @see java.sql.ResultSet
      */
     public boolean isLast() {
@@ -1051,6 +1401,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Last.
+     *
+     * @return true, if successful
      * @see java.sql.ResultSet
      */
     public boolean last() {
@@ -1062,6 +1415,8 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Move to current row.
+     *
      * @see java.sql.ResultSet
      */
     public void moveToCurrentRow() {
@@ -1073,6 +1428,8 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Move to insert row.
+     *
      * @see java.sql.ResultSet
      */
     public void moveToInsertRow() {
@@ -1084,6 +1441,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Next.
+     *
+     * @return true, if successful
      * @see java.sql.ResultSet
      */
     public boolean next() {
@@ -1095,6 +1455,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Previous.
+     *
+     * @return true, if successful
      * @see java.sql.ResultSet
      */
     public boolean previous() {
@@ -1106,6 +1469,8 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Refresh row.
+     *
      * @see java.sql.ResultSet
      */
     public void refreshRow() {
@@ -1117,6 +1482,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Relative.
+     *
+     * @param rows the rows
+     * @return true, if successful
      * @see java.sql.ResultSet
      */
     public boolean relative(int rows) {
@@ -1128,6 +1497,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Row deleted.
+     *
+     * @return true, if successful
      * @see java.sql.ResultSet
      */
     public boolean rowDeleted() {
@@ -1139,6 +1511,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Row inserted.
+     *
+     * @return true, if successful
      * @see java.sql.ResultSet
      */
     public boolean rowInserted() {
@@ -1150,6 +1525,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Row updated.
+     *
+     * @return true, if successful
      * @see java.sql.ResultSet
      */
     public boolean rowUpdated() {
@@ -1161,6 +1539,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the fetch direction.
+     *
+     * @param direction the new fetch direction
      * @see java.sql.ResultSet
      */
     public void setFetchDirection(int direction) {
@@ -1172,6 +1553,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Sets the fetch size.
+     *
+     * @param rows the new fetch size
      * @see java.sql.ResultSet
      */
     public void setFetchSize(int rows) {
@@ -1183,6 +1567,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update array.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateArray(int columnIndex, Array x) {
@@ -1194,6 +1582,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update array.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateArray(String columnLabel, Array x) {
@@ -1205,6 +1597,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update ascii stream.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateAsciiStream(int columnIndex, InputStream x) {
@@ -1216,6 +1612,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update ascii stream.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateAsciiStream(String columnLabel, InputStream x) {
@@ -1227,6 +1627,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update ascii stream.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateAsciiStream(int columnIndex, InputStream x, int length) {
@@ -1238,6 +1643,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update ascii stream.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateAsciiStream(String columnLabel, InputStream x, int length) {
@@ -1249,6 +1659,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update ascii stream.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateAsciiStream(int columnIndex, InputStream x, long length) {
@@ -1260,6 +1675,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update ascii stream.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateAsciiStream(String columnLabel, InputStream x, long length) {
@@ -1271,6 +1691,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update big decimal.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateBigDecimal(int columnIndex, BigDecimal x) {
@@ -1282,6 +1706,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update big decimal.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateBigDecimal(String columnLabel, BigDecimal x) {
@@ -1293,6 +1721,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update binary stream.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateBinaryStream(int columnIndex, InputStream x) {
@@ -1304,6 +1736,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update binary stream.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateBinaryStream(String columnLabel, InputStream x) {
@@ -1315,6 +1751,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update binary stream.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateBinaryStream(int columnIndex, InputStream x, int length) {
@@ -1326,6 +1767,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update binary stream.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateBinaryStream(String columnLabel, InputStream x, int length) {
@@ -1337,6 +1783,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update binary stream.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateBinaryStream(int columnIndex, InputStream x, long length) {
@@ -1348,6 +1799,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update binary stream.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateBinaryStream(String columnLabel, InputStream x, long length) {
@@ -1359,6 +1815,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update blob.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateBlob(int columnIndex, Blob x) {
@@ -1370,6 +1830,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update blob.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateBlob(String columnLabel, Blob x) {
@@ -1381,6 +1845,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update blob.
+     *
+     * @param columnIndex the column index
+     * @param inputStream the input stream
      * @see java.sql.ResultSet
      */
     public void updateBlob(int columnIndex, InputStream inputStream) {
@@ -1392,6 +1860,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update blob.
+     *
+     * @param columnLabel the column label
+     * @param inputStream the input stream
      * @see java.sql.ResultSet
      */
     public void updateBlob(String columnLabel, InputStream inputStream) {
@@ -1403,6 +1875,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update blob.
+     *
+     * @param columnIndex the column index
+     * @param inputStream the input stream
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateBlob(int columnIndex, InputStream inputStream, long length) {
@@ -1414,6 +1891,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update blob.
+     *
+     * @param columnLabel the column label
+     * @param inputStream the input stream
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateBlob(String columnLabel, InputStream inputStream, long length) {
@@ -1425,6 +1907,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update boolean.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateBoolean(int columnIndex, boolean x) {
@@ -1436,6 +1922,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update boolean.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateBoolean(String columnLabel, boolean x) {
@@ -1447,6 +1937,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update byte.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateByte(int columnIndex, byte x) {
@@ -1458,6 +1952,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update byte.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateByte(String columnLabel, byte x) {
@@ -1469,6 +1967,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update bytes.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateBytes(int columnIndex, byte[] x) {
@@ -1480,6 +1982,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update bytes.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateBytes(String columnLabel, byte[] x) {
@@ -1491,6 +1997,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update character stream.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateCharacterStream(int columnIndex, Reader x) {
@@ -1502,6 +2012,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update character stream.
+     *
+     * @param columnLabel the column label
+     * @param reader      the reader
      * @see java.sql.ResultSet
      */
     public void updateCharacterStream(String columnLabel, Reader reader) {
@@ -1513,6 +2027,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update character stream.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateCharacterStream(int columnIndex, Reader x, int length) {
@@ -1524,6 +2043,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update character stream.
+     *
+     * @param columnLabel the column label
+     * @param reader      the reader
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateCharacterStream(String columnLabel, Reader reader, int length) {
@@ -1535,6 +2059,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update character stream.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateCharacterStream(int columnIndex, Reader x, long length) {
@@ -1546,6 +2075,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update character stream.
+     *
+     * @param columnLabel the column label
+     * @param reader      the reader
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateCharacterStream(String columnLabel, Reader reader, long length) {
@@ -1557,6 +2091,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update clob.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateClob(int columnIndex, Clob x) {
@@ -1568,6 +2106,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update clob.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateClob(String columnLabel, Clob x) {
@@ -1579,6 +2121,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update clob.
+     *
+     * @param columnIndex the column index
+     * @param reader      the reader
      * @see java.sql.ResultSet
      */
     public void updateClob(int columnIndex, Reader reader) {
@@ -1590,6 +2136,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update clob.
+     *
+     * @param columnLabel the column label
+     * @param reader      the reader
      * @see java.sql.ResultSet
      */
     public void updateClob(String columnLabel, Reader reader) {
@@ -1601,6 +2151,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update clob.
+     *
+     * @param columnIndex the column index
+     * @param reader      the reader
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateClob(int columnIndex, Reader reader, long length) {
@@ -1612,6 +2167,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update clob.
+     *
+     * @param columnLabel the column label
+     * @param reader      the reader
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateClob(String columnLabel, Reader reader, long length) {
@@ -1623,6 +2183,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update date.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateDate(int columnIndex, Date x) {
@@ -1634,6 +2198,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update date.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateDate(String columnLabel, Date x) {
@@ -1645,6 +2213,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update double.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateDouble(int columnIndex, double x) {
@@ -1656,6 +2228,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update double.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateDouble(String columnLabel, double x) {
@@ -1667,6 +2243,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update float.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateFloat(int columnIndex, float x) {
@@ -1678,6 +2258,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update float.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateFloat(String columnLabel, float x) {
@@ -1689,6 +2273,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update int.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateInt(int columnIndex, int x) {
@@ -1700,6 +2288,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update int.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateInt(String columnLabel, int x) {
@@ -1711,6 +2303,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update long.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateLong(int columnIndex, long x) {
@@ -1722,6 +2318,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update long.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateLong(String columnLabel, long x) {
@@ -1733,6 +2333,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update N character stream.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateNCharacterStream(int columnIndex, Reader x) {
@@ -1744,6 +2348,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update N character stream.
+     *
+     * @param columnLabel the column label
+     * @param reader      the reader
      * @see java.sql.ResultSet
      */
     public void updateNCharacterStream(String columnLabel, Reader reader) {
@@ -1755,6 +2363,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update N character stream.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateNCharacterStream(int columnIndex, Reader x, long length) {
@@ -1766,6 +2379,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update N character stream.
+     *
+     * @param columnLabel the column label
+     * @param reader      the reader
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateNCharacterStream(String columnLabel, Reader reader, long length) {
@@ -1777,6 +2395,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update N clob.
+     *
+     * @param columnIndex the column index
+     * @param nClob       the n clob
      * @see java.sql.ResultSet
      */
     public void updateNClob(int columnIndex, NClob nClob) {
@@ -1788,6 +2410,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update N clob.
+     *
+     * @param columnLabel the column label
+     * @param nClob       the n clob
      * @see java.sql.ResultSet
      */
     public void updateNClob(String columnLabel, NClob nClob) {
@@ -1799,6 +2425,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update N clob.
+     *
+     * @param columnIndex the column index
+     * @param reader      the reader
      * @see java.sql.ResultSet
      */
     public void updateNClob(int columnIndex, Reader reader) {
@@ -1810,6 +2440,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update N clob.
+     *
+     * @param columnLabel the column label
+     * @param reader      the reader
      * @see java.sql.ResultSet
      */
     public void updateNClob(String columnLabel, Reader reader) {
@@ -1821,6 +2455,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update N clob.
+     *
+     * @param columnIndex the column index
+     * @param reader      the reader
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateNClob(int columnIndex, Reader reader, long length) {
@@ -1832,6 +2471,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update N clob.
+     *
+     * @param columnLabel the column label
+     * @param reader      the reader
+     * @param length      the length
      * @see java.sql.ResultSet
      */
     public void updateNClob(String columnLabel, Reader reader, long length) {
@@ -1843,6 +2487,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update N string.
+     *
+     * @param columnIndex the column index
+     * @param nString     the n string
      * @see java.sql.ResultSet
      */
     public void updateNString(int columnIndex, String nString) {
@@ -1854,6 +2502,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update N string.
+     *
+     * @param columnLabel the column label
+     * @param nString     the n string
      * @see java.sql.ResultSet
      */
     public void updateNString(String columnLabel, String nString) {
@@ -1865,6 +2517,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update null.
+     *
+     * @param columnIndex the column index
      * @see java.sql.ResultSet
      */
     public void updateNull(int columnIndex) {
@@ -1876,6 +2531,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update null.
+     *
+     * @param columnLabel the column label
      * @see java.sql.ResultSet
      */
     public void updateNull(String columnLabel) {
@@ -1887,6 +2545,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update object.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateObject(int columnIndex, Object x) {
@@ -1898,6 +2560,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update object.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateObject(String columnLabel, Object x) {
@@ -1909,6 +2575,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update object.
+     *
+     * @param columnIndex   the column index
+     * @param x             the x
+     * @param scaleOrLength the scale or length
      * @see java.sql.ResultSet
      */
     public void updateObject(int columnIndex, Object x, int scaleOrLength) {
@@ -1920,6 +2591,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update object.
+     *
+     * @param columnLabel   the column label
+     * @param x             the x
+     * @param scaleOrLength the scale or length
      * @see java.sql.ResultSet
      */
     public void updateObject(String columnLabel, Object x, int scaleOrLength) {
@@ -1931,6 +2607,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update ref.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateRef(int columnIndex, Ref x) {
@@ -1942,6 +2622,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update ref.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateRef(String columnLabel, Ref x) {
@@ -1953,6 +2637,8 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update row.
+     *
      * @see java.sql.ResultSet
      */
     public void updateRow() {
@@ -1964,6 +2650,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update row id.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateRowId(int columnIndex, RowId x) {
@@ -1975,6 +2665,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update row id.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateRowId(String columnLabel, RowId x) {
@@ -1986,6 +2680,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update SQLXML.
+     *
+     * @param columnIndex the column index
+     * @param xmlObject   the xml object
      * @see java.sql.ResultSet
      */
     public void updateSQLXML(int columnIndex, SQLXML xmlObject) {
@@ -1997,6 +2695,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update SQLXML.
+     *
+     * @param columnLabel the column label
+     * @param xmlObject   the xml object
      * @see java.sql.ResultSet
      */
     public void updateSQLXML(String columnLabel, SQLXML xmlObject) {
@@ -2008,6 +2710,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update short.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateShort(int columnIndex, short x) {
@@ -2019,6 +2725,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update short.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateShort(String columnLabel, short x) {
@@ -2030,6 +2740,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update string.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateString(int columnIndex, String x) {
@@ -2041,6 +2755,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update string.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateString(String columnLabel, String x) {
@@ -2052,6 +2770,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update time.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateTime(int columnIndex, Time x) {
@@ -2063,6 +2785,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update time.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateTime(String columnLabel, Time x) {
@@ -2074,6 +2800,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update timestamp.
+     *
+     * @param columnIndex the column index
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateTimestamp(int columnIndex, Timestamp x) {
@@ -2085,6 +2815,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Update timestamp.
+     *
+     * @param columnLabel the column label
+     * @param x           the x
      * @see java.sql.ResultSet
      */
     public void updateTimestamp(String columnLabel, Timestamp x) {
@@ -2096,6 +2830,9 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Was null.
+     *
+     * @return true, if successful
      * @see java.sql.ResultSet
      */
     public boolean wasNull() {
@@ -2107,6 +2844,10 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Checks if is wrapper for.
+     *
+     * @param iface the iface
+     * @return true, if is wrapper for
      * @see java.sql.ResultSet
      */
     public boolean isWrapperFor(Class<?> iface) {
@@ -2118,6 +2859,11 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Unwrap.
+     *
+     * @param <T>   the generic type
+     * @param iface the iface
+     * @return the t
      * @see java.sql.ResultSet
      */
     public <T> T unwrap(Class<T> iface) {
@@ -2129,6 +2875,8 @@ public class ResultSetWrapper implements AutoCloseable {
     }
 
     /**
+     * Gets the result set.
+     *
      * @return 返回resultSet
      */
     public ResultSet getResultSet() {

@@ -1,0 +1,49 @@
+author: "zhongj"
+packageName: "cn.featherfly.common.repository.builder"
+exception:
+  name: "BuilderException"
+  packageName: "cn.featherfly.common.repository.builder"
+  descp: null
+  author: "zhongj"
+code:
+  name: "BuilderExceptionCode"
+  packageName: "cn.featherfly.common.repository.builder"
+  descp: null
+  author: "zhongj"
+  module: "BUILDER"
+  codes:
+  - num: 10000
+    key: "query_operator_null"
+    name: "QueryOperatorNull"
+    messages:
+      zh: "queryOperator不能为空"
+      en: "queryOperator can not be null"
+  - num: 10001
+    key: "no_condition_behind"
+    name: "NoConditionBehind"
+    messages:
+      zh: "{0}后没有跟条件表达式"
+      en: "there is no condition expresstion behind {0}"
+    argus:
+    - type: "java.lang.String"
+      name: "operatorName"
+  - num: 10003
+    key: "next_to_same_condition"
+    name: "NextToSameCondition"
+    messages:
+      zh: "语法错误，连续相同类型的表达式：{0}"
+      en: "next condition is same as current condition：{0}"
+    argus:
+    - type: "java.lang.String"
+      name: "conditionTypeName"
+  - num: 10004
+    key: "index_gt_name_alias_size"
+    name: "IndexGtNameAliasSize"
+    messages:
+      zh: "索引{0}大于名称别名数量{1}, index {0} > name alias size {1}"
+      en: "index {0} > name alias size {1}"
+    argus:
+    - type: "java.lang.Integer"
+      name: "index"
+    - type: "java.lang.Integer"
+      name: "size"

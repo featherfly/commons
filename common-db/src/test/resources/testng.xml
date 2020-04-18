@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Hammer SQLDB Test Suite" parallel="tests"
+	thread-count="1">
+	<parameter name="dataBase" value="mysql" />
+	<!-- <parameter name="dataBase" value="sqllite" /> -->
+	<!-- <parameter name="dataBase" value="postgresql" /> -->
+	<test name="builder test">
+		<packages>
+			<package name="cn.featherfly.common.db.builder.*" />
+		</packages>
+	</test>
+</suite>

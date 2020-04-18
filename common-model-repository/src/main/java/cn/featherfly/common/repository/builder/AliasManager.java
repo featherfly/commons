@@ -54,7 +54,7 @@ public class AliasManager {
 
     public String getAlias(int index) {
         if (index > nameAlias.size()) {
-            throw new BuilderException(index + " > name alias size " + nameAlias.size());
+            throw new BuilderException(BuilderExceptionCode.createIndexGtNameAliasSizeCode(index, nameAlias.size()));
         }
         int size = 0;
         for (Entry<String, String> entry : nameAlias.entrySet()) {

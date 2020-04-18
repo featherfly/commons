@@ -4,4 +4,13 @@ ext {
 dependencies {
     api project(":common-core")
     api group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: '1.0.2.Final'
+    
+    implementation group: 'cn.featherfly.common', name: 'common-gentool', version: '0.1.5'
+    implementation 'log4j:log4j:1.2.17'
+}
+
+task genCode(type: JavaExec, dependsOn: 'classes') {
+    classpath = sourceSets.main.runtimeClasspath
+    main = "cn.featherfly.common.gentool.exception.GeneratorRunner"
+    args = ['src/gen/BuilderException.yaml']
 }

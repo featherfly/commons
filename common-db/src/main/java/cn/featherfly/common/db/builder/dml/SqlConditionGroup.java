@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import cn.featherfly.common.db.builder.ConditionBuildUtils;
+import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.lang.StringUtils;
@@ -220,7 +220,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
      * {@inheritDoc}
      */
     @Override
-    public LogicBuilder parent() {
+    public LogicBuilder endGroup() {
         return parent;
     }
 
@@ -271,7 +271,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
         }
 
         for (String condition : availableConditions) {
-            ConditionBuildUtils.appendCondition(result, condition);
+            BuilderUtils.link(result, condition);
         }
         if (result.length() > 0 && parent != null) {
             return " ( " + result.toString() + " ) ";

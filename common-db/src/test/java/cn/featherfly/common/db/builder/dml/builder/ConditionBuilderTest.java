@@ -20,7 +20,7 @@ import cn.featherfly.common.repository.builder.dml.SortBuilder;
 
 /**
  * ConditionBuilderTest
- * 
+ *
  * @author 钟冀
  */
 @Test(groups = { "dml-test" })
@@ -86,13 +86,12 @@ public class ConditionBuilderTest {
     }
 
     @Test
-    void testSelectConditionBuilder() {
+    void testConditionBuilder() {
         ConditionBuilder cb = new SqlConditionGroup(Dialects.MYSQL, null);
         cb.eq("name", name).and().eq("pwd", pwd).and().group().eq("sex", sex).or().gt("age", age);
         System.out.println(cb.build());
         System.out.println(((SqlConditionGroup) cb).getParamValues());
         assertEquals("`name` = ? AND `pwd` = ? AND ( `sex` = ? OR `age` > ? )", cb.build());
-
         assertEquals(params, cb.getParamValue());
 
     }

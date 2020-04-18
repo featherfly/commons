@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import cn.featherfly.common.db.data.query.TableQuery;
 import cn.featherfly.common.repository.Query;
+import cn.featherfly.common.repository.builder.dml.ConditionBuilder;
 
 /**
  * <p>
@@ -114,15 +115,17 @@ public interface DataExportor {
      */
     void exportData(Writer writer, String... querySqls);
 
-    //	/**
-    //	 * <p>
-    //	 * 导出结果集
-    //	 * </p>
-    //	 * @param conditionBuilder 查询条件
-    //	 * @param tableName  表名称
-    //	 * @param writer writer
-    //	 */
-    //	void exportData(String tableName, ConditionBuilder conditionBuilder, Writer writer);
+    /**
+     * <p>
+     * 导出结果集
+     * </p>
+     * 
+     * @param conditionBuilder 查询条件
+     * @param tableName        表名称
+     * @param writer           writer
+     */
+    void exportData(String tableName, ConditionBuilder conditionBuilder, Writer writer);
+
     /**
      * <p>
      * 导出结果集

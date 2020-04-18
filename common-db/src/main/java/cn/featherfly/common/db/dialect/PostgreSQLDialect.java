@@ -8,6 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.SqlUtils;
+import cn.featherfly.common.db.builder.BuilderUtils;
+import cn.featherfly.common.db.metadata.Column;
+import cn.featherfly.common.db.metadata.Table;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.DateUtils;
@@ -168,5 +171,22 @@ public class PostgreSQLDialect extends AbstractDialect {
     @Override
     public String getWrapSign() {
         return "\"";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getPrimaryKeyDDL(Table table) {
+        StringBuilder result = new StringBuilder(Chars.PAREN_L);
+        for (Column column : table.getColumns()) {
+            if (column.isPrimaryKey()) {
+                result.append(wrapName(column.getName())).append(Chars.DOT);
+            }
+        }
+        result.deleteCharAt(result.length() - 1);
+        result.append(Chars.PAREN_R);
+        return BuilderUtils.link(getKeyword(Keywords.CONSTRAINT), wrapName(table.getName() + "_" + "pkey"),
+                getKeyword(Keywords.PRIMARY), getKeyword(Keywords.KEY), result.toString());
     }
 }

@@ -15,7 +15,6 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.JdbcException;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.lang.StringUtils;
@@ -175,7 +174,8 @@ public class DatabaseMetadataManager {
             }
             databaseMetadata = new DatabaseMetadata();
             DatabaseMetaData metaData = connection.getMetaData();
-            ResultSet rs = metaData.getTableTypes();
+            ResultSet rs = null;
+            //            rs = metaData.getTableTypes();
             // 得到表信息
             rs = metaData.getTables(dataBase, null, null, new String[] { TableType.TABLE.toString() });
             //            rs = metaData.getTables(dataBase, dataBase, null, new String[] { TableType.TABLE.toString() });
@@ -227,14 +227,23 @@ public class DatabaseMetadataManager {
                     columnMetadata.setRemark(rc.getString(remarks));
                     // 长度
                     columnMetadata.setSize(rc.getInt("COLUMN_SIZE"));
+                    // 小数位数
+                    columnMetadata.setDecimalDigits(rc.getInt("DECIMAL_DIGITS"));
                     // 默认值
                     columnMetadata.setDefaultValue(rc.getString("COLUMN_DEF"));
                     // 是否空
                     int nullable = rc.getInt("NULLABLE");
-                    if (Chars.ZERO == nullable) {
-                        columnMetadata.setNullable(false);
-                    } else {
+                    if (DatabaseMetaData.columnNullable == nullable) {
                         columnMetadata.setNullable(true);
+                    } else {
+                        columnMetadata.setNullable(false);
+                    }
+                    // 是否空
+                    String isAutoincrement = rc.getString("IS_AUTOINCREMENT ");
+                    if ("YES".equals(isAutoincrement)) {
+                        columnMetadata.setAutoincrement(true);
+                    } else {
+                        columnMetadata.setAutoincrement(false);
                     }
                     // 列的位置
                     columnMetadata.setColumnIndex(rc.getInt("ORDINAL_POSITION"));
@@ -242,6 +251,7 @@ public class DatabaseMetadataManager {
                     if (pkColumnNames.contains(columnMetadata.getName())) {
                         columnMetadata.setPrimaryKey(true);
                     }
+
                     tableMetadata.addColumn(columnMetadata);
                 }
                 rc.close();
@@ -254,6 +264,10 @@ public class DatabaseMetadataManager {
             }
             databasemetadataPool.put(dataBase, databaseMetadata);
             databaseMetadata.setName(dataBase);
+            databaseMetadata.setProductName(metaData.getDatabaseProductName());
+            databaseMetadata.setProductVersion(metaData.getDatabaseProductVersion());
+            databaseMetadata.setMajorVersion(metaData.getDatabaseMajorVersion());
+            databaseMetadata.setMinorVersion(metaData.getDatabaseMinorVersion());
             return databaseMetadata;
         } catch (SQLException e) {
             throw new JdbcException(e);

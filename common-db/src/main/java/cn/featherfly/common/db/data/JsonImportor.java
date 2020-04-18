@@ -19,22 +19,29 @@ import com.fasterxml.jackson.core.JsonToken;
 
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.data.RecordModel.ValueModel;
+import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.LangUtils;
 
 /**
  * <p>
  * 导出为JSON格式的数据导入
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class JsonImportor extends AbstractDataImportor {
 
+    /** The factory. */
     private JsonFactory factory;
 
     /**
+     * Instantiates a new json importor.
+     *
+     * @param dialect the dialect
      */
-    public JsonImportor() {
+    public JsonImportor(Dialect dialect) {
+        super(dialect);
         factory = new JsonFactory();
     }
 
@@ -75,9 +82,9 @@ public class JsonImportor extends AbstractDataImportor {
                 } else if (parser.getCurrentToken() == JsonToken.START_OBJECT) {
                     // TODO
                 } else if ("name".equals(parser.getCurrentName())) {
-                    // TODO 
+                    // TODO
                 } else if ("tables".equals(parser.getCurrentName())) {
-                    // TODO 
+                    // TODO
                 }
             }
             if (getTransactionPolicy() == TransactionPolicy.all) {
@@ -90,6 +97,13 @@ public class JsonImportor extends AbstractDataImportor {
         }
     }
 
+    /**
+     * Read table.
+     *
+     * @param parser the parser
+     * @param conn   the conn
+     * @throws Exception the exception
+     */
     private void readTable(JsonParser parser, Connection conn) throws Exception {
         //		System.out.println("readTable - name : " + parser.getCurrentName() + " " + parser.getCurrentToken());
         Statement statement = conn.createStatement();
@@ -115,6 +129,15 @@ public class JsonImportor extends AbstractDataImportor {
         }
     }
 
+    /**
+     * Read rows.
+     *
+     * @param parser    the parser
+     * @param statement the statement
+     * @param tableName the table name
+     * @param pkMapping the pk mapping
+     * @throws Exception the exception
+     */
     private void readRows(JsonParser parser, Statement statement, String tableName, String pkMapping) throws Exception {
         String[] pkMappings = pkMapping.split(",");
         StringBuilder selectSql = new StringBuilder();
@@ -138,6 +161,16 @@ public class JsonImportor extends AbstractDataImportor {
         }
     }
 
+    /**
+     * Read row.
+     *
+     * @param parser     the parser
+     * @param statement  the statement
+     * @param tableName  the table name
+     * @param pkMappings the pk mappings
+     * @param prep       the prep
+     * @throws Exception the exception
+     */
     private void readRow(JsonParser parser, Statement statement, String tableName, String[] pkMappings,
             PreparedStatement prep) throws Exception {
         //		System.out.println("readRow - name : " + parser.getCurrentName() + " " + parser.getCurrentToken());
@@ -198,6 +231,15 @@ public class JsonImportor extends AbstractDataImportor {
         }
     }
 
+    /**
+     * Update.
+     *
+     * @param columnsMap the columns map
+     * @param tableName  the table name
+     * @param statement  the statement
+     * @param pkMappings the pk mappings
+     * @throws SQLException the SQL exception
+     */
     private void update(Map<String, Map<String, String>> columnsMap, String tableName, Statement statement,
             String[] pkMappings) throws SQLException {
         StringBuilder updateSql = new StringBuilder();
@@ -263,6 +305,14 @@ public class JsonImportor extends AbstractDataImportor {
         statement.addBatch(updateSql.toString());
     }
 
+    /**
+     * Insert.
+     *
+     * @param columnsMap the columns map
+     * @param tableName  the table name
+     * @param statement  the statement
+     * @throws SQLException the SQL exception
+     */
     private void insert(Map<String, Map<String, String>> columnsMap, String tableName, Statement statement)
             throws SQLException {
         // 准备 recordModel

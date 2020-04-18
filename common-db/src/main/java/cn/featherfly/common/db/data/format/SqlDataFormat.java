@@ -14,7 +14,7 @@ import java.util.Map;
 import cn.featherfly.common.db.data.DataFormat;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.db.metadata.TableMetadata;
+import cn.featherfly.common.db.metadata.Table;
 import cn.featherfly.common.lang.DateUtils;
 
 /**
@@ -60,7 +60,7 @@ public class SqlDataFormat implements DataFormat {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws IOException
      */
     @Override
@@ -79,7 +79,7 @@ public class SqlDataFormat implements DataFormat {
      * {@inheritDoc}
      */
     @Override
-    public void writeTableStart(TableMetadata tableMetadata) throws Exception {
+    public void writeTableStart(Table tableMetadata) throws Exception {
         Date now = new Date();
         StringBuilder tableDescp = new StringBuilder();
         tableDescp.append("/*==============================================================*/\n").append("/*\t")
@@ -91,11 +91,11 @@ public class SqlDataFormat implements DataFormat {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @throws Exception
      */
     @Override
-    public void writeTableEnd(TableMetadata tableMetadata) throws Exception {
+    public void writeTableEnd(Table tableMetadata) throws Exception {
         Date now = new Date();
         StringBuilder tableDescp = new StringBuilder();
         tableDescp.append("/*--------------------------------------------------------------*/\n").append("/*\t")
@@ -109,7 +109,7 @@ public class SqlDataFormat implements DataFormat {
      * {@inheritDoc}
      */
     @Override
-    public void writeRow(TableMetadata tableMetadata, ResultSet res) throws Exception {
+    public void writeRow(Table tableMetadata, ResultSet res) throws Exception {
         ResultSetMetaData rsmd = res.getMetaData();
         int columnTotal = rsmd.getColumnCount();
         String tableName = tableMetadata.getName();
@@ -153,7 +153,7 @@ public class SqlDataFormat implements DataFormat {
     }
 
     // ********************************************************************
-    //	
+    //
     // ********************************************************************
 
     /**

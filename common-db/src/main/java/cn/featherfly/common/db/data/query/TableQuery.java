@@ -1,8 +1,16 @@
 
 package cn.featherfly.common.db.data.query;
 
+import cn.featherfly.common.db.builder.BuilderUtils;
+import cn.featherfly.common.db.builder.dml.SqlConditionGroup;
+import cn.featherfly.common.db.builder.dml.SqlSortBuilder;
+import cn.featherfly.common.db.dialect.Dialect;
+import cn.featherfly.common.db.dialect.Dialects;
+import cn.featherfly.common.db.dialect.Keywords;
 import cn.featherfly.common.lang.AssertIllegalArgument;
+import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.repository.Query;
+import cn.featherfly.common.repository.builder.dml.ConditionBuilder;
 
 /**
  * <p>
@@ -14,34 +22,38 @@ import cn.featherfly.common.repository.Query;
 public class TableQuery implements Query {
 
     /**
+     * @param dialect   dialect
      * @param tableName tableName
      */
-    public TableQuery(String tableName) {
-        //	    this(tableName, null)
-        AssertIllegalArgument.isNotEmpty(tableName, "tableName不能为空");
+    public TableQuery(Dialect dialect, String tableName) {
+        this(dialect, tableName, null);
+    }
+
+    /**
+     * @param dialect          dialect
+     * @param tableName        tableName
+     * @param conditionBuilder ConditionBuilder
+     */
+    public TableQuery(Dialect dialect, String tableName, ConditionBuilder conditionBuilder) {
+        AssertIllegalArgument.isNotEmpty(tableName, "tableName");
         StringBuilder sql = new StringBuilder();
-        sql.append("select * from ").append(tableName);
+        sql.append("select * from ").append(dialect.buildTableSql(tableName));
+        if (conditionBuilder != null) {
+            String condition = conditionBuilder.build();
+            if (LangUtils.isNotEmpty(condition)) {
+                BuilderUtils.link(sql, dialect.getKeyword(Keywords.WHERE), condition);
+            }
+        }
         this.sql = sql.toString();
         this.tableName = tableName;
     }
-    //	/**
-    //	 * @param tableName tableName
-    //	 * @param conditionBuilder ConditionBuilder
-    //	 */
-    //	public TableQuery(String tableName, ConditionBuilder conditionBuilder){
-    //		AssertIllegalArgument.isNotEmpty(tableName, "tableName不能为空");
-    //		StringBuilder sql = new StringBuilder();
-    //		sql.append("select * from ").append(tableName);
-    //		if (conditionBuilder != null) {
-    //			conditionBuilder.setBuildWithWhere(true);
-    //			String condition = conditionBuilder.build();
-    //			if (condition != null) {
-    //				sql.append(" ").append(condition);
-    //			}
-    //		}
-    //		this.sql = sql.toString();
-    //		this.tableName = tableName;
-    //	}
+
+    public static void main(String[] args) {
+        ConditionBuilder builder = new SqlConditionGroup(Dialects.MYSQL, new SqlSortBuilder(Dialects.MYSQL));
+        builder.eq("name", "yufei").and().gt("age", 18);
+        TableQuery q = new TableQuery(Dialects.MYSQL, "user", builder);
+        System.out.println(q.sql);
+    }
 
     private String tableName;
 

@@ -14,7 +14,7 @@ import java.util.Map;
  *
  * @author zhongj
  */
-public class TableMetadata {
+public class TableMetadata implements Table {
 
     /**
      * @param databaseMetadata 数据库元数据
@@ -31,7 +31,8 @@ public class TableMetadata {
      * @param columnName 表名称
      * @return 列元数据对象
      */
-    public ColumnMetadata getColumn(String columnName) {
+    @Override
+    public Column getColumn(String columnName) {
         return columnMap.get(columnName.toUpperCase());
     }
 
@@ -42,7 +43,8 @@ public class TableMetadata {
      *
      * @return 所有列元数据对象的集合
      */
-    public Collection<ColumnMetadata> getColumns() {
+    @Override
+    public Collection<Column> getColumns() {
         return columnMap.values();
     }
 
@@ -53,7 +55,8 @@ public class TableMetadata {
      *
      * @return 所有列元数据对象的MAP
      */
-    public Map<String, ColumnMetadata> getColumnMap() {
+    @Override
+    public Map<String, Column> getColumnMap() {
         return columnMap;
     }
 
@@ -161,7 +164,7 @@ public class TableMetadata {
 
     private List<ColumnMetadata> primaryColumns = new ArrayList<>(1);
 
-    private Map<String, ColumnMetadata> columnMap = new HashMap<>(0);
+    private Map<String, Column> columnMap = new HashMap<>(0);
 
     /**
      * @return 返回databaseMetadata
@@ -173,6 +176,7 @@ public class TableMetadata {
     /**
      * @return 返回type
      */
+    @Override
     public String getType() {
         return type;
     }
@@ -180,13 +184,14 @@ public class TableMetadata {
     /**
      * @param type 设置type
      */
-    public void setType(String type) {
+    void setType(String type) {
         this.type = type;
     }
 
     /**
      * @return 返回name
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -194,13 +199,14 @@ public class TableMetadata {
     /**
      * @param name 设置name
      */
-    public void setName(String name) {
+    void setName(String name) {
         this.name = name;
     }
 
     /**
      * @return 返回remarks
      */
+    @Override
     public String getRemark() {
         return remark;
     }
@@ -208,13 +214,14 @@ public class TableMetadata {
     /**
      * @param remark 设置remarks
      */
-    public void setRemark(String remark) {
+    void setRemark(String remark) {
         this.remark = remark;
     }
 
     /**
      * @return 返回catalog
      */
+    @Override
     public String getCatalog() {
         return catalog;
     }
@@ -222,7 +229,7 @@ public class TableMetadata {
     /**
      * @param catalog 设置catalog
      */
-    public void setCatalog(String catalog) {
+    void setCatalog(String catalog) {
         this.catalog = catalog;
     }
 }

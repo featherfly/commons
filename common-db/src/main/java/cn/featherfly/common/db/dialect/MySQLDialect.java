@@ -6,7 +6,11 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.SqlUtils;
+import cn.featherfly.common.db.builder.BuilderUtils;
+import cn.featherfly.common.db.metadata.Column;
+import cn.featherfly.common.db.metadata.Table;
 import cn.featherfly.common.lang.DateUtils;
 import cn.featherfly.common.lang.LangUtils;
 
@@ -138,5 +142,27 @@ public class MySQLDialect extends AbstractDialect {
     @Override
     public String getFkCheck(boolean check) {
         return "SET FOREIGN_KEY_CHECKS=" + (check ? 1 : 0);
+    }
+
+    @Override
+    protected String getAutoIncrement(Column column) {
+        if (column.isAutoincrement()) {
+            return "AUTO_INCREMENT";
+        } else {
+            return "";
+        }
+    }
+
+    @Override
+    protected String getPrimaryKeyDDL(Table table) {
+        StringBuilder result = new StringBuilder(Chars.PAREN_L);
+        for (Column column : table.getColumns()) {
+            if (column.isPrimaryKey()) {
+                result.append(wrapName(column.getName())).append(Chars.DOT);
+            }
+        }
+        result.deleteCharAt(result.length() - 1);
+        result.append(Chars.PAREN_R);
+        return BuilderUtils.link(getKeyword(Keywords.PRIMARY), getKeyword(Keywords.KEY), result.toString());
     }
 }

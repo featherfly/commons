@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.SqlUtils;
+import cn.featherfly.common.db.metadata.Table;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.DateUtils;
@@ -182,5 +183,14 @@ public class OracleDialect extends AbstractDialect {
     @Override
     public String getWrapSign() {
         return "'";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getPrimaryKeyDDL(Table table) {
+        // FIXME 未实现
+        throw new UnsupportedException();
     }
 }

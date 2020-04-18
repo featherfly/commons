@@ -54,5 +54,16 @@ public enum Keywords {
     MAX,
     MIN,
     AVG,
-    DISTINCT;
+    DISTINCT,
+    DATABASE,
+    VIEW,
+    INDEX,
+    ALTER,
+    IF,
+    EXISTS,
+    COMMENT,
+    PRIMARY,
+    KEY,
+    CONSTRAINT,
+    DEFAULT;
 }

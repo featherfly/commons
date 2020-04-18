@@ -3,6 +3,10 @@ package cn.featherfly.common.db.dialect;
 import java.util.Map;
 
 import cn.featherfly.common.constant.Chars;
+import cn.featherfly.common.db.builder.BuilderUtils;
+import cn.featherfly.common.db.builder.model.TableElement;
+import cn.featherfly.common.db.metadata.Table;
+import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.repository.operate.AggregateFunction;
 import cn.featherfly.common.repository.operate.Function;
@@ -336,6 +340,16 @@ public interface Dialect {
     /**
      * build sql for table.
      *
+     * @param table table
+     * @return sql
+     */
+    default String buildTableSql(TableElement table) {
+        return buildTableSql(table.getName(), table.getAlias());
+    }
+
+    /**
+     * build sql for table.
+     *
      * @param tableName tableName
      * @return sql
      */
@@ -356,6 +370,200 @@ public interface Dialect {
             result = result + " " + tableAlias;
         }
         return result;
+    }
+
+    /**
+     * Builds the create data base sql.
+     *
+     * @param dataBaseName the data base name
+     * @return the string
+     */
+    default String buildCreateDataBaseSql(String dataBaseName) {
+        AssertIllegalArgument.isNotEmpty(dataBaseName, "dataBaseName");
+        return BuilderUtils.link(getKeyword(Keywords.CREATE), getKeyword(Keywords.DATABASE), wrapName(dataBaseName));
+    }
+
+    /**
+     * Builds the drop data base sql.
+     *
+     * @param dataBaseName the data base name
+     * @return the string
+     */
+    default String buildDropDataBaseSql(String dataBaseName) {
+        return buildDropDataBaseSql(dataBaseName, false);
+    }
+
+    /**
+     * Builds the drop data base sql.
+     *
+     * @param dataBaseName the data base name
+     * @param ifExists     the if exists
+     * @return the string
+     */
+    default String buildDropDataBaseSql(String dataBaseName, boolean ifExists) {
+        AssertIllegalArgument.isNotEmpty(dataBaseName, "dataBaseName");
+        if (ifExists) {
+            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.DATABASE), getKeyword(Keywords.IF),
+                    getKeyword(Keywords.EXISTS), wrapName(dataBaseName));
+        } else {
+            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.DATABASE), wrapName(dataBaseName));
+        }
+    }
+
+    /**
+     * Builds the create table sql.
+     *
+     * @param table the table
+     * @return the string
+     */
+    default String buildCreateTableSql(Table table) {
+        return buildCreateTableSql(table.getCatalog(), table);
+    }
+
+    /**
+     * Builds the create table sql.
+     *
+     * @param dataBaseName the data base name
+     * @param table        the table
+     * @return the string
+     */
+    String buildCreateTableSql(String dataBaseName, Table table);
+
+    /**
+     * Builds the drop table sql.
+     *
+     * @param tableName the table name
+     * @return the string
+     */
+    default String buildDropTableSql(String tableName) {
+        return buildDropTableSql(null, tableName);
+    }
+
+    /**
+     * Builds the drop table sql.
+     *
+     * @param tableName the table name
+     * @param ifExists  the if exists
+     * @return the string
+     */
+    default String buildDropTableSql(String tableName, boolean ifExists) {
+        return buildDropTableSql(null, tableName, ifExists);
+    }
+
+    /**
+     * Builds the drop table sql.
+     *
+     * @param databaseName the database name
+     * @param tableName    the table name
+     * @return the string
+     */
+    default String buildDropTableSql(String databaseName, String tableName) {
+        return buildDropTableSql(databaseName, tableName, false);
+    }
+
+    /**
+     * Builds the drop table sql.
+     *
+     * @param databaseName the database name
+     * @param tableName    the table name
+     * @param ifExists     the if exists
+     * @return the string
+     */
+    default String buildDropTableSql(String databaseName, String tableName, boolean ifExists) {
+        AssertIllegalArgument.isNotEmpty(tableName, "tableName");
+        String tn = LangUtils.isEmpty(databaseName) ? wrapName(tableName)
+                : wrapName(databaseName) + Chars.DOT + wrapName(tableName);
+        if (ifExists) {
+            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.TABLE), getKeyword(Keywords.IF),
+                    getKeyword(Keywords.EXISTS), tn);
+        } else {
+            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.TABLE), tn);
+        }
+    }
+
+    /**
+     * Builds the alter table sql.
+     *
+     * @param tableName the table name
+     * @return the string
+     */
+    default String buildAlterTableSql(String tableName) {
+        return buildAlterTableSql(null, tableName);
+    }
+
+    /**
+     * Builds the alter table sql.
+     *
+     * @param databaseName the database name
+     * @param tableName    the table name
+     * @return the string
+     */
+    default String buildAlterTableSql(String databaseName, String tableName) {
+        AssertIllegalArgument.isNotEmpty(tableName, "tableName");
+        if (LangUtils.isEmpty(databaseName)) {
+            return BuilderUtils.link(getKeyword(Keywords.ALTER), getKeyword(Keywords.TABLE), wrapName(tableName));
+        } else {
+            return BuilderUtils.link(getKeyword(Keywords.ALTER), getKeyword(Keywords.TABLE),
+                    wrapName(databaseName) + Chars.DOT + wrapName(tableName));
+        }
+    }
+
+    /**
+     * Builds the drop view sql.
+     *
+     * @param viewName the view name
+     * @return the string
+     */
+    default String buildDropViewSql(String viewName) {
+        return buildDropViewSql(null, viewName);
+    }
+
+    /**
+     * Builds the drop view sql.
+     *
+     * @param databaseName the database name
+     * @param viewName     the view name
+     * @return the string
+     */
+    default String buildDropViewSql(String databaseName, String viewName) {
+        AssertIllegalArgument.isNotEmpty(viewName, "viewName");
+        if (LangUtils.isEmpty(databaseName)) {
+            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.VIEW), wrapName(viewName));
+        } else {
+            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.VIEW),
+                    wrapName(databaseName) + Chars.DOT + wrapName(viewName));
+        }
+    }
+
+    /**
+     * Builds the drop index sql.
+     *
+     * @param tableName the table name
+     * @param indexName the index name
+     * @return the string
+     */
+    default String buildDropIndexSql(String tableName, String indexName) {
+        return buildDropIndexSql(null, tableName, indexName);
+    }
+
+    /**
+     * Builds the drop index sql.
+     *
+     * @param database  the database
+     * @param tableName the table name
+     * @param indexName the index name
+     * @return the string
+     */
+    default String buildDropIndexSql(String database, String tableName, String indexName) {
+        AssertIllegalArgument.isNotEmpty(tableName, "tableName");
+        AssertIllegalArgument.isNotEmpty(indexName, "indexName");
+        if (LangUtils.isEmpty(tableName)) {
+            return BuilderUtils.link(buildAlterTableSql(database, tableName), getKeyword(Keywords.DROP),
+                    getKeyword(Keywords.INDEX), wrapName(indexName));
+        } else {
+            return BuilderUtils.link(buildAlterTableSql(database, tableName), getKeyword(Keywords.DROP),
+                    getKeyword(Keywords.INDEX), wrapName(indexName));
+        }
     }
 
     /**

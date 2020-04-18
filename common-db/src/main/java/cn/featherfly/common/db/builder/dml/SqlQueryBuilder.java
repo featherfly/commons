@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import cn.featherfly.common.db.builder.ConditionBuildUtils;
+import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.StringUtils;
 import cn.featherfly.common.repository.builder.dml.FindBuilder;
@@ -53,10 +53,10 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
         }
         String condition = conditionGroup.build();
         if (StringUtils.isNotBlank(condition)) {
-            ConditionBuildUtils.appendCondition(result, "WHERE");
-            ConditionBuildUtils.appendCondition(result, condition);
+            BuilderUtils.link(result, "WHERE");
+            BuilderUtils.link(result, condition);
         }
-        ConditionBuildUtils.appendCondition(result, sortBuilder.build());
+        BuilderUtils.link(result, sortBuilder.build());
 
         //        if (pagination != null) {
         //            if (dialect == null) {

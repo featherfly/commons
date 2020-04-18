@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -538,7 +539,18 @@ public final class JdbcUtils {
             } else if (Clob.class.equals(requiredType)) {
                 value = rs.getClob(index);
             } else if (requiredType.isEnum()) {
-                value = LangUtils.toEnum((Class<Enum>) requiredType, rs.getObject(index));
+                ResultSetMetaData meta = rs.getMetaData();
+                switch (meta.getColumnType(index)) {
+                    case Types.TINYINT:
+                    case Types.SMALLINT:
+                    case Types.INTEGER:
+                    case Types.BIGINT:
+                        value = LangUtils.toEnum((Class<Enum>) requiredType, rs.getInt(index));
+                        break;
+                    default:
+                        value = LangUtils.toEnum((Class<Enum>) requiredType, rs.getString(index));
+                        break;
+                }
             } else {
                 // Some unknown type desired -> rely on getObject.
                 value = getResultSetValue(rs, index);

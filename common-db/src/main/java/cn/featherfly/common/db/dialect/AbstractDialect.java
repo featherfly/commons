@@ -6,7 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.constant.Chars;
+import cn.featherfly.common.db.builder.BuilderUtils;
+import cn.featherfly.common.db.metadata.Column;
+import cn.featherfly.common.db.metadata.Table;
 import cn.featherfly.common.lang.ArrayUtils;
+import cn.featherfly.common.lang.AssertIllegalArgument;
+import cn.featherfly.common.lang.LangUtils;
 
 /**
  * <p>
@@ -72,6 +77,91 @@ public abstract class AbstractDialect implements Dialect {
      */
     public void setTableAndColumnNameUppercase(boolean tableAndColumnNameUppercase) {
         this.tableAndColumnNameUppercase = tableAndColumnNameUppercase;
+    }
+
+    /**
+     * Builds the create table sql.
+     *
+     * @param dataBaseName the data base name
+     * @param table        the table
+     * @return the string
+     */
+    @Override
+    public String buildCreateTableSql(String dataBaseName, Table table) {
+        boolean formatSql = true;
+        AssertIllegalArgument.isNotEmpty(table, "table");
+        StringBuilder sql = new StringBuilder();
+        String tableName = LangUtils.isEmpty(dataBaseName) ? wrapName(table.getName())
+                : wrapName(dataBaseName) + Chars.DOT + wrapName(table.getName());
+        BuilderUtils.link(sql, getKeyword(Keywords.CREATE), getKeyword(Keywords.TABLE), tableName, Chars.PAREN_L);
+        if (formatSql) {
+            sql.append(Chars.NEW_LINE);
+        }
+
+        for (Column column : table.getColumns()) {
+            BuilderUtils.link(sql, wrapName(column.getName()), getColumnTypeDDL(column), getColumnNotNull(column),
+                    getDefaultValue(column), getAutoIncrement(column), getColumnComment(column));
+            sql.append(Chars.COMMA);
+            if (formatSql) {
+                sql.append(Chars.NEW_LINE);
+            }
+        }
+        BuilderUtils.link(sql, getPrimaryKeyDDL(table));
+        if (formatSql) {
+            sql.append(Chars.NEW_LINE);
+        }
+        BuilderUtils.link(sql, Chars.PAREN_R, LangUtils.isEmpty(table.getRemark()) ? ""
+                : BuilderUtils.link(getKeyword(Keywords.COMMENT), "'" + table.getRemark() + "'"));
+        return sql.toString();
+    }
+
+    protected abstract String getPrimaryKeyDDL(Table table);
+
+    protected String getDefaultValue(Column column) {
+        if (LangUtils.isEmpty(column.getDefaultValue())) {
+            return "";
+        } else {
+            return BuilderUtils.link(getKeyword(Keywords.DEFAULT), "'" + column.getDefaultValue() + "'");
+        }
+    }
+
+    protected String getAutoIncrement(Column column) {
+        return "";
+    }
+
+    protected String getColumnComment(Column column) {
+        return LangUtils.isEmpty(column.getRemark()) ? ""
+                : BuilderUtils.link(getKeyword(Keywords.COMMENT), "'" + column.getRemark() + "'");
+    }
+
+    protected String getColumnNotNull(Column column) {
+        if (column.isNullable()) {
+            return "";
+        } else {
+            return BuilderUtils.link(getKeyword(Keywords.NOT), getKeyword(Keywords.NULL));
+        }
+    }
+
+    protected String getColumnTypeDDL(Column column) {
+        return getColumnTypeDDL(column, null);
+    }
+
+    protected String getColumnTypeDDL(Column column, String extra) {
+        int size = column.getSize();
+        int decimalDigits = column.getDecimalDigits();
+        String result = column.getSqlType().getName();
+        if (size > 0) {
+            result += Chars.PAREN_L + size;
+            if (decimalDigits > 0) {
+                result += Chars.DOT + decimalDigits;
+            }
+            result += Chars.PAREN_R;
+        }
+        if (LangUtils.isNotEmpty(extra)) {
+            result = BuilderUtils.link(result, extra);
+        }
+        return result;
+
     }
 
     /**

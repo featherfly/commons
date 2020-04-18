@@ -14,8 +14,9 @@ import java.util.Collection;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.data.query.SimpleQuery;
 import cn.featherfly.common.db.data.query.TableQuery;
+import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.db.metadata.TableMetadata;
+import cn.featherfly.common.db.metadata.Table;
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.repository.Query;
 
@@ -23,19 +24,25 @@ import cn.featherfly.common.repository.Query;
  * <p>
  * 通用数据导出器，使用DataFormatFactory格式化数据
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class DataExportorImpl extends AbstractDataExportor {
 
-    private DataFormatFactory facotry;
-
     /**
-     * @param factory DataFormatFactory
+     * Instantiates a new data exportor impl.
+     *
+     * @param dialect the dialect
+     * @param facotry the data format factory
      */
-    public DataExportorImpl(DataFormatFactory factory) {
-        facotry = factory;
+    public DataExportorImpl(Dialect dialect, DataFormatFactory facotry) {
+        super(dialect);
+        this.facotry = facotry;
     }
+
+    /** The facotry. */
+    private DataFormatFactory facotry;
 
     /**
      * {@inheritDoc}
@@ -55,6 +62,13 @@ public class DataExportorImpl extends AbstractDataExportor {
         }
     }
 
+    /**
+     * Export data.
+     *
+     * @param query      the query
+     * @param dataFormat the data format
+     * @throws Exception the exception
+     */
     private void exportData(Query query, DataFormat dataFormat) throws Exception {
         //得到字段信息
         Connection conn = getDataSource().getConnection();
@@ -79,7 +93,7 @@ public class DataExportorImpl extends AbstractDataExportor {
                 logger.debug("自动从结果集第一列获取表名称：{}", name);
             }
         }
-        TableMetadata tableMetadata = getDatabaseMetadata().getTable(name);
+        Table tableMetadata = getDatabaseMetadata().getTable(name);
 
         dataFormat.writeTableStart(tableMetadata);
         while (res.next()) {

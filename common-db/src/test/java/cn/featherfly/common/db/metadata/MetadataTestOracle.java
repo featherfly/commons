@@ -1,13 +1,9 @@
 
-package cn.featherfly.common.db;
+package cn.featherfly.common.db.metadata;
 
 import java.sql.Types;
 
 import org.apache.commons.dbcp.BasicDataSource;
-
-import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
-import cn.featherfly.common.db.metadata.TableMetadata;
 
 /**
  *
@@ -27,7 +23,7 @@ public class MetadataTestOracle {
 
         System.out.println(meta.getName());
 
-        for (TableMetadata td : meta.getTables()) {
+        for (Table td : meta.getTables()) {
             System.out.println("\t" + td.getName());
         }
 

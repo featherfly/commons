@@ -1,11 +1,7 @@
 
-package cn.featherfly.common.db;
+package cn.featherfly.common.db.metadata;
 
 import org.apache.commons.dbcp.BasicDataSource;
-
-import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
-import cn.featherfly.common.db.metadata.TableMetadata;
 
 /**
  *
@@ -26,7 +22,7 @@ public class MetadataTestPostgreSQL {
 
         System.out.println(meta.getName());
 
-        for (TableMetadata td : meta.getTables()) {
+        for (Table td : meta.getTables()) {
             System.out.println("\t" + td.getName());
             td.getColumns().forEach(c -> {
                 System.out.println("\t\t" + c.getName() + " " + c.getTypeName() + "(" + c.getType() + ")" + " "

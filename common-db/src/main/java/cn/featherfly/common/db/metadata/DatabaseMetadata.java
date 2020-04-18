@@ -27,7 +27,7 @@ public class DatabaseMetadata {
      * @param tableName 表名称
      * @return 表元数据对象
      */
-    public TableMetadata getTable(String tableName) {
+    public Table getTable(String tableName) {
         return tableMap.get(tableName.toUpperCase());
     }
 
@@ -38,7 +38,7 @@ public class DatabaseMetadata {
      *
      * @return 所有表元数据对象的集合
      */
-    public Collection<TableMetadata> getTables() {
+    public Collection<Table> getTables() {
         return tableMap.values();
     }
 
@@ -49,7 +49,7 @@ public class DatabaseMetadata {
      *
      * @return 所有表元数据对象的MAP
      */
-    public Map<String, TableMetadata> getTableMap() {
+    public Map<String, Table> getTableMap() {
         return tableMap;
     }
 
@@ -58,10 +58,10 @@ public class DatabaseMetadata {
      * 添加表元数据.
      * </p>
      *
-     * @param tableMetadata 表元数据对象
+     * @param Table 表元数据对象
      */
-    public void addTable(TableMetadata tableMetadata) {
-        tableMap.put(tableMetadata.getName().toUpperCase(), tableMetadata);
+    void addTable(Table Table) {
+        tableMap.put(Table.getName().toUpperCase(), Table);
     }
 
     /**
@@ -69,11 +69,11 @@ public class DatabaseMetadata {
      * 添加表元数据.
      * </p>
      *
-     * @param tableMetadatas 表元数据对象数组
+     * @param Tables 表元数据对象数组
      */
-    public void addTable(TableMetadata... tableMetadatas) {
-        for (TableMetadata tableMetadata : tableMetadatas) {
-            addTable(tableMetadata);
+    void addTable(Table... Tables) {
+        for (Table Table : Tables) {
+            addTable(Table);
         }
     }
 
@@ -82,11 +82,11 @@ public class DatabaseMetadata {
      * 添加表元数据.
      * </p>
      *
-     * @param tableMetadatas 表元数据对象集合
+     * @param Tables 表元数据对象集合
      */
-    public void addTable(Collection<TableMetadata> tableMetadatas) {
-        for (TableMetadata tableMetadata : tableMetadatas) {
-            addTable(tableMetadata);
+    void addTable(Collection<Table> Tables) {
+        for (Table Table : Tables) {
+            addTable(Table);
         }
     }
 
@@ -94,9 +94,17 @@ public class DatabaseMetadata {
     //	property
     // ********************************************************************
 
-    private Map<String, TableMetadata> tableMap = new HashMap<>(0);
+    private Map<String, Table> tableMap = new HashMap<>(0);
 
     private String name;
+
+    private String productName;
+
+    private String productVersion;
+
+    private Integer majorVersion;
+
+    private Integer minorVersion;
 
     /**
      * 返回name
@@ -112,7 +120,80 @@ public class DatabaseMetadata {
      *
      * @param name name
      */
-    public void setName(String name) {
+    void setName(String name) {
         this.name = name;
     }
+
+    /**
+     * 返回productName
+     *
+     * @return productName
+     */
+    public String getProductName() {
+        return productName;
+    }
+
+    /**
+     * 返回productVersion
+     *
+     * @return productVersion
+     */
+    public String getProductVersion() {
+        return productVersion;
+    }
+
+    /**
+     * 设置productName
+     *
+     * @param productName productName
+     */
+    void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    /**
+     * 设置productVersion
+     *
+     * @param productVersion productVersion
+     */
+    void setProductVersion(String productVersion) {
+        this.productVersion = productVersion;
+    }
+
+    /**
+     * 返回majorVersion
+     *
+     * @return majorVersion
+     */
+    public Integer getMajorVersion() {
+        return majorVersion;
+    }
+
+    /**
+     * 设置majorVersion
+     *
+     * @param majorVersion majorVersion
+     */
+    void setMajorVersion(Integer majorVersion) {
+        this.majorVersion = majorVersion;
+    }
+
+    /**
+     * 返回minorVersion
+     *
+     * @return minorVersion
+     */
+    public Integer getMinorVersion() {
+        return minorVersion;
+    }
+
+    /**
+     * 设置minorVersion
+     *
+     * @param minorVersion minorVersion
+     */
+    void setMinorVersion(Integer minorVersion) {
+        this.minorVersion = minorVersion;
+    }
+
 }

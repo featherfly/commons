@@ -12,9 +12,9 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 import cn.featherfly.common.db.data.DataFormat;
 import cn.featherfly.common.db.data.ExportException;
-import cn.featherfly.common.db.metadata.ColumnMetadata;
+import cn.featherfly.common.db.metadata.Column;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.db.metadata.TableMetadata;
+import cn.featherfly.common.db.metadata.Table;
 import cn.featherfly.common.lang.DateUtils;
 
 /**
@@ -77,13 +77,18 @@ public class JsonDataFormat implements DataFormat {
      * {@inheritDoc}
      */
     @Override
-    public void writeTableStart(TableMetadata tableMetadata) throws Exception {
+    public void writeTableStart(Table tableMetadata) throws Exception {
         generator.writeStartObject();
         generator.writeStringField("name", tableMetadata.getName());
         StringBuilder pkMapping = new StringBuilder();
-        for (ColumnMetadata pkColumn : tableMetadata.getPrimaryColumns()) {
-            pkMapping.append(pkColumn.getName()).append(",");
+        for (Column column : tableMetadata.getColumns()) {
+            if (column.isPrimaryKey()) {
+                pkMapping.append(column.getName()).append(",");
+            }
         }
+        //        for (ColumnMetadata pkColumn : tableMetadata.getPrimaryColumns()) {
+        //            pkMapping.append(pkColumn.getName()).append(",");
+        //        }
         if (pkMapping.length() > 0) {
             pkMapping.deleteCharAt(pkMapping.length() - 1);
         }
@@ -97,7 +102,7 @@ public class JsonDataFormat implements DataFormat {
      * @throws Exception
      */
     @Override
-    public void writeTableEnd(TableMetadata tableMetadata) throws Exception {
+    public void writeTableEnd(Table tableMetadata) throws Exception {
         generator.writeEndArray();
         generator.writeEndObject();
     }
@@ -106,7 +111,7 @@ public class JsonDataFormat implements DataFormat {
      * {@inheritDoc}
      */
     @Override
-    public void writeRow(TableMetadata tableMetadata, ResultSet res) throws Exception {
+    public void writeRow(Table tableMetadata, ResultSet res) throws Exception {
         ResultSetMetaData rsmd = res.getMetaData();
         int columnTotal = rsmd.getColumnCount();
         generator.writeStartObject();

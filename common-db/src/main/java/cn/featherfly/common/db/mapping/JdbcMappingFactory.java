@@ -22,9 +22,8 @@ import cn.featherfly.common.bean.matcher.BeanPropertyAnnotationMatcher;
 import cn.featherfly.common.bean.matcher.BeanPropertyNameRegexMatcher;
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.dialect.Dialect;
-import cn.featherfly.common.db.metadata.ColumnMetadata;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.db.metadata.TableMetadata;
+import cn.featherfly.common.db.metadata.Table;
 import cn.featherfly.common.enums.Logic;
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.lang.SystemPropertyUtils;
@@ -165,7 +164,7 @@ public class JdbcMappingFactory implements MappingFactory {
                     String.format("###%s类%s映射到表%s", SystemPropertyUtils.getLineSeparator(), type.getName(), tableName));
         }
 
-        TableMetadata tm = metadata.getTable(tableName);
+        Table tm = metadata.getTable(tableName);
         if (tm == null) {
             throw new MappingException("#talbe.not.exists", new Object[] { tableName });
         }
@@ -182,7 +181,7 @@ public class JdbcMappingFactory implements MappingFactory {
             throw new MappingException("#id.map.not.exists", new Object[] { type.getName() });
         }
 
-        for (ColumnMetadata cmd : tm.getColumns()) {
+        for (cn.featherfly.common.db.metadata.Column cmd : tm.getColumns()) {
             mappingFromColumnMetadata(bd, tableMapping, cmd, logInfo);
         }
         if (LOGGER.isDebugEnabled()) {
@@ -195,7 +194,7 @@ public class JdbcMappingFactory implements MappingFactory {
     }
 
     private boolean mappingWithJpa(BeanProperty<?> beanProperty, Map<String, PropertyMapping> tableMapping,
-            StringBuilder logInfo, TableMetadata tableMetadata) {
+            StringBuilder logInfo, Table tableMetadata) {
         boolean hasPk = beanProperty.hasAnnotation(Id.class);
         PropertyMapping mapping = new PropertyMapping();
 
@@ -229,7 +228,7 @@ public class JdbcMappingFactory implements MappingFactory {
     }
 
     private void mappinEmbedded(PropertyMapping mapping, BeanProperty<?> beanProperty, StringBuilder logInfo,
-            TableMetadata tableMetadata) {
+            Table tableMetadata) {
         mapping.setPropertyName(beanProperty.getName());
         mapping.setPropertyType(beanProperty.getType());
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
@@ -252,7 +251,7 @@ public class JdbcMappingFactory implements MappingFactory {
                 }
                 mapping.add(columnMpping);
             } else {
-                ColumnMetadata columnMetadata = tableMetadata.getColumn(columnName);
+                cn.featherfly.common.db.metadata.Column columnMetadata = tableMetadata.getColumn(columnName);
                 if (columnMetadata != null) {
                     mapping.add(columnMpping);
                     if (LOGGER.isDebugEnabled()) {
@@ -292,7 +291,7 @@ public class JdbcMappingFactory implements MappingFactory {
     }
 
     private <T> void mappingFromColumnMetadata(BeanDescriptor<T> bd, Map<String, PropertyMapping> tableMapping,
-            ColumnMetadata cmd, StringBuilder logInfo) {
+            cn.featherfly.common.db.metadata.Column cmd, StringBuilder logInfo) {
         Map<String, PropertyMapping> nameSet = new HashMap<>();
         tableMapping.forEach((k, v) -> {
             if (LangUtils.isNotEmpty(k)) {

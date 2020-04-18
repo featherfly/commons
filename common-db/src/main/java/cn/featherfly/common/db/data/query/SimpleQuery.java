@@ -36,7 +36,7 @@ public class SimpleQuery implements Query {
      * @param params params
      */
     public SimpleQuery(String name, String sql, Object... params) {
-        AssertIllegalArgument.isNotEmpty(sql, "sql不能为空");
+        AssertIllegalArgument.isNotEmpty(sql, "sql");
         this.name = name;
         this.sql = sql;
         this.params = params;

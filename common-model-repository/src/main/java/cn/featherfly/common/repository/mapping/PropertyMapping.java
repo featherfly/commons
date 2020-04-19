@@ -43,16 +43,166 @@ public class PropertyMapping {
 
     private PropertyMapping parent;
 
+    private int size;
+
+    private String remark;
+
+    private boolean nullable;
+
+    private boolean insertable = true;
+
+    private boolean updatable = true;
+    private boolean unique;
+
     /**
-     * add nested property mapping
-     *
-     * @param propertyMapping propertyMapping
-     * @return this
+     * 小数位数
      */
-    public PropertyMapping add(PropertyMapping propertyMapping) {
-        propertyMapping.parent = this;
-        propertyMappings.put(propertyMapping.getRepositoryFieldName(), propertyMapping);
-        return this;
+    private int decimalDigits;
+
+    private boolean autoincrement;
+
+    /**
+     * 返回unique
+     * 
+     * @return unique
+     */
+    public boolean isUnique() {
+        return unique;
+    }
+
+    /**
+     * 设置unique
+     * 
+     * @param unique unique
+     */
+    public void setUnique(boolean unique) {
+        this.unique = unique;
+    }
+
+    /**
+     * 返回size
+     *
+     * @return size
+     */
+    public int getSize() {
+        return size;
+    }
+
+    /**
+     * 设置size
+     *
+     * @param size size
+     */
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    /**
+     * 返回remark
+     *
+     * @return remark
+     */
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * 设置remark
+     *
+     * @param remark remark
+     */
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    /**
+     * 返回nullable
+     *
+     * @return nullable
+     */
+    public boolean isNullable() {
+        return nullable;
+    }
+
+    /**
+     * 设置nullable
+     *
+     * @param nullable nullable
+     */
+    public void setNullable(boolean nullable) {
+        this.nullable = nullable;
+    }
+
+    /**
+     * 返回insertable
+     *
+     * @return insertable
+     */
+    public boolean isInsertable() {
+        return insertable;
+    }
+
+    /**
+     * 设置insertable
+     *
+     * @param insertable insertable
+     */
+    public void setInsertable(boolean insertable) {
+        this.insertable = insertable;
+    }
+
+    /**
+     * 返回updatable
+     *
+     * @return updatable
+     */
+    public boolean isUpdatable() {
+        return updatable;
+    }
+
+    /**
+     * 设置updatable
+     *
+     * @param updatable updatable
+     */
+    public void setUpdatable(boolean updatable) {
+        this.updatable = updatable;
+    }
+
+    /**
+     * 返回decimalDigits
+     *
+     * @return decimalDigits
+     */
+    public int getDecimalDigits() {
+        return decimalDigits;
+    }
+
+    /**
+     * 设置decimalDigits
+     *
+     * @param decimalDigits decimalDigits
+     */
+    public void setDecimalDigits(int decimalDigits) {
+        this.decimalDigits = decimalDigits;
+    }
+
+    /**
+     * 返回autoincrement
+     *
+     * @return autoincrement
+     */
+    public boolean isAutoincrement() {
+        return autoincrement;
+    }
+
+    /**
+     * 设置autoincrement
+     *
+     * @param autoincrement autoincrement
+     */
+    public void setAutoincrement(boolean autoincrement) {
+        this.autoincrement = autoincrement;
     }
 
     /**
@@ -174,6 +324,18 @@ public class PropertyMapping {
      */
     public PropertyMapping getPropertyMappingByPersitField(String repositoryFiledName) {
         return propertyMappings.get(repositoryFiledName);
+    }
+
+    /**
+     * add nested property mapping
+     *
+     * @param propertyMapping propertyMapping
+     * @return this
+     */
+    public PropertyMapping add(PropertyMapping propertyMapping) {
+        propertyMapping.parent = this;
+        propertyMappings.put(propertyMapping.getRepositoryFieldName(), propertyMapping);
+        return this;
     }
 
     /**

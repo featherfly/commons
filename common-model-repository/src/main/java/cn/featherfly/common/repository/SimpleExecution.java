@@ -1,6 +1,8 @@
 
 package cn.featherfly.common.repository;
 
+import java.util.Arrays;
+
 /**
  * <p>
  * simple sql execution
@@ -37,5 +39,13 @@ public class SimpleExecution implements Execution {
     @Override
     public Object[] getParams() {
         return params;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "SimpleExecution [execution=" + execution + ", params=" + Arrays.toString(params) + "]";
     }
 }

@@ -21,8 +21,18 @@ public class ClassMapping<T> {
      * @param repositoryName 存储名
      */
     public ClassMapping(Class<T> type, String repositoryName) {
+        this(type, repositoryName, null);
+    }
+
+    /**
+     * @param type           类型
+     * @param repositoryName 存储名
+     * @param remark         remark
+     */
+    public ClassMapping(Class<T> type, String repositoryName, String remark) {
         this.type = type;
         this.repositoryName = repositoryName;
+        this.remark = remark;
     }
 
     /**
@@ -94,6 +104,8 @@ public class ClassMapping<T> {
 
     private String repositoryName;
 
+    private String remark;
+
     private Class<?> type;
 
     /**
@@ -117,5 +129,14 @@ public class ClassMapping<T> {
     public String toString() {
         return "ClassMapping [repositoryName=" + repositoryName + ", type=" + type + ", propertyMappings="
                 + propertyMappings + "]";
+    }
+
+    /**
+     * 返回remark
+     *
+     * @return remark
+     */
+    public String getRemark() {
+        return remark;
     }
 }

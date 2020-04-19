@@ -1,3 +1,7 @@
+2020-4-20
+0.1.2
+    1.ClassMapping,PropertyMapping加入更多映射属性
+    
 2020-4-18
 0.1.1
     1.BuilderException使用codegen生成

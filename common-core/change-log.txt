@@ -1,6 +1,7 @@
-2020
+2020-4-20
 1.8.2
     1. 升级common-algorithm依赖
+    2. 加入LocaleMessage
     
     
 2020-4-15

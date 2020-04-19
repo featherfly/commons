@@ -250,6 +250,33 @@ public class SQLiteDialect extends AbstractDialect {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String buildInsertBatchSql(String tableName, String[] columnNames, int insertAmount) {
+        StringBuilder sql = new StringBuilder();
+        BuilderUtils.link(sql, getKeyword(Keywords.INSERT), getKeyword(Keywords.INTO), wrapName(tableName),
+                getKeyword(Keywords.SELECT));
+        for (String column : columnNames) {
+            BuilderUtils.link(sql, Chars.QUESTION, getKeyword(Keywords.AS), wrapName(column) + Chars.COMMA);
+        }
+        sql.deleteCharAt(sql.length() - 1);
+        for (int index = 1; index < insertAmount; index++) {
+            BuilderUtils.link(sql, getKeyword(Keywords.UNION), getKeyword(Keywords.SELECT));
+            for (int j = 0; j < columnNames.length; j++) {
+                BuilderUtils.link(sql, Chars.QUESTION + Chars.COMMA);
+            }
+            sql.deleteCharAt(sql.length() - 1);
+        }
+        return sql.toString();
+    }
+
+    @Override
+    public boolean isAutoGenerateKeyBatch() {
+        return false;
+    }
+
     @Override
     public String buildAlterTableAddColumnDDL(String databaseName, String tableName, Column... columns) {
         // TODO 未实现

@@ -17,7 +17,7 @@ public class User {
 
     private String name;
 
-    private Integer age;
+    private String descp;
 
     /**
      * 返回id
@@ -56,20 +56,21 @@ public class User {
     }
 
     /**
-     * 返回age
+     * 返回descp
      *
-     * @return age
+     * @return descp
      */
-    public Integer getAge() {
-        return age;
+    public String getDescp() {
+        return descp;
     }
 
     /**
-     * 设置age
+     * 设置descp
      *
-     * @param age age
+     * @param descp descp
      */
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setDescp(String descp) {
+        this.descp = descp;
     }
+
 }

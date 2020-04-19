@@ -268,7 +268,7 @@ public class ColumnModel implements Column {
      *
      * @param sqlType sqlType
      */
-    void setSqlType(SqlType sqlType) {
+    public void setSqlType(SqlType sqlType) {
         this.sqlType = sqlType;
         type = sqlType.getValue();
     }

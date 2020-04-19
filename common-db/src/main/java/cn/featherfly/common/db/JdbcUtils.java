@@ -422,7 +422,7 @@ public final class JdbcUtils {
         } else if (value.getClass().isEnum()) {
             prep.setInt(position, ((Enum<?>) value).ordinal());
         } else {
-            LOGGER.warn("setParameter不支持的数据类型{}，忽略", value.getClass().getName());
+            prep.setObject(position, value);
         }
     }
 
@@ -470,7 +470,7 @@ public final class JdbcUtils {
             } else if (value.getClass().isEnum()) {
                 prep.setInt(position, ((Enum<?>) value).ordinal());
             } else {
-                LOGGER.warn("setParameter不支持的数据类型{}，忽略", value.getClass().getName());
+                prep.setObject(position, value);
             }
         } catch (SQLException e) {
             throw new JdbcException(e);

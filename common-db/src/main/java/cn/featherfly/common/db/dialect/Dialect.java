@@ -120,6 +120,59 @@ public interface Dialect {
     String getFkCheck(boolean check);
 
     /**
+     * Checks if is auto generate key batch.
+     *
+     * @return true, if is auto generate key batch
+     */
+    default boolean isAutoGenerateKeyBatch() {
+        return true;
+    }
+
+    /**
+     * Checks if is insert batch.
+     *
+     * @return true, if is insert batch
+     */
+    default boolean isInsertBatch() {
+        return true;
+    }
+
+    /**
+     * dialect for database supports batch insert.
+     *
+     * @param tableName    the table name
+     * @param columnNames  the column names
+     * @param insertAmount the insert amount
+     * @return the string
+     */
+    default String buildInsertBatchSql(String tableName, String[] columnNames, int insertAmount) {
+        String sql = BuilderUtils.link(getKeyword(Keywords.INSERT), getKeyword(Keywords.INTO), wrapName(tableName),
+                Chars.PAREN_L);
+        StringBuilder names = new StringBuilder();
+        for (String column : columnNames) {
+            BuilderUtils.link(names, wrapName(column) + Chars.COMMA);
+        }
+        names.deleteCharAt(names.length() - 1).append(Chars.PAREN_R);
+        sql += names.toString();
+        sql = BuilderUtils.link(sql, getKeyword(Keywords.VALUES), Chars.PAREN_L);
+        StringBuilder ques = new StringBuilder();
+        for (int i = 0; i < columnNames.length; i++) {
+            BuilderUtils.link(ques, Chars.QUESTION + Chars.COMMA);
+        }
+        ques.deleteCharAt(ques.length() - 1).append(Chars.PAREN_R);
+        sql += ques.toString();
+        for (int index = 1; index < insertAmount; index++) {
+            ques = new StringBuilder();
+            for (int j = 0; j < columnNames.length; j++) {
+                BuilderUtils.link(ques, Chars.QUESTION + Chars.COMMA);
+            }
+            ques.deleteCharAt(ques.length() - 1).append(Chars.PAREN_R);
+            sql += Chars.COMMA + Chars.PAREN_L + ques.toString();
+        }
+        return sql;
+    }
+
+    /**
      * Checks if is keywords uppercase.
      *
      * @return true, if is keywords uppercase
@@ -1142,6 +1195,105 @@ public interface Dialect {
          */
         public String distinct() {
             return dialect.getKeyword(Keywords.DISTINCT);
+        }
+
+        /**
+         * View.
+         *
+         * @return the string
+         */
+        public String view() {
+            return dialect.getKeyword(Keywords.VIEW);
+        }
+
+        /**
+         * Index.
+         *
+         * @return the string
+         */
+        public String index() {
+            return dialect.getKeyword(Keywords.INDEX);
+        }
+
+        /**
+         * Default.
+         *
+         * @return the string
+         */
+        public String default_() {
+            return dialect.getKeyword(Keywords.DEFAULT);
+        }
+
+        /**
+         * Alter.
+         *
+         * @return the string
+         */
+        public String alter() {
+            return dialect.getKeyword(Keywords.ALTER);
+        }
+
+        /**
+         * Column.
+         *
+         * @return the string
+         */
+        public String column() {
+            return dialect.getKeyword(Keywords.COLUMN);
+        }
+
+        /**
+         * If.
+         *
+         * @return the string
+         */
+        public String if_() {
+            return dialect.getKeyword(Keywords.IF);
+        }
+
+        /**
+         * Exists.
+         *
+         * @return the string
+         */
+        public String exists() {
+            return dialect.getKeyword(Keywords.EXISTS);
+        }
+
+        /**
+         * Comment.
+         *
+         * @return the string
+         */
+        public String comment() {
+            return dialect.getKeyword(Keywords.COMMENT);
+        }
+
+        /**
+         * Primary.
+         *
+         * @return the string
+         */
+        public String primary() {
+            return dialect.getKeyword(Keywords.PRIMARY);
+        }
+
+        /**
+         * Key.
+         *
+         * @return the string
+         */
+        public String key() {
+            return dialect.getKeyword(Keywords.KEY);
+        }
+
+        /**
+         * Constraint.
+         *
+         * @return the string
+         */
+        public String constraint() {
+            return dialect.getKeyword(Keywords.CONSTRAINT);
         }
     }
 }

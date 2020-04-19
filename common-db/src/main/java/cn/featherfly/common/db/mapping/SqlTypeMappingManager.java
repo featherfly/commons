@@ -2,7 +2,9 @@
 package cn.featherfly.common.db.mapping;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -14,7 +16,6 @@ import com.speedment.common.tuple.Tuples;
 import cn.featherfly.common.db.metadata.SqlType;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.ClassUtils;
-import cn.featherfly.common.repository.mapping.MappingException;
 
 /**
  * <p>
@@ -30,31 +31,30 @@ public class SqlTypeMappingManager {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /** The default sql type mapping. */
-    private DefaultSqlTypeMapping defaultSqlTypeMapping;
+    private DefaultSqlTypeMapping defaultSqlTypeMapping = new DefaultSqlTypeMapping();
 
     /** The global store. */
-    private Store globalStore;
+    private Store globalStore = new Store();
 
-    /** The type store. */
-    private Map<Class<?>, Store> typeStore;
+    /** The type store map. */
+    private Map<Class<?>, Store> typeStoreMap = new HashMap<>();
 
     /**
      * Instantiates a new sql type mapping manager.
      */
     public SqlTypeMappingManager() {
-        defaultSqlTypeMapping = new DefaultSqlTypeMapping();
-        globalStore = new Store();
     }
 
     /**
      * Regist.
      *
      * @param register the register
-     * @return the sql type mapping manager
+     * @return SqlTypeMappingManager
      */
     public SqlTypeMappingManager regist(JavaToSqlTypeRegister<? extends Serializable> register) {
         AssertIllegalArgument.isNotNull(register, "register");
-        return _regist(null, register);
+        globalStore.put(register);
+        return this;
     }
 
     /**
@@ -62,31 +62,40 @@ public class SqlTypeMappingManager {
      *
      * @param entityType the entity type
      * @param register   the register
-     * @return the sql type mapping manager
+     * @return SqlTypeMappingManager
      */
     public SqlTypeMappingManager regist(Class<?> entityType, JavaToSqlTypeRegister<? extends Serializable> register) {
         AssertIllegalArgument.isNotNull(entityType, "entityType");
         AssertIllegalArgument.isNotNull(register, "register");
-        return _regist(entityType, register);
+        Store store = getStore(entityType);
+        store.put(register);
+        return this;
+    }
+
+    /**
+     * Regist.
+     *
+     * @param mapper the JavaToSqlTypeMapper
+     * @return SqlTypeMappingManager
+     */
+    public SqlTypeMappingManager regist(JavaToSqlTypeMapper<? extends Serializable> mapper) {
+        AssertIllegalArgument.isNotNull(mapper, "mapper");
+        globalStore.add(mapper);
+        return this;
     }
 
     /**
      * Regist.
      *
      * @param entityType the entity type
-     * @param register   the register
-     * @return the sql type mapping manager
+     * @param mapper     the mapper
+     * @return SqlTypeMappingManager
      */
-    private SqlTypeMappingManager _regist(Class<?> entityType, JavaToSqlTypeRegister<? extends Serializable> register) {
-        if (entityType == null) {
-            globalStore.put(register);
-            return this;
-        } else {
-            Store store = typeStore.get(entityType);
-            if (store != null) {
-                store.put(register);
-            }
-        }
+    public SqlTypeMappingManager regist(Class<?> entityType, JavaToSqlTypeMapper<? extends Serializable> mapper) {
+        AssertIllegalArgument.isNotNull(entityType, "entityType");
+        AssertIllegalArgument.isNotNull(mapper, "mapper");
+        Store store = getStore(entityType);
+        store.add(mapper);
         return this;
     }
 
@@ -94,7 +103,7 @@ public class SqlTypeMappingManager {
      * Regist.
      *
      * @param register the register
-     * @return the sql type mapping manager
+     * @return SqlTypeMappingManager
      */
     public SqlTypeMappingManager regist(SqlTypeToJavaRegister<? extends Serializable> register) {
         AssertIllegalArgument.isNotNull(register, "register");
@@ -107,17 +116,40 @@ public class SqlTypeMappingManager {
      *
      * @param entityType the entity type
      * @param register   the register
-     * @return the sql type mapping manager
+     * @return SqlTypeMappingManager
      */
     public SqlTypeMappingManager regist(Class<?> entityType, SqlTypeToJavaRegister<? extends Serializable> register) {
         AssertIllegalArgument.isNotNull(entityType, "entityType");
         AssertIllegalArgument.isNotNull(register, "register");
-        Store store = typeStore.get(entityType);
-        if (store == null) {
-            store = new Store();
-            typeStore.put(entityType, store);
-        }
+        Store store = getStore(entityType);
         store.put(register);
+        return this;
+    }
+
+    /**
+     * Regist.
+     *
+     * @param mapper the SqlTypeToJavaMapper
+     * @return SqlTypeMappingManager
+     */
+    public SqlTypeMappingManager regist(SqlTypeToJavaMapper<? extends Serializable> mapper) {
+        AssertIllegalArgument.isNotNull(mapper, "mapper");
+        globalStore.add(mapper);
+        return this;
+    }
+
+    /**
+     * Regist.
+     *
+     * @param entityType the entity type
+     * @param mapper     the SqlTypeToJavaMapper
+     * @return SqlTypeMappingManager
+     */
+    public SqlTypeMappingManager regist(Class<?> entityType, SqlTypeToJavaMapper<? extends Serializable> mapper) {
+        AssertIllegalArgument.isNotNull(entityType, "entityType");
+        AssertIllegalArgument.isNotNull(mapper, "mapper");
+        Store store = getStore(entityType);
+        store.add(mapper);
         return this;
     }
 
@@ -149,12 +181,12 @@ public class SqlTypeMappingManager {
         AssertIllegalArgument.isNotNull(entityType, "entityType");
         AssertIllegalArgument.isNotNull(javaType, "javaType");
         SqlType sqlType = null;
-        Store store = typeStore.get(entityType);
+        Store store = typeStoreMap.get(entityType);
         if (store != null) {
             sqlType = store.getSqlType(javaType);
         }
         if (sqlType == null) {
-            sqlType = defaultSqlTypeMapping.getSqlType(javaType);
+            sqlType = getSqlType(javaType);
         }
         return sqlType;
     }
@@ -187,14 +219,29 @@ public class SqlTypeMappingManager {
         AssertIllegalArgument.isNotNull(entityType, "entityType");
         AssertIllegalArgument.isNotNull(sqlType, "sqlType");
         Class<E> javaType = null;
-        Store store = typeStore.get(entityType);
+        Store store = typeStoreMap.get(entityType);
         if (store != null) {
             javaType = store.getJavaType(sqlType);
         }
         if (javaType == null) {
-            javaType = defaultSqlTypeMapping.getJavaType(sqlType);
+            javaType = getJavaType(sqlType);
         }
         return javaType;
+    }
+
+    /**
+     * Gets the store.
+     *
+     * @param entityType the entity type
+     * @return the store
+     */
+    private Store getStore(Class<?> entityType) {
+        Store store = typeStoreMap.get(entityType);
+        if (store == null) {
+            store = new Store();
+            typeStoreMap.put(entityType, store);
+        }
+        return store;
     }
 
     /**
@@ -205,10 +252,32 @@ public class SqlTypeMappingManager {
         /** The java to sql type map. */
         private Map<Class<? extends Serializable>, JavaToSqlTypeRegister<? extends Serializable>> javaToSqlTypeMap = new HashMap<>();
 
-        private Map<Class<? extends Serializable>, JavaToSqlTypeMapper<? extends Serializable>> javaToSqlTypeMappers = new HashMap<>();
+        /** The java to sql type mappers. */
+        private List<JavaToSqlTypeMapper<? extends Serializable>> javaToSqlTypeMappers = new ArrayList<>();
 
         /** The sql type to java map. */
         private Map<SqlType, Tuple2<SqlTypeToJavaRegister<? extends Serializable>, Class<? extends Serializable>>> sqlTypeToJavaMap = new HashMap<>();
+
+        /** The sql type to java mappers. */
+        private List<SqlTypeToJavaMapper<? extends Serializable>> sqlTypeToJavaMappers = new ArrayList<>();
+
+        /**
+         * Adds the.
+         *
+         * @param mapper the mapper
+         */
+        private void add(JavaToSqlTypeMapper<? extends Serializable> mapper) {
+            javaToSqlTypeMappers.add(mapper);
+        }
+
+        /**
+         * Adds the.
+         *
+         * @param mapper the mapper
+         */
+        private void add(SqlTypeToJavaMapper<? extends Serializable> mapper) {
+            sqlTypeToJavaMappers.add(mapper);
+        }
 
         /**
          * Put.
@@ -219,8 +288,8 @@ public class SqlTypeMappingManager {
             Class<? extends Serializable> type = ClassUtils.getSuperClassGenricType(register.getClass());
             JavaToSqlTypeRegister<? extends Serializable> oldRegister = null;
             if ((oldRegister = javaToSqlTypeMap.get(type)) != null) {
-                throw new MappingException(String.format("java type %s already regist with register %s for sql type %s",
-                        type.getName(), oldRegister.getClass().getName(), oldRegister.getSqlType().name()));
+                throw new JdbcMappingException("#java.type.registed", new Object[] { type.getName(),
+                        oldRegister.getClass().getName(), oldRegister.getSqlType().name() });
             }
             javaToSqlTypeMap.put(type, register);
             logger.debug("regist java type {} with sql type {}", type.getName(), register.getSqlType().name());
@@ -235,9 +304,9 @@ public class SqlTypeMappingManager {
             Class<? extends Serializable> type = ClassUtils.getSuperClassGenricType(register.getClass());
             Tuple2<SqlTypeToJavaRegister<? extends Serializable>, Class<? extends Serializable>> oldRegister = null;
             if ((oldRegister = sqlTypeToJavaMap.get(register.getSqlType())) != null) {
-                throw new MappingException(String.format("sql type %s already regist with register %s for java type %s",
-                        oldRegister.get0().getSqlType().name(), oldRegister.get0().getClass().getName(),
-                        oldRegister.get1().getName()));
+                throw new JdbcMappingException("#sql.type.registed",
+                        new Object[] { oldRegister.get0().getSqlType().name(), oldRegister.get0().getClass().getName(),
+                                oldRegister.get1().getName() });
             }
             sqlTypeToJavaMap.put(register.getSqlType(), Tuples.of(register, type));
             logger.debug("regist java type {} with sql type {}", type.getName(), register.getSqlType().name());
@@ -254,6 +323,12 @@ public class SqlTypeMappingManager {
             JavaToSqlTypeRegister<? extends Serializable> register = javaToSqlTypeMap.get(javaType);
             if (register != null) {
                 return register.getSqlType();
+            }
+            for (JavaToSqlTypeMapper<? extends Serializable> javaToSqlTypeMapper : javaToSqlTypeMappers) {
+                SqlType sqlType = javaToSqlTypeMapper.getSqlType(javaType);
+                if (sqlType != null) {
+                    return sqlType;
+                }
             }
             return null;
         }
@@ -272,8 +347,13 @@ public class SqlTypeMappingManager {
             if (tuple != null) {
                 return (Class<E>) tuple.get1();
             }
+            for (SqlTypeToJavaMapper<? extends Serializable> sqlTypeToJavaMapper : sqlTypeToJavaMappers) {
+                Class<E> type = sqlTypeToJavaMapper.getJavaType(sqlType);
+                if (type != null) {
+                    return type;
+                }
+            }
             return null;
         }
     }
-
 }

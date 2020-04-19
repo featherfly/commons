@@ -46,8 +46,9 @@ public class TableModel implements Table {
      *
      * @param type type
      */
-    public void setType(String type) {
+    public TableModel setType(String type) {
         this.type = type;
+        return this;
     }
 
     /**
@@ -65,8 +66,9 @@ public class TableModel implements Table {
      *
      * @param name name
      */
-    public void setName(String name) {
+    public TableModel setName(String name) {
         this.name = name;
+        return this;
     }
 
     /**
@@ -84,8 +86,9 @@ public class TableModel implements Table {
      *
      * @param remark remark
      */
-    public void setRemark(String remark) {
+    public TableModel setRemark(String remark) {
         this.remark = remark;
+        return this;
     }
 
     /**
@@ -103,8 +106,9 @@ public class TableModel implements Table {
      *
      * @param catalog catalog
      */
-    public void setCatalog(String catalog) {
+    public TableModel setCatalog(String catalog) {
         this.catalog = catalog;
+        return this;
     }
 
     /**
@@ -138,11 +142,12 @@ public class TableModel implements Table {
      *
      * @param column column
      */
-    public void addColumn(Column column) {
+    public TableModel addColumn(Column column) {
         if (column.isPrimaryKey()) {
             primaryColumns.add(column);
         }
         columnMap.put(column.getName().toUpperCase(), column);
+        return this;
     }
 
     /**
@@ -152,10 +157,11 @@ public class TableModel implements Table {
      *
      * @param columns 列元数据对象数组
      */
-    public void addColumn(Column... columns) {
+    public TableModel addColumn(Column... columns) {
         for (Column columnMetadata : columns) {
             addColumn(columnMetadata);
         }
+        return this;
     }
 
     /**
@@ -165,10 +171,11 @@ public class TableModel implements Table {
      *
      * @param columns 列元数据对象集合
      */
-    public void addColumn(Collection<Column> columns) {
+    public TableModel addColumn(Collection<Column> columns) {
         for (Column columnMetadata : columns) {
             addColumn(columnMetadata);
         }
+        return this;
     }
 
     /**

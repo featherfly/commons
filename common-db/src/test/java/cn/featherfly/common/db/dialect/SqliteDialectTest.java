@@ -120,4 +120,25 @@ public class SqliteDialectTest extends DialectTest {
         //        String s = "";
         //        assertEquals(sql, s);
     }
+
+    @Override
+    @Test
+    void testBuildInsertBatchSql() {
+        String sql = null;
+
+        sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 1);
+        assertEquals(sql, "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp`");
+
+        sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 2);
+        assertEquals(sql, "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp` UNION SELECT ?, ?, ?");
+
+        sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 3);
+        assertEquals(sql,
+                "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp` UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
+
+        sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 5);
+        assertEquals(sql,
+                "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp` UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
+
+    }
 }

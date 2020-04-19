@@ -118,4 +118,23 @@ public class MysqlDialectTest extends DialectTest {
                 + " MODIFY COLUMN `district` VARCHAR(222) COMMENT '区'";
         assertEquals(sql, s);
     }
+
+    @Test
+    void testBuildInsertBatchSql() {
+        String sql = null;
+
+        sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 1);
+        assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (`?`, `?`, `?`)");
+
+        sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 2);
+        assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (`?`, `?`, `?`),(`?`, `?`, `?`)");
+
+        sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 3);
+        assertEquals(sql,
+                "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (`?`, `?`, `?`),(`?`, `?`, `?`),(`?`, `?`, `?`)");
+
+        sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 5);
+        assertEquals(sql,
+                "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (`?`, `?`, `?`),(`?`, `?`, `?`),(`?`, `?`, `?`),(`?`, `?`, `?`),(`?`, `?`, `?`)");
+    }
 }

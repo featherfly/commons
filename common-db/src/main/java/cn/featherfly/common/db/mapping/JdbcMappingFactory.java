@@ -1,11 +1,13 @@
 
 package cn.featherfly.common.db.mapping;
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -32,7 +34,6 @@ import cn.featherfly.common.repository.mapping.ClassMapping;
 import cn.featherfly.common.repository.mapping.ClassNameConversion;
 import cn.featherfly.common.repository.mapping.ClassNameJpaConversion;
 import cn.featherfly.common.repository.mapping.ClassNameUnderlineConversion;
-import cn.featherfly.common.repository.mapping.MappingException;
 import cn.featherfly.common.repository.mapping.MappingFactory;
 import cn.featherfly.common.repository.mapping.PropertyMapping;
 import cn.featherfly.common.repository.mapping.PropertyNameConversion;
@@ -47,6 +48,11 @@ import cn.featherfly.common.repository.mapping.PropertyNameUnderlineConversion;
  * @author zhongj
  */
 public class JdbcMappingFactory implements MappingFactory {
+
+    public enum MappingMode {
+        OBJ_DB_MIXED,
+        OBJ_TO_DB_STRICT;
+    }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JdbcMappingFactory.class);
 
@@ -172,7 +178,7 @@ public class JdbcMappingFactory implements MappingFactory {
 
         Table tm = metadata.getTable(tableName);
         if (tm == null) {
-            throw new MappingException("#talbe.not.exists", new Object[] { tableName });
+            throw new JdbcMappingException("#talbe.not.exists", new Object[] { tableName });
         }
 
         Collection<BeanProperty<?>> bps = bd
@@ -184,7 +190,7 @@ public class JdbcMappingFactory implements MappingFactory {
             }
         }
         if (!findPk) {
-            throw new MappingException("#id.map.not.exists", new Object[] { type.getName() });
+            throw new JdbcMappingException("#id.map.not.exists", new Object[] { type.getName() });
         }
 
         for (cn.featherfly.common.db.metadata.Column cmd : tm.getColumns()) {
@@ -194,14 +200,16 @@ public class JdbcMappingFactory implements MappingFactory {
             LOGGER.debug(logInfo.toString());
         }
         // 形成映射对象
-        ClassMapping<T> classMapping = new ClassMapping<>(type, tableName);
-        classMapping.addPropertyMappings(tableMapping.values());
+        ClassMapping<T> classMapping = new ClassMapping<>(type, tableName, tm.getRemark());
+
+        classMapping.addPropertyMappings(tableMapping.values().stream()
+                .sorted((p1, p2) -> p1.getIndex() < p2.getIndex() ? -1 : 1).collect(Collectors.toList()));
         return classMapping;
     }
 
     private boolean mappingWithJpa(BeanProperty<?> beanProperty, Map<String, PropertyMapping> tableMapping,
             StringBuilder logInfo, Table tableMetadata) {
-        boolean hasPk = beanProperty.hasAnnotation(Id.class);
+        boolean isPk = beanProperty.hasAnnotation(Id.class);
         PropertyMapping mapping = new PropertyMapping();
 
         Embedded embedded = beanProperty.getAnnotation(Embedded.class);
@@ -212,16 +220,17 @@ public class JdbcMappingFactory implements MappingFactory {
             String columnName = getMappingColumnName(beanProperty);
             if (LangUtils.isNotEmpty(columnName)) {
                 columnName = dialect.convertTableOrColumnName(columnName);
-                ManyToOne manyToOne = beanProperty.getAnnotation(ManyToOne.class);
-                OneToOne oneToOne = beanProperty.getAnnotation(OneToOne.class);
                 mapping.setPropertyName(beanProperty.getName());
                 mapping.setPropertyType(beanProperty.getType());
-                mapping.setPrimaryKey(hasPk);
+                mapping.setPrimaryKey(isPk);
+                ManyToOne manyToOne = beanProperty.getAnnotation(ManyToOne.class);
+                OneToOne oneToOne = beanProperty.getAnnotation(OneToOne.class);
                 if (manyToOne != null || oneToOne != null) {
                     mapping.setRepositoryFieldName(columnName);
-                    mappingFk(mapping, beanProperty, columnName, hasPk, logInfo);
+                    mappingFk(mapping, beanProperty, columnName, isPk, logInfo);
                 } else {
                     mapping.setRepositoryFieldName(columnName);
+                    setColumnMapping(mapping, beanProperty);
                 }
                 tableMapping.put(mapping.getRepositoryFieldName(), mapping);
                 if (LOGGER.isDebugEnabled()) {
@@ -230,7 +239,7 @@ public class JdbcMappingFactory implements MappingFactory {
                 }
             }
         }
-        return hasPk;
+        return isPk;
     }
 
     private void mappinEmbedded(PropertyMapping mapping, BeanProperty<?> beanProperty, StringBuilder logInfo,
@@ -249,12 +258,15 @@ public class JdbcMappingFactory implements MappingFactory {
             columnMpping.setPropertyType(bp.getType());
             columnMpping.setPropertyName(bp.getName());
 
-            if (bp.getAnnotation(Column.class) != null) {
+            Column column = bp.getAnnotation(Column.class);
+            if (column != null) {
                 if (LOGGER.isDebugEnabled()) {
                     logInfo.append(String.format("%s###\t%s -> %s", SystemPropertyUtils.getLineSeparator(),
                             mapping.getPropertyName() + "." + columnMpping.getPropertyName(),
                             columnMpping.getRepositoryFieldName()));
                 }
+                setColumnMapping(mapping, beanProperty);
+
                 mapping.add(columnMpping);
             } else {
                 cn.featherfly.common.db.metadata.Column columnMetadata = tableMetadata.getColumn(columnName);
@@ -272,12 +284,24 @@ public class JdbcMappingFactory implements MappingFactory {
         }
     }
 
+    private void setColumnMapping(PropertyMapping mapping, BeanProperty<?> beanProperty) {
+        Column column = beanProperty.getAnnotation(Column.class);
+        if (column != null) {
+            mapping.setNullable(column.nullable());
+            mapping.setSize(beanProperty.getType() == String.class ? column.length() : column.precision());
+            mapping.setDecimalDigits(column.scale());
+            mapping.setInsertable(column.insertable());
+            mapping.setUpdatable(column.updatable());
+            mapping.setUnique(column.unique());
+        }
+    }
+
     private void mappingFk(PropertyMapping mapping, BeanProperty<?> beanProperty, String columnName, boolean hasPk,
             StringBuilder logInfo) {
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
         Collection<BeanProperty<?>> bps = bd.findBeanPropertys(new BeanPropertyAnnotationMatcher(Id.class));
         if (LangUtils.isEmpty(bps)) {
-            throw new MappingException(beanProperty.getType().getName() + " no property annotated with @Id");
+            throw new JdbcMappingException("#no.id.property", new Object[] { beanProperty.getType().getName() });
         }
         for (BeanProperty<?> bp : bps) {
             PropertyMapping columnMpping = new PropertyMapping();
@@ -312,17 +336,22 @@ public class JdbcMappingFactory implements MappingFactory {
         });
         if (!nameSet.containsKey(cmd.getName())) {
             // 转换下划线，并使用驼峰
-            // String columnName = cmd.getName().toLowerCase();
             String columnName = cmd.getName().toLowerCase();
-            String propertyName = WordUtils.parseToUpperFirst(columnName, Chars.UNDER_LINE.charAt(0));
+            String propertyName = WordUtils.parseToUpperFirst(columnName, Chars.UNDER_LINE_CHAR);
             BeanProperty<?> beanProperty = bd.findBeanProperty(new BeanPropertyNameRegexMatcher(propertyName));
-            if (beanProperty != null) {
+            if (beanProperty != null && !beanProperty.hasAnnotation(Transient.class)) {
                 PropertyMapping mapping = new PropertyMapping();
                 mapping.setPropertyType(beanProperty.getType());
-                mapping.setRepositoryFieldName(dialect.convertTableOrColumnName(columnName));
                 mapping.setPropertyName(propertyName);
+                mapping.setRepositoryFieldName(dialect.convertTableOrColumnName(columnName));
+                mapping.setRemark(cmd.getRemark());
+                mapping.setNullable(cmd.isNullable());
+                mapping.setDecimalDigits(cmd.getDecimalDigits());
+                mapping.setAutoincrement(cmd.isAutoincrement());
+                mapping.setSize(cmd.getSize());
                 mapping.setPrimaryKey(cmd.isPrimaryKey());
                 mapping.setDefaultValue(cmd.getDefaultValue());
+                mapping.setIndex(cmd.getColumnIndex());
                 tableMapping.put(mapping.getRepositoryFieldName(), mapping);
                 if (LOGGER.isDebugEnabled()) {
                     logInfo.append(String.format("%s###\t%s -> %s", SystemPropertyUtils.getLineSeparator(),
@@ -338,6 +367,12 @@ public class JdbcMappingFactory implements MappingFactory {
             PropertyMapping mapping = nameSet.get(cmd.getName());
             mapping.setPrimaryKey(cmd.isPrimaryKey());
             mapping.setDefaultValue(cmd.getDefaultValue());
+            mapping.setRemark(cmd.getRemark());
+            mapping.setNullable(cmd.isNullable());
+            mapping.setDecimalDigits(cmd.getDecimalDigits());
+            mapping.setAutoincrement(cmd.isAutoincrement());
+            mapping.setSize(cmd.getSize());
+            mapping.setIndex(cmd.getColumnIndex());
         }
     }
 
@@ -374,7 +409,7 @@ public class JdbcMappingFactory implements MappingFactory {
 
     /**
      * 返回sqlTypeMappingManager
-     * 
+     *
      * @return sqlTypeMappingManager
      */
     public SqlTypeMappingManager getSqlTypeMappingManager() {

@@ -208,4 +208,6 @@ public abstract class DialectTest {
     abstract void testAlterTableAddColumns();
 
     abstract void testAlterTableModifyColumns();
+
+    abstract void testBuildInsertBatchSql();
 }

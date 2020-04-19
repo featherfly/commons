@@ -188,4 +188,13 @@ public class OracleDialect extends AbstractDialect {
         // FIXME 未实现
         throw new UnsupportedException();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String buildInsertBatchSql(String tableName, String[] columnNames, int insertAmount) {
+        // FIXME 未实现
+        throw new UnsupportedException();
+    }
 }

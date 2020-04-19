@@ -14,12 +14,14 @@ import cn.featherfly.common.db.metadata.SqlType;
  * @author zhongj
  * @param <E> to regist java type
  */
-public interface SqlTypeToJavaRegister<E extends Serializable> {
+public interface SqlTypeToJavaMapper<E extends Serializable> {
 
     /**
      * Gets the sql type.
      *
+     * @param <C>     the generic type
+     * @param sqlType the sql type
      * @return the sql type
      */
-    SqlType getSqlType();
+    <C extends Serializable> Class<C> getJavaType(SqlType sqlType);
 }

@@ -1,7 +1,7 @@
 package cn.featherfly.common.repository.mapping;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -100,7 +100,7 @@ public class ClassMapping<T> {
     //
     // ********************************************************************
 
-    private Map<String, PropertyMapping> propertyMappings = new HashMap<>(0);
+    private Map<String, PropertyMapping> propertyMappings = new LinkedHashMap<>(0);
 
     private String repositoryName;
 

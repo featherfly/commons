@@ -1,4 +1,9 @@
 2020-4-20
+0.1.3
+    1.ClassMapping,PropertyMapping加入更多映射属性
+    2.ClassMapping的PropertyMappings使用index排序
+    
+2020-4-20
 0.1.2
     1.ClassMapping,PropertyMapping加入更多映射属性
     

@@ -52,6 +52,7 @@ public class PropertyMapping {
     private boolean insertable = true;
 
     private boolean updatable = true;
+
     private boolean unique;
 
     /**
@@ -61,9 +62,29 @@ public class PropertyMapping {
 
     private boolean autoincrement;
 
+    private int index = 0;
+
+    /**
+     * 返回index
+     * 
+     * @return index
+     */
+    public int getIndex() {
+        return index;
+    }
+
+    /**
+     * 设置index
+     * 
+     * @param index index
+     */
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
     /**
      * 返回unique
-     * 
+     *
      * @return unique
      */
     public boolean isUnique() {
@@ -72,7 +93,7 @@ public class PropertyMapping {
 
     /**
      * 设置unique
-     * 
+     *
      * @param unique unique
      */
     public void setUnique(boolean unique) {

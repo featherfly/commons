@@ -66,12 +66,12 @@ public enum SqlType {
         return value;
     }
 
-    public String getName() {
+    public String getTypeName() {
         switch (this) {
-            case INTEGER:
-                return "int";
+            //            case INTEGER:
+            //                return "int";
             default:
-                return toString();
+                return name();
         }
     }
 

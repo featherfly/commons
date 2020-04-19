@@ -60,6 +60,8 @@ public class JdbcMappingFactory implements MappingFactory {
 
     private List<PropertyNameConversion> propertyNameConversions = new ArrayList<>();
 
+    private SqlTypeMappingManager sqlTypeMappingManager;
+
     /**
      * @param metadata DatabaseMetadata
      * @param dialect  dialect
@@ -73,6 +75,8 @@ public class JdbcMappingFactory implements MappingFactory {
 
         getPropertyNameConversions().add(new PropertyNameJpaConversion());
         getPropertyNameConversions().add(new PropertyNameUnderlineConversion());
+
+        sqlTypeMappingManager = new SqlTypeMappingManager();
     }
 
     /**
@@ -89,6 +93,8 @@ public class JdbcMappingFactory implements MappingFactory {
 
         this.classNameConversions.addAll(classNameConversions);
         this.propertyNameConversions.addAll(propertyNameConversions);
+
+        sqlTypeMappingManager = new SqlTypeMappingManager();
     }
 
     /**
@@ -364,5 +370,14 @@ public class JdbcMappingFactory implements MappingFactory {
      */
     public Dialect getDialect() {
         return dialect;
+    }
+
+    /**
+     * 返回sqlTypeMappingManager
+     * 
+     * @return sqlTypeMappingManager
+     */
+    public SqlTypeMappingManager getSqlTypeMappingManager() {
+        return sqlTypeMappingManager;
     }
 }

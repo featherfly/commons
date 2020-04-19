@@ -311,7 +311,7 @@ public abstract class AbstractDialect implements Dialect {
      * @return the column type name
      */
     protected String getColumnTypeName(SqlType sqlType) {
-        return sqlType.getName();
+        return sqlType.getTypeName();
     }
 
     /**

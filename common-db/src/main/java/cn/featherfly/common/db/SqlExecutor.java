@@ -25,7 +25,6 @@ import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.repository.Execution;
-import cn.featherfly.common.repository.Query;
 import cn.featherfly.common.repository.mapping.RowMapper;
 
 /**
@@ -46,6 +45,10 @@ public class SqlExecutor {
 
     /** The data source. */
     private DataSource dataSource;
+
+    private char namedParamStartSymbol = SqlUtils.PARAM_NAME_START_SYMBOL;
+
+    private Character namedParamEndSymbol;
 
     /**
      * Instantiates a new sql executor.
@@ -165,6 +168,17 @@ public class SqlExecutor {
     /**
      * sql execute.
      *
+     * @param sql    named param sql.
+     * @param params map params
+     * @return exuecute success amount
+     */
+    public int execute(String sql, Map<String, Object> params) {
+        return execute(SqlUtils.transferNamedParamSql(sql, params, namedParamStartSymbol, namedParamEndSymbol));
+    }
+
+    /**
+     * sql execute.
+     *
      * @param execution execution
      * @return exuecute success amount
      */
@@ -199,11 +213,24 @@ public class SqlExecutor {
      * @param mapper the mapper
      * @return query result list
      */
-    public <E> List<E> query(Query query, RowMapper<E> mapper) {
+    public <E> List<E> query(Execution query, RowMapper<E> mapper) {
         if (query != null) {
             return query(query.getExecution(), mapper, query.getParams());
         }
         return new ArrayList<>();
+    }
+
+    /**
+     * sql query.
+     *
+     * @param <E>    the element type
+     * @param sql    sql
+     * @param params params
+     * @param mapper the mapper
+     * @return query result list
+     */
+    public <E> List<E> query(String sql, RowMapper<E> mapper, Map<String, Object> params) {
+        return query(SqlUtils.transferNamedParamSql(sql, params, namedParamStartSymbol, namedParamEndSymbol), mapper);
     }
 
     /**
@@ -235,11 +262,22 @@ public class SqlExecutor {
      * @param query query
      * @return query result list
      */
-    public List<Map<String, Object>> query(Query query) {
+    public List<Map<String, Object>> query(Execution query) {
         if (query != null) {
             return query(query.getExecution(), query.getParams());
         }
         return new ArrayList<>();
+    }
+
+    /**
+     * Query.
+     *
+     * @param sql    the sql
+     * @param params the params
+     * @return the list
+     */
+    public List<Map<String, Object>> query(String sql, Map<String, Object> params) {
+        return query(SqlUtils.transferNamedParamSql(sql, params, namedParamStartSymbol, namedParamEndSymbol));
     }
 
     /**
@@ -271,11 +309,15 @@ public class SqlExecutor {
      * @param query query
      * @return query result list
      */
-    public List<Object[]> queryListArray(Query query) {
+    public List<Object[]> queryListArray(Execution query) {
         if (query != null) {
             return queryListArray(query.getExecution(), query.getParams());
         }
         return new ArrayList<>();
+    }
+
+    public List<Object[]> queryListArray(String sql, Map<String, Object> params) {
+        return queryListArray(SqlUtils.transferNamedParamSql(sql, params, namedParamStartSymbol, namedParamEndSymbol));
     }
 
     /**
@@ -300,4 +342,41 @@ public class SqlExecutor {
         }
         return new ArrayList<>();
     }
+
+    /**
+     * 返回namedParamStartSymbol
+     *
+     * @return namedParamStartSymbol
+     */
+    public char getNamedParamStartSymbol() {
+        return namedParamStartSymbol;
+    }
+
+    /**
+     * 设置namedParamStartSymbol
+     *
+     * @param namedParamStartSymbol namedParamStartSymbol
+     */
+    public void setNamedParamStartSymbol(char namedParamStartSymbol) {
+        this.namedParamStartSymbol = namedParamStartSymbol;
+    }
+
+    /**
+     * 返回namedParamEndSymbol
+     *
+     * @return namedParamEndSymbol
+     */
+    public Character getNamedParamEndSymbol() {
+        return namedParamEndSymbol;
+    }
+
+    /**
+     * 设置namedParamEndSymbol
+     *
+     * @param namedParamEndSymbol namedParamEndSymbol
+     */
+    public void setNamedParamEndSymbol(Character namedParamEndSymbol) {
+        this.namedParamEndSymbol = namedParamEndSymbol;
+    }
+
 }

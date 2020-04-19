@@ -12,7 +12,9 @@ import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.Tuples;
 
 import cn.featherfly.common.constant.Chars;
+import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.dialect.Dialect;
+import cn.featherfly.common.db.dialect.Keywords;
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.lang.StringUtils;
 import cn.featherfly.common.repository.mapping.ClassMapping;
@@ -23,36 +25,91 @@ import cn.featherfly.common.repository.mapping.PropertyMapping;
  * <p>
  * ClassMappingUtils
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class ClassMappingUtils {
+
+    /**
+     * Gets the select sql.
+     *
+     * @param classMapping the class mapping
+     * @param dialect      the dialect
+     * @return the select sql
+     */
     public static String getSelectSql(ClassMapping<?> classMapping, Dialect dialect) {
         return getSelectSql(classMapping, null, dialect);
     }
 
+    /**
+     * Gets the select sql.
+     *
+     * @param classMapping the class mapping
+     * @param alias        the alias
+     * @param dialect      the dialect
+     * @return the select sql
+     */
     public static String getSelectSql(ClassMapping<?> classMapping, String alias, Dialect dialect) {
         StringBuilder selectSql = new StringBuilder();
-        selectSql.append("select ");
-        selectSql.append(getSelectColumnsSql(classMapping, alias, dialect));
-        selectSql.append(" from ").append(classMapping.getRepositoryName());
+        BuilderUtils.link(selectSql, dialect.getKeyword(Keywords.SELECT),
+                getSelectColumnsSql(classMapping, alias, dialect), dialect.getKeyword(Keywords.FROM),
+                dialect.wrapName(classMapping.getRepositoryName()));
         return selectSql.toString();
     }
 
+    /**
+     * Gets the select columns sql.
+     *
+     * @param classMapping the class mapping
+     * @param tableAlias   the table alias
+     * @param dialect      the dialect
+     * @return the select columns sql
+     */
     public static String getSelectColumnsSql(ClassMapping<?> classMapping, String tableAlias, Dialect dialect) {
         return getSelectColumnsSql(classMapping, tableAlias, "", dialect);
     }
 
+    /**
+     * Gets the select columns sql.
+     *
+     * @param classMapping       the class mapping
+     * @param tableAlias         the table alias
+     * @param prefixPropertyName the prefix property name
+     * @param dialect            the dialect
+     * @return the select columns sql
+     */
     public static String getSelectColumnsSql(ClassMapping<?> classMapping, String tableAlias, String prefixPropertyName,
             Dialect dialect) {
         return getSelectColumnsSql(classMapping, tableAlias, prefixPropertyName, dialect, null, new HashMap<>(0));
     }
 
+    /**
+     * Gets the select columns sql.
+     *
+     * @param classMapping    the class mapping
+     * @param tableAlias      the table alias
+     * @param dialect         the dialect
+     * @param mappingFactory  the mapping factory
+     * @param fetchProperties the fetch properties
+     * @return the select columns sql
+     */
     public static String getSelectColumnsSql(ClassMapping<?> classMapping, String tableAlias, Dialect dialect,
             MappingFactory mappingFactory, Map<String, String> fetchProperties) {
         return getSelectColumnsSql(classMapping, tableAlias, null, dialect, mappingFactory, fetchProperties);
     }
 
+    /**
+     * Gets the select columns sql.
+     *
+     * @param classMapping       the class mapping
+     * @param tableAlias         the table alias
+     * @param prefixPropertyName the prefix property name
+     * @param dialect            the dialect
+     * @param mappingFactory     the mapping factory
+     * @param fetchProperties    the fetch properties
+     * @return the select columns sql
+     */
     private static String getSelectColumnsSql(ClassMapping<?> classMapping, String tableAlias,
             String prefixPropertyName, Dialect dialect, MappingFactory mappingFactory,
             Map<String, String> fetchProperties) {
@@ -99,6 +156,16 @@ public class ClassMappingUtils {
         return selectSql.toString();
     }
 
+    /**
+     * Gets the select columns sql.
+     *
+     * @param classMapping       the class mapping
+     * @param tableAlias         the table alias
+     * @param propertyMapping    the property mapping
+     * @param prefixPropertyName the prefix property name
+     * @param dialect            the dialect
+     * @return the select columns sql
+     */
     private static String getSelectColumnsSql(ClassMapping<?> classMapping, String tableAlias,
             PropertyMapping propertyMapping, String prefixPropertyName, Dialect dialect) {
         StringBuilder selectSql = new StringBuilder();
@@ -111,6 +178,16 @@ public class ClassMappingUtils {
         return selectSql.toString();
     }
 
+    /**
+     * Gets the select columns sql.
+     *
+     * @param classMapping          the class mapping
+     * @param tableAlias            the table alias
+     * @param propertyMapping       the property mapping
+     * @param nestedPropertyMapping the nested property mapping
+     * @param dialect               the dialect
+     * @return the select columns sql
+     */
     private static String getSelectColumnsSql(ClassMapping<?> classMapping, String tableAlias,
             PropertyMapping propertyMapping, PropertyMapping nestedPropertyMapping, Dialect dialect) {
         StringBuilder selectSql = new StringBuilder();
@@ -123,10 +200,23 @@ public class ClassMappingUtils {
         return selectSql.toString();
     }
 
+    /**
+     * Gets the property alias name.
+     *
+     * @param propertyMapping the property mapping
+     * @return the property alias name
+     */
     public static String getPropertyAliasName(PropertyMapping propertyMapping) {
         return getNestedPropertyAliasName(propertyMapping, "");
     }
 
+    /**
+     * Gets the nested property alias name.
+     *
+     * @param propertyMapping       the property mapping
+     * @param nestedPropertyMapping the nested property mapping
+     * @return the nested property alias name
+     */
     private static String getNestedPropertyAliasName(PropertyMapping propertyMapping,
             PropertyMapping nestedPropertyMapping) {
         String prefixPropertyName = null;
@@ -136,6 +226,13 @@ public class ClassMappingUtils {
         return getNestedPropertyAliasName(propertyMapping, prefixPropertyName);
     }
 
+    /**
+     * Gets the nested property alias name.
+     *
+     * @param pm                 the pm
+     * @param prefixPropertyName the prefix property name
+     * @return the nested property alias name
+     */
     private static String getNestedPropertyAliasName(PropertyMapping pm, String prefixPropertyName) {
         PropertyMapping propertyMapping = pm;
         if (!propertyMapping.getPropertyMappings().isEmpty()) {
@@ -152,20 +249,49 @@ public class ClassMappingUtils {
         return propertyName;
     }
 
+    /**
+     * Gets the property alias name.
+     *
+     * @param propertyMapping the property mapping
+     * @param dialect         the dialect
+     * @return the property alias name
+     */
     public static String getPropertyAliasName(PropertyMapping propertyMapping, Dialect dialect) {
         return dialect.wrapName(getPropertyAliasName(propertyMapping));
     }
 
+    /**
+     * Gets the nested property alias name.
+     *
+     * @param propertyMapping    the property mapping
+     * @param prefixPropertyName the prefix property name
+     * @param dialect            the dialect
+     * @return the nested property alias name
+     */
     private static String getNestedPropertyAliasName(PropertyMapping propertyMapping, String prefixPropertyName,
             Dialect dialect) {
         return dialect.wrapName(getNestedPropertyAliasName(propertyMapping, prefixPropertyName));
     }
 
+    /**
+     * Gets the nested property alias name.
+     *
+     * @param propertyMapping       the property mapping
+     * @param nestedPropertyMapping the nested property mapping
+     * @param dialect               the dialect
+     * @return the nested property alias name
+     */
     private static String getNestedPropertyAliasName(PropertyMapping propertyMapping,
             PropertyMapping nestedPropertyMapping, Dialect dialect) {
         return dialect.wrapName(getNestedPropertyAliasName(propertyMapping, nestedPropertyMapping));
     }
 
+    /**
+     * Gets the select columns.
+     *
+     * @param classMapping the class mapping
+     * @return the select columns
+     */
     public static Map<String, String> getSelectColumns(ClassMapping<?> classMapping) {
         Map<String, String> columns = new HashMap<>();
         for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
@@ -174,7 +300,7 @@ public class ClassMappingUtils {
             } else {
                 for (PropertyMapping pm : propertyMapping.getPropertyMappings()) {
                     columns.put(pm.getRepositoryFieldName(),
-                            propertyMapping.getPropertyName() + "." + pm.getPropertyName());
+                            propertyMapping.getPropertyName() + Chars.DOT + pm.getPropertyName());
                 }
             }
         }
@@ -182,7 +308,7 @@ public class ClassMappingUtils {
     }
 
     /**
-     * 根据传入name获取对应的columnName,propertyName
+     * 根据传入name获取对应的columnName,propertyName.
      *
      * @param name         property name or column name
      * @param classMapping classMapping
@@ -191,7 +317,7 @@ public class ClassMappingUtils {
     public static Tuple2<String, String> getColumnAndPropertyName(String name, ClassMapping<?> classMapping) {
         PropertyMapping propertyMapping = null;
         if (classMapping != null && LangUtils.isNotEmpty(name)) {
-            if (name.contains(".")) {
+            if (name.contains(Chars.DOT)) {
                 String[] names = name.split("\\.");
                 propertyMapping = getNestedMapping(names, classMapping);
             } else {
@@ -201,12 +327,12 @@ public class ClassMappingUtils {
         if (propertyMapping != null) {
             return Tuples.of(propertyMapping.getRepositoryFieldName(), propertyMapping.getPropertyName());
         } else {
-            return Tuples.of(name, "");
+            return Tuples.of(name, Chars.EMPTY_STR);
         }
     }
 
     /**
-     * 根据传入name获取对应的columnName
+     * 根据传入name获取对应的columnName.
      *
      * @param name         property name or column name
      * @param classMapping classMapping
@@ -214,7 +340,7 @@ public class ClassMappingUtils {
      */
     public static String getColumnName(String name, ClassMapping<?> classMapping) {
         if (classMapping != null && LangUtils.isNotEmpty(name)) {
-            if (name.contains(".")) {
+            if (name.contains(Chars.DOT)) {
                 String[] names = name.split("\\.");
                 return getNestedColumnName(names, classMapping);
             } else {
@@ -224,11 +350,25 @@ public class ClassMappingUtils {
         return name;
     }
 
+    /**
+     * Gets the simple mapping.
+     *
+     * @param name         the name
+     * @param classMapping the class mapping
+     * @return the simple mapping
+     */
     private static PropertyMapping getSimpleMapping(String name, ClassMapping<?> classMapping) {
         PropertyMapping pm = classMapping.getPropertyMapping(name);
         return pm;
     }
 
+    /**
+     * Gets the simple column name.
+     *
+     * @param name         the name
+     * @param classMapping the class mapping
+     * @return the simple column name
+     */
     private static String getSimpleColumnName(String name, ClassMapping<?> classMapping) {
         PropertyMapping pm = getSimpleMapping(name, classMapping);
         if (pm != null) {
@@ -237,6 +377,13 @@ public class ClassMappingUtils {
         return name;
     }
 
+    /**
+     * Gets the nested mapping.
+     *
+     * @param names        the names
+     * @param classMapping the class mapping
+     * @return the nested mapping
+     */
     private static PropertyMapping getNestedMapping(String[] names, ClassMapping<?> classMapping) {
         PropertyMapping pm = null;
         for (String n : names) {
@@ -249,6 +396,13 @@ public class ClassMappingUtils {
         return pm;
     }
 
+    /**
+     * Gets the nested column name.
+     *
+     * @param names        the names
+     * @param classMapping the class mapping
+     * @return the nested column name
+     */
     private static String getNestedColumnName(String[] names, ClassMapping<?> classMapping) {
         PropertyMapping pm = getNestedMapping(names, classMapping);
         if (pm != null) {
@@ -259,7 +413,7 @@ public class ClassMappingUtils {
     }
 
     /**
-     * 根据传入name获取对应的columnName array
+     * 根据传入name获取对应的columnName array.
      *
      * @param classMapping classMapping
      * @param names        property name or column name array
@@ -278,7 +432,7 @@ public class ClassMappingUtils {
     }
 
     /**
-     * 根据传入name获取对应的columnName array
+     * 根据传入name获取对应的columnName array.
      *
      * @param classMapping classMapping
      * @param names        property name or column name collection

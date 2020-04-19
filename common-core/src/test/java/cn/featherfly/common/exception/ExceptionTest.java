@@ -8,6 +8,7 @@ import java.util.Locale;
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.locale.ResourceBundleUtils;
+import cn.featherfly.common.locale.Text;
 
 /**
  * <p>
@@ -76,4 +77,22 @@ public class ExceptionTest {
             System.out.println(e.getLocalizedMessage());
         }
     }
+
+    @Test
+    public void InitException() {
+        try {
+            throw new InitException(Text.HELLO.getMessage());
+        } catch (InitException e) {
+            assertEquals(e.getMessage(), "你好");
+            assertEquals(e.getLocalizedMessage(), "你好");
+        }
+
+        try {
+            throw new InitException(Text.HELLO.getMessage(Locale.ENGLISH));
+        } catch (InitException e) {
+            assertEquals(e.getMessage(), "hello");
+            assertEquals(e.getLocalizedMessage(), "hello");
+        }
+    }
+
 }

@@ -7,9 +7,6 @@ import java.util.function.Supplier;
  * <p>
  * Logger
  * </p>
- * <p>
- * 2019-08-29
- * </p>
  *
  * @author zhongj
  */

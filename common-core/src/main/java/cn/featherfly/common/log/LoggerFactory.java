@@ -19,9 +19,6 @@ import javassist.NotFoundException;
  * <p>
  * LoggerFactory
  * </p>
- * <p>
- * 2019-08-29
- * </p>
  *
  * @author zhongj
  */

@@ -3,14 +3,12 @@ package cn.featherfly.common.exception;
 
 import java.util.Locale;
 
+import cn.featherfly.common.locale.LocalizedMessage;
+
 /**
  * <p>
- * InitException
+ * UnsupportedException
  * </p>
- * <p>
- * 2019-08-07
- * </p>
- * .
  *
  * @author zhongj
  * @since 1.7.9
@@ -120,4 +118,71 @@ public class UnsupportedException extends LocalizedException {
         super(ex);
     }
 
+    /**
+     * @param message
+     * @param locale
+     * @param ex
+     */
+    public UnsupportedException(LocalizedMessage message, Locale locale, Throwable ex) {
+        super(message, locale, ex);
+    }
+
+    /**
+     * @param message
+     * @param locale
+     */
+    public UnsupportedException(LocalizedMessage message, Locale locale) {
+        super(message, locale);
+    }
+
+    /**
+     * @param message
+     * @param args
+     * @param locale
+     * @param ex
+     */
+    public UnsupportedException(LocalizedMessage message, Object[] args, Locale locale, Throwable ex) {
+        super(message, args, locale, ex);
+    }
+
+    /**
+     * @param message
+     * @param args
+     * @param locale
+     */
+    public UnsupportedException(LocalizedMessage message, Object[] args, Locale locale) {
+        super(message, args, locale);
+    }
+
+    /**
+     * @param message
+     * @param args
+     * @param ex
+     */
+    public UnsupportedException(LocalizedMessage message, Object[] args, Throwable ex) {
+        super(message, args, ex);
+    }
+
+    /**
+     * @param message
+     * @param args
+     */
+    public UnsupportedException(LocalizedMessage message, Object[] args) {
+        super(message, args);
+    }
+
+    /**
+     * @param message
+     * @param ex
+     */
+    public UnsupportedException(LocalizedMessage message, Throwable ex) {
+        super(message, ex);
+    }
+
+    /**
+     * @param message
+     */
+    public UnsupportedException(LocalizedMessage message) {
+        super(message);
+    }
 }

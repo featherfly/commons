@@ -4,6 +4,7 @@ import java.nio.charset.Charset;
 import java.util.Locale;
 
 import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.locale.LocalizedMessage;
 import cn.featherfly.common.locale.ResourceBundleUtils;
 
 /**
@@ -24,6 +25,8 @@ public abstract class LocalizedException extends BaseException {
     private String localizedMessage;
 
     protected Charset charset;
+
+    private LocalizedMessage localeMessage;
 
     /**
      * 构造方法
@@ -130,10 +133,102 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
+     * 构造方法
+     *
+     * @param message 信息
+     * @param ex      异常
+     */
+    protected LocalizedException(LocalizedMessage message, Throwable ex) {
+        this(message, new Object[] {}, ex);
+    }
+
+    /**
+     * 构造方法
+     *
+     * @param message 信息
+     * @param args    消息绑定参数
+     * @param locale  locale
+     * @param ex      异常
+     */
+    protected LocalizedException(LocalizedMessage message, Object[] args, Locale locale, Throwable ex) {
+        super(message.getMessage(args), ex);
+        this.args = args;
+        this.locale = locale;
+    }
+
+    /**
+     * 构造方法
+     *
+     * @param message 信息
+     * @param locale  locale
+     * @param ex      异常
+     */
+    protected LocalizedException(LocalizedMessage message, Locale locale, Throwable ex) {
+        this(message, new Object[] {}, locale, ex);
+    }
+
+    /**
+     * 构造方法
+     *
+     * @param message 信息
+     * @param args    消息绑定参数
+     * @param ex      异常
+     */
+    protected LocalizedException(LocalizedMessage message, Object[] args, Throwable ex) {
+        this(message, args, null, ex);
+    }
+
+    /**
+     * 构造方法
+     *
+     * @param message 信息
+     * @param args    消息绑定参数
+     * @param locale  locale
+     */
+    protected LocalizedException(LocalizedMessage message, Object[] args, Locale locale) {
+        super(message.getMessage(args));
+        this.args = args;
+        this.locale = locale;
+    }
+
+    /**
+     * 构造方法
+     *
+     * @param message 信息
+     * @param locale  locale
+     */
+    protected LocalizedException(LocalizedMessage message, Locale locale) {
+        this(message, new Object[] {}, locale);
+    }
+
+    /**
+     * 构造方法
+     *
+     * @param message 信息
+     * @param args    消息绑定参数
+     */
+    protected LocalizedException(LocalizedMessage message, Object[] args) {
+        super(message.getMessage(args));
+        this.args = args;
+    }
+
+    /**
+     * 构造方法
+     *
+     * @param message 信息
+     */
+    protected LocalizedException(LocalizedMessage message) {
+        this(message, new Object[] {});
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public String getLocalizedMessage() {
+        if (localeMessage != null) {
+            return getMessage();
+        }
         if (LangUtils.isEmpty(localizedMessage)) {
             String message = getMessage();
             if (LangUtils.isEmpty(message)) {

@@ -10,9 +10,6 @@ import cn.featherfly.common.lang.LangUtils;
  * <p>
  * LoggerUtils
  * </p>
- * <p>
- * 2019-08-29
- * </p>
  *
  * @author zhongj
  */

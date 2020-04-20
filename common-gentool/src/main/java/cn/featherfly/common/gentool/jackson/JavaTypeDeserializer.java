@@ -1,5 +1,5 @@
 
-package cn.featherfly.common.gentool.exception.jackson;
+package cn.featherfly.common.gentool.jackson;
 
 import java.io.IOException;
 import java.math.BigDecimal;

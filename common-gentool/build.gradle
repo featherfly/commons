@@ -1,7 +1,12 @@
 dependencies {
-    implementation project(":common-core")
+    api project(":common-core")
+    api project(":common-db")
     
-    implementation group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.11.RELEASE'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.0'
-    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.10.0'
+    api group: 'org.freemarker', name: 'freemarker', version: '2.3.30'
+    api group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.11.RELEASE'
+    api group: 'org.springframework', name: 'spring-core', version: '5.2.5.RELEASE'
+    api group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3'
+    api group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.10.3'
+    
+    testImplementation 'mysql:mysql-connector-java:5.1.48'
 }

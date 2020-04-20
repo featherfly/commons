@@ -4,6 +4,8 @@ package cn.featherfly.common.gentool.exception;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.featherfly.common.gentool.GenerateConfig;
+
 /**
  * <p>
  * GeneratorRunner
@@ -32,7 +34,11 @@ public class GeneratorRunner {
 
         GenerateConfig config = new GenerateConfig();
         if (configFile != null) {
-            config = GenerateConfig.create(configFile);
+            config.load(configFile);
+            //            config = GenerateConfig.create(configFile);
+        } else {
+            config.setTemplateSuffix(".template");
+            config.setTemplateDir("cn/featherfly/common/gentool/exception/template/");
         }
 
         Generator generator = new Generator(config);

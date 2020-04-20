@@ -3,6 +3,8 @@ package cn.featherfly.common.gentool.exception;
 
 import org.testng.annotations.Test;
 
+import cn.featherfly.common.gentool.GenerateConfig;
+
 /**
  * <p>
  * GeneratorTest

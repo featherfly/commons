@@ -3,7 +3,7 @@ package cn.featherfly.common.gentool.exception.module;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import cn.featherfly.common.gentool.exception.jackson.JavaTypeDeserializer;
+import cn.featherfly.common.gentool.jackson.JavaTypeDeserializer;
 
 /**
  * <p>

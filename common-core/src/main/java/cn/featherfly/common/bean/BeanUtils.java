@@ -1,6 +1,7 @@
 package cn.featherfly.common.bean;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -337,6 +338,15 @@ public final class BeanUtils {
                 String name = fromProperty.getName();
                 copyProperty(target, targetBeanDescriptor, from, fromProperty, name, rule);
             }
+
+            for (Field field : from.getClass().getFields()) {
+                try {
+                    ClassUtils.setFieldValue(target, field.getName(), ClassUtils.getFieldValue(from, field.getName()));
+                } catch (Exception e) {
+                    // no field in from, ignore
+                }
+            }
+
         } else if (ClassUtils.isParent(target.getClass(), from.getClass())) {
             BeanDescriptor<E> targetBeanDescriptor = BeanDescriptor
                     .getBeanDescriptor(ClassUtils.castGenericType(target.getClass(), target));
@@ -348,6 +358,13 @@ public final class BeanUtils {
                 BeanProperty<?> fromProperty = iter.next();
                 String name = fromProperty.getName();
                 copyProperty(target, from, name, rule);
+            }
+            for (Field field : target.getClass().getFields()) {
+                try {
+                    ClassUtils.setFieldValue(target, field.getName(), ClassUtils.getFieldValue(from, field.getName()));
+                } catch (Exception e) {
+                    // no field in from, ignore
+                }
             }
         } else {
             throw new IllegalArgumentException(String.format("目标对象和源对象不是相同类型也不是继承关系target[%s]，from[%s]",

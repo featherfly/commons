@@ -168,6 +168,35 @@ public final class ClassUtils {
     }
 
     /**
+     * 设置目标类型的指定类型的静态字段值，支持多层嵌套 例如, user.address.no
+     *
+     * @param type      目标类型
+     * @param fieldName 字段名
+     */
+    public static void setFieldValue(Class<?> type, String fieldName, Object value) {
+        try {
+            getField(type, fieldName).set(type, value);
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            throw new ReflectException(e);
+        }
+    }
+
+    /**
+     * 设置目标对象的指定类型的字段值，支持多层嵌套 例如, user.address.no
+     *
+     * @param object    目标对象
+     * @param fieldName 字段名
+     * @param value     value
+     */
+    public static void setFieldValue(Object object, String fieldName, Object value) {
+        try {
+            getField(object.getClass(), fieldName).set(object, value);
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            throw new ReflectException(e);
+        }
+    }
+
+    /**
      * invoke static method
      *
      * @param type       type

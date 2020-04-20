@@ -13,17 +13,23 @@ import cn.featherfly.common.lang.function.SerializableSupplier;
  * </p>
  *
  * @author zhongj
- * @since 1.0
  * @version 1.0
+ * @since 1.0
  */
 public final class AssertIllegalArgument {
 
+    /** The Constant ASSERT. */
     private static final IllegalArgumentAssert ASSERT = new IllegalArgumentAssert();
 
+    /**
+     * Instantiates a new assert illegal argument.
+     */
     private AssertIllegalArgument() {
     }
 
     /**
+     * Checks if is not null.
+     *
      * @param object    object
      * @param arguDescp argument descption
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotNull(java.lang.Object,
@@ -34,6 +40,8 @@ public final class AssertIllegalArgument {
     }
 
     /**
+     * Checks if is not blank.
+     *
      * @param text      text
      * @param arguDescp argument descption
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotBlank(java.lang.String,
@@ -44,6 +52,8 @@ public final class AssertIllegalArgument {
     }
 
     /**
+     * Checks if is not empty.
+     *
      * @param obj       obj
      * @param arguDescp arguDescp
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(java.lang.Object,
@@ -54,6 +64,8 @@ public final class AssertIllegalArgument {
     }
 
     /**
+     * Checks if is not empty.
+     *
      * @param text      text
      * @param arguDescp argument descption
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(java.lang.String,
@@ -64,6 +76,8 @@ public final class AssertIllegalArgument {
     }
 
     /**
+     * Checks if is not empty.
+     *
      * @param array     array
      * @param arguDescp arguDescp
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(java.lang.Object[],
@@ -74,6 +88,8 @@ public final class AssertIllegalArgument {
     }
 
     /**
+     * Checks if is not empty.
+     *
      * @param collection collection
      * @param arguDescp  arguDescp
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(java.util.Collection,
@@ -84,6 +100,8 @@ public final class AssertIllegalArgument {
     }
 
     /**
+     * Checks if is not empty.
+     *
      * @param map       map
      * @param arguDescp arguDescp
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(java.util.Map,
@@ -94,6 +112,8 @@ public final class AssertIllegalArgument {
     }
 
     /**
+     * Checks if is exists.
+     *
      * @param file      file
      * @param arguDescp argument descption
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isExists(java.io.File,
@@ -104,6 +124,8 @@ public final class AssertIllegalArgument {
     }
 
     /**
+     * Checks if is instance of.
+     *
      * @param clazz clazz
      * @param obj   obj
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isInstanceOf(java.lang.Class,
@@ -114,6 +136,8 @@ public final class AssertIllegalArgument {
     }
 
     /**
+     * Checks if is parent.
+     *
      * @param parentType parentType
      * @param subType    subType
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isParent(java.lang.Class,
@@ -124,8 +148,10 @@ public final class AssertIllegalArgument {
     }
 
     /**
-     * @param file
-     * @param arguDescp
+     * Checks if is file.
+     *
+     * @param file      the file
+     * @param arguDescp the argu descp
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isFile(java.io.File,
      *      java.lang.String)
      */
@@ -134,8 +160,10 @@ public final class AssertIllegalArgument {
     }
 
     /**
-     * @param file
-     * @param arguDescp
+     * Checks if is directory.
+     *
+     * @param file      the file
+     * @param arguDescp the argu descp
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isDirectory(java.io.File,
      *      java.lang.String)
      */
@@ -144,7 +172,9 @@ public final class AssertIllegalArgument {
     }
 
     /**
-     * @param classType
+     * Checks if is not interface.
+     *
+     * @param classType the class type
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotInterface(java.lang.Class)
      */
     public static void isNotInterface(Class<?> classType) {
@@ -152,10 +182,12 @@ public final class AssertIllegalArgument {
     }
 
     /**
-     * @param value
-     * @param min
-     * @param max
-     * @param arguDescp
+     * Checks if is in range.
+     *
+     * @param value     the value
+     * @param min       the min
+     * @param max       the max
+     * @param arguDescp the argu descp
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isInRange(int,
      *      int, int, java.lang.String)
      */
@@ -164,9 +196,11 @@ public final class AssertIllegalArgument {
     }
 
     /**
-     * @param value
-     * @param min
-     * @param arguDescp
+     * Checks if is gt.
+     *
+     * @param value     the value
+     * @param min       the min
+     * @param arguDescp the argu descp
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGt(int, int,
      *      java.lang.String)
      */
@@ -175,9 +209,11 @@ public final class AssertIllegalArgument {
     }
 
     /**
-     * @param value
-     * @param min
-     * @param arguDescp
+     * Checks if is ge.
+     *
+     * @param value     the value
+     * @param min       the min
+     * @param arguDescp the argu descp
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGe(int, int,
      *      java.lang.String)
      */
@@ -186,9 +222,11 @@ public final class AssertIllegalArgument {
     }
 
     /**
-     * @param value
-     * @param max
-     * @param arguDescp
+     * Checks if is lt.
+     *
+     * @param value     the value
+     * @param max       the max
+     * @param arguDescp the argu descp
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLt(int, int,
      *      java.lang.String)
      */
@@ -197,9 +235,11 @@ public final class AssertIllegalArgument {
     }
 
     /**
-     * @param value
-     * @param max
-     * @param arguDescp
+     * Checks if is le.
+     *
+     * @param value     the value
+     * @param max       the max
+     * @param arguDescp the argu descp
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLe(int, int,
      *      java.lang.String)
      */
@@ -208,8 +248,10 @@ public final class AssertIllegalArgument {
     }
 
     /**
-     * @param <T>
-     * @param propertySupplier
+     * Checks if is not null.
+     *
+     * @param <T>              the generic type
+     * @param propertySupplier the property supplier
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotNull(cn.featherfly.common.lang.function.SerializableSupplier)
      */
     public static <T> void isNotNull(SerializableSupplier<T> propertySupplier) {
@@ -217,7 +259,9 @@ public final class AssertIllegalArgument {
     }
 
     /**
-     * @param propertySupplier
+     * Checks if is not blank.
+     *
+     * @param propertySupplier the property supplier
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotBlank(cn.featherfly.common.lang.function.SerializableSupplier)
      */
     public static void isNotBlank(SerializableSupplier<String> propertySupplier) {
@@ -225,8 +269,10 @@ public final class AssertIllegalArgument {
     }
 
     /**
-     * @param <T>
-     * @param propertySupplier
+     * Checks if is not empty.
+     *
+     * @param <T>              the generic type
+     * @param propertySupplier the property supplier
      * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(cn.featherfly.common.lang.function.SerializableSupplier)
      */
     public static <T> void isNotEmpty(SerializableSupplier<T> propertySupplier) {

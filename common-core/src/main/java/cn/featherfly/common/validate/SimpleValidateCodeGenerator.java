@@ -7,24 +7,28 @@ import java.util.Random;
  * <p>
  * VerifyCodeGenerator
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class SimpleValidateCodeGenerator implements ValidateCodeGenerator {
-    /**
-     * VERIFY_CODES
-     */
+
+    /** VERIFY_CODES. */
     public static final String VERIFY_CODES = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
 
+    /** The size. */
     private int size;
 
     /**
+     * Instantiates a new simple validate code generator.
      */
     public SimpleValidateCodeGenerator() {
     }
 
     /**
-     * @param size
+     * Instantiates a new simple validate code generator.
+     *
+     * @param size the size
      */
     public SimpleValidateCodeGenerator(int size) {
         super();
@@ -32,7 +36,7 @@ public class SimpleValidateCodeGenerator implements ValidateCodeGenerator {
     }
 
     /**
-     * 返回size
+     * 返回size.
      *
      * @return size
      */
@@ -41,7 +45,7 @@ public class SimpleValidateCodeGenerator implements ValidateCodeGenerator {
     }
 
     /**
-     * 设置size
+     * 设置size.
      *
      * @param size size
      */
@@ -50,7 +54,7 @@ public class SimpleValidateCodeGenerator implements ValidateCodeGenerator {
     }
 
     /**
-     * 使用系统默认字符源生成验证码
+     * 使用系统默认字符源生成验证码.
      *
      * @param verifySize 验证码长度
      * @return verifyCode
@@ -60,7 +64,7 @@ public class SimpleValidateCodeGenerator implements ValidateCodeGenerator {
     }
 
     /**
-     * 使用指定源生成验证码
+     * 使用指定源生成验证码.
      *
      * @param size    验证码长度
      * @param sources 验证码字符源

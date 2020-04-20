@@ -12,23 +12,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * The Class LogUtils.
+ *
  * @author zhongj - yufei
  */
 public class LogUtils {
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = LoggerFactory.getLogger(LogUtils.class);
 
     /**
+     * Instantiates a new log utils.
      */
     public LogUtils() {
     }
 
     /**
-     * trace
+     * trace.
      *
-     * @param logger
-     * @param msg
-     * @param supplier
+     * @param logger   the logger
+     * @param msg      the msg
+     * @param supplier the supplier
      */
     public static void trace(Logger logger, String msg, Supplier<Object[]> supplier) {
         if (logger.isTraceEnabled()) {
@@ -37,11 +41,11 @@ public class LogUtils {
     }
 
     /**
-     * debug
+     * debug.
      *
-     * @param logger
-     * @param msg
-     * @param supplier
+     * @param logger   the logger
+     * @param msg      the msg
+     * @param supplier the supplier
      */
     public static void debug(Logger logger, String msg, Supplier<Object[]> supplier) {
         if (logger.isDebugEnabled()) {
@@ -50,11 +54,11 @@ public class LogUtils {
     }
 
     /**
-     * info
+     * info.
      *
-     * @param logger
-     * @param msg
-     * @param supplier
+     * @param logger   the logger
+     * @param msg      the msg
+     * @param supplier the supplier
      */
     public static void info(Logger logger, String msg, Supplier<Object[]> supplier) {
         if (logger.isInfoEnabled()) {
@@ -63,11 +67,11 @@ public class LogUtils {
     }
 
     /**
-     * info
+     * info.
      *
-     * @param logger
-     * @param msg
-     * @param supplier
+     * @param logger   the logger
+     * @param msg      the msg
+     * @param supplier the supplier
      */
     public static void warn(Logger logger, String msg, Supplier<Object[]> supplier) {
         if (logger.isWarnEnabled()) {
@@ -76,11 +80,11 @@ public class LogUtils {
     }
 
     /**
-     * error
+     * error.
      *
-     * @param logger
-     * @param msg
-     * @param supplier
+     * @param logger   the logger
+     * @param msg      the msg
+     * @param supplier the supplier
      */
     public static void error(Logger logger, String msg, Supplier<Object[]> supplier) {
         if (logger.isErrorEnabled()) {
@@ -92,6 +96,7 @@ public class LogUtils {
      * <p>
      * 记录日志（debug级别）
      * </p>
+     * .
      *
      * @param e   异常信息
      * @param log 日志对象
@@ -106,6 +111,7 @@ public class LogUtils {
      * <p>
      * 记录日志（warn级别）
      * </p>
+     * .
      *
      * @param e   异常信息
      * @param log 日志对象
@@ -120,6 +126,7 @@ public class LogUtils {
      * <p>
      * 记录日志（error级别）
      * </p>
+     * .
      *
      * @param e   异常信息
      * @param log 日志对象
@@ -134,6 +141,7 @@ public class LogUtils {
      * <p>
      * 记录日志（info级别）
      * </p>
+     * .
      *
      * @param e   异常信息
      * @param log 日志对象
@@ -148,6 +156,7 @@ public class LogUtils {
      * <p>
      * 记录日志（trace级别）
      * </p>
+     * .
      *
      * @param e   异常信息
      * @param log 日志对象
@@ -162,6 +171,7 @@ public class LogUtils {
      * <p>
      * 将对象属性信息图输出到日志
      * </p>
+     * .
      *
      * @param target 对象
      * @param log    日志
@@ -174,6 +184,7 @@ public class LogUtils {
      * <p>
      * 将对象属性信息图输出到日志
      * </p>
+     * .
      *
      * @param target 对象
      * @param logger 日志
@@ -208,6 +219,14 @@ public class LogUtils {
         }
     }
 
+    /**
+     * Gets the object info.
+     *
+     * @param target the target
+     * @param level  the level
+     * @return the object info
+     * @throws IllegalAccessException the illegal access exception
+     */
     private String getObjectInfo(Object target, int level) throws IllegalAccessException {
         if (target == null) {
             return StringUtils.NULL_STRING;
@@ -246,11 +265,15 @@ public class LogUtils {
         return sb.toString();
     }
 
+    /** The recursion level. */
     private int recursionLevel = 1;
 
+    /** The enabled. */
     private boolean enabled = true;
 
     /**
+     * Gets the recursion level.
+     *
      * @return 返回recursionLevel
      */
     public int getRecursionLevel() {
@@ -258,6 +281,8 @@ public class LogUtils {
     }
 
     /**
+     * Sets the recursion level.
+     *
      * @param recursionLevel 设置recursionLevel
      */
     public void setRecursionLevel(int recursionLevel) {
@@ -268,6 +293,8 @@ public class LogUtils {
     }
 
     /**
+     * Checks if is enabled.
+     *
      * @return 返回enabled
      */
     public boolean isEnabled() {
@@ -275,6 +302,8 @@ public class LogUtils {
     }
 
     /**
+     * Sets the enabled.
+     *
      * @param enabled 设置enabled
      */
     public void setEnabled(boolean enabled) {

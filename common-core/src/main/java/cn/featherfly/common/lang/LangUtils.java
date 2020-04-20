@@ -14,13 +14,17 @@ import java.util.function.Supplier;
  * <p>
  * 对一些在语法上显得拖沓的常用操作进行封装的工具类
  * </p>
+ * .
  *
  * @author zhongj
- * @since 1.0
  * @version 1.0
+ * @since 1.0
  */
 public final class LangUtils {
 
+    /**
+     * Instantiates a new lang utils.
+     */
     private LangUtils() {
     }
 
@@ -28,6 +32,7 @@ public final class LangUtils {
      * <p>
      * 如果第一个参数为空(null），返回第二个参数，否则返回第一个参数
      * </p>
+     * .
      *
      * @param <T>           泛型
      * @param target        目标参数
@@ -42,6 +47,7 @@ public final class LangUtils {
      * <p>
      * 返回第一个非空的项，!=null
      * <p>
+     * .
      *
      * @param <T>         泛型
      * @param pickedItems 需要选择的对象
@@ -63,6 +69,7 @@ public final class LangUtils {
      * <p>
      * 返回最后一个非空的对象，!=null
      * </p>
+     * .
      *
      * @param <T>         泛型
      * @param pickedItems 需要选择的对象
@@ -85,6 +92,7 @@ public final class LangUtils {
      * <p>
      * 返回传入对象是否为空，（String、Collection、Map、Array还要判断长度是否为0）
      * </p>
+     * .
      *
      * @param object 传入的对象
      * @return 传入对象是否为空
@@ -112,6 +120,7 @@ public final class LangUtils {
      * <p>
      * 返回传入对象是否不为空（String、Collection、Map、Array还要判断长度是否为0）
      * </p>
+     * .
      *
      * @param object 传入的对象
      * @return 传入对象是否不为空
@@ -121,8 +130,10 @@ public final class LangUtils {
     }
 
     /**
-     * ifTrue
+     * ifTrue.
      *
+     * @param <O>     the generic type
+     * @param <R>     the generic type
      * @param bool    bool
      * @param isTrue  exec when bool is true
      * @param isFalse exec when bool is false
@@ -137,8 +148,10 @@ public final class LangUtils {
     }
 
     /**
-     * ifTrue
+     * ifTrue.
      *
+     * @param <O>     the generic type
+     * @param <R>     the generic type
      * @param bool    bool
      * @param isFalse exec when bool is false
      * @param isTrue  exec when bool is true
@@ -156,7 +169,10 @@ public final class LangUtils {
      * <p>
      * 判断传入对象是否为空，（String、Collection、Map、Array还要判断长度是否为0），如果为空则执行传入的方法
      * </p>
+     * .
      *
+     * @param <O>      the generic type
+     * @param <R>      the generic type
      * @param object   传入的对象
      * @param empty    exec when empty
      * @param notEmpty exec when not empty
@@ -174,7 +190,10 @@ public final class LangUtils {
      * <p>
      * 判断传入对象是否为空，（String、Collection、Map、Array还要判断长度是否为0），如果为空则执行传入的方法
      * </p>
+     * .
      *
+     * @param <O>      the generic type
+     * @param <R>      the generic type
      * @param object   传入的对象
      * @param empty    exec when empty
      * @param notEmpty exec when not empty
@@ -192,7 +211,9 @@ public final class LangUtils {
      * <p>
      * 判断传入对象是否不为空，（String、Collection、Map、Array还要判断长度是否为0），如果不为空则执行传入的方法
      * </p>
+     * .
      *
+     * @param <O>      the generic type
      * @param object   传入的对象
      * @param consumer 需要执行的方法
      */
@@ -206,9 +227,13 @@ public final class LangUtils {
      * <p>
      * 判断传入对象是否不为空，（String、Collection、Map、Array还要判断长度是否为0），如果不为空则执行传入的方法
      * </p>
+     * .
      *
+     * @param <O>      the generic type
+     * @param <R>      the generic type
      * @param object   传入的对象
      * @param notEmpty 需要执行的方法
+     * @param empty    the empty
      * @return object
      */
     public static <O, R> R ifNotEmpty(O object, Supplier<R> notEmpty, Supplier<R> empty) {
@@ -223,9 +248,13 @@ public final class LangUtils {
      * <p>
      * 判断传入对象是否不为空，（String、Collection、Map、Array还要判断长度是否为0），如果不为空则执行传入的方法
      * </p>
+     * .
      *
+     * @param <O>      the generic type
+     * @param <R>      the generic type
      * @param object   传入的对象
      * @param notEmpty 需要执行的方法
+     * @param empty    the empty
      * @return object
      */
     public static <O, R> R ifNotEmpty(O object, Function<O, R> notEmpty, Supplier<R> empty) {
@@ -240,6 +269,7 @@ public final class LangUtils {
      * <p>
      * 返回传入字符串是否为空（是null或是空字符串）
      * </p>
+     * .
      *
      * @param string 传入的字符串
      * @return 传入字符串是否为空
@@ -267,6 +297,7 @@ public final class LangUtils {
      * <p>
      * 返回传入字符串是否不为空（不是null或不是空字符串）
      * </p>
+     * .
      *
      * @param string 传入的字符串
      * @return 传入字符串是否不为空
@@ -294,6 +325,7 @@ public final class LangUtils {
      * <p>
      * 返回数组是否为空（是null或是空数组）
      * </p>
+     * .
      *
      * @param array 传入的数组
      * @return 传入数组是否为空
@@ -320,6 +352,7 @@ public final class LangUtils {
      * <p>
      * 返回数组是否不为空（null或空数组）
      * </p>
+     * .
      *
      * @param array 传入的数组
      * @return 传入数组是否不为空
@@ -346,6 +379,7 @@ public final class LangUtils {
      * <p>
      * 返回传入集合是否为空（是null或size=0）
      * </p>
+     * .
      *
      * @param collection 传入的集合
      * @return 传入集合是否为空
@@ -372,6 +406,7 @@ public final class LangUtils {
      * <p>
      * 返回传入集合是否不为空（不是null或size&gt;0）
      * </p>
+     * .
      *
      * @param collection 传入的集合
      * @return 传入集合是否不为空
@@ -398,6 +433,7 @@ public final class LangUtils {
      * <p>
      * 返回传入map是否为空（是null或size=0）
      * </p>
+     * .
      *
      * @param map 传入的map
      * @return 传入map是否为空
@@ -410,6 +446,7 @@ public final class LangUtils {
      * <p>
      * 返回传入map是否不为空（不是null或size&gt;0）
      * </p>
+     * .
      *
      * @param map 传入的map
      * @return 传入map是否不为空
@@ -450,6 +487,7 @@ public final class LangUtils {
      * <p>
      * 判断传入文件对象代表的物理文件是否存在
      * </p>
+     * .
      *
      * @param file 判断的文件
      * @return 传入文件对象代表的物理文件是否存在
@@ -462,6 +500,7 @@ public final class LangUtils {
      * <p>
      * 判断传入文件对象代表的物理文件是否不存在
      * </p>
+     * .
      *
      * @param file 判断的文件
      * @return 传入文件对象代表的物理文件是否存在
@@ -474,6 +513,7 @@ public final class LangUtils {
      * <p>
      * 判断传入文件对象代表的物理文件是否存在，存在则执行传入方法
      * </p>
+     * .
      *
      * @param file     判断的文件
      * @param consumer 需要执行的方法
@@ -488,7 +528,9 @@ public final class LangUtils {
      * <p>
      * 判断传入文件对象代表的物理文件是否存在，存在则执行传入方法
      * </p>
+     * .
      *
+     * @param <R>       the generic type
      * @param file      判断的文件
      * @param exists    exec when exists
      * @param notExists exec when not exists
@@ -506,6 +548,7 @@ public final class LangUtils {
      * <p>
      * 判断传入文件对象代表的物理文件是否不存在，不存在则执行传入方法
      * </p>
+     * .
      *
      * @param file     判断的文件
      * @param consumer 需要执行的方法
@@ -520,7 +563,9 @@ public final class LangUtils {
      * <p>
      * 判断传入文件对象代表的物理文件是否不存在，不存在则执行传入方法
      * </p>
+     * .
      *
+     * @param <R>       the generic type
      * @param file      判断的文件
      * @param notExists exec when not exists
      * @param exists    exec when exists
@@ -538,7 +583,9 @@ public final class LangUtils {
      * <p>
      * 判断传入文件对象代表的物理文件是否不存在，不存在则执行传入方法
      * </p>
+     * .
      *
+     * @param <R>      the generic type
      * @param file     判断的文件
      * @param supplier 需要执行的方法
      * @return obj
@@ -554,10 +601,11 @@ public final class LangUtils {
      * <p>
      * 将传入对象转换为枚举
      * </p>
+     * .
      *
+     * @param <T>     泛型
      * @param toClass 枚举的类型
      * @param object  需要转换的对象
-     * @param <T>     泛型
      * @return 转换后的枚举，如果是无法转换或不存在的枚举类型，则返回null
      */
     public static <T extends Enum<T>> T toEnum(Class<T> toClass, Object object) {
@@ -580,6 +628,14 @@ public final class LangUtils {
         return null;
     }
 
+    /**
+     * To enum.
+     *
+     * @param <T>     the generic type
+     * @param toClass the to class
+     * @param value   the value
+     * @return the t
+     */
     private static <T extends Enum<T>> T toEnum(Class<T> toClass, String value) {
         try {
             int ordinal = Integer.parseInt(value);
@@ -589,6 +645,14 @@ public final class LangUtils {
         }
     }
 
+    /**
+     * To enum.
+     *
+     * @param <T>     the generic type
+     * @param toClass the to class
+     * @param ordinal the ordinal
+     * @return the t
+     */
     private static <T extends Enum<T>> T toEnum(Class<T> toClass, Integer ordinal) {
         T[] es = toClass.getEnumConstants();
         for (T e : es) {
@@ -603,6 +667,7 @@ public final class LangUtils {
      * <p>
      * 安全的equals，防止空指针异常
      * </p>
+     * .
      *
      * @param target      比较对象
      * @param otherTarget 另一个比较对象
@@ -627,6 +692,7 @@ public final class LangUtils {
      * <p>
      * 转换为String，如果不能转换（null）则使用默认值
      * </p>
+     * .
      *
      * @param obj          obj
      * @param defaultValue defaultValue
@@ -640,6 +706,7 @@ public final class LangUtils {
      * <p>
      * 转换为String，如果不能转换（null）则返回null
      * </p>
+     * .
      *
      * @param obj obj
      * @return string
@@ -652,6 +719,7 @@ public final class LangUtils {
      * <p>
      * 获取调用getInvoker方法所在的方法被调用的信息（即调用方法、类等）
      * </p>
+     * .
      *
      * @return StackTraceElement
      */
@@ -672,6 +740,7 @@ public final class LangUtils {
      * <p>
      * 获取调用此方法的调用方法栈
      * </p>
+     * .
      *
      * @return List&lt;StackTraceElement&gt;
      */

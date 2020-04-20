@@ -11,25 +11,32 @@ import cn.featherfly.common.lang.RandomUtils;
  * <p>
  * VerifyCodeGenerator
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class CountValidateCodeGenerator implements ValidateCodeGenerator {
 
+    /** The numbers. */
     private List<Integer> numbers = new ArrayList<>();
 
+    /** The operators. */
     private List<String> operators = new ArrayList<>();
 
+    /** The count times. */
     private int countTimes = 1;
 
     /**
+     * Instantiates a new count validate code generator.
      */
     public CountValidateCodeGenerator() {
         this(1);
     }
 
     /**
-     * @param countTimes
+     * Instantiates a new count validate code generator.
+     *
+     * @param countTimes the count times
      */
     public CountValidateCodeGenerator(int countTimes) {
         super();
@@ -41,6 +48,12 @@ public class CountValidateCodeGenerator implements ValidateCodeGenerator {
         //        CollectionUtils.addAll(operators, "+", "-", "*", "/");
     }
 
+    /**
+     * Count.
+     *
+     * @param countTimes the count times
+     * @return the validate code
+     */
     private ValidateCode count(int countTimes) {
         int result = RandomUtils.getRandom(numbers);
         String show = result + "";

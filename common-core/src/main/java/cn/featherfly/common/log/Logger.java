@@ -11,11 +11,12 @@ import java.util.function.Supplier;
  * @author zhongj
  */
 public interface Logger extends org.slf4j.Logger {
+
     /**
-     * trace
+     * trace.
      *
-     * @param msg
-     * @param supplier
+     * @param msg      the msg
+     * @param supplier the supplier
      */
     void trace(String msg, Supplier<Object[]> supplier);
 

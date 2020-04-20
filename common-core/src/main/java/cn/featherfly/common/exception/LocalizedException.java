@@ -258,9 +258,10 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 设置charset
+     * 设置charset.
      *
      * @param charset charset
+     * @return the localized exception
      */
     public LocalizedException setCharset(Charset charset) {
         this.charset = charset;

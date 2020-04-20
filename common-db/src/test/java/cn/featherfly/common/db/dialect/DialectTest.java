@@ -3,9 +3,9 @@ package cn.featherfly.common.db.dialect;
 
 import java.sql.Types;
 
-import cn.featherfly.common.db.builder.ddl.ColumnModel;
-import cn.featherfly.common.db.builder.ddl.TableModel;
-import cn.featherfly.common.db.metadata.Column;
+import cn.featherfly.common.db.Column;
+import cn.featherfly.common.db.builder.ColumnModel;
+import cn.featherfly.common.db.builder.TableModel;
 
 /**
  * <p>

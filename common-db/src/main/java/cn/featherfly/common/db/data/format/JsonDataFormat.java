@@ -10,11 +10,11 @@ import java.sql.Types;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 
+import cn.featherfly.common.db.Column;
+import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.data.DataFormat;
 import cn.featherfly.common.db.data.ExportException;
-import cn.featherfly.common.db.metadata.Column;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.db.metadata.Table;
 import cn.featherfly.common.lang.DateUtils;
 
 /**

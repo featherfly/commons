@@ -1,6 +1,8 @@
 
 package cn.featherfly.common.db.metadata;
 
+import cn.featherfly.common.db.Column;
+
 /**
  * <p>
  * 列元数据

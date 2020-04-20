@@ -2,6 +2,8 @@ package cn.featherfly.common.db.metadata;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
+import cn.featherfly.common.db.Table;
+
 public class MetadataTestMysql {
     public static void main(String[] args) {
         BasicDataSource dataSource = new BasicDataSource();

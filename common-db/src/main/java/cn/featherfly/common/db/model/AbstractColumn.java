@@ -1,44 +1,44 @@
 
-package cn.featherfly.common.db.builder.ddl;
+package cn.featherfly.common.db.model;
 
-import cn.featherfly.common.db.metadata.Column;
+import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.metadata.SqlType;
 
 /**
  * <p>
- * ColumnModel
+ * AbstractColumn
  * </p>
  *
  * @author zhongj
  */
-public class ColumnModel implements Column {
+public abstract class AbstractColumn<T extends Column> implements Column {
 
-    private String name;
+    protected String name;
 
-    private SqlType sqlType;
+    protected SqlType sqlType;
 
-    private int type;
+    protected int type;
 
-    private String typeName;
+    protected String typeName;
 
-    private int size;
+    protected int size;
 
-    private String remark;
+    protected String remark;
 
-    private String defaultValue;
+    protected String defaultValue;
 
-    private boolean nullable;
+    protected boolean nullable;
 
-    private int columnIndex;
+    protected int columnIndex;
 
-    private boolean primaryKey;
+    protected boolean primaryKey;
 
     /**
      * 小数位数
      */
-    private int decimalDigits;
+    protected int decimalDigits;
 
-    private boolean autoincrement;
+    protected boolean autoincrement;
 
     /**
      * 返回name
@@ -55,8 +55,10 @@ public class ColumnModel implements Column {
      *
      * @param name name
      */
-    public void setName(String name) {
+    @SuppressWarnings("unchecked")
+    public T setName(String name) {
         this.name = name;
+        return (T) this;
     }
 
     /**
@@ -74,9 +76,11 @@ public class ColumnModel implements Column {
      *
      * @param type type
      */
-    public void setType(int type) {
+    @SuppressWarnings("unchecked")
+    public T setType(int type) {
         this.type = type;
         sqlType = SqlType.value(type);
+        return (T) this;
     }
 
     /**
@@ -94,8 +98,10 @@ public class ColumnModel implements Column {
      *
      * @param typeName typeName
      */
-    public void setTypeName(String typeName) {
+    @SuppressWarnings("unchecked")
+    public T setTypeName(String typeName) {
         this.typeName = typeName;
+        return (T) this;
     }
 
     /**
@@ -113,8 +119,10 @@ public class ColumnModel implements Column {
      *
      * @param size size
      */
-    public void setSize(int size) {
+    @SuppressWarnings("unchecked")
+    public T setSize(int size) {
         this.size = size;
+        return (T) this;
     }
 
     /**
@@ -132,8 +140,10 @@ public class ColumnModel implements Column {
      *
      * @param remark remark
      */
-    public void setRemark(String remark) {
+    @SuppressWarnings("unchecked")
+    public T setRemark(String remark) {
         this.remark = remark;
+        return (T) this;
     }
 
     /**
@@ -151,8 +161,10 @@ public class ColumnModel implements Column {
      *
      * @param defaultValue defaultValue
      */
-    public void setDefaultValue(String defaultValue) {
+    @SuppressWarnings("unchecked")
+    public T setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
+        return (T) this;
     }
 
     /**
@@ -170,8 +182,10 @@ public class ColumnModel implements Column {
      *
      * @param nullable nullable
      */
-    public void setNullable(boolean nullable) {
+    @SuppressWarnings("unchecked")
+    public T setNullable(boolean nullable) {
         this.nullable = nullable;
+        return (T) this;
     }
 
     /**
@@ -189,8 +203,10 @@ public class ColumnModel implements Column {
      *
      * @param columnIndex columnIndex
      */
-    public void setColumnIndex(int columnIndex) {
+    @SuppressWarnings("unchecked")
+    public T setColumnIndex(int columnIndex) {
         this.columnIndex = columnIndex;
+        return (T) this;
     }
 
     /**
@@ -208,11 +224,13 @@ public class ColumnModel implements Column {
      *
      * @param primaryKey primaryKey
      */
-    public void setPrimaryKey(boolean primaryKey) {
+    @SuppressWarnings("unchecked")
+    public T setPrimaryKey(boolean primaryKey) {
         this.primaryKey = primaryKey;
         if (primaryKey) {
             nullable = false;
         }
+        return (T) this;
     }
 
     /**
@@ -230,8 +248,10 @@ public class ColumnModel implements Column {
      *
      * @param decimalDigits decimalDigits
      */
-    public void setDecimalDigits(int decimalDigits) {
+    @SuppressWarnings("unchecked")
+    public T setDecimalDigits(int decimalDigits) {
         this.decimalDigits = decimalDigits;
+        return (T) this;
     }
 
     /**
@@ -249,8 +269,10 @@ public class ColumnModel implements Column {
      *
      * @param autoincrement autoincrement
      */
-    public void setAutoincrement(boolean autoincrement) {
+    @SuppressWarnings("unchecked")
+    public T setAutoincrement(boolean autoincrement) {
         this.autoincrement = autoincrement;
+        return (T) this;
     }
 
     /**
@@ -268,8 +290,10 @@ public class ColumnModel implements Column {
      *
      * @param sqlType sqlType
      */
-    public void setSqlType(SqlType sqlType) {
+    @SuppressWarnings("unchecked")
+    public T setSqlType(SqlType sqlType) {
         this.sqlType = sqlType;
         type = sqlType.getValue();
+        return (T) this;
     }
 }

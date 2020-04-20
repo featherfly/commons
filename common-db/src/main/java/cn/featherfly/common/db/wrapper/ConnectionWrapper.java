@@ -779,7 +779,7 @@ public class ConnectionWrapper implements AutoCloseable {
      *
      * @return 返回connection（java.sql.Connection）
      */
-    public ConnectionWrapper getConnection() {
-        return new ConnectionWrapper(connection);
+    public Connection getConnection() {
+        return connection;
     }
 }

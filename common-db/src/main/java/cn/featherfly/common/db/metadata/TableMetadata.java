@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.featherfly.common.db.Column;
+import cn.featherfly.common.db.Table;
+
 /**
  * <p>
  * 表元数据

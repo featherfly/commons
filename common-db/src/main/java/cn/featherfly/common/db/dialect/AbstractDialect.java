@@ -6,10 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.constant.Chars;
+import cn.featherfly.common.db.Column;
+import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.builder.BuilderUtils;
-import cn.featherfly.common.db.metadata.Column;
 import cn.featherfly.common.db.metadata.SqlType;
-import cn.featherfly.common.db.metadata.Table;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.LangUtils;

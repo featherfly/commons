@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.data.query.SimpleQuery;
 import cn.featherfly.common.db.data.query.TableQuery;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.db.metadata.Table;
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.repository.Query;
 import cn.featherfly.common.repository.builder.dml.ConditionBuilder;

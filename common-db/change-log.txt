@@ -1,4 +1,8 @@
 2020-4-20
+0.1.2
+    1.加入代码生成需要的
+    
+2020-4-20
 0.1.1
     1.SqlUtils加入transferNamedParamSql方法，用于转换命名参数sql为传统sql
     2.加入SqlTypeMappingManager，用于管理SqlType和JavaType的对应关系

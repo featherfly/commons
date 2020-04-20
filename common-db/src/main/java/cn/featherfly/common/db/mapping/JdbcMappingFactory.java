@@ -23,9 +23,9 @@ import cn.featherfly.common.bean.BeanProperty;
 import cn.featherfly.common.bean.matcher.BeanPropertyAnnotationMatcher;
 import cn.featherfly.common.bean.matcher.BeanPropertyNameRegexMatcher;
 import cn.featherfly.common.constant.Chars;
+import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.db.metadata.Table;
 import cn.featherfly.common.enums.Logic;
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.lang.SystemPropertyUtils;
@@ -193,7 +193,7 @@ public class JdbcMappingFactory implements MappingFactory {
             throw new JdbcMappingException("#id.map.not.exists", new Object[] { type.getName() });
         }
 
-        for (cn.featherfly.common.db.metadata.Column cmd : tm.getColumns()) {
+        for (cn.featherfly.common.db.Column cmd : tm.getColumns()) {
             mappingFromColumnMetadata(bd, tableMapping, cmd, logInfo);
         }
         if (LOGGER.isDebugEnabled()) {
@@ -269,7 +269,7 @@ public class JdbcMappingFactory implements MappingFactory {
 
                 mapping.add(columnMpping);
             } else {
-                cn.featherfly.common.db.metadata.Column columnMetadata = tableMetadata.getColumn(columnName);
+                cn.featherfly.common.db.Column columnMetadata = tableMetadata.getColumn(columnName);
                 if (columnMetadata != null) {
                     mapping.add(columnMpping);
                     if (LOGGER.isDebugEnabled()) {
@@ -321,7 +321,7 @@ public class JdbcMappingFactory implements MappingFactory {
     }
 
     private <T> void mappingFromColumnMetadata(BeanDescriptor<T> bd, Map<String, PropertyMapping> tableMapping,
-            cn.featherfly.common.db.metadata.Column cmd, StringBuilder logInfo) {
+            cn.featherfly.common.db.Column cmd, StringBuilder logInfo) {
         Map<String, PropertyMapping> nameSet = new HashMap<>();
         tableMapping.forEach((k, v) -> {
             if (LangUtils.isNotEmpty(k)) {

@@ -1,5 +1,7 @@
 
-package cn.featherfly.common.db.metadata;
+package cn.featherfly.common.db;
+
+import cn.featherfly.common.db.metadata.SqlType;
 
 /**
  * <p>

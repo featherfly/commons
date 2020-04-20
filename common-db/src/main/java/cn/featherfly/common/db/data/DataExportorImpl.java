@@ -12,11 +12,11 @@ import java.sql.ResultSetMetaData;
 import java.util.Collection;
 
 import cn.featherfly.common.db.JdbcUtils;
+import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.data.query.SimpleQuery;
 import cn.featherfly.common.db.data.query.TableQuery;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.db.metadata.Table;
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.repository.Query;
 

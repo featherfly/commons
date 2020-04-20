@@ -3,8 +3,8 @@ package cn.featherfly.common.db.data;
 
 import java.sql.ResultSet;
 
+import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.db.metadata.Table;
 
 /**
  * <p>

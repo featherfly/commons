@@ -6,6 +6,7 @@ import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -29,6 +30,7 @@ import cn.featherfly.common.db.wrapper.ConnectionWrapper;
 import cn.featherfly.common.db.wrapper.DataSourceWrapper;
 import cn.featherfly.common.db.wrapper.PreparedStatementWrapper;
 import cn.featherfly.common.db.wrapper.ResultSetWrapper;
+import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.lang.LogUtils;
 import cn.featherfly.common.repository.mapping.RowMapper;
@@ -37,15 +39,55 @@ import cn.featherfly.common.repository.mapping.RowMapper;
  * <p>
  * JDBC操作的工具类
  * </p>
+ * .
  *
  * @author zhongj
  */
 public final class JdbcUtils {
 
+    /**
+     * Instantiates a new jdbc utils.
+     */
     private JdbcUtils() {
     }
 
+    /** The Constant LOGGER. */
     private static final Logger LOGGER = LoggerFactory.getLogger(JdbcUtils.class);
+
+    /**
+     * Gets the connection.
+     *
+     * @param driverClassName the driver class name
+     * @param uri             the uri
+     * @param username        the username
+     * @param password        the password
+     * @return the connection
+     */
+    public static ConnectionWrapper getConnection(String driverClassName, String uri, String username,
+            String password) {
+        try {
+            ClassUtils.forName(driverClassName);
+            return new ConnectionWrapper(DriverManager.getConnection(uri, username, password));
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * Gets the connection.
+     *
+     * @param driverClassName the driver class name
+     * @param uri             the uri
+     * @return the connection
+     */
+    public static ConnectionWrapper getConnection(String driverClassName, String uri) {
+        try {
+            ClassUtils.forName(driverClassName);
+            return new ConnectionWrapper(DriverManager.getConnection(uri));
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
 
     /**
      * 关闭<code>Connection</code>, 忽略null的情况.
@@ -311,14 +353,32 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Warp data source.
+     *
+     * @param dataSource the data source
+     * @return the data source wrapper
+     */
     public static DataSourceWrapper warpDataSource(DataSource dataSource) {
         return new DataSourceWrapper(dataSource);
     }
 
+    /**
+     * Warp connection.
+     *
+     * @param connection the connection
+     * @return the connection wrapper
+     */
     public static ConnectionWrapper warpConnection(Connection connection) {
         return new ConnectionWrapper(connection);
     }
 
+    /**
+     * Gets the connection.
+     *
+     * @param dataSource the data source
+     * @return the connection
+     */
     public static Connection getConnection(DataSource dataSource) {
         try {
             return dataSource.getConnection();
@@ -327,10 +387,22 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the connection wrapper.
+     *
+     * @param dataSource the data source
+     * @return the connection wrapper
+     */
     public static ConnectionWrapper getConnectionWrapper(DataSource dataSource) {
         return warpConnection(getConnection(dataSource));
     }
 
+    /**
+     * Gets the catalog.
+     *
+     * @param dataSource the data source
+     * @return the catalog
+     */
     public static String getCatalog(DataSource dataSource) {
         String catalog = null;
         Connection conn = getConnection(dataSource);
@@ -339,6 +411,12 @@ public final class JdbcUtils {
         return catalog;
     }
 
+    /**
+     * Gets the catalog.
+     *
+     * @param conn the conn
+     * @return the catalog
+     */
     public static String getCatalog(Connection conn) {
         try {
             return conn.getCatalog();
@@ -351,6 +429,7 @@ public final class JdbcUtils {
      * <p>
      * 设置参数
      * </p>
+     * .
      *
      * @param prep   PreparedStatementWrapper
      * @param values 参数
@@ -367,6 +446,7 @@ public final class JdbcUtils {
      * <p>
      * 设置参数
      * </p>
+     * .
      *
      * @param prep   PreparedStatement
      * @param values 参数
@@ -383,6 +463,7 @@ public final class JdbcUtils {
      * <p>
      * 设置参数
      * </p>
+     * .
      *
      * @param prep     PreparedStatementWrapper
      * @param position 占位符位置
@@ -430,6 +511,7 @@ public final class JdbcUtils {
      * <p>
      * 设置参数
      * </p>
+     * .
      *
      * @param prep     PreparedStatement
      * @param position 占位符位置
@@ -621,6 +703,12 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the result set map.
+     *
+     * @param rs the rs
+     * @return the result set map
+     */
     private static Map<String, Object> getResultSetMap(ResultSet rs) {
         try {
             Map<String, Object> resultMap = new HashMap<>();
@@ -636,10 +724,26 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the result set objects.
+     *
+     * @param <E>    the element type
+     * @param rs     the rs
+     * @param mapper the mapper
+     * @return the result set objects
+     */
     public static <E> List<E> getResultSetObjects(ResultSetWrapper rs, RowMapper<E> mapper) {
         return getResultSetObjects(rs.getResultSet(), mapper);
     }
 
+    /**
+     * Gets the result set objects.
+     *
+     * @param <E>    the element type
+     * @param rs     the rs
+     * @param mapper the mapper
+     * @return the result set objects
+     */
     public static <E> List<E> getResultSetObjects(ResultSet rs, RowMapper<E> mapper) {
         try {
             List<E> list = new ArrayList<>();
@@ -654,10 +758,22 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the result set maps.
+     *
+     * @param rs the rs
+     * @return the result set maps
+     */
     public static List<Map<String, Object>> getResultSetMaps(ResultSetWrapper rs) {
         return getResultSetMaps(rs.getResultSet());
     }
 
+    /**
+     * Gets the result set maps.
+     *
+     * @param rs the rs
+     * @return the result set maps
+     */
     public static List<Map<String, Object>> getResultSetMaps(ResultSet rs) {
         try {
             List<Map<String, Object>> list = new ArrayList<>();
@@ -670,6 +786,12 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the result set array.
+     *
+     * @param rs the rs
+     * @return the result set array
+     */
     private static Object[] getResultSetArray(ResultSet rs) {
         try {
             ResultSetMetaData metaData = rs.getMetaData();
@@ -683,10 +805,22 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the result set arrays.
+     *
+     * @param rs the rs
+     * @return the result set arrays
+     */
     public static List<Object[]> getResultSetArrays(ResultSetWrapper rs) {
         return getResultSetArrays(rs.getResultSet());
     }
 
+    /**
+     * Gets the result set arrays.
+     *
+     * @param rs the rs
+     * @return the result set arrays
+     */
     public static List<Object[]> getResultSetArrays(ResultSet rs) {
         try {
             List<Object[]> list = new ArrayList<>();
@@ -710,9 +844,9 @@ public final class JdbcUtils {
      * clause. If the SQL AS clause was not specified, then the label is the
      * name of the column</i>.
      *
-     * @return the column name to use
      * @param resultSetMetaData the current meta data to use
      * @param columnIndex       the index of the column for the look up
+     * @return the column name to use
      */
     public static String lookupColumnName(ResultSetMetaData resultSetMetaData, int columnIndex) {
         try {

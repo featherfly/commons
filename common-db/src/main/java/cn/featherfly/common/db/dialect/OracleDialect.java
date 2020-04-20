@@ -5,7 +5,7 @@ import java.util.Date;
 
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.SqlUtils;
-import cn.featherfly.common.db.metadata.Table;
+import cn.featherfly.common.db.Table;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.DateUtils;

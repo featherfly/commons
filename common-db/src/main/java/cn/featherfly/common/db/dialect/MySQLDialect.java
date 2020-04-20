@@ -3,8 +3,8 @@ package cn.featherfly.common.db.dialect;
 import java.sql.Types;
 import java.util.Date;
 
+import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.SqlUtils;
-import cn.featherfly.common.db.metadata.Column;
 import cn.featherfly.common.lang.DateUtils;
 import cn.featherfly.common.lang.LangUtils;
 

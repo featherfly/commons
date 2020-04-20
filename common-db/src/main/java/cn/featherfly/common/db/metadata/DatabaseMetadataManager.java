@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.db.JdbcException;
 import cn.featherfly.common.db.JdbcUtils;
+import cn.featherfly.common.db.wrapper.ConnectionWrapper;
 import cn.featherfly.common.lang.StringUtils;
 
 /**
@@ -75,6 +76,18 @@ public class DatabaseMetadataManager {
      */
     public synchronized DatabaseMetadata create(Connection connection) {
         return create(connection, getDatabase(connection));
+    }
+
+    /**
+     * <p>
+     * 创建数据库元数据，会初始化表和列元数据， 如果元数据对象已经存在，则直接返回.
+     * </p>
+     *
+     * @param connection 数据库连接
+     * @return 已经初始化的数据库元数据对象
+     */
+    public synchronized DatabaseMetadata create(ConnectionWrapper connection) {
+        return create(connection.getConnection());
     }
 
     /**

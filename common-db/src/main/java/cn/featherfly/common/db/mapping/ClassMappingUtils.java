@@ -15,9 +15,11 @@ import com.speedment.common.tuple.Tuples;
 
 import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.constant.Chars;
+import cn.featherfly.common.db.Column;
+import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.builder.BuilderUtils;
-import cn.featherfly.common.db.builder.ddl.ColumnModel;
-import cn.featherfly.common.db.builder.ddl.TableModel;
+import cn.featherfly.common.db.builder.ColumnModel;
+import cn.featherfly.common.db.builder.TableModel;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.lang.StringUtils;
@@ -43,7 +45,7 @@ public class ClassMappingUtils {
      * @param sqlTypeMappingManager the sql type mapping manager
      * @return the table model
      */
-    public static TableModel getTableModel(ClassMapping<?> classMapping, Dialect dialect,
+    public static Table createTable(ClassMapping<?> classMapping, Dialect dialect,
             SqlTypeMappingManager sqlTypeMappingManager) {
         // table
         TableModel table = new TableModel();
@@ -72,7 +74,7 @@ public class ClassMappingUtils {
      */
     public static String getCreateTableSql(ClassMapping<?> classMapping, Dialect dialect,
             SqlTypeMappingManager sqlTypeMappingManager) {
-        return dialect.buildCreateTableDDL(getTableModel(classMapping, dialect, sqlTypeMappingManager));
+        return dialect.buildCreateTableDDL(createTable(classMapping, dialect, sqlTypeMappingManager));
     }
 
     /**
@@ -83,8 +85,7 @@ public class ClassMappingUtils {
      * @return the column model
      */
     @SuppressWarnings("unchecked")
-    private static ColumnModel createColumn(PropertyMapping propertyMapping,
-            SqlTypeMappingManager sqlTypeMappingManager) {
+    private static Column createColumn(PropertyMapping propertyMapping, SqlTypeMappingManager sqlTypeMappingManager) {
         ColumnModel column = new ColumnModel();
         column.setName(propertyMapping.getRepositoryFieldName());
         column.setPrimaryKey(propertyMapping.isPrimaryKey());
@@ -147,27 +148,6 @@ public class ClassMappingUtils {
         if (pms.size() > 0) {
             insertSql.deleteCharAt(insertSql.length() - 1);
         }
-        //        insertSql.append(" ) ").append(dialect.getKeywords().values()).append(" ( ");
-        //        int paramNum = 0;
-        //        for (int i = 0; i < pms.size(); i++) {
-        //            PropertyMapping pm = pms.get(i);
-        //            if (pm.isPrimaryKey() && pm.getDefaultValue() != null && !"null".equalsIgnoreCase(pm.getDefaultValue())) {
-        //                insertSql.append(pm.getDefaultValue()).append(Chars.COMMA);
-        //            } else {
-        //                paramNum++;
-        //                insertSql.append(Chars.QUESTION).append(Chars.COMMA);
-        //                if (pm.getParent() == null) {
-        //                    propertyPositions.put(paramNum, pm.getPropertyName());
-        //                } else {
-        //                    propertyPositions.put(paramNum,
-        //                            pm.getParent().getPropertyName() + Chars.DOT + pm.getPropertyName());
-        //                }
-        //            }
-        //        }
-        //        if (pms.size() > 0) {
-        //            insertSql.deleteCharAt(insertSql.length() - 1);
-        //        }
-        //        insertSql.append(" )");
         insertSql.append(") ").append(dialect.getKeywords().values())
                 .append(getInsertValuesSqlPart(pms, propertyPositions));
         return Tuples.of(insertSql.toString(), propertyPositions);

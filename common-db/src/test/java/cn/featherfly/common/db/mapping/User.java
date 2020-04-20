@@ -1,7 +1,9 @@
 
 package cn.featherfly.common.db.mapping;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * <p>
@@ -10,6 +12,8 @@ import javax.persistence.Id;
  *
  * @author zhongj
  */
+@Entity
+@Table(name = "")
 public class User {
 
     @Id

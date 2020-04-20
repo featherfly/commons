@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.featherfly.common.db.Table;
+
 /**
  * <p>
  * 库元数据

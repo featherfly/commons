@@ -3,10 +3,10 @@ package cn.featherfly.common.db.dialect;
 import java.util.Map;
 
 import cn.featherfly.common.constant.Chars;
+import cn.featherfly.common.db.Column;
+import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.builder.model.TableElement;
-import cn.featherfly.common.db.metadata.Column;
-import cn.featherfly.common.db.metadata.Table;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.repository.operate.AggregateFunction;

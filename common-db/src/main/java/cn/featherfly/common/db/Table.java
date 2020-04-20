@@ -1,5 +1,5 @@
 
-package cn.featherfly.common.db.metadata;
+package cn.featherfly.common.db;
 
 import java.util.Collection;
 import java.util.List;

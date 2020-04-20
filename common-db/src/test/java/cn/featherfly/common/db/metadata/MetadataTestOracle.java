@@ -5,6 +5,8 @@ import java.sql.Types;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
+import cn.featherfly.common.db.Table;
+
 /**
  *
  */

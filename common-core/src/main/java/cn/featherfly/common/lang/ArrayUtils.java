@@ -7,11 +7,11 @@ import java.util.List;
 
 import cn.featherfly.common.constant.Chars;
 
-
 /**
  * <p>
  * 数组的工具类
  * </p>
+ *
  * @author zhongj
  * @since 1.0
  * @version 1.0
@@ -23,11 +23,10 @@ public final class ArrayUtils {
 
     /**
      * <p>
-     * 返回传入数组是否为空（是null或size=0）.
-     * 当传入对象不是数组时，只会进行null的判断
+     * 返回传入数组是否为空（是null或size=0）. 当传入对象不是数组时，只会进行null的判断
      * </p>
-     * @param array
-     *            传入的数组
+     *
+     * @param array 传入的数组
      * @return 传入数组是否为空
      */
     public static boolean isEmpty(Object array) {
@@ -42,11 +41,10 @@ public final class ArrayUtils {
 
     /**
      * <p>
-     * 返回传入数组是否不为空（是null或size=0）.
-     * 当传入对象不是数组时，只会进行null的判断
+     * 返回传入数组是否不为空（是null或size=0）. 当传入对象不是数组时，只会进行null的判断
      * </p>
-     * @param array
-     *            传入的数组
+     *
+     * @param array 传入的数组
      * @return 传入数组是否不为空
      */
     public static boolean isNotEmpty(Object array) {
@@ -57,6 +55,7 @@ public final class ArrayUtils {
      * <p>
      * 将传入数组进行字符串转换（与Collection的一样使用,分割）
      * </p>
+     *
      * @param array 对象数组
      * @return 字符串
      */
@@ -68,14 +67,12 @@ public final class ArrayUtils {
                 sb.append(Chars.BRACK_L);
                 StringBuilder result = new StringBuilder();
                 for (int i = 0; i < Array.getLength(array); i++) {
-                    result.append(Array.get(array, i))
-                              .append(Chars.COMMA);
+                    result.append(Array.get(array, i)).append(Chars.COMMA);
                 }
                 if (result.length() > 0) {
                     result.deleteCharAt(result.length() - 1);
                 }
-                sb.append(result.toString())
-                    .append(Chars.BRACK_R);
+                sb.append(result.toString()).append(Chars.BRACK_R);
             }
         }
         return sb.toString();
@@ -85,31 +82,32 @@ public final class ArrayUtils {
      * <p>
      * 将传入数组进行字符串转换（与Collection的一样使用,分割）
      * </p>
-     * @param <E> 对象类型
+     *
+     * @param <E>     对象类型
      * @param objects 对象数组
      * @return 字符串
      */
     @SafeVarargs
-    public static <E> String toString(E...objects) {
+    public static <E> String toString(E... objects) {
         StringBuilder sb = new StringBuilder();
         sb.append(Chars.BRACK_L);
         if (objects != null && objects.length > 0) {
             for (Object object : objects) {
-                sb.append(object.toString())
-                    .append(Chars.COMMA);
+                sb.append(object.toString()).append(Chars.COMMA);
             }
             sb.deleteCharAt(sb.length() - 1);
         }
         sb.append(Chars.BRACK_R);
         return sb.toString();
     }
-    
+
     /**
      * <p>
      * 转换为列表
      * </p>
+     *
      * @param arrays 数组
-     * @param <T> 泛型
+     * @param <T>    泛型
      * @return 列表
      */
     public static <T> List<T> toList(T[] arrays) {
@@ -121,10 +119,30 @@ public final class ArrayUtils {
 
     /**
      * <p>
+     * fill target array with source array
+     * </p>
+     *
+     * @param <T>    泛型
+     * @param target fill target
+     * @param source fill source
+     */
+    public static <T> void fill(T[] target, T[] source) {
+        int len = target.length;
+        if (len > source.length) {
+            len = source.length;
+        }
+        for (int i = 0; i < len; i++) {
+            target[i] = source[i];
+        }
+    }
+
+    /**
+     * <p>
      * 判断第一个传入的数组中是否存在第二个参数
      * </p>
-     * @param <T> 泛型
-     * @param tSet 源数组
+     *
+     * @param <T>    泛型
+     * @param tSet   源数组
      * @param target 查找对象
      * @return 第一个数组中是否存在第二个对象
      */
@@ -143,8 +161,9 @@ public final class ArrayUtils {
     /**
      * <p>
      * 判断第一个传入的字符串数组中是否存在第二个传入的字符串
-     * @param strSet 源字符串数组
-     * @param strTarget 查找字符串
+     *
+     * @param strSet     源字符串数组
+     * @param strTarget  查找字符串
      * @param ignoreCase 忽略大小写
      * @return 第一个数组中是否存在第二个字符串
      */
@@ -168,10 +187,12 @@ public final class ArrayUtils {
         }
         return result;
     }
+
     /**
      * <p>
      * 数组链接
      * </p>
+     *
      * @param arr1 arr1
      * @param arr2 arr2
      * @return 链接后的数组
@@ -185,23 +206,23 @@ public final class ArrayUtils {
         if (len2 <= 0) {
             return arr1;
         } else {
-            Class<?> commonComponentType = ClassUtils.parentClass(arr1.getClass()
-                            .getComponentType(), arr2.getClass().getComponentType());
-            Object newArray = Array.newInstance(commonComponentType, len1
-                            + len2);
+            Class<?> commonComponentType = ClassUtils.parentClass(arr1.getClass().getComponentType(),
+                    arr2.getClass().getComponentType());
+            Object newArray = Array.newInstance(commonComponentType, len1 + len2);
             System.arraycopy(arr1, 0, newArray, 0, len1);
             System.arraycopy(arr2, 0, newArray, len1, len2);
             return newArray;
         }
     }
-    
+
     /**
      * <p>
      * 创建数组
      * </p>
-     * @param type 类型
+     *
+     * @param type   类型
      * @param length 长度
-     * @param <T> 泛型
+     * @param <T>    泛型
      * @return 数组
      */
     @SuppressWarnings("unchecked")

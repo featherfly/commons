@@ -1,6 +1,7 @@
 2020
 1.8.4
     1. NumberUtils加入62 64进制字符串和数字互相转换的方法
+    2. ArrayUtils加入fill(T[] target, T[] source)方法
     
 2020-4-20
 1.8.3

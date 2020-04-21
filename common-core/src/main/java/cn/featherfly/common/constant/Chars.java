@@ -194,6 +194,86 @@ public interface Chars {
      */
     int NINE = 9;
     /**
+     * 数字 0
+     */
+    String ZERO_STR = "0";
+    /**
+     * 数字 1
+     */
+    String ONE_STR = "1";
+    /**
+     * 数字 2
+     */
+    String TWO_STR = "2";
+    /**
+     * 数字 3
+     */
+    String THREE_STR = "3";
+    /**
+     * 数字 4
+     */
+    String FOUR_STR = "4";
+    /**
+     * 数字 5
+     */
+    String FIVE_STR = "5";
+    /**
+     * 数字 6
+     */
+    String SIX_STR = "6";
+    /**
+     * 数字 7
+     */
+    String SEVEN_STR = "7";
+    /**
+     * 数字 8
+     */
+    String EIGHT_STR = "8";
+    /**
+     * 数字 9
+     */
+    String NINE_STR = "9";
+    /**
+     * 数字 0
+     */
+    char ZERO_CHAR = '0';
+    /**
+     * 数字 1
+     */
+    char ONE_CHAR = '1';
+    /**
+     * 数字 2
+     */
+    char TWO_CHAR = '2';
+    /**
+     * 数字 3
+     */
+    char THREE_CHAR = '3';
+    /**
+     * 数字 4
+     */
+    char FOUR_CHAR = '4';
+    /**
+     * 数字 5
+     */
+    char FIVE_CHAR = '5';
+    /**
+     * 数字 6
+     */
+    char SIX_CHAR = '6';
+    /**
+     * 数字 7
+     */
+    char SEVEN_CHAR = '7';
+    /**
+     * 数字 8
+     */
+    char EIGHT_CHAR = '8';
+    /**
+     * 数字 9
+     */
+    char NINE_CHAR = '9';
+    /**
      * 大写 A
      */
     String A_UPPER = "A";

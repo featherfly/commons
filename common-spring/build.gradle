@@ -1,5 +1,5 @@
 ext {
-    sv = '5.2.1.RELEASE' 
+    sv = '5.2.6.RELEASE' 
 }
   
 dependencies {
@@ -11,4 +11,8 @@ dependencies {
     //compile 'org.springframework:spring-aop:5.1.8.RELEASE'
     //compile 'org.springframework:spring-context:5.1.8.RELEASE'
     implementation group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.4'
+    
+    testImplementation 'org.springframework:spring-test:' + sv 
+    testImplementation 'org.springframework:spring-tx:' + sv 
+    testImplementation 'net.sf.ehcache:ehcache:2.10.6'
 }

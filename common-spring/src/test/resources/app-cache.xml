@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/cache
+		http://www.springframework.org/schema/cache/spring-cache.xsd">
+		
+    <cache:annotation-driven cache-manager="cacheManager" proxy-target-class="true"/>
+
+    <bean id="ehcacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:ehcache.xml"/>
+    </bean>
+
+    <bean id="srpingEhcacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehcacheManager"/>
+        <property name="transactionAware" value="true"/>
+    </bean>
+
+    <util:map id="uniquePrefixPropertyMap">
+        <entry key="user:email:" value="email"/>
+        <entry key="user:username:" value="username"/>
+        <entry key="user:token:" value="token"/>
+    </util:map>
+
+    <bean id="userCacheManager" class="cn.featherfly.common.spring.cache.MulitiUniqueKeyCacheManager"
+          p:cacheManager-ref="srpingEhcacheManager" p:cacheName="userCache"
+          p:idCacheName="userCache1"
+          p:uniqueKeyCacheName="userCache1"
+          p:idKeyPrefix="user:id:"
+          p:idPropertyName="id"
+          p:targetType="cn.featherfly.common.spring.cache.User"
+          p:uniquePrefixPropertyMap-ref="uniquePrefixPropertyMap"/>
+
+    <bean id="cacheManager" class="cn.featherfly.common.spring.cache.MulitiCacheManager">
+        <property name="cacheManagers">
+            <util:list>
+                <ref bean="userCacheManager"/>
+                <ref bean="srpingEhcacheManager"/>
+            </util:list>
+        </property>
+    </bean>
+   
+</beans>

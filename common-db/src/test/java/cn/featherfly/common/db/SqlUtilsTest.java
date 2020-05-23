@@ -57,6 +57,26 @@ public class SqlUtilsTest {
     }
 
     @Test
+    void testConvertSelectToCountMulitiLine() {
+        String sql = "select a.project_code,u.* from user_project_auth a join user u on a.user_id = u.id\n"
+                + "order by id desc";
+        //        System.out.println(SqlUtils.convertSelectToCount(sql));
+        String count = "SELECT COUNT(*) from user_project_auth a join user u on a.user_id = u.id\n"
+                + "order by id desc";
+        assertEquals(SqlUtils.convertSelectToCount(sql), count);
+
+        sql = "select a.project_code,u.* from user_project_auth a join user u on a.user_id = u.id\r\n"
+                + "order by id desc";
+        count = "SELECT COUNT(*) from user_project_auth a join user u on a.user_id = u.id\r\n" + "order by id desc";
+        assertEquals(SqlUtils.convertSelectToCount(sql), count);
+
+        sql = "select a.project_code,u.* from user_project_auth a join user u on a.user_id = u.id\r"
+                + "order by id desc";
+        count = "SELECT COUNT(*) from user_project_auth a join user u on a.user_id = u.id\r" + "order by id desc";
+        assertEquals(SqlUtils.convertSelectToCount(sql), count);
+    }
+
+    @Test
     void testTransferNamedParamSql() {
         String sql = "select * from user where name like ? and age = ?";
         Execution execution = null;

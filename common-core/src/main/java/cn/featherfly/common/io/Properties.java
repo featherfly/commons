@@ -13,55 +13,148 @@ import cn.featherfly.common.constant.Chars;
  * <p>
  * Properties
  * </p>
+ * .
  *
  * @author zhongj
  */
 public interface Properties {
 
+    /**
+     * Sets the property.
+     *
+     * @param key   the key
+     * @param value the value
+     * @return the string
+     */
     String setProperty(String key, String value);
 
+    /**
+     * Sets the property.
+     *
+     * @param key     the key
+     * @param value   the value
+     * @param comment the comment
+     * @return the string
+     */
     String setProperty(String key, String value, String comment);
 
+    /**
+     * Sets the property.
+     *
+     * @param property the property
+     * @return the property
+     */
     Property setProperty(Property property);
 
+    /**
+     * Gets the property.
+     *
+     * @param key the key
+     * @return the property
+     */
     String getProperty(String key);
 
+    /**
+     * Gets the property.
+     *
+     * @param key          the key
+     * @param defaultValue the default value
+     * @return the property
+     */
     String getProperty(String key, String defaultValue);
 
+    /**
+     * Gets the property part.
+     *
+     * @param key the key
+     * @return the property part
+     */
     Property getPropertyPart(String key);
 
+    /**
+     * Gets the property parts.
+     *
+     * @return the property parts
+     */
     Collection<Property> getPropertyParts();
 
+    /**
+     * Gets the property names.
+     *
+     * @return the property names
+     */
     Collection<String> getPropertyNames();
 
+    /**
+     * List all.
+     *
+     * @return the collection
+     */
     Collection<Part> listAll();
 
+    /**
+     * Gets the charset.
+     *
+     * @return the charset
+     */
     Charset getCharset();
 
     //    Properties comment(String... comment);
 
+    /**
+     * Store.
+     *
+     * @param out the out
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     void store(OutputStream out) throws IOException;
 
+    /**
+     * Load.
+     *
+     * @param is the is
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     void load(InputStream is) throws IOException;
 
+    /**
+     * To jdk properties.
+     *
+     * @return the java.util. properties
+     */
     java.util.Properties toJdkProperties();
 
+    /**
+     * The Interface Part.
+     */
     public interface Part {
+
+        /**
+         * To part.
+         *
+         * @return the string
+         */
         String toPart();
     }
 
+    /**
+     * The Class Comment.
+     */
     public class Comment implements Part {
 
+        /** The comment. */
         String comment;
 
         /**
-         *
+         * Instantiates a new comment.
          */
         public Comment() {
         }
 
         /**
-         * @param comment
+         * Instantiates a new comment.
+         *
+         * @param comment the comment
          */
         public Comment(String comment) {
             super();
@@ -69,7 +162,7 @@ public interface Properties {
         }
 
         /**
-         * 返回comment
+         * 返回comment.
          *
          * @return comment
          */
@@ -78,7 +171,7 @@ public interface Properties {
         }
 
         /**
-         * 设置comment
+         * 设置comment.
          *
          * @param comment comment
          */
@@ -103,10 +196,19 @@ public interface Properties {
         }
     }
 
+    /**
+     * The Class CharsetComment.
+     */
     public class CharsetComment extends Comment {
 
         private Charset charset;
 
+        /**
+         * Creates the if can.
+         *
+         * @param comment the comment
+         * @return the charset comment
+         */
         public static CharsetComment createIfCan(String comment) {
             String[] tokens = comment.split("=");
             if (tokens.length == 2 && "charset".equalsIgnoreCase(tokens[0].trim())) {
@@ -116,7 +218,9 @@ public interface Properties {
         }
 
         /**
-         * @param charset
+         * Instantiates a new charset comment.
+         *
+         * @param charset the charset
          */
         public CharsetComment(Charset charset) {
             super("charset=" + charset.displayName());
@@ -124,7 +228,7 @@ public interface Properties {
         }
 
         /**
-         * 返回charset
+         * 返回charset.
          *
          * @return charset
          */
@@ -133,7 +237,7 @@ public interface Properties {
         }
 
         /**
-         * 设置charset
+         * 设置charset.
          *
          * @param charset charset
          */
@@ -142,6 +246,9 @@ public interface Properties {
         }
     }
 
+    /**
+     * The Class Property.
+     */
     public class Property implements Part {
 
         private String key;
@@ -151,14 +258,16 @@ public interface Properties {
         private String comment;
 
         /**
-         *
+         * Instantiates a new property.
          */
         public Property() {
         }
 
         /**
-         * @param key
-         * @param value
+         * Instantiates a new property.
+         *
+         * @param key   the key
+         * @param value the value
          */
         public Property(String key, String value) {
             super();
@@ -167,9 +276,11 @@ public interface Properties {
         }
 
         /**
-         * @param key
-         * @param value
-         * @param comment
+         * Instantiates a new property.
+         *
+         * @param key     the key
+         * @param value   the value
+         * @param comment the comment
          */
         public Property(String key, String value, String comment) {
             super();
@@ -179,7 +290,7 @@ public interface Properties {
         }
 
         /**
-         * 返回key
+         * 返回key.
          *
          * @return key
          */
@@ -188,7 +299,7 @@ public interface Properties {
         }
 
         /**
-         * 设置key
+         * 设置key.
          *
          * @param key key
          */
@@ -197,7 +308,7 @@ public interface Properties {
         }
 
         /**
-         * 返回value
+         * 返回value.
          *
          * @return value
          */
@@ -206,7 +317,7 @@ public interface Properties {
         }
 
         /**
-         * 设置value
+         * 设置value.
          *
          * @param value value
          */
@@ -215,7 +326,7 @@ public interface Properties {
         }
 
         /**
-         * 返回comment
+         * 返回comment.
          *
          * @return comment
          */
@@ -224,7 +335,7 @@ public interface Properties {
         }
 
         /**
-         * 设置comment
+         * 设置comment.
          *
          * @param comment comment
          */

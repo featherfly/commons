@@ -7,6 +7,9 @@ import org.apache.commons.lang3.StringUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.LangUtils;
 
+/**
+ * The Class ChineseNumber.
+ */
 public class ChineseNumber implements LocaleNumber {
 
     private boolean simple = false;
@@ -29,24 +32,39 @@ public class ChineseNumber implements LocaleNumber {
     private static final String ZHENG = "整";
 
     /**
+     * Instantiates a new chinese number.
      */
     public ChineseNumber() {
         this(false);
     }
 
     /**
-     * @param simple
+     * Instantiates a new chinese number.
+     *
+     * @param simple the simple
      */
     public ChineseNumber(boolean simple) {
         super();
         this.simple = simple;
     }
 
+    /**
+     * Gets the group unit.
+     *
+     * @param groupPosition the group position
+     * @return the group unit
+     */
     public String getGroupUnit(int groupPosition) {
         AssertIllegalArgument.isLt(groupPosition, GROUP_UNITS.length, "groupPosition");
         return GROUP_UNITS[groupPosition];
     }
 
+    /**
+     * Gets the unit.
+     *
+     * @param position the position
+     * @return the unit
+     */
     public String getUnit(int position) {
         AssertIllegalArgument.isLt(position, SIMPLE_CHINESE_UNITS.length, "position");
         if (simple) {
@@ -56,6 +74,12 @@ public class ChineseNumber implements LocaleNumber {
         }
     }
 
+    /**
+     * Gets the chinese number.
+     *
+     * @param number the number
+     * @return the chinese number
+     */
     public String getChineseNumber(int number) {
         AssertIllegalArgument.isLt(number, SIMPLE_CHINESE_NUMBERS.length, "number");
         if (simple) {

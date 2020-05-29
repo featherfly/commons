@@ -26,6 +26,7 @@ import cn.featherfly.common.lang.ServiceLoaderUtils;
  * <p>
  * java bean 的描述信息
  * </p>
+ * .
  *
  * @author zhongj
  * @param <T> 描述的类型
@@ -74,6 +75,8 @@ public class BeanDescriptor<T> {
     protected static final String DOT = ".";
 
     /**
+     * Instantiates a new bean descriptor.
+     *
      * @param type 类型
      */
     protected BeanDescriptor(Class<T> type) {
@@ -88,6 +91,7 @@ public class BeanDescriptor<T> {
      * <p>
      * 初始化泛型参数
      * </p>
+     * .
      *
      * @param type type
      */
@@ -226,6 +230,8 @@ public class BeanDescriptor<T> {
     }
 
     /**
+     * Gets the bean properties.
+     *
      * @return 返回beanProperties
      */
     public Collection<BeanProperty<?>> getBeanProperties() {
@@ -237,6 +243,7 @@ public class BeanDescriptor<T> {
      * 返回指定索引属性.
      * </p>
      *
+     * @param <E>   the element type
      * @param index 索引
      * @return 指定属性
      */
@@ -250,6 +257,7 @@ public class BeanDescriptor<T> {
      * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常
      * </p>
      *
+     * @param <E>  the element type
      * @param name 属性名
      * @return 指定属性
      */
@@ -266,6 +274,7 @@ public class BeanDescriptor<T> {
      * <p>
      * 返回指定属性是否存在
      * </p>
+     * .
      *
      * @param name 属性名
      * @return 指定属性是否存在
@@ -333,6 +342,7 @@ public class BeanDescriptor<T> {
      * <p>
      * 设置属性
      * </p>
+     * .
      *
      * @param obj   目标对象
      * @param name  属性名称
@@ -387,6 +397,7 @@ public class BeanDescriptor<T> {
      * <p>
      * 添加属性值（如果添加目标是Collection，则会一直添加，如果是其他类型同setProperty）
      * </p>
+     * .
      *
      * @param obj   对象
      * @param name  属性名
@@ -411,6 +422,7 @@ public class BeanDescriptor<T> {
      * <p>
      * 返回属性
      * </p>
+     * .
      *
      * @param obj  目标对象
      * @param name 属性名
@@ -473,6 +485,7 @@ public class BeanDescriptor<T> {
      * <p>
      * 返回当前对象的所有注解
      * </p>
+     * .
      *
      * @return 当前对象的所有注解
      */
@@ -485,7 +498,7 @@ public class BeanDescriptor<T> {
     // ********************************************************************
 
     /**
-     * 返回指定类型的描述
+     * 返回指定类型的描述.
      *
      * @param <T>  类型
      * @param type 类型
@@ -540,12 +553,12 @@ public class BeanDescriptor<T> {
     // property
     // ********************************************************************
 
-    /**
-     * 类型
-     */
+    /** 类型. */
     protected Class<T> type;
 
     /**
+     * Gets the type.
+     *
      * @return 返回type
      */
     public Class<T> getType() {

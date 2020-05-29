@@ -1,3 +1,8 @@
+2020-5-29
+1.8.5
+    1. 加入ThreadLocalMap
+    2. 加入SimplagePage,Page加入getSize,getNumber方法，原来的getPageSize,getPageNumber标注为废弃，后续版本会删除
+
 2020-5-19
 1.8.4
     1. NumberUtils加入62 64进制字符串和数字互相转换的方法

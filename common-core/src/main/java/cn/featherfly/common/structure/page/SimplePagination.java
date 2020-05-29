@@ -4,17 +4,21 @@ package cn.featherfly.common.structure.page;
  * <p>
  * 简单分页模型实现
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class SimplePagination implements Pagination {
 
     /**
+     * Instantiates a new simple pagination.
      */
     public SimplePagination() {
     }
 
     /**
+     * Instantiates a new simple pagination.
+     *
      * @param limit limit
      */
     public SimplePagination(Limit limit) {
@@ -22,51 +26,34 @@ public class SimplePagination implements Pagination {
     }
 
     /**
+     * Instantiates a new simple pagination.
+     *
      * @param offset offset
      * @param limit  limit
      */
     public SimplePagination(int offset, int limit) {
-        pageSize = limit;
-        pageNumber = (offset + limit) / limit;
+        size = limit;
+        number = (offset + limit) / limit;
     }
 
     private Integer total;
 
-    private Integer pageSize;
+    private Integer size;
 
-    private Integer pageNumber;
-
-    /**
-     * <p>
-     * 设置每页数量
-     * </p>
-     *
-     * @param pageSize 每页数量
-     */
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    /**
-     * <p>
-     * 设置页数
-     * </p>
-     *
-     * @param pageNumber 页数
-     */
-    public void setPageNumber(Integer pageNumber) {
-        this.pageNumber = pageNumber;
-    }
+    private Integer number;
 
     /**
      * <p>
      * 设置总数
      * </p>
+     * .
      *
      * @param total 总数
+     * @return the simple pagination
      */
-    public void setTotal(Integer total) {
+    public SimplePagination setTotal(Integer total) {
         this.total = total;
+        return this;
     }
 
     /**
@@ -74,7 +61,7 @@ public class SimplePagination implements Pagination {
      */
     @Override
     public Integer getTotalPage() {
-        return (getTotal() + pageSize - 1) / pageSize;
+        return (getTotal() + size - 1) / size;
     }
 
     /**
@@ -86,18 +73,92 @@ public class SimplePagination implements Pagination {
     }
 
     /**
-     * {@inheritDoc}
+     * <p>
+     * 设置每页数量
+     * </p>
+     * .
+     *
+     * @param size 每页数量
+     * @return the simple pagination
      */
-    @Override
-    public Integer getPageSize() {
-        return pageSize;
+    public SimplePagination setSize(Integer size) {
+        this.size = size;
+        return this;
+    }
+
+    /**
+     * <p>
+     * 设置当前页数（第几页）
+     * </p>
+     * .
+     *
+     * @param number 当前页数（第几页）
+     * @return the simple pagination
+     */
+    public SimplePagination setNumber(Integer number) {
+        this.number = number;
+        return this;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
+    public Integer getSize() {
+        return size;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Integer getNumber() {
+        return number;
+    }
+
+    /**
+     * <p>
+     * 设置每页数量
+     * </p>
+     * .
+     *
+     * @param pageSize 每页数量
+     * @deprecated {@link #setSize(Integer)}
+     */
+    @Deprecated
+    public void setPageSize(Integer pageSize) {
+        size = pageSize;
+    }
+
+    /**
+     * <p>
+     * 设置页数
+     * </p>
+     * .
+     *
+     * @param pageNumber 页数
+     * @deprecated {@link #setNumber(Integer)}
+     */
+    @Deprecated
+    public void setPageNumber(Integer pageNumber) {
+        number = pageNumber;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Deprecated
+    public Integer getPageSize() {
+        return size;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Deprecated
     public Integer getPageNumber() {
-        return pageNumber;
+        return number;
     }
 }

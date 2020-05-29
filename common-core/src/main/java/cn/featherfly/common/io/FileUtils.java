@@ -32,6 +32,7 @@ import cn.featherfly.common.lang.LogUtils;
  * 文件操作类<br>
  * 此类中封装一些常用的文件操作<br>
  * </p>
+ * .
  *
  * @author zhongj
  */
@@ -68,7 +69,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
 
     /**
      * 修改文件的最后访问时间。 如果文件不存在则创建该文件。
-     * <b>目前这个方法的行为方式还不稳定，主要是方法有些信息输出，这些信息输出是否保留还在考虑中。</b>
+     * <b>目前这个方法的行为方式还不稳定，主要是方法有些信息输出，这些信息输出是否保留还在考虑中。</b>.
      *
      * @param file 需要修改最后访问时间的文件。
      */
@@ -95,7 +96,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
 
     /**
      * 修改文件的最后访问时间。 如果文件不存在则创建该文件。
-     * <b>目前这个方法的行为方式还不稳定，主要是方法有些信息输出，这些信息输出是否保留还在考虑中。</b>
+     * <b>目前这个方法的行为方式还不稳定，主要是方法有些信息输出，这些信息输出是否保留还在考虑中。</b>.
      *
      * @param fileName 需要修改最后访问时间的文件的文件名。
      */
@@ -106,7 +107,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
 
     /**
      * 修改文件的最后访问时间。 如果文件不存在则创建该文件。
-     * <b>目前这个方法的行为方式还不稳定，主要是方法有些信息输出，这些信息输出是否保留还在考虑中。</b>
+     * <b>目前这个方法的行为方式还不稳定，主要是方法有些信息输出，这些信息输出是否保留还在考虑中。</b>.
      *
      * @param files 需要修改最后访问时间的文件数组。
      */
@@ -118,7 +119,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
 
     /**
      * 修改文件的最后访问时间。 如果文件不存在则创建该文件。
-     * <b>目前这个方法的行为方式还不稳定，主要是方法有些信息输出，这些信息输出是否保留还在考虑中。</b>
+     * <b>目前这个方法的行为方式还不稳定，主要是方法有些信息输出，这些信息输出是否保留还在考虑中。</b>.
      *
      * @param fileNames 需要修改最后访问时间的文件名数组。
      */
@@ -131,7 +132,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 创建指定的目录。 如果指定的目录的父目录不存在则创建其目录书上所有需要的父目录。 <b>注意：可能会在返回false的时候创建部分父目录。</b>
+     * 创建指定的目录。 如果指定的目录的父目录不存在则创建其目录书上所有需要的父目录。
+     * <b>注意：可能会在返回false的时候创建部分父目录。</b>.
      *
      * @param file 要创建的目录
      * @return 完全创建成功时返回true，否则返回false。
@@ -145,7 +147,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 创建指定的目录。 如果指定的目录的父目录不存在则创建其目录书上所有需要的父目录。 <b>注意：可能会在返回false的时候创建部分父目录。</b>
+     * 创建指定的目录。 如果指定的目录的父目录不存在则创建其目录书上所有需要的父目录。
+     * <b>注意：可能会在返回false的时候创建部分父目录。</b>.
      *
      * @param fileName 要创建的目录的目录名
      * @return 完全创建成功时返回true，否则返回false。
@@ -157,7 +160,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
 
     /**
      * 清空指定目录中的文件。 这个方法将尽可能删除所有的文件，但是只要有一个文件没有被删除都会返回false。
-     * 另外这个方法不会迭代删除，即不会删除子目录及其内容。
+     * 另外这个方法不会迭代删除，即不会删除子目录及其内容。.
      *
      * @param directory 要清空的目录
      * @return 目录下的所有文件都被成功删除时返回true，否则返回false.
@@ -174,7 +177,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 清空指定目录中的文件。 这个方法将尽可能删除所有的文件，但是只要有一个文件没有被删除都会返回false。
+     * 清空指定目录中的文件。 这个方法将尽可能删除所有的文件，但是只要有一个文件没有被删除都会返回false。.
      *
      * @param directory 要清空的目录
      * @param cascade   是否级联删除子目录
@@ -201,7 +204,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
 
     /**
      * 清空指定目录中的文件。 这个方法将尽可能删除所有的文件，但是只要有一个文件没有被删除都会返回false。
-     * 另外这个方法不会迭代删除，即不会删除子目录及其内容。
+     * 另外这个方法不会迭代删除，即不会删除子目录及其内容。.
      *
      * @param directoryName 要清空的目录的目录名
      * @return 目录下的所有文件都被成功删除时返回true，否则返回false。
@@ -212,7 +215,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 删除指定目录及其中的所有内容。
+     * 删除指定目录及其中的所有内容。.
      *
      * @param dirName 要删除的目录的目录名
      * @return 删除成功时返回true，否则返回false。
@@ -223,7 +226,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 删除指定目录及其中的所有内容。
+     * 删除指定目录及其中的所有内容。.
      *
      * @param dir 要删除的目录
      * @return 删除成功时返回true，否则返回false。
@@ -252,7 +255,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 删除指定文件。
+     * 删除指定文件。.
      *
      * @param fileName 要删除的文件名
      * @return 删除成功时返回true，否则返回false。
@@ -263,7 +266,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 删除指定文件。
+     * 删除指定文件。.
      *
      * @param file 要删除的文件
      * @return 删除成功时返回true，否则返回false。
@@ -276,7 +279,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 删除指定文件或目录。
+     * 删除指定文件或目录。.
      *
      * @param fileName 要删除的文件或目录
      * @return 删除成功时返回true，否则返回false。
@@ -287,7 +290,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 删除指定文件或目录。
+     * 删除指定文件或目录。.
      *
      * @param file 要删除的文件或目录
      * @return 删除成功时返回true，否则返回false。
@@ -303,7 +306,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 列出目录中的所有文件和目录，包括其子目录中的文件和目录。
+     * 列出目录中的所有文件和目录，包括其子目录中的文件和目录。.
      *
      * @param fileName 要列出的目录的目录名
      * @return 目录的子文件和子目录数组。
@@ -313,7 +316,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 列出目录中的所有文件和目录，包括其子目录中的文件和目录。
+     * 列出目录中的所有文件和目录，包括其子目录中的文件和目录。.
      *
      * @param file 要列出的目录
      * @return 目录的子文件和子目录数组。
@@ -325,7 +328,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 列出目录中的所有文件和目录，包括其子目录中的文件和目录。
+     * 列出目录中的所有文件和目录，包括其子目录中的文件和目录。.
      *
      * @param file   要列出的目录
      * @param filter 过滤器
@@ -365,6 +368,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * <p>
      * 获取文件根目录
      * </p>
+     * .
      *
      * @param file 文件
      * @return 根目录
@@ -381,6 +385,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * <p>
      * 获取当前运行程序所在的文件根目录
      * </p>
+     * .
      *
      * @return 根目录
      */
@@ -422,7 +427,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 从文件路径得到文件名。
+     * 从文件路径得到文件名。.
      *
      * @param filePath 文件的路径，可以是相对路径也可以是绝对路径
      * @return 对应的文件名
@@ -445,7 +450,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 从文件名得到文件绝对路径。
+     * 从文件名得到文件绝对路径。.
      *
      * @param fileName 文件名
      * @return 对应的文件路径
@@ -455,7 +460,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 从文件得到文件绝对路径。
+     * 从文件得到文件绝对路径。.
      *
      * @param file 文件
      * @return 对应的文件路径
@@ -517,7 +522,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 将DOS/Windows格式的路径转换为UNIX/Linux格式的路径。
      * 其实就是将路径中的"\"全部换为"/"，因为在某些情况下我们转换为这种方式比较方便，
-     * 某中程度上说"/"比"\"更适合作为路径分隔符，而且DOS/Windows也将它当作路径分隔符。
+     * 某中程度上说"/"比"\"更适合作为路径分隔符，而且DOS/Windows也将它当作路径分隔符。.
      *
      * @param filePath 转换前的路径
      * @return 转换后的路径
@@ -530,7 +535,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 从文件名得到UNIX风格的文件绝对路径。
+     * 从文件名得到UNIX风格的文件绝对路径。.
      *
      * @param fileName 文件名
      * @return 对应的UNIX风格的文件路径
@@ -545,7 +550,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 得到路径分隔符在文件路径中首次出现的位置。 对于DOS或者UNIX风格的分隔符都可以。
+     * 得到路径分隔符在文件路径中首次出现的位置。 对于DOS或者UNIX风格的分隔符都可以。.
      *
      * @param fileName 文件路径
      * @return 路径分隔符在路径中首次出现的位置，没有出现时返回-1。
@@ -562,7 +567,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 得到路径分隔符在文件路径中指定位置后首次出现的位置。 对于DOS或者UNIX风格的分隔符都可以。
+     * 得到路径分隔符在文件路径中指定位置后首次出现的位置。 对于DOS或者UNIX风格的分隔符都可以。.
      *
      * @param fileName  文件路径
      * @param fromIndex 开始查找的位置
@@ -580,7 +585,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 得到路径分隔符在文件路径中最后出现的位置。 对于DOS或者UNIX风格的分隔符都可以。
+     * 得到路径分隔符在文件路径中最后出现的位置。 对于DOS或者UNIX风格的分隔符都可以。.
      *
      * @param fileName 文件路径
      * @return 路径分隔符在路径中最后出现的位置，没有出现时返回-1。
@@ -597,7 +602,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 得到路径分隔符在文件路径中指定位置前最后出现的位置。 对于DOS或者UNIX风格的分隔符都可以。
+     * 得到路径分隔符在文件路径中指定位置前最后出现的位置。 对于DOS或者UNIX风格的分隔符都可以。.
      *
      * @param fileName  文件路径
      * @param fromIndex 开始查找的位置
@@ -630,7 +635,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 得到相对路径。 文件名不是目录名的子节点时返回文件名。
+     * 得到相对路径。 文件名不是目录名的子节点时返回文件名。.
      *
      * @param pathName 目录名
      * @param fileName 文件名
@@ -646,7 +651,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 复制文件夹
+     * 复制文件夹.
      *
      * @param srcDir  源文件夹
      * @param destDir 目标文件夹
@@ -657,7 +662,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 复制文件夹
+     * 复制文件夹.
      *
      * @param srcDir     源文件夹
      * @param destDir    目标文件夹
@@ -669,7 +674,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 移动文件夹
+     * 移动文件夹.
      *
      * @param srcDir  源文件夹
      * @param destDir 目标文件夹
@@ -680,7 +685,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 复制文件
+     * 复制文件.
      *
      * @param srcFile  源文件
      * @param destFile 目标文件
@@ -691,7 +696,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 复制文件到指定文件夹
+     * 复制文件到指定文件夹.
      *
      * @param srcFile 源文件（夹）
      * @param destDir 目标文件夹，作为源文件（夹）的父目录
@@ -702,7 +707,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 移动文件
+     * 移动文件.
      *
      * @param srcFile  源文件
      * @param destFile 目标文件
@@ -713,7 +718,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 读取文档正文
+     * 读取文档正文.
      *
      * @param filePath 文件路径
      * @param charset  字符集
@@ -732,7 +737,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 读取文档正文
+     * 读取文档正文.
      *
      * @param filePath 文件路径
      * @param charset  字符集
@@ -751,7 +756,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 判断指定的文件是否存在。
+     * 判断指定的文件是否存在。.
      *
      * @param fileName 要判断的文件的文件名
      * @return 存在时返回true，否则返回false。
@@ -764,6 +769,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * <p>
      * 文件的创建 如果路经不存在，则自动创建路经
      * </p>
+     * .
      *
      * @param file 需要创建的文件
      * @return 创建是否成功
@@ -814,7 +820,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 判断传入资源是否是jar包内的资源
+     * 判断传入资源是否是jar包内的资源.
      *
      * @param resourceUrl 资源定位
      * @return boolean
@@ -827,29 +833,29 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * generate crc32 long number
+     * generate crc32 long number.
      *
      * @param file file
      * @return crc32 long number
-     * @throws IOException
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public static long crc32(File file) throws IOException {
         return CRC.crc32(file);
     }
 
     /**
-     * generate crc32 hex string
+     * generate crc32 hex string.
      *
      * @param file file
      * @return crc32 hex string
-     * @throws IOException
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public static String crc32Hex(File file) throws IOException {
         return CRC.crc32Hex(file);
     }
 
     /**
-     * 监控传入目录
+     * 监控传入目录.
      *
      * @param dir      目录
      * @param listener WatchListener
@@ -861,7 +867,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 监控传入目录
+     * 监控传入目录.
      *
      * @param dir      目录
      * @param listener WatchListener
@@ -873,7 +879,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 监控传入目录及其子目录
+     * 监控传入目录及其子目录.
      *
      * @param dir      目录
      * @param listener WatchListener
@@ -885,7 +891,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 监控传入目录及其子目录
+     * 监控传入目录及其子目录.
      *
      * @param dir      目录
      * @param listener WatchListener
@@ -899,7 +905,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 监控由传入过滤器过滤后的传入目录及其子目录
+     * 监控由传入过滤器过滤后的传入目录及其子目录.
      *
      * @param dir      目录
      * @param listener WatchListener
@@ -913,7 +919,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
-     * 监控由传入过滤器过滤后的传入目录及其子目录
+     * 监控由传入过滤器过滤后的传入目录及其子目录.
      *
      * @param dir      目录
      * @param listener WatchListener

@@ -41,13 +41,17 @@ import cn.featherfly.common.lang.matcher.MethodMatcher;
  * <p>
  * class处理的工具类
  * </p>
+ * .
  *
  * @author zhongj
- * @since 1.0
  * @version 1.0
+ * @since 1.0
  */
 public final class ClassUtils {
 
+    /**
+     * Instantiates a new class utils.
+     */
     private ClassUtils() {
     }
 
@@ -60,9 +64,7 @@ public final class ClassUtils {
     private static final String IS = "is";
 
     /**
-     * <p>
-     * 查找指定类型
-     * </p>
+     * 查找指定类型 .
      *
      * @param className 类名
      * @return 指定类型
@@ -76,7 +78,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 判断第一个参数是否是第二个参数的父类（父接口）
+     * 判断第一个参数是否是第二个参数的父类（父接口）.
      *
      * @param parentType 父类型（包括类和接口）
      * @param childType  子类型（包括类和接口）
@@ -93,6 +95,7 @@ public final class ClassUtils {
      * <p>
      * 返回传入类型的共同父类
      * </p>
+     * .
      *
      * @param c1 类型1
      * @param c2 类型2
@@ -172,6 +175,7 @@ public final class ClassUtils {
      *
      * @param type      目标类型
      * @param fieldName 字段名
+     * @param value     the value
      */
     public static void setFieldValue(Class<?> type, String fieldName, Object value) {
         try {
@@ -197,7 +201,7 @@ public final class ClassUtils {
     }
 
     /**
-     * invoke static method
+     * invoke static method.
      *
      * @param type       type
      * @param methodName method name
@@ -208,7 +212,7 @@ public final class ClassUtils {
     }
 
     /**
-     * invoke static method
+     * invoke static method.
      *
      * @param type       type
      * @param methodName method name
@@ -220,7 +224,7 @@ public final class ClassUtils {
     }
 
     /**
-     * invoke static method
+     * invoke static method.
      *
      * @param type   type
      * @param method method
@@ -236,7 +240,7 @@ public final class ClassUtils {
     }
 
     /**
-     * invoke object method
+     * invoke object method.
      *
      * @param object     object
      * @param methodName method name
@@ -247,7 +251,7 @@ public final class ClassUtils {
     }
 
     /**
-     * invoke object method
+     * invoke object method.
      *
      * @param object     object
      * @param methodName method name
@@ -259,7 +263,7 @@ public final class ClassUtils {
     }
 
     /**
-     * invoke object method
+     * invoke object method.
      *
      * @param object object
      * @param method method
@@ -275,7 +279,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 获取标注的注解实力对象，如果没有标注，返回null
+     * 获取标注的注解实力对象，如果没有标注，返回null.
      *
      * @param <A1>              被标注的注解泛型
      * @param <A2>              标注的注解泛型
@@ -289,7 +293,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 返回指定类型(objectType)的指定注解类型(annotationType), 会把父类里有被标注的字段也进行返回
+     * 返回指定类型(objectType)的指定注解类型(annotationType), 会把父类里有被标注的字段也进行返回.
      *
      * @param <A>            注解泛型
      * @param objectType     对象类型
@@ -302,7 +306,7 @@ public final class ClassUtils {
 
     /**
      * 返回指定类型(objectType)的指定注解类型(annotationType), fromSuper 为 true
-     * 时如果没有找到annotionType,则继续从父类查找
+     * 时如果没有找到annotionType,则继续从父类查找.
      *
      * @param <A>            注解泛型
      * @param objectType     对象类型
@@ -324,7 +328,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 获取标注的注解实力对象，如果没有标注，返回null
+     * 获取标注的注解实力对象，如果没有标注，返回null.
      *
      * @param <A1>              被标注的注解泛型
      * @param <A2>              标注的注解泛型
@@ -338,7 +342,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 返回指定类型(objectType)的指定注解类型(annotationType), 会把父类里有被标注的字段也进行返回
+     * 返回指定类型(objectType)的指定注解类型(annotationType), 会把父类里有被标注的字段也进行返回.
      *
      * @param <A>            注解泛型
      * @param objectType     对象类型
@@ -351,7 +355,7 @@ public final class ClassUtils {
 
     /**
      * 返回指定类型(objectType)的指定注解类型(annotationType), fromSuper 为 true
-     * 时如果没有找到annotionType,则继续从父类查找
+     * 时如果没有找到annotionType,则继续从父类查找.
      *
      * @param <A>            注解泛型
      * @param objectType     对象类型
@@ -374,7 +378,7 @@ public final class ClassUtils {
 
     /**
      * 返回指定类型(objectType)被指定注解(annotationType)标注的所有字段【成员变量】(field)
-     * 会把父类里有被标注的字段也进行返回
+     * 会把父类里有被标注的字段也进行返回.
      *
      * @param <A>            注解泛型
      * @param objectType     对象类型
@@ -387,7 +391,7 @@ public final class ClassUtils {
 
     /**
      * 返回指定类型(objectType)被指定注解(annotationType)标注的所有字段【成员变量】(field) fromSuper 为
-     * true 时会把父类里有被标注的字段也进行返回，为false则只返回本类的
+     * true 时会把父类里有被标注的字段也进行返回，为false则只返回本类的.
      *
      * @param <A>            注解泛型
      * @param objectType     对象类型
@@ -418,7 +422,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 返回指定类型(objectType)被指定注解(annotationType)标注的公共(public)方法(method)
+     * 返回指定类型(objectType)被指定注解(annotationType)标注的公共(public)方法(method).
      *
      * @param <A>            注解类型
      * @param objectType     目标类型
@@ -463,7 +467,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 是否是set方法(以set开头)
+     * 是否是set方法(以set开头).
      *
      * @param method 方法
      * @return 是否是set方法
@@ -475,7 +479,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 是否是get方法（以get或is开头）
+     * 是否是get方法（以get或is开头）.
      *
      * @param method 方法
      * @return 是否是get方法
@@ -494,7 +498,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 返回getter方法，包括getXxx和isXxx 没有找到返回null
+     * 返回getter方法，包括getXxx和isXxx 没有找到返回null.
      *
      * @param field 成员变量
      * @param type  类型
@@ -519,7 +523,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 返回setter方法 没有找到返回null
+     * 返回setter方法 没有找到返回null.
      *
      * @param field 成员变量
      * @param type  类型
@@ -596,7 +600,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 是否是cellection接口,及其子接口或实现类
+     * 是否是cellection接口,及其子接口或实现类.
      *
      * @param type 类型
      * @return 是否是cellection接口,及其子接口或实现类
@@ -606,7 +610,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 是否是map接口，及其子接口或实现类
+     * 是否是map接口，及其子接口或实现类.
      *
      * @param type 类型
      * @return 是否是map接口，及其子接口或实现类
@@ -619,6 +623,7 @@ public final class ClassUtils {
      * <p>
      * 判断传入类型是否是抽象类
      * </p>
+     * .
      *
      * @param type type
      * @return 是否是抽象类
@@ -631,6 +636,7 @@ public final class ClassUtils {
      * <p>
      * 判断传入类型是否是可实例化的类
      * </p>
+     * .
      *
      * @param type type
      * @return 是否是可实例化的类
@@ -643,6 +649,7 @@ public final class ClassUtils {
      * <p>
      * Class泛型参数强制转型
      * </p>
+     * .
      *
      * @param <T>        泛型
      * @param type       type
@@ -789,9 +796,9 @@ public final class ClassUtils {
      * 通过反射,获得指定类的父类的泛型参数的实际类型. 如BuyerServiceBean extends
      * DaoSupport&lt;Buyer&gt;
      *
+     * @param <T>   泛型
      * @param clazz clazz 需要反射的类,该类必须继承范型父类
      * @param index 泛型参数所在索引,从0开始.
-     * @param <T>   泛型
      * @return 范型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
      *         <code>Object.class</code>
      */
@@ -819,8 +826,8 @@ public final class ClassUtils {
      * 通过反射,获得指定类的父类的第一个泛型参数的实际类型. 如BuyerServiceBean extends
      * DaoSupport&lt;Buyer&gt;
      *
-     * @param clazz clazz 需要反射的类,该类必须继承泛型父类
      * @param <T>   泛型
+     * @param clazz clazz 需要反射的类,该类必须继承泛型父类
      * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
      *         <code>Object.class</code>
      */
@@ -854,9 +861,9 @@ public final class ClassUtils {
     /**
      * 通过反射,获得方法返回值泛型参数的实际类型. 如: public Map&lt;String, Buyer&gt; getNames(){}
      *
+     * @param <T>    泛型
      * @param method 方法
      * @param index  泛型参数所在索引,从0开始.
-     * @param <T>    泛型
      * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
      *         <code>Object.class</code>
      */
@@ -867,8 +874,8 @@ public final class ClassUtils {
     /**
      * 通过反射,获得方法返回值第一个泛型参数的实际类型. 如: public Map&lt;String, Buyer&gt; getNames(){}
      *
-     * @param method 方法
      * @param <T>    泛型
+     * @param method 方法
      * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
      *         <code>Object.class</code>
      */
@@ -903,6 +910,7 @@ public final class ClassUtils {
      * 通过反射,获得方法输入参数第index个输入参数的所有泛型参数的实际类型. 如: public void add(Map&lt;String,
      * Buyer&gt; maps, List&lt;String&gt; names){}
      *
+     * @param <T>              the generic type
      * @param method           方法
      * @param paramIndex       第几个输入参数
      * @param genericTypeIndex 第几个泛型参数
@@ -963,8 +971,8 @@ public final class ClassUtils {
     /**
      * 通过反射,获得Field泛型参数的实际类型. 如: public Map&lt;String, Buyer&gt; names;
      *
-     * @param field 字段
      * @param <T>   泛型
+     * @param field 字段
      * @return 泛型参数的实际类型,
      *         如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
      */
@@ -975,9 +983,9 @@ public final class ClassUtils {
     /**
      * 通过反射,获得Field泛型参数的实际类型. 如: public Map&lt;String, Buyer&gt; names;
      *
+     * @param <T>   泛型
      * @param field 字段
      * @param index 泛型参数所在索引,从0开始.
-     * @param <T>   泛型
      * @return 泛型参数的实际类型,
      *         如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
      */
@@ -1037,8 +1045,8 @@ public final class ClassUtils {
     /**
      * 实例化.
      *
-     * @param clazz 类型
      * @param <T>   泛型
+     * @param clazz 类型
      * @return 对象
      */
     public static <T> T newInstance(Class<T> clazz) {
@@ -1062,9 +1070,9 @@ public final class ClassUtils {
     /**
      * 实例化.
      *
+     * @param <T>   泛型
      * @param clazz 类型
      * @param args  参数数组
-     * @param <T>   泛型
      * @return 对象
      */
     public static <T> T newInstance(Class<T> clazz, Object... args) {
@@ -1139,9 +1147,9 @@ public final class ClassUtils {
     /**
      * 实例化.
      *
+     * @param <T>         泛型
      * @param constructor 构造器
      * @param args        参数数组
-     * @param <T>         泛型
      * @return 对象
      */
     public static <T> T newInstance(Constructor<T> constructor, Object... args) {
@@ -1258,7 +1266,7 @@ public final class ClassUtils {
     }
 
     /**
-     * getRawType
+     * getRawType.
      *
      * @param type type
      * @return raw type

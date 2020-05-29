@@ -18,11 +18,13 @@ import cn.featherfly.common.lang.LogUtils;
  * <p>
  * Watcher
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class Watcher {
 
+    /** The logger. */
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private WatchListener listener;
@@ -33,13 +35,18 @@ public class Watcher {
 
     private WatchEvent.Kind<?>[] events;
 
+    /**
+     * Instantiates a new watcher.
+     */
     public Watcher() {
     }
 
     /**
-     * @param directory
-     * @param listener
-     * @param events
+     * Instantiates a new watcher.
+     *
+     * @param directory the directory
+     * @param listener  the listener
+     * @param events    the events
      */
     public Watcher(Path directory, WatchListener listener, WatchEvent.Kind<?>... events) {
         super();
@@ -49,7 +56,7 @@ public class Watcher {
     }
 
     /**
-     * 返回listener
+     * 返回listener.
      *
      * @return listener
      */
@@ -58,7 +65,7 @@ public class Watcher {
     }
 
     /**
-     * 设置listener
+     * 设置listener.
      *
      * @param listener listener
      */
@@ -67,7 +74,7 @@ public class Watcher {
     }
 
     /**
-     * 返回directory
+     * 返回directory.
      *
      * @return directory
      */
@@ -76,7 +83,7 @@ public class Watcher {
     }
 
     /**
-     * 设置directory
+     * 设置directory.
      *
      * @param directory directory
      */
@@ -85,7 +92,7 @@ public class Watcher {
     }
 
     /**
-     * 返回events
+     * 返回events.
      *
      * @return events
      */
@@ -94,7 +101,7 @@ public class Watcher {
     }
 
     /**
-     * 设置events
+     * 设置events.
      *
      * @param events events
      */
@@ -102,6 +109,9 @@ public class Watcher {
         this.events = events;
     }
 
+    /**
+     * Watch.
+     */
     public void watch() {
         // 监听新文件
         try {

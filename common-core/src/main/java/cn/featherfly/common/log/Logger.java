@@ -7,6 +7,7 @@ import java.util.function.Supplier;
  * <p>
  * Logger
  * </p>
+ * .
  *
  * @author zhongj
  */
@@ -21,34 +22,34 @@ public interface Logger extends org.slf4j.Logger {
     void trace(String msg, Supplier<Object[]> supplier);
 
     /**
-     * debug
+     * debug.
      *
-     * @param msg
-     * @param supplier
+     * @param msg      the msg
+     * @param supplier the supplier
      */
     void debug(String msg, Supplier<Object[]> supplier);
 
     /**
-     * info
+     * info.
      *
-     * @param msg
-     * @param supplier
+     * @param msg      the msg
+     * @param supplier the supplier
      */
     void info(String msg, Supplier<Object[]> supplier);
 
     /**
-     * warn
+     * warn.
      *
-     * @param msg
-     * @param supplier
+     * @param msg      the msg
+     * @param supplier the supplier
      */
     void warn(String msg, Supplier<Object[]> supplier);
 
     /**
-     * error
+     * error.
      *
-     * @param msg
-     * @param supplier
+     * @param msg      the msg
+     * @param supplier the supplier
      */
     void error(String msg, Supplier<Object[]> supplier);
 }

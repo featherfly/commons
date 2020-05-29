@@ -37,8 +37,8 @@ public class Limit {
     public Limit(Page page) {
         super();
         AssertIllegalArgument.isNotNull(page, "Page page");
-        Integer pageNumber = page.getPageNumber();
-        Integer pageSize = page.getPageSize();
+        Integer pageNumber = page.getNumber();
+        Integer pageSize = page.getSize();
         if (pageNumber == null) {
             pageNumber = 1;
         } else if (pageNumber < 1) {

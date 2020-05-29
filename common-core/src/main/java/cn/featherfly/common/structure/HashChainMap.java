@@ -8,11 +8,12 @@ import java.util.Map;
  * <p>
  * 带链式调用的HASHMAP
  * </p>
+ *
  * @param <K> 键的类型
  * @param <V> 值的类型
  * @author zhongj
  */
-public class HashChainMap<K, V> extends HashMap<K, V> {
+public class HashChainMap<K, V> extends HashMap<K, V> implements ChainMap<K, V> {
 
     private static final long serialVersionUID = 7403898439744127401L;
 
@@ -25,35 +26,27 @@ public class HashChainMap<K, V> extends HashMap<K, V> {
 
     /**
      * @see java.util.HashMap
-     * @param  initialCapacity 初始化的大小.
+     * @param initialCapacity 初始化的大小.
      */
     public HashChainMap(int initialCapacity) {
         super(initialCapacity);
     }
 
     /**
-     * <p>
-     * 带链式调用的put方法.
-     * {@link java.util.HashMap#put(Object, Object)}
-     * </p>
-     * @param key 指定值将要关联的键。
-     * @param value 指定键将要关联的值。
-     * @return 当前MAP
+     * {@inheritDoc}
      */
-    public HashChainMap<K, V> putChain(K key, V value) {
-        this.put(key, value);
+    @Override
+    public ChainMap<K, V> putChain(K key, V value) {
+        put(key, value);
         return this;
     }
+
     /**
-     * <p>
-     * 带链式调用的putAll方法.
-     * {@link java.util.HashMap#putAll(Map)}
-     * </p>
-     * @param m 要在此映射中存储的映射关系
-     * @return 当前MAP
+     * {@inheritDoc}
      */
-    public HashChainMap<K, V> putAllChain(Map<? extends K, ? extends V> m) {
-        this.putAll(m);
+    @Override
+    public ChainMap<K, V> putAllChain(Map<? extends K, ? extends V> m) {
+        putAll(m);
         return this;
     }
 }

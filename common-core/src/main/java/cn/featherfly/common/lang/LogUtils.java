@@ -193,7 +193,7 @@ public class LogUtils {
     public void debugObject(Object target, Logger logger, String desc) {
         try {
             if (isEnabled() && logger.isDebugEnabled()) {
-                String des = LangUtils.isEmpty(desc) ? "" : desc + " ->\n";
+                String des = Lang.isEmpty(desc) ? "" : desc + " ->\n";
                 String logMsg = des + getObjectInfo(target);
                 logger.debug(logMsg);
             }
@@ -215,7 +215,7 @@ public class LogUtils {
             return getObjectInfo(target, 1);
         } catch (Exception e) {
             debug(e, LOGGER);
-            return StringUtils.NULL_STRING;
+            return Strings.NULL_STRING;
         }
     }
 
@@ -229,7 +229,7 @@ public class LogUtils {
      */
     private String getObjectInfo(Object target, int level) throws IllegalAccessException {
         if (target == null) {
-            return StringUtils.NULL_STRING;
+            return Strings.NULL_STRING;
         }
         Class<?> tc = target.getClass();
         StringBuilder sb = new StringBuilder();

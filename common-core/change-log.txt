@@ -1,4 +1,11 @@
 2020-5-29
+1.8.6
+    1.加入Lang替代LangUtils，后续大版本会删除LangUtils
+    2.加入Strings替代StringUtils，后续大版本会删除StringUtils
+    3.加入StringFormatter,Strings.format方法使用StringFormatter实现
+    4.部分接口移动到common-api中
+
+2020-5-29
 1.8.5
     1. 加入ThreadLocalMap
     2. 加入SimplagePage,Page加入getSize,getNumber方法，原来的getPageSize,getPageNumber标注为废弃，后续版本会删除

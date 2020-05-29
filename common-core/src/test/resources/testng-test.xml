@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suite name="Test-class Suite" parallel="tests" thread-count="2">
-    <test name="Test common lang">
-        <parameter name="test-name" value="Assert Test" />
-        <classes>
-            <class name="cn.featherfly.common.lang.AssertIllegalArgumentTest" />
-            <class name="cn.featherfly.common.lang.LocalizedAssertTest" />            
-            <class name="cn.featherfly.common.lang.CollectionUtilsTest" />            
-            <class name="cn.featherfly.common.lang.ClassUtilsTest" />            
-            <class name="cn.featherfly.common.lang.DateUtilsTest" />            
-            <class name="cn.featherfly.common.lang.LangUtilsTest"/>            
-        </classes>
+    <test name="Test common all">
+        <packages>
+            <package name="cn.featherfly.common.lang.*" />
+            <package name="cn.featherfly.common.bean.*" />
+            <package name="cn.featherfly.common.exception.*" />
+            <package name="cn.featherfly.common.io.*" />
+            <package name="cn.featherfly.common.locale.*" />
+            <package name="cn.featherfly.common.strcture.*" />
+            <package name="cn.featherfly.common.validate.*" />
+        </packages>
     </test>
-<!--     <test name="Test-class test 2"> -->
-<!--         <parameter name="test-name" value="test-method One" /> -->
+<!--     <test name="Test common lang"> -->
+<!--         <parameter name="test-name" value="Assert Test" /> -->
 <!--         <classes> -->
-<!--             <class name="com.howtodoinjava.parallelism.ParallelSuiteTest" /> -->
+<!--             <class -->
+<!--                 name="cn.featherfly.common.lang.AssertIllegalArgumentTest" /> -->
+<!--             <class -->
+<!--                 name="cn.featherfly.common.lang.LocalizedAssertTest" /> -->
+<!--             <class -->
+<!--                 name="cn.featherfly.common.lang.CollectionUtilsTest" /> -->
+<!--             <class name="cn.featherfly.common.lang.ClassUtilsTest" /> -->
+<!--             <class name="cn.featherfly.common.lang.DateUtilsTest" /> -->
+<!--             <class name="cn.featherfly.common.lang.LangUtilsTest" /> -->
 <!--         </classes> -->
 <!--     </test> -->
 </suite>

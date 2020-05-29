@@ -10,7 +10,7 @@ import cn.featherfly.common.lang.number.ChineseNumber;
  * <p>
  * 一些单词的处理
  * </p>
- * 
+ *
  * @author zhongj
  */
 public final class WordUtils {
@@ -19,7 +19,7 @@ public final class WordUtils {
 
     /**
      * 转换第一个字符为大写
-     * 
+     *
      * @param word 需要转换的字符串
      * @return 转换完成的字符串
      */
@@ -37,13 +37,13 @@ public final class WordUtils {
 
     /**
      * 将传入字符串中含有相应符号后的首个字符转换为大写，并去符号
-     * 
+     *
      * @param word 需要转换的字符串
      * @param sign 符号
      * @return 转换完成的字符串
      */
     public static String parseToUpperFirst(String word, char sign) {
-        if (LangUtils.isEmpty(word)) {
+        if (Lang.isEmpty(word)) {
             return "";
         }
         StringBuilder sb = new StringBuilder();
@@ -76,7 +76,7 @@ public final class WordUtils {
      * @return 转换完成的字符串
      */
     public static String addSignBeforeUpper(String word, char sign, boolean upperToLower) {
-        if (LangUtils.isEmpty(word)) {
+        if (Lang.isEmpty(word)) {
             return "";
         }
         StringBuilder sb = new StringBuilder();
@@ -99,7 +99,7 @@ public final class WordUtils {
      * <p>
      * 将传入的数值转换为带单位（KB,MB,GB等）的字符串 如2032转换为1.98 KB，254855398转换为243.04 MB
      * </p>
-     * 
+     *
      * @param total 数值
      * @return 带单位（KB,MB,GB等）的字符串
      */
@@ -143,7 +143,7 @@ public final class WordUtils {
      * <p>
      * 转换为百分比表示的字符串
      * </p>
-     * 
+     *
      * @param num       待转换的数值
      * @param precision 转换后保密几位小数精度
      * @return 转换后的百分比表示字符串
@@ -160,7 +160,7 @@ public final class WordUtils {
      * <p>
      * 转换为百分比表示的字符串，不保留小数精度.
      * </p>
-     * 
+     *
      * @param num 待转换的数值
      * @return 转换后的百分比表示字符串
      */

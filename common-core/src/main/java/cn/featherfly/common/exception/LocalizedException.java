@@ -3,7 +3,7 @@ package cn.featherfly.common.exception;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.locale.LocalizedMessage;
 import cn.featherfly.common.locale.ResourceBundleUtils;
 
@@ -229,9 +229,9 @@ public abstract class LocalizedException extends BaseException {
         if (localeMessage != null) {
             return getMessage();
         }
-        if (LangUtils.isEmpty(localizedMessage)) {
+        if (Lang.isEmpty(localizedMessage)) {
             String message = getMessage();
-            if (LangUtils.isEmpty(message)) {
+            if (Lang.isEmpty(message)) {
                 return message;
             }
             int keyIndex = message.indexOf(ResourceBundleUtils.KEY_SIGN);

@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.ClassUtils;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -38,7 +38,7 @@ public class MethodParamTypeMatcher implements MethodMatcher {
      */
     @Override
     public boolean match(Method method) {
-        if (LangUtils.isEmpty(parameterTypes) || method == null) {
+        if (Lang.isEmpty(parameterTypes) || method == null) {
             return false;
         }
         Class<?>[] types = method.getParameterTypes();

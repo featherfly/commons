@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * 支持生成长度为22,32,36的UUID.<br>
  * 生成性能依次是36&gt;32&gt;22.
  * </p>
- * 
+ *
  * @author zhongj
  */
 public final class UUIDGenerator {
@@ -21,7 +21,7 @@ public final class UUIDGenerator {
      * <p>
      * 生成长度为36的UUID
      * </p>
-     * 
+     *
      * @return 长度为36的UUID
      */
     public static String generateUUID36() {
@@ -32,11 +32,11 @@ public final class UUIDGenerator {
      * <p>
      * 生成长度为32的UUID
      * </p>
-     * 
+     *
      * @return 长度为32的UUID
      */
     public static String generateUUID32() {
-        return StringUtils.replace(generate().toString(), "-", "");
+        return Strings.replace(generate().toString(), "-", "");
     }
 
     /**
@@ -44,7 +44,7 @@ public final class UUIDGenerator {
      * 生成长度为22的UUID.包含字符（ a到z,A到Z,0到9,-_ ）.<br>
      * 可以用在URL中，但是需要区分大小写，不建议作为数据库主键。
      * </p>
-     * 
+     *
      * @return 长度为22的UUID
      */
     public static String generateUUID22Letters() {
@@ -58,7 +58,7 @@ public final class UUIDGenerator {
      * 生成长度为22的UUID.包含字符（ a到z,`1234567890-=~!@#$%^&amp;*()_+[]{}\\|;;,./? ）<br>
      * 包含URL特殊字符，不能在URL中使用，不包含大小写，可以用作数据库主键（优点：短，加速查询；缺点：人眼难识别）
      * </p>
-     * 
+     *
      * @return 长度为22的UUID
      */
     public static String generateUUID22Chars() {
@@ -71,7 +71,7 @@ public final class UUIDGenerator {
      * <p>
      * 返回默认的UUID字符串（长度32位）
      * </p>
-     * 
+     *
      * @return 默认的UUID字符串（长度32位）
      */
     public static String generateUUID() {

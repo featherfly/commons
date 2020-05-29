@@ -30,7 +30,7 @@ public final class CollectionUtils {
      * @return 传入集合是否为空
      */
     public static boolean isEmpty(Collection<?> collection) {
-        return LangUtils.isEmpty(collection);
+        return Lang.isEmpty(collection);
     }
 
     /**
@@ -59,7 +59,7 @@ public final class CollectionUtils {
         if (collection == null) {
             return false;
         }
-        if (LangUtils.isEmpty(elements)) {
+        if (Lang.isEmpty(elements)) {
             return false;
         }
         return Collections.addAll(collection, elements);
@@ -77,11 +77,38 @@ public final class CollectionUtils {
      */
     public static <A> A[] toArray(Collection<A> collection, Class<A> type) {
         AssertIllegalArgument.isNotNull(type, "Class<A> type");
-        A[] results = null;
         if (collection == null) {
             collection = new ArrayList<>();
         }
-        results = ArrayUtils.create(type, collection.size());
+        return doToArray(collection, type);
+    }
+
+    /**
+     * 转换为数组. 如果传入集合为空（null或者size=0）或者集合内的对象都是null,返回null.
+     *
+     * @param <A>        泛型
+     * @param collection 集合
+     * @return 数组
+     */
+    @SuppressWarnings("unchecked")
+    public static <A> A[] toArray(Collection<A> collection) {
+        if (isEmpty(collection)) {
+            return null;
+        }
+        Class<A> type = null;
+        for (A a : collection) {
+            if (a != null) {
+                type = (Class<A>) a.getClass();
+            }
+        }
+        if (type == null) {
+            return null;
+        }
+        return doToArray(collection, type);
+    }
+
+    private static <A> A[] doToArray(Collection<A> collection, Class<A> type) {
+        A[] results = ArrayUtils.create(type, collection.size());
         int i = 0;
         for (A a : collection) {
             results[i] = a;
@@ -128,7 +155,7 @@ public final class CollectionUtils {
      * <p>
      * 根据传入的类型生成Map实例
      * </p>
-     * 
+     *
      * @param type 类型
      * @param <K>  Map Key泛型
      * @param <V>  Map Value泛型

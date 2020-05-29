@@ -7,22 +7,65 @@ package cn.featherfly.common.lang;
 
 import static org.testng.Assert.assertEquals;
 
+import java.util.Map;
+
 import org.testng.annotations.Test;
 
-public class StringUtilsTest {
+import cn.featherfly.common.structure.HashChainMap;
+
+public class StringsTest {
     @Test
     public void testSubstring() {
-        String str = "cn.featherfly.common.lang.StringUtils";
-        str = StringUtils.class.getName();
+        String str = "cn.featherfly.common.lang.Strings";
+        str = Strings.class.getName();
         int lastDot = str.lastIndexOf(".");
-        String packageName = StringUtils.substringBefore(str, lastDot);
-        String className = StringUtils.substringAfter(str, lastDot);
+        String packageName = Strings.substringBefore(str, lastDot);
+        String className = Strings.substringAfter(str, lastDot);
         System.out.println(packageName);
         System.out.println(className);
-        assertEquals(packageName, StringUtils.class.getPackage().getName());
-        assertEquals(className, StringUtils.class.getSimpleName());
+        assertEquals(packageName, Strings.class.getPackage().getName());
+        assertEquals(className, Strings.class.getSimpleName());
 
-        assertEquals(StringUtils.substringLast(str, 5), "Utils");
+        assertEquals(Strings.substringLast(str, 7), "Strings");
+    }
+
+    @Test
+    public void testFormat() {
+        String expected = "hello yufei at 2020 from [yi] at 12:15";
+        String name = "yufei";
+        String name2 = "yi";
+        int year = 2020;
+        String time = "12:15";
+
+        Map<String, Object> map = new HashChainMap<String, Object>().putChain("name", name).putChain("year", year)
+                .putChain("name2", name2).putChain("time", time);
+        Object[] args = new Object[] { name, year, name2, time };
+
+        String actual = null;
+
+        actual = Strings.format("hello {name} at {year} from [{name2}] at {time}", map, '{', '}');
+        assertEquals(actual, expected);
+
+        actual = Strings.format("hello $name$ at $year$ from [$name2$] at $time$", map, '$', '$');
+        assertEquals(actual, expected);
+
+        actual = Strings.format("hello {0} at {1} from [{2}] at {3}", args, '{', '}');
+        assertEquals(actual, expected);
+
+        actual = Strings.format("hello $0$ at $1$ from [$2$] at $3$", args, '$', '$');
+        assertEquals(actual, expected);
+
+        // ------------------
+
+        String str = "hello {yufei} {} at {2020}";
+        assertEquals(Strings.format("hello {{{0}}} {{}} at {{{1}}}", new Object[] { name, year }, '{', '}'), str);
+
+        assertEquals(Strings.format("hello {{{name}}} {{}} at {{{year}}}", map, '{', '}'), str);
+
+        str = "hello $yufei$ $$ at $2020$";
+        assertEquals(Strings.format("hello $$$0$$$ $$$$ at $$$1$$$", new Object[] { name, year }, '$'), str);
+
+        assertEquals(Strings.format("hello $$$name$$$ $$$$ at $$$year$$$", map, '$'), str);
     }
 
 }

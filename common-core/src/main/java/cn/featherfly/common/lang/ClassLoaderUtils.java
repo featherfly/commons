@@ -54,7 +54,7 @@ public final class ClassLoaderUtils {
             iterator.addEnumeration(ClassLoaderUtils.class.getClassLoader().getResources(resourceName));
         }
 
-        Class<?> callingClass = ClassUtils.forName(LangUtils.getInvoker().getClassName());
+        Class<?> callingClass = ClassUtils.forName(Lang.getInvoker().getClassName());
 
         if (!iterator.hasNext() || aggregate) {
             ClassLoader cl = callingClass.getClassLoader();
@@ -132,7 +132,7 @@ public final class ClassLoaderUtils {
         if (url != null) {
             return url;
         }
-        Class<?> callingClass = ClassUtils.forName(LangUtils.getInvoker().getClassName());
+        Class<?> callingClass = ClassUtils.forName(Lang.getInvoker().getClassName());
         if (url == null) {
             ClassLoader cl = callingClass.getClassLoader();
 

@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import org.apache.commons.lang3.StringUtils;
 
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * The Class ChineseNumber.
@@ -90,7 +90,7 @@ public class ChineseNumber implements LocaleNumber {
     }
 
     private String toChineseNumber(String number) {
-        if (LangUtils.isEmpty(number)) {
+        if (Lang.isEmpty(number)) {
             return "";
         }
         String result = "";

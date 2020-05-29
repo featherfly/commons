@@ -8,7 +8,7 @@ import java.util.Set;
 import cn.featherfly.common.enums.Logic;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.CollectionUtils;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -51,7 +51,7 @@ public class GroupMatcher<M extends Matcher<O>, O> implements Matcher<O> {
      */
     @Override
     public boolean match(O o) {
-        if (LangUtils.isEmpty(this.matchers)) {
+        if (Lang.isEmpty(this.matchers)) {
             return false;
         }
         if (logic == Logic.AND) {

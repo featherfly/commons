@@ -9,7 +9,7 @@ import java.util.MissingResourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.ServiceLoaderUtils;
 
 /**
@@ -360,7 +360,7 @@ public final class ResourceBundleUtils {
     }
 
     private static String format(String string, Object[] argus) {
-        if (LangUtils.isNotEmpty(argus)) {
+        if (Lang.isNotEmpty(argus)) {
             return MessageFormat.format(string, argus);
         }
         return string;

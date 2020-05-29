@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import cn.featherfly.common.bean.matcher.BeanPropertyMatcher;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.CollectionUtils;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.ServiceLoaderUtils;
 
 /**
@@ -188,17 +188,17 @@ public class BeanDescriptor<T> {
              */
             if (prop.get("get") != null) {
                 getter = (Method) prop.get("get");
-                declaringType = LangUtils.pick(declaringType, getter.getDeclaringClass());
-                propertyType = LangUtils.pick(propertyType,
+                declaringType = Lang.pick(declaringType, getter.getDeclaringClass());
+                propertyType = Lang.pick(propertyType,
                         getGenericType(getter.getGenericReturnType(), getter.getReturnType()));
-                propertyName = LangUtils.pick(propertyName, ClassUtils.getPropertyName(getter));
+                propertyName = Lang.pick(propertyName, ClassUtils.getPropertyName(getter));
             }
             if (prop.get("set") != null) {
                 setter = (Method) prop.get("set");
-                declaringType = LangUtils.pick(declaringType, setter.getDeclaringClass());
-                propertyType = LangUtils.pick(propertyType,
+                declaringType = Lang.pick(declaringType, setter.getDeclaringClass());
+                propertyType = Lang.pick(propertyType,
                         getGenericType(setter.getGenericParameterTypes()[0], setter.getParameterTypes()[0]));
-                propertyName = LangUtils.pick(propertyName, ClassUtils.getPropertyName(setter));
+                propertyName = Lang.pick(propertyName, ClassUtils.getPropertyName(setter));
             }
             BeanProperty<?> property = FACTORY.create(propertyName, null, propertyType, setter, getter, type,
                     declaringType);

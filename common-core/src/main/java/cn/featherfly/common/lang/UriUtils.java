@@ -69,10 +69,10 @@ public final class UriUtils {
      * @return 连接后的uri
      */
     public static String linkUri(String startUri, String endUri, boolean ignoreCaseEmpty) {
-        if (ignoreCaseEmpty && LangUtils.isEmpty(startUri)) {
+        if (ignoreCaseEmpty && Lang.isEmpty(startUri)) {
             return endUri;
         }
-        if (ignoreCaseEmpty && LangUtils.isEmpty(endUri)) {
+        if (ignoreCaseEmpty && Lang.isEmpty(endUri)) {
             return startUri;
         }
         startUri = removeEndSeparator(startUri);

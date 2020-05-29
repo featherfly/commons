@@ -14,7 +14,7 @@ import cn.featherfly.common.bean.rule.CopyRuleAlwaysCopy;
 import cn.featherfly.common.bean.rule.CopyRuleEnum;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.ClassUtils;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -206,7 +206,7 @@ public final class BeanUtils {
      */
     public static <E> void fillProperties(Map<String, Object> map, E bean, boolean ignoreNull) {
         AssertIllegalArgument.isNotNull(bean, "Class<E> type");
-        if (LangUtils.isEmpty(map)) {
+        if (Lang.isEmpty(map)) {
             return;
         }
         BeanDescriptor<E> beanDescriptor = BeanDescriptor

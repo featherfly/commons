@@ -3,7 +3,7 @@ package cn.featherfly.common.io.file.rename;
 
 import cn.featherfly.common.io.FileUtils;
 import cn.featherfly.common.io.file.RenamePolicy;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -30,7 +30,7 @@ public abstract class AbstractExtNameRenamePolicy implements RenamePolicy{
     protected String appendExtName(String newFileName, String fileName) {
         if (withExtName) {
             String extName = FileUtils.getFileExtName(fileName);
-            if (LangUtils.isNotEmpty(extName)) {
+            if (Lang.isNotEmpty(extName)) {
                 return newFileName + "." + FileUtils.getFileExtName(fileName);
             }
         }

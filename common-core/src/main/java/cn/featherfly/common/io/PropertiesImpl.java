@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.lang.DateUtils;
-import cn.featherfly.common.lang.LangUtils;
-import cn.featherfly.common.lang.StringUtils;
+import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.lang.Strings;
 
 /**
  * <p>
@@ -128,7 +128,7 @@ public class PropertiesImpl implements Properties {
     @Override
     public String getProperty(String key) {
         Property p = getPropertyPart(key);
-        if (LangUtils.isNotEmpty(p)) {
+        if (Lang.isNotEmpty(p)) {
             return p.getValue();
         }
         return null;
@@ -260,8 +260,8 @@ public class PropertiesImpl implements Properties {
             // 处理注释
             if (Chars.SHARP_CHAR == lr.lineBuf[0] || Chars.NOT_L_CHAR == lr.lineBuf[0]) {
                 comment = loadConvert(lr.lineBuf, 0, limit, convtBuf).substring(1);
-                if (LangUtils.isNotEmpty(comment)) {
-                    comment = StringUtils.encode(comment, StandardCharsets.ISO_8859_1, charset);
+                if (Lang.isNotEmpty(comment)) {
+                    comment = Strings.encode(comment, StandardCharsets.ISO_8859_1, charset);
                     CharsetComment cc;
                     if (firstLine && (cc = CharsetComment.createIfCan(comment)) != null) {
                         charset = cc.getCharset();
@@ -307,8 +307,8 @@ public class PropertiesImpl implements Properties {
             }
             String key = loadConvert(lr.lineBuf, 0, keyLen, convtBuf);
             String value = loadConvert(lr.lineBuf, valueStart, limit - valueStart, convtBuf);
-            setProperty(StringUtils.encode(key, StandardCharsets.ISO_8859_1, charset),
-                    StringUtils.encode(value, StandardCharsets.ISO_8859_1, charset), comment);
+            setProperty(Strings.encode(key, StandardCharsets.ISO_8859_1, charset),
+                    Strings.encode(value, StandardCharsets.ISO_8859_1, charset), comment);
             partMap.remove(commentKey);
             comment = null;
         }
@@ -400,7 +400,7 @@ public class PropertiesImpl implements Properties {
                     String key = saveConvert(property.getKey(), true, escUnicode);
                     String val = saveConvert(property.getValue(), false, escUnicode);
                     //                    String comment = saveConvert(property.getComment(), false, escUnicode);
-                    Property np = new Property(key, val, LangUtils.ifNotEmpty(property.getComment(),
+                    Property np = new Property(key, val, Lang.ifNotEmpty(property.getComment(),
                             comm -> saveConvert(comm, false, escUnicode), () -> ""));
                     bw.write(np.toPart());
                     bw.write(Chars.NEW_LINE);
@@ -408,7 +408,7 @@ public class PropertiesImpl implements Properties {
                 } else {
                     Comment nc = new Comment();
                     if (charset == null || charset == StandardCharsets.ISO_8859_1) {
-                        nc.setComment(StringUtils.stringToUnicode(((Comment) part).getComment()));
+                        nc.setComment(Strings.stringToUnicode(((Comment) part).getComment()));
                     } else {
                         nc.setComment(((Comment) part).getComment());
                     }

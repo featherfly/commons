@@ -453,7 +453,7 @@ public final class SystemPropertyUtils {
      */
     public static String addProperty(String key, String value) {
         String pv = getProperty(key);
-        if (LangUtils.isNotEmpty(pv)) {
+        if (Lang.isNotEmpty(pv)) {
             value = pv + getPathSeparator() + value;
         }
         return System.setProperty(key, value);

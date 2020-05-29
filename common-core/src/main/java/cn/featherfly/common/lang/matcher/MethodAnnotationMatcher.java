@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 
 import cn.featherfly.common.enums.Logic;
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -50,7 +50,7 @@ public class MethodAnnotationMatcher implements MethodMatcher {
      */
     @Override
     public boolean match(Method field) {
-        if (LangUtils.isEmpty(annotationClasses) || field == null) {
+        if (Lang.isEmpty(annotationClasses) || field == null) {
             return false;
         }
         if (logic == Logic.AND) {

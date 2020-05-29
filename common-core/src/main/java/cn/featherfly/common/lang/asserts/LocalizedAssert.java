@@ -9,8 +9,8 @@ import cn.featherfly.common.exception.LocalizedExceptionUtils;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.LambdaUtils;
 import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
-import cn.featherfly.common.lang.LangUtils;
-import cn.featherfly.common.lang.StringUtils;
+import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.lang.function.SerializableSupplier;
 
 /**
@@ -48,7 +48,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      */
     @Override
     public void isNotBlank(String text, String arg) {
-        if (!StringUtils.isNotBlank(text)) {
+        if (!Strings.isNotBlank(text)) {
             throwException("#isNotBlank", new Object[] { arg });
         }
     }
@@ -58,7 +58,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      */
     @Override
     public void isNotEmpty(Object obj, String args) {
-        if (!LangUtils.isNotEmpty(obj)) {
+        if (!Lang.isNotEmpty(obj)) {
             throwException("#isNotEmpty", new Object[] { args });
         }
     }
@@ -68,7 +68,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      */
     @Override
     public void isNotEmpty(String text, String arg) {
-        if (!LangUtils.isNotEmpty(text)) {
+        if (!Lang.isNotEmpty(text)) {
             throwException("#isNotEmpty", new Object[] { arg });
         }
     }
@@ -78,7 +78,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      */
     @Override
     public void isNotEmpty(Object[] array, String arg) {
-        if (LangUtils.isEmpty(array)) {
+        if (Lang.isEmpty(array)) {
             throwException("#isNotEmpty", new Object[] { arg });
         }
     }
@@ -88,7 +88,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      */
     @Override
     public void isNotEmpty(Collection<?> collection, String arg) {
-        if (LangUtils.isEmpty(collection)) {
+        if (Lang.isEmpty(collection)) {
             throwException("#isNotEmpty", new Object[] { arg });
         }
     }
@@ -98,7 +98,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      */
     @Override
     public void isNotEmpty(Map<?, ?> map, String arg) {
-        if (LangUtils.isEmpty(map)) {
+        if (Lang.isEmpty(map)) {
             throwException("#isNotEmpty", new Object[] { arg });
         }
     }

@@ -4,7 +4,7 @@ package cn.featherfly.common.log;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -15,11 +15,11 @@ import cn.featherfly.common.lang.LangUtils;
  */
 public class LoggerUtils {
 
-    public static Map<String, Logger> loggers = new HashMap<>();
+    public static Map<String, Slf4jLogger> loggers = new HashMap<>();
 
-    public static Logger logger() {
-        String className = LangUtils.getInvoker().getClassName();
-        Logger logger = loggers.get(className);
+    public static Slf4jLogger logger() {
+        String className = Lang.getInvoker().getClassName();
+        Slf4jLogger logger = loggers.get(className);
         if (logger == null) {
             synchronized (loggers) {
                 if (logger == null) {

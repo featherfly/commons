@@ -3,7 +3,9 @@ package cn.featherfly.common.lang;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.featherfly.common.constant.Chars;
 
@@ -108,13 +110,49 @@ public final class ArrayUtils {
      *
      * @param arrays 数组
      * @param <T>    泛型
-     * @return 列表
+     * @return map
      */
     public static <T> List<T> toList(T[] arrays) {
         if (arrays == null) {
             return new ArrayList<>();
         }
-        return new ArrayList<>(Arrays.asList(arrays));
+        return Arrays.asList(arrays);
+    }
+
+    /**
+     * 转换为以数组索引为key,数组值为value的map.
+     *
+     * @param <A>    the generic type
+     * @param arrays 数组
+     * @return map
+     */
+    public static <A> Map<Integer, A> toMap(A[] arrays) {
+        if (arrays == null) {
+            return new LinkedHashMap<>(0);
+        }
+        Map<Integer, A> map = new LinkedHashMap<>(arrays.length);
+        for (int i = 0; i < arrays.length; i++) {
+            map.put(i, arrays[i]);
+        }
+        return map;
+    }
+
+    /**
+     * 转换为以数组索引为key,数组值为value的map.
+     *
+     * @param <A>    the generic type
+     * @param arrays 数组
+     * @return 列表
+     */
+    public static <A> Map<String, A> toMap2(A[] arrays) {
+        if (arrays == null) {
+            return new LinkedHashMap<>(0);
+        }
+        Map<String, A> map = new LinkedHashMap<>(arrays.length);
+        for (int i = 0; i < arrays.length; i++) {
+            map.put(String.valueOf(i), arrays[i]);
+        }
+        return map;
     }
 
     /**

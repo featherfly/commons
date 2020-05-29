@@ -14,25 +14,24 @@ import java.nio.charset.StandardCharsets;
 public interface Charsets {
     /**
      * ISO8859_1
-     *
-     * @deprecated {@link StandardCharsets#ISO_8859_1}
      */
-    @Deprecated
     Charset ISO_8859_1 = StandardCharsets.ISO_8859_1;
     /**
      * UTF-8
-     *
-     * @deprecated {@link StandardCharsets#UTF_8}
      */
-    @Deprecated
     Charset UTF_8 = StandardCharsets.UTF_8;
     /**
      * UTF-16
-     *
-     * @deprecated {@link StandardCharsets#UTF_16}
      */
-    @Deprecated
     Charset UTF_16 = StandardCharsets.UTF_16;
+    /**
+     * UTF-16BE
+     */
+    Charset UTF_16BE = StandardCharsets.UTF_16BE;
+    /**
+     * UTF-16LE
+     */
+    Charset UTF_16LE = StandardCharsets.UTF_16LE;
     /**
      * GBK
      */

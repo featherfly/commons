@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 import cn.featherfly.common.bytecode.JavassistUtils;
 import cn.featherfly.common.exception.InitException;
 import cn.featherfly.common.exception.UnsupportedException;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.SystemPropertyUtils;
 import cn.featherfly.common.lang.WordUtils;
 import javassist.CannotCompileException;
@@ -28,19 +28,19 @@ public class LoggerFactory {
 
     private static boolean init;
 
-    public static Logger getLogger() {
-        String className = LangUtils.getInvoker().getClassName();
+    public static Slf4jLogger getLogger() {
+        String className = Lang.getInvoker().getClassName();
         return getLogger(className);
     }
 
-    public static Logger getLogger(String name) {
+    public static Slf4jLogger getLogger(String name) {
         init();
-        return (Logger) org.slf4j.LoggerFactory.getLogger(name);
+        return (Slf4jLogger) org.slf4j.LoggerFactory.getLogger(name);
     }
 
-    public static Logger getLogger(Class<?> clazz) {
+    public static Slf4jLogger getLogger(Class<?> clazz) {
         init();
-        return (Logger) org.slf4j.LoggerFactory.getLogger(clazz);
+        return (Slf4jLogger) org.slf4j.LoggerFactory.getLogger(clazz);
     }
 
     private static void init() {
@@ -51,7 +51,7 @@ public class LoggerFactory {
                         ClassPool pool = ClassPool.getDefault();
                         try {
                             CtClass ctClass = pool.get(LOG4J);
-                            ctClass.addInterface(pool.get(Logger.class.getName()));
+                            ctClass.addInterface(pool.get(Slf4jLogger.class.getName()));
                             addMethods(ctClass, pool);
                             ctClass.toClass();
                             ctClass.detach();
@@ -68,7 +68,7 @@ public class LoggerFactory {
     }
 
     private static void addMethods(CtClass ctClass, ClassPool pool) throws NotFoundException, CannotCompileException {
-        for (Method method : Logger.class.getDeclaredMethods()) {
+        for (Method method : Slf4jLogger.class.getDeclaredMethods()) {
             CtMethod ctMethod = JavassistUtils.createMethod(method, ctClass, pool);
             ctMethod.setBody(String.format("if (is%sEnabled()) {this.%s($1, $2.get());}",
                     WordUtils.upperCaseFirst(ctMethod.getName()), ctMethod.getName()));

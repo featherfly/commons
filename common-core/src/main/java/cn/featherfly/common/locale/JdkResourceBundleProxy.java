@@ -9,8 +9,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import cn.featherfly.common.lang.LangUtils;
-import cn.featherfly.common.lang.StringUtils;
+import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.lang.Strings;
 
 /**
  * <p>
@@ -137,8 +137,8 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.locale.Resou
     }
 
     private String encode(String str) {
-        if (LangUtils.isNotEmpty(str) && charset != null) {
-            return StringUtils.encode(str, DEFAULT_CHARSET.displayName(), charset.displayName());
+        if (Lang.isNotEmpty(str) && charset != null) {
+            return Strings.encode(str, DEFAULT_CHARSET.displayName(), charset.displayName());
         }
         return str;
     }

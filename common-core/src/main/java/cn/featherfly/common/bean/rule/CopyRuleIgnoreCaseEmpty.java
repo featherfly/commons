@@ -1,7 +1,7 @@
 
 package cn.featherfly.common.bean.rule;
 
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -23,7 +23,7 @@ public class CopyRuleIgnoreCaseEmpty implements CopyRule{
      */
     @Override
     public boolean isCopyEnabled(Object target, Object from, String propertyName, Object propertyValue) {
-        if (LangUtils.isEmpty(propertyValue)) {
+        if (Lang.isEmpty(propertyValue)) {
             return false;
         }
         return true;

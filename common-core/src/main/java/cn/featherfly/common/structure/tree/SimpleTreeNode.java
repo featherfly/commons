@@ -14,7 +14,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.structure.tree.matcher.TreeNodeEqualsMatcher;
 
 /**
@@ -226,7 +226,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
     }
     
     private TreeNode<E> findTreeNode(TreeNodeMatcher<TreeNode<E>> matcher, Collection<TreeNode<E>> treeNodes) {
-        if (LangUtils.isNotEmpty(treeNodes)) {
+        if (Lang.isNotEmpty(treeNodes)) {
             Iterator<TreeNode<E>> iter = treeNodes.iterator();
             while (iter.hasNext()) {
                 TreeNode<E> child = iter.next();
@@ -643,7 +643,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
         if (object == null || !(object instanceof TreeNode)) {
             return false;
         }
-        if (LangUtils.isEmpty(this.getId())) {
+        if (Lang.isEmpty(this.getId())) {
             return false;
         }
         @SuppressWarnings("unchecked")

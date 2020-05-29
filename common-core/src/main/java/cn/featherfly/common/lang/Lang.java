@@ -10,31 +10,25 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import cn.featherfly.common.exception.ExceptionWrapper;
+
 /**
- * <p>
- * 对一些在语法上显得拖沓的常用操作进行封装的工具类
- * </p>
- * .
+ * 对一些在语法上显得拖沓的常用操作进行封装的工具类 .
  *
  * @author zhongj
- * @version 1.0
- * @since 1.0
- * @deprecated use {@link Lang} instead
  */
-@Deprecated
-public final class LangUtils {
+public final class Lang {
+
+    private static final ExceptionWrapper<RuntimeException> WRAPPER = new ExceptionWrapper<>(RuntimeException.class);
 
     /**
      * Instantiates a new lang utils.
      */
-    private LangUtils() {
+    private Lang() {
     }
 
     /**
-     * <p>
-     * 如果第一个参数为空(null），返回第二个参数，否则返回第一个参数
-     * </p>
-     * .
+     * 如果第一个参数为空(null），返回第二个参数，否则返回第一个参数 .
      *
      * @param <T>           泛型
      * @param target        目标参数
@@ -42,14 +36,11 @@ public final class LangUtils {
      * @return 第一个参数为空(null），返回第二个参数，否则返回第一个参数
      */
     public static <T> T pick(T target, T defaultTarget) {
-        return Lang.pick(target, defaultTarget);
+        return target == null ? defaultTarget : target;
     }
 
     /**
-     * <p>
-     * 返回第一个非空的项，!=null
-     * <p>
-     * .
+     * 返回第一个非空的项，!=null .
      *
      * @param <T>         泛型
      * @param pickedItems 需要选择的对象
@@ -68,10 +59,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 返回最后一个非空的对象，!=null
-     * </p>
-     * .
+     * 返回最后一个非空的对象，!=null .
      *
      * @param <T>         泛型
      * @param pickedItems 需要选择的对象
@@ -91,10 +79,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 返回传入对象是否为空，（String、Collection、Map、Array还要判断长度是否为0）
-     * </p>
-     * .
+     * 返回传入对象是否为空，（String、Collection、Map、Array还要判断长度是否为0） .
      *
      * @param object 传入的对象
      * @return 传入对象是否为空
@@ -119,10 +104,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 返回传入对象是否不为空（String、Collection、Map、Array还要判断长度是否为0）
-     * </p>
-     * .
+     * 返回传入对象是否不为空（String、Collection、Map、Array还要判断长度是否为0） .
      *
      * @param object 传入的对象
      * @return 传入对象是否不为空
@@ -168,10 +150,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 判断传入对象是否为空，（String、Collection、Map、Array还要判断长度是否为0），如果为空则执行传入的方法
-     * </p>
-     * .
+     * 判断传入对象是否为空，（String、Collection、Map、Array还要判断长度是否为0），如果为空则执行传入的方法 .
      *
      * @param <O>      the generic type
      * @param <R>      the generic type
@@ -189,10 +168,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 判断传入对象是否为空，（String、Collection、Map、Array还要判断长度是否为0），如果为空则执行传入的方法
-     * </p>
-     * .
+     * 判断传入对象是否为空，（String、Collection、Map、Array还要判断长度是否为0），如果为空则执行传入的方法 .
      *
      * @param <O>      the generic type
      * @param <R>      the generic type
@@ -210,10 +186,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 判断传入对象是否不为空，（String、Collection、Map、Array还要判断长度是否为0），如果不为空则执行传入的方法
-     * </p>
-     * .
+     * 判断传入对象是否不为空，（String、Collection、Map、Array还要判断长度是否为0），如果不为空则执行传入的方法 .
      *
      * @param <O>      the generic type
      * @param object   传入的对象
@@ -226,10 +199,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 判断传入对象是否不为空，（String、Collection、Map、Array还要判断长度是否为0），如果不为空则执行传入的方法
-     * </p>
-     * .
+     * 判断传入对象是否不为空，（String、Collection、Map、Array还要判断长度是否为0），如果不为空则执行传入的方法 .
      *
      * @param <O>      the generic type
      * @param <R>      the generic type
@@ -247,10 +217,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 判断传入对象是否不为空，（String、Collection、Map、Array还要判断长度是否为0），如果不为空则执行传入的方法
-     * </p>
-     * .
+     * 判断传入对象是否不为空，（String、Collection、Map、Array还要判断长度是否为0），如果不为空则执行传入的方法 .
      *
      * @param <O>      the generic type
      * @param <R>      the generic type
@@ -268,10 +235,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 返回传入字符串是否为空（是null或是空字符串）
-     * </p>
-     * .
+     * 返回传入字符串是否为空（是null或是空字符串） .
      *
      * @param string 传入的字符串
      * @return 传入字符串是否为空
@@ -281,9 +245,9 @@ public final class LangUtils {
     }
 
     //    /**
-    //     * <p>
+    //
     //     * 判断传入字符串是否为空（是null或是空字符串），如果为空，则执行传入的方法
-    //     * </p>
+    //
     //     *
     //     * @param string   传入的字符串
     //     * @param consumer 需要执行的方法
@@ -296,10 +260,7 @@ public final class LangUtils {
     //    }
 
     /**
-     * <p>
-     * 返回传入字符串是否不为空（不是null或不是空字符串）
-     * </p>
-     * .
+     * 返回传入字符串是否不为空（不是null或不是空字符串） .
      *
      * @param string 传入的字符串
      * @return 传入字符串是否不为空
@@ -309,9 +270,9 @@ public final class LangUtils {
     }
 
     //    /**
-    //     * <p>
+    //
     //     * 判断传入字符串是否不为空（是null或是空字符串），如果不为空，则执行传入的方法
-    //     * </p>
+    //
     //     *
     //     * @param string   传入的字符串
     //     * @param consumer 需要执行的方法
@@ -324,10 +285,7 @@ public final class LangUtils {
     //    }
 
     /**
-     * <p>
-     * 返回数组是否为空（是null或是空数组）
-     * </p>
-     * .
+     * 返回数组是否为空（是null或是空数组） .
      *
      * @param array 传入的数组
      * @return 传入数组是否为空
@@ -337,9 +295,9 @@ public final class LangUtils {
     }
 
     //    /**
-    //     * <p>
+    //
     //     * 判断数组是否为空（是null或是空数组），如果为空，则执行传入的方法
-    //     * </p>
+    //
     //     *
     //     * @param array    传入的数组
     //     * @param consumer 需要执行的方法
@@ -351,10 +309,7 @@ public final class LangUtils {
     //    }
 
     /**
-     * <p>
-     * 返回数组是否不为空（null或空数组）
-     * </p>
-     * .
+     * 返回数组是否不为空（null或空数组） .
      *
      * @param array 传入的数组
      * @return 传入数组是否不为空
@@ -364,9 +319,9 @@ public final class LangUtils {
     }
 
     //    /**
-    //     * <p>
+    //
     //     * 判断数组是否不为空（是null或是空数组），如果不为空，则执行传入的方法
-    //     * </p>
+    //
     //     *
     //     * @param array    传入的数组
     //     * @param consumer 需要执行的方法
@@ -378,10 +333,7 @@ public final class LangUtils {
     //    }
 
     /**
-     * <p>
-     * 返回传入集合是否为空（是null或size=0）
-     * </p>
-     * .
+     * 返回传入集合是否为空（是null或size=0） .
      *
      * @param collection 传入的集合
      * @return 传入集合是否为空
@@ -391,9 +343,9 @@ public final class LangUtils {
     }
 
     //    /**
-    //     * <p>
+    //
     //     * 判断集合是否为空（是null或size=0），如果为空，则执行传入的方法
-    //     * </p>
+    //
     //     *
     //     * @param collection 传入的集合
     //     * @param consumer   需要执行的方法
@@ -405,10 +357,7 @@ public final class LangUtils {
     //    }
 
     /**
-     * <p>
-     * 返回传入集合是否不为空（不是null或size&gt;0）
-     * </p>
-     * .
+     * 返回传入集合是否不为空（不是null或size&gt;0） .
      *
      * @param collection 传入的集合
      * @return 传入集合是否不为空
@@ -418,9 +367,9 @@ public final class LangUtils {
     }
 
     //    /**
-    //     * <p>
+    //
     //     * 判断集合是否不为空（是null或size&gt;0），如果不为空，则执行传入的方法
-    //     * </p>
+    //
     //     *
     //     * @param collection 传入的集合
     //     * @param consumer   需要执行的方法
@@ -432,10 +381,7 @@ public final class LangUtils {
     //    }
 
     /**
-     * <p>
-     * 返回传入map是否为空（是null或size=0）
-     * </p>
-     * .
+     * 返回传入map是否为空（是null或size=0） .
      *
      * @param map 传入的map
      * @return 传入map是否为空
@@ -445,10 +391,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 返回传入map是否不为空（不是null或size&gt;0）
-     * </p>
-     * .
+     * 返回传入map是否不为空（不是null或size&gt;0） .
      *
      * @param map 传入的map
      * @return 传入map是否不为空
@@ -458,9 +401,9 @@ public final class LangUtils {
     }
 
     //    /**
-    //     * <p>
+    //
     //     * 判断map是否为空（是null或size=0），如果为空，则执行传入的方法
-    //     * </p>
+    //
     //     *
     //     * @param map      传入的map
     //     * @param consumer 需要执行的方法
@@ -472,9 +415,9 @@ public final class LangUtils {
     //    }
 
     //    /**
-    //     * <p>
+    //
     //     * 判断map是否不为空（是null或size=0），如果不为空，则执行传入的方法
-    //     * </p>
+    //
     //     *
     //     * @param map      传入的map
     //     * @param consumer 需要执行的方法
@@ -486,10 +429,7 @@ public final class LangUtils {
     //    }
 
     /**
-     * <p>
-     * 判断传入文件对象代表的物理文件是否存在
-     * </p>
-     * .
+     * 判断传入文件对象代表的物理文件是否存在 .
      *
      * @param file 判断的文件
      * @return 传入文件对象代表的物理文件是否存在
@@ -499,10 +439,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 判断传入文件对象代表的物理文件是否不存在
-     * </p>
-     * .
+     * 判断传入文件对象代表的物理文件是否不存在 .
      *
      * @param file 判断的文件
      * @return 传入文件对象代表的物理文件是否存在
@@ -512,10 +449,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 判断传入文件对象代表的物理文件是否存在，存在则执行传入方法
-     * </p>
-     * .
+     * 判断传入文件对象代表的物理文件是否存在，存在则执行传入方法 .
      *
      * @param file     判断的文件
      * @param consumer 需要执行的方法
@@ -527,10 +461,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 判断传入文件对象代表的物理文件是否存在，存在则执行传入方法
-     * </p>
-     * .
+     * 判断传入文件对象代表的物理文件是否存在，存在则执行传入方法 .
      *
      * @param <R>       the generic type
      * @param file      判断的文件
@@ -547,10 +478,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 判断传入文件对象代表的物理文件是否不存在，不存在则执行传入方法
-     * </p>
-     * .
+     * 判断传入文件对象代表的物理文件是否不存在，不存在则执行传入方法 .
      *
      * @param file     判断的文件
      * @param consumer 需要执行的方法
@@ -562,10 +490,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 判断传入文件对象代表的物理文件是否不存在，不存在则执行传入方法
-     * </p>
-     * .
+     * 判断传入文件对象代表的物理文件是否不存在，不存在则执行传入方法 .
      *
      * @param <R>       the generic type
      * @param file      判断的文件
@@ -582,10 +507,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 判断传入文件对象代表的物理文件是否不存在，不存在则执行传入方法
-     * </p>
-     * .
+     * 判断传入文件对象代表的物理文件是否不存在，不存在则执行传入方法 .
      *
      * @param <R>      the generic type
      * @param file     判断的文件
@@ -600,10 +522,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 将传入对象转换为枚举
-     * </p>
-     * .
+     * 将传入对象转换为枚举 .
      *
      * @param <T>     泛型
      * @param toClass 枚举的类型
@@ -666,10 +585,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 安全的equals，防止空指针异常
-     * </p>
-     * .
+     * 安全的equals，防止空指针异常 .
      *
      * @param target      比较对象
      * @param otherTarget 另一个比较对象
@@ -691,10 +607,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 转换为String，如果不能转换（null）则使用默认值
-     * </p>
-     * .
+     * 转换为String，如果不能转换（null）则使用默认值 .
      *
      * @param obj          obj
      * @param defaultValue defaultValue
@@ -705,10 +618,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 转换为String，如果不能转换（null）则返回null
-     * </p>
-     * .
+     * 转换为String，如果不能转换（null）则返回null .
      *
      * @param obj obj
      * @return string
@@ -718,10 +628,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 获取调用getInvoker方法所在的方法被调用的信息（即调用方法、类等）
-     * </p>
-     * .
+     * 获取调用getInvoker方法所在的方法被调用的信息（即调用方法、类等） .
      *
      * @return StackTraceElement
      */
@@ -739,10 +646,7 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 获取调用此方法的调用方法栈
-     * </p>
-     * .
+     * 获取调用此方法的调用方法栈 .
      *
      * @return List&lt;StackTraceElement&gt;
      */
@@ -764,74 +668,86 @@ public final class LangUtils {
         return invokers;
     }
 
-    //    /**
-    //     * <p>
-    //     * 获取调用getInvoker方法所在的方法被调用的信息（即调用方法、类等）
-    //     * </p>
-    //     *
-    //     * @return StackTraceElement
-    //     */
-    //    public static StackTraceElement getInvokerAll() {
-    //        final String methodName = "getInvokerAll";
-    //        for (Entry<Thread, StackTraceElement[]> entry : Thread.getAllStackTraces().entrySet()) {
-    //            StackTraceElement[] stackTraceElements = entry.getValue();
-    //            boolean findThis = false;
-    //            boolean findInvokeThis = false;
-    //            boolean findInvokor = false;
-    //            for (StackTraceElement stackTraceElement : stackTraceElements) {
-    //                if (findThis) {
-    //                    findInvokeThis = true;
-    //                    findThis = false;
-    //                }
-    //                if (stackTraceElement.getClassName().equals(Lang.class.getName())
-    //                        && stackTraceElement.getMethodName().equals(methodName)) {
-    //                    findThis = true;
-    //                }
-    //                if (findInvokor) {
-    //                    return stackTraceElement;
-    //                }
-    //                if (findInvokeThis) {
-    //                    findInvokeThis = false;
-    //                    findInvokor = true;
-    //                }
-    //            }
-    //        }
-    //        return null;
-    //    }
-    //
-    //    /**
-    //     * <p>
-    //     * 获取调用此方法的调用方法栈
-    //     * </p>
-    //     *
-    //     * @return List&lt;StackTraceElement&gt;
-    //     */
-    //    public static List<StackTraceElement> getInvokersAll() {
-    //        final String methodName = "getInvokersAll";
-    //        List<StackTraceElement> invokers = new ArrayList<>();
-    //        for (Entry<Thread, StackTraceElement[]> entry : Thread.getAllStackTraces().entrySet()) {
-    //            StackTraceElement[] stackTraceElements = entry.getValue();
-    //            boolean findThis = false;
-    //            boolean findInvokeThis = false;
-    //            boolean findInvokor = false;
-    //            for (StackTraceElement stackTraceElement : stackTraceElements) {
-    //                if (findThis) {
-    //                    findInvokeThis = true;
-    //                    findThis = false;
-    //                }
-    //                if (stackTraceElement.getClassName().equals(Lang.class.getName())
-    //                        && stackTraceElement.getMethodName().equals(methodName)) {
-    //                    findThis = true;
-    //                }
-    //                if (findInvokor) {
-    //                    invokers.add(stackTraceElement);
-    //                }
-    //                if (findInvokeThis) {
-    //                    findInvokeThis = false;
-    //                    findInvokor = true;
-    //                }
-    //            }
-    //        }
-    //        return invokers;
-    //    }
+    /**
+     * 转换为数组. 如果传入集合为空（null或者size=0）或者集合内的对象都是null,返回null.
+     *
+     * @param <A>        泛型
+     * @param collection 集合
+     * @return 数组
+     */
+    public static <A> A[] toArray(Collection<A> collection) {
+        return CollectionUtils.toArray(collection);
+    }
+
+    /**
+     * <p>
+     * 转换为数组. 如果传入集合为空（null或者size=0），返回长度为0的数组（不会返回null）.
+     * </p>
+     *
+     * @param <A>        泛型
+     * @param collection 集合
+     * @param type       类型
+     * @return 数组
+     */
+    public static <A> A[] toArray(Collection<A> collection, Class<A> type) {
+        return CollectionUtils.toArray(collection, type);
+    }
+
+    /**
+     * <p>
+     * 转换为列表
+     * </p>
+     * .
+     *
+     * @param <A>    the generic type
+     * @param arrays 数组
+     * @return 列表
+     */
+    public static <A> List<A> toList(A[] arrays) {
+        return ArrayUtils.toList(arrays);
+    }
+
+    /**
+     * 转换为以数组索引为key,数组值为value的map.
+     *
+     * @param <A>    the generic type
+     * @param arrays 数组
+     * @return map
+     */
+    public static <A> Map<Integer, A> toMap(A[] arrays) {
+        return ArrayUtils.toMap(arrays);
+    }
+
+    /**
+     * 转换为以数组索引为key,数组值为value的map.
+     *
+     * @param <A>    the generic type
+     * @param arrays 数组
+     * @return map
+     */
+    public static <A> Map<String, A> toMap2(A[] arrays) {
+        return ArrayUtils.toMap2(arrays);
+    }
+
+    /**
+     * Wrap throw.
+     *
+     * @param throwable the throwable
+     */
+    public static void wrapThrow(Throwable throwable) {
+        AssertIllegalArgument.isNotNull(throwable, "throwable");
+        WRAPPER.throwException(throwable);
+    }
+
+    /**
+     * Wrap throw.
+     *
+     * @param throwable               the throwable
+     * @param wrappedRuntimeException the wrapped runtime exception
+     */
+    public static void wrapThrow(Throwable throwable, RuntimeException wrappedRuntimeException) {
+        AssertIllegalArgument.isNotNull(throwable, "throwable");
+        AssertIllegalArgument.isNotNull(wrappedRuntimeException, "wrappedRuntimeException");
+        new ExceptionWrapper<>(wrappedRuntimeException.getClass()).throwException(throwable);
+    }
 }

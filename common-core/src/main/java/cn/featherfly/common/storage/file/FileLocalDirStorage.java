@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.io.FileUtils;
 import cn.featherfly.common.io.file.RenamePolicy;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.UriUtils;
 import cn.featherfly.common.storage.StorageException;
 
@@ -99,7 +99,7 @@ public abstract class FileLocalDirStorage implements FileStorage{
      * @return 文件存储后的唯一标示
      */
     protected String getId(File targetFile, String extDir) {
-        if (LangUtils.isEmpty(extDir)) {
+        if (Lang.isEmpty(extDir)) {
             return targetFile.getName();
         } else {
             return extDir + "/" + targetFile.getName();
@@ -117,7 +117,7 @@ public abstract class FileLocalDirStorage implements FileStorage{
         String finalDir = getBaseDir();
         // 连接相对目录
         String relativeDir = getRelativeDir();
-        if (LangUtils.isNotEmpty(relativeDir)) {
+        if (Lang.isNotEmpty(relativeDir)) {
             finalDir = UriUtils.linkUri(finalDir, relativeDir);
         }
         file = new File(finalDir);
@@ -136,7 +136,7 @@ public abstract class FileLocalDirStorage implements FileStorage{
         File file = createRelativeDir();
         String finalDir = file.getAbsolutePath();
         // 连接扩展目录
-        if (LangUtils.isNotEmpty(extDir)) {
+        if (Lang.isNotEmpty(extDir)) {
             finalDir = UriUtils.linkUri(finalDir, extDir);
         }
         file = new File(finalDir);
@@ -178,7 +178,7 @@ public abstract class FileLocalDirStorage implements FileStorage{
     }
 
     private void setBaseDirDefault() {
-        if (LangUtils.isEmpty(baseDir)) {
+        if (Lang.isEmpty(baseDir)) {
             URL resource = this.getClass().getResource("/");
             if (resource == null) {
                 resource = Thread.currentThread().getContextClassLoader().getResource(".");

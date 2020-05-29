@@ -8,12 +8,7 @@ import org.testng.annotations.Test;
 import cn.featherfly.common.lang.number.ChineseNumber;
 
 /**
- * <p>
- * StringUtilsTest
- * </p>
- * <p>
- * 2019-08-16
- * </p>
+ * WorldUtilsTest.
  *
  * @author zhongj
  */

@@ -138,7 +138,7 @@ public final class NumberUtils {
      */
     @SuppressWarnings("unchecked")
     public static <T extends Number> T parse(String source, Class<T> toType) {
-        if (LangUtils.isEmpty(source)) {
+        if (Lang.isEmpty(source)) {
             return null;
         }
         T value = null;

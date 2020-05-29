@@ -1,0 +1,21 @@
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src/main/java"]
+        }
+        resources {
+            srcDirs = ["src/main/resources"]
+        }
+    }
+}
+
+dependencies {
+    api group: 'cn.featherfly.common', name: 'common-algorithm', version: '1.1.0'
+    api group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+    api group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
+    api group: 'commons-io', name: 'commons-io', version: '2.6'
+    //compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'    
+    //compile group: 'org.springframework', name: 'spring-core', version: '5.1.8.RELEASE'
+    
+    api group: 'org.javassist', name: 'javassist', version: '3.25.0-GA'
+}

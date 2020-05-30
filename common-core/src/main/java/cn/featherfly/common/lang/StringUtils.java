@@ -24,7 +24,9 @@ import cn.featherfly.common.constant.Unit;
  * @author zhongj
  * @since 1.0
  * @version 1.0
+ * @deprecated {@link Strings}
  */
+@Deprecated
 public final class StringUtils extends org.apache.commons.lang3.StringUtils {
 
     private static final Pattern UNICODE_PATTERN = Pattern.compile("(\\\\u(\\p{XDigit}{4}))");

@@ -3,6 +3,10 @@ package cn.featherfly.common.lang;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -15,19 +19,24 @@ import cn.featherfly.common.constant.Unit;
  * <p>
  * 日期的帮助类
  * </p>
+ * .
  *
  * @author zhongj
- * @since 1.0
- * @version 1.0
- * @deprecated {@link Dates}
  */
-@Deprecated
-public final class DateUtils {
+public final class Dates {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DateUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Dates.class);
 
-    private DateUtils() {
+    private Dates() {
     }
+
+    // 默认格式化参数
+    private static final String FORMART_DATE = "yyyy-MM-dd";
+
+    private static final String FORMART_TIME = "yyyy-MM-dd HH:mm:ss";
+
+    // 信息
+    private static final String MSG_START_AFTER_END = "开始日期startDate不能晚于结束日期endDate";
 
     /**
      * 方法 {@link #getDayOfWeek(Date date)}的返回值 星期一.
@@ -78,14 +87,88 @@ public final class DateUtils {
      * <p>
      * 时间类型
      * </p>
-     * millisecond 毫秒 second 秒 minute 分钟 hour 小时 day 日
+     * millisecond 毫秒 second 秒 minute 分钟 hour 小时 day 日.
      */
     public enum TimeType {
-        millisecond, second, minute, hour, day
+        /** The millisecond. */
+        millisecond,
+        /** The second. */
+        second,
+        /** The minute. */
+        minute,
+        /** The hour. */
+        hour,
+        /** The day. */
+        day
     }
 
     /**
-     * 使用yyyy-MM-dd进行格式化
+     * To local date time.
+     *
+     * @param date the date
+     * @return the local date time
+     */
+    public static LocalDateTime toLocalDateTime(Date date) {
+        if (date == null) {
+            return null;
+        }
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+    /**
+     * To local date.
+     *
+     * @param date the date
+     * @return the local date
+     */
+    public static LocalDate toLocalDate(Date date) {
+        if (date == null) {
+            return null;
+        }
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    /**
+     * To local time.
+     *
+     * @param date the date
+     * @return the local time
+     */
+    public static LocalTime toLocalTime(Date date) {
+        if (date == null) {
+            return null;
+        }
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
+    }
+
+    /**
+     * To date.
+     *
+     * @param localDateTime the local date time
+     * @return the date
+     */
+    public static Date toDate(LocalDateTime localDateTime) {
+        if (localDateTime == null) {
+            return null;
+        }
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * To date.
+     *
+     * @param localDate the local date
+     * @return the date
+     */
+    public static Date toDate(LocalDate localDate) {
+        if (localDate == null) {
+            return null;
+        }
+        return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * 使用yyyy-MM-dd进行格式化.
      *
      * @param date 日期对象
      * @return 如果传入的日期不为null,则按yyyy-MM-dd的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
@@ -95,7 +178,7 @@ public final class DateUtils {
     }
 
     /**
-     * 使用yyyy-MM-dd hh:mm:ss进行格式化
+     * 使用yyyy-MM-dd hh:mm:ss进行格式化.
      *
      * @param date 日期对象
      * @return 如果传入的日期不为null,则按yyyy-MM-dd hh:mm:ss的格式返回一个格式化的字符串
@@ -106,7 +189,7 @@ public final class DateUtils {
     }
 
     /**
-     * 使用传入的格式化参数进行格式化
+     * 使用传入的格式化参数进行格式化.
      *
      * @param date    日期
      * @param formart 格式化参数
@@ -125,6 +208,7 @@ public final class DateUtils {
      * <p>
      * 将传入的参数以yyyy-MM-dd的格式进行日期转换
      * </p>
+     * .
      *
      * @param strDate 日期的字符串表示
      * @return 转换后的日期
@@ -137,6 +221,7 @@ public final class DateUtils {
      * <p>
      * 将传入的参数以yyyy-MM-dd hh:mm:ss的格式进行日期转换
      * </p>
+     * .
      *
      * @param strDate 日期的字符串表示
      * @return 转换后的日期
@@ -149,6 +234,7 @@ public final class DateUtils {
      * <p>
      * 将传入的参数（第一个）以传入的格式（第二个）进行日期转换
      * </p>
+     * .
      *
      * @param strDate 日期的字符串表示
      * @param formart 格式
@@ -170,6 +256,7 @@ public final class DateUtils {
      * <p>
      * 将传入的参数转换为日期
      * </p>
+     * .
      *
      * @param strDate 日期的字符串表示
      * @return 转换后的日期
@@ -182,7 +269,7 @@ public final class DateUtils {
     }
 
     /**
-     * 根据指定的 year,month,day 返回Date实例
+     * 根据指定的 year,month,day 返回Date实例.
      *
      * @param year  年
      * @param month 月 1-12
@@ -196,7 +283,7 @@ public final class DateUtils {
     }
 
     /**
-     * 根据指定的 year,month,day,hour,minute,second 返回Date实例
+     * 根据指定的 year,month,day,hour,minute,second 返回Date实例.
      *
      * @param year   年
      * @param month  月 1-12
@@ -213,7 +300,7 @@ public final class DateUtils {
     }
 
     /**
-     * 返回当前年
+     * 返回当前年.
      *
      * @return 当前年
      */
@@ -223,7 +310,7 @@ public final class DateUtils {
     }
 
     /**
-     * 返回当前月，与Date和Calendar的0-11不同，返回的是1-12
+     * 返回当前月，与Date和Calendar的0-11不同，返回的是1-12.
      *
      * @return 当前月
      */
@@ -233,7 +320,7 @@ public final class DateUtils {
     }
 
     /**
-     * 返回当前日期（一月中的哪天）
+     * 返回当前日期（一月中的哪天）.
      *
      * @return 当前日期（一月中的哪天）
      */
@@ -243,7 +330,7 @@ public final class DateUtils {
     }
 
     /**
-     * 返回当前是星期几
+     * 返回当前是星期几.
      *
      * @return 当前是星期几
      */
@@ -253,7 +340,7 @@ public final class DateUtils {
     }
 
     /**
-     * 返回当前小时（24小时制）
+     * 返回当前小时（24小时制）.
      *
      * @return 当前小时（24小时制）
      */
@@ -263,7 +350,7 @@ public final class DateUtils {
     }
 
     /**
-     * 返回当前分钟
+     * 返回当前分钟.
      *
      * @return 当前分钟
      */
@@ -273,7 +360,7 @@ public final class DateUtils {
     }
 
     /**
-     * 返回当前秒
+     * 返回当前秒.
      *
      * @return 当前秒
      */
@@ -283,7 +370,7 @@ public final class DateUtils {
     }
 
     /**
-     * 返回传入日期的年份
+     * 返回传入日期的年份.
      *
      * @param date 日期
      * @return 传入日期的年份
@@ -295,7 +382,7 @@ public final class DateUtils {
     }
 
     /**
-     * 返回传入日期的月份，与Date和Calendar的0-11不同，返回的是1-12
+     * 返回传入日期的月份，与Date和Calendar的0-11不同，返回的是1-12.
      *
      * @param date 日期
      * @return 传入日期的月份
@@ -307,7 +394,7 @@ public final class DateUtils {
     }
 
     /**
-     * 返回传入日期的日（一月中的哪天）
+     * 返回传入日期的日（一月中的哪天）.
      *
      * @param date 日期
      * @return 传入日期的日（一月中的哪天）
@@ -319,7 +406,7 @@ public final class DateUtils {
     }
 
     /**
-     * 返回传入日期是星期几，星期一是1，星期日是7
+     * 返回传入日期是星期几，星期一是1，星期日是7.
      *
      * @param date 日期
      * @return 传入日期是星期几
@@ -337,7 +424,7 @@ public final class DateUtils {
     }
 
     /**
-     * 返回传入日期是当年的第几天
+     * 返回传入日期是当年的第几天.
      *
      * @param date 日期
      * @return 传入日期是当年的第几天
@@ -378,7 +465,7 @@ public final class DateUtils {
     }
 
     /**
-     * 返回传入日期小时（24小时制）
+     * 返回传入日期小时（24小时制）.
      *
      * @param date 日期
      * @return 传入日期小时（24小时制）
@@ -390,7 +477,7 @@ public final class DateUtils {
     }
 
     /**
-     * 返回传入日期分钟
+     * 返回传入日期分钟.
      *
      * @param date 日期
      * @return 传入日期分钟
@@ -402,7 +489,7 @@ public final class DateUtils {
     }
 
     /**
-     * 返回传入日期秒
+     * 返回传入日期秒.
      *
      * @param date 日期
      * @return 传入日期秒
@@ -414,7 +501,7 @@ public final class DateUtils {
     }
 
     /**
-     * 返回给定日期按照指定单位的一个数字表示值
+     * 返回给定日期按照指定单位的一个数字表示值.
      *
      * @param date 日期
      * @param type 指定一个单位（如second,hour）
@@ -528,6 +615,7 @@ public final class DateUtils {
      * <p>
      * 以年为最小单位判断第一个日期是否早于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -541,6 +629,7 @@ public final class DateUtils {
      * <p>
      * 以年为最小单位判断第一个日期是否等于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -554,6 +643,7 @@ public final class DateUtils {
      * <p>
      * 以年为最小单位判断第一个日期是否晚于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -567,6 +657,7 @@ public final class DateUtils {
      * <p>
      * 以月为最小单位判断第一个日期是否早于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -580,6 +671,7 @@ public final class DateUtils {
      * <p>
      * 以月为最小单位判断第一个日期是否等于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -593,6 +685,7 @@ public final class DateUtils {
      * <p>
      * 以月为最小单位判断第一个日期是否晚于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -606,6 +699,7 @@ public final class DateUtils {
      * <p>
      * 以日为最小单位判断第一个日期是否早于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -619,6 +713,7 @@ public final class DateUtils {
      * <p>
      * 以日为最小单位判断第一个日期是否等于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -632,6 +727,7 @@ public final class DateUtils {
      * <p>
      * 以日为最小单位判断第一个日期是否晚于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -645,6 +741,7 @@ public final class DateUtils {
      * <p>
      * 以小时为最小单位判断第一个日期是否早于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -658,6 +755,7 @@ public final class DateUtils {
      * <p>
      * 以小时为最小单位判断第一个日期是否等于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -671,6 +769,7 @@ public final class DateUtils {
      * <p>
      * 以小时为最小单位判断第一个日期是否晚于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -684,6 +783,7 @@ public final class DateUtils {
      * <p>
      * 以分钟为最小单位判断第一个日期是否早于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -697,6 +797,7 @@ public final class DateUtils {
      * <p>
      * 以分钟为最小单位判断第一个日期是否等于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -710,6 +811,7 @@ public final class DateUtils {
      * <p>
      * 以分钟为最小单位判断第一个日期是否晚于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -723,6 +825,7 @@ public final class DateUtils {
      * <p>
      * 以秒为最小单位判断第一个日期是否早于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -736,6 +839,7 @@ public final class DateUtils {
      * <p>
      * 以秒为最小单位判断第一个日期是否等于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -749,6 +853,7 @@ public final class DateUtils {
      * <p>
      * 以秒为最小单位判断第一个日期是否晚于第二个日期
      * </p>
+     * .
      *
      * @param firstDate  第一个日期
      * @param secondDate 第二个日期
@@ -762,6 +867,7 @@ public final class DateUtils {
      * <p>
      * 返回某年某月的最大天数
      * </p>
+     * .
      *
      * @param date 日期
      * @return 最大天数
@@ -779,6 +885,7 @@ public final class DateUtils {
      * <p>
      * 返回某年某月的最大天数
      * </p>
+     * .
      *
      * @param year  某年
      * @param month 某月
@@ -941,6 +1048,7 @@ public final class DateUtils {
      * <p>
      * 使用系统当前日期与传入出生日期比较获得年龄
      * </p>
+     * .
      *
      * @param birthday 生日
      * @return 年龄
@@ -1009,13 +1117,6 @@ public final class DateUtils {
         AssertIllegalArgument.isNotNull(firstDate, "Date firstDate");
         AssertIllegalArgument.isNotNull(secondDate, "Date secondDate");
     }
-
-    // 默认格式化参数
-    private static final String FORMART_DATE = "yyyy-MM-dd";
-    private static final String FORMART_TIME = "yyyy-MM-dd HH:mm:ss";
-
-    // 信息
-    private static final String MSG_START_AFTER_END = "开始日期startDate不能晚于结束日期endDate";
 
     private static void isTrue(boolean exp, String msg) {
         if (!exp) {

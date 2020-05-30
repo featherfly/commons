@@ -1,3 +1,8 @@
+2020-5-29
+0.1.4
+    1.修改LangUtils为Lang,StringUtils为Strings
+    2.SqlUtils.transferNamedParamSql改为convertNamedParamSql
+    
 2020-5-23
 0.1.3
     1.SqlUtils.convertSelectToCount加入多行sql支持

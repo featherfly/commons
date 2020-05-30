@@ -8,8 +8,8 @@ import java.util.List;
 
 import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.dialect.Dialect;
-import cn.featherfly.common.lang.LangUtils;
-import cn.featherfly.common.lang.StringUtils;
+import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.repository.builder.BuilderException;
 import cn.featherfly.common.repository.builder.BuilderExceptionCode;
 import cn.featherfly.common.repository.builder.dml.ConditionBuilder;
@@ -251,7 +251,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
         List<Expression> availableExpressions = new ArrayList<>();
         for (Expression expression : conditions) {
             String condition = expression.build();
-            if (StringUtils.isNotBlank(condition)) {
+            if (Strings.isNotBlank(condition)) {
                 availableConditions.add(condition);
                 availableExpressions.add(expression);
             } else {
@@ -299,7 +299,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
         for (Expression condition : conditions) {
             if (condition instanceof ParamedExpression) {
                 Object param = ((ParamedExpression) condition).getParamValue();
-                if (LangUtils.isNotEmpty(param)) {
+                if (Lang.isNotEmpty(param)) {
                     if (param instanceof Collection) {
                         params.addAll((Collection<?>) param);
                     } else if (param.getClass().isArray()) {

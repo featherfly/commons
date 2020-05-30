@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.featherfly.common.db.dialect.Dialect;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -36,7 +36,7 @@ public abstract class AbstractDataImportor extends AbstractDataImpExp implements
      * @param prepareSql prepareSql
      */
     public void addPrepareSql(String prepareSql) {
-        if (LangUtils.isNotEmpty(prepareSql)) {
+        if (Lang.isNotEmpty(prepareSql)) {
             prepareSqls.add(prepareSql);
         }
     }
@@ -50,7 +50,7 @@ public abstract class AbstractDataImportor extends AbstractDataImpExp implements
      * @param prepareSqls prepareSqls
      */
     public void addPrepareSql(String... prepareSqls) {
-        if (LangUtils.isNotEmpty(prepareSqls)) {
+        if (Lang.isNotEmpty(prepareSqls)) {
             for (String prepareSql : prepareSqls) {
                 this.prepareSqls.add(prepareSql);
             }
@@ -66,7 +66,7 @@ public abstract class AbstractDataImportor extends AbstractDataImpExp implements
      * @param filter filter
      */
     public void addFilter(DataFilter filter) {
-        if (LangUtils.isNotEmpty(filter)) {
+        if (Lang.isNotEmpty(filter)) {
             filters.add(filter);
         }
     }
@@ -80,7 +80,7 @@ public abstract class AbstractDataImportor extends AbstractDataImpExp implements
      * @param filters dataFilters
      */
     public void addFilter(DataFilter... filters) {
-        if (LangUtils.isNotEmpty(filters)) {
+        if (Lang.isNotEmpty(filters)) {
             for (DataFilter filter : filters) {
                 this.filters.add(filter);
             }
@@ -96,7 +96,7 @@ public abstract class AbstractDataImportor extends AbstractDataImpExp implements
      * @param transformer transformer
      */
     public void addTransformers(DataTransformer transformer) {
-        if (LangUtils.isNotEmpty(transformer)) {
+        if (Lang.isNotEmpty(transformer)) {
             transformers.add(transformer);
         }
     }
@@ -110,7 +110,7 @@ public abstract class AbstractDataImportor extends AbstractDataImpExp implements
      * @param transformers transformer
      */
     public void addTransformers(DataTransformer... transformers) {
-        if (LangUtils.isNotEmpty(filters)) {
+        if (Lang.isNotEmpty(filters)) {
             for (DataTransformer transformer : transformers) {
                 this.transformers.add(transformer);
             }
@@ -129,7 +129,7 @@ public abstract class AbstractDataImportor extends AbstractDataImpExp implements
      */
     protected boolean filtdate(RecordModel recordModel, Connection conn) {
         // 过滤
-        if (LangUtils.isNotEmpty(filters)) {
+        if (Lang.isNotEmpty(filters)) {
             for (DataFilter filter : filters) {
                 if (filter.filter(recordModel, conn)) {
                     logger.debug("过滤该条数据， {}", recordModel);
@@ -151,7 +151,7 @@ public abstract class AbstractDataImportor extends AbstractDataImpExp implements
      */
     protected RecordModel transform(RecordModel recordModel) {
         // 数据变换
-        if (LangUtils.isNotEmpty(transformers)) {
+        if (Lang.isNotEmpty(transformers)) {
             for (DataTransformer transformer : transformers) {
                 recordModel = transformer.transform(recordModel);
             }

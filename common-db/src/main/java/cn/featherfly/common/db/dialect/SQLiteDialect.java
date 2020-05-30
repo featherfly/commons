@@ -13,7 +13,7 @@ import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.metadata.SqlType;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.DateUtils;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -121,7 +121,7 @@ public class SQLiteDialect extends AbstractDialect {
      */
     @Override
     public String wrapName(String name) {
-        if (LangUtils.isNotEmpty(name)) {
+        if (Lang.isNotEmpty(name)) {
             return getWrapSign() + name + getWrapSign();
         }
         return name;
@@ -179,12 +179,12 @@ public class SQLiteDialect extends AbstractDialect {
 
     @Override
     protected String getTableComment(Table table) {
-        return LangUtils.isEmpty(table.getRemark()) ? "" : BuilderUtils.link("--", table.getRemark());
+        return Lang.isEmpty(table.getRemark()) ? "" : BuilderUtils.link("--", table.getRemark());
     }
 
     @Override
     protected String getColumnComment(Column column) {
-        return LangUtils.isEmpty(column.getRemark()) ? "" : BuilderUtils.link("--", column.getRemark());
+        return Lang.isEmpty(column.getRemark()) ? "" : BuilderUtils.link("--", column.getRemark());
     }
 
     @Override
@@ -214,7 +214,7 @@ public class SQLiteDialect extends AbstractDialect {
             }
             result += Chars.PAREN_R;
         }
-        if (LangUtils.isNotEmpty(extra)) {
+        if (Lang.isNotEmpty(extra)) {
             result = BuilderUtils.link(result, extra);
         }
         return result;

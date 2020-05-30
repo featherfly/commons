@@ -9,7 +9,7 @@ import java.util.Map;
 
 import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.dialect.Dialect;
-import cn.featherfly.common.lang.StringUtils;
+import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.repository.builder.dml.FindBuilder;
 import cn.featherfly.common.repository.builder.dml.QueryBuilder;
 import cn.featherfly.common.repository.operate.AggregateFunction;
@@ -52,7 +52,7 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
             result.append(selectBuilder.build());
         }
         String condition = conditionGroup.build();
-        if (StringUtils.isNotBlank(condition)) {
+        if (Strings.isNotBlank(condition)) {
             BuilderUtils.link(result, "WHERE");
             BuilderUtils.link(result, condition);
         }

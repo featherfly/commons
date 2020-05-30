@@ -11,7 +11,7 @@ import cn.featherfly.common.db.builder.SqlBuilder;
 import cn.featherfly.common.db.builder.model.SelectColumnElement;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.mapping.ClassMappingUtils;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.builder.AliasManager;
 import cn.featherfly.common.repository.mapping.ClassMapping;
 import cn.featherfly.common.repository.mapping.MappingFactory;
@@ -201,7 +201,7 @@ public class SqlSelectColumnsBasicBuilder implements SqlBuilder {
         StringBuilder columnsBuilder = new StringBuilder();
         if (columns.isEmpty()) {
             if (classMapping == null) {
-                if (LangUtils.isEmpty(tableAlias)) {
+                if (Lang.isEmpty(tableAlias)) {
                     columnsBuilder.append(Chars.STAR);
                 } else {
                     columnsBuilder.append(tableAlias).append(Chars.DOT).append(Chars.STAR);

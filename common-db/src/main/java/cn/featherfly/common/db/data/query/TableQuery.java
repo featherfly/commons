@@ -8,7 +8,7 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.Dialects;
 import cn.featherfly.common.db.dialect.Keywords;
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.Query;
 import cn.featherfly.common.repository.builder.dml.ConditionBuilder;
 
@@ -40,7 +40,7 @@ public class TableQuery implements Query {
         sql.append("select * from ").append(dialect.buildTableSql(tableName));
         if (conditionBuilder != null) {
             String condition = conditionBuilder.build();
-            if (LangUtils.isNotEmpty(condition)) {
+            if (Lang.isNotEmpty(condition)) {
                 BuilderUtils.link(sql, dialect.getKeyword(Keywords.WHERE), condition);
             }
         }

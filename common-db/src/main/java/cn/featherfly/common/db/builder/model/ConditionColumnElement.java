@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.dialect.Dialect;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.operate.QueryOperator;
 
 /**
@@ -46,7 +46,7 @@ public class ConditionColumnElement extends ParamedColumnElement {
         // throw new BuilderException("#query.operator.null");
         // }
 
-        if (LangUtils.isNotEmpty(value)) {
+        if (Lang.isNotEmpty(value)) {
             Object paramValue = null;
             switch (queryOperator) {
                 case SW:
@@ -70,18 +70,18 @@ public class ConditionColumnElement extends ParamedColumnElement {
      */
     @Override
     public String toSql() {
-        if (LangUtils.isEmpty(name)) {
+        if (Lang.isEmpty(name)) {
             return "";
         }
         StringBuilder condition = new StringBuilder();
         Object value = param;
         String name = dialect.buildColumnSql(this.name, tableAlias);
-        // if (LangUtils.isNotEmpty(tableAlias)) {
+        // if (Lang.isNotEmpty(tableAlias)) {
         // condition.append(tableAlias).append(".");
         // }
         if (QueryOperator.ISN == queryOperator || QueryOperator.INN == queryOperator) {
             condition.append(name).append(Chars.SPACE).append(toOperator(queryOperator));
-        } else if (LangUtils.isNotEmpty(value)) {
+        } else if (Lang.isNotEmpty(value)) {
             if (QueryOperator.IN == queryOperator || QueryOperator.NIN == queryOperator) {
                 int length = 1;
                 if (value instanceof Collection) {

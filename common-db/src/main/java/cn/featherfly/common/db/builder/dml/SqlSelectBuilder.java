@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import cn.featherfly.common.db.dialect.Dialect;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.operate.AggregateFunction;
 
 /**
@@ -93,7 +93,7 @@ public class SqlSelectBuilder extends AbstractSqlSelectBuilder implements Select
      */
     @Override
     public SelectBuilder select(String[] columnNames) {
-        if (LangUtils.isNotEmpty(columnNames)) {
+        if (Lang.isNotEmpty(columnNames)) {
             for (String columnName : columnNames) {
                 select(columnName);
             }
@@ -106,7 +106,7 @@ public class SqlSelectBuilder extends AbstractSqlSelectBuilder implements Select
      */
     @Override
     public SelectBuilder select(Collection<String> columnNames) {
-        if (LangUtils.isNotEmpty(columnNames)) {
+        if (Lang.isNotEmpty(columnNames)) {
             for (String columnName : columnNames) {
                 select(columnName);
             }

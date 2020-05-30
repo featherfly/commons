@@ -6,7 +6,7 @@ import java.util.Date;
 import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.SqlUtils;
 import cn.featherfly.common.lang.DateUtils;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -114,7 +114,7 @@ public class MySQLDialect extends AbstractDialect {
      */
     @Override
     public String wrapName(String name) {
-        if (LangUtils.isNotEmpty(name)) {
+        if (Lang.isNotEmpty(name)) {
             return getWrapSign() + name + getWrapSign();
         }
         return name;

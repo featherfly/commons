@@ -118,18 +118,16 @@ public class PostgresqlDialectTest extends DialectTest {
         String sql = null;
 
         sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 1);
-        assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (\"?\", \"?\", \"?\")");
+        assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?)");
 
         sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 2);
-        assertEquals(sql,
-                "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (\"?\", \"?\", \"?\"),(\"?\", \"?\", \"?\")");
+        assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?),(?, ?, ?)");
 
         sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 3);
-        assertEquals(sql,
-                "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (\"?\", \"?\", \"?\"),(\"?\", \"?\", \"?\"),(\"?\", \"?\", \"?\")");
+        assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?)");
 
         sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 5);
         assertEquals(sql,
-                "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (\"?\", \"?\", \"?\"),(\"?\", \"?\", \"?\"),(\"?\", \"?\", \"?\"),(\"?\", \"?\", \"?\"),(\"?\", \"?\", \"?\")");
+                "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?)");
     }
 }

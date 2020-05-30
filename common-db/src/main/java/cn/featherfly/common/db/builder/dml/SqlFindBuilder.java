@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import cn.featherfly.common.db.builder.SqlBuilder;
 import cn.featherfly.common.db.dialect.Dialect;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.builder.dml.ConditionBuilder;
 import cn.featherfly.common.repository.builder.dml.FindBuilder;
 import cn.featherfly.common.repository.operate.AggregateFunction;
@@ -50,7 +50,7 @@ public class SqlFindBuilder extends AbstractSqlSelectBuilder implements FindBuil
      */
     @Override
     public FindBuilder property(String... propertyNames) {
-        if (LangUtils.isNotEmpty(propertyNames)) {
+        if (Lang.isNotEmpty(propertyNames)) {
             for (String p : propertyNames) {
                 property(p);
             }
@@ -76,7 +76,7 @@ public class SqlFindBuilder extends AbstractSqlSelectBuilder implements FindBuil
      */
     @Override
     public FindBuilder property(Collection<String> propertyNames) {
-        if (LangUtils.isNotEmpty(propertyNames)) {
+        if (Lang.isNotEmpty(propertyNames)) {
             for (String p : propertyNames) {
                 property(p);
             }

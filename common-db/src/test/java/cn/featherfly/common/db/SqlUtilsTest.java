@@ -77,23 +77,23 @@ public class SqlUtilsTest {
     }
 
     @Test
-    void testTransferNamedParamSql() {
+    void testConvertNamedParamSql() {
         String sql = "select * from user where name like ? and age = ?";
         Execution execution = null;
         Map<String, Object> params = new LinkedHashMap<>();
         params.put("name", "yufei");
         params.put("age", 18);
 
-        execution = SqlUtils.transferNamedParamSql("select * from user where name like :name and age = :age", params);
+        execution = SqlUtils.convertNamedParamSql("select * from user where name like :name and age = :age", params);
         assertEquals(execution.getExecution(), sql);
         assertEquals(execution.getParams(), params.values().toArray());
 
-        execution = SqlUtils.transferNamedParamSql("select * from user where name like {name} and age = {age}", params,
+        execution = SqlUtils.convertNamedParamSql("select * from user where name like {name} and age = {age}", params,
                 '{', '}');
         assertEquals(execution.getExecution(), sql);
         assertEquals(execution.getParams(), params.values().toArray());
 
-        execution = SqlUtils.transferNamedParamSql("select * from user where name like @name and age = @age", params,
+        execution = SqlUtils.convertNamedParamSql("select * from user where name like @name and age = @age", params,
                 '@');
         assertEquals(execution.getExecution(), sql);
         assertEquals(execution.getParams(), params.values().toArray());

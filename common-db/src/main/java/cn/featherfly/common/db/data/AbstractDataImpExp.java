@@ -12,7 +12,7 @@ import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -127,7 +127,7 @@ public abstract class AbstractDataImpExp {
      */
     private String getCheckedDatabase() {
         String database = JdbcUtils.getCatalog(getDataSource());
-        if (LangUtils.isEmpty(database)) {
+        if (Lang.isEmpty(database)) {
             database = JdbcUtils.getCatalog(getDataSource());
             if (database == null) {
                 throw new ExportException("#database.null");
@@ -151,7 +151,7 @@ public abstract class AbstractDataImpExp {
     protected String getValueToSql(String value, int type, String isNull) {
         String v = null;
         // "1"代表isNull属性的值为真
-        if ("1".equals(isNull) && LangUtils.isEmpty(value)) {
+        if ("1".equals(isNull) && Lang.isEmpty(value)) {
             v = "null";
         } else {
             v = getDialect().valueToSql(value, type);

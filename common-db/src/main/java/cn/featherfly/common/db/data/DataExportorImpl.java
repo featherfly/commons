@@ -17,7 +17,7 @@ import cn.featherfly.common.db.data.query.SimpleQuery;
 import cn.featherfly.common.db.data.query.TableQuery;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.Query;
 
 /**
@@ -73,7 +73,7 @@ public class DataExportorImpl extends AbstractDataExportor {
         //得到字段信息
         Connection conn = getDataSource().getConnection();
         PreparedStatement prep = conn.prepareStatement(query.getExecution());
-        if (LangUtils.isNotEmpty(query.getParams())) {
+        if (Lang.isNotEmpty(query.getParams())) {
             JdbcUtils.setParameters(prep, query.getParams());
         }
         ResultSet res = prep.executeQuery();
@@ -84,9 +84,9 @@ public class DataExportorImpl extends AbstractDataExportor {
         } else if (query instanceof TableQuery) {
             name = ((TableQuery) query).getName();
         }
-        if (LangUtils.isEmpty(name)) {
+        if (Lang.isEmpty(name)) {
             name = rsmd.getTableName(1);
-            if (LangUtils.isEmpty(name)) {
+            if (Lang.isEmpty(name)) {
                 throw new ExportException("#driver.resultset.tablename");
                 //				throw new ExportException("自动获取表名称失败，当前数据库驱动不支持从结果集获取表名称！");
             } else {

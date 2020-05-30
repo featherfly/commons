@@ -1,7 +1,7 @@
 
 package cn.featherfly.common.db.builder;
 
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -38,11 +38,11 @@ public class BuilderUtils {
      * @return linked sqlPart
      */
     public static String link(String sqlPart, String linkSqlPart) {
-        if (LangUtils.isEmpty(sqlPart) && LangUtils.isEmpty(linkSqlPart)) {
+        if (Lang.isEmpty(sqlPart) && Lang.isEmpty(linkSqlPart)) {
             return "";
-        } else if (LangUtils.isEmpty(sqlPart) && LangUtils.isNotEmpty(linkSqlPart)) {
+        } else if (Lang.isEmpty(sqlPart) && Lang.isNotEmpty(linkSqlPart)) {
             return linkSqlPart.trim();
-        } else if (LangUtils.isNotEmpty(sqlPart) && LangUtils.isEmpty(linkSqlPart)) {
+        } else if (Lang.isNotEmpty(sqlPart) && Lang.isEmpty(linkSqlPart)) {
             return sqlPart.trim();
         } else if (sqlPart.charAt(sqlPart.length() - 1) == ' ') {
             return sqlPart + linkSqlPart.trim();

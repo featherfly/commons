@@ -8,7 +8,7 @@ import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.builder.model.TableElement;
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.operate.AggregateFunction;
 import cn.featherfly.common.repository.operate.Function;
 import cn.featherfly.common.repository.operate.LogicOperator;
@@ -338,7 +338,7 @@ public interface Dialect {
         if (!Chars.STAR.equals(columnName)) {
             column = wrapName(convertTableOrColumnName(columnName));
         }
-        if (LangUtils.isNotEmpty(tableAlias) && !Chars.STAR.equals(columnName)) {
+        if (Lang.isNotEmpty(tableAlias) && !Chars.STAR.equals(columnName)) {
             column = tableAlias + Chars.DOT + column;
         }
         if (aggregateFunction != null) {
@@ -350,7 +350,7 @@ public interface Dialect {
                     column = getFunction(aggregateFunction) + Chars.PAREN_L + column + Chars.PAREN_R;
             }
         }
-        if (LangUtils.isNotEmpty(asName)) {
+        if (Lang.isNotEmpty(asName)) {
             column = column + Chars.SPACE + wrapName(asName);
         }
         return column;
@@ -379,7 +379,7 @@ public interface Dialect {
      * @return sql
      */
     default String convertTableOrColumnName(String tableOrColumnName) {
-        if (LangUtils.isEmpty(tableOrColumnName)) {
+        if (Lang.isEmpty(tableOrColumnName)) {
             return tableOrColumnName;
         }
         String result = tableOrColumnName;
@@ -420,7 +420,7 @@ public interface Dialect {
      */
     default String buildTableSql(String tableName, String tableAlias) {
         String result = wrapName(convertTableOrColumnName(tableName));
-        if (LangUtils.isNotEmpty(tableAlias)) {
+        if (Lang.isNotEmpty(tableAlias)) {
             result = result + " " + tableAlias;
         }
         return result;
@@ -525,7 +525,7 @@ public interface Dialect {
      */
     default String buildDropTableDDL(String databaseName, String tableName, boolean ifExists) {
         AssertIllegalArgument.isNotEmpty(tableName, "tableName");
-        String tn = LangUtils.isEmpty(databaseName) ? wrapName(tableName)
+        String tn = Lang.isEmpty(databaseName) ? wrapName(tableName)
                 : wrapName(databaseName) + Chars.DOT + wrapName(tableName);
         if (ifExists) {
             return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.TABLE), getKeyword(Keywords.IF),
@@ -554,7 +554,7 @@ public interface Dialect {
      */
     default String buildAlterTableDDL(String databaseName, String tableName) {
         AssertIllegalArgument.isNotEmpty(tableName, "tableName");
-        if (LangUtils.isEmpty(databaseName)) {
+        if (Lang.isEmpty(databaseName)) {
             return BuilderUtils.link(getKeyword(Keywords.ALTER), getKeyword(Keywords.TABLE), wrapName(tableName));
         } else {
             return BuilderUtils.link(getKeyword(Keywords.ALTER), getKeyword(Keywords.TABLE),
@@ -654,7 +654,7 @@ public interface Dialect {
      */
     default String buildDropViewDDL(String databaseName, String viewName) {
         AssertIllegalArgument.isNotEmpty(viewName, "viewName");
-        if (LangUtils.isEmpty(databaseName)) {
+        if (Lang.isEmpty(databaseName)) {
             return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.VIEW), wrapName(viewName));
         } else {
             return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.VIEW),
@@ -684,7 +684,7 @@ public interface Dialect {
     default String buildDropIndexDDL(String database, String tableName, String indexName) {
         AssertIllegalArgument.isNotEmpty(tableName, "tableName");
         AssertIllegalArgument.isNotEmpty(indexName, "indexName");
-        if (LangUtils.isEmpty(tableName)) {
+        if (Lang.isEmpty(tableName)) {
             return BuilderUtils.link(buildAlterTableDDL(database, tableName), getKeyword(Keywords.DROP),
                     getKeyword(Keywords.INDEX), wrapName(indexName));
         } else {

@@ -11,7 +11,7 @@ import cn.featherfly.common.db.data.query.SimpleQuery;
 import cn.featherfly.common.db.data.query.TableQuery;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.Query;
 import cn.featherfly.common.repository.builder.dml.ConditionBuilder;
 
@@ -62,7 +62,7 @@ public abstract class AbstractDataExportor extends AbstractDataImpExp implements
     @Override
     public void exportTable(Writer writer, Collection<String> tableNames) {
         Collection<TableQuery> tableQuerys = new ArrayList<>();
-        if (LangUtils.isEmpty(tableNames)) {
+        if (Lang.isEmpty(tableNames)) {
             tableNames = new ArrayList<>();
         }
         for (String tableName : tableNames) {
@@ -125,7 +125,7 @@ public abstract class AbstractDataExportor extends AbstractDataImpExp implements
     @Override
     public void exportData(Writer writer, String... querySqls) {
         Collection<Query> querys = new ArrayList<>();
-        if (LangUtils.isNotEmpty(querySqls)) {
+        if (Lang.isNotEmpty(querySqls)) {
             for (String querySql : querySqls) {
                 querys.add(new SimpleQuery(querySql, new Object[] {}));
             }

@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import cn.featherfly.common.db.JdbcException;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.wrapper.ConnectionWrapper;
-import cn.featherfly.common.lang.StringUtils;
+import cn.featherfly.common.lang.Strings;
 
 /**
  * <p>
@@ -172,7 +172,7 @@ public class DatabaseMetadataManager {
 
     private String getDatabase(Connection connection) {
         String catalog = JdbcUtils.getCatalog(connection);
-        if (StringUtils.isEmpty(catalog)) {
+        if (Strings.isEmpty(catalog)) {
             throw new DatabaseMetadataException("#driver.not.support.catalog");
             //			throw new DatabaseMetadataException("数据库驱动不支持从连接对象获取当前连接的具体库，请使用带具体库名称的方法显示创建！");
         }

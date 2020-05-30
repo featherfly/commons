@@ -414,7 +414,7 @@ public class SqlSelectBasicBuilder implements SqlBuilder {
         }
         // if (columns.isEmpty()) {
         // if (classMapping == null) {
-        // if (LangUtils.isEmpty(tableAlias)) {
+        // if (Lang.isEmpty(tableAlias)) {
         // select.append(Chars.SPACE).append(Chars.STAR);
         // } else {
         // select.append(Chars.SPACE).append(tableAlias).append(Chars.DOT).append(Chars.STAR);

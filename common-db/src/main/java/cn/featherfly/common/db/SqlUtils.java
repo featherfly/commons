@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.Execution;
 import cn.featherfly.common.repository.SimpleExecution;
 
@@ -62,7 +62,7 @@ public final class SqlUtils {
         if (m.group(groupThree) != null) {
             distinctColumn = sql.substring(m.group(2).length(), m.group(2).length() + m.group(groupThree).length());
         }
-        if (LangUtils.isEmpty(distinctColumn)) {
+        if (Lang.isEmpty(distinctColumn)) {
             countSql.append("*");
         } else {
             countSql.append(distinctColumn);
@@ -79,37 +79,41 @@ public final class SqlUtils {
      * @return 转义后的字符串
      */
     public static String transferStringForSql(String str) {
-        if (LangUtils.isEmpty(str)) {
+        if (Lang.isEmpty(str)) {
             return str;
         }
         return str.replaceAll("[\\\\\'\"]", "\\\\$0");
     }
 
     /**
-     * Transfer named param sql with {@link #PARAM_NAME_START_SYMBOL}.
+     * convert named param sql with {@link #PARAM_NAME_START_SYMBOL}.
+     * <p>
+     * transfer <code>select * from user where name = :user</code> to
+     * <code>select * from user where name = ?</code>
+     * <p>
      *
      * @param namedParamSql the named param sql
      * @param params        the params
      * @return the execution
      */
-    public static Execution transferNamedParamSql(String namedParamSql, Map<String, Object> params) {
-        return transferNamedParamSql(namedParamSql, params, PARAM_NAME_START_SYMBOL);
+    public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params) {
+        return convertNamedParamSql(namedParamSql, params, PARAM_NAME_START_SYMBOL);
     }
 
     /**
-     * Transfer named param sql.
+     * convert named param sql.
      *
      * @param namedParamSql the named param sql
      * @param params        the params
      * @param startSymbol   the start symbol
      * @return the execution
      */
-    public static Execution transferNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol) {
-        return transferNamedParamSql(namedParamSql, params, startSymbol, null);
+    public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol) {
+        return convertNamedParamSql(namedParamSql, params, startSymbol, null);
     }
 
     /**
-     * Transfer named param sql.
+     * convert named param sql.
      *
      * @param namedParamSql the named param sql
      * @param params        the params
@@ -117,7 +121,7 @@ public final class SqlUtils {
      * @param endSymbol     the end symbol
      * @return the execution
      */
-    public static Execution transferNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol,
+    public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol,
             Character endSymbol) {
         AssertIllegalArgument.isNotEmpty(namedParamSql, "namedParamSql");
         AssertIllegalArgument.isNotEmpty(startSymbol, "startSymbol");
@@ -125,7 +129,7 @@ public final class SqlUtils {
         StringBuilder sql = new StringBuilder(namedParamSql);
         int nameStartIndex = -1;
         int nameEndIndex = -1;
-        boolean emptySymbol = LangUtils.isEmpty(endSymbol);
+        boolean emptySymbol = Lang.isEmpty(endSymbol);
         char end = emptySymbol ? Chars.SPACE_CHAR : endSymbol;
         boolean isEnd = false;
         for (int index = 0; index < sql.length(); index++) {

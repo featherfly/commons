@@ -31,8 +31,8 @@ import cn.featherfly.common.db.wrapper.DataSourceWrapper;
 import cn.featherfly.common.db.wrapper.PreparedStatementWrapper;
 import cn.featherfly.common.db.wrapper.ResultSetWrapper;
 import cn.featherfly.common.lang.ClassUtils;
-import cn.featherfly.common.lang.LangUtils;
 import cn.featherfly.common.lang.LogUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.mapping.RowMapper;
 
 /**
@@ -435,7 +435,7 @@ public final class JdbcUtils {
      * @param values 参数
      */
     public static void setParameters(PreparedStatementWrapper prep, Object... values) {
-        if (LangUtils.isNotEmpty(values)) {
+        if (Lang.isNotEmpty(values)) {
             for (int i = 0; i < values.length; i++) {
                 setParameter(prep, i + 1, values[i]);
             }
@@ -452,7 +452,7 @@ public final class JdbcUtils {
      * @param values 参数
      */
     public static void setParameters(PreparedStatement prep, Object... values) {
-        if (LangUtils.isNotEmpty(values)) {
+        if (Lang.isNotEmpty(values)) {
             for (int i = 0; i < values.length; i++) {
                 setParameter(prep, i + 1, values[i]);
             }
@@ -629,10 +629,10 @@ public final class JdbcUtils {
                     case Types.SMALLINT:
                     case Types.INTEGER:
                     case Types.BIGINT:
-                        value = LangUtils.toEnum((Class<Enum>) requiredType, rs.getInt(index));
+                        value = Lang.toEnum((Class<Enum>) requiredType, rs.getInt(index));
                         break;
                     default:
-                        value = LangUtils.toEnum((Class<Enum>) requiredType, rs.getString(index));
+                        value = Lang.toEnum((Class<Enum>) requiredType, rs.getString(index));
                         break;
                 }
             } else {
@@ -851,7 +851,7 @@ public final class JdbcUtils {
     public static String lookupColumnName(ResultSetMetaData resultSetMetaData, int columnIndex) {
         try {
             String name = resultSetMetaData.getColumnLabel(columnIndex);
-            if (LangUtils.isEmpty(name)) {
+            if (Lang.isEmpty(name)) {
                 name = resultSetMetaData.getColumnName(columnIndex);
             }
             return name;

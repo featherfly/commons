@@ -21,8 +21,8 @@ import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.builder.ColumnModel;
 import cn.featherfly.common.db.builder.TableModel;
 import cn.featherfly.common.db.dialect.Dialect;
-import cn.featherfly.common.lang.LangUtils;
-import cn.featherfly.common.lang.StringUtils;
+import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.repository.mapping.ClassMapping;
 import cn.featherfly.common.repository.mapping.MappingFactory;
 import cn.featherfly.common.repository.mapping.PropertyMapping;
@@ -53,7 +53,7 @@ public class ClassMappingUtils {
         table.setRemark(classMapping.getRemark());
         // columns
         for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
-            if (LangUtils.isEmpty(propertyMapping.getPropertyMappings())) {
+            if (Lang.isEmpty(propertyMapping.getPropertyMappings())) {
                 table.addColumn(createColumn(propertyMapping, sqlTypeMappingManager));
             } else {
                 for (PropertyMapping pm : propertyMapping.getPropertyMappings()) {
@@ -131,7 +131,7 @@ public class ClassMappingUtils {
                 .append(Chars.SPACE).append(dialect.wrapName(classMapping.getRepositoryName())).append(" (");
         List<PropertyMapping> pms = new ArrayList<>();
         for (PropertyMapping pm : classMapping.getPropertyMappings()) {
-            if (LangUtils.isEmpty(pm.getPropertyMappings())) {
+            if (Lang.isEmpty(pm.getPropertyMappings())) {
                 if (pm.isInsertable()) {
                     insertSql.append(dialect.wrapName(pm.getRepositoryFieldName())).append(",");
                     pms.add(pm);
@@ -203,7 +203,7 @@ public class ClassMappingUtils {
 
         List<PropertyMapping> pms = new ArrayList<>();
         for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
-            if (LangUtils.isEmpty(propertyMapping.getPropertyMappings())) {
+            if (Lang.isEmpty(propertyMapping.getPropertyMappings())) {
                 if (propertyMapping.isPrimaryKey()) {
                     pms.add(propertyMapping);
                 } else if (propertyMapping.isUpdatable()) {
@@ -262,7 +262,7 @@ public class ClassMappingUtils {
                 .append(dialect.getKeywords().where()).append(Chars.SPACE);
         int columnNum = 0;
         for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
-            if (LangUtils.isEmpty(propertyMapping.getPropertyMappings())) {
+            if (Lang.isEmpty(propertyMapping.getPropertyMappings())) {
                 if (propertyMapping.isPrimaryKey()) {
                     if (columnNum > 0) {
                         deleteSql.append(dialect.getKeywords().and()).append(Chars.SPACE);
@@ -361,7 +361,7 @@ public class ClassMappingUtils {
         if (onlyNull) {
             return BeanUtils.getProperty(entity, pn) == null;
         } else {
-            return LangUtils.isEmpty(BeanUtils.getProperty(entity, pn));
+            return Lang.isEmpty(BeanUtils.getProperty(entity, pn));
         }
     }
 
@@ -535,14 +535,14 @@ public class ClassMappingUtils {
         StringBuilder selectSql = new StringBuilder();
         int columnNum = 0;
         for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
-            if (LangUtils.isEmpty(propertyMapping.getPropertyMappings())) {
+            if (Lang.isEmpty(propertyMapping.getPropertyMappings())) {
                 selectSql.append(
                         getSelectColumnsSql(classMapping, tableAlias, propertyMapping, prefixPropertyName, dialect));
                 columnNum++;
             } else {
                 boolean fetchAble = false;
                 String fetchPropertyTableAlia = null;
-                if (LangUtils.isNotEmpty(fetchProperties)) {
+                if (Lang.isNotEmpty(fetchProperties)) {
                     for (Entry<String, String> fetchPropertyEntry : fetchProperties.entrySet()) {
                         fetchPropertyTableAlia = fetchPropertyEntry.getValue();
                         if (propertyMapping.getPropertyName().equals(fetchPropertyEntry.getKey())) {
@@ -588,7 +588,7 @@ public class ClassMappingUtils {
     private static String getSelectColumnsSql(ClassMapping<?> classMapping, String tableAlias,
             PropertyMapping propertyMapping, String prefixPropertyName, Dialect dialect) {
         StringBuilder selectSql = new StringBuilder();
-        if (StringUtils.isNotBlank(tableAlias)) {
+        if (Strings.isNotBlank(tableAlias)) {
             selectSql.append(tableAlias).append(Chars.DOT);
         }
         selectSql.append(dialect.wrapName(propertyMapping.getRepositoryFieldName())).append(Chars.SPACE)
@@ -610,7 +610,7 @@ public class ClassMappingUtils {
     private static String getSelectColumnsSql(ClassMapping<?> classMapping, String tableAlias,
             PropertyMapping propertyMapping, PropertyMapping nestedPropertyMapping, Dialect dialect) {
         StringBuilder selectSql = new StringBuilder();
-        if (StringUtils.isNotBlank(tableAlias)) {
+        if (Strings.isNotBlank(tableAlias)) {
             selectSql.append(tableAlias).append(Chars.DOT);
         }
         selectSql.append(dialect.wrapName(propertyMapping.getRepositoryFieldName())).append(Chars.SPACE)
@@ -662,7 +662,7 @@ public class ClassMappingUtils {
             propertyName = propertyMapping.getParent().getPropertyName() + Chars.DOT
                     + propertyMapping.getPropertyName();
         }
-        if (LangUtils.isNotEmpty(prefixPropertyName)) {
+        if (Lang.isNotEmpty(prefixPropertyName)) {
             propertyName = prefixPropertyName + Chars.DOT + propertyName;
         }
         return propertyName;
@@ -714,7 +714,7 @@ public class ClassMappingUtils {
     public static Map<String, String> getSelectColumns(ClassMapping<?> classMapping) {
         Map<String, String> columns = new HashMap<>();
         for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
-            if (LangUtils.isEmpty(propertyMapping.getPropertyMappings())) {
+            if (Lang.isEmpty(propertyMapping.getPropertyMappings())) {
                 columns.put(propertyMapping.getRepositoryFieldName(), propertyMapping.getPropertyName());
             } else {
                 for (PropertyMapping pm : propertyMapping.getPropertyMappings()) {
@@ -735,7 +735,7 @@ public class ClassMappingUtils {
      */
     public static Tuple2<String, String> getColumnAndPropertyName(String name, ClassMapping<?> classMapping) {
         PropertyMapping propertyMapping = null;
-        if (classMapping != null && LangUtils.isNotEmpty(name)) {
+        if (classMapping != null && Lang.isNotEmpty(name)) {
             if (name.contains(Chars.DOT)) {
                 String[] names = name.split("\\.");
                 propertyMapping = getNestedMapping(names, classMapping);
@@ -758,7 +758,7 @@ public class ClassMappingUtils {
      * @return columnName
      */
     public static String getColumnName(String name, ClassMapping<?> classMapping) {
-        if (classMapping != null && LangUtils.isNotEmpty(name)) {
+        if (classMapping != null && Lang.isNotEmpty(name)) {
             if (name.contains(Chars.DOT)) {
                 String[] names = name.split("\\.");
                 return getNestedColumnName(names, classMapping);

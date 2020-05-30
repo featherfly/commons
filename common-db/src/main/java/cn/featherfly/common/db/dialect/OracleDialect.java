@@ -9,7 +9,7 @@ import cn.featherfly.common.db.Table;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.DateUtils;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -157,7 +157,7 @@ public class OracleDialect extends AbstractDialect {
      */
     @Override
     public String wrapName(String name) {
-        if (LangUtils.isNotEmpty(name)) {
+        if (Lang.isNotEmpty(name)) {
             return getWrapSign() + name + getWrapSign();
         }
         return name;

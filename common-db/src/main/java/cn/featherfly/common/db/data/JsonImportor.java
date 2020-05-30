@@ -20,7 +20,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.data.RecordModel.ValueModel;
 import cn.featherfly.common.db.dialect.Dialect;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -62,7 +62,7 @@ public class JsonImportor extends AbstractDataImportor {
                 addPrepareSql(getDialect().getFkCheck(isFkCheck()));
             }
 
-            if (LangUtils.isNotEmpty(getPrepareSqls())) {
+            if (Lang.isNotEmpty(getPrepareSqls())) {
                 for (String prepareSql : getPrepareSqls()) {
                     logger.debug("prepareSql: {}", prepareSql);
                     conn.createStatement().execute(prepareSql);

@@ -1,4 +1,5 @@
 rootProject.name = 'commons-build-config'
+includeFlat 'common-api'
 includeFlat 'common-algorithm'
 includeFlat 'common-core'
 includeFlat 'common-bean-javassist'

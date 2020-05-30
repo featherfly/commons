@@ -27,7 +27,7 @@ import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.enums.Logic;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.SystemPropertyUtils;
 import cn.featherfly.common.lang.WordUtils;
 import cn.featherfly.common.repository.mapping.ClassMapping;
@@ -218,7 +218,7 @@ public class JdbcMappingFactory implements MappingFactory {
             tableMapping.put(mapping.getRepositoryFieldName(), mapping);
         } else {
             String columnName = getMappingColumnName(beanProperty);
-            if (LangUtils.isNotEmpty(columnName)) {
+            if (Lang.isNotEmpty(columnName)) {
                 columnName = dialect.convertTableOrColumnName(columnName);
                 mapping.setPropertyName(beanProperty.getName());
                 mapping.setPropertyType(beanProperty.getType());
@@ -300,7 +300,7 @@ public class JdbcMappingFactory implements MappingFactory {
             StringBuilder logInfo) {
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
         Collection<BeanProperty<?>> bps = bd.findBeanPropertys(new BeanPropertyAnnotationMatcher(Id.class));
-        if (LangUtils.isEmpty(bps)) {
+        if (Lang.isEmpty(bps)) {
             throw new JdbcMappingException("#no.id.property", new Object[] { beanProperty.getType().getName() });
         }
         for (BeanProperty<?> bp : bps) {
@@ -324,10 +324,10 @@ public class JdbcMappingFactory implements MappingFactory {
             cn.featherfly.common.db.Column cmd, StringBuilder logInfo) {
         Map<String, PropertyMapping> nameSet = new HashMap<>();
         tableMapping.forEach((k, v) -> {
-            if (LangUtils.isNotEmpty(k)) {
+            if (Lang.isNotEmpty(k)) {
                 nameSet.put(k, v);
             } else {
-                if (LangUtils.isNotEmpty(v.getPropertyMappings())) {
+                if (Lang.isNotEmpty(v.getPropertyMappings())) {
                     v.getPropertyMappings().forEach(pm -> {
                         nameSet.put(pm.getRepositoryFieldName(), pm);
                     });
@@ -380,7 +380,7 @@ public class JdbcMappingFactory implements MappingFactory {
         String tableName = null;
         for (ClassNameConversion classNameConversion : classNameConversions) {
             tableName = classNameConversion.getMappingName(type);
-            if (LangUtils.isNotEmpty(tableName)) {
+            if (Lang.isNotEmpty(tableName)) {
                 return tableName;
             }
         }
@@ -391,7 +391,7 @@ public class JdbcMappingFactory implements MappingFactory {
         String columnName = null;
         for (PropertyNameConversion propertyNameConversion : propertyNameConversions) {
             columnName = propertyNameConversion.getMappingName(type);
-            if (LangUtils.isNotEmpty(columnName)) {
+            if (Lang.isNotEmpty(columnName)) {
                 return columnName;
             }
         }

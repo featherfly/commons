@@ -8,7 +8,7 @@ import java.sql.Types;
 import java.util.Date;
 
 import cn.featherfly.common.db.JdbcException;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -313,11 +313,11 @@ public class SqlResultSet implements cn.featherfly.common.repository.mapping.Res
         try {
             if (proxy.getType() == Types.INTEGER || proxy.getType() == Types.TINYINT
                     || proxy.getType() == Types.SMALLINT) {
-                return LangUtils.toEnum(type, proxy.getInt(index));
+                return Lang.toEnum(type, proxy.getInt(index));
             } else if (proxy.getType() == Types.VARCHAR || proxy.getType() == Types.NVARCHAR
                     || proxy.getType() == Types.CHAR || proxy.getType() == Types.NCHAR
                     || proxy.getType() == Types.LONGVARCHAR || proxy.getType() == Types.LONGNVARCHAR) {
-                return LangUtils.toEnum(type, proxy.getString(index));
+                return Lang.toEnum(type, proxy.getString(index));
             }
             // TODO 标准化
             throw new JdbcException("can not convert type " + proxy.getType() + " to enum " + type.getName());
@@ -334,11 +334,11 @@ public class SqlResultSet implements cn.featherfly.common.repository.mapping.Res
         try {
             if (proxy.getType() == Types.INTEGER || proxy.getType() == Types.TINYINT
                     || proxy.getType() == Types.SMALLINT) {
-                return LangUtils.toEnum(type, proxy.getInt(name));
+                return Lang.toEnum(type, proxy.getInt(name));
             } else if (proxy.getType() == Types.VARCHAR || proxy.getType() == Types.NVARCHAR
                     || proxy.getType() == Types.CHAR || proxy.getType() == Types.NCHAR
                     || proxy.getType() == Types.LONGVARCHAR || proxy.getType() == Types.LONGNVARCHAR) {
-                return LangUtils.toEnum(type, proxy.getString(name));
+                return Lang.toEnum(type, proxy.getString(name));
             }
             // TODO 标准化
             throw new JdbcException("can not convert type " + proxy.getType() + " to enum " + type.getName());

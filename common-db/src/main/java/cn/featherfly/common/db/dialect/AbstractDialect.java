@@ -12,7 +12,7 @@ import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.metadata.SqlType;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -154,7 +154,7 @@ public abstract class AbstractDialect implements Dialect {
     public String buildCreateTableDDL(String dataBaseName, Table table) {
         AssertIllegalArgument.isNotEmpty(table, "table");
         StringBuilder sql = new StringBuilder();
-        String tableName = LangUtils.isEmpty(dataBaseName) ? wrapName(table.getName())
+        String tableName = Lang.isEmpty(dataBaseName) ? wrapName(table.getName())
                 : wrapName(dataBaseName) + Chars.DOT + wrapName(table.getName());
         BuilderUtils.link(sql, getKeyword(Keywords.CREATE), getKeyword(Keywords.TABLE), tableName, Chars.PAREN_L);
         sql.append(Chars.NEW_LINE);
@@ -171,7 +171,7 @@ public abstract class AbstractDialect implements Dialect {
      * @return the table comment
      */
     protected String getTableComment(Table table) {
-        return LangUtils.isEmpty(table.getRemark()) ? ""
+        return Lang.isEmpty(table.getRemark()) ? ""
                 : BuilderUtils.link(getKeyword(Keywords.COMMENT), "'" + table.getRemark() + "'");
     }
 
@@ -228,7 +228,7 @@ public abstract class AbstractDialect implements Dialect {
      * @return the default value
      */
     protected String getDefaultValue(Column column) {
-        if (LangUtils.isEmpty(column.getDefaultValue())) {
+        if (Lang.isEmpty(column.getDefaultValue())) {
             return "";
         } else {
             return BuilderUtils.link(getKeyword(Keywords.DEFAULT), "'" + column.getDefaultValue() + "'");
@@ -252,7 +252,7 @@ public abstract class AbstractDialect implements Dialect {
      * @return the column comment
      */
     protected String getColumnComment(Column column) {
-        return LangUtils.isEmpty(column.getRemark()) ? ""
+        return Lang.isEmpty(column.getRemark()) ? ""
                 : BuilderUtils.link(getKeyword(Keywords.COMMENT), "'" + column.getRemark() + "'");
     }
 
@@ -298,7 +298,7 @@ public abstract class AbstractDialect implements Dialect {
             }
             result += Chars.PAREN_R;
         }
-        if (LangUtils.isNotEmpty(extra)) {
+        if (Lang.isNotEmpty(extra)) {
             result = BuilderUtils.link(result, extra);
         }
         return result;

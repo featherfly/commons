@@ -138,7 +138,7 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.locale.Resou
 
     private String encode(String str) {
         if (Lang.isNotEmpty(str) && charset != null) {
-            return Strings.encode(str, DEFAULT_CHARSET.displayName(), charset.displayName());
+            return Strings.encode(str, DEFAULT_CHARSET, charset);
         }
         return str;
     }

@@ -10,7 +10,7 @@ import org.springframework.cache.support.SimpleValueWrapper;
 
 import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.lang.ClassUtils;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -170,7 +170,7 @@ public class MulitiUniqueKeyCache implements Cache {
         if (value != null) {
             uniquePrefixPropertyMap.forEach((k, v) -> {
                 Object uniqueValue = BeanUtils.getProperty(value, v);
-                if (LangUtils.isNotEmpty(uniqueValue)) {
+                if (Lang.isNotEmpty(uniqueValue)) {
                     targetUniqueKeyCache.put(k + uniqueValue, idKeyPrefix + id);
                 }
             });
@@ -182,7 +182,7 @@ public class MulitiUniqueKeyCache implements Cache {
         if (value != null) {
             uniquePrefixPropertyMap.forEach((k, v) -> {
                 Object uniqueValue = BeanUtils.getProperty(value, v);
-                if (LangUtils.isNotEmpty(uniqueValue)) {
+                if (Lang.isNotEmpty(uniqueValue)) {
                     targetUniqueKeyCache.putIfAbsent(k + uniqueValue, idKeyPrefix + id);
                 }
             });

@@ -17,13 +17,13 @@ import org.springframework.util.SystemPropertyUtils;
 
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
  * 类路径扫描器
  * </p>
- * 
+ *
  * @author zhongj
  */
 public class ClassPathScanningProvider {
@@ -49,7 +49,7 @@ public class ClassPathScanningProvider {
 
     /**
      * 设置资源匹配模式
-     * 
+     *
      * @param resourcePattern 资源匹配模式
      */
     public void setResourcePattern(String resourcePattern) {
@@ -59,7 +59,7 @@ public class ClassPathScanningProvider {
 
     /**
      * 扫描CLASSPATH指定包名前缀的类
-     * 
+     *
      * @param basePackage 基础包名
      * @return 元数据集合
      */
@@ -82,13 +82,13 @@ public class ClassPathScanningProvider {
 
     /**
      * 扫描CLASSPATH指定包名前缀的类
-     * 
+     *
      * @param basePackages 基础包名数组
      * @return 元数据集合
      */
     public Set<MetadataReader> findMetadata(String... basePackages) {
         Set<MetadataReader> metaSet = new LinkedHashSet<>();
-        if (LangUtils.isNotEmpty(basePackages)) {
+        if (Lang.isNotEmpty(basePackages)) {
             LOGGER.debug("扫描basePackages: " + ArrayUtils.toString(basePackages));
             for (String basePackage : basePackages) {
                 metaSet.addAll(findMetadata(basePackage));

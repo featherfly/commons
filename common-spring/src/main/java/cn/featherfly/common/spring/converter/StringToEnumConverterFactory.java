@@ -1,8 +1,9 @@
 package cn.featherfly.common.spring.converter;
 
-import cn.featherfly.common.lang.LangUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
+
+import cn.featherfly.common.lang.Lang;
 
 @SuppressWarnings("rawtypes")
 public final class StringToEnumConverterFactory implements ConverterFactory<String, Enum> {
@@ -31,11 +32,11 @@ public final class StringToEnumConverterFactory implements ConverterFactory<Stri
 
         @Override
         public T convert(String source) {
-            if (LangUtils.isEmpty(source)) {
+            if (Lang.isEmpty(source)) {
                 // It's an empty enum identifier: reset the enum value to null.
                 return null;
             }
-            return (T) LangUtils.toEnum(this.enumType, source);
+            return Lang.toEnum(this.enumType, source);
         }
     }
 

@@ -11,15 +11,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 public final class StringToDateConverterFactory implements ConverterFactory<String, Date> {
 
     private static final Logger LOG = LoggerFactory.getLogger(StringToDateConverterFactory.class);
 
-    private String[] patterns = new String[] {"yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM-dd HH", "yyyy-MM-dd"};
+    private String[] patterns = new String[] { "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM-dd HH",
+            "yyyy-MM-dd" };
 
-    private List<DateFormat> dateFormats = new ArrayList<DateFormat>();
+    private List<DateFormat> dateFormats = new ArrayList<>();
 
     public StringToDateConverterFactory() {
         setPatterns(patterns);
@@ -44,7 +45,7 @@ public final class StringToDateConverterFactory implements ConverterFactory<Stri
         @SuppressWarnings("unchecked")
         @Override
         public T convert(String source) {
-            if (LangUtils.isEmpty(source)) {
+            if (Lang.isEmpty(source)) {
                 // It's an empty enum identifier: reset the enum value to null.
                 return null;
             }
@@ -62,7 +63,7 @@ public final class StringToDateConverterFactory implements ConverterFactory<Stri
 
     /**
      * 返回patterns
-     * 
+     *
      * @return patterns
      */
     public String[] getPatterns() {
@@ -71,9 +72,8 @@ public final class StringToDateConverterFactory implements ConverterFactory<Stri
 
     /**
      * 设置patterns
-     * 
-     * @param patterns
-     *            patterns
+     *
+     * @param patterns patterns
      */
     public void setPatterns(String[] patterns) {
         this.patterns = patterns;

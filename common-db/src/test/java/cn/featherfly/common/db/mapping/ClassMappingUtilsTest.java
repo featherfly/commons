@@ -33,7 +33,7 @@ public class ClassMappingUtilsTest {
 
         System.out.println(sql);
 
-        assertEquals(sql, "SELECT `name` `name`, `id` `id`, `descp` `descp` FROM `user`");
+        assertEquals(sql, "SELECT `id` `id`, `name` `name`, `descp` `descp` FROM `user`");
     }
 
     @Test
@@ -41,13 +41,14 @@ public class ClassMappingUtilsTest {
         String sql = ClassMappingUtils.getSelectByIdSql(getUserClassMapping(), dialect);
 
         System.out.println(sql);
-        assertEquals(sql, "SELECT `name` `name`, `id` `id`, `descp` `descp` FROM `user` WHERE `id` = ?");
+        assertEquals(sql, "SELECT `id` `id`, `name` `name`, `descp` `descp` FROM `user` WHERE `id` = ?");
 
         sql = ClassMappingUtils.getSelectByIdSql(getUserRoleClassMapping(), dialect);
 
         System.out.println(sql);
         assertEquals(sql,
-                "SELECT `descp2` `descp2`, `user_id` `userId`, `role_id` `roleId`, `descp` `descp` FROM `user_role` WHERE `user_id` = ? AND `role_id` = ?");
+                "SELECT `user_id` `userId`, `role_id` `roleId`, `descp` `descp`, `descp2` `descp2` FROM `user_role` WHERE `user_id` = ? AND `role_id` = ?");
+
     }
 
     @Test
@@ -57,7 +58,7 @@ public class ClassMappingUtilsTest {
         System.out.println(t.get0());
         System.out.println(t.get1());
 
-        assertEquals(t.get0(), "INSERT INTO `user` (`name`,`id`,`descp`) VALUES (?,?,?)");
+        assertEquals(t.get0(), "INSERT INTO `user` (`id`,`name`,`descp`) VALUES (?,?,?)");
     }
 
     @Test
@@ -73,8 +74,7 @@ public class ClassMappingUtilsTest {
         System.out.println(t.get0());
         System.out.println(t.get1());
         assertEquals(t.get0(),
-                "UPDATE `user_role` SET `descp2` = ?, `descp` = ? WHERE `user_id` = ? AND `role_id` = ?");
-
+                "UPDATE `user_role` SET `descp` = ?, `descp2` = ? WHERE `user_id` = ? AND `role_id` = ?");
     }
 
     @Test
@@ -135,8 +135,7 @@ public class ClassMappingUtilsTest {
         System.out.println(t.get1());
 
         assertEquals(t.get0(),
-                "UPDATE `user_role` SET `descp2` = ?, `descp` = ? WHERE `user_id` = ? AND `role_id` = ?");
-
+                "UPDATE `user_role` SET `descp` = ?, `descp2` = ? WHERE `user_id` = ? AND `role_id` = ?");
     }
 
     @Test

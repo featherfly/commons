@@ -1,7 +1,7 @@
 
 package cn.featherfly.common.db;
 
-import cn.featherfly.common.db.metadata.SqlType;
+import java.sql.SQLType;
 
 /**
  * <p>
@@ -20,7 +20,7 @@ public interface Column {
 
     String getDefaultValue();
 
-    SqlType getSqlType();
+    SQLType getSqlType();
 
     int getType();
 

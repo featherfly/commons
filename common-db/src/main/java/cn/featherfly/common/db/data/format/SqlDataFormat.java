@@ -15,7 +15,7 @@ import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.data.DataFormat;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.lang.DateUtils;
+import cn.featherfly.common.lang.Dates;
 
 /**
  * <p>
@@ -52,7 +52,7 @@ public class SqlDataFormat implements DataFormat {
         Date now = new Date();
         StringBuilder descp = new StringBuilder();
         descp.append("/*==============================================================*/\n").append("/*\t")
-                .append("\t start at -> ").append(DateUtils.formartTime(now)).append("\t timestamp -> ")
+                .append("\t start at -> ").append(Dates.formatTime(now)).append("\t timestamp -> ")
                 .append(now.getTime()).append("\t*/\n")
                 .append("/*==============================================================*/\n").append("\n\n\n");
         writer.write(descp.toString());
@@ -60,15 +60,13 @@ public class SqlDataFormat implements DataFormat {
 
     /**
      * {@inheritDoc}
-     *
-     * @throws IOException
      */
     @Override
     public void writeDataEnd(DatabaseMetadata databaseMetadata) throws IOException {
         Date now = new Date();
         StringBuilder descp = new StringBuilder();
         descp.append("\n\n\n").append("/*==============================================================*/\n")
-                .append("/*\t").append("\t end at -> ").append(DateUtils.formartTime(now)).append("\t timestamp -> ")
+                .append("/*\t").append("\t end at -> ").append(Dates.formatTime(now)).append("\t timestamp -> ")
                 .append(now.getTime()).append("\t*/\n")
                 .append("/*==============================================================*/\n");
         writer.write(descp.toString());
@@ -83,7 +81,7 @@ public class SqlDataFormat implements DataFormat {
         Date now = new Date();
         StringBuilder tableDescp = new StringBuilder();
         tableDescp.append("/*==============================================================*/\n").append("/*\t")
-                .append(tableMetadata.getName()).append("\t start at -> ").append(DateUtils.formartTime(now))
+                .append(tableMetadata.getName()).append("\t start at -> ").append(Dates.formatTime(now))
                 .append("\t timestamp -> ").append(now.getTime()).append("\t*/\n")
                 .append("/*--------------------------------------------------------------*/\n");
         writer.write(tableDescp.toString());
@@ -91,15 +89,13 @@ public class SqlDataFormat implements DataFormat {
 
     /**
      * {@inheritDoc}
-     *
-     * @throws Exception
      */
     @Override
     public void writeTableEnd(Table tableMetadata) throws Exception {
         Date now = new Date();
         StringBuilder tableDescp = new StringBuilder();
         tableDescp.append("/*--------------------------------------------------------------*/\n").append("/*\t")
-                .append(tableMetadata.getName()).append("\t end at -> ").append(DateUtils.formartTime(now))
+                .append(tableMetadata.getName()).append("\t end at -> ").append(Dates.formatTime(now))
                 .append("\t timestamp -> ").append(now.getTime()).append("\t*/\n")
                 .append("/*==============================================================*/\n").append("\n\n");
         writer.write(tableDescp.toString());

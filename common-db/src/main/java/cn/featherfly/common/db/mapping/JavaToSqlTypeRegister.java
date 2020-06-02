@@ -3,8 +3,6 @@ package cn.featherfly.common.db.mapping;
 
 import java.io.Serializable;
 
-import cn.featherfly.common.db.metadata.SqlType;
-
 /**
  * <p>
  * JavaToSqlTypeRegister
@@ -14,12 +12,6 @@ import cn.featherfly.common.db.metadata.SqlType;
  * @author zhongj
  * @param <E> to regist java type
  */
-public interface JavaToSqlTypeRegister<E extends Serializable> {
+public interface JavaToSqlTypeRegister<E extends Serializable> extends TypeRegister<E> {
 
-    /**
-     * Gets the sql type.
-     *
-     * @return the sql type
-     */
-    SqlType getSqlType();
 }

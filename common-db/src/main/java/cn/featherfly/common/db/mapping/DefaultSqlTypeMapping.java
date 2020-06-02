@@ -4,6 +4,8 @@ package cn.featherfly.common.db.mapping;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.JDBCType;
+import java.sql.SQLType;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,8 +13,6 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import cn.featherfly.common.db.metadata.SqlType;
 
 /**
  * <p>
@@ -23,88 +23,88 @@ import cn.featherfly.common.db.metadata.SqlType;
  */
 public class DefaultSqlTypeMapping {
 
-    private static final Map<Class<? extends Serializable>, SqlType> JAVA_TO_SQL_MAP = new HashMap<>();
+    private static final Map<Class<? extends Serializable>, SQLType> JAVA_TO_SQL_MAP = new HashMap<>();
 
-    private static final Map<SqlType, Class<? extends Serializable>> SQL_TO_JAVA_MAP = new HashMap<>();
+    private static final Map<SQLType, Class<? extends Serializable>> SQL_TO_JAVA_MAP = new HashMap<>();
 
     static {
         // ------------------------------------------------------------------------------------------
         // java to sql
         // ------------------------------------------------------------------------------------------
-        JAVA_TO_SQL_MAP.put(Boolean.TYPE, SqlType.BOOLEAN);
-        JAVA_TO_SQL_MAP.put(Boolean.class, SqlType.BOOLEAN);
-        JAVA_TO_SQL_MAP.put(Character.TYPE, SqlType.CHAR);
-        JAVA_TO_SQL_MAP.put(Character.class, SqlType.CHAR);
-        JAVA_TO_SQL_MAP.put(Byte.TYPE, SqlType.TINYINT);
-        JAVA_TO_SQL_MAP.put(Byte.class, SqlType.TINYINT);
-        JAVA_TO_SQL_MAP.put(Short.TYPE, SqlType.SMALLINT);
-        JAVA_TO_SQL_MAP.put(Short.class, SqlType.SMALLINT);
-        JAVA_TO_SQL_MAP.put(Integer.TYPE, SqlType.INTEGER);
-        JAVA_TO_SQL_MAP.put(Integer.class, SqlType.INTEGER);
-        JAVA_TO_SQL_MAP.put(Long.TYPE, SqlType.BIGINT);
-        JAVA_TO_SQL_MAP.put(Long.class, SqlType.BIGINT);
-        JAVA_TO_SQL_MAP.put(Float.TYPE, SqlType.FLOAT);
-        JAVA_TO_SQL_MAP.put(Float.class, SqlType.FLOAT);
-        JAVA_TO_SQL_MAP.put(Double.TYPE, SqlType.DOUBLE);
-        JAVA_TO_SQL_MAP.put(Double.class, SqlType.DOUBLE);
-        JAVA_TO_SQL_MAP.put(BigInteger.class, SqlType.BIGINT);
-        JAVA_TO_SQL_MAP.put(BigDecimal.class, SqlType.DECIMAL);
-        JAVA_TO_SQL_MAP.put(String.class, SqlType.VARCHAR);
-        JAVA_TO_SQL_MAP.put(Date.class, SqlType.TIMESTAMP);
-        JAVA_TO_SQL_MAP.put(Timestamp.class, SqlType.TIMESTAMP);
-        JAVA_TO_SQL_MAP.put(LocalDateTime.class, SqlType.TIMESTAMP);
-        JAVA_TO_SQL_MAP.put(java.sql.Date.class, SqlType.DATE);
-        JAVA_TO_SQL_MAP.put(LocalDate.class, SqlType.DATE);
-        JAVA_TO_SQL_MAP.put(java.sql.Time.class, SqlType.DATE);
-        JAVA_TO_SQL_MAP.put(LocalTime.class, SqlType.TIME);
+        JAVA_TO_SQL_MAP.put(Boolean.TYPE, JDBCType.BOOLEAN);
+        JAVA_TO_SQL_MAP.put(Boolean.class, JDBCType.BOOLEAN);
+        JAVA_TO_SQL_MAP.put(Character.TYPE, JDBCType.CHAR);
+        JAVA_TO_SQL_MAP.put(Character.class, JDBCType.CHAR);
+        JAVA_TO_SQL_MAP.put(Byte.TYPE, JDBCType.TINYINT);
+        JAVA_TO_SQL_MAP.put(Byte.class, JDBCType.TINYINT);
+        JAVA_TO_SQL_MAP.put(Short.TYPE, JDBCType.SMALLINT);
+        JAVA_TO_SQL_MAP.put(Short.class, JDBCType.SMALLINT);
+        JAVA_TO_SQL_MAP.put(Integer.TYPE, JDBCType.INTEGER);
+        JAVA_TO_SQL_MAP.put(Integer.class, JDBCType.INTEGER);
+        JAVA_TO_SQL_MAP.put(Long.TYPE, JDBCType.BIGINT);
+        JAVA_TO_SQL_MAP.put(Long.class, JDBCType.BIGINT);
+        JAVA_TO_SQL_MAP.put(Float.TYPE, JDBCType.FLOAT);
+        JAVA_TO_SQL_MAP.put(Float.class, JDBCType.FLOAT);
+        JAVA_TO_SQL_MAP.put(Double.TYPE, JDBCType.DOUBLE);
+        JAVA_TO_SQL_MAP.put(Double.class, JDBCType.DOUBLE);
+        JAVA_TO_SQL_MAP.put(BigInteger.class, JDBCType.BIGINT);
+        JAVA_TO_SQL_MAP.put(BigDecimal.class, JDBCType.DECIMAL);
+        JAVA_TO_SQL_MAP.put(String.class, JDBCType.VARCHAR);
+        JAVA_TO_SQL_MAP.put(Date.class, JDBCType.TIMESTAMP);
+        JAVA_TO_SQL_MAP.put(Timestamp.class, JDBCType.TIMESTAMP);
+        JAVA_TO_SQL_MAP.put(LocalDateTime.class, JDBCType.TIMESTAMP);
+        JAVA_TO_SQL_MAP.put(java.sql.Date.class, JDBCType.DATE);
+        JAVA_TO_SQL_MAP.put(LocalDate.class, JDBCType.DATE);
+        JAVA_TO_SQL_MAP.put(java.sql.Time.class, JDBCType.DATE);
+        JAVA_TO_SQL_MAP.put(LocalTime.class, JDBCType.TIME);
 
         // ------------------------------------------------------------------------------------------
         // sql to java
         // ------------------------------------------------------------------------------------------
-        SQL_TO_JAVA_MAP.put(SqlType.BOOLEAN, Boolean.TYPE);
+        SQL_TO_JAVA_MAP.put(JDBCType.BOOLEAN, Boolean.TYPE);
         //  str types
-        SQL_TO_JAVA_MAP.put(SqlType.CHAR, String.class);
-        SQL_TO_JAVA_MAP.put(SqlType.NCHAR, String.class);
-        SQL_TO_JAVA_MAP.put(SqlType.VARCHAR, String.class);
-        SQL_TO_JAVA_MAP.put(SqlType.NVARCHAR, String.class);
-        SQL_TO_JAVA_MAP.put(SqlType.LONGVARCHAR, String.class);
-        SQL_TO_JAVA_MAP.put(SqlType.LONGNVARCHAR, String.class);
-        SQL_TO_JAVA_MAP.put(SqlType.CLOB, String.class);
-        SQL_TO_JAVA_MAP.put(SqlType.NCLOB, String.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.CHAR, String.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.NCHAR, String.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.VARCHAR, String.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.NVARCHAR, String.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.LONGVARCHAR, String.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.LONGNVARCHAR, String.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.CLOB, String.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.NCLOB, String.class);
 
         //  number types
-        SQL_TO_JAVA_MAP.put(SqlType.TINYINT, Integer.class);
-        SQL_TO_JAVA_MAP.put(SqlType.SMALLINT, Integer.class);
-        SQL_TO_JAVA_MAP.put(SqlType.INTEGER, Integer.class);
-        SQL_TO_JAVA_MAP.put(SqlType.BIGINT, Long.class);
-        SQL_TO_JAVA_MAP.put(SqlType.FLOAT, BigDecimal.class);
-        SQL_TO_JAVA_MAP.put(SqlType.DOUBLE, BigDecimal.class);
-        SQL_TO_JAVA_MAP.put(SqlType.REAL, BigDecimal.class);
-        SQL_TO_JAVA_MAP.put(SqlType.NUMERIC, BigDecimal.class);
-        SQL_TO_JAVA_MAP.put(SqlType.DECIMAL, BigDecimal.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.TINYINT, Integer.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.SMALLINT, Integer.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.INTEGER, Integer.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.BIGINT, Long.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.FLOAT, BigDecimal.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.DOUBLE, BigDecimal.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.REAL, BigDecimal.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.NUMERIC, BigDecimal.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.DECIMAL, BigDecimal.class);
 
         // date types
-        SQL_TO_JAVA_MAP.put(SqlType.DATE, Date.class);
-        SQL_TO_JAVA_MAP.put(SqlType.TIME, Date.class);
-        SQL_TO_JAVA_MAP.put(SqlType.TIMESTAMP, Date.class);
-        SQL_TO_JAVA_MAP.put(SqlType.TIME_WITH_TIMEZONE, LocalTime.class);
-        SQL_TO_JAVA_MAP.put(SqlType.TIMESTAMP_WITH_TIMEZONE, LocalDateTime.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.DATE, Date.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.TIME, Date.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.TIMESTAMP, Date.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.TIME_WITH_TIMEZONE, LocalTime.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.TIMESTAMP_WITH_TIMEZONE, LocalDateTime.class);
 
         // data binary
-        SQL_TO_JAVA_MAP.put(SqlType.BLOB, byte[].class);
-        SQL_TO_JAVA_MAP.put(SqlType.BINARY, byte[].class);
-        SQL_TO_JAVA_MAP.put(SqlType.LONGVARBINARY, byte[].class);
-        SQL_TO_JAVA_MAP.put(SqlType.VARBINARY, byte[].class);
+        SQL_TO_JAVA_MAP.put(JDBCType.BLOB, byte[].class);
+        SQL_TO_JAVA_MAP.put(JDBCType.BINARY, byte[].class);
+        SQL_TO_JAVA_MAP.put(JDBCType.LONGVARBINARY, byte[].class);
+        SQL_TO_JAVA_MAP.put(JDBCType.VARBINARY, byte[].class);
 
-        SQL_TO_JAVA_MAP.put(SqlType.BIT, BigInteger.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.BIT, Boolean.class);
     }
 
     public DefaultSqlTypeMapping() {
     }
 
-    public <E extends Serializable> SqlType getSqlType(Class<E> javaType) {
+    public <E extends Serializable> SQLType getSqlType(Class<E> javaType) {
         if (javaType.isEnum()) {
-            return SqlType.VARCHAR;
+            return JDBCType.VARCHAR;
         }
         return JAVA_TO_SQL_MAP.get(javaType);
     }
@@ -117,7 +117,7 @@ public class DefaultSqlTypeMapping {
      * @return the java type
      */
     @SuppressWarnings("unchecked")
-    public <E extends Serializable> Class<E> getJavaType(SqlType sqlType) {
+    public <E extends Serializable> Class<E> getJavaType(SQLType sqlType) {
         return (Class<E>) SQL_TO_JAVA_MAP.get(sqlType);
     }
 

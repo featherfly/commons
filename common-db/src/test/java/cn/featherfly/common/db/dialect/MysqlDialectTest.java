@@ -67,7 +67,7 @@ public class MysqlDialectTest extends DialectTest {
     void testCreateTable() {
         String sql = dialect.buildCreateTableDDL(getTableModel());
         System.out.println(sql);
-        String s = "CREATE TABLE `db_test`.`user` (\n" + " `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id主键',\n"
+        String s = "CREATE TABLE `db_test`.`user` (\n" + " `id` INTEGER(11) NOT NULL AUTO_INCREMENT COMMENT 'id主键',\n"
                 + " `name` VARCHAR(255) NOT NULL COMMENT 'name名称',\n"
                 + " `money` DECIMAL(11.2) NOT NULL COMMENT 'money金额',\n"
                 + " `state` TINYINT(4) NOT NULL DEFAULT '0' COMMENT 'state状态：0禁用，1启用',\n"
@@ -80,8 +80,8 @@ public class MysqlDialectTest extends DialectTest {
     void testCreateTableMulitiKey() {
         String sql = dialect.buildCreateTableDDL(getMultiKeyTableModel());
         System.out.println(sql);
-        String s = "CREATE TABLE `user_role` (\n" + " `user_id` int(11) NOT NULL COMMENT 'user id',\n"
-                + " `role_id` int(11) NOT NULL COMMENT 'role id',\n" + " `descp` VARCHAR(255) COMMENT 'descp描述',\n"
+        String s = "CREATE TABLE `user_role` (\n" + " `user_id` INTEGER(11) NOT NULL COMMENT 'user id',\n"
+                + " `role_id` INTEGER(11) NOT NULL COMMENT 'role id',\n" + " `descp` VARCHAR(255) COMMENT 'descp描述',\n"
                 + " PRIMARY KEY (`user_id`,`role_id`)\n" + " ) COMMENT 'user role 关系表'";
         assertEquals(sql, s);
     }
@@ -101,8 +101,8 @@ public class MysqlDialectTest extends DialectTest {
     void testAlterTableAddColumns() {
         String sql = dialect.buildAlterTableAddColumnDDL(table, getColumnModels());
         System.out.println(sql);
-        String s = "ALTER TABLE `user`\n" + " ADD COLUMN `user_id` int(11) NOT NULL COMMENT 'user id',\n"
-                + " ADD COLUMN `role_id` int(11) NOT NULL COMMENT 'role id',\n"
+        String s = "ALTER TABLE `user`\n" + " ADD COLUMN `user_id` INTEGER(11) NOT NULL COMMENT 'user id',\n"
+                + " ADD COLUMN `role_id` INTEGER(11) NOT NULL COMMENT 'role id',\n"
                 + " ADD COLUMN `descp` VARCHAR(255) COMMENT 'descp描述'";
         assertEquals(sql, s);
     }

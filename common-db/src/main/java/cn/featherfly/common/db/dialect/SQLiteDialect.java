@@ -1,6 +1,8 @@
 
 package cn.featherfly.common.db.dialect;
 
+import java.sql.JDBCType;
+import java.sql.SQLType;
 import java.sql.Types;
 import java.util.Date;
 
@@ -10,9 +12,8 @@ import cn.featherfly.common.db.JdbcException;
 import cn.featherfly.common.db.SqlUtils;
 import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.builder.BuilderUtils;
-import cn.featherfly.common.db.metadata.SqlType;
 import cn.featherfly.common.exception.UnsupportedException;
-import cn.featherfly.common.lang.DateUtils;
+import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
 
 /**
@@ -23,6 +24,8 @@ import cn.featherfly.common.lang.Lang;
  * @author zhongj
  */
 public class SQLiteDialect extends AbstractDialect {
+
+    public static final String TEXT_TYPE = "TEXT";
 
     /**
      */
@@ -102,7 +105,7 @@ public class SQLiteDialect extends AbstractDialect {
                 case Types.TIME:
                 case Types.TIMESTAMP:
                     if (value instanceof Date) {
-                        sqlPart.append("'").append(DateUtils.formart((Date) value, "yyyy-MM-dd HH:mm:ss")).append("'");
+                        sqlPart.append("'").append(Dates.formatTime((Date) value)).append("'");
                     } else {
                         sqlPart.append("'").append(value).append("'");
                         break;
@@ -207,7 +210,7 @@ public class SQLiteDialect extends AbstractDialect {
         int size = column.getSize();
         int decimalDigits = column.getDecimalDigits();
         String result = getColumnTypeName(column.getSqlType());
-        if (size > 0 && (result.equals(SqlType.REAL.toString()) || result.equals("text"))) {
+        if (size > 0 && (result.equals(JDBCType.REAL.getName()) || result.equals(TEXT_TYPE))) {
             result += Chars.PAREN_L + size;
             if (decimalDigits > 0) {
                 result += Chars.COMMA + decimalDigits;
@@ -221,14 +224,15 @@ public class SQLiteDialect extends AbstractDialect {
     }
 
     @Override
-    protected String getColumnTypeName(SqlType type) {
+    protected String getColumnTypeName(SQLType sqlType) {
+        JDBCType type = JDBCType.valueOf(sqlType.getVendorTypeNumber());
         switch (type) {
             case BOOLEAN:
             case TINYINT:
             case SMALLINT:
             case INTEGER:
             case BIGINT:
-                return SqlType.INTEGER.toString();
+                return JDBCType.INTEGER.getName();
             case CHAR:
             case VARCHAR:
             case NCHAR:
@@ -236,15 +240,15 @@ public class SQLiteDialect extends AbstractDialect {
             case DATE:
             case TIME:
             case TIMESTAMP:
-                return "TEXT";
+                return TEXT_TYPE;
             case BLOB:
-                return SqlType.BLOB.toString();
+                return JDBCType.BLOB.getName();
             case FLOAT:
             case DOUBLE:
             case NUMERIC:
             case DECIMAL:
             case REAL:
-                return SqlType.REAL.toString();
+                return JDBCType.REAL.getName();
             default:
                 throw new JdbcException(getClass().getSimpleName() + " not support type " + type.toString());
         }

@@ -9,6 +9,7 @@ import cn.featherfly.common.repository.mapping.MappingException;
  * <p>
  * JdbcMappingException
  * </p>
+ * .
  *
  * @author zhongj
  */
@@ -17,82 +18,100 @@ public class JdbcMappingException extends MappingException {
     private static final long serialVersionUID = 4628524073238713895L;
 
     /**
-     *
+     * Instantiates a new jdbc mapping exception.
      */
     public JdbcMappingException() {
         super();
     }
 
     /**
-     * @param message
-     * @param locale
-     * @param ex
+     * Instantiates a new jdbc mapping exception.
+     *
+     * @param message the message
+     * @param locale  the locale
+     * @param ex      the ex
      */
     public JdbcMappingException(String message, Locale locale, Throwable ex) {
         super(message, locale, ex);
     }
 
     /**
-     * @param message
-     * @param locale
+     * Instantiates a new jdbc mapping exception.
+     *
+     * @param message the message
+     * @param locale  the locale
      */
     public JdbcMappingException(String message, Locale locale) {
         super(message, locale);
     }
 
     /**
-     * @param message
-     * @param args
-     * @param locale
-     * @param ex
+     * Instantiates a new jdbc mapping exception.
+     *
+     * @param message the message
+     * @param args    the args
+     * @param locale  the locale
+     * @param ex      the ex
      */
     public JdbcMappingException(String message, Object[] args, Locale locale, Throwable ex) {
         super(message, args, locale, ex);
     }
 
     /**
-     * @param message
-     * @param args
-     * @param locale
+     * Instantiates a new jdbc mapping exception.
+     *
+     * @param message the message
+     * @param args    the args
+     * @param locale  the locale
      */
     public JdbcMappingException(String message, Object[] args, Locale locale) {
         super(message, args, locale);
     }
 
     /**
-     * @param message
-     * @param args
-     * @param ex
+     * Instantiates a new jdbc mapping exception.
+     *
+     * @param message the message
+     * @param args    the args
+     * @param ex      the ex
      */
     public JdbcMappingException(String message, Object[] args, Throwable ex) {
         super(message, args, ex);
     }
 
     /**
-     * @param message
-     * @param args
+     * Instantiates a new jdbc mapping exception.
+     *
+     * @param message the message
+     * @param args    the args
      */
     public JdbcMappingException(String message, Object[] args) {
         super(message, args);
     }
 
     /**
-     * @param message
-     * @param ex
+     * Instantiates a new jdbc mapping exception.
+     *
+     * @param message the message
+     * @param ex      the ex
      */
     public JdbcMappingException(String message, Throwable ex) {
         super(message, ex);
     }
 
     /**
-     * @param message
+     * Instantiates a new jdbc mapping exception.
+     *
+     * @param message the message
      */
     public JdbcMappingException(String message) {
         super(message);
     }
 
     /**
-     * @param ex
+     * Instantiates a new jdbc mapping exception.
+     *
+     * @param ex the ex
      */
     public JdbcMappingException(Throwable ex) {
         super(ex);

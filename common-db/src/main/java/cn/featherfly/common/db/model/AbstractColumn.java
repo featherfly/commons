@@ -1,47 +1,60 @@
 
 package cn.featherfly.common.db.model;
 
+import java.sql.JDBCType;
+import java.sql.SQLType;
+
 import cn.featherfly.common.db.Column;
-import cn.featherfly.common.db.metadata.SqlType;
 
 /**
  * <p>
  * AbstractColumn
  * </p>
+ * .
  *
  * @author zhongj
+ * @param <T> the generic type
  */
 public abstract class AbstractColumn<T extends Column> implements Column {
 
+    /** The name. */
     protected String name;
 
-    protected SqlType sqlType;
+    /** The sql type. */
+    protected SQLType sqlType;
 
+    /** The type. */
     protected int type;
 
+    /** The type name. */
     protected String typeName;
 
+    /** The size. */
     protected int size;
 
+    /** The remark. */
     protected String remark;
 
+    /** The default value. */
     protected String defaultValue;
 
+    /** The nullable. */
     protected boolean nullable;
 
+    /** The column index. */
     protected int columnIndex;
 
+    /** The primary key. */
     protected boolean primaryKey;
 
-    /**
-     * 小数位数
-     */
+    /** 小数位数. */
     protected int decimalDigits;
 
+    /** The autoincrement. */
     protected boolean autoincrement;
 
     /**
-     * 返回name
+     * 返回name.
      *
      * @return name
      */
@@ -51,9 +64,10 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 设置name
+     * 设置name.
      *
      * @param name name
+     * @return the t
      */
     @SuppressWarnings("unchecked")
     public T setName(String name) {
@@ -62,7 +76,7 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 返回type
+     * 返回type.
      *
      * @return type
      */
@@ -72,19 +86,20 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 设置type
+     * 设置type.
      *
      * @param type type
+     * @return the t
      */
     @SuppressWarnings("unchecked")
     public T setType(int type) {
         this.type = type;
-        sqlType = SqlType.value(type);
+        sqlType = JDBCType.valueOf(type);
         return (T) this;
     }
 
     /**
-     * 返回typeName
+     * 返回typeName.
      *
      * @return typeName
      */
@@ -94,9 +109,10 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 设置typeName
+     * 设置typeName.
      *
      * @param typeName typeName
+     * @return the t
      */
     @SuppressWarnings("unchecked")
     public T setTypeName(String typeName) {
@@ -105,7 +121,7 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 返回size
+     * 返回size.
      *
      * @return size
      */
@@ -115,9 +131,10 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 设置size
+     * 设置size.
      *
      * @param size size
+     * @return the t
      */
     @SuppressWarnings("unchecked")
     public T setSize(int size) {
@@ -126,7 +143,7 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 返回remark
+     * 返回remark.
      *
      * @return remark
      */
@@ -136,9 +153,10 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 设置remark
+     * 设置remark.
      *
      * @param remark remark
+     * @return the t
      */
     @SuppressWarnings("unchecked")
     public T setRemark(String remark) {
@@ -147,7 +165,7 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 返回defaultValue
+     * 返回defaultValue.
      *
      * @return defaultValue
      */
@@ -157,9 +175,10 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 设置defaultValue
+     * 设置defaultValue.
      *
      * @param defaultValue defaultValue
+     * @return the t
      */
     @SuppressWarnings("unchecked")
     public T setDefaultValue(String defaultValue) {
@@ -168,7 +187,7 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 返回nullable
+     * 返回nullable.
      *
      * @return nullable
      */
@@ -178,9 +197,10 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 设置nullable
+     * 设置nullable.
      *
      * @param nullable nullable
+     * @return the t
      */
     @SuppressWarnings("unchecked")
     public T setNullable(boolean nullable) {
@@ -189,7 +209,7 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 返回columnIndex
+     * 返回columnIndex.
      *
      * @return columnIndex
      */
@@ -199,9 +219,10 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 设置columnIndex
+     * 设置columnIndex.
      *
      * @param columnIndex columnIndex
+     * @return the t
      */
     @SuppressWarnings("unchecked")
     public T setColumnIndex(int columnIndex) {
@@ -210,7 +231,7 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 返回primaryKey
+     * 返回primaryKey.
      *
      * @return primaryKey
      */
@@ -220,9 +241,10 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 设置primaryKey
+     * 设置primaryKey.
      *
      * @param primaryKey primaryKey
+     * @return the t
      */
     @SuppressWarnings("unchecked")
     public T setPrimaryKey(boolean primaryKey) {
@@ -234,7 +256,7 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 返回decimalDigits
+     * 返回decimalDigits.
      *
      * @return decimalDigits
      */
@@ -244,9 +266,10 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 设置decimalDigits
+     * 设置decimalDigits.
      *
      * @param decimalDigits decimalDigits
+     * @return the t
      */
     @SuppressWarnings("unchecked")
     public T setDecimalDigits(int decimalDigits) {
@@ -255,7 +278,7 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 返回autoincrement
+     * 返回autoincrement.
      *
      * @return autoincrement
      */
@@ -265,9 +288,10 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 设置autoincrement
+     * 设置autoincrement.
      *
      * @param autoincrement autoincrement
+     * @return the t
      */
     @SuppressWarnings("unchecked")
     public T setAutoincrement(boolean autoincrement) {
@@ -276,24 +300,25 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 返回sqlType
+     * 返回sqlType.
      *
      * @return sqlType
      */
     @Override
-    public SqlType getSqlType() {
+    public SQLType getSqlType() {
         return sqlType;
     }
 
     /**
-     * 设置sqlType
+     * 设置sqlType.
      *
      * @param sqlType sqlType
+     * @return the t
      */
     @SuppressWarnings("unchecked")
-    public T setSqlType(SqlType sqlType) {
+    public T setSqlType(SQLType sqlType) {
         this.sqlType = sqlType;
-        type = sqlType.getValue();
+        type = sqlType.getVendorTypeNumber();
         return (T) this;
     }
 }

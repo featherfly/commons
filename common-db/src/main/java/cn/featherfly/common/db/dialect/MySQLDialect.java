@@ -5,7 +5,7 @@ import java.util.Date;
 
 import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.SqlUtils;
-import cn.featherfly.common.lang.DateUtils;
+import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
 
 /**
@@ -95,7 +95,7 @@ public class MySQLDialect extends AbstractDialect {
                 case Types.TIME:
                 case Types.TIMESTAMP:
                     if (value instanceof Date) {
-                        sqlPart.append("'").append(DateUtils.formart((Date) value, "yyyy-MM-dd HH:mm:ss")).append("'");
+                        sqlPart.append("'").append(Dates.formatTime((Date) value)).append("'");
                     } else {
                         sqlPart.append("'").append(value).append("'");
                         break;

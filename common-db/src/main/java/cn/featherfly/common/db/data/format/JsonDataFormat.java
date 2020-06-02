@@ -15,7 +15,7 @@ import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.data.DataFormat;
 import cn.featherfly.common.db.data.ExportException;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.lang.DateUtils;
+import cn.featherfly.common.lang.Dates;
 
 /**
  * <p>
@@ -98,8 +98,6 @@ public class JsonDataFormat implements DataFormat {
 
     /**
      * {@inheritDoc}
-     *
-     * @throws Exception
      */
     @Override
     public void writeTableEnd(Table tableMetadata) throws Exception {
@@ -125,7 +123,7 @@ public class JsonDataFormat implements DataFormat {
                 generator.writeStringField("null", "0");
                 switch (type) {
                     case Types.TIMESTAMP:
-                        generator.writeStringField("value", DateUtils.formartTime(res.getTimestamp(columnName)));
+                        generator.writeStringField("value", Dates.formatTime(res.getTimestamp(columnName)));
                         break;
                     default:
                         generator.writeStringField("value", value.toString());

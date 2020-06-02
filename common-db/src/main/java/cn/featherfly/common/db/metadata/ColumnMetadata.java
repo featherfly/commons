@@ -1,6 +1,9 @@
 
 package cn.featherfly.common.db.metadata;
 
+import java.sql.JDBCType;
+import java.sql.SQLType;
+
 import cn.featherfly.common.db.Column;
 
 /**
@@ -79,7 +82,7 @@ public class ColumnMetadata implements Column {
 
     private boolean primaryKey;
 
-    private SqlType sqlType;
+    private SQLType sqlType;
 
     /**
      * 小数位数
@@ -116,7 +119,7 @@ public class ColumnMetadata implements Column {
      */
     void setType(int type) {
         this.type = type;
-        sqlType = SqlType.value(type);
+        sqlType = JDBCType.valueOf(type);
     }
 
     /**
@@ -275,7 +278,7 @@ public class ColumnMetadata implements Column {
      * @return sqlType
      */
     @Override
-    public SqlType getSqlType() {
+    public SQLType getSqlType() {
         return sqlType;
     }
 
@@ -284,8 +287,8 @@ public class ColumnMetadata implements Column {
      *
      * @param sqlType sqlType
      */
-    void setSqlType(SqlType sqlType) {
+    void setSqlType(SQLType sqlType) {
         this.sqlType = sqlType;
-        type = sqlType.getValue();
+        type = sqlType.getVendorTypeNumber();
     }
 }

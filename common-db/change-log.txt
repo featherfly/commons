@@ -1,3 +1,9 @@
+2020-6-3
+0.2.0
+    1.完善SqlTypeMappingManager相关功能
+    2.删除SqlType枚举,使用jdbc的JDBCType代替
+    3.JdbcUtils.setParamaeter加入java.util.Optional支持,加入getColumnIndex,getResultSQLType等方法
+    
 2020-5-29
 0.1.4
     1.修改LangUtils为Lang,StringUtils为Strings

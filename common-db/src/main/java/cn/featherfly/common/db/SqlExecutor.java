@@ -225,8 +225,8 @@ public class SqlExecutor {
      *
      * @param <E>    the element type
      * @param sql    sql
-     * @param params params
      * @param mapper the mapper
+     * @param params params
      * @return query result list
      */
     public <E> List<E> query(String sql, RowMapper<E> mapper, Map<String, Object> params) {
@@ -236,7 +236,9 @@ public class SqlExecutor {
     /**
      * sql query.
      *
+     * @param <E>    the element type
      * @param sql    sql
+     * @param mapper the mapper
      * @param params params
      * @return query result list
      */
@@ -316,6 +318,13 @@ public class SqlExecutor {
         return new ArrayList<>();
     }
 
+    /**
+     * Query list array.
+     *
+     * @param sql    the sql
+     * @param params the params
+     * @return the list
+     */
     public List<Object[]> queryListArray(String sql, Map<String, Object> params) {
         return queryListArray(SqlUtils.convertNamedParamSql(sql, params, namedParamStartSymbol, namedParamEndSymbol));
     }
@@ -344,7 +353,7 @@ public class SqlExecutor {
     }
 
     /**
-     * 返回namedParamStartSymbol
+     * 返回namedParamStartSymbol.
      *
      * @return namedParamStartSymbol
      */
@@ -353,7 +362,7 @@ public class SqlExecutor {
     }
 
     /**
-     * 设置namedParamStartSymbol
+     * 设置namedParamStartSymbol.
      *
      * @param namedParamStartSymbol namedParamStartSymbol
      */
@@ -362,7 +371,7 @@ public class SqlExecutor {
     }
 
     /**
-     * 返回namedParamEndSymbol
+     * 返回namedParamEndSymbol.
      *
      * @return namedParamEndSymbol
      */
@@ -371,7 +380,7 @@ public class SqlExecutor {
     }
 
     /**
-     * 设置namedParamEndSymbol
+     * 设置namedParamEndSymbol.
      *
      * @param namedParamEndSymbol namedParamEndSymbol
      */

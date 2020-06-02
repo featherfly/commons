@@ -8,7 +8,7 @@ import cn.featherfly.common.db.SqlUtils;
 import cn.featherfly.common.db.Table;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.ArrayUtils;
-import cn.featherfly.common.lang.DateUtils;
+import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
 
 /**
@@ -137,7 +137,7 @@ public class OracleDialect extends AbstractDialect {
                 case Types.TIME:
                 case Types.TIMESTAMP:
                     if (value instanceof Date) {
-                        sqlPart.append("to_date('").append(DateUtils.formart((Date) value, "yyyy-MM-dd HH:mm:ss"))
+                        sqlPart.append("to_date('").append(Dates.formatTime((Date) value))
                                 .append("' , 'yyyy-mm-dd hh24:mi:ss')");
                     } else {
                         sqlPart.append("to_date('").append(value).append("' , 'yyyy-mm-dd hh24:mi:ss')");

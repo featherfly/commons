@@ -15,4 +15,9 @@
 			<package name="cn.featherfly.common.db.dialect.*" />
 		</packages>
 	</test>
+	<test name="sql mapping test">
+		<packages>
+			<package name="cn.featherfly.common.db.mapping.*" />
+		</packages>
+	</test>
 </suite>

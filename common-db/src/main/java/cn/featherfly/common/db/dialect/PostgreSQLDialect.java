@@ -10,7 +10,7 @@ import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.ArrayUtils;
-import cn.featherfly.common.lang.DateUtils;
+import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
 
 /**
@@ -126,7 +126,7 @@ public class PostgreSQLDialect extends AbstractDialect {
                 case Types.TIME:
                 case Types.TIMESTAMP:
                     if (value instanceof Date) {
-                        sqlPart.append("'").append(DateUtils.formart((Date) value, "yyyy-MM-dd HH:mm:ss")).append("'");
+                        sqlPart.append("'").append(Dates.formatTime((Date) value)).append("'");
                     } else {
                         sqlPart.append("'").append(value).append("'");
                         break;

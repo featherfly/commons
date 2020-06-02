@@ -5,6 +5,8 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
+import cn.featherfly.common.exception.UnsupportedException;
+
 /**
  * <p>
  * SqliteDialectTest2
@@ -68,8 +70,8 @@ public class SqliteDialectTest extends DialectTest {
         String sql = dialect.buildCreateTableDDL(getTableModel());
         System.out.println(sql);
         String s = "CREATE TABLE `db_test`.`user` (\n" + " `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, -- id主键\n"
-                + " `name` TEXT NOT NULL , -- name名称\n" + " `money` REAL(11,2) NOT NULL , -- money金额\n"
-                + " `state` INTEGER NOT NULL DEFAULT '0' , -- state状态：0禁用，1启用\n" + " `descp` TEXT -- descp描述\n"
+                + " `name` TEXT(255) NOT NULL , -- name名称\n" + " `money` REAL(11,2) NOT NULL , -- money金额\n"
+                + " `state` INTEGER NOT NULL DEFAULT '0' , -- state状态：0禁用，1启用\n" + " `descp` TEXT(255) -- descp描述\n"
                 + " ) -- user用户表";
         assertEquals(sql, s);
     }
@@ -80,7 +82,7 @@ public class SqliteDialectTest extends DialectTest {
         String sql = dialect.buildCreateTableDDL(getMultiKeyTableModel());
         System.out.println(sql);
         String s = "CREATE TABLE `user_role` (\n" + " `user_id` INTEGER NOT NULL, -- user id\n"
-                + " `role_id` INTEGER NOT NULL, -- role id\n" + " `descp` TEXT, -- descp描述\n"
+                + " `role_id` INTEGER NOT NULL, -- role id\n" + " `descp` TEXT(255), -- descp描述\n"
                 + " PRIMARY KEY (`user_id`,`role_id`)\n" + " ) -- user role 关系表";
         assertEquals(sql, s);
     }
@@ -89,7 +91,7 @@ public class SqliteDialectTest extends DialectTest {
      * {@inheritDoc}
      */
     @Override
-    @Test
+    @Test(expectedExceptions = { UnsupportedException.class })
     void testAlterTableDropColumn() {
         String sql = dialect.buildAlterTableDropColumnDDL(table, getColumnModels());
         System.out.println(sql);
@@ -102,7 +104,7 @@ public class SqliteDialectTest extends DialectTest {
      * {@inheritDoc}
      */
     @Override
-    @Test
+    @Test(expectedExceptions = { UnsupportedException.class })
     void testAlterTableAddColumns() {
         String sql = dialect.buildAlterTableAddColumnDDL(table, getColumnModels());
         System.out.println(sql);
@@ -112,7 +114,7 @@ public class SqliteDialectTest extends DialectTest {
     }
 
     @Override
-    @Test
+    @Test(expectedExceptions = { UnsupportedException.class })
     void testAlterTableModifyColumns() {
         String sql = dialect.buildAlterTableModifyColumnDDL("user_info", getModifyColumnModels());
         System.out.println(sql);

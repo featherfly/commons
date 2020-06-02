@@ -1,7 +1,7 @@
 
 package cn.featherfly.common.storage.file;
 
-import cn.featherfly.common.lang.DateUtils;
+import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.UriUtils;
 
 /**
@@ -14,7 +14,7 @@ import cn.featherfly.common.lang.UriUtils;
  *
  * @author zhongj
  */
-public class FileDateLocalDirStorage extends FileLocalDirStorage{
+public class FileDateLocalDirStorage extends FileLocalDirStorage {
 
     /**
      */
@@ -28,13 +28,13 @@ public class FileDateLocalDirStorage extends FileLocalDirStorage{
     protected String getExtDir() {
         String result = "";
         if (withYear) {
-            result = UriUtils.linkUri(DateUtils.getCurrentYear() + "");
+            result = UriUtils.linkUri(Dates.getCurrentYear() + "");
         }
         if (withMonth) {
-            result = UriUtils.linkUri(result , DateUtils.getCurrentMonth() + "");
+            result = UriUtils.linkUri(result, Dates.getCurrentMonth() + "");
         }
         if (withDay) {
-            result = UriUtils.linkUri(result , DateUtils.getCurrentDayOfMonth() + "");
+            result = UriUtils.linkUri(result, Dates.getCurrentDayOfMonth() + "");
         }
         return result;
     }
@@ -51,6 +51,7 @@ public class FileDateLocalDirStorage extends FileLocalDirStorage{
 
     /**
      * 返回withYear
+     * 
      * @return withYear
      */
     public boolean isWithYear() {
@@ -59,6 +60,7 @@ public class FileDateLocalDirStorage extends FileLocalDirStorage{
 
     /**
      * 设置withYear
+     * 
      * @param withYear withYear
      */
     public void setWithYear(boolean withYear) {
@@ -67,6 +69,7 @@ public class FileDateLocalDirStorage extends FileLocalDirStorage{
 
     /**
      * 返回withMonth
+     * 
      * @return withMonth
      */
     public boolean isWithMonth() {
@@ -75,6 +78,7 @@ public class FileDateLocalDirStorage extends FileLocalDirStorage{
 
     /**
      * 设置withMonth
+     * 
      * @param withMonth withMonth
      */
     public void setWithMonth(boolean withMonth) {
@@ -83,6 +87,7 @@ public class FileDateLocalDirStorage extends FileLocalDirStorage{
 
     /**
      * 返回withDay
+     * 
      * @return withDay
      */
     public boolean isWithDay() {
@@ -91,6 +96,7 @@ public class FileDateLocalDirStorage extends FileLocalDirStorage{
 
     /**
      * 设置withDay
+     * 
      * @param withDay withDay
      */
     public void setWithDay(boolean withDay) {

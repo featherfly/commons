@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -99,6 +100,9 @@ public final class Lang {
         }
         if (object.getClass().isArray()) {
             return Array.getLength(object) == 0;
+        }
+        if (object instanceof Optional) {
+            isEmpty((Optional<?>) object);
         }
         return false;
     }
@@ -232,6 +236,29 @@ public final class Lang {
         } else {
             return empty.get();
         }
+    }
+
+    /**
+     * 返回传入Optional是否为空（是null或者内部数据为null） .
+     *
+     * @param optional 传入的Optional
+     * @return 传入Optional是否为空
+     */
+    public static boolean isEmpty(Optional<?> optional) {
+        if (optional == null) {
+            return true;
+        }
+        return isEmpty(optional.orElse(null));
+    }
+
+    /**
+     * 返回传入Optional是否不为空（不是null或者内部数据不为null） .
+     *
+     * @param optional 传入的Optional
+     * @return 传入Optional是否为空
+     */
+    public static boolean isNotEmpty(Optional<?> optional) {
+        return !isEmpty(optional);
     }
 
     /**

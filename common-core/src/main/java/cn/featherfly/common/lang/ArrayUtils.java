@@ -2,10 +2,10 @@ package cn.featherfly.common.lang;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import cn.featherfly.common.constant.Chars;
 
@@ -13,15 +13,93 @@ import cn.featherfly.common.constant.Chars;
  * <p>
  * 数组的工具类
  * </p>
+ * .
  *
  * @author zhongj
- * @since 1.0
  * @version 1.0
+ * @since 1.0
  */
 public final class ArrayUtils {
 
     private ArrayUtils() {
     }
+
+    /**
+     * An empty immutable {@code Object} array.
+     */
+    public static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
+    /**
+     * An empty immutable {@code Class} array.
+     */
+    public static final Class<?>[] EMPTY_CLASS_ARRAY = new Class[0];
+    /**
+     * An empty immutable {@code String} array.
+     */
+    public static final String[] EMPTY_STRING_ARRAY = new String[0];
+    /**
+     * An empty immutable {@code long} array.
+     */
+    public static final long[] EMPTY_LONG_ARRAY = new long[0];
+    /**
+     * An empty immutable {@code Long} array.
+     */
+    public static final Long[] EMPTY_LONG_OBJECT_ARRAY = new Long[0];
+    /**
+     * An empty immutable {@code int} array.
+     */
+    public static final int[] EMPTY_INT_ARRAY = new int[0];
+    /**
+     * An empty immutable {@code Integer} array.
+     */
+    public static final Integer[] EMPTY_INTEGER_OBJECT_ARRAY = new Integer[0];
+    /**
+     * An empty immutable {@code short} array.
+     */
+    public static final short[] EMPTY_SHORT_ARRAY = new short[0];
+    /**
+     * An empty immutable {@code Short} array.
+     */
+    public static final Short[] EMPTY_SHORT_OBJECT_ARRAY = new Short[0];
+    /**
+     * An empty immutable {@code byte} array.
+     */
+    public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
+    /**
+     * An empty immutable {@code Byte} array.
+     */
+    public static final Byte[] EMPTY_BYTE_OBJECT_ARRAY = new Byte[0];
+    /**
+     * An empty immutable {@code double} array.
+     */
+    public static final double[] EMPTY_DOUBLE_ARRAY = new double[0];
+    /**
+     * An empty immutable {@code Double} array.
+     */
+    public static final Double[] EMPTY_DOUBLE_OBJECT_ARRAY = new Double[0];
+    /**
+     * An empty immutable {@code float} array.
+     */
+    public static final float[] EMPTY_FLOAT_ARRAY = new float[0];
+    /**
+     * An empty immutable {@code Float} array.
+     */
+    public static final Float[] EMPTY_FLOAT_OBJECT_ARRAY = new Float[0];
+    /**
+     * An empty immutable {@code boolean} array.
+     */
+    public static final boolean[] EMPTY_BOOLEAN_ARRAY = new boolean[0];
+    /**
+     * An empty immutable {@code Boolean} array.
+     */
+    public static final Boolean[] EMPTY_BOOLEAN_OBJECT_ARRAY = new Boolean[0];
+    /**
+     * An empty immutable {@code char} array.
+     */
+    public static final char[] EMPTY_CHAR_ARRAY = new char[0];
+    /**
+     * An empty immutable {@code Character} array.
+     */
+    public static final Character[] EMPTY_CHARACTER_OBJECT_ARRAY = new Character[0];
 
     /**
      * <p>
@@ -54,9 +132,44 @@ public final class ArrayUtils {
     }
 
     /**
+     * Each.
+     *
+     * @param <T>      the generic type
+     * @param array    the array
+     * @param consumer the consumer
+     */
+    public static <T> void each(T[] array, BiConsumer<T, Integer> consumer) {
+        if (array != null) {
+            for (int i = 0; i < array.length; i++) {
+                consumer.accept(array[i], i);
+            }
+        }
+    }
+
+    /**
+     * 将传入数组进行字符串转换,使用传入的符号作为数组之间的连接符号.
+     *
+     * @param <A>        the generic type
+     * @param array      对象数组
+     * @param linkSymbol the link symbol
+     * @return 字符串
+     */
+    public static <A> String toString(A[] array, char linkSymbol) {
+        StringBuilder sb = new StringBuilder();
+        for (A a : array) {
+            sb.append(a).append(linkSymbol);
+        }
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        return sb.toString();
+    }
+
+    /**
      * <p>
      * 将传入数组进行字符串转换（与Collection的一样使用,分割）
      * </p>
+     * .
      *
      * @param array 对象数组
      * @return 字符串
@@ -75,6 +188,8 @@ public final class ArrayUtils {
                     result.deleteCharAt(result.length() - 1);
                 }
                 sb.append(result.toString()).append(Chars.BRACK_R);
+            } else {
+                sb.append(array.toString());
             }
         }
         return sb.toString();
@@ -84,6 +199,7 @@ public final class ArrayUtils {
      * <p>
      * 将传入数组进行字符串转换（与Collection的一样使用,分割）
      * </p>
+     * .
      *
      * @param <E>     对象类型
      * @param objects 对象数组
@@ -104,19 +220,20 @@ public final class ArrayUtils {
     }
 
     /**
-     * <p>
-     * 转换为列表
-     * </p>
+     * To list.
      *
-     * @param arrays 数组
-     * @param <T>    泛型
-     * @return map
+     * @param <T>    the generic type
+     * @param arrays the arrays
+     * @return the list
      */
-    public static <T> List<T> toList(T[] arrays) {
-        if (arrays == null) {
-            return new ArrayList<>();
+    public static <T> List<T> toList(@SuppressWarnings("unchecked") T... arrays) {
+        List<T> list = new ArrayList<>();
+        if (arrays != null) {
+            for (T t : arrays) {
+                list.add(t);
+            }
         }
-        return Arrays.asList(arrays);
+        return list;
     }
 
     /**
@@ -126,7 +243,7 @@ public final class ArrayUtils {
      * @param arrays 数组
      * @return map
      */
-    public static <A> Map<Integer, A> toMap(A[] arrays) {
+    public static <A> Map<Integer, A> toMap(@SuppressWarnings("unchecked") A... arrays) {
         if (arrays == null) {
             return new LinkedHashMap<>(0);
         }
@@ -144,7 +261,7 @@ public final class ArrayUtils {
      * @param arrays 数组
      * @return 列表
      */
-    public static <A> Map<String, A> toMap2(A[] arrays) {
+    public static <A> Map<String, A> toMap2(@SuppressWarnings("unchecked") A... arrays) {
         if (arrays == null) {
             return new LinkedHashMap<>(0);
         }
@@ -156,9 +273,30 @@ public final class ArrayUtils {
     }
 
     /**
+     * To number array.
+     *
+     * @param <A>   the generic type
+     * @param type  the type
+     * @param array the array
+     * @return the a[]
+     */
+    public static <A extends Number> A[] toNumbers(Class<A> type, String... array) {
+        int len = 0;
+        if (array != null) {
+            len = array.length;
+        }
+        A[] as = create(type, len);
+        each(array, (a, i) -> {
+            as[i] = NumberUtils.parse(a, type);
+        });
+        return as;
+    }
+
+    /**
      * <p>
      * fill target array with source array
      * </p>
+     * .
      *
      * @param <T>    泛型
      * @param target fill target
@@ -178,6 +316,7 @@ public final class ArrayUtils {
      * <p>
      * 判断第一个传入的数组中是否存在第二个参数
      * </p>
+     * .
      *
      * @param <T>    泛型
      * @param tSet   源数组
@@ -198,14 +337,14 @@ public final class ArrayUtils {
 
     /**
      * <p>
-     * 判断第一个传入的字符串数组中是否存在第二个传入的字符串
+     * 判断第一个传入的字符串数组中是否存在第二个传入的字符串.
      *
      * @param strSet     源字符串数组
      * @param strTarget  查找字符串
      * @param ignoreCase 忽略大小写
      * @return 第一个数组中是否存在第二个字符串
      */
-    public static boolean containString(String[] strSet, String strTarget, boolean ignoreCase) {
+    public static boolean contain(String[] strSet, String strTarget, boolean ignoreCase) {
         if (strSet == null || strTarget == null) {
             return false;
         }
@@ -228,8 +367,24 @@ public final class ArrayUtils {
 
     /**
      * <p>
+     * 判断第一个传入的字符串数组中是否存在第二个传入的字符串.
+     *
+     * @param strSet     源字符串数组
+     * @param strTarget  查找字符串
+     * @param ignoreCase 忽略大小写
+     * @return 第一个数组中是否存在第二个字符串
+     * @deprecated use {@link #contain(String[], String, boolean)} instead
+     */
+    @Deprecated
+    public static boolean containString(String[] strSet, String strTarget, boolean ignoreCase) {
+        return contain(strSet, strTarget, ignoreCase);
+    }
+
+    /**
+     * <p>
      * 数组链接
      * </p>
+     * .
      *
      * @param arr1 arr1
      * @param arr2 arr2
@@ -257,10 +412,11 @@ public final class ArrayUtils {
      * <p>
      * 创建数组
      * </p>
+     * .
      *
+     * @param <T>    泛型
      * @param type   类型
      * @param length 长度
-     * @param <T>    泛型
      * @return 数组
      */
     @SuppressWarnings("unchecked")

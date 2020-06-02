@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -34,6 +35,10 @@ public final class Dates {
     private static final String FORMART_DATE = "yyyy-MM-dd";
 
     private static final String FORMART_TIME = "yyyy-MM-dd HH:mm:ss";
+
+    private static final DateTimeFormatter FORMATTER_DATE = DateTimeFormatter.ofPattern(FORMART_DATE);
+
+    private static final DateTimeFormatter FORMATTER_TIME = DateTimeFormatter.ofPattern(FORMART_TIME);
 
     // 信息
     private static final String MSG_START_AFTER_END = "开始日期startDate不能晚于结束日期endDate";
@@ -100,6 +105,33 @@ public final class Dates {
         hour,
         /** The day. */
         day
+    }
+
+    /**
+     * Gets the time.
+     *
+     * @param localDateTime the local date time
+     * @return the time
+     */
+    public static long getTime(LocalDateTime localDateTime) {
+        return getTime(localDateTime, ZoneId.systemDefault());
+    }
+
+    /**
+     * Gets the time.
+     *
+     * @param localDateTime the local date time
+     * @param zoneId        the zone id
+     * @return the time
+     */
+    public static long getTime(LocalDateTime localDateTime, ZoneId zoneId) {
+        if (localDateTime == null) {
+            return 0;
+        }
+        if (zoneId == null) {
+            zoneId = ZoneId.systemDefault();
+        }
+        return localDateTime.atZone(zoneId).toInstant().toEpochMilli();
     }
 
     /**
@@ -170,11 +202,51 @@ public final class Dates {
     /**
      * 使用yyyy-MM-dd进行格式化.
      *
+     * @param localDateTime the local date time
+     * @return 如果传入的日期不为null,则按yyyy-MM-dd的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
+     */
+    public static String formatDate(LocalDateTime localDateTime) {
+        return localDateTime.format(FORMATTER_DATE);
+    }
+
+    /**
+     * 使用yyyy-MM-dd hh:mm:ss进行格式化.
+     *
+     * @param localDateTime the local date time
+     * @return 如果传入的日期不为null,则按yyyy-MM-dd hh:mm:ss的格式返回一个格式化的字符串
+     *         如果传入的日期为null则返回空字符串（""）
+     */
+    public static String formatTime(LocalDateTime localDateTime) {
+        return format(localDateTime, FORMATTER_TIME);
+    }
+
+    /**
+     * 使用传入的格式化参数进行格式化.
+     *
+     * @param localDateTime the local date time
+     * @param format        格式化参数
+     * @return 如果传入的日期不会null,则按传入的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
+     */
+    public static String format(LocalDateTime localDateTime, String format) {
+        LOGGER.debug("formart : formart={} ||| localDateTime ={}", new Object[] { format, localDateTime });
+        return format(localDateTime, DateTimeFormatter.ofPattern(format));
+    }
+
+    private static String format(LocalDateTime localDateTime, DateTimeFormatter formartter) {
+        if (localDateTime != null) {
+            return localDateTime.format(formartter);
+        }
+        return "";
+    }
+
+    /**
+     * 使用yyyy-MM-dd进行格式化.
+     *
      * @param date 日期对象
      * @return 如果传入的日期不为null,则按yyyy-MM-dd的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
      */
-    public static String formartDate(Date date) {
-        return formart(date, FORMART_DATE);
+    public static String formatDate(Date date) {
+        return format(date, FORMART_DATE);
     }
 
     /**
@@ -184,22 +256,22 @@ public final class Dates {
      * @return 如果传入的日期不为null,则按yyyy-MM-dd hh:mm:ss的格式返回一个格式化的字符串
      *         如果传入的日期为null则返回空字符串（""）
      */
-    public static String formartTime(Date date) {
-        return formart(date, FORMART_TIME);
+    public static String formatTime(Date date) {
+        return format(date, FORMART_TIME);
     }
 
     /**
      * 使用传入的格式化参数进行格式化.
      *
-     * @param date    日期
-     * @param formart 格式化参数
+     * @param date   日期
+     * @param format 格式化参数
      * @return 如果传入的日期不会null,则按传入的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
      */
-    public static String formart(Date date, String formart) {
-        LOGGER.debug("formartDate: formart={} ||| date={}", new Object[] { formart, date });
+    public static String format(Date date, String format) {
+        LOGGER.debug("formartDate: formart={} ||| date={}", new Object[] { format, date });
         if (date != null) {
-            DateFormat format = new SimpleDateFormat(formart);
-            return format.format(date);
+            DateFormat df = new SimpleDateFormat(format);
+            return df.format(date);
         }
         return "";
     }
@@ -277,9 +349,7 @@ public final class Dates {
      * @return 指定year,month,day的Date实例
      */
     public static Date getDate(int year, int month, int day) {
-        Calendar c = Calendar.getInstance();
-        c.set(year, toDateMonth(month), day);
-        return c.getTime();
+        return toDate(LocalDate.of(year, month, day));
     }
 
     /**
@@ -294,9 +364,7 @@ public final class Dates {
      * @return 指定year,month,day,hour,minute,second的Date实例
      */
     public static Date getTime(int year, int month, int day, int hour, int minute, int second) {
-        Calendar c = Calendar.getInstance();
-        c.set(year, toDateMonth(month), day, hour, minute, second);
-        return c.getTime();
+        return toDate(LocalDateTime.of(year, month, day, hour, minute, second));
     }
 
     /**
@@ -305,8 +373,7 @@ public final class Dates {
      * @return 当前年
      */
     public static int getCurrentYear() {
-        Calendar c = Calendar.getInstance();
-        return c.get(Calendar.YEAR);
+        return LocalDate.now().getYear();
     }
 
     /**
@@ -315,8 +382,7 @@ public final class Dates {
      * @return 当前月
      */
     public static int getCurrentMonth() {
-        Calendar c = Calendar.getInstance();
-        return fromDateMonth(c.get(Calendar.MONTH));
+        return LocalDate.now().getMonthValue();
     }
 
     /**
@@ -325,18 +391,16 @@ public final class Dates {
      * @return 当前日期（一月中的哪天）
      */
     public static int getCurrentDayOfMonth() {
-        Calendar c = Calendar.getInstance();
-        return c.get(Calendar.DAY_OF_MONTH);
+        return LocalDate.now().getDayOfMonth();
     }
 
     /**
-     * 返回当前是星期几.
+     * 返回当前是星期几. 1 - 7.
      *
      * @return 当前是星期几
      */
     public static int getCurrentDayOfWeek() {
-        Calendar c = Calendar.getInstance();
-        return c.get(Calendar.DAY_OF_WEEK);
+        return LocalDate.now().getDayOfWeek().getValue();
     }
 
     /**
@@ -345,8 +409,7 @@ public final class Dates {
      * @return 当前小时（24小时制）
      */
     public static int getCurrentHour() {
-        Calendar c = Calendar.getInstance();
-        return c.get(Calendar.HOUR_OF_DAY);
+        return LocalTime.now().getHour();
     }
 
     /**
@@ -355,8 +418,7 @@ public final class Dates {
      * @return 当前分钟
      */
     public static int getCurrentMinute() {
-        Calendar c = Calendar.getInstance();
-        return c.get(Calendar.MINUTE);
+        return LocalTime.now().getMinute();
     }
 
     /**
@@ -365,8 +427,7 @@ public final class Dates {
      * @return 当前秒
      */
     public static int getCurrentSecond() {
-        Calendar c = Calendar.getInstance();
-        return c.get(Calendar.SECOND);
+        return LocalTime.now().getSecond();
     }
 
     /**
@@ -376,9 +437,7 @@ public final class Dates {
      * @return 传入日期的年份
      */
     public static int getYear(Date date) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        return c.get(Calendar.YEAR);
+        return toLocalDate(date).getYear();
     }
 
     /**
@@ -388,9 +447,7 @@ public final class Dates {
      * @return 传入日期的月份
      */
     public static int getMonth(Date date) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        return fromDateMonth(c.get(Calendar.MONTH));
+        return toLocalDate(date).getMonthValue();
     }
 
     /**
@@ -400,9 +457,7 @@ public final class Dates {
      * @return 传入日期的日（一月中的哪天）
      */
     public static int getDayOfMonth(Date date) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        return c.get(Calendar.DAY_OF_MONTH);
+        return toLocalDate(date).getDayOfMonth();
     }
 
     /**
@@ -412,15 +467,7 @@ public final class Dates {
      * @return 传入日期是星期几
      */
     public static int getDayOfWeek(Date date) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-        if (dayOfWeek == Calendar.SUNDAY) {
-            dayOfWeek = SUNDAY;
-        } else {
-            dayOfWeek -= 1;
-        }
-        return dayOfWeek;
+        return toLocalDate(date).getDayOfWeek().getValue();
     }
 
     /**
@@ -430,27 +477,9 @@ public final class Dates {
      * @return 传入日期是当年的第几天
      */
     public static int getDayOfYear(Date date) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        return c.get(Calendar.DAY_OF_YEAR);
+        return toLocalDate(date).getDayOfYear();
     }
 
-    //    /**
-    //     * 返回传入日期是当月的第几个星期.以星期一为一个星期的开始时间
-    //     * @param date 日期
-    //     * @return 传入日期是当月的第几个星期
-    //     */
-    //    public static int getWeekOfMonth(Date date) {
-    //        Calendar c = Calendar.getInstance();
-    //        c.setTime(date);
-    //        final int i = 9;
-    //        int dayOfWeek = getDayOfWeek(date);
-    //        int secondWeek = i - dayOfWeek;
-    //        int maxDay = getMaxDayOfMonth(date);
-    //        int leftDay = maxDay - secondWeek - 1;
-    //        c.setFirstDayOfWeek(Calendar.MONDAY);
-    //        return c.get(Calendar.DAY_OF_WEEK_IN_MONTH);
-    //    }
     /**
      * 返回传入日期是当年的第几个星期.以星期一为一个星期的开始时间
      *
@@ -471,9 +500,7 @@ public final class Dates {
      * @return 传入日期小时（24小时制）
      */
     public static int getHour(Date date) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        return c.get(Calendar.HOUR_OF_DAY);
+        return toLocalTime(date).getHour();
     }
 
     /**
@@ -483,9 +510,7 @@ public final class Dates {
      * @return 传入日期分钟
      */
     public static int getMinute(Date date) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        return c.get(Calendar.MINUTE);
+        return toLocalTime(date).getMinute();
     }
 
     /**
@@ -495,9 +520,7 @@ public final class Dates {
      * @return 传入日期秒
      */
     public static int getSecond(Date date) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        return c.get(Calendar.SECOND);
+        return toLocalTime(date).getSecond();
     }
 
     /**
@@ -1082,16 +1105,6 @@ public final class Dates {
     // private method
     // ********************************************************************
 
-    // 转换1-12到0-11
-    private static int toDateMonth(int month) {
-        return month - 1;
-    }
-
-    // 转换0-11到1-12
-    private static int fromDateMonth(int month) {
-        return month + 1;
-    }
-
     /*
      * 以传入的格式形比较日期大小. 如果第一个日期小于第二个日期，返回 -1 如果第一个日期等于第二个日期，返回 0 如果第一个日期大于第二个日期，返回
      * 1
@@ -1102,8 +1115,8 @@ public final class Dates {
      */
     private static int compare(Date firstDate, Date secondDate, String formart) {
         checkNull(firstDate, secondDate);
-        long first = Long.parseLong(formart(firstDate, formart));
-        long second = Long.parseLong(formart(secondDate, formart));
+        long first = Long.parseLong(format(firstDate, formart));
+        long second = Long.parseLong(format(secondDate, formart));
         if (first < second) {
             return COMPARE_LT;
         } else if (first == second) {

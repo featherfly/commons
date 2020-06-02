@@ -1,6 +1,12 @@
-2020
+2020-6-3
 1.8.7
-    1.加入Dates替代DateUtils,后续大版本会删除DateUtils
+    1.Lang.isEmpty,isNotEmpty等一系列判断方法加入Option支持
+    2.加入Dates替代DateUtils,后续大版本会删除DateUtils
+    3.Dates加入getTime(LocalDateTime),getTime(LocalDateTime,ZoneId)
+    4.Dates中部分使用Calendar实现的功能使用LocalDate,LocalTime,LocalDateTime重构
+    5.ArrayUtils加入#contain(String[], String, boolean), toNumbers(Class<A>, String...), each(T[], BiConsumer<T, Integer>)
+        , toString(A[], char)和一些列空数组定义
+    6.GenericClass,BeanProperty加入hashcode(),equals实现
 
 2020-5-29
 1.8.6

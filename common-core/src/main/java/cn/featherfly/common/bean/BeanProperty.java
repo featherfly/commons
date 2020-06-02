@@ -387,4 +387,39 @@ public class BeanProperty<T> implements GenericType<T> {
         return declaringType;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        if (field != null) {
+            return field.hashCode();
+        } else if (getter != null) {
+            return getter.hashCode();
+        } else {
+            return setter.hashCode();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj.getClass() != BeanProperty.class) {
+            return false;
+        }
+        BeanProperty<?> target = (BeanProperty<?>) obj;
+        if (field != null) {
+            return field.equals(target.field);
+        } else if (getter != null) {
+            return getter.equals(target.getter);
+        } else {
+            return setter.equals(target.setter);
+        }
+    }
+
 }

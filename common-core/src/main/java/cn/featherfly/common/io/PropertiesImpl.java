@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import cn.featherfly.common.constant.Chars;
-import cn.featherfly.common.lang.DateUtils;
+import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
 
@@ -391,7 +391,7 @@ public class PropertiesImpl implements Properties {
 
     private void store0(BufferedWriter bw, boolean escUnicode, Charset charset) throws IOException {
         bw.write(Chars.SHARP + "charset=" + charset.displayName() + Chars.NEW_LINE);
-        bw.write(Chars.SHARP + "updated at " + DateUtils.formartTime(new Date()) + Chars.NEW_LINE);
+        bw.write(Chars.SHARP + "updated at " + Dates.formatTime(new Date()) + Chars.NEW_LINE);
         //        bw.newLine();
         synchronized (this) {
             for (Part part : listAll()) {

@@ -1,7 +1,7 @@
 
 package cn.featherfly.common.storage;
 
-import cn.featherfly.common.lang.DateUtils;
+import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.UriUtils;
 
 /**
@@ -15,7 +15,7 @@ import cn.featherfly.common.lang.UriUtils;
  * @param <E> 存储的对象类型
  * @author zhongj
  */
-public abstract class DateLocalDirStorage<E> extends LocalDirStorage<E>{
+public abstract class DateLocalDirStorage<E> extends LocalDirStorage<E> {
 
     /**
      */
@@ -29,13 +29,13 @@ public abstract class DateLocalDirStorage<E> extends LocalDirStorage<E>{
     protected String getExtDir() {
         String result = "";
         if (withYear) {
-            result = UriUtils.linkUri(DateUtils.getCurrentYear() + "");
+            result = UriUtils.linkUri(Dates.getCurrentYear() + "");
         }
         if (withMonth) {
-            result = UriUtils.linkUri(result , DateUtils.getCurrentMonth() + "");
+            result = UriUtils.linkUri(result, Dates.getCurrentMonth() + "");
         }
         if (withDay) {
-            result = UriUtils.linkUri(result , DateUtils.getCurrentDayOfMonth() + "");
+            result = UriUtils.linkUri(result, Dates.getCurrentDayOfMonth() + "");
         }
         return result;
     }
@@ -52,6 +52,7 @@ public abstract class DateLocalDirStorage<E> extends LocalDirStorage<E>{
 
     /**
      * 返回withYear
+     * 
      * @return withYear
      */
     public boolean isWithYear() {
@@ -60,6 +61,7 @@ public abstract class DateLocalDirStorage<E> extends LocalDirStorage<E>{
 
     /**
      * 设置withYear
+     * 
      * @param withYear withYear
      */
     public void setWithYear(boolean withYear) {
@@ -68,6 +70,7 @@ public abstract class DateLocalDirStorage<E> extends LocalDirStorage<E>{
 
     /**
      * 返回withMonth
+     * 
      * @return withMonth
      */
     public boolean isWithMonth() {
@@ -76,6 +79,7 @@ public abstract class DateLocalDirStorage<E> extends LocalDirStorage<E>{
 
     /**
      * 设置withMonth
+     * 
      * @param withMonth withMonth
      */
     public void setWithMonth(boolean withMonth) {
@@ -84,6 +88,7 @@ public abstract class DateLocalDirStorage<E> extends LocalDirStorage<E>{
 
     /**
      * 返回withDay
+     * 
      * @return withDay
      */
     public boolean isWithDay() {
@@ -92,6 +97,7 @@ public abstract class DateLocalDirStorage<E> extends LocalDirStorage<E>{
 
     /**
      * 设置withDay
+     * 
      * @param withDay withDay
      */
     public void setWithDay(boolean withDay) {

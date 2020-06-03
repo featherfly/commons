@@ -12,11 +12,13 @@ import java.util.Random;
  * <p>
  * 随机生成工具类
  * </p>
- * 
+ *
  * @author zhongj
  * @since 1.0
  * @version 1.0
+ * @deprecated use {@link Randoms} instead
  */
+@Deprecated
 public final class RandomUtils {
 
     private RandomUtils() {
@@ -56,7 +58,7 @@ public final class RandomUtils {
 
     /**
      * 使用单个 long 种子设置此随机数生成器的种子
-     * 
+     *
      * @param seed 设置此随机数生成器的种子
      */
     public static void setSeed(long seed) {
@@ -65,7 +67,7 @@ public final class RandomUtils {
 
     /**
      * 随机返回一个字母(随机大小写）
-     * 
+     *
      * @return 一个随机字母(随机大小写）
      */
     public static char getRandomLetter() {
@@ -78,7 +80,7 @@ public final class RandomUtils {
 
     /**
      * 随机返回一个大写字母
-     * 
+     *
      * @return 一个随机大写字母
      */
     public static char getRandomLetterUpperCase() {
@@ -87,7 +89,7 @@ public final class RandomUtils {
 
     /**
      * 随机返回一个小写字母
-     * 
+     *
      * @return 一个随机小写字母
      */
     public static char getRandomLetterLowerCase() {
@@ -96,7 +98,7 @@ public final class RandomUtils {
 
     /**
      * 随机返回一个数字，（0-9）
-     * 
+     *
      * @return 一个随机数字，（0-9）
      */
     public static char getRandomNumber() {
@@ -105,7 +107,7 @@ public final class RandomUtils {
 
     /**
      * 随机返回一个字符（大小写字母，数字0-9)
-     * 
+     *
      * @return 一个随机字符（大小写字母，数字0-9)
      */
     public static char getRandomWord() {
@@ -122,7 +124,7 @@ public final class RandomUtils {
 
     /**
      * 随机返回一个布尔值
-     * 
+     *
      * @return 一个随机布尔值
      */
     public static boolean getRandomBoolean() {
@@ -131,7 +133,7 @@ public final class RandomUtils {
 
     /**
      * 随机返回一个整数
-     * 
+     *
      * @return 一个随机整数
      */
     public static int getRandomInt() {
@@ -140,7 +142,7 @@ public final class RandomUtils {
 
     /**
      * 返回一个不大于max的随机整数
-     * 
+     *
      * @param max 返回随机整数的最大边界值（大于返回的数）
      * @return 整数，0&lt;=返回值&lt;max
      */
@@ -150,7 +152,7 @@ public final class RandomUtils {
 
     /**
      * 返回一个随机double
-     * 
+     *
      * @return 一个随机double
      */
     public static double getRandomDouble() {
@@ -159,7 +161,7 @@ public final class RandomUtils {
 
     /**
      * 返回一个随机Float
-     * 
+     *
      * @return 一个随机float
      */
     public static double getRandomFloat() {
@@ -168,7 +170,7 @@ public final class RandomUtils {
 
     /**
      * 返回一个随机Long
-     * 
+     *
      * @return 一个随机long
      */
     public static double getRandomLong() {
@@ -177,7 +179,7 @@ public final class RandomUtils {
 
     /**
      * 返回一个随机Double
-     * 
+     *
      * @see java.util.Random#nextGaussian()
      * @return 一个随机duble
      */
@@ -187,7 +189,7 @@ public final class RandomUtils {
 
     /**
      * 随机返回一个字符串（大小写字母，数字0-9）
-     * 
+     *
      * @param length 返回字符串的长度
      * @return 一个给定长度的随机字符串
      */
@@ -201,7 +203,7 @@ public final class RandomUtils {
 
     /**
      * 随机返回一个字符串，包含大写，小写还是数字又传入参数charTypes确定
-     * 
+     *
      * @param length    返回字符串的长度
      * @param charTypes 确定字符的类型（大写，小写，数字）
      * @return 一个给定长度的随机字符串
@@ -251,7 +253,7 @@ public final class RandomUtils {
      * <p>
      * 以给定的列表为源，随机抽取其中一个元素返回
      * </p>
-     * 
+     *
      * @param <T>    集合内的对象类型
      * @param source 随机对象选取的源对象
      * @return 随机选择的对象
@@ -266,7 +268,7 @@ public final class RandomUtils {
      * <p>
      * 以给定的列表为源，随机抽取其中一个元素返回
      * </p>
-     * 
+     *
      * @param <T>    集合内的对象类型
      * @param source 随机对象选取的源对象
      * @param length 返回字符串的长度
@@ -284,7 +286,7 @@ public final class RandomUtils {
 
     /**
      * 把传入总数分解为随机的传入份数
-     * 
+     *
      * @param total 总数
      * @param num   分数
      * @return 随机数组

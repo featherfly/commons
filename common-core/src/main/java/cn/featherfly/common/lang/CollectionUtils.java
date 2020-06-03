@@ -8,11 +8,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 /**
  * <p>
  * 集合类工具
  * </p>
+ * .
  *
  * @author zhongj
  */
@@ -25,6 +27,7 @@ public final class CollectionUtils {
      * <p>
      * 返回传入集合是否为空（是null或size=0）
      * </p>
+     * .
      *
      * @param collection 传入的集合
      * @return 传入集合是否为空
@@ -37,6 +40,7 @@ public final class CollectionUtils {
      * <p>
      * 返回传入集合是否不为空（不是null或size&gt;0）
      * </p>
+     * .
      *
      * @param collection 传入的集合
      * @return 传入集合是否不为空
@@ -50,9 +54,9 @@ public final class CollectionUtils {
      * 批量添加元素到集合，如果collection==null返回false,或者elements为空返回false，其他情况请参考{@link java.util.Collections#addAll(Collection, Object...)}
      * </p>
      *
+     * @param <T>        泛型
      * @param collection 集合
      * @param elements   需要批量添加的元素
-     * @param <T>        泛型
      * @return 是否添加
      */
     public static <T> boolean addAll(Collection<T> collection, @SuppressWarnings("unchecked") T... elements) {
@@ -121,10 +125,11 @@ public final class CollectionUtils {
      * <p>
      * 根据传入类型创建Collection实例
      * </p>
+     * .
      *
-     * @param type 类型
      * @param <C>  返回Collection实例泛型
      * @param <E>  返回Collection的泛型
+     * @param type 类型
      * @return Collection实例
      */
     @SuppressWarnings("unchecked")
@@ -155,10 +160,11 @@ public final class CollectionUtils {
      * <p>
      * 根据传入的类型生成Map实例
      * </p>
+     * .
      *
-     * @param type 类型
      * @param <K>  Map Key泛型
      * @param <V>  Map Value泛型
+     * @param type 类型
      * @return Map实例
      */
     @SuppressWarnings("unchecked")
@@ -172,6 +178,23 @@ public final class CollectionUtils {
                 return new HashMap<>();
             }
             throw new IllegalArgumentException("不支持的类型：" + type.getName());
+        }
+    }
+
+    /**
+     * Each.
+     *
+     * @param <T>      the generic type
+     * @param iterable the iterable
+     * @param consumer the consumer
+     */
+    public static <T> void each(Iterable<T> iterable, BiConsumer<T, Integer> consumer) {
+        if (iterable != null) {
+            int i = 0;
+            for (T t : iterable) {
+                consumer.accept(t, i);
+                i++;
+            }
         }
     }
 }

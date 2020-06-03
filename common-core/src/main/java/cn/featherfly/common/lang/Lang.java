@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -17,6 +18,7 @@ import cn.featherfly.common.exception.ExceptionWrapper;
  * 对一些在语法上显得拖沓的常用操作进行封装的工具类 .
  *
  * @author zhongj
+ * @since 1.8.6
  */
 public final class Lang {
 
@@ -776,5 +778,27 @@ public final class Lang {
         AssertIllegalArgument.isNotNull(throwable, "throwable");
         AssertIllegalArgument.isNotNull(wrappedRuntimeException, "wrappedRuntimeException");
         new ExceptionWrapper<>(wrappedRuntimeException.getClass()).throwException(throwable);
+    }
+
+    /**
+     * Each.
+     *
+     * @param <T>      the generic type
+     * @param array    the array
+     * @param consumer the consumer
+     */
+    public static <T> void each(T[] array, BiConsumer<T, Integer> consumer) {
+        ArrayUtils.each(array, consumer);
+    }
+
+    /**
+     * Each.
+     *
+     * @param <T>      the generic type
+     * @param iterable the iterable
+     * @param consumer the consumer
+     */
+    public static <T> void each(Iterable<T> iterable, BiConsumer<T, Integer> consumer) {
+        CollectionUtils.each(iterable, consumer);
     }
 }

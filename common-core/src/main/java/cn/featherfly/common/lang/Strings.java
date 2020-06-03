@@ -20,6 +20,7 @@ import cn.featherfly.common.lang.string.StringFormatter;
  * 字符串的工具类 .
  *
  * @author zhongj
+ * @since 1.8.6
  */
 public final class Strings extends org.apache.commons.lang3.StringUtils {
 

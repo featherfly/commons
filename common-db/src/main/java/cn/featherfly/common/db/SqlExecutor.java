@@ -157,9 +157,10 @@ public class SqlExecutor {
                     logger.debug("execute sql -> {} , params -> {}", sql, ArrayUtils.toString(params));
                 }
                 JdbcUtils.setParameters(prep, params);
-                if (prep.execute()) {
-                    return Chars.ONE;
-                }
+                return prep.executeUpdate();
+                //                if (prep.execute()) {
+                //                    return Chars.ONE;
+                //                }
             }
         }
         return Chars.ZERO;

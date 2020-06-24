@@ -112,7 +112,10 @@ public class ClassMappingUtils {
             ClassMapping<?> classMapping, Dialect dialect) {
         Tuple2<String, Map<Integer, String>> tuple = getInsertSqlAndParamPositions(classMapping, dialect);
         String sql = dialect.buildInsertBatchSql(classMapping.getRepositoryName(),
-                tuple.get1().values().toArray(new String[] {}), insertAmount);
+                tuple.get1().values().stream().map(pn -> {
+                    return getColumnName(pn, classMapping);
+                }).toArray(String[]::new), insertAmount);
+        //        tuple.get1().values().toArray(new String[] {}), insertAmount);
         return Tuples.of(sql, tuple.get1());
     }
 

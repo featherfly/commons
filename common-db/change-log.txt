@@ -1,3 +1,7 @@
+2020-6-24
+0.2.1
+    1.修复ClassMappingUtils.getInsertBatchSqlAndParamPositions返回的sql没字段使用对象属性的问题
+
 2020-6-3
 0.2.0
     1.完善SqlTypeMappingManager相关功能

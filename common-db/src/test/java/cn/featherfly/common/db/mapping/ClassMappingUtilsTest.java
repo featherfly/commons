@@ -158,6 +158,32 @@ public class ClassMappingUtilsTest {
     }
 
     @Test
+    void testInsertBatchMysql2() {
+        Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getInsertBatchSqlAndParamPositions(5,
+                getUserRoleClassMapping(), dialect);
+
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        for (int i = 0; i < 5; i++) {
+            int len = t.get1().size();
+            System.out.println("第" + i + "对象");
+            for (Entry<Integer, String> e : t.get1().entrySet()) {
+                int position = e.getKey() + i * len;
+                System.out.println(e.getValue());
+                System.out.println(position);
+            }
+        }
+
+        assertEquals(t.get0(),
+                "INSERT INTO `user_role` (`user_id`, `role_id`, `descp`, `descp2`) VALUES (?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?)");
+        assertEquals(t.get1().get(1), "userId");
+        assertEquals(t.get1().get(2), "roleId");
+        assertEquals(t.get1().get(3), "descp");
+        assertEquals(t.get1().get(4), "descp2");
+    }
+
+    @Test
     void testInsertBatchSqlite() {
         int size = 5;
         Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getInsertBatchSqlAndParamPositions(size,
@@ -175,7 +201,6 @@ public class ClassMappingUtilsTest {
                 System.out.println(position);
             }
         }
-
     }
 
     ClassMapping<User> getUserClassMapping() {

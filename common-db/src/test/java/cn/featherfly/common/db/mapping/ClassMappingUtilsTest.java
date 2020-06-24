@@ -4,7 +4,6 @@ package cn.featherfly.common.db.mapping;
 import static org.testng.Assert.assertEquals;
 
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.testng.annotations.Test;
 
@@ -143,18 +142,24 @@ public class ClassMappingUtilsTest {
         Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getInsertBatchSqlAndParamPositions(5,
                 getUserClassMapping(), dialect);
 
-        System.out.println(t.get0());
-        System.out.println(t.get1());
+        //        System.out.println(t.get0());
+        //        System.out.println(t.get1());
+        //
+        //        for (int i = 0; i < 5; i++) {
+        //            int len = t.get1().size();
+        //            System.out.println("第" + i + "对象");
+        //            for (Entry<Integer, String> e : t.get1().entrySet()) {
+        //                int position = e.getKey() + i * len;
+        //                System.out.println(e.getValue());
+        //                System.out.println(position);
+        //            }
+        //        }
 
-        for (int i = 0; i < 5; i++) {
-            int len = t.get1().size();
-            System.out.println("第" + i + "对象");
-            for (Entry<Integer, String> e : t.get1().entrySet()) {
-                int position = e.getKey() + i * len;
-                System.out.println(e.getValue());
-                System.out.println(position);
-            }
-        }
+        assertEquals(t.get0(),
+                "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?)");
+        assertEquals(t.get1().get(1), "id");
+        assertEquals(t.get1().get(2), "name");
+        assertEquals(t.get1().get(3), "descp");
     }
 
     @Test
@@ -162,18 +167,18 @@ public class ClassMappingUtilsTest {
         Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getInsertBatchSqlAndParamPositions(5,
                 getUserRoleClassMapping(), dialect);
 
-        System.out.println(t.get0());
-        System.out.println(t.get1());
-
-        for (int i = 0; i < 5; i++) {
-            int len = t.get1().size();
-            System.out.println("第" + i + "对象");
-            for (Entry<Integer, String> e : t.get1().entrySet()) {
-                int position = e.getKey() + i * len;
-                System.out.println(e.getValue());
-                System.out.println(position);
-            }
-        }
+        //        System.out.println(t.get0());
+        //        System.out.println(t.get1());
+        //
+        //        for (int i = 0; i < 5; i++) {
+        //            int len = t.get1().size();
+        //            System.out.println("第" + i + "对象");
+        //            for (Entry<Integer, String> e : t.get1().entrySet()) {
+        //                int position = e.getKey() + i * len;
+        //                System.out.println(e.getValue());
+        //                System.out.println(position);
+        //            }
+        //        }
 
         assertEquals(t.get0(),
                 "INSERT INTO `user_role` (`user_id`, `role_id`, `descp`, `descp2`) VALUES (?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?)");
@@ -189,18 +194,24 @@ public class ClassMappingUtilsTest {
         Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getInsertBatchSqlAndParamPositions(size,
                 getUserClassMapping(), Dialects.SQLITE);
 
-        System.out.println(t.get0());
-        System.out.println(t.get1());
+        //        System.out.println(t.get0());
+        //        System.out.println(t.get1());
+        //
+        //        for (int i = 0; i < 5; i++) {
+        //            int len = t.get1().size();
+        //            System.out.println("第" + i + "对象");
+        //            for (Entry<Integer, String> e : t.get1().entrySet()) {
+        //                int position = e.getKey() + i * len;
+        //                System.out.println(e.getValue());
+        //                System.out.println(position);
+        //            }
+        //        }
 
-        for (int i = 0; i < 5; i++) {
-            int len = t.get1().size();
-            System.out.println("第" + i + "对象");
-            for (Entry<Integer, String> e : t.get1().entrySet()) {
-                int position = e.getKey() + i * len;
-                System.out.println(e.getValue());
-                System.out.println(position);
-            }
-        }
+        assertEquals(t.get0(),
+                "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp` UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
+        assertEquals(t.get1().get(1), "id");
+        assertEquals(t.get1().get(2), "name");
+        assertEquals(t.get1().get(3), "descp");
     }
 
     ClassMapping<User> getUserClassMapping() {

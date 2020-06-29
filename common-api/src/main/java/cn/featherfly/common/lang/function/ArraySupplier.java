@@ -1,8 +1,6 @@
 
 package cn.featherfly.common.lang.function;
 
-import java.util.function.Supplier;
-
 /**
  * <p>
  * ArraySupplier
@@ -10,6 +8,6 @@ import java.util.function.Supplier;
  *
  * @author zhongj
  */
-public interface ArraySupplier<E> extends Supplier<E[]> {
+public interface ArraySupplier<E> extends SerializableSupplier<E[]> {
 
 }

@@ -2,7 +2,6 @@
 package cn.featherfly.common.lang.function;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 /**
  * <p>
@@ -11,6 +10,6 @@ import java.util.function.Supplier;
  *
  * @author zhongj
  */
-public interface MapSupplier<K, V> extends Supplier<Map<K, V>> {
+public interface MapSupplier<K, V> extends SerializableSupplier<Map<K, V>> {
 
 }

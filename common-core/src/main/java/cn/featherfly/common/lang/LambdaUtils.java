@@ -7,14 +7,13 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.exception.ReflectException;
+import cn.featherfly.common.lang.function.SerializableSupplier;
 
 /**
  * <p>
  * LambdaUtils
- * </p>
- * <p>
- * 2019-09-17
  * </p>
  *
  * @author zhongj
@@ -107,6 +106,49 @@ public class LambdaUtils {
 
     }
 
+    public static class SerializableSupplierLambdaInfo<T> {
+
+        private T value;
+
+        private SerializedLambdaInfo serializedLambdaInfo;
+
+        /**
+         * @param serializedLambdaInfo serializedLambdaInfo
+         * @param value                value
+         */
+        private SerializableSupplierLambdaInfo(SerializedLambdaInfo serializedLambdaInfo, T value) {
+            this.serializedLambdaInfo = serializedLambdaInfo;
+            this.value = value;
+        }
+
+        /**
+         * 返回value
+         *
+         * @return value
+         */
+        public T getValue() {
+            return value;
+        }
+
+        /**
+         * 返回serializedLambdaInfo
+         *
+         * @return serializedLambdaInfo
+         */
+        public SerializedLambdaInfo getSerializedLambdaInfo() {
+            return serializedLambdaInfo;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return "SerializableSupplierLambdaInfo [value=" + value + ", serializedLambdaInfo=" + serializedLambdaInfo
+                    + "]";
+        }
+    }
+
     public static SerializedLambdaInfo getLambdaInfo(Serializable lambda) {
         SerializedLambda serializedLambda = getSerializedLambda(lambda);
         SerializedLambdaInfo info = CACHE_LAMBDA_INFO.get(serializedLambda);
@@ -130,6 +172,14 @@ public class LambdaUtils {
         }
         CACHE_LAMBDA_INFO.put(serializedLambda, info2);
         return info2;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <
+            T> SerializableSupplierLambdaInfo<T> getSerializableSupplierLambdaInfo(SerializableSupplier<T> lambda) {
+        SerializedLambdaInfo info = getLambdaInfo(lambda);
+        Object value = BeanUtils.getProperty(info.getSerializedLambda().getCapturedArg(0), info.getPropertyName());
+        return new SerializableSupplierLambdaInfo<>(info, (T) value);
     }
 
     public static SerializedLambda getSerializedLambda(Serializable lambda) {

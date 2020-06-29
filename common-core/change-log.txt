@@ -1,3 +1,8 @@
+2020-
+1.8.9
+    1.LambdaUtils加入getSerializableSupplierLambdaInfo(SerializableSupplier<T> lambda)方法
+    
+    
 2020-6-19
 1.8.8
     1.加入Randoms代替RandomUtils,后续大版本会删除RandomUtils

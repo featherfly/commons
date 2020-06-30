@@ -10,6 +10,8 @@ import java.util.function.Consumer;
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
+import cn.featherfly.common.lang.function.GetFunction;
+import cn.featherfly.common.lang.function.ReturnNumberFunction;
 import cn.featherfly.common.lang.function.SerializableConsumer;
 import cn.featherfly.common.lang.function.SerializableFunction;
 import cn.featherfly.common.lang.function.SerializableSupplier;
@@ -145,6 +147,15 @@ public class LambdaUtilsTest {
         assertEquals(info.getMethodInstanceClassName(), user.getClass().getName());
     }
 
+    @Test
+    public void testG() {
+        User user = new User();
+        //        g1(User::getAge);
+        //        g2(User::getAge);
+        //        g3(User::getAge);
+        g4(User::getAge);
+    }
+
     public static void main(String[] args) {
         SerializedLambda s;
         s = get(User::isLocked);
@@ -243,8 +254,28 @@ public class LambdaUtilsTest {
         return LambdaUtils.getLambdaInfo(f);
     }
 
-    public static <T> void t(Consumer<T> c) {
+    <T, N extends Number> void g1(ReturnNumberFunction<T, N> f) {
 
+    }
+
+    <N extends Number> void g2(GetFunction<N> f) {
+
+    }
+
+    <N extends Number> void g3(SerializableFunction<Void, N> f) {
+
+    }
+
+    <T, N extends Number> void g4(SerializableFunction<T, N> f) {
+        System.out.println(f.getClass().getName());
+        SerializedLambdaInfo info = LambdaUtils.getLambdaInfo(f);
+        System.out.println(info);
+    }
+
+    public <T> void t(Consumer<T> c) {
+        g1(User::getAge);
+        //        g3(User::getAge);
+        g4(User::getAge);
     }
 
 }

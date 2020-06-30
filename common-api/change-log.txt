@@ -1,6 +1,8 @@
 2020-6-30
 0.2.2
-    1.加入EnumGetFunction,EnumSupplier
+    1.加入ReturnStringFunction,ReturnLocalDateFunction,ReturnLocalDateTimeFunction,ReturnLocalTimeFunction
+        ,ReturnNumberFunction, ReturnEnumFunction,EnumSupplier
+    2.删除StringGetFunction,LocalDateGetFunction,LocalDateTimeGetFunction,LocalTimeGetFunction,NumberGetFunction
 
 2020-6-30
 0.2.1

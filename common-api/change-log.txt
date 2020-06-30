@@ -1,3 +1,7 @@
+2020-6-30
+0.2.1
+    1.加入GetFunction,StringGetFunction,LocalDateGetFunction,LocalDateTimeGetFunction,LocalTimeGetFunction,NumberGetFunction
+
 2020-6-29
 0.2.0
     1.加入DateSupplier,LocalDateSupplier,LocalDateTimeSupplier,LocalTimeSupplier,NumberSupplier

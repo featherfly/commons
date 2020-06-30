@@ -1,4 +1,8 @@
 2020-6-30
+0.2.2
+    1.加入EnumGetFunction,EnumSupplier
+
+2020-6-30
 0.2.1
     1.加入GetFunction,StringGetFunction,LocalDateGetFunction,LocalDateTimeGetFunction,LocalTimeGetFunction,NumberGetFunction
 

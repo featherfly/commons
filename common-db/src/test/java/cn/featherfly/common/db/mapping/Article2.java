@@ -11,13 +11,13 @@ import javax.persistence.Table;
  * @author zhongj
  */
 @Table(name = "cms_article")
-public class Article {
+public class Article2 {
 
     private Long id;
 
     private String title;
 
-    private Long[] content;
+    private Content content2;
 
     /**
      * 返回id
@@ -56,21 +56,20 @@ public class Article {
     }
 
     /**
-     * 返回content
+     * 返回content2
      *
-     * @return content
+     * @return content2
      */
-    public Long[] getContent() {
-        return content;
+    public Content getContent2() {
+        return content2;
     }
 
     /**
-     * 设置content
+     * 设置content2
      *
-     * @param content content
+     * @param content2 content2
      */
-    public void setContent(Long[] content) {
-        this.content = content;
+    public void setContent2(Content content2) {
+        this.content2 = content2;
     }
-
 }

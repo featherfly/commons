@@ -8,7 +8,9 @@ public class MetadataTestMysql {
     public static void main(String[] args) {
         BasicDataSource dataSource = new BasicDataSource();
         //		dataSource.setUrl("jdbc:mysql://192.168.1.99:3306/mysql");
-        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/db_test");
+        //        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/db_test");
+        dataSource.setUrl(
+                "jdbc:mysql://127.0.0.1:3306/db_test?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false");
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUsername("root");
         dataSource.setPassword("123456");

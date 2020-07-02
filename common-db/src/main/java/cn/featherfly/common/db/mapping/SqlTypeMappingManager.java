@@ -41,7 +41,7 @@ public class SqlTypeMappingManager {
     private Store globalStore = new Store();
 
     /** The type store map. */
-    private Map<Class<?>, Store> typeStoreMap = new HashMap<>();
+    private Map<GenericType<?>, Store> typeStoreMap = new HashMap<>();
 
     /**
      * Instantiates a new sql type mapping manager.
@@ -95,10 +95,10 @@ public class SqlTypeMappingManager {
      * @param mapper     the mapper
      * @return SqlTypeMappingManager
      */
-    public SqlTypeMappingManager regist(Class<?> entityType, JavaSqlTypeMapper<? extends Serializable> mapper) {
+    public SqlTypeMappingManager regist(GenericType<?> entityType, JavaSqlTypeMapper<? extends Serializable> mapper) {
         AssertIllegalArgument.isNotNull(entityType, "entityType");
         AssertIllegalArgument.isNotNull(mapper, "mapper");
-        Store store = getStore(entityType);
+        Store store = getStoreForRegist(entityType);
         store.add(mapper);
         return this;
     }
@@ -185,7 +185,7 @@ public class SqlTypeMappingManager {
         AssertIllegalArgument.isNotNull(entityType, "entityType");
         AssertIllegalArgument.isNotNull(javaType, "javaType");
         SQLType sqlType = null;
-        Store store = typeStoreMap.get(entityType);
+        Store store = typeStoreMap.get(new GenericClass<>(entityType));
         if (store != null) {
             sqlType = store.getSqlType(javaType);
         }
@@ -223,7 +223,7 @@ public class SqlTypeMappingManager {
         AssertIllegalArgument.isNotNull(entityType, "entityType");
         AssertIllegalArgument.isNotNull(sqlType, "sqlType");
         Class<E> javaType = null;
-        Store store = typeStoreMap.get(entityType);
+        Store store = typeStoreMap.get(new GenericClass<>(entityType));
         if (store != null) {
             javaType = store.getJavaType(sqlType);
         }
@@ -244,7 +244,8 @@ public class SqlTypeMappingManager {
     public <E extends Serializable> void set(PreparedStatement prep, int columnIndex, E columnValue) {
         AssertIllegalArgument.isNotNull(prep, "PreparedStatement");
         if (columnValue != null) {
-            Store store = typeStoreMap.get(columnValue.getClass());
+            GenericType<?> gt = new GenericClass<>(columnValue.getClass());
+            Store store = typeStoreMap.get(gt);
             if (store != null && store.set(prep, columnIndex, columnValue)) {
                 return;
             }
@@ -259,16 +260,16 @@ public class SqlTypeMappingManager {
      * Sets the.
      *
      * @param <E>         the element type
-     * @param columnValue the column value
-     * @param columnIndex the column index
-     * @param javaType    the java type
      * @param prep        the prep
+     * @param columnIndex the column index
+     * @param columnValue the column value
+     * @param javaType    the java type
      */
-    public <E extends Serializable> void set(E columnValue, int columnIndex, GenericType<E> javaType,
-            PreparedStatement prep) {
+    public <E extends Serializable> void set(PreparedStatement prep, int columnIndex, E columnValue,
+            GenericType<E> javaType) {
         AssertIllegalArgument.isNotNull(javaType, "javaType");
         AssertIllegalArgument.isNotNull(prep, "PreparedStatement");
-        Store store = typeStoreMap.get(javaType.getType());
+        Store store = getStore(javaType);
         if (store != null && store.set(prep, columnIndex, columnValue, javaType)) {
             return;
         }
@@ -291,7 +292,7 @@ public class SqlTypeMappingManager {
     public <E extends Serializable> E get(ResultSet rs, int columnIndex, GenericType<E> javaType) {
         AssertIllegalArgument.isNotNull(javaType, "javaType");
         AssertIllegalArgument.isNotNull(rs, "ResultSet");
-        Store store = typeStoreMap.get(javaType.getType());
+        Store store = getStore(javaType);
         E e = null;
         if (store != null && (e = store.get(rs, columnIndex, javaType)) != null) {
             return e;
@@ -317,19 +318,26 @@ public class SqlTypeMappingManager {
         return get(rs, index, javaType);
     }
 
-    /**
-     * Gets the store.
-     *
-     * @param entityType the entity type
-     * @return the store
-     */
-    private Store getStore(Class<?> entityType) {
+    //    private Store getStore(Class<?> entityType) {
+    //        Store store = typeStoreMap.get(entityType);
+    //        if (store == null) {
+    //            store = new Store();
+    //            typeStoreMap.put(entityType, store);
+    //        }
+    //        return store;
+    //    }
+
+    private <E> Store getStoreForRegist(GenericType<E> entityType) {
         Store store = typeStoreMap.get(entityType);
         if (store == null) {
             store = new Store();
             typeStoreMap.put(entityType, store);
         }
         return store;
+    }
+
+    private <E> Store getStore(GenericType<E> javaType) {
+        return typeStoreMap.get(javaType);
     }
 
     /**

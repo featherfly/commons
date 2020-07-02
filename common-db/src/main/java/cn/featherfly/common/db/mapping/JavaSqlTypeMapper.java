@@ -24,10 +24,10 @@ public interface JavaSqlTypeMapper<E extends Serializable> {
     boolean support(GenericType<E> type);
 
     /**
-     * Gets the sql type.
+     * Gets the java type.
      *
      * @param sqlType the sql type
-     * @return the sql type
+     * @return the java type
      */
     Class<E> getJavaType(SQLType sqlType);
 
@@ -42,11 +42,11 @@ public interface JavaSqlTypeMapper<E extends Serializable> {
     /**
      * Sets the value.
      *
-     * @param prep        the prep
-     * @param columnIndex the column index
-     * @param value       the value
+     * @param prep           the prep
+     * @param parameterIndex the parameter index
+     * @param value          the value
      */
-    void set(PreparedStatement prep, int columnIndex, E value);
+    void set(PreparedStatement prep, int parameterIndex, E value);
 
     /**
      * Gets the.

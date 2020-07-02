@@ -20,6 +20,7 @@ import java.util.Date;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.log4j.xml.DOMConfigurator;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -27,12 +28,15 @@ import cn.featherfly.common.bean.BeanDescriptor;
 import cn.featherfly.common.bean.BeanProperty;
 import cn.featherfly.common.db.JdbcException;
 import cn.featherfly.common.db.JdbcUtils;
+import cn.featherfly.common.db.mapping.mappers.ObjectToJsonMapper;
 import cn.featherfly.common.db.wrapper.ConnectionWrapper;
 import cn.featherfly.common.db.wrapper.PreparedStatementWrapper;
 import cn.featherfly.common.db.wrapper.ResultSetWrapper;
 import cn.featherfly.common.lang.ArrayUtils;
+import cn.featherfly.common.lang.ClassLoaderUtils;
 import cn.featherfly.common.lang.GenericType;
 import cn.featherfly.common.lang.RandomUtils;
+import cn.featherfly.common.lang.Randoms;
 import cn.featherfly.common.lang.reflect.GenericClass;
 
 /**
@@ -48,8 +52,10 @@ public class SqlTypeMappingManagerTest {
 
     @BeforeClass
     public void setUp() {
+        DOMConfigurator.configure(ClassLoaderUtils.getResource("log4j.xml").getFile());
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/db_test");
+        dataSource.setUrl(
+                "jdbc:mysql://127.0.0.1:3306/db_test?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false");
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUsername("root");
         dataSource.setPassword("123456");
@@ -236,6 +242,46 @@ public class SqlTypeMappingManagerTest {
                 Long[] content = manager.get(rs.getResultSet(), 3, gc);
                 System.out.println(title + " -> " + ArrayUtils.toString(content));
                 assertEquals(content, contentArray);
+            }
+        }
+    }
+
+    @Test
+    public void testObjectToJsonMapper() {
+        SqlTypeMappingManager manager = new SqlTypeMappingManager();
+        assertNull(manager.getSqlType(Content.class));
+
+        BeanDescriptor<Article2> bd = BeanDescriptor.getBeanDescriptor(Article2.class);
+        BeanProperty<Content> contentProperty = bd.getBeanProperty("content2");
+
+        manager.regist(contentProperty, new ObjectToJsonMapper<>(Content.class));
+
+        String insert = "INSERT INTO `db_test`.`cms_article` (`ID`, `title`, `content2`) VALUES (null, ?, ?)";
+        Content content = new Content();
+        content.setTitle("c_title");
+        content.setDescp("c_descp");
+        content.setImg("c_img");
+
+        try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
+                PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
+            manager.set(prep.getPreparedStatement(), 1, Randoms.getString(6));
+            //            manager.set(prep.getPreparedStatement(), 2, content);
+            manager.set(prep.getPreparedStatement(), 2, content, contentProperty);
+
+            boolean res = prep.execute();
+            System.out.println(res);
+        }
+
+        String select = "select * from cms_article";
+        try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
+                PreparedStatementWrapper prep = connection.prepareStatement(select)) {
+            ResultSetWrapper rs = prep.executeQuery();
+            GenericType<String> gts = new GenericClass<>(String.class);
+            while (rs.next()) {
+                String title = manager.get(rs.getResultSet(), 2, gts);
+                Content contentResult = manager.get(rs.getResultSet(), 3, contentProperty);
+                System.out.println(title + " -> " + contentResult);
+                assertEquals(content, contentResult);
             }
         }
     }

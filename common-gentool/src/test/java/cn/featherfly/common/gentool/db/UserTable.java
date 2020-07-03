@@ -1,10 +1,11 @@
 
 package cn.featherfly.common.gentool.db;
 
+import java.sql.SQLType;
+
 import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.builder.ColumnModel;
 import cn.featherfly.common.db.builder.TableModel;
-import cn.featherfly.common.db.metadata.SqlType;
 
 /**
  * <p>
@@ -19,8 +20,7 @@ public class UserTable extends TableModel {
     }
 
     public enum UserColumns implements Column {
-        id(new ColumnModel()),
-        name(new ColumnModel());
+        id(new ColumnModel()), name(new ColumnModel());
 
         private Column column;
 
@@ -64,7 +64,7 @@ public class UserTable extends TableModel {
          * {@inheritDoc}
          */
         @Override
-        public SqlType getSqlType() {
+        public SQLType getSqlType() {
             return column.getSqlType();
         }
 

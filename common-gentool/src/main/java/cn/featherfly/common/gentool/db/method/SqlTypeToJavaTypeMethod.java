@@ -1,9 +1,10 @@
 package cn.featherfly.common.gentool.db.method;
 
+import java.sql.JDBCType;
+import java.sql.SQLType;
 import java.util.List;
 
 import cn.featherfly.common.db.mapping.SqlTypeMappingManager;
-import cn.featherfly.common.db.metadata.SqlType;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import freemarker.ext.beans.StringModel;
 import freemarker.template.SimpleNumber;
@@ -39,15 +40,15 @@ public class SqlTypeToJavaTypeMethod implements TemplateMethodModelEx {
             throw new RuntimeException("Wrong arguments, only one argument allow");
         }
         Object type = arguments.get(0);
-        SqlType sqlType = null;
+        SQLType sqlType = null;
         if (type instanceof SimpleNumber) {
             SimpleNumber sn = (SimpleNumber) type;
             Number n = sn.getAsNumber();
             if (n.getClass() == Integer.class || n.getClass() == Integer.TYPE) {
-                sqlType = SqlType.value((int) n);
+                sqlType = JDBCType.valueOf((int) n);
             }
         } else if (type instanceof StringModel) {
-            sqlType = SqlType.valueOf(((StringModel) type).getAsString());
+            sqlType = JDBCType.valueOf(((StringModel) type).getAsString());
         }
         if (sqlType == null) {
             throw new RuntimeException(

@@ -1,3 +1,7 @@
+2020-7-4
+1.8.10
+    1.修正ClassUtils.isGetter(Method)方法的问题
+    
 2020-6-30
 1.8.9
     1.LambdaUtils加入getSerializableSupplierLambdaInfo(SerializableSupplier<T> lambda)方法

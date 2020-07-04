@@ -485,10 +485,12 @@ public final class ClassUtils {
         String get = GET;
         String is = IS;
         String name = method.getName();
-        if (name.startsWith(get) && !get.equals(name) && method.getReturnType() != void.class) {
+        if (name.startsWith(get) && !get.equals(name) && method.getReturnType() != void.class
+                && method.getParameterCount() == 0) {
             return true;
         }
-        if (name.startsWith(is) && !is.equals(name) && method.getReturnType() != void.class) {
+        if (name.startsWith(is) && !is.equals(name) && method.getReturnType() != void.class
+                && method.getParameterCount() == 0) {
             return true;
         }
         return false;

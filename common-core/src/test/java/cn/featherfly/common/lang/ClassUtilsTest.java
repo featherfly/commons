@@ -25,6 +25,7 @@ import cn.featherfly.common.lang.vo.Bar;
 import cn.featherfly.common.lang.vo.Coo;
 import cn.featherfly.common.lang.vo.Foo;
 import cn.featherfly.common.lang.vo.User;
+import cn.featherfly.common.lang.vo.User3;
 
 public class ClassUtilsTest {
 
@@ -102,5 +103,11 @@ public class ClassUtilsTest {
         assertEquals(ClassUtils.getMethodGenericParameterTypes(setList).size(), 1);
         assertEquals(ClassUtils.getMethodGenericParameterTypes(setMap).size(), 2);
 
+    }
+
+    @Test
+    public void testGetter() throws NoSuchMethodException, SecurityException {
+        Method method = User3.class.getMethod("isUser", new Class[] { String.class });
+        assertFalse(ClassUtils.isGetter(method));
     }
 }

@@ -1,5 +1,5 @@
 ext {
-    sv = '5.2.6.RELEASE' 
+    sv = '5.2.7.RELEASE' 
 }
   
 dependencies {

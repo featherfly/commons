@@ -44,13 +44,20 @@ import cn.featherfly.common.repository.mapping.PropertyNameUnderlineConversion;
  * <p>
  * MapperFactory
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class JdbcMappingFactory implements MappingFactory {
 
+    /**
+     * The Enum MappingMode.
+     */
     public enum MappingMode {
+
+        /** The obj db mixed. */
         OBJ_DB_MIXED,
+        /** The obj to db strict. */
         OBJ_TO_DB_STRICT;
     }
 
@@ -69,10 +76,23 @@ public class JdbcMappingFactory implements MappingFactory {
     private SqlTypeMappingManager sqlTypeMappingManager;
 
     /**
+     * Instantiates a new jdbc mapping factory.
+     *
      * @param metadata DatabaseMetadata
      * @param dialect  dialect
      */
     public JdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect) {
+        this(metadata, dialect, new SqlTypeMappingManager());
+    }
+
+    /**
+     * Instantiates a new jdbc mapping factory.
+     *
+     * @param metadata              DatabaseMetadata
+     * @param dialect               dialect
+     * @param sqlTypeMappingManager the sql type mapping manager
+     */
+    public JdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect, SqlTypeMappingManager sqlTypeMappingManager) {
         super();
         this.metadata = metadata;
         this.dialect = dialect;
@@ -82,16 +102,32 @@ public class JdbcMappingFactory implements MappingFactory {
         getPropertyNameConversions().add(new PropertyNameJpaConversion());
         getPropertyNameConversions().add(new PropertyNameUnderlineConversion());
 
-        sqlTypeMappingManager = new SqlTypeMappingManager();
+        this.sqlTypeMappingManager = sqlTypeMappingManager;
     }
 
     /**
+     * Instantiates a new jdbc mapping factory.
+     *
      * @param metadata                DatabaseMetadata
      * @param dialect                 dialect
      * @param classNameConversions    classNameConversions
      * @param propertyNameConversions propertyNameConversions
      */
     public JdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
+            List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions) {
+        this(metadata, dialect, new SqlTypeMappingManager(), classNameConversions, propertyNameConversions);
+    }
+
+    /**
+     * Instantiates a new jdbc mapping factory.
+     *
+     * @param metadata                DatabaseMetadata
+     * @param dialect                 dialect
+     * @param sqlTypeMappingManager   the sql type mapping manager
+     * @param classNameConversions    classNameConversions
+     * @param propertyNameConversions propertyNameConversions
+     */
+    public JdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect, SqlTypeMappingManager sqlTypeMappingManager,
             List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions) {
         super();
         this.metadata = metadata;
@@ -100,11 +136,11 @@ public class JdbcMappingFactory implements MappingFactory {
         this.classNameConversions.addAll(classNameConversions);
         this.propertyNameConversions.addAll(propertyNameConversions);
 
-        sqlTypeMappingManager = new SqlTypeMappingManager();
+        this.sqlTypeMappingManager = sqlTypeMappingManager;
     }
 
     /**
-     * 返回classNameConversions
+     * 返回classNameConversions.
      *
      * @return classNameConversions
      */
@@ -113,7 +149,7 @@ public class JdbcMappingFactory implements MappingFactory {
     }
 
     /**
-     * 设置classNameConversions
+     * 设置classNameConversions.
      *
      * @param classNameConversions classNameConversions
      */
@@ -122,7 +158,7 @@ public class JdbcMappingFactory implements MappingFactory {
     }
 
     /**
-     * 返回propertyNameConversions
+     * 返回propertyNameConversions.
      *
      * @return propertyNameConversions
      */
@@ -131,7 +167,7 @@ public class JdbcMappingFactory implements MappingFactory {
     }
 
     /**
-     * 设置propertyNameConversions
+     * 设置propertyNameConversions.
      *
      * @param propertyNameConversions propertyNameConversions
      */
@@ -140,7 +176,7 @@ public class JdbcMappingFactory implements MappingFactory {
     }
 
     /**
-     * 返回metadata
+     * 返回metadata.
      *
      * @return metadata
      */
@@ -399,7 +435,7 @@ public class JdbcMappingFactory implements MappingFactory {
     }
 
     /**
-     * 返回dialect
+     * 返回dialect.
      *
      * @return dialect
      */
@@ -408,7 +444,7 @@ public class JdbcMappingFactory implements MappingFactory {
     }
 
     /**
-     * 返回sqlTypeMappingManager
+     * 返回sqlTypeMappingManager.
      *
      * @return sqlTypeMappingManager
      */

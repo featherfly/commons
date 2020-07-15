@@ -1,7 +1,6 @@
 
 package cn.featherfly.common.db.mapping;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.JDBCType;
@@ -23,9 +22,11 @@ import java.util.Map;
  */
 public class DefaultSqlTypeMapping {
 
-    private static final Map<Class<? extends Serializable>, SQLType> JAVA_TO_SQL_MAP = new HashMap<>();
+    private static final Map<Class<? extends Object>, SQLType> JAVA_TO_SQL_MAP = new HashMap<>();
 
-    private static final Map<SQLType, Class<? extends Serializable>> SQL_TO_JAVA_MAP = new HashMap<>();
+    private static final Map<SQLType, Class<? extends Object>> SQL_TO_JAVA_MAP = new HashMap<>();
+
+    private boolean enumWithOrdinal;
 
     static {
         // ------------------------------------------------------------------------------------------
@@ -102,9 +103,13 @@ public class DefaultSqlTypeMapping {
     public DefaultSqlTypeMapping() {
     }
 
-    public <E extends Serializable> SQLType getSqlType(Class<E> javaType) {
+    public <E extends Object> SQLType getSqlType(Class<E> javaType) {
         if (javaType.isEnum()) {
-            return JDBCType.VARCHAR;
+            if (enumWithOrdinal) {
+                return JDBCType.INTEGER;
+            } else {
+                return JDBCType.VARCHAR;
+            }
         }
         return JAVA_TO_SQL_MAP.get(javaType);
     }
@@ -117,8 +122,25 @@ public class DefaultSqlTypeMapping {
      * @return the java type
      */
     @SuppressWarnings("unchecked")
-    public <E extends Serializable> Class<E> getJavaType(SQLType sqlType) {
+    public <E extends Object> Class<E> getJavaType(SQLType sqlType) {
         return (Class<E>) SQL_TO_JAVA_MAP.get(sqlType);
     }
 
+    /**
+     * 返回enumWithOrdinal
+     *
+     * @return enumWithOrdinal
+     */
+    public boolean isEnumWithOrdinal() {
+        return enumWithOrdinal;
+    }
+
+    /**
+     * 设置enumWithOrdinal
+     *
+     * @param enumWithOrdinal enumWithOrdinal
+     */
+    public void setEnumWithOrdinal(boolean enumWithOrdinal) {
+        this.enumWithOrdinal = enumWithOrdinal;
+    }
 }

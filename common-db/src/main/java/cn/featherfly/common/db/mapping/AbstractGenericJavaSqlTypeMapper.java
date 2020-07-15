@@ -1,8 +1,6 @@
 
 package cn.featherfly.common.db.mapping;
 
-import java.io.Serializable;
-
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.reflect.GenericClass;
 
@@ -13,7 +11,7 @@ import cn.featherfly.common.lang.reflect.GenericClass;
  *
  * @author zhongj
  */
-public abstract class AbstractGenericJavaSqlTypeMapper<E extends Serializable> extends AbstractJavaSqlTypeMapper<E> {
+public abstract class AbstractGenericJavaSqlTypeMapper<E extends Object> extends AbstractJavaSqlTypeMapper<E> {
 
     /**
      */

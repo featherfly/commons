@@ -1,7 +1,6 @@
 
 package cn.featherfly.common.db.mapping;
 
-import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLType;
@@ -17,7 +16,7 @@ import cn.featherfly.common.lang.GenericType;
  * @author zhongj
  * @param <E> to regist java type
  */
-public interface JavaSqlTypeMapper<E extends Serializable> {
+public interface JavaSqlTypeMapper<E extends Object> {
 
     boolean support(SQLType sqlType);
 

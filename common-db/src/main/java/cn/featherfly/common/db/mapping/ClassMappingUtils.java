@@ -1,7 +1,6 @@
 
 package cn.featherfly.common.db.mapping;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -84,7 +83,6 @@ public class ClassMappingUtils {
      * @param sqlTypeMappingManager the sql type mapping manager
      * @return the column model
      */
-    @SuppressWarnings("unchecked")
     private static Column createColumn(PropertyMapping propertyMapping, SqlTypeMappingManager sqlTypeMappingManager) {
         ColumnModel column = new ColumnModel();
         column.setName(propertyMapping.getRepositoryFieldName());
@@ -96,7 +94,7 @@ public class ClassMappingUtils {
         column.setRemark(propertyMapping.getRemark());
         column.setSize(propertyMapping.getSize());
         column.setSqlType(
-                sqlTypeMappingManager.getSqlType((Class<? extends Serializable>) propertyMapping.getPropertyType()));
+                sqlTypeMappingManager.getSqlType((Class<? extends Object>) propertyMapping.getPropertyType()));
         return column;
     }
 

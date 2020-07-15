@@ -1,3 +1,12 @@
+2020-7-15
+0.2.3
+    1.SqlTypeMappingManager相关的泛型extends Seriable改为extends Object
+    
+2020-7-15
+0.2.2
+    1.SqlTypeMappingManager加入setEnumWithOrdinal,isEnumWithOrdinal方法
+    2.JdbcMappingFactory构造参数加入SqlTypeMappingManager
+
 2020-6-24
 0.2.1
     1.修复ClassMappingUtils.getInsertBatchSqlAndParamPositions返回的sql没字段使用对象属性的问题

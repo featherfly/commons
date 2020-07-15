@@ -1,8 +1,6 @@
 
 package cn.featherfly.common.db.mapping;
 
-import java.io.Serializable;
-
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.GenericType;
 
@@ -15,7 +13,7 @@ import cn.featherfly.common.lang.GenericType;
  * @author zhongj
  * @param <E> the element type
  */
-public abstract class AbstractJavaSqlTypeMapper<E extends Serializable> implements JavaSqlTypeMapper<E> {
+public abstract class AbstractJavaSqlTypeMapper<E extends Object> implements JavaSqlTypeMapper<E> {
 
     private GenericType<E> genericType;
 

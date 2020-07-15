@@ -1,7 +1,6 @@
 
 package cn.featherfly.common.db.mapping;
 
-import java.io.Serializable;
 import java.sql.SQLType;
 
 /**
@@ -13,7 +12,7 @@ import java.sql.SQLType;
  * @author zhongj
  * @param <E> to regist java type
  */
-public interface TypeRegister<E extends Serializable> {
+public interface TypeRegister<E extends Object> {
 
     /**
      * Gets the java type.

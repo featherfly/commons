@@ -49,6 +49,26 @@ public class SqlTypeMappingManager {
     }
 
     /**
+     * Checks if is enum with ordinal.
+     *
+     * @return true, if is enum with ordinal
+     * @see cn.featherfly.common.db.mapping.DefaultSqlTypeMapping#isEnumWithOrdinal()
+     */
+    public boolean isEnumWithOrdinal() {
+        return defaultSqlTypeMapping.isEnumWithOrdinal();
+    }
+
+    /**
+     * Sets the enum with ordinal.
+     *
+     * @param enumWithOrdinal the new enum with ordinal
+     * @see cn.featherfly.common.db.mapping.DefaultSqlTypeMapping#setEnumWithOrdinal(boolean)
+     */
+    public void setEnumWithOrdinal(boolean enumWithOrdinal) {
+        defaultSqlTypeMapping.setEnumWithOrdinal(enumWithOrdinal);
+    }
+
+    /**
      * Regist.
      *
      * @param register the register

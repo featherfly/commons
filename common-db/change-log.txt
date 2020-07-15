@@ -1,4 +1,8 @@
 2020-7-15
+0.2.4
+    1.修复0.2.3版本SqlTypeMappingManager的setEnumWithOrdinal,isEnumWithOrdinal方法删除问题
+    
+2020-7-15
 0.2.3
     1.SqlTypeMappingManager相关的泛型extends Seriable改为extends Object
     

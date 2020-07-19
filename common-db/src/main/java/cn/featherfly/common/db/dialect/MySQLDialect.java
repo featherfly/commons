@@ -1,5 +1,7 @@
 package cn.featherfly.common.db.dialect;
 
+import java.sql.JDBCType;
+import java.sql.SQLType;
 import java.sql.Types;
 import java.util.Date;
 
@@ -143,5 +145,32 @@ public class MySQLDialect extends AbstractDialect {
         } else {
             return "";
         }
+    }
+
+    @Override
+    protected String getColumnTypeName(SQLType sqlType) {
+        JDBCType type = JDBCType.valueOf(sqlType.getVendorTypeNumber());
+        switch (type) {
+            case INTEGER:
+                return "INT";
+            default:
+                return super.getColumnTypeName(sqlType);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInitSqlHeader() {
+        return getFkCheck(false);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInitSqlFooter() {
+        return getFkCheck(true);
     }
 }

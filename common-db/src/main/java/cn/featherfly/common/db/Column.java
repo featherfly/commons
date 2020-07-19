@@ -35,4 +35,6 @@ public interface Column {
     int getDecimalDigits();
 
     boolean isAutoincrement();
+
+    //    boolean isUnique();
 }

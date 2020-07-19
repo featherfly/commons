@@ -184,4 +184,31 @@ public class PostgreSQLDialect extends AbstractDialect {
         return BuilderUtils.link(getKeyword(Keywords.CONSTRAINT), wrapName(table.getName() + "_" + "pkey"),
                 getKeyword(Keywords.PRIMARY), getKeyword(Keywords.KEY), result.toString());
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getAutoIncrement(Column column) {
+        // FIXME 未实现
+        throw new UnsupportedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInitSqlHeader() {
+        // FIXME 未实现
+        throw new UnsupportedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInitSqlFooter() {
+        // FIXME 未实现
+        throw new UnsupportedException();
+    }
 }

@@ -17,25 +17,19 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 
-import javax.sql.DataSource;
-
-import org.apache.commons.dbcp.BasicDataSource;
-import org.apache.log4j.xml.DOMConfigurator;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.bean.BeanDescriptor;
 import cn.featherfly.common.bean.BeanProperty;
 import cn.featherfly.common.db.JdbcException;
+import cn.featherfly.common.db.JdbcTestBase;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.mappers.ObjectToJsonMapper;
 import cn.featherfly.common.db.wrapper.ConnectionWrapper;
 import cn.featherfly.common.db.wrapper.PreparedStatementWrapper;
 import cn.featherfly.common.db.wrapper.ResultSetWrapper;
 import cn.featherfly.common.lang.ArrayUtils;
-import cn.featherfly.common.lang.ClassLoaderUtils;
 import cn.featherfly.common.lang.GenericType;
-import cn.featherfly.common.lang.RandomUtils;
 import cn.featherfly.common.lang.Randoms;
 import cn.featherfly.common.lang.reflect.GenericClass;
 
@@ -46,21 +40,7 @@ import cn.featherfly.common.lang.reflect.GenericClass;
  *
  * @author zhongj
  */
-public class SqlTypeMappingManagerTest {
-
-    private DataSource dataSource;
-
-    @BeforeClass
-    public void setUp() {
-        DOMConfigurator.configure(ClassLoaderUtils.getResource("log4j.xml").getFile());
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl(
-                "jdbc:mysql://127.0.0.1:3306/db_test?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false");
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUsername("root");
-        dataSource.setPassword("123456");
-        this.dataSource = dataSource;
-    }
+public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
     @Test
     public void testDefaultJavaToSql() {
@@ -225,7 +205,7 @@ public class SqlTypeMappingManagerTest {
         Long[] contentArray = new Long[] { 1L, 2L, 3L };
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
                 PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
-            manager.set(prep.getPreparedStatement(), 1, RandomUtils.getRandomString(6));
+            manager.set(prep.getPreparedStatement(), 1, Randoms.getString(6));
             manager.set(prep.getPreparedStatement(), 2, contentArray);
             boolean res = prep.execute();
             System.out.println(res);

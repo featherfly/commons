@@ -11,7 +11,7 @@ public class MetadataTestMysql {
         //        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/db_test");
         dataSource.setUrl(
                 "jdbc:mysql://127.0.0.1:3306/db_test?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false");
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUsername("root");
         dataSource.setPassword("123456");
         DatabaseMetadata meta = DatabaseMetadataManager.getDefaultManager().create(dataSource);

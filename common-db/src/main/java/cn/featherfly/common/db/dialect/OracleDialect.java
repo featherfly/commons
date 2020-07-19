@@ -4,6 +4,7 @@ import java.sql.Types;
 import java.util.Date;
 
 import cn.featherfly.common.constant.Chars;
+import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.SqlUtils;
 import cn.featherfly.common.db.Table;
 import cn.featherfly.common.exception.UnsupportedException;
@@ -194,6 +195,33 @@ public class OracleDialect extends AbstractDialect {
      */
     @Override
     public String buildInsertBatchSql(String tableName, String[] columnNames, int insertAmount) {
+        // FIXME 未实现
+        throw new UnsupportedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getAutoIncrement(Column column) {
+        // FIXME 未实现
+        throw new UnsupportedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInitSqlHeader() {
+        // FIXME 未实现
+        throw new UnsupportedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInitSqlFooter() {
         // FIXME 未实现
         throw new UnsupportedException();
     }

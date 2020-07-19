@@ -298,4 +298,22 @@ public class SQLiteDialect extends AbstractDialect {
         // TODO 未实现
         throw new UnsupportedException();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInitSqlHeader() {
+        // FIXME 未实现
+        throw new UnsupportedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getInitSqlFooter() {
+        // FIXME 未实现
+        throw new UnsupportedException();
+    }
 }

@@ -1,5 +1,6 @@
 package cn.featherfly.common.db.dialect;
 
+import java.sql.JDBCType;
 import java.sql.SQLType;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.builder.BuilderUtils;
+import cn.featherfly.common.db.mapping.JdbcMappingException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
@@ -236,14 +238,12 @@ public abstract class AbstractDialect implements Dialect {
     }
 
     /**
-     * Gets the auto increment.
+     * Gets the identity.
      *
      * @param column the column
-     * @return the auto increment
+     * @return the identity
      */
-    protected String getAutoIncrement(Column column) {
-        return "";
-    }
+    protected abstract String getAutoIncrement(Column column);
 
     /**
      * Gets the column comment.
@@ -291,10 +291,18 @@ public abstract class AbstractDialect implements Dialect {
         int size = column.getSize();
         int decimalDigits = column.getDecimalDigits();
         String result = getColumnTypeName(column.getSqlType());
-        if (size > 0) {
+        if (size <= 0) {
+            SQLType sqlType = column.getSqlType();
+            if (sqlType == JDBCType.VARCHAR || sqlType == JDBCType.NVARCHAR || sqlType == JDBCType.CHAR
+                    || sqlType == JDBCType.NCHAR || sqlType == JDBCType.LONGVARCHAR || sqlType == JDBCType.LONGNVARCHAR
+                    || sqlType == JDBCType.FLOAT || sqlType == JDBCType.DOUBLE || sqlType == JDBCType.DECIMAL
+                    || sqlType == JDBCType.NUMERIC) {
+                throw new JdbcMappingException("#size.not.define", Lang.array(column.getName()));
+            }
+        } else {
             result += Chars.PAREN_L + size;
             if (decimalDigits > 0) {
-                result += Chars.DOT + decimalDigits;
+                result += Chars.COMMA + decimalDigits;
             }
             result += Chars.PAREN_R;
         }

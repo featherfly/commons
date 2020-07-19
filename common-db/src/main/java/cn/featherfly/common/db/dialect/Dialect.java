@@ -138,6 +138,20 @@ public interface Dialect {
     }
 
     /**
+     * Gets the inits the sql header.
+     *
+     * @return the inits the sql header
+     */
+    String getInitSqlHeader();
+
+    /**
+     * Gets the inits the sql footer.
+     *
+     * @return the inits the sql footer
+     */
+    String getInitSqlFooter();
+
+    /**
      * dialect for database supports batch insert.
      *
      * @param tableName    the table name

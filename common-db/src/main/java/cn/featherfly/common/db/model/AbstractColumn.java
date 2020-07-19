@@ -39,7 +39,7 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     protected String defaultValue;
 
     /** The nullable. */
-    protected boolean nullable;
+    protected boolean nullable = true;
 
     /** The column index. */
     protected int columnIndex;
@@ -52,6 +52,8 @@ public abstract class AbstractColumn<T extends Column> implements Column {
 
     /** The autoincrement. */
     protected boolean autoincrement;
+
+    //    protected boolean unique;
 
     /**
      * 返回name.
@@ -321,4 +323,21 @@ public abstract class AbstractColumn<T extends Column> implements Column {
         type = sqlType.getVendorTypeNumber();
         return (T) this;
     }
+
+    //    /**
+    //     * {@inheritDoc}
+    //     */
+    //    @Override
+    //    public boolean isUnique() {
+    //        return unique;
+    //    }
+    //
+    //    /**
+    //     * 设置unique
+    //     *
+    //     * @param unique unique
+    //     */
+    //    public void setUnique(boolean unique) {
+    //        this.unique = unique;
+    //    }
 }

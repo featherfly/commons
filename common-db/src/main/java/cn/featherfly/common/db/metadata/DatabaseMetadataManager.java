@@ -270,10 +270,8 @@ public class DatabaseMetadataManager {
                 rc.close();
             }
             rs.close();
-            if (!hasDatabase) {
+            if (!hasDatabase && !dataBase.equals(connection.getCatalog())) {
                 throw new DatabaseMetadataException("#driver.not.find.database", new Object[] { dataBase });
-                //				throw new DatabaseMetadataException(String.format(
-                //						"没有在数据源中找到具体库%s（mysql为库，oracle为表空间）", dataBase));
             }
             databasemetadataPool.put(dataBase, databaseMetadata);
             databaseMetadata.setName(dataBase);

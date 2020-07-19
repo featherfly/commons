@@ -1,3 +1,8 @@
+2020
+1.8.11
+    1.修正Lang.wrapThrow(Throwable, Class<E>)
+    2.ArrayUtils,Lang的加入toMapStringKey，toArray2标注为废弃
+    
 2020-7-4
 1.8.10
     1.修正ClassUtils.isGetter(Method)方法的问题

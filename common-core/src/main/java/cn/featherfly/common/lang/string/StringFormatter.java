@@ -60,7 +60,7 @@ public class StringFormatter {
      * @return formated str
      */
     public String format(String str, Object... args) {
-        return format(str, startSymbol, endSymbol, Lang.toMap2(args));
+        return format(str, startSymbol, endSymbol, Lang.toMapStringKey(args));
     }
 
     /**

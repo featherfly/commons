@@ -753,9 +753,22 @@ public final class Lang {
      * @param <A>    the generic type
      * @param arrays 数组
      * @return map
+     * @deprecated use {@link #toMapStringKey(Object...)} instead
      */
+    @Deprecated
     public static <A> Map<String, A> toMap2(A[] arrays) {
         return ArrayUtils.toMap2(arrays);
+    }
+
+    /**
+     * 转换为以数组索引为key(string类型),数组值为value的map.
+     *
+     * @param <A>    the generic type
+     * @param arrays 数组
+     * @return 列表
+     */
+    public static <A> Map<String, A> toMapStringKey(@SuppressWarnings("unchecked") A... arrays) {
+        return ArrayUtils.toMapStringKey(arrays);
     }
 
     /**
@@ -774,10 +787,10 @@ public final class Lang {
      * @param throwable               the throwable
      * @param wrappedRuntimeException the wrapped runtime exception
      */
-    public static void wrapThrow(Throwable throwable, RuntimeException wrappedRuntimeException) {
+    public static <E extends RuntimeException> void wrapThrow(Throwable throwable, Class<E> wrappedRuntimeException) {
         AssertIllegalArgument.isNotNull(throwable, "throwable");
         AssertIllegalArgument.isNotNull(wrappedRuntimeException, "wrappedRuntimeException");
-        new ExceptionWrapper<>(wrappedRuntimeException.getClass()).throwException(throwable);
+        new ExceptionWrapper<>(wrappedRuntimeException).throwException(throwable);
     }
 
     /**

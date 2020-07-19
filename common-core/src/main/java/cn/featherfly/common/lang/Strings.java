@@ -443,7 +443,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * @return formated str
      */
     public static String format(String content, Object[] args, char startSymbol, char endSymbol) {
-        return format(content, Lang.toMap2(args), startSymbol, endSymbol);
+        return format(content, Lang.toMapStringKey(args), startSymbol, endSymbol);
     }
 
     /**

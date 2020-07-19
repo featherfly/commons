@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.featherfly.common.lang.CollectionUtils;
-import cn.featherfly.common.lang.RandomUtils;
+import cn.featherfly.common.lang.Randoms;
 
 /**
  * <p>
@@ -55,11 +55,11 @@ public class CountValidateCodeGenerator implements ValidateCodeGenerator {
      * @return the validate code
      */
     private ValidateCode count(int countTimes) {
-        int result = RandomUtils.getRandom(numbers);
+        int result = Randoms.get(numbers);
         String show = result + "";
         for (int i = 0; i < countTimes; i++) {
-            String operator = RandomUtils.getRandom(operators);
-            int nextNumber = RandomUtils.getRandom(numbers);
+            String operator = Randoms.get(operators);
+            int nextNumber = Randoms.get(numbers);
             show = show + operator + nextNumber;
             switch (operator) {
                 case "+":

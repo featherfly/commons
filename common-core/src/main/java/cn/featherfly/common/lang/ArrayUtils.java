@@ -255,13 +255,26 @@ public final class ArrayUtils {
     }
 
     /**
-     * 转换为以数组索引为key,数组值为value的map.
+     * 转换为以数组索引为key(string类型),数组值为value的map.
+     *
+     * @param <A>    the generic type
+     * @param arrays 数组
+     * @return 列表
+     * @deprecated use {@link #toMapStringKey(Object...)} instead
+     */
+    @Deprecated
+    public static <A> Map<String, A> toMap2(@SuppressWarnings("unchecked") A... arrays) {
+        return toMapStringKey(arrays);
+    }
+
+    /**
+     * 转换为以数组索引为key(string类型),数组值为value的map.
      *
      * @param <A>    the generic type
      * @param arrays 数组
      * @return 列表
      */
-    public static <A> Map<String, A> toMap2(@SuppressWarnings("unchecked") A... arrays) {
+    public static <A> Map<String, A> toMapStringKey(@SuppressWarnings("unchecked") A... arrays) {
         if (arrays == null) {
             return new LinkedHashMap<>(0);
         }

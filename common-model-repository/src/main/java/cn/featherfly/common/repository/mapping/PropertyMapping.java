@@ -47,7 +47,7 @@ public class PropertyMapping {
 
     private String remark;
 
-    private boolean nullable;
+    private boolean nullable = true;
 
     private boolean insertable = true;
 
@@ -66,7 +66,7 @@ public class PropertyMapping {
 
     /**
      * 返回index
-     * 
+     *
      * @return index
      */
     public int getIndex() {
@@ -75,7 +75,7 @@ public class PropertyMapping {
 
     /**
      * 设置index
-     * 
+     *
      * @param index index
      */
     public void setIndex(int index) {

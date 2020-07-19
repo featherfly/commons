@@ -1,4 +1,3 @@
-
 package cn.featherfly.common.db.mapping;
 
 import java.util.ArrayList;
@@ -54,10 +53,16 @@ public class JdbcMappingFactory implements MappingFactory {
      */
     public enum MappingMode {
 
-        /** The obj db mixed. */
+        /**
+         * obj db mixed. 如果对象的属性没有显示的jpa注释表示映射，则使用数据库元数据反向映射对象属性.
+         * 可能存在数据库列没有映射属性以及对象属性没有映射数据库列的情况.
+         */
         OBJ_DB_MIXED,
-        /** The obj to db strict. */
-        OBJ_TO_DB_STRICT;
+        /**
+         * The obj to db strict. 使用对象属性进行映射，如果对象属性映射的数据库列不存在，则抛出异常.
+         * 如果有属性不需要映射，使用javax.persistence.Transient注解注释该属性
+         */
+        OBJ_TO_DB;
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JdbcMappingFactory.class);
@@ -73,6 +78,8 @@ public class JdbcMappingFactory implements MappingFactory {
     private List<PropertyNameConversion> propertyNameConversions = new ArrayList<>();
 
     private SqlTypeMappingManager sqlTypeMappingManager;
+
+    private MappingMode mappingMode = MappingMode.OBJ_DB_MIXED;
 
     /**
      * Instantiates a new jdbc mapping factory.
@@ -139,51 +146,6 @@ public class JdbcMappingFactory implements MappingFactory {
     }
 
     /**
-     * 返回classNameConversions.
-     *
-     * @return classNameConversions
-     */
-    public List<ClassNameConversion> getClassNameConversions() {
-        return classNameConversions;
-    }
-
-    /**
-     * 设置classNameConversions.
-     *
-     * @param classNameConversions classNameConversions
-     */
-    public void setClassNameConversions(List<ClassNameConversion> classNameConversions) {
-        this.classNameConversions = classNameConversions;
-    }
-
-    /**
-     * 返回propertyNameConversions.
-     *
-     * @return propertyNameConversions
-     */
-    public List<PropertyNameConversion> getPropertyNameConversions() {
-        return propertyNameConversions;
-    }
-
-    /**
-     * 设置propertyNameConversions.
-     *
-     * @param propertyNameConversions propertyNameConversions
-     */
-    public void setPropertyNameConversions(List<PropertyNameConversion> propertyNameConversions) {
-        this.propertyNameConversions = propertyNameConversions;
-    }
-
-    /**
-     * 返回metadata.
-     *
-     * @return metadata
-     */
-    public DatabaseMetadata getMetadata() {
-        return metadata;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -201,7 +163,7 @@ public class JdbcMappingFactory implements MappingFactory {
         Map<String, PropertyMapping> tableMapping = new HashMap<>();
 
         StringBuilder logInfo = new StringBuilder();
-        // // 从对象中读取有Column的列，找到显示映射，使用scan扫描
+        // 从对象中读取有Column的列，找到显示映射，使用scan扫描
         BeanDescriptor<T> bd = BeanDescriptor.getBeanDescriptor(type);
         String tableName = getMappingTableName(type);
         tableName = dialect.convertTableOrColumnName(tableName);
@@ -215,9 +177,16 @@ public class JdbcMappingFactory implements MappingFactory {
         if (tm == null) {
             throw new JdbcMappingException("#talbe.not.exists", new Object[] { tableName });
         }
-
-        Collection<BeanProperty<?>> bps = bd
-                .findBeanPropertys(new BeanPropertyAnnotationMatcher(Logic.OR, Column.class, Id.class, Embedded.class));
+        Collection<BeanProperty<?>> bps;
+        switch (mappingMode) {
+            case OBJ_TO_DB:
+                bps = bd.getBeanProperties();
+                break;
+            default:
+                bps = bd.findBeanPropertys(
+                        new BeanPropertyAnnotationMatcher(Logic.OR, Column.class, Id.class, Embedded.class));
+                break;
+        }
         boolean findPk = false;
         for (BeanProperty<?> beanProperty : bps) {
             if (mappingWithJpa(beanProperty, tableMapping, logInfo, tm)) {
@@ -228,8 +197,12 @@ public class JdbcMappingFactory implements MappingFactory {
             throw new JdbcMappingException("#id.map.not.exists", new Object[] { type.getName() });
         }
 
-        for (cn.featherfly.common.db.Column cmd : tm.getColumns()) {
-            mappingFromColumnMetadata(bd, tableMapping, cmd, logInfo);
+        if (mappingMode == MappingMode.OBJ_DB_MIXED) {
+            for (cn.featherfly.common.db.Column cmd : tm.getColumns()) {
+                mappingFromColumnMetadata(bd, tableMapping, cmd, logInfo);
+            }
+        } else if (mappingMode == MappingMode.OBJ_TO_DB) {
+            checkMapping(bd, tableMapping, tm);
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(logInfo.toString());
@@ -244,6 +217,9 @@ public class JdbcMappingFactory implements MappingFactory {
 
     private boolean mappingWithJpa(BeanProperty<?> beanProperty, Map<String, PropertyMapping> tableMapping,
             StringBuilder logInfo, Table tableMetadata) {
+        if (isTransient(beanProperty)) {
+            return false;
+        }
         boolean isPk = beanProperty.hasAnnotation(Id.class);
         PropertyMapping mapping = new PropertyMapping();
 
@@ -355,27 +331,26 @@ public class JdbcMappingFactory implements MappingFactory {
         }
     }
 
-    private <T> void mappingFromColumnMetadata(BeanDescriptor<T> bd, Map<String, PropertyMapping> tableMapping,
-            cn.featherfly.common.db.Column cmd, StringBuilder logInfo) {
-        Map<String, PropertyMapping> nameSet = new HashMap<>();
-        tableMapping.forEach((k, v) -> {
-            if (Lang.isNotEmpty(k)) {
-                nameSet.put(k, v);
-            } else {
-                if (Lang.isNotEmpty(v.getPropertyMappings())) {
-                    v.getPropertyMappings().forEach(pm -> {
-                        nameSet.put(pm.getRepositoryFieldName(), pm);
-                    });
-                }
+    private <T> void checkMapping(BeanDescriptor<T> bd, Map<String, PropertyMapping> tableMapping, Table table) {
+        Map<String, PropertyMapping> fieldPropertyMap = getFieldProperyMap(tableMapping);
+        fieldPropertyMap.forEach((fieldName, property) -> {
+            if (!table.hasColumn(fieldName)) {
+                throw new JdbcMappingException("#field.not.exists",
+                        new Object[] { bd.getType().getName(), property.getPropertyName(), fieldName });
             }
         });
-        if (!nameSet.containsKey(cmd.getName())) {
+
+    }
+
+    private <T> void mappingFromColumnMetadata(BeanDescriptor<T> bd, Map<String, PropertyMapping> tableMapping,
+            cn.featherfly.common.db.Column cmd, StringBuilder logInfo) {
+        Map<String, PropertyMapping> fieldPropertyMap = getFieldProperyMap(tableMapping);
+        if (!fieldPropertyMap.containsKey(cmd.getName())) {
             // 转换下划线，并使用驼峰
             String columnName = cmd.getName().toLowerCase();
             String propertyName = WordUtils.parseToUpperFirst(columnName, Chars.UNDER_LINE_CHAR);
             BeanProperty<?> beanProperty = bd.findBeanProperty(new BeanPropertyNameRegexMatcher(propertyName));
-            if (beanProperty != null && (!beanProperty.hasAnnotation(java.beans.Transient.class)
-                    || !beanProperty.hasAnnotation(javax.persistence.Transient.class))) {
+            if (beanProperty != null && !isTransient(beanProperty)) {
                 PropertyMapping mapping = new PropertyMapping();
                 mapping.setPropertyType(beanProperty.getType());
                 mapping.setPropertyName(propertyName);
@@ -400,7 +375,7 @@ public class JdbcMappingFactory implements MappingFactory {
                 }
             }
         } else {
-            PropertyMapping mapping = nameSet.get(cmd.getName());
+            PropertyMapping mapping = fieldPropertyMap.get(cmd.getName());
             mapping.setPrimaryKey(cmd.isPrimaryKey());
             mapping.setDefaultValue(cmd.getDefaultValue());
             mapping.setRemark(cmd.getRemark());
@@ -410,6 +385,22 @@ public class JdbcMappingFactory implements MappingFactory {
             mapping.setSize(cmd.getSize());
             mapping.setIndex(cmd.getColumnIndex());
         }
+    }
+
+    private Map<String, PropertyMapping> getFieldProperyMap(Map<String, PropertyMapping> tableMapping) {
+        Map<String, PropertyMapping> nameSet = new HashMap<>();
+        tableMapping.forEach((k, v) -> {
+            if (Lang.isNotEmpty(k)) {
+                nameSet.put(k, v);
+            } else {
+                if (Lang.isNotEmpty(v.getPropertyMappings())) {
+                    v.getPropertyMappings().forEach(pm -> {
+                        nameSet.put(pm.getRepositoryFieldName(), pm);
+                    });
+                }
+            }
+        });
+        return nameSet;
     }
 
     private String getMappingTableName(Class<?> type) {
@@ -434,6 +425,11 @@ public class JdbcMappingFactory implements MappingFactory {
         return columnName;
     }
 
+    private boolean isTransient(BeanProperty<?> beanProperty) {
+        return beanProperty.hasAnnotation(java.beans.Transient.class)
+                || beanProperty.hasAnnotation(javax.persistence.Transient.class);
+    }
+
     /**
      * 返回dialect.
      *
@@ -450,5 +446,68 @@ public class JdbcMappingFactory implements MappingFactory {
      */
     public SqlTypeMappingManager getSqlTypeMappingManager() {
         return sqlTypeMappingManager;
+    }
+
+    /**
+     * 返回mappingMode
+     *
+     * @return mappingMode
+     */
+    public MappingMode getMappingMode() {
+        return mappingMode;
+    }
+
+    /**
+     * 设置mappingMode
+     *
+     * @param mappingMode mappingMode
+     */
+    public void setMappingMode(MappingMode mappingMode) {
+        this.mappingMode = mappingMode;
+    }
+
+    /**
+     * 返回classNameConversions.
+     *
+     * @return classNameConversions
+     */
+    public List<ClassNameConversion> getClassNameConversions() {
+        return classNameConversions;
+    }
+
+    /**
+     * 设置classNameConversions.
+     *
+     * @param classNameConversions classNameConversions
+     */
+    public void setClassNameConversions(List<ClassNameConversion> classNameConversions) {
+        this.classNameConversions = classNameConversions;
+    }
+
+    /**
+     * 返回propertyNameConversions.
+     *
+     * @return propertyNameConversions
+     */
+    public List<PropertyNameConversion> getPropertyNameConversions() {
+        return propertyNameConversions;
+    }
+
+    /**
+     * 设置propertyNameConversions.
+     *
+     * @param propertyNameConversions propertyNameConversions
+     */
+    public void setPropertyNameConversions(List<PropertyNameConversion> propertyNameConversions) {
+        this.propertyNameConversions = propertyNameConversions;
+    }
+
+    /**
+     * 返回metadata.
+     *
+     * @return metadata
+     */
+    public DatabaseMetadata getMetadata() {
+        return metadata;
     }
 }

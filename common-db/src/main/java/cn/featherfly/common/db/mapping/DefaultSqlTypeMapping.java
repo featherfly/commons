@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.JDBCType;
 import java.sql.SQLType;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -52,12 +51,14 @@ public class DefaultSqlTypeMapping {
         JAVA_TO_SQL_MAP.put(BigDecimal.class, JDBCType.DECIMAL);
         JAVA_TO_SQL_MAP.put(String.class, JDBCType.VARCHAR);
         JAVA_TO_SQL_MAP.put(Date.class, JDBCType.TIMESTAMP);
-        JAVA_TO_SQL_MAP.put(Timestamp.class, JDBCType.TIMESTAMP);
+        JAVA_TO_SQL_MAP.put(LocalDate.class, JDBCType.DATE);
+        JAVA_TO_SQL_MAP.put(LocalTime.class, JDBCType.TIME);
         JAVA_TO_SQL_MAP.put(LocalDateTime.class, JDBCType.TIMESTAMP);
         JAVA_TO_SQL_MAP.put(java.sql.Date.class, JDBCType.DATE);
-        JAVA_TO_SQL_MAP.put(LocalDate.class, JDBCType.DATE);
-        JAVA_TO_SQL_MAP.put(java.sql.Time.class, JDBCType.DATE);
-        JAVA_TO_SQL_MAP.put(LocalTime.class, JDBCType.TIME);
+        JAVA_TO_SQL_MAP.put(java.sql.Time.class, JDBCType.TIME);
+        JAVA_TO_SQL_MAP.put(java.sql.Timestamp.class, JDBCType.TIMESTAMP);
+        JAVA_TO_SQL_MAP.put(byte[].class, JDBCType.VARBINARY);
+        JAVA_TO_SQL_MAP.put(Byte[].class, JDBCType.VARBINARY);
 
         // ------------------------------------------------------------------------------------------
         // sql to java
@@ -106,7 +107,7 @@ public class DefaultSqlTypeMapping {
     public <E extends Object> SQLType getSqlType(Class<E> javaType) {
         if (javaType.isEnum()) {
             if (enumWithOrdinal) {
-                return JDBCType.INTEGER;
+                return JDBCType.TINYINT;
             } else {
                 return JDBCType.VARCHAR;
             }

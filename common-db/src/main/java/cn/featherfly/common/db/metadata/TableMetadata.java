@@ -9,6 +9,7 @@ import java.util.Map;
 
 import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.Table;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -235,5 +236,16 @@ public class TableMetadata implements Table {
      */
     void setCatalog(String catalog) {
         this.catalog = catalog;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasColumn(String columnName) {
+        if (Lang.isEmpty(columnName)) {
+            return false;
+        }
+        return columnMap.containsKey(columnName.toUpperCase());
     }
 }

@@ -9,6 +9,7 @@ import java.util.Map;
 
 import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.Table;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -167,5 +168,16 @@ public abstract class AbstractTable<T extends Table> implements Table {
     @Override
     public List<Column> getPrimaryColumns() {
         return new ArrayList<>(primaryColumns);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasColumn(String columnName) {
+        if (Lang.isEmpty(columnName)) {
+            return false;
+        }
+        return columnMap.containsKey(columnName.toUpperCase());
     }
 }

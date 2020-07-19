@@ -58,4 +58,12 @@ public interface Table {
      * @return 列元数据对象
      */
     Column getColumn(String columnName);
+
+    /**
+     * hasColumn
+     * 
+     * @param columnName columnName
+     * @return boolean
+     */
+    boolean hasColumn(String columnName);
 }

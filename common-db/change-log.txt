@@ -1,3 +1,7 @@
+2020
+0.2.5
+    1.修复JdbcMappingFactory中@Transient不是使用javax.persistence.Transient的问题
+    
 2020-7-15
 0.2.4
     1.修复0.2.3版本SqlTypeMappingManager的setEnumWithOrdinal,isEnumWithOrdinal方法删除问题

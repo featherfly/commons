@@ -1,7 +1,6 @@
 
 package cn.featherfly.common.db.mapping;
 
-import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -375,7 +374,8 @@ public class JdbcMappingFactory implements MappingFactory {
             String columnName = cmd.getName().toLowerCase();
             String propertyName = WordUtils.parseToUpperFirst(columnName, Chars.UNDER_LINE_CHAR);
             BeanProperty<?> beanProperty = bd.findBeanProperty(new BeanPropertyNameRegexMatcher(propertyName));
-            if (beanProperty != null && !beanProperty.hasAnnotation(Transient.class)) {
+            if (beanProperty != null && (!beanProperty.hasAnnotation(java.beans.Transient.class)
+                    || !beanProperty.hasAnnotation(javax.persistence.Transient.class))) {
                 PropertyMapping mapping = new PropertyMapping();
                 mapping.setPropertyType(beanProperty.getType());
                 mapping.setPropertyName(propertyName);

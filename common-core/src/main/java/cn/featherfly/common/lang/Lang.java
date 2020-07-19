@@ -22,6 +22,7 @@ import cn.featherfly.common.exception.ExceptionWrapper;
  */
 public final class Lang {
 
+    /** The Constant WRAPPER. */
     private static final ExceptionWrapper<RuntimeException> WRAPPER = new ExceptionWrapper<>(RuntimeException.class);
 
     /**
@@ -784,6 +785,7 @@ public final class Lang {
     /**
      * Wrap throw.
      *
+     * @param <E>                     the element type
      * @param throwable               the throwable
      * @param wrappedRuntimeException the wrapped runtime exception
      */
@@ -813,5 +815,28 @@ public final class Lang {
      */
     public static <T> void each(Iterable<T> iterable, BiConsumer<T, Integer> consumer) {
         CollectionUtils.each(iterable, consumer);
+    }
+
+    /**
+     * array.
+     *
+     * @param objs the objs
+     * @return Object[]
+     */
+    public static Object[] array(Object... objs) {
+        return objs;
+    }
+
+    /**
+     * List.
+     *
+     * @param <E>      the element type
+     * @param elements the elements
+     * @return the list
+     */
+    public static <E> List<E> list(@SuppressWarnings("unchecked") E... elements) {
+        List<E> list = new ArrayList<>();
+        CollectionUtils.addAll(list, elements);
+        return list;
     }
 }

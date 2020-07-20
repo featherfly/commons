@@ -45,7 +45,7 @@ public class PropertyMapping {
 
     private int size;
 
-    private String remark;
+    private String remark = "";
 
     private boolean nullable = true;
 

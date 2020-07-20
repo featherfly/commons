@@ -1,3 +1,9 @@
+2020-7-20
+0.1.5
+    1.ClassMapping加入getPropertyMappingLeafNodes方法
+    2.PropertyMapping的remark默认值改为空字符串
+    3.getPropertyMappingByPersitField(String persitField)修改为从getPropertyMappingLeafNodes()中查找
+    
 2020-7-19
 0.1.4
     1.设置PropertyMapping的nullable属性默认值为true

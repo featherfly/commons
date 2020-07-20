@@ -1,5 +1,6 @@
 package cn.featherfly.common.repository.mapping;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -10,13 +11,16 @@ import java.util.stream.Collectors;
  * <p>
  * class repository mapping
  * </p>
+ * .
  *
- * @param <T> 类型
  * @author zhongj
+ * @param <T> 类型
  */
 public class ClassMapping<T> {
 
     /**
+     * Instantiates a new class mapping.
+     *
      * @param type           类型
      * @param repositoryName 存储名
      */
@@ -25,6 +29,8 @@ public class ClassMapping<T> {
     }
 
     /**
+     * Instantiates a new class mapping.
+     *
      * @param type           类型
      * @param repositoryName 存储名
      * @param remark         remark
@@ -56,7 +62,7 @@ public class ClassMapping<T> {
      * @return 属性映射对象
      */
     public PropertyMapping getPropertyMappingByPersitField(String persitField) {
-        for (PropertyMapping pm : propertyMappings.values()) {
+        for (PropertyMapping pm : getPropertyMappingLeafNodes()) {
             if (pm.getRepositoryFieldName().equals(persitField)) {
                 return pm;
             }
@@ -68,6 +74,7 @@ public class ClassMapping<T> {
      * <p>
      * 返回所有属性映射
      * </p>
+     * .
      *
      * @return 所有属性映射
      */
@@ -76,9 +83,29 @@ public class ClassMapping<T> {
     }
 
     /**
+     * 返回所有叶节点的属性映射
+     *
+     * @return the property mapping leaf nodes
+     */
+    public Collection<PropertyMapping> getPropertyMappingLeafNodes() {
+        List<PropertyMapping> leafNodes = new ArrayList<>();
+        for (PropertyMapping propertyMapping : getPropertyMappings()) {
+            if (propertyMapping.getPropertyMappings().size() > 0) {
+                for (PropertyMapping pm : propertyMapping.getPropertyMappings()) {
+                    leafNodes.add(pm);
+                }
+            } else {
+                leafNodes.add(propertyMapping);
+            }
+        }
+        return leafNodes;
+    }
+
+    /**
      * <p>
      * 返回所有主键属性映射
      * </p>
+     * .
      *
      * @return 所有属性映射
      */
@@ -86,10 +113,20 @@ public class ClassMapping<T> {
         return propertyMappings.values().stream().filter(p -> p.isPrimaryKey()).collect(Collectors.toList());
     }
 
+    /**
+     * Adds the property mapping.
+     *
+     * @param propertyMapping the property mapping
+     */
     public void addPropertyMapping(PropertyMapping propertyMapping) {
         propertyMappings.put(propertyMapping.getPropertyName(), propertyMapping);
     }
 
+    /**
+     * Adds the property mappings.
+     *
+     * @param propertyMappings the property mappings
+     */
     public void addPropertyMappings(Collection<PropertyMapping> propertyMappings) {
         for (PropertyMapping propertyMapping : propertyMappings) {
             addPropertyMapping(propertyMapping);
@@ -100,15 +137,21 @@ public class ClassMapping<T> {
     //
     // ********************************************************************
 
+    /** The property mappings. */
     private Map<String, PropertyMapping> propertyMappings = new LinkedHashMap<>(0);
 
+    /** The repository name. */
     private String repositoryName;
 
+    /** The remark. */
     private String remark;
 
+    /** The type. */
     private Class<?> type;
 
     /**
+     * Gets the repository name.
+     *
      * @return 返回tableName
      */
     public String getRepositoryName() {
@@ -116,6 +159,8 @@ public class ClassMapping<T> {
     }
 
     /**
+     * Gets the type.
+     *
      * @return 返回type
      */
     public Class<?> getType() {
@@ -132,7 +177,7 @@ public class ClassMapping<T> {
     }
 
     /**
-     * 返回remark
+     * 返回remark.
      *
      * @return remark
      */

@@ -12,6 +12,7 @@ import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.lang.Strings;
 
 /**
  * <p>
@@ -33,7 +34,7 @@ public class PostgreSQLDialect extends AbstractDialect {
      */
     @Override
     public String getPaginationSql(String sql, int start, int limit) {
-        return getPaginationSql(sql, start, false);
+        return getPaginationSql(sql, start, false, PARAM_NAME_START_SYMBOL);
     }
 
     /**
@@ -41,7 +42,15 @@ public class PostgreSQLDialect extends AbstractDialect {
      */
     @Override
     public String getParamNamedPaginationSql(String sql, int start, int limit) {
-        return getPaginationSql(sql, start, true);
+        return getParamNamedPaginationSql(sql, start, limit, PARAM_NAME_START_SYMBOL);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getParamNamedPaginationSql(String sql, int start, int limit, char startSymbol) {
+        return getPaginationSql(sql, start, true, startSymbol);
     }
 
     /**
@@ -69,7 +78,7 @@ public class PostgreSQLDialect extends AbstractDialect {
         return (Object[]) ArrayUtils.concat(params, pagingParams);
     }
 
-    private String getPaginationSql(String sql, int start, boolean isParamNamed) {
+    private String getPaginationSql(String sql, int start, boolean isParamNamed, char startSymbol) {
         sql = sql.trim();
         boolean isForUpdate = false;
         if (isForUpdate(sql)) {
@@ -81,9 +90,10 @@ public class PostgreSQLDialect extends AbstractDialect {
         pagingSelect.append(sql);
         if (isParamNamed) {
             if (start > 0) {
-                pagingSelect.append(String.format(" LIMIT :%s OFFSET :%s", LIMIT_PARAM_NAME, START_PARAM_NAME));
+                pagingSelect.append(Strings.format(" LIMIT {0}{1} OFFSET {0}{2}",
+                        Lang.array(startSymbol, LIMIT_PARAM_NAME, START_PARAM_NAME)));
             } else {
-                pagingSelect.append(String.format(" LIMIT :%s", LIMIT_PARAM_NAME));
+                pagingSelect.append(Strings.format(" LIMIT {0}{1}", Lang.array(startSymbol, LIMIT_PARAM_NAME)));
             }
         } else {
             if (start > 0) {
@@ -211,4 +221,5 @@ public class PostgreSQLDialect extends AbstractDialect {
         // FIXME 未实现
         throw new UnsupportedException();
     }
+
 }

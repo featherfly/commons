@@ -1,5 +1,7 @@
 package cn.featherfly.common.db.dialect;
 
+import java.sql.JDBCType;
+import java.sql.SQLType;
 import java.util.Map;
 
 import cn.featherfly.common.constant.Chars;
@@ -28,6 +30,8 @@ public interface Dialect {
 
     /** 命名参数查询的查询条件默认数量名称. */
     String LIMIT_PARAM_NAME = "dialect_paging_limit";
+
+    char PARAM_NAME_START_SYMBOL = Chars.COLON_CHAR;
 
     /** 默认的查询返回条数. */
     int DEFAULT_LIMIT = 10;
@@ -84,6 +88,21 @@ public interface Dialect {
      * @return 返回转换好的分页sql
      */
     String getParamNamedPaginationSql(String sql, int start, int limit);
+
+    /**
+     * <p>
+     * 转换普通命名sql为带分页的sql,此sql为带命名参数sql, 如select * from user where user_name =
+     * {startSymal}username.
+     * </p>
+     * .
+     *
+     * @param sql         带转换的sql
+     * @param start       起始数
+     * @param limit       数量
+     * @param startSymbol 命名参数的起始符号
+     * @return 返回转换好的分页sql
+     */
+    String getParamNamedPaginationSql(String sql, int start, int limit, char startSymbol);
 
     /**
      * <p>
@@ -380,7 +399,7 @@ public interface Dialect {
      */
     default String buildColumnSql(String columnName, String tableAlias, Function function) {
         if (function instanceof AggregateFunction) {
-            return buildColumnSql(columnName, tableAlias, function);
+            return buildColumnSql(columnName, tableAlias, (AggregateFunction) function);
         }
         // TODO 后续添加其他实现
         throw new DialectException("只实现了 AggregateFunction，未实现的 function" + function.getClass().getName());
@@ -577,6 +596,19 @@ public interface Dialect {
     }
 
     /**
+     * Builds the alter table DDL.
+     *
+     * @param databaseName  the database name
+     * @param tableName     the table name
+     * @param addColumns    the add columns
+     * @param modifyColumns the modify columns
+     * @param dropColumns   the drop columns
+     * @return the string
+     */
+    String buildAlterTableDDL(String databaseName, String tableName, Column[] addColumns, Column[] modifyColumns,
+            Column[] dropColumns);
+
+    /**
      * Builds the alter table add column DDL.
      *
      * @param tableName the table name
@@ -617,6 +649,16 @@ public interface Dialect {
      * @return the string
      */
     String buildAlterTableModifyColumnDDL(String databaseName, String tableName, Column... columns);
+
+    /**
+     * Builds the alter table drop column DDL.
+     *
+     * @param column the column
+     * @return the string
+     */
+    default String buildAlterTableDropColumnDDL(Column column) {
+        return buildAlterTableDropColumnDDL(null, column.getName(), column);
+    }
 
     /**
      * Builds the alter table drop column DDL.
@@ -704,6 +746,36 @@ public interface Dialect {
         } else {
             return BuilderUtils.link(buildAlterTableDDL(database, tableName), getKeyword(Keywords.DROP),
                     getKeyword(Keywords.INDEX), wrapName(indexName));
+        }
+    }
+
+    /**
+     * Gets the column type name.
+     *
+     * @param sqlType the sql type
+     * @return the column type name
+     */
+    default String getColumnTypeName(SQLType sqlType) {
+        return sqlType.getName();
+    }
+
+    default int getDefaultSize(SQLType sqlType) {
+        if (sqlType == JDBCType.BIGINT) {
+            return 19;
+        } else if (sqlType == JDBCType.INTEGER) {
+            return 10;
+        } else if (sqlType == JDBCType.SMALLINT) {
+            return 5;
+        } else if (sqlType == JDBCType.TINYINT) {
+            return 3;
+        } else if (sqlType == JDBCType.TIMESTAMP) {
+            return 19;
+        } else if (sqlType == JDBCType.DATE) {
+            return 10;
+        } else if (sqlType == JDBCType.TIME) {
+            return 8;
+        } else {
+            return 0;
         }
     }
 

@@ -8,6 +8,6 @@ package cn.featherfly.common.db.model;
  *
  * @author zhongj
  */
-public class SimpleTable extends AbstractTable<SimpleTable> {
+public class SimpleTable extends AbstractTablePojo<SimpleTable, SimpleColumn> {
 
 }

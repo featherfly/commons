@@ -9,6 +9,7 @@ import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.SqlUtils;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.lang.Strings;
 
 /**
  * <p>
@@ -29,7 +30,7 @@ public class MySQLDialect extends AbstractDialect {
      */
     @Override
     public String getPaginationSql(String sql, int start, int limit) {
-        return getPaginationSql(sql, start, false);
+        return getPaginationSql(sql, start, false, PARAM_NAME_START_SYMBOL);
     }
 
     /**
@@ -37,10 +38,18 @@ public class MySQLDialect extends AbstractDialect {
      */
     @Override
     public String getParamNamedPaginationSql(String sql, int start, int limit) {
-        return getPaginationSql(sql, start, true);
+        return getParamNamedPaginationSql(sql, start, limit, PARAM_NAME_START_SYMBOL);
     }
 
-    private String getPaginationSql(String sql, int start, boolean isParamNamed) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getParamNamedPaginationSql(String sql, int start, int limit, char startSymbol) {
+        return getPaginationSql(sql, start, true, startSymbol);
+    }
+
+    private String getPaginationSql(String sql, int start, boolean isParamNamed, char startSymbol) {
         sql = sql.trim();
         boolean isForUpdate = false;
         if (isForUpdate(sql)) {
@@ -52,9 +61,11 @@ public class MySQLDialect extends AbstractDialect {
         pagingSelect.append(sql);
         if (isParamNamed) {
             if (start > 0) {
-                pagingSelect.append(String.format(" LIMIT :%s,:%s", START_PARAM_NAME, LIMIT_PARAM_NAME));
+                pagingSelect.append(Strings.format(" LIMIT {0}{1},{0}{2}",
+                        Lang.array(PARAM_NAME_START_SYMBOL, START_PARAM_NAME, LIMIT_PARAM_NAME)));
             } else {
-                pagingSelect.append(String.format(" LIMIT :%s", LIMIT_PARAM_NAME));
+                pagingSelect
+                        .append(Strings.format(" LIMIT {0}{1}", Lang.array(PARAM_NAME_START_SYMBOL, LIMIT_PARAM_NAME)));
             }
         } else {
             if (start > 0) {
@@ -148,7 +159,7 @@ public class MySQLDialect extends AbstractDialect {
     }
 
     @Override
-    protected String getColumnTypeName(SQLType sqlType) {
+    public String getColumnTypeName(SQLType sqlType) {
         JDBCType type = JDBCType.valueOf(sqlType.getVendorTypeNumber());
         switch (type) {
             case INTEGER:

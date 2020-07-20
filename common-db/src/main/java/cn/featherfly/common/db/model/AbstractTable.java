@@ -15,10 +15,12 @@ import cn.featherfly.common.lang.Lang;
  * <p>
  * AbstractTable
  * </p>
+ * .
  *
  * @author zhongj
+ * @param <C> the generic type
  */
-public abstract class AbstractTable<T extends Table> implements Table {
+public abstract class AbstractTable<C extends Column> implements Table {
     /** The type. */
     protected String type;
 
@@ -43,11 +45,64 @@ public abstract class AbstractTable<T extends Table> implements Table {
     public AbstractTable() {
     }
 
-    protected void add(Column column) {
+    /**
+     * Adds the.
+     *
+     * @param column the column
+     */
+    protected void add(C column) {
         if (column.isPrimaryKey()) {
             primaryColumns.add(column);
         }
         columnMap.put(column.getName().toUpperCase(), column);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (catalog == null ? 0 : catalog.hashCode());
+        result = prime * result + (name == null ? 0 : name.hashCode());
+        result = prime * result + (remark == null ? 0 : remark.hashCode());
+        result = prime * result + (type == null ? 0 : type.hashCode());
+        result = prime * result + (columnMap == null ? 0 : columnMap.hashCode());
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Table)) {
+            return false;
+        }
+        Table other = (Table) obj;
+        if (!Lang.equals(catalog, other.getCatalog())) {
+            return false;
+        }
+        if (!Lang.equals(columnMap, other.getColumnMap())) {
+            return false;
+        }
+        if (!Lang.equals(name, other.getName())) {
+            return false;
+        }
+        if (!Lang.equals(remark, other.getRemark())) {
+            return false;
+        }
+        if (!Lang.equals(type, other.getType())) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -61,18 +116,6 @@ public abstract class AbstractTable<T extends Table> implements Table {
     }
 
     /**
-     * 设置type.
-     *
-     * @param type type
-     * @return the table model
-     */
-    @SuppressWarnings("unchecked")
-    public T setType(String type) {
-        this.type = type;
-        return (T) this;
-    }
-
-    /**
      * 返回name.
      *
      * @return name
@@ -80,18 +123,6 @@ public abstract class AbstractTable<T extends Table> implements Table {
     @Override
     public String getName() {
         return name;
-    }
-
-    /**
-     * 设置name.
-     *
-     * @param name name
-     * @return the table model
-     */
-    @SuppressWarnings("unchecked")
-    public T setName(String name) {
-        this.name = name;
-        return (T) this;
     }
 
     /**
@@ -105,18 +136,6 @@ public abstract class AbstractTable<T extends Table> implements Table {
     }
 
     /**
-     * 设置remark.
-     *
-     * @param remark remark
-     * @return the table model
-     */
-    @SuppressWarnings("unchecked")
-    public T setRemark(String remark) {
-        this.remark = remark;
-        return (T) this;
-    }
-
-    /**
      * 返回catalog.
      *
      * @return catalog
@@ -124,18 +143,6 @@ public abstract class AbstractTable<T extends Table> implements Table {
     @Override
     public String getCatalog() {
         return catalog;
-    }
-
-    /**
-     * 设置catalog.
-     *
-     * @param catalog catalog
-     * @return the table model
-     */
-    @SuppressWarnings("unchecked")
-    public T setCatalog(String catalog) {
-        this.catalog = catalog;
-        return (T) this;
     }
 
     /**
@@ -180,4 +187,5 @@ public abstract class AbstractTable<T extends Table> implements Table {
         }
         return columnMap.containsKey(columnName.toUpperCase());
     }
+
 }

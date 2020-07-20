@@ -14,7 +14,6 @@ import com.speedment.common.tuple.Tuples;
 
 import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.constant.Chars;
-import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.builder.ColumnModel;
@@ -50,13 +49,16 @@ public class ClassMappingUtils {
         TableModel table = new TableModel();
         table.setName(classMapping.getRepositoryName());
         table.setRemark(classMapping.getRemark());
+        int index = 1;
         // columns
         for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
             if (Lang.isEmpty(propertyMapping.getPropertyMappings())) {
-                table.addColumn(createColumn(propertyMapping, sqlTypeMappingManager));
+                table.addColumn(createColumn(propertyMapping, sqlTypeMappingManager, index, dialect));
+                index++;
             } else {
                 for (PropertyMapping pm : propertyMapping.getPropertyMappings()) {
-                    table.addColumn(createColumn(pm, sqlTypeMappingManager));
+                    table.addColumn(createColumn(pm, sqlTypeMappingManager, index, dialect));
+                    index++;
                 }
             }
         }
@@ -81,9 +83,11 @@ public class ClassMappingUtils {
      *
      * @param propertyMapping       the property mapping
      * @param sqlTypeMappingManager the sql type mapping manager
+     * @param index                 the index
      * @return the column model
      */
-    private static Column createColumn(PropertyMapping propertyMapping, SqlTypeMappingManager sqlTypeMappingManager) {
+    private static ColumnModel createColumn(PropertyMapping propertyMapping,
+            SqlTypeMappingManager sqlTypeMappingManager, int index, Dialect dialect) {
         ColumnModel column = new ColumnModel();
         column.setName(propertyMapping.getRepositoryFieldName());
         column.setPrimaryKey(propertyMapping.isPrimaryKey());
@@ -93,8 +97,10 @@ public class ClassMappingUtils {
         column.setNullable(propertyMapping.isNullable());
         column.setRemark(propertyMapping.getRemark());
         column.setSize(propertyMapping.getSize());
+        column.setColumnIndex(index);
         column.setSqlType(
                 sqlTypeMappingManager.getSqlType((Class<? extends Object>) propertyMapping.getPropertyType()));
+        column.setTypeName(dialect.getColumnTypeName(column.getSqlType()));
         return column;
     }
 

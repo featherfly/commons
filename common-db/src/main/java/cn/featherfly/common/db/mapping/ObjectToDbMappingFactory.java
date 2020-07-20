@@ -115,9 +115,11 @@ public class ObjectToDbMappingFactory extends AbstractMappingFactory {
 
         Collection<BeanProperty<?>> bps = bd.getBeanProperties();
         boolean findPk = false;
+        int pkNo = 0;
         for (BeanProperty<?> beanProperty : bps) {
             if (mappingWithJpa(beanProperty, tableMapping, logInfo, tm)) {
                 findPk = true;
+                pkNo++;
             }
         }
         if (!findPk) {
@@ -134,6 +136,13 @@ public class ObjectToDbMappingFactory extends AbstractMappingFactory {
 
         classMapping.addPropertyMappings(tableMapping.values().stream()
                 .sorted((p1, p2) -> p1.getIndex() < p2.getIndex() ? -1 : 1).collect(Collectors.toList()));
+        if (pkNo > 1) {
+            classMapping.getPropertyMappings().forEach(pm -> {
+                if (pm.isPrimaryKey()) {
+                    pm.setAutoincrement(false);
+                }
+            });
+        }
         return classMapping;
     }
 

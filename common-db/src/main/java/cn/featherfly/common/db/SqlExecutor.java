@@ -158,9 +158,6 @@ public class SqlExecutor {
                 }
                 JdbcUtils.setParameters(prep, params);
                 return prep.executeUpdate();
-                //                if (prep.execute()) {
-                //                    return Chars.ONE;
-                //                }
             }
         }
         return Chars.ZERO;
@@ -389,4 +386,12 @@ public class SqlExecutor {
         this.namedParamEndSymbol = namedParamEndSymbol;
     }
 
+    /**
+     * 返回dataSource
+     *
+     * @return dataSource
+     */
+    public DataSource getDataSource() {
+        return dataSource;
+    }
 }

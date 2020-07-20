@@ -69,6 +69,26 @@ public class SqlTypeMappingManager {
     }
 
     /**
+     * Sets the enum ordinal type.
+     *
+     * @param enumOrdinalType the new enum ordinal type
+     * @see cn.featherfly.common.db.mapping.DefaultSqlTypeMapping#setEnumOrdinalType(java.sql.SQLType)
+     */
+    public void setEnumOrdinalType(SQLType enumOrdinalType) {
+        defaultSqlTypeMapping.setEnumOrdinalType(enumOrdinalType);
+    }
+
+    /**
+     * Gets the enum ordinal type.
+     *
+     * @return the enum ordinal type
+     * @see cn.featherfly.common.db.mapping.DefaultSqlTypeMapping#getEnumOrdinalType()
+     */
+    public SQLType getEnumOrdinalType() {
+        return defaultSqlTypeMapping.getEnumOrdinalType();
+    }
+
+    /**
      * Regist.
      *
      * @param register the register
@@ -346,6 +366,13 @@ public class SqlTypeMappingManager {
     //        return store;
     //    }
 
+    /**
+     * Gets the store for regist.
+     *
+     * @param <E>        the element type
+     * @param entityType the entity type
+     * @return the store for regist
+     */
     private <E> Store getStoreForRegist(GenericType<E> entityType) {
         Store store = typeStoreMap.get(entityType);
         if (store == null) {
@@ -355,6 +382,13 @@ public class SqlTypeMappingManager {
         return store;
     }
 
+    /**
+     * Gets the store.
+     *
+     * @param <E>      the element type
+     * @param javaType the java type
+     * @return the store
+     */
     private <E> Store getStore(GenericType<E> javaType) {
         return typeStoreMap.get(javaType);
     }
@@ -373,7 +407,11 @@ public class SqlTypeMappingManager {
         /** The java to sql type mappers. */
         private List<JavaSqlTypeMapper<? extends Object>> javaSqlTypeMappers = new ArrayList<>();
 
-        /** The sql type to java mappers. */
+        /**
+         * The sql type to java mappers.
+         *
+         * @param mapper the mapper
+         */
         //        private List<JavaSqlTypeMapper<? extends Object>> javaToSqlTypeMappers = new ArrayList<>();
 
         /**
@@ -465,6 +503,15 @@ public class SqlTypeMappingManager {
             return null;
         }
 
+        /**
+         * Sets the.
+         *
+         * @param <E>         the element type
+         * @param prep        the prep
+         * @param columnIndex the column index
+         * @param columnValue the column value
+         * @return true, if successful
+         */
         @SuppressWarnings("unchecked")
         public <E extends Object> boolean set(PreparedStatement prep, int columnIndex, E columnValue) {
             if (columnValue == null) {
@@ -475,6 +522,16 @@ public class SqlTypeMappingManager {
             }
         }
 
+        /**
+         * Sets the.
+         *
+         * @param <E>         the element type
+         * @param prep        the prep
+         * @param columnIndex the column index
+         * @param columnValue the column value
+         * @param javaType    the java type
+         * @return true, if successful
+         */
         @SuppressWarnings({ "unchecked", "rawtypes" })
         public <E extends Object> boolean set(PreparedStatement prep, int columnIndex, E columnValue,
                 GenericType<E> javaType) {
@@ -494,6 +551,15 @@ public class SqlTypeMappingManager {
             return false;
         }
 
+        /**
+         * Gets the.
+         *
+         * @param <E>         the element type
+         * @param rs          the rs
+         * @param columnIndex the column index
+         * @param javaType    the java type
+         * @return the e
+         */
         @SuppressWarnings("unchecked")
         public <E extends Object> E get(ResultSet rs, int columnIndex, GenericType<E> javaType) {
             SQLType sqlType = JdbcUtils.getResultSQLType(rs, columnIndex);

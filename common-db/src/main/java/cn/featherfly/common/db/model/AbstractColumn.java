@@ -1,10 +1,11 @@
 
 package cn.featherfly.common.db.model;
 
-import java.sql.JDBCType;
 import java.sql.SQLType;
 
 import cn.featherfly.common.db.Column;
+import cn.featherfly.common.db.Table;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -13,9 +14,8 @@ import cn.featherfly.common.db.Column;
  * .
  *
  * @author zhongj
- * @param <T> the generic type
  */
-public abstract class AbstractColumn<T extends Column> implements Column {
+public abstract class AbstractColumn implements Column {
 
     /** The name. */
     protected String name;
@@ -33,7 +33,7 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     protected int size;
 
     /** The remark. */
-    protected String remark;
+    protected String remark = "";
 
     /** The default value. */
     protected String defaultValue;
@@ -53,7 +53,106 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     /** The autoincrement. */
     protected boolean autoincrement;
 
+    // TODO 后续加入unique实现
     //    protected boolean unique;
+
+    /** The table. */
+    protected Table table;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (autoincrement ? 1231 : 1237);
+        //        result = prime * result + columnIndex;
+        result = prime * result + decimalDigits;
+        result = prime * result + (defaultValue == null ? 0 : defaultValue.hashCode());
+        result = prime * result + (name == null ? 0 : name.hashCode());
+        result = prime * result + (nullable ? 1231 : 1237);
+        result = prime * result + (primaryKey ? 1231 : 1237);
+        result = prime * result + (remark == null ? 0 : remark.hashCode());
+        result = prime * result + size;
+        result = prime * result + (sqlType == null ? 0 : sqlType.hashCode());
+        result = prime * result + type;
+        result = prime * result + (typeName == null ? 0 : typeName.hashCode());
+        if (table != null && Lang.isNotEmpty(table.getName())) {
+            result = prime * result + table.getName().hashCode();
+        }
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Column)) {
+            return false;
+        }
+        Column other = (Column) obj;
+        if (autoincrement != other.isAutoincrement()) {
+            return false;
+        }
+        //        if (columnIndex != other.getColumnIndex()) {
+        //            return false;
+        //        }
+        if (decimalDigits != other.getDecimalDigits()) {
+            return false;
+        }
+        if (!Lang.equals(defaultValue, other.getDefaultValue())) {
+            return false;
+        }
+        if (!Lang.equals(name, other.getName())) {
+            return false;
+        }
+        if (nullable != other.isNullable()) {
+            return false;
+        }
+        if (primaryKey != other.isPrimaryKey()) {
+            return false;
+        }
+        if (!Lang.equals(remark, other.getRemark())) {
+            return false;
+        }
+        if (size != other.getSize()) {
+            return false;
+        }
+        if (!Lang.equals(sqlType, other.getSqlType())) {
+            return false;
+        }
+        if (type != other.getType()) {
+            return false;
+        }
+        if (!Lang.equals(typeName, other.getTypeName())) {
+            return false;
+        }
+        if (table != null && Lang.isNotEmpty(table.getName())) {
+            if (!Lang.equals(table.getName(), other.getTable().getName())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "Column [name=" + name + ", sqlType=" + sqlType + ", type=" + type + ", typeName=" + typeName + ", size="
+                + size + ", remark=" + remark + ", defaultValue=" + defaultValue + ", nullable=" + nullable
+                + ", columnIndex=" + columnIndex + ", primaryKey=" + primaryKey + ", decimalDigits=" + decimalDigits
+                + ", autoincrement=" + autoincrement + "]";
+    }
 
     /**
      * 返回name.
@@ -63,18 +162,6 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     @Override
     public String getName() {
         return name;
-    }
-
-    /**
-     * 设置name.
-     *
-     * @param name name
-     * @return the t
-     */
-    @SuppressWarnings("unchecked")
-    public T setName(String name) {
-        this.name = name;
-        return (T) this;
     }
 
     /**
@@ -88,19 +175,6 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 设置type.
-     *
-     * @param type type
-     * @return the t
-     */
-    @SuppressWarnings("unchecked")
-    public T setType(int type) {
-        this.type = type;
-        sqlType = JDBCType.valueOf(type);
-        return (T) this;
-    }
-
-    /**
      * 返回typeName.
      *
      * @return typeName
@@ -108,18 +182,6 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     @Override
     public String getTypeName() {
         return typeName;
-    }
-
-    /**
-     * 设置typeName.
-     *
-     * @param typeName typeName
-     * @return the t
-     */
-    @SuppressWarnings("unchecked")
-    public T setTypeName(String typeName) {
-        this.typeName = typeName;
-        return (T) this;
     }
 
     /**
@@ -133,18 +195,6 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 设置size.
-     *
-     * @param size size
-     * @return the t
-     */
-    @SuppressWarnings("unchecked")
-    public T setSize(int size) {
-        this.size = size;
-        return (T) this;
-    }
-
-    /**
      * 返回remark.
      *
      * @return remark
@@ -152,18 +202,6 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     @Override
     public String getRemark() {
         return remark;
-    }
-
-    /**
-     * 设置remark.
-     *
-     * @param remark remark
-     * @return the t
-     */
-    @SuppressWarnings("unchecked")
-    public T setRemark(String remark) {
-        this.remark = remark;
-        return (T) this;
     }
 
     /**
@@ -177,18 +215,6 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 设置defaultValue.
-     *
-     * @param defaultValue defaultValue
-     * @return the t
-     */
-    @SuppressWarnings("unchecked")
-    public T setDefaultValue(String defaultValue) {
-        this.defaultValue = defaultValue;
-        return (T) this;
-    }
-
-    /**
      * 返回nullable.
      *
      * @return nullable
@@ -196,18 +222,6 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     @Override
     public boolean isNullable() {
         return nullable;
-    }
-
-    /**
-     * 设置nullable.
-     *
-     * @param nullable nullable
-     * @return the t
-     */
-    @SuppressWarnings("unchecked")
-    public T setNullable(boolean nullable) {
-        this.nullable = nullable;
-        return (T) this;
     }
 
     /**
@@ -221,18 +235,6 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 设置columnIndex.
-     *
-     * @param columnIndex columnIndex
-     * @return the t
-     */
-    @SuppressWarnings("unchecked")
-    public T setColumnIndex(int columnIndex) {
-        this.columnIndex = columnIndex;
-        return (T) this;
-    }
-
-    /**
      * 返回primaryKey.
      *
      * @return primaryKey
@@ -240,21 +242,6 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     @Override
     public boolean isPrimaryKey() {
         return primaryKey;
-    }
-
-    /**
-     * 设置primaryKey.
-     *
-     * @param primaryKey primaryKey
-     * @return the t
-     */
-    @SuppressWarnings("unchecked")
-    public T setPrimaryKey(boolean primaryKey) {
-        this.primaryKey = primaryKey;
-        if (primaryKey) {
-            nullable = false;
-        }
-        return (T) this;
     }
 
     /**
@@ -268,18 +255,6 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 设置decimalDigits.
-     *
-     * @param decimalDigits decimalDigits
-     * @return the t
-     */
-    @SuppressWarnings("unchecked")
-    public T setDecimalDigits(int decimalDigits) {
-        this.decimalDigits = decimalDigits;
-        return (T) this;
-    }
-
-    /**
      * 返回autoincrement.
      *
      * @return autoincrement
@@ -287,18 +262,6 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     @Override
     public boolean isAutoincrement() {
         return autoincrement;
-    }
-
-    /**
-     * 设置autoincrement.
-     *
-     * @param autoincrement autoincrement
-     * @return the t
-     */
-    @SuppressWarnings("unchecked")
-    public T setAutoincrement(boolean autoincrement) {
-        this.autoincrement = autoincrement;
-        return (T) this;
     }
 
     /**
@@ -312,16 +275,13 @@ public abstract class AbstractColumn<T extends Column> implements Column {
     }
 
     /**
-     * 设置sqlType.
+     * 返回table.
      *
-     * @param sqlType sqlType
-     * @return the t
+     * @return table
      */
-    @SuppressWarnings("unchecked")
-    public T setSqlType(SQLType sqlType) {
-        this.sqlType = sqlType;
-        type = sqlType.getVendorTypeNumber();
-        return (T) this;
+    @Override
+    public Table getTable() {
+        return table;
     }
 
     //    /**

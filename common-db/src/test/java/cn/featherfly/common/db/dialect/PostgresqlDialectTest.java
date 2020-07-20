@@ -130,4 +130,15 @@ public class PostgresqlDialectTest extends DialectTest {
         assertEquals(sql,
                 "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?)");
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Test
+    void testParamNamedPaginationSql() {
+        String pageNamedParamSql = dialect.getParamNamedPaginationSql("select * from user", 11, 10);
+        System.out.println(pageNamedParamSql);
+        assertEquals(pageNamedParamSql, "select * from user LIMIT :dialect_paging_limit OFFSET :dialect_paging_start");
+    }
 }

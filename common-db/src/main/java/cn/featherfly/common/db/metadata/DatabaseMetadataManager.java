@@ -105,7 +105,7 @@ public class DatabaseMetadataManager {
 
     /**
      * <p>
-     * 创建数据库元数据，会初始化表和列元数据.
+     * 创建数据库元数据，会初始化表和列元数据， 如果元数据对象已经存在，则直接返回.
      * </p>
      *
      * @param dataSource 数据源
@@ -118,7 +118,7 @@ public class DatabaseMetadataManager {
 
     /**
      * <p>
-     * 创建数据库元数据，会初始化表和列元数据， 不管元数据对象是否存在，都创建，原来的会被替换.
+     * 重新创建数据库元数据，会初始化表和列元数据， 不管元数据对象是否存在，都创建，原来的会被替换.
      * </p>
      *
      * @param connection 数据库连接

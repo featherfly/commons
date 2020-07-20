@@ -1,3 +1,10 @@
+TODO 
+    1.为Migrator实现索引的创建·更新·删除
+
+2020-7-21
+0.3.0
+    1.实现Migrator的initSql,updateSql方法
+    
 2020-7-19
 0.2.5
     1.修复JdbcMappingFactory中@Transient不是使用javax.persistence.Transient的问题

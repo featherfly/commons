@@ -2,6 +2,7 @@
 package cn.featherfly.common.db.mapping;
 
 import java.math.BigDecimal;
+import java.sql.SQLType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -153,11 +154,13 @@ public abstract class AbstractMappingFactory implements MappingFactory {
             } else if (beanProperty.getType() == Double.class || beanProperty.getType() == Double.TYPE
                     || beanProperty.getType() == Float.class || beanProperty.getType() == Float.TYPE
                     || beanProperty.getType() == BigDecimal.class) {
-                mapping.setSize(11);
+                mapping.setSize(12);
                 mapping.setDecimalDigits(2);
-            } else {
-                mapping.setSize(0);
             }
+        }
+        if (mapping.getSize() == 0) {
+            SQLType sqlType = sqlTypeMappingManager.getSqlType(beanProperty.getType());
+            mapping.setSize(dialect.getDefaultSize(sqlType));
         }
         ColumnDefault columnDefault = beanProperty.getAnnotation(ColumnDefault.class);
         if (columnDefault != null) {
@@ -169,8 +172,7 @@ public abstract class AbstractMappingFactory implements MappingFactory {
         }
         if (beanProperty.getType().isEnum()) {
             if (!sqlTypeMappingManager.isEnumWithOrdinal()) {
-                // FIXME 写死的长度，后续修改为可变更
-                mapping.setSize(20);
+                mapping.setSize(dialect.getDefaultSize(sqlTypeMappingManager.getEnumOrdinalType()));
             }
         }
 
@@ -195,6 +197,7 @@ public abstract class AbstractMappingFactory implements MappingFactory {
      * Checks if is transient.
      *
      * @param beanProperty the bean property
+     * @param logInfo      the log info
      * @return true, if is transient
      */
     protected boolean isTransient(BeanProperty<?> beanProperty, StringBuilder logInfo) {

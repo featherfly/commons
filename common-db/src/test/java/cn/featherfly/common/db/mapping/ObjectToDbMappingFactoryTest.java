@@ -5,8 +5,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.db.JdbcTestBase;
-import cn.featherfly.common.db.dialect.Dialect;
-import cn.featherfly.common.db.dialect.Dialects;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
 import cn.featherfly.common.repository.mapping.ClassMapping;
@@ -22,8 +20,6 @@ import cn.featherfly.common.repository.mapping.MappingException;
 public class ObjectToDbMappingFactoryTest extends JdbcTestBase {
 
     private ObjectToDbMappingFactory factory;
-
-    private Dialect dialect = Dialects.MYSQL;
 
     private SqlTypeMappingManager sqlTypeMappingManager = new SqlTypeMappingManager();
 

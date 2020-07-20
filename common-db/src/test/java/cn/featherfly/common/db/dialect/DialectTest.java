@@ -34,7 +34,7 @@ public abstract class DialectTest {
         id.setAutoincrement(true);
         id.setColumnIndex(index);
         id.setType(Types.INTEGER);
-        id.setSize(11);
+        id.setSize(0);
         id.setNullable(false);
         id.setRemark("id主键");
 
@@ -92,7 +92,7 @@ public abstract class DialectTest {
         userId.setPrimaryKey(true);
         userId.setColumnIndex(index);
         userId.setType(Types.INTEGER);
-        userId.setSize(11);
+        userId.setSize(0);
         userId.setNullable(false);
         userId.setRemark("user id");
 
@@ -102,7 +102,7 @@ public abstract class DialectTest {
         roleId.setPrimaryKey(true);
         roleId.setColumnIndex(index);
         roleId.setType(Types.INTEGER);
-        roleId.setSize(11);
+        roleId.setSize(0);
         roleId.setNullable(false);
         roleId.setRemark("role id");
 
@@ -126,7 +126,7 @@ public abstract class DialectTest {
         userId.setPrimaryKey(true);
         userId.setColumnIndex(index);
         userId.setType(Types.INTEGER);
-        userId.setSize(11);
+        userId.setSize(0);
         userId.setNullable(false);
         userId.setRemark("user id");
 
@@ -136,7 +136,7 @@ public abstract class DialectTest {
         roleId.setPrimaryKey(true);
         roleId.setColumnIndex(index);
         roleId.setType(Types.INTEGER);
-        roleId.setSize(11);
+        roleId.setSize(0);
         roleId.setNullable(false);
         roleId.setRemark("role id");
 
@@ -210,4 +210,6 @@ public abstract class DialectTest {
     abstract void testAlterTableModifyColumns();
 
     abstract void testBuildInsertBatchSql();
+
+    abstract void testParamNamedPaginationSql();
 }

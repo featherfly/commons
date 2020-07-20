@@ -7,6 +7,8 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.testng.annotations.BeforeSuite;
 
+import cn.featherfly.common.db.dialect.Dialect;
+import cn.featherfly.common.db.dialect.Dialects;
 import cn.featherfly.common.lang.ClassLoaderUtils;
 
 /**
@@ -20,6 +22,8 @@ public class JdbcTestBase {
 
     protected DataSource dataSource;
 
+    protected Dialect dialect;
+
     @BeforeSuite
     public void setUp() {
         DOMConfigurator.configure(ClassLoaderUtils.getResource("log4j.xml").getFile());
@@ -30,5 +34,6 @@ public class JdbcTestBase {
         dataSource.setUsername("root");
         dataSource.setPassword("123456");
         this.dataSource = dataSource;
+        dialect = Dialects.MYSQL;
     }
 }

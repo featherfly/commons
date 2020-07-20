@@ -11,6 +11,7 @@ import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.lang.Strings;
 
 /**
  * <p>
@@ -58,7 +59,7 @@ public class OracleDialect extends AbstractDialect {
      */
     @Override
     public String getPaginationSql(String sql, int start, int limit) {
-        return getPaginationSql(sql, start, false);
+        return getPaginationSql(sql, start, false, PARAM_NAME_START_SYMBOL);
     }
 
     /**
@@ -66,10 +67,18 @@ public class OracleDialect extends AbstractDialect {
      */
     @Override
     public String getParamNamedPaginationSql(String sql, int start, int limit) {
-        return getPaginationSql(sql, start, true);
+        return getParamNamedPaginationSql(sql, start, limit, PARAM_NAME_START_SYMBOL);
     }
 
-    private String getPaginationSql(String sql, int start, boolean isParamNamed) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getParamNamedPaginationSql(String sql, int start, int limit, char startSymbol) {
+        return getPaginationSql(sql, start, false, startSymbol);
+    }
+
+    private String getPaginationSql(String sql, int start, boolean isParamNamed, char startSymbol) {
         sql = sql.trim();
         boolean isForUpdate = false;
         if (isForUpdate(sql)) {
@@ -86,10 +95,14 @@ public class OracleDialect extends AbstractDialect {
         pagingSelect.append(sql);
         if (isParamNamed) {
             if (start > 0) {
-                pagingSelect.append(String.format(" ) row_ ) where rownum_ > :%s and rownum_ <= :%s ", START_PARAM_NAME,
-                        LIMIT_PARAM_NAME));
+                pagingSelect.append(Strings.format(" ) row_ ) where rownum_ > {0}{1} and rownum_ <= {0}{2} ",
+                        Lang.array(startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME)));
+                //                pagingSelect.append(String.format(" ) row_ ) where rownum_ > :%s and rownum_ <= :%s ", START_PARAM_NAME,
+                //                        LIMIT_PARAM_NAME));
             } else {
-                pagingSelect.append(String.format(") where rownum <= :%s", LIMIT_PARAM_NAME));
+                pagingSelect
+                        .append(Strings.format(") where rownum <= {0}{1}", Lang.array(startSymbol, LIMIT_PARAM_NAME)));
+                //                pagingSelect.append(String.format(") where rownum <= :%s", LIMIT_PARAM_NAME));
             }
         } else {
             if (start > 0) {

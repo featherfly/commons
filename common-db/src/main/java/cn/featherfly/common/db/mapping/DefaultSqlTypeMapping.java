@@ -27,6 +27,8 @@ public class DefaultSqlTypeMapping {
 
     private boolean enumWithOrdinal;
 
+    private SQLType enumOrdinalType = JDBCType.TINYINT;
+
     static {
         // ------------------------------------------------------------------------------------------
         // java to sql
@@ -43,11 +45,11 @@ public class DefaultSqlTypeMapping {
         JAVA_TO_SQL_MAP.put(Integer.class, JDBCType.INTEGER);
         JAVA_TO_SQL_MAP.put(Long.TYPE, JDBCType.BIGINT);
         JAVA_TO_SQL_MAP.put(Long.class, JDBCType.BIGINT);
-        JAVA_TO_SQL_MAP.put(Float.TYPE, JDBCType.FLOAT);
-        JAVA_TO_SQL_MAP.put(Float.class, JDBCType.FLOAT);
-        JAVA_TO_SQL_MAP.put(Double.TYPE, JDBCType.DOUBLE);
-        JAVA_TO_SQL_MAP.put(Double.class, JDBCType.DOUBLE);
         JAVA_TO_SQL_MAP.put(BigInteger.class, JDBCType.BIGINT);
+        JAVA_TO_SQL_MAP.put(Float.TYPE, JDBCType.DECIMAL);
+        JAVA_TO_SQL_MAP.put(Float.class, JDBCType.DECIMAL);
+        JAVA_TO_SQL_MAP.put(Double.TYPE, JDBCType.DECIMAL);
+        JAVA_TO_SQL_MAP.put(Double.class, JDBCType.DECIMAL);
         JAVA_TO_SQL_MAP.put(BigDecimal.class, JDBCType.DECIMAL);
         JAVA_TO_SQL_MAP.put(String.class, JDBCType.VARCHAR);
         JAVA_TO_SQL_MAP.put(Date.class, JDBCType.TIMESTAMP);
@@ -107,7 +109,7 @@ public class DefaultSqlTypeMapping {
     public <E extends Object> SQLType getSqlType(Class<E> javaType) {
         if (javaType.isEnum()) {
             if (enumWithOrdinal) {
-                return JDBCType.TINYINT;
+                return enumOrdinalType;
             } else {
                 return JDBCType.VARCHAR;
             }
@@ -143,5 +145,29 @@ public class DefaultSqlTypeMapping {
      */
     public void setEnumWithOrdinal(boolean enumWithOrdinal) {
         this.enumWithOrdinal = enumWithOrdinal;
+    }
+
+    /**
+     * 返回enumOrdinalType
+     *
+     * @return enumOrdinalType
+     */
+    public SQLType getEnumOrdinalType() {
+        return enumOrdinalType;
+    }
+
+    /**
+     * 设置enumOrdinalType
+     *
+     * @param enumOrdinalType enumOrdinalType
+     */
+    public void setEnumOrdinalType(SQLType enumOrdinalType) {
+        if (enumOrdinalType == JDBCType.TINYINT || enumOrdinalType == JDBCType.SMALLINT
+                || enumOrdinalType == JDBCType.INTEGER) {
+            this.enumOrdinalType = enumOrdinalType;
+        } else {
+            throw new JdbcMappingException(
+                    "enumWithOrdinal only can be JDBCType.TINYINT, JDBCType.SMALLINT, JDBCType.INTEGER");
+        }
     }
 }

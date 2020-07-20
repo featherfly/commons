@@ -36,5 +36,6 @@ public interface Column {
 
     boolean isAutoincrement();
 
+    Table getTable();
     //    boolean isUnique();
 }

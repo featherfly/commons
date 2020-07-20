@@ -85,13 +85,38 @@ public abstract class AbstractDialect implements Dialect {
         this.tableAndColumnNameUppercase = tableAndColumnNameUppercase;
     }
 
+    @Override
+    public String buildAlterTableDDL(String databaseName, String tableName, Column[] addColumns, Column[] modifyColumns,
+            Column[] dropColumns) {
+        AssertIllegalArgument.isNotEmpty(tableName, "tableName");
+        StringBuilder ddl = new StringBuilder(buildAlterTableDDL(databaseName, tableName));
+        ddl.append(Chars.NEW_LINE);
+        if (Lang.isNotEmpty(addColumns)) {
+            ddl.append(buildAddColumnDDL(addColumns)).toString();
+            ddl.append(Chars.NEW_LINE);
+        }
+        if (Lang.isNotEmpty(modifyColumns)) {
+            ddl.append(buildModifyColumnDDL(modifyColumns)).toString();
+            ddl.append(Chars.NEW_LINE);
+        }
+        if (Lang.isNotEmpty(dropColumns)) {
+            ddl.append(buildDropColumnDDL(dropColumns)).toString();
+            ddl.append(Chars.NEW_LINE);
+        }
+        return ddl.toString();
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public String buildAlterTableAddColumnDDL(String databaseName, String tableName, Column... columns) {
         StringBuilder ddl = new StringBuilder(buildAlterTableDDL(databaseName, tableName));
-        ddl.append(Chars.NEW_LINE);
+        return ddl.append(Chars.NEW_LINE).append(buildAddColumnDDL(columns)).toString();
+    }
+
+    protected String buildAddColumnDDL(Column... columns) {
+        StringBuilder ddl = new StringBuilder(Chars.SPACE);
         for (Column column : columns) {
             BuilderUtils.link(ddl, getKeyword(Keywords.ADD), getKeyword(Keywords.COLUMN), getColumnDDL(column));
             ddl.append(Chars.COMMA);
@@ -107,7 +132,11 @@ public abstract class AbstractDialect implements Dialect {
     @Override
     public String buildAlterTableModifyColumnDDL(String databaseName, String tableName, Column... columns) {
         StringBuilder ddl = new StringBuilder(buildAlterTableDDL(databaseName, tableName));
-        ddl.append(Chars.NEW_LINE);
+        return ddl.append(Chars.NEW_LINE).append(buildModifyColumnDDL(columns)).toString();
+    }
+
+    protected String buildModifyColumnDDL(Column... columns) {
+        StringBuilder ddl = new StringBuilder(Chars.SPACE);
         for (Column column : columns) {
             BuilderUtils.link(ddl, getKeyword(Keywords.MODIFY), getKeyword(Keywords.COLUMN), getColumnDDL(column));
             ddl.append(Chars.COMMA);
@@ -122,11 +151,8 @@ public abstract class AbstractDialect implements Dialect {
      */
     @Override
     public String buildAlterTableDropColumnDDL(String databaseName, String tableName, Column... columns) {
-        String[] columnNames = new String[columns.length];
-        for (int i = 0; i < columns.length; i++) {
-            columnNames[i] = columns[i].getName();
-        }
-        return buildAlterTableDropColumnDDL(databaseName, tableName, columnNames);
+        StringBuilder ddl = new StringBuilder(buildAlterTableDDL(databaseName, tableName));
+        return ddl.append(Chars.NEW_LINE).append(buildDropColumnDDL(columns)).toString();
     }
 
     /**
@@ -135,7 +161,19 @@ public abstract class AbstractDialect implements Dialect {
     @Override
     public String buildAlterTableDropColumnDDL(String databaseName, String tableName, String... columnNames) {
         StringBuilder ddl = new StringBuilder(buildAlterTableDDL(databaseName, tableName));
-        ddl.append(Chars.NEW_LINE);
+        return ddl.append(Chars.NEW_LINE).append(buildDropColumnDDL(columnNames)).toString();
+    }
+
+    protected String buildDropColumnDDL(Column... columns) {
+        String[] columnNames = new String[columns.length];
+        for (int i = 0; i < columns.length; i++) {
+            columnNames[i] = columns[i].getName();
+        }
+        return buildDropColumnDDL(columnNames);
+    }
+
+    protected String buildDropColumnDDL(String... columnNames) {
+        StringBuilder ddl = new StringBuilder(Chars.SPACE);
         for (String columnName : columnNames) {
             BuilderUtils.link(ddl, getKeyword(Keywords.DROP), getKeyword(Keywords.COLUMN), wrapName(columnName));
             ddl.append(Chars.COMMA);
@@ -291,20 +329,16 @@ public abstract class AbstractDialect implements Dialect {
         int size = column.getSize();
         int decimalDigits = column.getDecimalDigits();
         String result = getColumnTypeName(column.getSqlType());
-        if (size <= 0) {
-            SQLType sqlType = column.getSqlType();
-            if (sqlType == JDBCType.VARCHAR || sqlType == JDBCType.NVARCHAR || sqlType == JDBCType.CHAR
-                    || sqlType == JDBCType.NCHAR || sqlType == JDBCType.LONGVARCHAR || sqlType == JDBCType.LONGNVARCHAR
-                    || sqlType == JDBCType.FLOAT || sqlType == JDBCType.DOUBLE || sqlType == JDBCType.DECIMAL
-                    || sqlType == JDBCType.NUMERIC) {
+        if (defineNeedSize(column.getSqlType())) {
+            if (size <= 0) {
                 throw new JdbcMappingException("#size.not.define", Lang.array(column.getName()));
+            } else {
+                result += Chars.PAREN_L + size;
+                if (decimalDigits > 0) {
+                    result += Chars.COMMA + decimalDigits;
+                }
+                result += Chars.PAREN_R;
             }
-        } else {
-            result += Chars.PAREN_L + size;
-            if (decimalDigits > 0) {
-                result += Chars.COMMA + decimalDigits;
-            }
-            result += Chars.PAREN_R;
         }
         if (Lang.isNotEmpty(extra)) {
             result = BuilderUtils.link(result, extra);
@@ -312,14 +346,11 @@ public abstract class AbstractDialect implements Dialect {
         return result;
     }
 
-    /**
-     * Gets the column type name.
-     *
-     * @param sqlType the sql type
-     * @return the column type name
-     */
-    protected String getColumnTypeName(SQLType sqlType) {
-        return sqlType.getName();
+    private boolean defineNeedSize(SQLType sqlType) {
+        return sqlType == JDBCType.VARCHAR || sqlType == JDBCType.NVARCHAR || sqlType == JDBCType.CHAR
+                || sqlType == JDBCType.NCHAR || sqlType == JDBCType.LONGVARCHAR || sqlType == JDBCType.LONGNVARCHAR
+                || sqlType == JDBCType.FLOAT || sqlType == JDBCType.DOUBLE || sqlType == JDBCType.DECIMAL
+                || sqlType == JDBCType.NUMERIC;
     }
 
     /**

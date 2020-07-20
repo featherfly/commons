@@ -69,7 +69,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         assertEquals(manager.getSqlType(LocalDateTime.class), JDBCType.TIMESTAMP);
         assertEquals(manager.getSqlType(java.sql.Date.class), JDBCType.DATE);
         assertEquals(manager.getSqlType(LocalDate.class), JDBCType.DATE);
-        assertEquals(manager.getSqlType(java.sql.Time.class), JDBCType.DATE);
+        assertEquals(manager.getSqlType(java.sql.Time.class), JDBCType.TIME);
         assertEquals(manager.getSqlType(LocalTime.class), JDBCType.TIME);
 
     }

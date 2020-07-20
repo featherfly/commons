@@ -1,7 +1,7 @@
 
 package cn.featherfly.common.db.builder;
 
-import cn.featherfly.common.db.model.AbstractColumn;
+import cn.featherfly.common.db.model.AbstractColumnPojo;
 
 /**
  * <p>
@@ -10,6 +10,6 @@ import cn.featherfly.common.db.model.AbstractColumn;
  *
  * @author zhongj
  */
-public class ColumnModel extends AbstractColumn<ColumnModel> {
+public class ColumnModel extends AbstractColumnPojo<ColumnModel> {
 
 }

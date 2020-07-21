@@ -31,6 +31,7 @@ public interface Dialect {
     /** 命名参数查询的查询条件默认数量名称. */
     String LIMIT_PARAM_NAME = "dialect_paging_limit";
 
+    /** The param name start symbol. */
     char PARAM_NAME_START_SYMBOL = Chars.COLON_CHAR;
 
     /** 默认的查询返回条数. */
@@ -126,17 +127,6 @@ public interface Dialect {
      * @return 包装后的名称
      */
     String wrapName(String name);
-
-    /**
-     * <p>
-     * 返回设值外检检查SQL语句
-     * </p>
-     * .
-     *
-     * @param check 是否检查外检
-     * @return 设值外检检查SQL语句
-     */
-    String getFkCheck(boolean check);
 
     /**
      * Checks if is auto generate key batch.
@@ -467,7 +457,8 @@ public interface Dialect {
      */
     default String buildCreateDataBaseDDL(String dataBaseName) {
         AssertIllegalArgument.isNotEmpty(dataBaseName, "dataBaseName");
-        return BuilderUtils.link(getKeyword(Keywords.CREATE), getKeyword(Keywords.DATABASE), wrapName(dataBaseName));
+        return BuilderUtils.link(getKeyword(Keywords.CREATE), getKeyword(Keywords.DATABASE), wrapName(dataBaseName))
+                + Chars.SEMI;
     }
 
     /**
@@ -491,9 +482,50 @@ public interface Dialect {
         AssertIllegalArgument.isNotEmpty(dataBaseName, "dataBaseName");
         if (ifExists) {
             return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.DATABASE), getKeyword(Keywords.IF),
-                    getKeyword(Keywords.EXISTS), wrapName(dataBaseName));
+                    getKeyword(Keywords.EXISTS), wrapName(dataBaseName)) + Chars.SEMI;
         } else {
-            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.DATABASE), wrapName(dataBaseName));
+            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.DATABASE), wrapName(dataBaseName))
+                    + Chars.SEMI;
+        }
+    }
+
+    /**
+     * Builds the create schema DDL.
+     *
+     * @param schemaName the schema name
+     * @return the string
+     */
+    default String buildCreateSchemaDDL(String schemaName) {
+        AssertIllegalArgument.isNotEmpty(schemaName, "schemaName");
+        return BuilderUtils.link(getKeyword(Keywords.CREATE), getKeyword(Keywords.SCHEMA), wrapName(schemaName))
+                + Chars.SEMI;
+    }
+
+    /**
+     * Builds the drop schema DDL.
+     *
+     * @param schemaName the schema name
+     * @return the string
+     */
+    default String buildDropSchemaDDL(String schemaName) {
+        return buildDropSchemaDDL(schemaName, false);
+    }
+
+    /**
+     * Builds the drop schema DDL.
+     *
+     * @param schemaName the schema name
+     * @param ifExists   the if exists
+     * @return the string
+     */
+    default String buildDropSchemaDDL(String schemaName, boolean ifExists) {
+        AssertIllegalArgument.isNotEmpty(schemaName, "dataBaseName");
+        if (ifExists) {
+            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.SCHEMA), getKeyword(Keywords.IF),
+                    getKeyword(Keywords.EXISTS), wrapName(schemaName)) + Chars.SEMI;
+        } else {
+            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.SCHEMA), wrapName(schemaName))
+                    + Chars.SEMI;
         }
     }
 
@@ -503,18 +535,7 @@ public interface Dialect {
      * @param table the table
      * @return the string
      */
-    default String buildCreateTableDDL(Table table) {
-        return buildCreateTableDDL(table.getCatalog(), table);
-    }
-
-    /**
-     * Builds the create table sql.
-     *
-     * @param dataBaseName the data base name
-     * @param table        the table
-     * @return the string
-     */
-    String buildCreateTableDDL(String dataBaseName, Table table);
+    String buildCreateTableDDL(Table table);
 
     /**
      * Builds the drop table sql.
@@ -540,32 +561,49 @@ public interface Dialect {
     /**
      * Builds the drop table sql.
      *
-     * @param databaseName the database name
-     * @param tableName    the table name
+     * @param schema    the schema
+     * @param tableName the table name
      * @return the string
      */
-    default String buildDropTableDDL(String databaseName, String tableName) {
-        return buildDropTableDDL(databaseName, tableName, false);
+    default String buildDropTableDDL(String schema, String tableName) {
+        return buildDropTableDDL(schema, tableName, false);
     }
 
     /**
      * Builds the drop table sql.
      *
-     * @param databaseName the database name
-     * @param tableName    the table name
-     * @param ifExists     the if exists
+     * @param schema    the database schema
+     * @param tableName the table name
+     * @param ifExists  the if exists
      * @return the string
      */
-    default String buildDropTableDDL(String databaseName, String tableName, boolean ifExists) {
+    default String buildDropTableDDL(String schema, String tableName, boolean ifExists) {
+        return buildDropTableDDL(schema, tableName, ifExists, false);
+    }
+
+    /**
+     * Builds the drop table sql.
+     *
+     * @param schema    the database schema
+     * @param tableName the table name
+     * @param ifExists  the if exists
+     * @param cascade   the cascade
+     * @return the string
+     */
+    default String buildDropTableDDL(String schema, String tableName, boolean ifExists, boolean cascade) {
         AssertIllegalArgument.isNotEmpty(tableName, "tableName");
-        String tn = Lang.isEmpty(databaseName) ? wrapName(tableName)
-                : wrapName(databaseName) + Chars.DOT + wrapName(tableName);
+        String tn = Lang.isEmpty(schema) ? wrapName(tableName) : wrapName(schema) + Chars.DOT + wrapName(tableName);
+        String ddl = "";
         if (ifExists) {
-            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.TABLE), getKeyword(Keywords.IF),
+            ddl = BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.TABLE), getKeyword(Keywords.IF),
                     getKeyword(Keywords.EXISTS), tn);
         } else {
-            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.TABLE), tn);
+            ddl = BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.TABLE), tn);
         }
+        if (cascade) {
+            ddl += Chars.SPACE + Keywords.CASCADE;
+        }
+        return ddl + Chars.SEMI;
     }
 
     /**
@@ -581,31 +619,31 @@ public interface Dialect {
     /**
      * Builds the alter table sql.
      *
-     * @param databaseName the database name
-     * @param tableName    the table name
+     * @param schema    the schema
+     * @param tableName the table name
      * @return the string
      */
-    default String buildAlterTableDDL(String databaseName, String tableName) {
+    default String buildAlterTableDDL(String schema, String tableName) {
         AssertIllegalArgument.isNotEmpty(tableName, "tableName");
-        if (Lang.isEmpty(databaseName)) {
+        if (Lang.isEmpty(schema)) {
             return BuilderUtils.link(getKeyword(Keywords.ALTER), getKeyword(Keywords.TABLE), wrapName(tableName));
         } else {
             return BuilderUtils.link(getKeyword(Keywords.ALTER), getKeyword(Keywords.TABLE),
-                    wrapName(databaseName) + Chars.DOT + wrapName(tableName));
+                    wrapName(schema) + Chars.DOT + wrapName(tableName));
         }
     }
 
     /**
      * Builds the alter table DDL.
      *
-     * @param databaseName  the database name
+     * @param schema        the database name
      * @param tableName     the table name
      * @param addColumns    the add columns
      * @param modifyColumns the modify columns
      * @param dropColumns   the drop columns
      * @return the string
      */
-    String buildAlterTableDDL(String databaseName, String tableName, Column[] addColumns, Column[] modifyColumns,
+    String buildAlterTableDDL(String schema, String tableName, Column[] addColumns, Column[] modifyColumns,
             Column[] dropColumns);
 
     /**
@@ -622,12 +660,12 @@ public interface Dialect {
     /**
      * Builds the alter table add column DDL.
      *
-     * @param databaseName the database name
-     * @param tableName    the table name
-     * @param columns      the columns
+     * @param schema    the database name
+     * @param tableName the table name
+     * @param columns   the columns
      * @return the string
      */
-    String buildAlterTableAddColumnDDL(String databaseName, String tableName, Column... columns);
+    String buildAlterTableAddColumnDDL(String schema, String tableName, Column... columns);
 
     /**
      * Builds the alter table modify column DDL.
@@ -643,12 +681,12 @@ public interface Dialect {
     /**
      * Builds the alter table modify column DDL.
      *
-     * @param databaseName the database name
-     * @param tableName    the table name
-     * @param columns      the columns
+     * @param schema    the database name
+     * @param tableName the table name
+     * @param columns   the columns
      * @return the string
      */
-    String buildAlterTableModifyColumnDDL(String databaseName, String tableName, Column... columns);
+    String buildAlterTableModifyColumnDDL(String schema, String tableName, Column... columns);
 
     /**
      * Builds the alter table drop column DDL.
@@ -674,22 +712,22 @@ public interface Dialect {
     /**
      * Builds the alter table drop column DDL.
      *
-     * @param databaseName the database name
-     * @param tableName    the table name
-     * @param columns      the columns
+     * @param schema    the database name
+     * @param tableName the table name
+     * @param columns   the columns
      * @return the string
      */
-    String buildAlterTableDropColumnDDL(String databaseName, String tableName, Column... columns);
+    String buildAlterTableDropColumnDDL(String schema, String tableName, Column... columns);
 
     /**
      * Builds the alter table drop column DDL.
      *
-     * @param databaseName the database name
-     * @param tableName    the table name
-     * @param columnNames  the column names
+     * @param schema      the database name
+     * @param tableName   the table name
+     * @param columnNames the column names
      * @return the string
      */
-    String buildAlterTableDropColumnDDL(String databaseName, String tableName, String... columnNames);
+    String buildAlterTableDropColumnDDL(String schema, String tableName, String... columnNames);
 
     /**
      * Builds the drop view sql.
@@ -704,18 +742,113 @@ public interface Dialect {
     /**
      * Builds the drop view sql.
      *
-     * @param databaseName the database name
-     * @param viewName     the view name
+     * @param schema   the database name
+     * @param viewName the view name
      * @return the string
      */
-    default String buildDropViewDDL(String databaseName, String viewName) {
+    default String buildDropViewDDL(String schema, String viewName) {
+        return buildDropViewDDL(schema, viewName, false);
+    }
+
+    /**
+     * Builds the drop view sql.
+     *
+     * @param schema   the database name
+     * @param viewName the view name
+     * @param ifExists the if exists
+     * @return the string
+     */
+    default String buildDropViewDDL(String schema, String viewName, boolean ifExists) {
         AssertIllegalArgument.isNotEmpty(viewName, "viewName");
-        if (Lang.isEmpty(databaseName)) {
-            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.VIEW), wrapName(viewName));
+        return buildDropDDL(schema, viewName, Keywords.VIEW, ifExists);
+    }
+
+    /**
+     * Builds the drop DDL.
+     *
+     * @param schema   the schema
+     * @param name     the name
+     * @param type     the type
+     * @param ifExists the if exists
+     * @return the string
+     */
+    default String buildDropDDL(String schema, String name, Keywords type, boolean ifExists) {
+        AssertIllegalArgument.isNotEmpty(name, "name");
+        AssertIllegalArgument.isNotEmpty(type, "type");
+        String tn = Lang.isEmpty(schema) ? wrapName(name) : wrapName(schema) + Chars.DOT + wrapName(name);
+        if (ifExists) {
+            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(type), getKeyword(Keywords.IF),
+                    getKeyword(Keywords.EXISTS), tn) + Chars.SEMI;
         } else {
-            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.VIEW),
-                    wrapName(databaseName) + Chars.DOT + wrapName(viewName));
+            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(type), tn) + Chars.SEMI;
         }
+    }
+
+    /**
+     * Builds the create index DDL.
+     *
+     * @param tableName the table name
+     * @param indexName the index name
+     * @param columns   the columns
+     * @return the string
+     */
+    default String buildCreateIndexDDL(String tableName, String indexName, String[] columns) {
+        return buildCreateIndexDDL(tableName, indexName, columns, false);
+    }
+
+    /**
+     * Builds the create index DDL.
+     *
+     * @param tableName the table name
+     * @param indexName the index name
+     * @param columns   the columns
+     * @param unique    the unique
+     * @return the string
+     */
+    default String buildCreateIndexDDL(String tableName, String indexName, String[] columns, boolean unique) {
+        return buildCreateIndexDDL(null, tableName, indexName, columns, unique);
+    }
+
+    /**
+     * Builds the create index DDL.
+     *
+     * @param schema    the schema
+     * @param tableName the table name
+     * @param indexName the index name
+     * @param columns   the columns
+     * @return the string
+     */
+    default String buildCreateIndexDDL(String schema, String tableName, String indexName, String[] columns) {
+        return buildCreateIndexDDL(schema, tableName, indexName, columns, false);
+    }
+
+    /**
+     * Builds the create index DDL.
+     *
+     * @param schema    the schema
+     * @param tableName the table name
+     * @param indexName the index name
+     * @param columns   the columns
+     * @param unique    the unique
+     * @return the string
+     */
+    default String buildCreateIndexDDL(String schema, String tableName, String indexName, String[] columns,
+            boolean unique) {
+        AssertIllegalArgument.isNotEmpty(columns, "columns");
+        StringBuilder ddl = new StringBuilder();
+        String tn = Lang.isEmpty(schema) ? wrapName(tableName) : wrapName(schema) + Chars.DOT + wrapName(tableName);
+        StringBuilder cols = new StringBuilder();
+        cols.append(Chars.PAREN_L);
+        for (String column : columns) {
+            cols.append(wrapName(column)).append(Chars.COMMA);
+        }
+        cols.deleteCharAt(cols.length() - 1);
+        cols.append(Chars.PAREN_R);
+        String indexKeyWords = unique ? getKeyword(Keywords.UNIQUE) + Chars.SPACE + getKeyword(Keywords.INDEX)
+                : getKeyword(Keywords.INDEX);
+        BuilderUtils.link(ddl, getKeyword(Keywords.CREATE), indexKeyWords, indexName, getKeyword(Keywords.ON),
+                tn + cols.toString());
+        return ddl.toString() + Chars.SEMI;
     }
 
     /**
@@ -732,20 +865,44 @@ public interface Dialect {
     /**
      * Builds the drop index sql.
      *
-     * @param database  the database
      * @param tableName the table name
      * @param indexName the index name
      * @return the string
      */
-    default String buildDropIndexDDL(String database, String tableName, String indexName) {
-        AssertIllegalArgument.isNotEmpty(tableName, "tableName");
+    default String buildDropIndexDDL(String tableName, String indexName, boolean ifExists) {
+        return buildDropIndexDDL(null, tableName, indexName, ifExists);
+    }
+
+    /**
+     * Builds the drop index sql.
+     *
+     * @param schema    the schema
+     * @param tableName the table name
+     * @param indexName the index name
+     * @return the string
+     */
+    default String buildDropIndexDDL(String schema, String tableName, String indexName) {
+        return buildDropIndexDDL(schema, tableName, indexName, false);
+    }
+
+    /**
+     * Builds the drop index sql.
+     *
+     * @param schema    the schema
+     * @param tableName the table name
+     * @param indexName the index name
+     * @param ifExists  the if exists
+     * @return the string
+     */
+    default String buildDropIndexDDL(String schema, String tableName, String indexName, boolean ifExists) {
         AssertIllegalArgument.isNotEmpty(indexName, "indexName");
-        if (Lang.isEmpty(tableName)) {
-            return BuilderUtils.link(buildAlterTableDDL(database, tableName), getKeyword(Keywords.DROP),
-                    getKeyword(Keywords.INDEX), wrapName(indexName));
+        //        AssertIllegalArgument.isNotEmpty(tableName, "tableName");
+        String name = Lang.isEmpty(schema) ? wrapName(indexName) : wrapName(schema) + Chars.DOT + wrapName(indexName);
+        if (ifExists) {
+            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.INDEX), getKeyword(Keywords.IF),
+                    getKeyword(Keywords.EXISTS), name) + Chars.SEMI;
         } else {
-            return BuilderUtils.link(buildAlterTableDDL(database, tableName), getKeyword(Keywords.DROP),
-                    getKeyword(Keywords.INDEX), wrapName(indexName));
+            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.INDEX), name) + Chars.SEMI;
         }
     }
 
@@ -759,6 +916,22 @@ public interface Dialect {
         return sqlType.getName();
     }
 
+    /**
+     * Gets the default schema.
+     *
+     * @param catalog the catalog
+     * @return the default schema
+     */
+    default String getDefaultSchema(String catalog) {
+        return "public";
+    }
+
+    /**
+     * Gets the default size.
+     *
+     * @param sqlType the sql type
+     * @return the default size
+     */
     default int getDefaultSize(SQLType sqlType) {
         if (sqlType == JDBCType.BIGINT) {
             return 19;
@@ -1380,6 +1553,15 @@ public interface Dialect {
          */
         public String constraint() {
             return dialect.getKeyword(Keywords.CONSTRAINT);
+        }
+
+        /**
+         * cascade.
+         *
+         * @return the string
+         */
+        public String cascade() {
+            return dialect.getKeyword(Keywords.CASCADE);
         }
     }
 }

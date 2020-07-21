@@ -49,6 +49,7 @@ public class ClassMappingUtils {
         TableModel table = new TableModel();
         table.setName(classMapping.getRepositoryName());
         table.setRemark(classMapping.getRemark());
+        table.setSchema(classMapping.getSchema());
         int index = 1;
         // columns
         for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {

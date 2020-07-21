@@ -1,3 +1,6 @@
+/*
+ *
+ */
 
 package cn.featherfly.common.db.dialect;
 
@@ -186,5 +189,15 @@ public enum Keywords {
     CONSTRAINT,
 
     /** The default. */
-    DEFAULT;
+    DEFAULT,
+
+    /** The cascade. */
+    CASCADE,
+
+    /** The schema. */
+    SCHEMA,
+
+    /** The unique. */
+    UNIQUE;
+
 }

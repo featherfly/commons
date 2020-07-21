@@ -59,7 +59,7 @@ public class JsonImportor extends AbstractDataImportor {
             conn.setAutoCommit(false);
 
             if (!isFkCheck()) {
-                addPrepareSql(getDialect().getFkCheck(isFkCheck()));
+                addPrepareSql(getDialect().getInitSqlHeader());
             }
 
             if (Lang.isNotEmpty(getPrepareSqls())) {

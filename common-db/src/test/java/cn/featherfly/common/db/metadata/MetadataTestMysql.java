@@ -24,5 +24,8 @@ public class MetadataTestMysql {
                         + c.getDefaultValue());
             });
         }
+        for (Table td : meta.getTables()) {
+            System.out.println("\t" + td.toString());
+        }
     }
 }

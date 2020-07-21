@@ -15,7 +15,8 @@ import cn.featherfly.common.db.Table;
  * @author zhongj
  */
 public class DatabaseMetadata {
-
+    // FIXME 多个schema内有相同名称表的会出错
+    // TODO 后续加入多个schema管理，当前的方法都不该，只是代理到default schema去获取
     /**
      */
     DatabaseMetadata() {

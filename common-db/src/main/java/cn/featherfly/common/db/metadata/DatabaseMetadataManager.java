@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import cn.featherfly.common.db.JdbcException;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.wrapper.ConnectionWrapper;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
 
 /**
@@ -100,7 +101,21 @@ public class DatabaseMetadataManager {
      * @return 已经初始化的数据库元数据对象
      */
     public DatabaseMetadata create(Connection connection, String dataBase) {
-        return create(connection, dataBase, false);
+        return create(connection, dataBase, null);
+    }
+
+    /**
+     * <p>
+     * 创建数据库元数据，会初始化表和列元数据， 如果元数据对象已经存在，则直接返回.
+     * </p>
+     *
+     * @param connection 数据库连接
+     * @param dataBase   具体库
+     * @param schema     the schema
+     * @return 已经初始化的数据库元数据对象
+     */
+    public DatabaseMetadata create(Connection connection, String dataBase, String schema) {
+        return create(connection, dataBase, schema, false);
     }
 
     /**
@@ -163,7 +178,21 @@ public class DatabaseMetadataManager {
      * @return 已经初始化的数据库元数据对象
      */
     public synchronized DatabaseMetadata reCreate(Connection connection, String dataBase) {
-        return create(connection, dataBase, true);
+        return reCreate(connection, dataBase, null);
+    }
+
+    /**
+     * <p>
+     * 创建数据库元数据，会初始化表和列元数据， 不管元数据对象是否存在，都创建，原来的会被替换.
+     * </p>
+     *
+     * @param connection 数据库连接
+     * @param dataBase   具体库
+     * @param schema     the schema
+     * @return 已经初始化的数据库元数据对象
+     */
+    public synchronized DatabaseMetadata reCreate(Connection connection, String dataBase, String schema) {
+        return create(connection, dataBase, schema, true);
     }
 
     // ********************************************************************
@@ -179,7 +208,8 @@ public class DatabaseMetadataManager {
         return catalog;
     }
 
-    private synchronized DatabaseMetadata create(Connection connection, String dataBase, boolean reCreate) {
+    private synchronized DatabaseMetadata create(Connection connection, String dataBase, String schema,
+            boolean reCreate) {
         try {
             DatabaseMetadata databaseMetadata = getDatabaseMetadata(dataBase);
             if (databaseMetadata != null && !reCreate) {
@@ -190,7 +220,7 @@ public class DatabaseMetadataManager {
             ResultSet rs = null;
             //            rs = metaData.getTableTypes();
             // 得到表信息
-            rs = metaData.getTables(dataBase, null, null, new String[] { TableType.TABLE.toString() });
+            rs = metaData.getTables(dataBase, schema, null, new String[] { TableType.TABLE.toString() });
             //            rs = metaData.getTables(dataBase, dataBase, null, new String[] { TableType.TABLE.toString() });
             //			rs = metaData.getTables("","", null, new String[]{TableType.TABLE.toString()});
             final String remarks = "REMARKS";
@@ -211,10 +241,17 @@ public class DatabaseMetadataManager {
                 tableMetadata.setType(rs.getString("TABLE_TYPE"));
                 // 库（表空间）
                 String tableCat = rs.getString("TABLE_CAT");
-                if (tableCat != null) {
+                if (Lang.isNotEmpty(tableCat)) {
                     tableMetadata.setCatalog(tableCat);
                 } else {
                     tableMetadata.setCatalog(dataBase);
+                }
+                // schema
+                String tableSchema = rs.getString("TABLE_SCHEM");
+                if (Lang.isNotEmpty(tableSchema)) {
+                    tableMetadata.setSchema(tableSchema);
+                } else {
+                    tableMetadata.setSchema(tableMetadata.getCatalog());
                 }
                 tableMetadata.setRemark(rs.getString(remarks));
                 databaseMetadata.addTable(tableMetadata);

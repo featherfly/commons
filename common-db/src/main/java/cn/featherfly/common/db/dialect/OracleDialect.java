@@ -181,15 +181,6 @@ public class OracleDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public String getFkCheck(boolean check) {
-        // FIXME 未实现方法
-        throw new UnsupportedException();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String getWrapSign() {
         return "'";
     }

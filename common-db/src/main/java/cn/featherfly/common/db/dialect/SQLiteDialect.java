@@ -149,15 +149,6 @@ public class SQLiteDialect extends AbstractDialect {
         return "`";
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getFkCheck(boolean check) {
-        // FIXME 未实现方法
-        throw new UnsupportedException();
-    }
-
     @Override
     protected String getTableColumnsDDL(Table table) {
         StringBuilder ddl = new StringBuilder();
@@ -327,5 +318,4 @@ public class SQLiteDialect extends AbstractDialect {
         // FIXME 未实现
         throw new UnsupportedException();
     }
-
 }

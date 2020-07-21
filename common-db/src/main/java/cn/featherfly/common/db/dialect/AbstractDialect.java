@@ -86,10 +86,10 @@ public abstract class AbstractDialect implements Dialect {
     }
 
     @Override
-    public String buildAlterTableDDL(String databaseName, String tableName, Column[] addColumns, Column[] modifyColumns,
+    public String buildAlterTableDDL(String schema, String tableName, Column[] addColumns, Column[] modifyColumns,
             Column[] dropColumns) {
         AssertIllegalArgument.isNotEmpty(tableName, "tableName");
-        StringBuilder ddl = new StringBuilder(buildAlterTableDDL(databaseName, tableName));
+        StringBuilder ddl = new StringBuilder(buildAlterTableDDL(schema, tableName));
         ddl.append(Chars.NEW_LINE);
         if (Lang.isNotEmpty(addColumns)) {
             ddl.append(buildAddColumnDDL(addColumns)).toString();
@@ -110,8 +110,8 @@ public abstract class AbstractDialect implements Dialect {
      * {@inheritDoc}
      */
     @Override
-    public String buildAlterTableAddColumnDDL(String databaseName, String tableName, Column... columns) {
-        StringBuilder ddl = new StringBuilder(buildAlterTableDDL(databaseName, tableName));
+    public String buildAlterTableAddColumnDDL(String schema, String tableName, Column... columns) {
+        StringBuilder ddl = new StringBuilder(buildAlterTableDDL(schema, tableName));
         return ddl.append(Chars.NEW_LINE).append(buildAddColumnDDL(columns)).toString();
     }
 
@@ -130,8 +130,8 @@ public abstract class AbstractDialect implements Dialect {
      * {@inheritDoc}
      */
     @Override
-    public String buildAlterTableModifyColumnDDL(String databaseName, String tableName, Column... columns) {
-        StringBuilder ddl = new StringBuilder(buildAlterTableDDL(databaseName, tableName));
+    public String buildAlterTableModifyColumnDDL(String schema, String tableName, Column... columns) {
+        StringBuilder ddl = new StringBuilder(buildAlterTableDDL(schema, tableName));
         return ddl.append(Chars.NEW_LINE).append(buildModifyColumnDDL(columns)).toString();
     }
 
@@ -150,8 +150,8 @@ public abstract class AbstractDialect implements Dialect {
      * {@inheritDoc}
      */
     @Override
-    public String buildAlterTableDropColumnDDL(String databaseName, String tableName, Column... columns) {
-        StringBuilder ddl = new StringBuilder(buildAlterTableDDL(databaseName, tableName));
+    public String buildAlterTableDropColumnDDL(String schema, String tableName, Column... columns) {
+        StringBuilder ddl = new StringBuilder(buildAlterTableDDL(schema, tableName));
         return ddl.append(Chars.NEW_LINE).append(buildDropColumnDDL(columns)).toString();
     }
 
@@ -159,8 +159,8 @@ public abstract class AbstractDialect implements Dialect {
      * {@inheritDoc}
      */
     @Override
-    public String buildAlterTableDropColumnDDL(String databaseName, String tableName, String... columnNames) {
-        StringBuilder ddl = new StringBuilder(buildAlterTableDDL(databaseName, tableName));
+    public String buildAlterTableDropColumnDDL(String schema, String tableName, String... columnNames) {
+        StringBuilder ddl = new StringBuilder(buildAlterTableDDL(schema, tableName));
         return ddl.append(Chars.NEW_LINE).append(buildDropColumnDDL(columnNames)).toString();
     }
 
@@ -186,16 +186,17 @@ public abstract class AbstractDialect implements Dialect {
     /**
      * Builds the create table sql.
      *
-     * @param dataBaseName the data base name
-     * @param table        the table
+     * @param schema the schema
+     * @param table  the table
      * @return the string
      */
     @Override
-    public String buildCreateTableDDL(String dataBaseName, Table table) {
+    public String buildCreateTableDDL(Table table) {
         AssertIllegalArgument.isNotEmpty(table, "table");
+        String schema = table.getSchema();
         StringBuilder sql = new StringBuilder();
-        String tableName = Lang.isEmpty(dataBaseName) ? wrapName(table.getName())
-                : wrapName(dataBaseName) + Chars.DOT + wrapName(table.getName());
+        String tableName = Lang.isEmpty(schema) ? wrapName(table.getName())
+                : wrapName(schema) + Chars.DOT + wrapName(table.getName());
         BuilderUtils.link(sql, getKeyword(Keywords.CREATE), getKeyword(Keywords.TABLE), tableName, Chars.PAREN_L);
         sql.append(Chars.NEW_LINE);
         BuilderUtils.link(sql, getTableColumnsDDL(table));

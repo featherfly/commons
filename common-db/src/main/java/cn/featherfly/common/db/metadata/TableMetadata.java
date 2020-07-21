@@ -9,12 +9,15 @@ import cn.featherfly.common.db.model.AbstractTable;
  * <p>
  * 表元数据
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class TableMetadata extends AbstractTable<ColumnMetadata> {
 
     /**
+     * Instantiates a new table metadata.
+     *
      * @param databaseMetadata 数据库元数据
      */
     public TableMetadata(DatabaseMetadata databaseMetadata) {
@@ -65,6 +68,8 @@ public class TableMetadata extends AbstractTable<ColumnMetadata> {
     private DatabaseMetadata databaseMetadata;
 
     /**
+     * Gets the database metadata.
+     *
      * @return 返回databaseMetadata
      */
     public DatabaseMetadata getDatabaseMetadata() {
@@ -72,6 +77,8 @@ public class TableMetadata extends AbstractTable<ColumnMetadata> {
     }
 
     /**
+     * Sets the type.
+     *
      * @param type 设置type
      */
     void setType(String type) {
@@ -79,6 +86,8 @@ public class TableMetadata extends AbstractTable<ColumnMetadata> {
     }
 
     /**
+     * Sets the name.
+     *
      * @param name 设置name
      */
     void setName(String name) {
@@ -86,6 +95,8 @@ public class TableMetadata extends AbstractTable<ColumnMetadata> {
     }
 
     /**
+     * Sets the remark.
+     *
      * @param remark 设置remarks
      */
     void setRemark(String remark) {
@@ -93,9 +104,20 @@ public class TableMetadata extends AbstractTable<ColumnMetadata> {
     }
 
     /**
+     * Sets the catalog.
+     *
      * @param catalog 设置catalog
      */
     void setCatalog(String catalog) {
         this.catalog = catalog;
+    }
+
+    /**
+     * Sets the schema.
+     *
+     * @param schema the new schema
+     */
+    void setSchema(String schema) {
+        this.schema = schema;
     }
 }

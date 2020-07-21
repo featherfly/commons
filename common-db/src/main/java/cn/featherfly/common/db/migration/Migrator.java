@@ -62,7 +62,7 @@ public class Migrator {
     private SqlTypeMappingManager sqlTypeMappingManager;
 
     /** The database name. */
-    private String databaseName;
+    private String schema;
 
     /**
      * Instantiates a new migrator.
@@ -81,11 +81,12 @@ public class Migrator {
      * @param dataSource            the data source
      * @param dialect               the dialect
      * @param sqlTypeMappingManager the sql type mapping manager
-     * @param generateDatabaseName  the generate database name
+     * @param generateSchema        the generate schema
      */
     public Migrator(DataSource dataSource, Dialect dialect, SqlTypeMappingManager sqlTypeMappingManager,
-            boolean generateDatabaseName) {
-        this(dataSource, dialect, sqlTypeMappingManager, generateDatabaseName, JdbcUtils.getCatalog(dataSource));
+            boolean generateSchema) {
+        this(dataSource, dialect, sqlTypeMappingManager, generateSchema,
+                dialect.getDefaultSchema(JdbcUtils.getCatalog(dataSource)));
     }
 
     /**
@@ -94,17 +95,17 @@ public class Migrator {
      * @param dataSource            the data source
      * @param dialect               the dialect
      * @param sqlTypeMappingManager the sql type mapping manager
-     * @param generateDatabaseName  the generate database name
-     * @param databaseName          the database name
+     * @param generateSchema        the generate schema
+     * @param schema                the schema
      */
     public Migrator(DataSource dataSource, Dialect dialect, SqlTypeMappingManager sqlTypeMappingManager,
-            boolean generateDatabaseName, String databaseName) {
+            boolean generateSchema, String schema) {
         super();
         this.dialect = dialect;
         this.sqlTypeMappingManager = sqlTypeMappingManager;
         sqlExecutor = new SqlExecutor(dataSource);
-        if (generateDatabaseName) {
-            this.databaseName = databaseName;
+        if (generateSchema) {
+            this.schema = schema;
         }
     }
 
@@ -122,10 +123,10 @@ public class Migrator {
         }
         sql.append(dialect.getInitSqlFooter()).append(Chars.SEMI).append(Chars.NEW_LINE);
         String result = sql.toString();
-        if (Lang.isEmpty(databaseName)) {
+        if (Lang.isEmpty(schema)) {
             LOGGER.debug("create init sql -> \n{}", result);
         } else {
-            LOGGER.debug("create init sql for {} -> \n{}", databaseName, result);
+            LOGGER.debug("create init sql for {} -> \n{}", schema, result);
         }
         return result;
     }
@@ -163,9 +164,9 @@ public class Migrator {
     private String createSql(Table table, boolean dropIfExists, Class<?> type) {
         StringBuilder sql = new StringBuilder();
         if (dropIfExists) {
-            appendSqlWithEnd(sql, dialect.buildDropTableDDL(databaseName, table.getName(), true));
+            appendSqlWithEnd(sql, dialect.buildDropTableDDL(schema, table.getName(), true));
         }
-        String result = sql.append(dialect.buildCreateTableDDL(databaseName, table)).toString();
+        String result = sql.append(dialect.buildCreateTableDDL(table)).toString();
         LOGGER.debug("create sql for entity {} -> \n{}", type.getName(), result);
         return result;
     }
@@ -279,7 +280,7 @@ public class Migrator {
                     dropColumns.addAll(modifyTable.noMappingColumns);
                 }
                 if (ModifyType.MODIFY == columnModifyType) {
-                    appendSqlWithEnd(sql, dialect.buildAlterTableDDL(databaseName, table.getName(),
+                    appendSqlWithEnd(sql, dialect.buildAlterTableDDL(schema, table.getName(),
                             //  添加新的属性列映射
                             CollectionUtils.toArray(modifyTable.newColumns.values(), Column.class),
                             // 需要修改的对象映射
@@ -289,14 +290,14 @@ public class Migrator {
                 } else if (ModifyType.DROP_AND_CREATE == columnModifyType) {
                     dropColumns.addAll(modifyTable.modifyColumns.values());
 
-                    appendSqlWithEnd(sql, dialect.buildAlterTableDropColumnDDL(databaseName, table.getName(),
+                    appendSqlWithEnd(sql, dialect.buildAlterTableDropColumnDDL(schema, table.getName(),
                             CollectionUtils.toArray(dropColumns, Column.class)));
 
                     List<Column> addColumns = new ArrayList<>();
                     addColumns.addAll(modifyTable.newColumns.values());
                     addColumns.addAll(modifyTable.modifyColumns.values());
 
-                    appendSqlWithEnd(sql, dialect.buildAlterTableDDL(databaseName, table.getName(),
+                    appendSqlWithEnd(sql, dialect.buildAlterTableDDL(schema, table.getName(),
                             //  添加新的属性列映射
                             CollectionUtils.toArray(addColumns, Column.class),
                             // 需要修改的对象映射
@@ -316,16 +317,16 @@ public class Migrator {
         // 删除没有对象映射的表
         if (dropNoMappingTable) {
             updateMapping.noMappingTables.forEach(table -> {
-                appendSqlWithEnd(sql, dialect.buildDropTableDDL(databaseName, table.getName()));
+                appendSqlWithEnd(sql, dialect.buildDropTableDDL(schema, table.getName()));
             });
         }
         // 添加尾部
         sql.append(dialect.getInitSqlFooter()).append(Chars.SEMI).append(Chars.NEW_LINE);
         String result = sql.toString();
-        if (Lang.isEmpty(databaseName)) {
+        if (Lang.isEmpty(schema)) {
             LOGGER.debug("create update sql -> \n{}", result);
         } else {
-            LOGGER.debug("create update sql for {} -> \n{}", databaseName, result);
+            LOGGER.debug("create update sql for {} -> \n{}", schema, result);
         }
         return result;
     }
@@ -431,11 +432,11 @@ public class Migrator {
     }
 
     /**
-     * 返回databaseName.
+     * 返回schema
      *
-     * @return databaseName
+     * @return schema
      */
-    public String getDatabaseName() {
-        return databaseName;
+    public String getSchema() {
+        return schema;
     }
 }

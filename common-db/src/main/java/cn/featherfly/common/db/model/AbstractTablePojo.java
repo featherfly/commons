@@ -114,4 +114,17 @@ public abstract class AbstractTablePojo<T extends AbstractTablePojo<T, C>, C ext
         this.catalog = catalog;
         return (T) this;
     }
+
+    /**
+     * 设置schema.
+     *
+     * @param schema schema
+     * @return the table model
+     */
+    @SuppressWarnings("unchecked")
+    public T setSchema(String schema) {
+        this.schema = schema;
+        return (T) this;
+    }
+
 }

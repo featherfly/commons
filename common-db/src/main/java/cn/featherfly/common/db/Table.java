@@ -22,6 +22,8 @@ public interface Table {
 
     String getCatalog();
 
+    String getSchema();
+
     /**
      * <p>
      * 返回所有主键列元数据对象的列表.
@@ -61,7 +63,7 @@ public interface Table {
 
     /**
      * hasColumn
-     * 
+     *
      * @param columnName columnName
      * @return boolean
      */

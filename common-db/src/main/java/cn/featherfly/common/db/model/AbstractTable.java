@@ -33,6 +33,8 @@ public abstract class AbstractTable<C extends Column> implements Table {
     /** The catalog. */
     protected String catalog;
 
+    protected String schema;
+
     /** The primary columns. */
     protected List<Column> primaryColumns = new ArrayList<>(1);
 
@@ -61,10 +63,22 @@ public abstract class AbstractTable<C extends Column> implements Table {
      * {@inheritDoc}
      */
     @Override
+    public boolean hasColumn(String columnName) {
+        if (Lang.isEmpty(columnName)) {
+            return false;
+        }
+        return columnMap.containsKey(columnName.toUpperCase());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + (catalog == null ? 0 : catalog.hashCode());
+        result = prime * result + (schema == null ? 0 : schema.hashCode());
         result = prime * result + (name == null ? 0 : name.hashCode());
         result = prime * result + (remark == null ? 0 : remark.hashCode());
         result = prime * result + (type == null ? 0 : type.hashCode());
@@ -90,6 +104,9 @@ public abstract class AbstractTable<C extends Column> implements Table {
         if (!Lang.equals(catalog, other.getCatalog())) {
             return false;
         }
+        if (!Lang.equals(schema, other.getSchema())) {
+            return false;
+        }
         if (!Lang.equals(columnMap, other.getColumnMap())) {
             return false;
         }
@@ -103,6 +120,15 @@ public abstract class AbstractTable<C extends Column> implements Table {
             return false;
         }
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "Table [type=" + type + ", name=" + name + ", remark=" + remark + ", catalog=" + catalog + ", schema="
+                + schema + ", columnMap=" + columnMap + "]";
     }
 
     /**
@@ -178,14 +204,12 @@ public abstract class AbstractTable<C extends Column> implements Table {
     }
 
     /**
-     * {@inheritDoc}
+     * 返回schema
+     *
+     * @return schema
      */
     @Override
-    public boolean hasColumn(String columnName) {
-        if (Lang.isEmpty(columnName)) {
-            return false;
-        }
-        return columnMap.containsKey(columnName.toUpperCase());
+    public String getSchema() {
+        return schema;
     }
-
 }

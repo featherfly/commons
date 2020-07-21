@@ -17,6 +17,7 @@ import cn.featherfly.common.db.builder.TableModel;
 public abstract class DialectTest {
 
     String database = "db_test";
+    String schema = "db_test";
     String table = "user";
     String view = "user_view";
     String index = "username_uq";
@@ -26,6 +27,7 @@ public abstract class DialectTest {
         tableModel.setName("user");
         tableModel.setRemark("user用户表");
         tableModel.setCatalog(database);
+        tableModel.setSchema(schema);
 
         int index = 0;
         ColumnModel id = new ColumnModel();

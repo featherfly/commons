@@ -103,9 +103,17 @@ public class ObjectToDbMappingFactory extends AbstractMappingFactory {
         String tableName = getMappingTableName(type);
         tableName = dialect.convertTableOrColumnName(tableName);
         String remark = null;
+        String schema = null;
         Comment comment = bd.getAnnotation(Comment.class);
         if (comment != null) {
             remark = comment.value();
+        }
+        javax.persistence.Table table = bd.getAnnotation(javax.persistence.Table.class);
+        if (table != null) {
+            schema = table.schema();
+        }
+        if (Lang.isEmpty(schema)) {
+            schema = dialect.getDefaultSchema(metadata.getName());
         }
         if (logger.isDebugEnabled()) {
             logInfo.append(
@@ -132,7 +140,7 @@ public class ObjectToDbMappingFactory extends AbstractMappingFactory {
             logger.debug(logInfo.toString());
         }
         // 形成映射对象
-        ClassMapping<T> classMapping = new ClassMapping<>(type, tableName, remark);
+        ClassMapping<T> classMapping = new ClassMapping<>(type, tableName, schema, remark);
 
         classMapping.addPropertyMappings(tableMapping.values().stream()
                 .sorted((p1, p2) -> p1.getIndex() < p2.getIndex() ? -1 : 1).collect(Collectors.toList()));

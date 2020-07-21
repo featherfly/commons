@@ -176,7 +176,7 @@ public class PostgreSQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public String buildCreateTableDDL(String schema, Table table) {
+    public String buildCreateTableDDL(Table table) {
         final StringBuilder comments = new StringBuilder();
         for (Column column : table.getColumns()) {
             if (Lang.isNotEmpty(column.getRemark())) {
@@ -192,8 +192,9 @@ public class PostgreSQLDialect extends AbstractDialect {
                 comments.append(comment);
             }
         }
-        String result = super.buildCreateTableDDL(schema, table);
+        String result = super.buildCreateTableDDL(table);
         if (comments.length() > 0) {
+            comments.deleteCharAt(comments.length() - 1);
             result += Chars.SEMI + Chars.NEW_LINE + comments.toString();
         }
         return result;

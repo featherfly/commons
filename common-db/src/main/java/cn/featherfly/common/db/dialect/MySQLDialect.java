@@ -5,8 +5,11 @@ import java.sql.SQLType;
 import java.sql.Types;
 import java.util.Date;
 
+import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.SqlUtils;
+import cn.featherfly.common.db.builder.BuilderUtils;
+import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
@@ -144,7 +147,6 @@ public class MySQLDialect extends AbstractDialect {
     /**
      * {@inheritDoc}
      */
-    @Override
     public String getFkCheck(boolean check) {
         return "SET FOREIGN_KEY_CHECKS=" + (check ? 1 : 0);
     }
@@ -183,5 +185,31 @@ public class MySQLDialect extends AbstractDialect {
     @Override
     public String getInitSqlFooter() {
         return getFkCheck(true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDefaultSchema(String catalog) {
+        return catalog;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String buildDropIndexDDL(String schema, String tableName, String indexName, boolean ifExists) {
+        AssertIllegalArgument.isNotEmpty(tableName, "tableName");
+        AssertIllegalArgument.isNotEmpty(indexName, "indexName");
+        String in = Lang.isEmpty(schema) ? wrapName(indexName) : wrapName(schema) + Chars.DOT + wrapName(indexName);
+        String tn = Lang.isEmpty(schema) ? wrapName(tableName) : wrapName(schema) + Chars.DOT + wrapName(tableName);
+        if (ifExists) {
+            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.INDEX), getKeyword(Keywords.IF),
+                    getKeyword(Keywords.EXISTS), in, getKeyword(Keywords.ON), tn) + Chars.SEMI;
+        } else {
+            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.INDEX), in, getKeyword(Keywords.ON),
+                    tn) + Chars.SEMI;
+        }
     }
 }

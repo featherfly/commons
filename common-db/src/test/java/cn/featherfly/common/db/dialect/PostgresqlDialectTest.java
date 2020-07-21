@@ -67,9 +67,17 @@ public class PostgresqlDialectTest extends DialectTest {
     void testCreateTable() {
         String sql = dialect.buildCreateTableDDL(getTableModel());
         System.out.println(sql);
-        // TODO 后续有环境了把测试补上
-        //      String s = "";
-        //      assertEquals(sql, s);
+        //        assertEquals(sql,
+        //                "CREATE TABLE \"db_test\".\"user\" (\r\n" + " \"id\" SERIAL4 NOT NULL,\r\n"
+        //                        + " \"name\" VARCHAR(255) NOT NULL,\r\n" + " \"money\" DECIMAL(11,2) NOT NULL,\r\n"
+        //                        + " \"state\" INT2 NOT NULL DEFAULT '0',\r\n" + " \"descp\" VARCHAR(255),\r\n"
+        //                        + " CONSTRAINT \"user_pkey\" PRIMARY KEY (\"id\")\r\n" + " ) ;\r\n"
+        //                        + "COMMENT ON TABLE \"db_test\".\"user\" IS 'user用户表';\r\n"
+        //                        + "COMMENT ON COLUMN \"db_test\".\"user\".\"id\" IS 'id主键';\r\n"
+        //                        + "COMMENT ON COLUMN \"db_test\".\"user\".\"name\" IS 'name名称';\r\n"
+        //                        + "COMMENT ON COLUMN \"db_test\".\"user\".\"money\" IS 'money金额';\r\n"
+        //                        + "COMMENT ON COLUMN \"db_test\".\"user\".\"state\" IS 'state状态：0禁用，1启用';\r\n"
+        //                        + "COMMENT ON COLUMN \"db_test\".\"user\".\"descp\" IS 'descp描述';");
     }
 
     @Override

@@ -33,11 +33,24 @@ public class ClassMapping<T> {
      *
      * @param type           类型
      * @param repositoryName 存储名
+     * @param schema         the schema
+     */
+    public ClassMapping(Class<T> type, String repositoryName, String schema) {
+        this(type, repositoryName, schema, null);
+    }
+
+    /**
+     * Instantiates a new class mapping.
+     *
+     * @param type           类型
+     * @param repositoryName 存储名
+     * @param schema         the schema
      * @param remark         remark
      */
-    public ClassMapping(Class<T> type, String repositoryName, String remark) {
+    public ClassMapping(Class<T> type, String repositoryName, String schema, String remark) {
         this.type = type;
         this.repositoryName = repositoryName;
+        this.schema = schema;
         this.remark = remark;
     }
 
@@ -146,6 +159,8 @@ public class ClassMapping<T> {
     /** The remark. */
     private String remark;
 
+    private String schema;
+
     /** The type. */
     private Class<?> type;
 
@@ -183,5 +198,14 @@ public class ClassMapping<T> {
      */
     public String getRemark() {
         return remark;
+    }
+
+    /**
+     * 返回schema
+     *
+     * @return schema
+     */
+    public String getSchema() {
+        return schema;
     }
 }

@@ -10,6 +10,7 @@ import java.util.Map;
 import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.Table;
 import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.repository.Index;
 
 /**
  * <p>
@@ -33,6 +34,7 @@ public abstract class AbstractTable<C extends Column> implements Table {
     /** The catalog. */
     protected String catalog;
 
+    /** The schema. */
     protected String schema;
 
     /** The primary columns. */
@@ -41,6 +43,9 @@ public abstract class AbstractTable<C extends Column> implements Table {
     /** The column map. */
     protected Map<String, Column> columnMap = new LinkedHashMap<>(0);
 
+    /** The index map. */
+    protected Map<String, Index> indexMap = new LinkedHashMap<>();
+
     /**
      * Instantiates a new table model.
      */
@@ -48,7 +53,7 @@ public abstract class AbstractTable<C extends Column> implements Table {
     }
 
     /**
-     * Adds the.
+     * Adds the column.
      *
      * @param column the column
      */
@@ -57,6 +62,15 @@ public abstract class AbstractTable<C extends Column> implements Table {
             primaryColumns.add(column);
         }
         columnMap.put(column.getName().toUpperCase(), column);
+    }
+
+    /**
+     * Adds the index.
+     *
+     * @param index the index
+     */
+    protected void add(Index index) {
+        indexMap.put(index.getName().toUpperCase(), index);
     }
 
     /**
@@ -83,6 +97,7 @@ public abstract class AbstractTable<C extends Column> implements Table {
         result = prime * result + (remark == null ? 0 : remark.hashCode());
         result = prime * result + (type == null ? 0 : type.hashCode());
         result = prime * result + (columnMap == null ? 0 : columnMap.hashCode());
+        result = prime * result + (indexMap == null ? 0 : indexMap.hashCode());
         return result;
     }
 
@@ -119,6 +134,9 @@ public abstract class AbstractTable<C extends Column> implements Table {
         if (!Lang.equals(type, other.getType())) {
             return false;
         }
+        if (!Lang.equals(indexMap, other.getColumnMap())) {
+            return false;
+        }
         return true;
     }
 
@@ -128,13 +146,11 @@ public abstract class AbstractTable<C extends Column> implements Table {
     @Override
     public String toString() {
         return "Table [type=" + type + ", name=" + name + ", remark=" + remark + ", catalog=" + catalog + ", schema="
-                + schema + ", columnMap=" + columnMap + "]";
+                + schema + ", columns=" + columnMap + ", indexs=" + indexMap + "]";
     }
 
     /**
-     * 返回type.
-     *
-     * @return type
+     * {@inheritDoc}
      */
     @Override
     public String getType() {
@@ -142,9 +158,7 @@ public abstract class AbstractTable<C extends Column> implements Table {
     }
 
     /**
-     * 返回name.
-     *
-     * @return name
+     * {@inheritDoc}
      */
     @Override
     public String getName() {
@@ -152,9 +166,7 @@ public abstract class AbstractTable<C extends Column> implements Table {
     }
 
     /**
-     * 返回remark.
-     *
-     * @return remark
+     * {@inheritDoc}
      */
     @Override
     public String getRemark() {
@@ -204,12 +216,18 @@ public abstract class AbstractTable<C extends Column> implements Table {
     }
 
     /**
-     * 返回schema
-     *
-     * @return schema
+     * {@inheritDoc}
      */
     @Override
     public String getSchema() {
         return schema;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Index> getIndexs() {
+        return new ArrayList<>(indexMap.values());
     }
 }

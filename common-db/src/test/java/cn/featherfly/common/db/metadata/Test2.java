@@ -62,6 +62,31 @@ public class Test2 {
                 System.out.println("\tcat: " + rs.getString("TABLE_CAT"));
                 System.out.println("\tschem: " + rs.getString("TABLE_SCHEM"));
                 System.out.println("\tREMARKS: " + rs.getString(remarks));
+
+                ResultSet ri = metaData.getIndexInfo(catalog, null, tableName, false, false);
+                while (ri.next()) {
+                    System.out.println("\tINDEX_NAME: " + ri.getString("INDEX_NAME"));
+                    System.out.println("\t\tCOLUMN_NAME: " + ri.getString("COLUMN_NAME"));
+                    System.out.println("\t\tNON_UNIQUE: " + ri.getBoolean("NON_UNIQUE"));
+                    System.out.println("\t\tINDEX_QUALIFIER: " + ri.getString("INDEX_QUALIFIER"));
+                    System.out.println("\t\tIASC_OR_DESC: " + ri.getString("ASC_OR_DESC"));
+                    System.out.println("\t\tTYPE: " + ri.getString("TYPE"));
+                    System.out.println("\t\tTABLE_CAT: " + ri.getString("TABLE_CAT"));
+                    System.out.println("\t\tTABLE_SCHEM: " + ri.getString("TABLE_SCHEM"));
+                }
+                System.err.println("-------------------------------");
+                ri = metaData.getIndexInfo(catalog, null, tableName, true, false);
+                while (ri.next()) {
+                    System.out.println("\tINDEX_NAME: " + ri.getString("INDEX_NAME"));
+                    System.out.println("\t\tCOLUMN_NAME: " + ri.getString("COLUMN_NAME"));
+                    System.out.println("\t\tNON_UNIQUE: " + ri.getBoolean("NON_UNIQUE"));
+                    System.out.println("\t\tINDEX_QUALIFIER: " + ri.getString("INDEX_QUALIFIER"));
+                    System.out.println("\t\tIASC_OR_DESC: " + ri.getString("ASC_OR_DESC"));
+                    System.out.println("\t\tTYPE: " + ri.getString("TYPE"));
+                    System.out.println("\t\tTABLE_CAT: " + ri.getString("TABLE_CAT"));
+                    System.out.println("\t\tTABLE_SCHEM: " + ri.getString("TABLE_SCHEM"));
+                }
+
                 // 得到主键信息
                 ResultSet rp = metaData.getPrimaryKeys(catalog, null, tableName);
                 Set<String> pkColumnNames = new HashSet<>();

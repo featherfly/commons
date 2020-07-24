@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import cn.featherfly.common.repository.Index;
+
 /**
  * <p>
  * Table
@@ -23,6 +25,8 @@ public interface Table {
     String getCatalog();
 
     String getSchema();
+
+    List<Index> getIndexs();
 
     /**
      * <p>

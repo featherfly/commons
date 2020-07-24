@@ -222,6 +222,7 @@ public class Migrator {
 
         UpdateMapping updateMapping = new UpdateMapping();
 
+        // TODO 判断index的更新情况
         Set<String> tableNameSet = new HashSet<>();
         for (ClassMapping<?> classMapping : classMappings) {
             Table tableMetadata = metadata.getTable(classMapping.getRepositoryName());

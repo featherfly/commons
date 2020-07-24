@@ -80,7 +80,7 @@ public class MysqlDialectTest extends DialectTest {
                 + " `name` VARCHAR(255) NOT NULL COMMENT 'name名称',\n"
                 + " `money` DECIMAL(11,2) NOT NULL COMMENT 'money金额',\n"
                 + " `state` TINYINT NOT NULL DEFAULT '0' COMMENT 'state状态：0禁用，1启用',\n"
-                + " `descp` VARCHAR(255) COMMENT 'descp描述',\n" + " PRIMARY KEY (`id`)\n" + " ) COMMENT 'user用户表'";
+                + " `descp` VARCHAR(255) COMMENT 'descp描述',\n" + " PRIMARY KEY (`id`)\n" + " ) COMMENT 'user用户表';";
         assertEquals(sql, s);
     }
 
@@ -91,7 +91,7 @@ public class MysqlDialectTest extends DialectTest {
         System.out.println(sql);
         String s = "CREATE TABLE `user_role` (\n" + " `user_id` INT NOT NULL COMMENT 'user id',\n"
                 + " `role_id` INT NOT NULL COMMENT 'role id',\n" + " `descp` VARCHAR(255) COMMENT 'descp描述',\n"
-                + " PRIMARY KEY (`user_id`,`role_id`)\n" + " ) COMMENT 'user role 关系表'";
+                + " PRIMARY KEY (`user_id`,`role_id`)\n" + " ) COMMENT 'user role 关系表';";
         assertEquals(sql, s);
     }
 
@@ -101,7 +101,7 @@ public class MysqlDialectTest extends DialectTest {
         String sql = dialect.buildAlterTableDropColumnDDL(table, getColumnModels());
         System.out.println(sql);
         String s = "ALTER TABLE `user`\n" + " DROP COLUMN `user_id`,\n" + " DROP COLUMN `role_id`,\n"
-                + " DROP COLUMN `descp`";
+                + " DROP COLUMN `descp`;";
         assertEquals(sql, s);
     }
 
@@ -112,7 +112,7 @@ public class MysqlDialectTest extends DialectTest {
         System.out.println(sql);
         String s = "ALTER TABLE `user`\n" + " ADD COLUMN `user_id` INT NOT NULL COMMENT 'user id',\n"
                 + " ADD COLUMN `role_id` INT NOT NULL COMMENT 'role id',\n"
-                + " ADD COLUMN `descp` VARCHAR(255) COMMENT 'descp描述'";
+                + " ADD COLUMN `descp` VARCHAR(255) COMMENT 'descp描述';";
         assertEquals(sql, s);
     }
 
@@ -124,7 +124,7 @@ public class MysqlDialectTest extends DialectTest {
         String s = "ALTER TABLE `user_info`\n" + " MODIFY COLUMN `descp` VARCHAR(222) COMMENT 'descp',\n"
                 + " MODIFY COLUMN `province` VARCHAR(222) COMMENT '省',\n"
                 + " MODIFY COLUMN `city` VARCHAR(222) COMMENT '市',\n"
-                + " MODIFY COLUMN `district` VARCHAR(222) COMMENT '区'";
+                + " MODIFY COLUMN `district` VARCHAR(222) COMMENT '区';";
         assertEquals(sql, s);
     }
 
@@ -158,10 +158,14 @@ public class MysqlDialectTest extends DialectTest {
         assertEquals(pageNamedParamSql, "select * from user LIMIT :dialect_paging_start,:dialect_paging_limit");
     }
 
+    @Override
     @Test
     void testCreateIndex() {
         String sql = dialect.buildCreateIndexDDL(table, index, new String[] { "user_id" });
         assertEquals(sql, "CREATE INDEX username_uq ON `user`(`user_id`);");
+
+        sql = dialect.buildCreateIndexDDL(table, index, new String[] { "user_id", "role_id" });
+        assertEquals(sql, "CREATE INDEX username_uq ON `user`(`user_id`,`role_id`);");
 
         sql = dialect.buildCreateIndexDDL(table, index, new String[] { "user_id" }, true);
         assertEquals(sql, "CREATE UNIQUE INDEX username_uq ON `user`(`user_id`);");

@@ -15,6 +15,7 @@ import cn.featherfly.common.db.mapping.JdbcMappingException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.repository.Index;
 
 /**
  * <p>
@@ -93,10 +94,16 @@ public abstract class AbstractDialect implements Dialect {
         ddl.append(Chars.NEW_LINE);
         if (Lang.isNotEmpty(addColumns)) {
             ddl.append(buildAddColumnDDL(addColumns)).toString();
+            if (Lang.isNotEmpty(modifyColumns) || Lang.isNotEmpty(dropColumns)) {
+                ddl.append(Chars.COMMA);
+            }
             ddl.append(Chars.NEW_LINE);
         }
         if (Lang.isNotEmpty(modifyColumns)) {
             ddl.append(buildModifyColumnDDL(modifyColumns)).toString();
+            if (Lang.isNotEmpty(dropColumns)) {
+                ddl.append(Chars.COMMA);
+            }
             ddl.append(Chars.NEW_LINE);
         }
         if (Lang.isNotEmpty(dropColumns)) {
@@ -112,7 +119,7 @@ public abstract class AbstractDialect implements Dialect {
     @Override
     public String buildAlterTableAddColumnDDL(String schema, String tableName, Column... columns) {
         StringBuilder ddl = new StringBuilder(buildAlterTableDDL(schema, tableName));
-        return ddl.append(Chars.NEW_LINE).append(buildAddColumnDDL(columns)).toString();
+        return ddl.append(Chars.NEW_LINE).append(buildAddColumnDDL(columns)).append(Chars.SEMI).toString();
     }
 
     protected String buildAddColumnDDL(Column... columns) {
@@ -132,7 +139,7 @@ public abstract class AbstractDialect implements Dialect {
     @Override
     public String buildAlterTableModifyColumnDDL(String schema, String tableName, Column... columns) {
         StringBuilder ddl = new StringBuilder(buildAlterTableDDL(schema, tableName));
-        return ddl.append(Chars.NEW_LINE).append(buildModifyColumnDDL(columns)).toString();
+        return ddl.append(Chars.NEW_LINE).append(buildModifyColumnDDL(columns)).append(Chars.SEMI).toString();
     }
 
     protected String buildModifyColumnDDL(Column... columns) {
@@ -152,7 +159,7 @@ public abstract class AbstractDialect implements Dialect {
     @Override
     public String buildAlterTableDropColumnDDL(String schema, String tableName, Column... columns) {
         StringBuilder ddl = new StringBuilder(buildAlterTableDDL(schema, tableName));
-        return ddl.append(Chars.NEW_LINE).append(buildDropColumnDDL(columns)).toString();
+        return ddl.append(Chars.NEW_LINE).append(buildDropColumnDDL(columns)).append(Chars.SEMI).toString();
     }
 
     /**
@@ -161,7 +168,7 @@ public abstract class AbstractDialect implements Dialect {
     @Override
     public String buildAlterTableDropColumnDDL(String schema, String tableName, String... columnNames) {
         StringBuilder ddl = new StringBuilder(buildAlterTableDDL(schema, tableName));
-        return ddl.append(Chars.NEW_LINE).append(buildDropColumnDDL(columnNames)).toString();
+        return ddl.append(Chars.NEW_LINE).append(buildDropColumnDDL(columnNames)).append(Chars.SEMI).toString();
     }
 
     protected String buildDropColumnDDL(Column... columns) {
@@ -202,6 +209,17 @@ public abstract class AbstractDialect implements Dialect {
         BuilderUtils.link(sql, getTableColumnsDDL(table));
         sql.append(Chars.NEW_LINE);
         BuilderUtils.link(sql, Chars.PAREN_R, getTableComment(table));
+
+        if (table.getIndexs().size() > 0) {
+            sql.append(Chars.SEMI).append(Chars.NEW_LINE);
+            for (Index index : table.getIndexs()) {
+                sql.append(buildCreateIndexDDL(schema, table.getName(), index.getName(), index.getColumns(),
+                        index.isUnique())).append(Chars.NEW_LINE);
+            }
+            sql.deleteCharAt(sql.length() - 1);
+        } else {
+            sql.append(Chars.SEMI);
+        }
         return sql.toString();
     }
 

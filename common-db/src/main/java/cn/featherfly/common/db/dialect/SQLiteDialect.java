@@ -284,19 +284,28 @@ public class SQLiteDialect extends AbstractDialect {
     }
 
     @Override
-    public String buildAlterTableAddColumnDDL(String databaseName, String tableName, Column... columns) {
+    public String buildAlterTableAddColumnDDL(String schema, String tableName, Column... columns) {
         // TODO 未实现
         throw new UnsupportedException();
     }
 
     @Override
-    public String buildAlterTableDropColumnDDL(String databaseName, String tableName, String... columnNames) {
+    public String buildAlterTableDropColumnDDL(String schema, String tableName, String... columnNames) {
+        // TODO 未实现
+        throw new UnsupportedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String buildAlterTableDropColumnDDL(String schema, String tableName, Column... columns) {
         // TODO 未实现
         throw new UnsupportedException();
     }
 
     @Override
-    public String buildAlterTableModifyColumnDDL(String databaseName, String tableName, Column... columns) {
+    public String buildAlterTableModifyColumnDDL(String schema, String tableName, Column... columns) {
         // TODO 未实现
         throw new UnsupportedException();
     }

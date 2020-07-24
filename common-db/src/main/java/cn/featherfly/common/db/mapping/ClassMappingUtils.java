@@ -21,6 +21,7 @@ import cn.featherfly.common.db.builder.TableModel;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.repository.Index;
 import cn.featherfly.common.repository.mapping.ClassMapping;
 import cn.featherfly.common.repository.mapping.MappingFactory;
 import cn.featherfly.common.repository.mapping.PropertyMapping;
@@ -50,18 +51,21 @@ public class ClassMappingUtils {
         table.setName(classMapping.getRepositoryName());
         table.setRemark(classMapping.getRemark());
         table.setSchema(classMapping.getSchema());
-        int index = 1;
+        int i = 1;
         // columns
         for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
             if (Lang.isEmpty(propertyMapping.getPropertyMappings())) {
-                table.addColumn(createColumn(propertyMapping, sqlTypeMappingManager, index, dialect));
-                index++;
+                table.addColumn(createColumn(propertyMapping, sqlTypeMappingManager, i, dialect));
+                i++;
             } else {
                 for (PropertyMapping pm : propertyMapping.getPropertyMappings()) {
-                    table.addColumn(createColumn(pm, sqlTypeMappingManager, index, dialect));
-                    index++;
+                    table.addColumn(createColumn(pm, sqlTypeMappingManager, i, dialect));
+                    i++;
                 }
             }
+        }
+        for (Index index : classMapping.getIndexs()) {
+            table.addIndex(index);
         }
         return table;
     }

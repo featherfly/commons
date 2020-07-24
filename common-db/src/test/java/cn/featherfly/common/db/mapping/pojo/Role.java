@@ -1,5 +1,5 @@
 
-package cn.featherfly.common.db.mapping;
+package cn.featherfly.common.db.mapping.pojo;
 
 import javax.persistence.Id;
 import javax.persistence.Table;

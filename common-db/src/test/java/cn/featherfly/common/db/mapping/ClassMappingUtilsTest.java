@@ -11,6 +11,8 @@ import com.speedment.common.tuple.Tuple2;
 
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.Dialects;
+import cn.featherfly.common.db.mapping.pojo.User;
+import cn.featherfly.common.db.mapping.pojo.UserRole;
 import cn.featherfly.common.repository.mapping.ClassMapping;
 import cn.featherfly.common.repository.mapping.PropertyMapping;
 

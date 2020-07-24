@@ -8,10 +8,10 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.db.JdbcTestBase;
-import cn.featherfly.common.db.mapping.Entity;
-import cn.featherfly.common.db.mapping.Entity2;
 import cn.featherfly.common.db.mapping.ObjectToDbMappingFactory;
 import cn.featherfly.common.db.mapping.SqlTypeMappingManager;
+import cn.featherfly.common.db.mapping.pojo.Entity;
+import cn.featherfly.common.db.mapping.pojo.Entity2;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
 import cn.featherfly.common.db.migration.Migrator.ModifyType;
@@ -48,8 +48,8 @@ public class MigratorTest extends JdbcTestBase {
     }
 
     @Test
-    public void testUpdateSql() {
-        System.out.println(migrator.updateSql(classMappings()));
+    public void testInitCreate() {
+        migrator.create(classMappings());
     }
 
     @Test

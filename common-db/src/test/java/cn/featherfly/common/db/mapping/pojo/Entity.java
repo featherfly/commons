@@ -1,5 +1,5 @@
 
-package cn.featherfly.common.db.mapping;
+package cn.featherfly.common.db.mapping.pojo;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -11,8 +11,8 @@ import java.time.LocalTime;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 import cn.featherfly.common.db.jpa.Comment;
@@ -24,13 +24,13 @@ import cn.featherfly.common.db.jpa.Comment;
  *
  * @author zhongj
  */
-@Table(name = "entity")
+@Table(indexes = { @Index(name = "age_index", columnList = "age"), @Index(columnList = "username", unique = true),
+        @Index(name = "state_id_index", columnList = "id,state"), })
 @Comment("测试实体")
-public class Entity2 {
+public class Entity {
 
     public enum State {
-        ENABLE,
-        DISABLE
+        ENABLE, DISABLE
     }
 
     @Id
@@ -39,8 +39,10 @@ public class Entity2 {
     @Comment("名称")
     private String name;
 
+    private String username;
+
     @Column
-    private Byte age;
+    private Integer age;
 
     private String descp;
 
@@ -53,29 +55,12 @@ public class Entity2 {
     private Time time;
     private State state;
 
+    private Double doubleNumber;
+    private Float floatNumber;
     private BigInteger bigInteger;
     private BigDecimal bigDecimal;
-
-    @Embedded
-    private Address address;
-
-    /**
-     * 返回address
-     *
-     * @return address
-     */
-    public Address getAddress() {
-        return address;
-    }
-
-    /**
-     * 设置address
-     *
-     * @param address address
-     */
-    public void setAddress(Address address) {
-        this.address = address;
-    }
+    private Byte byteNumber;
+    private Short shortNumber;
 
     /**
      * 返回id
@@ -118,7 +103,7 @@ public class Entity2 {
      *
      * @return age
      */
-    public Byte getAge() {
+    public Integer getAge() {
         return age;
     }
 
@@ -127,7 +112,7 @@ public class Entity2 {
      *
      * @param age age
      */
-    public void setAge(Byte age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
@@ -294,6 +279,42 @@ public class Entity2 {
     }
 
     /**
+     * 返回doubleNumber
+     *
+     * @return doubleNumber
+     */
+    public Double getDoubleNumber() {
+        return doubleNumber;
+    }
+
+    /**
+     * 设置doubleNumber
+     *
+     * @param doubleNumber doubleNumber
+     */
+    public void setDoubleNumber(Double doubleNumber) {
+        this.doubleNumber = doubleNumber;
+    }
+
+    /**
+     * 返回floatNumber
+     *
+     * @return floatNumber
+     */
+    public Float getFloatNumber() {
+        return floatNumber;
+    }
+
+    /**
+     * 设置floatNumber
+     *
+     * @param floatNumber floatNumber
+     */
+    public void setFloatNumber(Float floatNumber) {
+        this.floatNumber = floatNumber;
+    }
+
+    /**
      * 返回bigInteger
      *
      * @return bigInteger
@@ -329,4 +350,57 @@ public class Entity2 {
         this.bigDecimal = bigDecimal;
     }
 
+    /**
+     * 返回byteNumber
+     *
+     * @return byteNumber
+     */
+    public Byte getByteNumber() {
+        return byteNumber;
+    }
+
+    /**
+     * 设置byteNumber
+     *
+     * @param byteNumber byteNumber
+     */
+    public void setByteNumber(Byte byteNumber) {
+        this.byteNumber = byteNumber;
+    }
+
+    /**
+     * 返回shortNumber
+     *
+     * @return shortNumber
+     */
+    public Short getShortNumber() {
+        return shortNumber;
+    }
+
+    /**
+     * 设置shortNumber
+     *
+     * @param shortNumber shortNumber
+     */
+    public void setShortNumber(Short shortNumber) {
+        this.shortNumber = shortNumber;
+    }
+
+    /**
+     * 返回username
+     *
+     * @return username
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * 设置username
+     *
+     * @param username username
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

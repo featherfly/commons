@@ -3,6 +3,8 @@ package cn.featherfly.common.db.model;
 
 import java.util.Collection;
 
+import cn.featherfly.common.repository.Index;
+
 /**
  * <p>
  * AbstractTable
@@ -63,6 +65,43 @@ public abstract class AbstractTablePojo<T extends AbstractTablePojo<T, C>, C ext
     public T addColumn(Collection<C> columns) {
         for (C columnMetadata : columns) {
             addColumn(columnMetadata);
+        }
+        return (T) this;
+    }
+
+    /**
+     * 添加索引.
+     *
+     * @param index 索引
+     */
+    @SuppressWarnings("unchecked")
+    public T addIndex(Index index) {
+        add(index);
+        return (T) this;
+    }
+
+    /**
+     * 添加索引.
+     *
+     * @param indexs 索引对象数组
+     */
+    @SuppressWarnings("unchecked")
+    public T addIndex(Index... indexs) {
+        for (Index index : indexs) {
+            addIndex(index);
+        }
+        return (T) this;
+    }
+
+    /**
+     * 添加索引.
+     *
+     * @param indexs 索引集合
+     */
+    @SuppressWarnings("unchecked")
+    public T addIndex(Collection<Index> indexs) {
+        for (Index index : indexs) {
+            addIndex(index);
         }
         return (T) this;
     }

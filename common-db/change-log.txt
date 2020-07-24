@@ -1,10 +1,9 @@
-TODO 
-    1.为Migrator实现索引的创建·更新·删除
 
 2020
 0.3.1
-    1.Dialect实现索引的创建·更新·删除
-    TODO 2.Migrator实现索引的创建·更新·删除
+    1.Dialect实现索引的创建·更新·删除（Mysql,Postgresql）
+    2.实现从Entity生成的ClassMapping支持索引，并且生成的建表、更新表的语句已经加上索引信息
+    TODO 3.Migrator实现版本更新支持索引
 
 2020-7-21
 0.3.0

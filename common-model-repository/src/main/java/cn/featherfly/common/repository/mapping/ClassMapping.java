@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import cn.featherfly.common.repository.Index;
+
 /**
  * <p>
  * class repository mapping
@@ -92,11 +94,11 @@ public class ClassMapping<T> {
      * @return 所有属性映射
      */
     public Collection<PropertyMapping> getPropertyMappings() {
-        return propertyMappings.values();
+        return new ArrayList<>(propertyMappings.values());
     }
 
     /**
-     * 返回所有叶节点的属性映射
+     * 返回所有叶节点的属性映射.
      *
      * @return the property mapping leaf nodes
      */
@@ -146,12 +148,53 @@ public class ClassMapping<T> {
         }
     }
 
+    /**
+     * Adds the index.
+     *
+     * @param index the index
+     */
+    public void addIndex(Index index) {
+        this.indexs.put(index.getName(), index);
+    }
+
+    /**
+     * Adds the indexs.
+     *
+     * @param indexs the indexs
+     */
+    public void addIndexs(Collection<Index> indexs) {
+        for (Index index : indexs) {
+            addIndex(index);
+        }
+    }
+
+    /**
+     * 返回indexs.
+     *
+     * @return indexs
+     */
+    public List<Index> getIndexs() {
+        return new ArrayList<>(indexs.values());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "ClassMapping [repositoryName=" + repositoryName + ", remark=" + remark + ", schema=" + schema
+                + ", type=" + type + ", indexs=" + indexs + "propertyMappings=" + propertyMappings + "]";
+    }
+
     // ********************************************************************
     //
     // ********************************************************************
 
     /** The property mappings. */
     private Map<String, PropertyMapping> propertyMappings = new LinkedHashMap<>(0);
+
+    /** The indexs. */
+    private Map<String, Index> indexs = new LinkedHashMap<>(0);
 
     /** The repository name. */
     private String repositoryName;
@@ -183,15 +226,6 @@ public class ClassMapping<T> {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return "ClassMapping [repositoryName=" + repositoryName + ", type=" + type + ", propertyMappings="
-                + propertyMappings + "]";
-    }
-
-    /**
      * 返回remark.
      *
      * @return remark
@@ -201,7 +235,7 @@ public class ClassMapping<T> {
     }
 
     /**
-     * 返回schema
+     * 返回schema.
      *
      * @return schema
      */

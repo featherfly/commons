@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -20,6 +23,7 @@ import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.wrapper.ConnectionWrapper;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.repository.Index;
 
 /**
  * <p>
@@ -37,6 +41,9 @@ public class DatabaseMetadataManager {
     private static final DatabaseMetadataManager DEFAULT_MANAGER = new DatabaseMetadataManager();
 
     private static final Pattern TABLE_NAME_PATTERN = Pattern.compile("[a-zA-Z-_0-9]+");
+
+    private static final String COLUMN_NAME = "COLUMN_NAME";
+    private static final String REMARKS = "REMARKS";
 
     /**
      */
@@ -223,8 +230,7 @@ public class DatabaseMetadataManager {
             rs = metaData.getTables(dataBase, schema, null, new String[] { TableType.TABLE.toString() });
             //            rs = metaData.getTables(dataBase, dataBase, null, new String[] { TableType.TABLE.toString() });
             //			rs = metaData.getTables("","", null, new String[]{TableType.TABLE.toString()});
-            final String remarks = "REMARKS";
-            final String columnName = "COLUMN_NAME";
+
             boolean hasDatabase = false;
             while (rs.next()) {
                 hasDatabase = true;
@@ -253,58 +259,13 @@ public class DatabaseMetadataManager {
                 } else {
                     tableMetadata.setSchema(tableMetadata.getCatalog());
                 }
-                tableMetadata.setRemark(rs.getString(remarks));
+                tableMetadata.setRemark(rs.getString(REMARKS));
+                //                tableMetadata.addcolu
+                tableMetadata.addIndex(
+                        createIndexs(metaData, tableName, tableMetadata.getCatalog(), tableMetadata.getSchema()));
+                addColumns(metaData, tableMetadata);
                 databaseMetadata.addTable(tableMetadata);
-                // 得到主键信息
-                ResultSet rp = metaData.getPrimaryKeys(dataBase, null, tableMetadata.getName());
-                Set<String> pkColumnNames = new HashSet<>();
-                while (rp.next()) {
-                    // 主键列名称
-                    pkColumnNames.add(rp.getString(columnName));
-                }
-                rp.close();
-                // 得到表信息
-                ResultSet rc = metaData.getColumns(dataBase, null, tableMetadata.getName(), null);
-                while (rc.next()) {
-                    ColumnMetadata columnMetadata = new ColumnMetadata(tableMetadata);
-                    // 列名
-                    columnMetadata.setName(rc.getString(columnName));
-                    // 列类型
-                    columnMetadata.setType(rc.getInt("DATA_TYPE"));
-                    // 类型名称
-                    columnMetadata.setTypeName(rc.getString("TYPE_NAME"));
-                    // 注释
-                    columnMetadata.setRemark(rc.getString(remarks));
-                    // 长度
-                    columnMetadata.setSize(rc.getInt("COLUMN_SIZE"));
-                    // 小数位数
-                    columnMetadata.setDecimalDigits(rc.getInt("DECIMAL_DIGITS"));
-                    // 默认值
-                    columnMetadata.setDefaultValue(rc.getString("COLUMN_DEF"));
-                    // 是否空
-                    int nullable = rc.getInt("NULLABLE");
-                    if (DatabaseMetaData.columnNullable == nullable) {
-                        columnMetadata.setNullable(true);
-                    } else {
-                        columnMetadata.setNullable(false);
-                    }
-                    // 是否空
-                    String isAutoincrement = rc.getString("IS_AUTOINCREMENT");
-                    if ("YES".equals(isAutoincrement)) {
-                        columnMetadata.setAutoincrement(true);
-                    } else {
-                        columnMetadata.setAutoincrement(false);
-                    }
-                    // 列的位置
-                    columnMetadata.setColumnIndex(rc.getInt("ORDINAL_POSITION"));
-                    // 设置是否主键
-                    if (pkColumnNames.contains(columnMetadata.getName())) {
-                        columnMetadata.setPrimaryKey(true);
-                    }
 
-                    tableMetadata.addColumn(columnMetadata);
-                }
-                rc.close();
             }
             rs.close();
             if (!hasDatabase && !dataBase.equals(connection.getCatalog())) {
@@ -322,6 +283,89 @@ public class DatabaseMetadataManager {
         } finally {
             JdbcUtils.closeQuietly(connection);
         }
+    }
+
+    private void addColumns(DatabaseMetaData metaData, TableMetadata tableMetadata) throws SQLException {
+        // 得到主键信息
+        ResultSet rp = metaData.getPrimaryKeys(tableMetadata.getCatalog(), tableMetadata.getSchema(),
+                tableMetadata.getName());
+        Set<String> pkColumnNames = new HashSet<>();
+        while (rp.next()) {
+            // 主键列名称
+            pkColumnNames.add(rp.getString(COLUMN_NAME));
+        }
+        rp.close();
+
+        // 得到表信息
+        ResultSet rc = metaData.getColumns(tableMetadata.getCatalog(), tableMetadata.getSchema(),
+                tableMetadata.getName(), null);
+        while (rc.next()) {
+            ColumnMetadata columnMetadata = new ColumnMetadata(tableMetadata);
+            // 列名
+            columnMetadata.setName(rc.getString(COLUMN_NAME));
+            // 列类型
+            columnMetadata.setType(rc.getInt("DATA_TYPE"));
+            // 类型名称
+            columnMetadata.setTypeName(rc.getString("TYPE_NAME"));
+            // 注释
+            columnMetadata.setRemark(rc.getString(REMARKS));
+            // 长度
+            columnMetadata.setSize(rc.getInt("COLUMN_SIZE"));
+            // 小数位数
+            columnMetadata.setDecimalDigits(rc.getInt("DECIMAL_DIGITS"));
+            // 默认值
+            columnMetadata.setDefaultValue(rc.getString("COLUMN_DEF"));
+            // 是否空
+            int nullable = rc.getInt("NULLABLE");
+            if (DatabaseMetaData.columnNullable == nullable) {
+                columnMetadata.setNullable(true);
+            } else {
+                columnMetadata.setNullable(false);
+            }
+            // 是否空
+            String isAutoincrement = rc.getString("IS_AUTOINCREMENT");
+            if ("YES".equals(isAutoincrement)) {
+                columnMetadata.setAutoincrement(true);
+            } else {
+                columnMetadata.setAutoincrement(false);
+            }
+            // 列的位置
+            columnMetadata.setColumnIndex(rc.getInt("ORDINAL_POSITION"));
+            // 设置是否主键
+            if (pkColumnNames.contains(columnMetadata.getName())) {
+                columnMetadata.setPrimaryKey(true);
+            }
+            tableMetadata.addColumn(columnMetadata);
+        }
+        rc.close();
+    }
+
+    private List<Index> createIndexs(DatabaseMetaData metaData, String tableName, String catalog, String schema)
+            throws SQLException {
+        List<Index> indexList = new ArrayList<>();
+        ResultSet ri = metaData.getIndexInfo(catalog, schema, tableName, false, false);
+        Map<String, List<String>> indexColumnMap = new LinkedHashMap<>();
+        Set<String> uniques = new HashSet<>();
+        while (ri.next()) {
+            String indexName = ri.getString("INDEX_NAME");
+            List<String> columnNames = indexColumnMap.get(indexName);
+            String columnName = ri.getString("COLUMN_NAME");
+            if (columnNames == null) {
+                columnNames = new ArrayList<>();
+            }
+            columnNames.add(columnName);
+        }
+        indexColumnMap.forEach((name, columns) -> {
+        });
+        ri = metaData.getIndexInfo(catalog, schema, tableName, true, false);
+        while (ri.next()) {
+            String indexName = ri.getString("INDEX_NAME");
+            uniques.add(indexName);
+        }
+        indexColumnMap.forEach((name, columns) -> {
+            indexList.add(new Index(name, Lang.toArray(columns, String.class), uniques.contains(name)));
+        });
+        return indexList;
     }
 
     // ********************************************************************

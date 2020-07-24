@@ -4,6 +4,7 @@ package cn.featherfly.common.db.metadata;
 import java.util.Collection;
 
 import cn.featherfly.common.db.model.AbstractTable;
+import cn.featherfly.common.repository.Index;
 
 /**
  * <p>
@@ -25,39 +26,64 @@ public class TableMetadata extends AbstractTable<ColumnMetadata> {
     }
 
     /**
-     * <p>
      * 添加列元数据.
-     * </p>
      *
      * @param columnMetadata 列元数据对象
      */
-    public void addColumn(ColumnMetadata columnMetadata) {
+    void addColumn(ColumnMetadata columnMetadata) {
         add(columnMetadata);
     }
 
     /**
-     * <p>
      * 添加列元数据.
-     * </p>
      *
      * @param columnMetadatas 列元数据对象数组
      */
-    public void addColumn(ColumnMetadata... columnMetadatas) {
+    void addColumn(ColumnMetadata... columnMetadatas) {
         for (ColumnMetadata columnMetadata : columnMetadatas) {
             addColumn(columnMetadata);
         }
     }
 
     /**
-     * <p>
      * 添加列元数据.
-     * </p>
      *
      * @param columnMetadatas 列元数据对象集合
      */
-    public void addColumn(Collection<ColumnMetadata> columnMetadatas) {
+    void addColumn(Collection<ColumnMetadata> columnMetadatas) {
         for (ColumnMetadata columnMetadata : columnMetadatas) {
             addColumn(columnMetadata);
+        }
+    }
+
+    /**
+     * 添加索引.
+     *
+     * @param index 索引
+     */
+    void addIndex(Index index) {
+        add(index);
+    }
+
+    /**
+     * 添加索引.
+     *
+     * @param indexs 索引对象数组
+     */
+    void addIndex(Index... indexs) {
+        for (Index index : indexs) {
+            addIndex(index);
+        }
+    }
+
+    /**
+     * 添加索引.
+     *
+     * @param indexs 索引集合
+     */
+    void addIndex(Collection<Index> indexs) {
+        for (Index index : indexs) {
+            addIndex(index);
         }
     }
 

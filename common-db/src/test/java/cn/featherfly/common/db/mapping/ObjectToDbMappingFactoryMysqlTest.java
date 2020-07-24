@@ -5,6 +5,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.db.JdbcTestBase;
+import cn.featherfly.common.db.mapping.pojo.Entity;
+import cn.featherfly.common.db.mapping.pojo.Role;
+import cn.featherfly.common.db.mapping.pojo.User;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
 import cn.featherfly.common.repository.mapping.ClassMapping;
@@ -17,7 +20,8 @@ import cn.featherfly.common.repository.mapping.MappingException;
  *
  * @author zhongj
  */
-public class ObjectToDbMappingFactoryTest extends JdbcTestBase {
+//@Test(groups = "mysql")
+public class ObjectToDbMappingFactoryMysqlTest extends JdbcTestBase {
 
     private ObjectToDbMappingFactory factory;
 

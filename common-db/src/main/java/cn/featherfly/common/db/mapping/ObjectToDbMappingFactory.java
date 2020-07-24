@@ -1,6 +1,7 @@
 
 package cn.featherfly.common.db.mapping;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -16,12 +17,14 @@ import javax.persistence.OneToOne;
 import cn.featherfly.common.bean.BeanDescriptor;
 import cn.featherfly.common.bean.BeanProperty;
 import cn.featherfly.common.bean.matcher.BeanPropertyAnnotationMatcher;
+import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.jpa.Comment;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.SystemPropertyUtils;
+import cn.featherfly.common.repository.Index;
 import cn.featherfly.common.repository.mapping.ClassMapping;
 import cn.featherfly.common.repository.mapping.ClassNameConversion;
 import cn.featherfly.common.repository.mapping.PropertyMapping;
@@ -95,6 +98,16 @@ public class ObjectToDbMappingFactory extends AbstractMappingFactory {
         return classMapping;
     }
 
+    private <T> List<Index> createIndexs(javax.persistence.Table table) {
+        List<Index> indexs = new ArrayList<>();
+        if (table != null) {
+            for (javax.persistence.Index i : table.indexes()) {
+                indexs.add(new Index(i.name(), i.columnList().split(Chars.COMMA), i.unique()));
+            }
+        }
+        return indexs;
+    }
+
     private <T> ClassMapping<T> createClassMapping(Class<T> type) {
         Map<String, PropertyMapping> tableMapping = new LinkedHashMap<>();
         StringBuilder logInfo = new StringBuilder();
@@ -141,6 +154,7 @@ public class ObjectToDbMappingFactory extends AbstractMappingFactory {
         }
         // 形成映射对象
         ClassMapping<T> classMapping = new ClassMapping<>(type, tableName, schema, remark);
+        classMapping.addIndexs(createIndexs(table));
 
         classMapping.addPropertyMappings(tableMapping.values().stream()
                 .sorted((p1, p2) -> p1.getIndex() < p2.getIndex() ? -1 : 1).collect(Collectors.toList()));

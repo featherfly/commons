@@ -203,6 +203,8 @@ public abstract class DialectTest {
 
     abstract void testCreateTable();
 
+    abstract void testCreateIndex();
+
     abstract void testCreateTableMulitiKey();
 
     abstract void testAlterTableDropColumn();

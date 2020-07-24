@@ -2,22 +2,26 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="common db Test Suite" parallel="tests"
 	thread-count="1">
-	<parameter name="dataBase" value="mysql" />
+<!-- 	<parameter name="dataBase" value="mysql" /> -->
 	<!-- <parameter name="dataBase" value="sqllite" /> -->
 	<!-- <parameter name="dataBase" value="postgresql" /> -->
-	<test name="sql builder test">
-		<packages>
-			<package name="cn.featherfly.common.db.builder.*" />
-		</packages>
-	</test>
-	<test name="sql dialect test">
-		<packages>
-			<package name="cn.featherfly.common.db.dialect.*" />
-		</packages>
-	</test>
-	<test name="sql mapping test">
-		<packages>
-			<package name="cn.featherfly.common.db.mapping.*" />
-		</packages>
-	</test>
+<!-- 	<test name="sql builder test"> -->
+<!-- 		<packages> -->
+<!-- 			<package name="cn.featherfly.common.db.builder.*" /> -->
+<!-- 		</packages> -->
+<!-- 	</test> -->
+<!-- 	<test name="sql dialect test"> -->
+<!-- 		<packages> -->
+<!-- 			<package name="cn.featherfly.common.db.dialect.*" /> -->
+<!-- 		</packages> -->
+<!-- 	</test> -->
+<!-- 	<test name="sql mapping test"> -->
+<!-- 		<packages> -->
+<!-- 			<package name="cn.featherfly.common.db.mapping.*" /> -->
+<!-- 		</packages> -->
+<!-- 	</test> -->
+    <suite-files>
+       <suite-file path="testng-test-mysql.xml"/>
+       <suite-file path="testng-test-postgresql.xml"/>
+    </suite-files>
 </suite>

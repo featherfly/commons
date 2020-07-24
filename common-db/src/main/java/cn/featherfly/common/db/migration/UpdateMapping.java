@@ -3,11 +3,14 @@ package cn.featherfly.common.db.migration;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
 import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.Table;
+import cn.featherfly.common.repository.Index;
 import cn.featherfly.common.repository.mapping.ClassMapping;
 import cn.featherfly.common.repository.mapping.PropertyMapping;
 
@@ -26,12 +29,6 @@ public class UpdateMapping {
     Set<Table> noMappingTables = new HashSet<>();
 
     ModifyTables modifyTables = new ModifyTables();
-
-    //    Map<Table, Map<PropertyMapping, Column>> newColumns = new HashMap<>();
-    //
-    //    Map<Table, Map<PropertyMapping, Column>> modifyColumns = new HashMap<>();
-
-    //    Map<String, Set<Column>> noMappingColumns = new HashMap<>();
 
     UpdateMapping() {
     }
@@ -77,10 +74,13 @@ class ModifyTable {
 
     ClassMapping<?> classMapping;
 
-    Map<PropertyMapping, Column> newColumns = new HashMap<>();
+    Map<PropertyMapping, Column> newColumns = new LinkedHashMap<>();
 
-    Map<PropertyMapping, Column> modifyColumns = new HashMap<>();
+    Map<PropertyMapping, Column> modifyColumns = new LinkedHashMap<>();
 
-    Set<Column> noMappingColumns = new HashSet<>();
+    Set<Column> noMappingColumns = new LinkedHashSet<>();
 
+    Set<Index> dropIndexs = new LinkedHashSet<>();
+
+    Set<Index> addIndexs = new LinkedHashSet<>();
 }

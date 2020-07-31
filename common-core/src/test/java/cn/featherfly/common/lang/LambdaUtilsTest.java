@@ -156,6 +156,13 @@ public class LambdaUtilsTest {
         g4(User::getAge);
     }
 
+    @Test
+    public void test10() {
+        User2 user = new User2();
+        user.setAge(18);
+        assertUser(user);
+    }
+
     public static void main(String[] args) {
         SerializedLambda s;
         s = get(User::isLocked);
@@ -169,6 +176,10 @@ public class LambdaUtilsTest {
         //        t(System.out::println);
         //        Arrays.stream(new String[0]).forEach(System.out::println);
         //        eq(User::isLocked, User::isLocked);
+    }
+
+    void assertUser(User user) {
+        AssertIllegalArgument.isNotNull(user::getAge);
     }
 
     public static void p(SerializedLambda s) {

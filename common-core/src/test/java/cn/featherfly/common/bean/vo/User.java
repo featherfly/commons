@@ -6,11 +6,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.xml.ws.BindingType;
-
 import cn.featherfly.common.bean.BeanUtils;
 
-@BindingType("sys_user")
+// @javax.xml.ws.BindingType("sys_user")
 public class User {
 
     public static void main(String[] args) {
@@ -164,7 +162,7 @@ public class User {
 
     /**
      * 返回username
-     * 
+     *
      * @return username
      */
     public Optional<String> getUsername() {
@@ -173,7 +171,7 @@ public class User {
 
     /**
      * 设置available
-     * 
+     *
      * @param available available
      */
     public void setAvailable(Boolean available) {
@@ -182,7 +180,7 @@ public class User {
 
     /**
      * 设置username
-     * 
+     *
      * @param username username
      */
     public void setUsername(Optional<String> username) {

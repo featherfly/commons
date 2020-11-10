@@ -26,6 +26,9 @@ public final class NumberUtils {
     /** The Constant LETTERS64. */
     private static final char[] LETTERS64;
 
+    /** The Constant LETTERS128 */
+    private static final char[] LETTERS128;
+
     /** The Constant NUMBER_TEN. */
     private static final int NUMBER_TEN = 10;
 
@@ -33,11 +36,13 @@ public final class NumberUtils {
     private static final int NUMBER_THREETY_SIX = 36;
 
     /** The Constant LETTERS64_DIGITS_MAP. */
-    private static final Map<Character, Integer> LETTERS64_DIGITS_MAP = new HashMap<>();
+    private static final Map<Character, Integer> LETTERS128_DIGITS_MAP = new HashMap<>();
 
     static {
         LETTERS62 = new char[Radix.RADIX62.value()];
         LETTERS64 = new char[Radix.RADIX64.value()];
+        LETTERS128 = new char[Radix.RADIX128.value()];
+
         for (int i = 0; i < NUMBER_TEN; i++) {
             LETTERS62[i] = (char) ('0' + i);
             LETTERS64[i] = (char) ('0' + i);
@@ -51,7 +56,7 @@ public final class NumberUtils {
             LETTERS64[i] = (char) ('A' + i - NUMBER_THREETY_SIX);
         }
         LETTERS64[Radix.RADIX62.value()] = '_';
-        LETTERS64[Radix.RADIX62.value() + 1] = '@';
+        LETTERS64[Radix.RADIX62.value() + 1] = '~';
 
         int max = 0;
         for (char c : LETTERS64) {
@@ -59,8 +64,21 @@ public final class NumberUtils {
                 max = c;
             }
         }
-        for (int i = 0; i < LETTERS64.length; i++) {
-            LETTERS64_DIGITS_MAP.put(LETTERS64[i], i);
+        //        for (int i = 0; i < LETTERS64.length; i++) {
+        //            LETTERS128_DIGITS_MAP.put(LETTERS64[i], i);
+        //
+        //            LETTERS128[i] = LETTERS64[i];
+        //        }
+
+        ArrayUtils.fillAll(LETTERS128, LETTERS64);
+        ArrayUtils.fillAll(LETTERS128, Radix.RADIX64.value(),
+                new char[] { '©', 'ß', '¿', '£', '¤', '¥', '¦', '§', 'µ', '¶', 'À', 'Á', 'Â', 'Ä', 'Å', 'Æ', 'È', 'É',
+                        'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'à',
+                        'á', 'â', 'ä', 'å', 'æ', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ð', 'ñ', 'ò', 'ó', 'ô', 'õ',
+                        'ö', 'ù', 'ú', 'û', 'ü', 'ý', '¯', '®' });
+
+        for (int i = 0; i < LETTERS128.length; i++) {
+            LETTERS128_DIGITS_MAP.put(LETTERS128[i], i);
         }
     }
 
@@ -583,6 +601,88 @@ public final class NumberUtils {
     }
 
     /**
+     * To string 128 unit.
+     *
+     * @param number the number
+     * @return the string
+     */
+    public static String toString128Unit(byte number) {
+        return toString128Unit((long) number);
+    }
+
+    /**
+     * To string 128 unit.
+     *
+     * @param number the number
+     * @return the string
+     */
+    public static String toString128Unit(short number) {
+        return toString128Unit((long) number);
+    }
+
+    /**
+     * To string 128 unit.
+     *
+     * @param number the number
+     * @return the string
+     */
+    public static String toString128Unit(int number) {
+        return toString128Unit((long) number);
+    }
+
+    /**
+     * To string 128 unit.
+     *
+     * @param number the number
+     * @return the string
+     */
+    public static String toString128Unit(long number) {
+        boolean reverse = false;
+        if (number < 0) {
+            reverse = true;
+            number = 0 - number;
+        } else if (number == 0) {
+            return Chars.ZERO_STR;
+        }
+        StringBuilder buf = new StringBuilder();
+        while (number != 0) {
+            buf.append(LETTERS128[(int) (number % Radix.RADIX128.value())]);
+            number /= Radix.RADIX128.value();
+        }
+        if (reverse) {
+            buf.append(Chars.MINUS_CHAR);
+        }
+        return buf.reverse().toString();
+    }
+
+    /**
+     * To string 128 unit.
+     *
+     * @param number the number
+     * @return the string
+     */
+    public static String toString128Unit(BigInteger number) {
+        if (number.equals(BigInteger.ZERO)) {
+            return Chars.ZERO_STR;
+        }
+        boolean reverse = false;
+        BigInteger abs = number.abs();
+        reverse = !abs.equals(number);
+        if (reverse) {
+            number = abs;
+        }
+        StringBuilder buf = new StringBuilder();
+        while (!number.equals(BigInteger.ZERO)) {
+            buf.append(LETTERS128[number.mod(BigInteger.valueOf(Radix.RADIX128.value())).intValue()]);
+            number = number.divide(BigInteger.valueOf(Radix.RADIX128.value()));
+        }
+        if (reverse) {
+            buf.append(Chars.MINUS_CHAR);
+        }
+        return buf.reverse().toString();
+    }
+
+    /**
      * Parses the.
      *
      * @param numberStr the number str
@@ -595,6 +695,8 @@ public final class NumberUtils {
                 return parse62Unit(numberStr);
             case RADIX64:
                 return parse64Unit(numberStr);
+            case RADIX128:
+                return parse128Unit(numberStr);
             default:
                 return new BigInteger(numberStr, radix.value());
         }
@@ -725,6 +827,52 @@ public final class NumberUtils {
     }
 
     /**
+     * Parses the 128 unit to int.
+     *
+     * @param numberStr the number str
+     * @return the int
+     */
+    public static int parse128UnitToInt(String numberStr) {
+        return parse128Unit(numberStr).intValue();
+    }
+
+    /**
+     * Parses the 128 unit to long.
+     *
+     * @param numberStr the number str
+     * @return the long
+     */
+    public static long parse128UnitToLong(String numberStr) {
+        return parse128Unit(numberStr).longValue();
+    }
+
+    /**
+     * Parses the 128 unit.
+     *
+     * @param numberStr the number str
+     * @return the big integer
+     */
+    public static BigInteger parse128Unit(String numberStr) {
+        boolean reverse = false;
+        if (numberStr.charAt(0) == Chars.MINUS_CHAR) {
+            reverse = true;
+            numberStr = numberStr.substring(1);
+        }
+        BigInteger result = BigInteger.ZERO;
+        BigInteger multiplier = BigInteger.ONE;
+        for (int pos = numberStr.length() - 1; pos >= 0; pos--) {
+            int index = getIndex(numberStr, pos, Radix.RADIX128);
+            result = result.add(multiplier.multiply(BigInteger.valueOf(index)));
+            multiplier = multiplier.multiply(BigInteger.valueOf(Radix.RADIX128.value()));
+        }
+        if (reverse) {
+            return BigInteger.ZERO.subtract(result);
+        } else {
+            return result;
+        }
+    }
+
+    /**
      * Gets the index.
      *
      * @param s     the s
@@ -734,7 +882,7 @@ public final class NumberUtils {
      */
     private static int getIndex(String s, int pos, Radix radix) {
         char c = s.charAt(pos);
-        Integer value = LETTERS64_DIGITS_MAP.get(c);
+        Integer value = LETTERS128_DIGITS_MAP.get(c);
         switch (radix) {
             case RADIX62:
                 if (value == null) {
@@ -744,6 +892,11 @@ public final class NumberUtils {
             case RADIX64:
                 if (value == null) {
                     throw new IllegalArgumentException("Unknow character for unit64 " + c);
+                }
+                break;
+            case RADIX128:
+                if (value == null) {
+                    throw new IllegalArgumentException("Unknow character for unit128 " + c);
                 }
                 break;
             default:

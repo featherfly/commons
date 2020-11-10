@@ -1,3 +1,8 @@
+2020-11-10
+1.8.12
+    1.ArrayUtils加入fillAll相关的方法
+    2.NumberUtils加入128进制的转换，64进制转换中@替换为~
+    
 2020-7-19
 1.8.11
     1.修正Lang.wrapThrow(Throwable, Class<E>)

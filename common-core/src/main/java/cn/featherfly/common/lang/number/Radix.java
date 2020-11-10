@@ -30,7 +30,10 @@ public enum Radix {
     RADIX62(62),
 
     /** The radix64. */
-    RADIX64(64);
+    RADIX64(64),
+
+    /** The radix128. */
+    RADIX128(128);
 
     /** The value. */
     private int value;

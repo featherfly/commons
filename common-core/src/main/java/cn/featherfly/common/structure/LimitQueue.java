@@ -9,10 +9,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 固定长度队列
- * @author zhongj
  *
+ * @author zhongj
  */
-public class LimitQueue<E> implements Queue<E>{
+public class LimitQueue<E> implements Queue<E> {
 
     //队列长度
     private int limit;
@@ -24,7 +24,7 @@ public class LimitQueue<E> implements Queue<E>{
     /**
      * @param limit 队列长度
      */
-    public LimitQueue(int limit){
+    public LimitQueue(int limit) {
         this(limit, null);
     }
 
@@ -32,16 +32,16 @@ public class LimitQueue<E> implements Queue<E>{
      * @param limit 队列长度
      * @param queue 队列
      */
-    public LimitQueue(int limit, Queue<E> queue){
+    public LimitQueue(int limit, Queue<E> queue) {
         this(limit, queue, null);
     }
 
     /**
      * @param limit 队列长度
      * @param queue 队列
-     * @param lock 锁
+     * @param lock  锁
      */
-    public LimitQueue(int limit, Queue<E> queue, Lock lock){
+    public LimitQueue(int limit, Queue<E> queue, Lock lock) {
         this.limit = limit;
         if (queue == null) {
             queue = new LinkedList<>();
@@ -55,12 +55,13 @@ public class LimitQueue<E> implements Queue<E>{
 
     /**
      * 入队
+     *
      * @param e element
      */
     @Override
-    public boolean offer(E e){
+    public boolean offer(E e) {
         lock.lock();
-        if(queue.size() >= limit){
+        if (queue.size() >= limit) {
             //如果超出长度,入队时,先出队
             queue.poll();
         }
@@ -70,6 +71,7 @@ public class LimitQueue<E> implements Queue<E>{
 
     /**
      * 出队
+     *
      * @return element
      */
     @Override
@@ -79,17 +81,19 @@ public class LimitQueue<E> implements Queue<E>{
 
     /**
      * 获取队列
+     *
      * @return queue
      */
-    public Queue<E> getQueue(){
+    public Queue<E> getQueue() {
         return queue;
     }
 
     /**
      * 获取限制大小
+     *
      * @return limit
      */
-    public int getLimit(){
+    public int getLimit() {
         return limit;
     }
 
@@ -176,7 +180,7 @@ public class LimitQueue<E> implements Queue<E>{
 
     /**
      * @param o object
-     * @return <tt>true</tt> if the specified object is equal to this
+     * @return true if the specified object is equal to this
      * @see java.util.Collection#equals(java.lang.Object)
      */
     @Override
@@ -185,7 +189,7 @@ public class LimitQueue<E> implements Queue<E>{
     }
 
     /**
-     *  @return the hash code value for this queue 
+     * @return the hash code value for this queue
      * @see java.util.Collection#hashCode()
      */
     @Override

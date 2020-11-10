@@ -58,9 +58,9 @@ public final class LocalizedExceptionUtils {
      *
      * @param exceptionType throw exception type
      * @param cause         the cause (which is saved for later retrieval by the
-     *                      {@link Throwable#getCause()} method). (A
-     *                      <tt>null</tt> value is permitted, and indicates that
-     *                      the cause is nonexistent or unknown.)
+     *                      {@link Throwable#getCause()} method). (A null value
+     *                      is permitted, and indicates that the cause is
+     *                      nonexistent or unknown.)
      * @param message       message
      * @param args          消息绑定参数
      */
@@ -76,9 +76,9 @@ public final class LocalizedExceptionUtils {
      *
      * @param exceptionType throw exception type
      * @param cause         the cause (which is saved for later retrieval by the
-     *                      {@link Throwable#getCause()} method). (A
-     *                      <tt>null</tt> value is permitted, and indicates that
-     *                      the cause is nonexistent or unknown.)
+     *                      {@link Throwable#getCause()} method). (A null value
+     *                      is permitted, and indicates that the cause is
+     *                      nonexistent or unknown.)
      * @param locale        locale
      * @param message       message
      * @param args          消息绑定参数

@@ -1,7 +1,6 @@
 sourceSets {
     main {
         java {
-            //srcDirs = ["", ""]
         }
     }
 }

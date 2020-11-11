@@ -50,6 +50,15 @@ public class PropertiesPlus extends java.util.Properties implements cn.featherfl
      * Creates an empty property list with the specified defaults.
      *
      * @param defaults the defaults.
+     */
+    public PropertiesPlus(java.util.Properties defaults) {
+        this(defaults, null);
+    }
+
+    /**
+     * Creates an empty property list with the specified defaults.
+     *
+     * @param defaults the defaults.
      * @param charset  charset.
      */
     public PropertiesPlus(java.util.Properties defaults, Charset charset) {

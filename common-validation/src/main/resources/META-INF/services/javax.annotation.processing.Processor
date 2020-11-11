@@ -1,0 +1,2 @@
+cn.featherfly.common.validation.apt.Jsr305Processor
+cn.featherfly.common.validation.apt.ValidationProcessor

@@ -1,0 +1,16 @@
+sourceSets {
+    main {
+        java {
+            //srcDirs = ["", ""]
+        }
+    }
+}
+  
+dependencies {
+	//implementation project(":common-core")
+	api group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.18.Final'
+	
+	api group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+	
+	compileOnly files(System.getProperty("java.home") + "/../lib/tools.jar")
+}

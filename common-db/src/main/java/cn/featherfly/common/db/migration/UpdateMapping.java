@@ -83,4 +83,7 @@ class ModifyTable {
     Set<Index> dropIndexs = new LinkedHashSet<>();
 
     Set<Index> addIndexs = new LinkedHashSet<>();
+
+    Set<Index> noMappingIndexs = new LinkedHashSet<>();
+
 }

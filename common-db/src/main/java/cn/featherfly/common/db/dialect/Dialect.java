@@ -31,6 +31,8 @@ public interface Dialect {
     /** 命名参数查询的查询条件默认数量名称. */
     String LIMIT_PARAM_NAME = "dialect_paging_limit";
 
+    String PRIMARY_KEY_INDEX_NAME = "PRIMARY";
+
     /** The param name start symbol. */
     char PARAM_NAME_START_SYMBOL = Chars.COLON_CHAR;
 
@@ -867,6 +869,7 @@ public interface Dialect {
      *
      * @param tableName the table name
      * @param indexName the index name
+     * @param ifExists  the if exists
      * @return the string
      */
     default String buildDropIndexDDL(String tableName, String indexName, boolean ifExists) {
@@ -950,6 +953,15 @@ public interface Dialect {
         } else {
             return 0;
         }
+    }
+
+    /**
+     * Gets the primary key index name.
+     *
+     * @return the primary key index name
+     */
+    default String getPrimaryKeyIndexName() {
+        return PRIMARY_KEY_INDEX_NAME;
     }
 
     /**

@@ -25,6 +25,7 @@ import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
 import cn.featherfly.common.lang.CollectionUtils;
 import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.repository.Index;
 import cn.featherfly.common.repository.mapping.ClassMapping;
 
 /**
@@ -195,11 +196,11 @@ public class Migrator {
      *
      * @param classMappings the class mappings
      * @param modifyType    the modify type for table and column
-     * @param dropNoMapping the drop no mapping for table and column
+     * @param dropNoMapping the drop no mapping for table, column, index
      * @return the string
      */
     public String updateSql(Set<ClassMapping<?>> classMappings, ModifyType modifyType, boolean dropNoMapping) {
-        return updateSql(classMappings, modifyType, dropNoMapping, modifyType, dropNoMapping);
+        return updateSql(classMappings, modifyType, dropNoMapping, modifyType, dropNoMapping, dropNoMapping);
     }
 
     /**
@@ -212,20 +213,19 @@ public class Migrator {
      * @param columnModifyType    the column modify type
      * @param dropNoMappingColumn if true, drop the column which no mapping with
      *                            object; if false, do nothing.
+     * @param dropNoMappingIndex  if true, drop the index which no mapping with
+     *                            object; if false, do nothing.
+     * @param databaseMetadata    database metadata
      * @return the inits the sql
      */
     public String updateSql(Set<ClassMapping<?>> classMappings, ModifyType tableModifyType, boolean dropNoMappingTable,
-            ModifyType columnModifyType, boolean dropNoMappingColumn) {
-        // TODO 这里是否需要reCreate后续再来确定
-        //        DatabaseMetadata metadata = DatabaseMetadataManager.getDefaultManager().reCreate(sqlExecutor.getDataSource());
-        DatabaseMetadata metadata = DatabaseMetadataManager.getDefaultManager().create(sqlExecutor.getDataSource());
-
+            ModifyType columnModifyType, boolean dropNoMappingColumn, boolean dropNoMappingIndex,
+            DatabaseMetadata databaseMetadata) {
         UpdateMapping updateMapping = new UpdateMapping();
 
-        // TODO 判断index的更新情况
         Set<String> tableNameSet = new HashSet<>();
         for (ClassMapping<?> classMapping : classMappings) {
-            Table tableMetadata = metadata.getTable(classMapping.getRepositoryName());
+            Table tableMetadata = databaseMetadata.getTable(classMapping.getRepositoryName());
             Table table = ClassMappingUtils.createTable(classMapping, dialect, sqlTypeMappingManager);
             tableNameSet.add(table.getName());
             if (tableMetadata == null) {
@@ -257,9 +257,27 @@ public class Migrator {
                         modifyTable.noMappingColumns.add(columnMetadata);
                     }
                 }
+
+                // 索引
+                for (Index index : table.getIndexs()) {
+                    Index indexMetadata = tableMetadata.getIndex(index.getName());
+                    if (indexMetadata == null) {
+                        // 数据库索引数据没有该索引，添加新索引
+                        modifyTable.addIndexs.add(index);
+                    } else if (!indexMetadata.equals(index)) {
+                        modifyTable.dropIndexs.add(indexMetadata);
+                        modifyTable.addIndexs.add(index);
+                    }
+                }
+                for (Index indexMetadata : tableMetadata.getIndexs()) {
+                    // 判断数据库表的索引是否没有映射
+                    if (!table.hasIndex(indexMetadata.getName())) {
+                        modifyTable.noMappingIndexs.add(indexMetadata);
+                    }
+                }
             }
         }
-        for (Table tableMetadata : metadata.getTables()) {
+        for (Table tableMetadata : databaseMetadata.getTables()) {
             // 判断数据库表是否没有映射
             if (!tableNameSet.contains(tableMetadata.getName())) {
                 updateMapping.noMappingTables.add(tableMetadata);
@@ -270,16 +288,28 @@ public class Migrator {
         sql.append(dialect.getInitSqlHeader()).append(Chars.SEMI).append(Chars.NEW_LINE);
         // 添加新的对象映射
         updateMapping.newClassMappings.forEach((classMapping, table) -> {
-            sql.append(createSql(table, true, classMapping.getType())).append(Chars.SEMI).append(Chars.NEW_LINE);
+            appendSqlWithEnd(sql, createSql(table, true, classMapping.getType()));
         });
         for (Entry<Table, ModifyTable> entry : updateMapping.modifyTables.modifyTableMap.entrySet()) {
             Table table = entry.getKey();
             ModifyTable modifyTable = entry.getValue();
             if (ModifyType.MODIFY == tableModifyType) {
                 List<Column> dropColumns = new ArrayList<>();
+                List<Index> dropIndex = new ArrayList<>();
                 if (dropNoMappingColumn) {
                     dropColumns.addAll(modifyTable.noMappingColumns);
                 }
+                dropIndex.addAll(modifyTable.dropIndexs);
+                if (dropNoMappingIndex) {
+                    dropIndex.addAll(modifyTable.noMappingIndexs);
+                }
+
+                // 删除的索引
+                for (Index index : dropIndex) {
+                    appendSqlWithEnd(sql,
+                            dialect.buildDropIndexDDL(table.getSchema(), table.getName(), index.getName()));
+                }
+
                 if (ModifyType.MODIFY == columnModifyType) {
                     appendSqlWithEnd(sql, dialect.buildAlterTableDDL(schema, table.getName(),
                             //  添加新的属性列映射
@@ -308,12 +338,18 @@ public class Migrator {
                 } else {
                     throw new JdbcMappingException("no support ModifyType for columnModifyType -> " + columnModifyType);
                 }
+
+                // 新增加的索引
+                for (Index index : modifyTable.addIndexs) {
+                    appendSqlWithEnd(sql, dialect.buildCreateIndexDDL(table.getSchema(), table.getName(),
+                            index.getName(), index.getColumns()));
+                }
+
             } else if (ModifyType.DROP_AND_CREATE == tableModifyType) {
                 appendSqlWithEnd(sql, createSql(modifyTable.classMapping, true));
             } else {
                 throw new JdbcMappingException("no support ModifyType for tableModifyType -> " + tableModifyType);
             }
-
         }
         // 删除没有对象映射的表
         if (dropNoMappingTable) {
@@ -330,6 +366,27 @@ public class Migrator {
             LOGGER.debug("create update sql for {} -> \n{}", schema, result);
         }
         return result;
+    }
+
+    /**
+     * Gets the update sql with cached DatabaseMetadata(maybe different from
+     * database).
+     *
+     * @param classMappings       the class mappings
+     * @param tableModifyType     the table modify type
+     * @param dropNoMappingTable  if true, drop the table which no mapping with
+     *                            object; if false, do nothing.
+     * @param columnModifyType    the column modify type
+     * @param dropNoMappingColumn if true, drop the column which no mapping with
+     *                            object; if false, do nothing.
+     * @param dropNoMappingIndex  if true, drop the index which no mapping with
+     *                            object; if false, do nothing.
+     * @return the inits the sql
+     */
+    public String updateSql(Set<ClassMapping<?>> classMappings, ModifyType tableModifyType, boolean dropNoMappingTable,
+            ModifyType columnModifyType, boolean dropNoMappingColumn, boolean dropNoMappingIndex) {
+        return updateSql(classMappings, tableModifyType, dropNoMappingTable, columnModifyType, dropNoMappingColumn,
+                dropNoMappingIndex, DatabaseMetadataManager.getDefaultManager().create(sqlExecutor.getDataSource()));
     }
 
     //    /**
@@ -387,11 +444,12 @@ public class Migrator {
      * @param dropTableNotMapping  the drop table not mapping
      * @param columnModifyType     the column modify type
      * @param dropColumnNotMapping the drop column not mapping
+     * @param dropIndexNotMapping  the drop index not mapping
      */
     public void update(Set<ClassMapping<?>> classMappings, ModifyType tableModifyType, boolean dropTableNotMapping,
-            ModifyType columnModifyType, boolean dropColumnNotMapping) {
-        sqlExecutor.execute(
-                updateSql(classMappings, tableModifyType, dropTableNotMapping, columnModifyType, dropColumnNotMapping));
+            ModifyType columnModifyType, boolean dropColumnNotMapping, boolean dropIndexNotMapping) {
+        sqlExecutor.execute(updateSql(classMappings, tableModifyType, dropTableNotMapping, columnModifyType,
+                dropColumnNotMapping, dropIndexNotMapping));
     }
 
     /**
@@ -402,7 +460,14 @@ public class Migrator {
      * @return the string builder
      */
     private StringBuilder appendSqlWithEnd(StringBuilder sql, String appendSql) {
-        return sql.append(appendSql).append(Chars.SEMI).append(Chars.NEW_LINE);
+        if (Lang.isNotEmpty(appendSql)) {
+            sql.append(appendSql);
+            if (!appendSql.endsWith(Chars.SEMI)) {
+                sql.append(Chars.SEMI);
+            }
+            return sql.append(Chars.NEW_LINE);
+        }
+        return sql;
     }
 
     /**

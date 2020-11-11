@@ -12,6 +12,7 @@ import cn.featherfly.common.db.mapping.ObjectToDbMappingFactory;
 import cn.featherfly.common.db.mapping.SqlTypeMappingManager;
 import cn.featherfly.common.db.mapping.pojo.Entity;
 import cn.featherfly.common.db.mapping.pojo.Entity2;
+import cn.featherfly.common.db.mapping.pojo.Entity3;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
 import cn.featherfly.common.db.migration.Migrator.ModifyType;
@@ -57,23 +58,32 @@ public class MigratorTest extends JdbcTestBase {
         Set<ClassMapping<?>> mappings = classMappings2();
         sqlTypeMappingManager.setEnumWithOrdinal(false);
         System.out.println("migrator.updateSql(classMappings(), ModifyType.MODIFY, true, ModifyType.MODIFY, true)");
-        System.err.println(migrator.updateSql(mappings, ModifyType.MODIFY, true, ModifyType.MODIFY, true));
+        System.err.println(migrator.updateSql(mappings, ModifyType.MODIFY, true, ModifyType.MODIFY, true, true));
         System.out.println("******************************************");
         System.out.println("migrator.updateSql(classMappings(), ModifyType.MODIFY, false, ModifyType.MODIFY, false)");
         System.out.println("******************************************");
-        System.err.println(migrator.updateSql(mappings, ModifyType.MODIFY, false, ModifyType.MODIFY, false));
+        System.err.println(migrator.updateSql(mappings, ModifyType.MODIFY, false, ModifyType.MODIFY, false, false));
         System.out.println("******************************************");
         System.out.println(
                 "migrator.updateSql(classMappings(), ModifyType.DROP_AND_CREATE, true,ModifyType.DROP_AND_CREATE, true)");
         System.out.println("******************************************");
         System.err.println(
-                migrator.updateSql(mappings, ModifyType.DROP_AND_CREATE, true, ModifyType.DROP_AND_CREATE, true));
+                migrator.updateSql(mappings, ModifyType.DROP_AND_CREATE, true, ModifyType.DROP_AND_CREATE, true, true));
         System.out.println("******************************************");
         System.out.println(
                 "migrator.updateSql(classMappings(), ModifyType.DROP_AND_CREATE, false, ModifyType.DROP_AND_CREATE, false)");
         System.out.println("******************************************");
-        System.err.println(
-                migrator.updateSql(mappings, ModifyType.DROP_AND_CREATE, false, ModifyType.DROP_AND_CREATE, false));
+        System.err.println(migrator.updateSql(mappings, ModifyType.DROP_AND_CREATE, false, ModifyType.DROP_AND_CREATE,
+                false, false));
+    }
+
+    @Test
+    public void testUpdateSqlIndex() {
+        Set<ClassMapping<?>> mappings = classMappings2();
+        sqlTypeMappingManager.setEnumWithOrdinal(false);
+        System.out.println("migrator.updateSql(classMappings(), ModifyType.MODIFY, true, ModifyType.MODIFY, true)");
+        System.err.println(migrator.updateSql(mappings, ModifyType.MODIFY, true, ModifyType.MODIFY, true, true));
+
     }
 
     private Set<ClassMapping<?>> classMappings() {
@@ -87,6 +97,7 @@ public class MigratorTest extends JdbcTestBase {
     private Set<ClassMapping<?>> classMappings2() {
         Set<ClassMapping<?>> set = new HashSet<>();
         set.add(factory.getClassMapping(Entity2.class));
+        set.add(factory.getClassMapping(Entity3.class));
         return set;
     }
 }

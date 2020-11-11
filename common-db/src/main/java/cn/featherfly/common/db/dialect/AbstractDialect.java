@@ -89,6 +89,9 @@ public abstract class AbstractDialect implements Dialect {
     @Override
     public String buildAlterTableDDL(String schema, String tableName, Column[] addColumns, Column[] modifyColumns,
             Column[] dropColumns) {
+        if (Lang.isEmpty(addColumns) && Lang.isEmpty(modifyColumns) && Lang.isEmpty(dropColumns)) {
+            return "";
+        }
         AssertIllegalArgument.isNotEmpty(tableName, "tableName");
         StringBuilder ddl = new StringBuilder(buildAlterTableDDL(schema, tableName));
         ddl.append(Chars.NEW_LINE);

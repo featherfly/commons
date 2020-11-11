@@ -25,9 +25,10 @@ import cn.featherfly.common.db.dialect.Dialects;
  */
 public class SqlExportMysqlImplTest {
     public static void main(String[] args) throws Exception {
-        String database = "juorm_jdbc";
+        String database = "db_test";
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/" + database);
+        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/" + database
+                + "?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false");
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUsername("root");
         dataSource.setPassword("123456");
@@ -39,18 +40,19 @@ public class SqlExportMysqlImplTest {
         DataExportorImpl exportor = new DataExportorImpl(Dialects.MYSQL, new SqlDataFormatFactory());
         //		SqlExportorMysqlImpl exportor = new SqlExportorMysqlImpl();
         exportor.setDataSource(dataSource);
-        //		exportor.exportDatabase(new OutputStreamWriter(new FileOutputStream("C:/" + database + ".sql"), "UTF-8"));
+        exportor.exportDatabase(new OutputStreamWriter(new FileOutputStream("tmp/" + database + ".sql"), "UTF-8"));
 
-        exportor.exportData("select * from USER where ID = '1'",
-                new OutputStreamWriter(new FileOutputStream("PERSON_1.sql"), "UTF-8"));
+        exportor.exportData("select * from user_info where ID = '1'",
+                new OutputStreamWriter(new FileOutputStream("tmp/user_info_1.sql"), "UTF-8"));
+
         Collection<String> tables = new ArrayList<>();
-        tables.add("user");
+        tables.add("user_info");
         tables.add("role");
         tables.add("user_role");
-        exportor.exportTable(new OutputStreamWriter(new FileOutputStream("tables.sql"), "UTF-8"), tables);
+        exportor.exportTable(new OutputStreamWriter(new FileOutputStream("tmp/tables.sql"), "UTF-8"), tables);
         Collection<String> sqls = new ArrayList<>();
         sqls.add("select * from cms_article where ID = '1'");
         sqls.add("select * from user_info where ID = '1'");
-        exportor.exportData(sqls, new OutputStreamWriter(new FileOutputStream("sqls.sql"), "UTF-8"));
+        exportor.exportData(sqls, new OutputStreamWriter(new FileOutputStream("tmp/sqls.sql"), "UTF-8"));
     }
 }

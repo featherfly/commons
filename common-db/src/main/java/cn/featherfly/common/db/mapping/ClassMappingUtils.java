@@ -67,6 +67,17 @@ public class ClassMappingUtils {
         for (Index index : classMapping.getIndexs()) {
             table.addIndex(index);
         }
+
+        //        if (classMapping.getPrivaryKeyPropertyMappings().size() > 0) {
+        //            List<String> pkColumns = new ArrayList<>();
+        //            for (PropertyMapping pm : classMapping.getPrivaryKeyPropertyMappings()) {
+        //                pkColumns.add(pm.getRepositoryFieldName());
+        //            }
+        //            Index pkIndex = new Index(dialect.getPrimaryKeyIndexName(),
+        //                    CollectionUtils.toArray(pkColumns, String.class), true);
+        //            table.addIndex(pkIndex);
+        //        }
+
         return table;
     }
 

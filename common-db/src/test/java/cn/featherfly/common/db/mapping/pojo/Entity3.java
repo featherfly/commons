@@ -25,9 +25,9 @@ import cn.featherfly.common.db.jpa.Comment;
  *
  * @author zhongj
  */
-@Table(name = "entity", indexes = { @Index(columnList = "name", name = "name_index") })
+@Table(name = "entity3", indexes = { @Index(columnList = "name", name = "name_index") })
 @Comment("测试实体")
-public class Entity2 {
+public class Entity3 {
 
     public enum State {
         ENABLE, DISABLE

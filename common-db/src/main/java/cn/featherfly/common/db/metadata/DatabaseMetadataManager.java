@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.db.JdbcException;
 import cn.featherfly.common.db.JdbcUtils;
+import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.wrapper.ConnectionWrapper;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
@@ -348,15 +349,17 @@ public class DatabaseMetadataManager {
         Set<String> uniques = new HashSet<>();
         while (ri.next()) {
             String indexName = ri.getString("INDEX_NAME");
+            if (Dialect.PRIMARY_KEY_INDEX_NAME.equals(indexName)) {
+                continue;
+            }
             List<String> columnNames = indexColumnMap.get(indexName);
             String columnName = ri.getString("COLUMN_NAME");
             if (columnNames == null) {
                 columnNames = new ArrayList<>();
             }
             columnNames.add(columnName);
+            indexColumnMap.put(indexName, columnNames);
         }
-        indexColumnMap.forEach((name, columns) -> {
-        });
         ri = metaData.getIndexInfo(catalog, schema, tableName, true, false);
         while (ri.next()) {
             String indexName = ri.getString("INDEX_NAME");

@@ -60,7 +60,7 @@ public class Test2 {
                 System.out.println("\tname: " + tableName);
                 System.out.println("\ttype: " + rs.getString("TABLE_TYPE"));
                 System.out.println("\tcat: " + rs.getString("TABLE_CAT"));
-                System.out.println("\tschem: " + rs.getString("TABLE_SCHEM"));
+                System.out.println("\tschema: " + rs.getString("TABLE_SCHEM"));
                 System.out.println("\tREMARKS: " + rs.getString(remarks));
 
                 ResultSet ri = metaData.getIndexInfo(catalog, null, tableName, false, false);

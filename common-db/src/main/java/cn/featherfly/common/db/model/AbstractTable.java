@@ -188,7 +188,7 @@ public abstract class AbstractTable<C extends Column> implements Table {
      */
     @Override
     public Column getColumn(String columnName) {
-        return columnMap.get(columnName.toUpperCase());
+        return Lang.isEmpty(columnName) ? null : columnMap.get(columnName.toUpperCase());
     }
 
     /**
@@ -229,5 +229,29 @@ public abstract class AbstractTable<C extends Column> implements Table {
     @Override
     public List<Index> getIndexs() {
         return new ArrayList<>(indexMap.values());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<String, Index> getIndexMap() {
+        return new LinkedHashMap<>(indexMap);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Index getIndex(String indexName) {
+        return Lang.isEmpty(indexName) ? null : indexMap.get(indexName.toUpperCase());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasIndex(String indexName) {
+        return Lang.isEmpty(indexName) ? false : indexMap.containsKey(indexName.toUpperCase());
     }
 }

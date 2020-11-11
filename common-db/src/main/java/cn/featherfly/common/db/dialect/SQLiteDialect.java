@@ -54,7 +54,6 @@ public class SQLiteDialect extends AbstractDialect {
      */
     @Override
     public String getParamNamedPaginationSql(String sql, int start, int limit, char startSymbol) {
-        // YUFEI_TODO Auto-generated method stub
         return getPaginationSql(sql, start, true, startSymbol);
     }
 

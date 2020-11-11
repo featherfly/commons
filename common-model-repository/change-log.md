@@ -1,5 +1,5 @@
-# 0.1.6 2020-11-11
-    1.ClassMapping加入schema属性和getIndex(indexName)方法
+# 0.1.6 2020
+    1.ClassMapping加入schema属性和getIndex相关的一系列方法
     
 # 0.1.5 2020-7-20
     1.ClassMapping加入getPropertyMappingLeafNodes方法

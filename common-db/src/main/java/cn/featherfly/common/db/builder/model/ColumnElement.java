@@ -7,16 +7,21 @@ import cn.featherfly.common.db.dialect.Dialect;
  * <p>
  * Column
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class ColumnElement extends AbstractSqlElement {
 
+    /** The name. */
     protected String name;
 
+    /** The table alias. */
     protected String tableAlias;
 
     /**
+     * Instantiates a new column element.
+     *
      * @param dialect dialect
      * @param name    name
      */
@@ -25,6 +30,8 @@ public class ColumnElement extends AbstractSqlElement {
     }
 
     /**
+     * Instantiates a new column element.
+     *
      * @param dialect    dialect
      * @param name       name
      * @param tableAlias tableAlias
@@ -36,7 +43,7 @@ public class ColumnElement extends AbstractSqlElement {
     }
 
     /**
-     * 返回name
+     * 返回name.
      *
      * @return name
      */
@@ -45,7 +52,7 @@ public class ColumnElement extends AbstractSqlElement {
     }
 
     /**
-     * 设置name
+     * 设置name.
      *
      * @param name name
      */
@@ -54,7 +61,7 @@ public class ColumnElement extends AbstractSqlElement {
     }
 
     /**
-     * 返回tableAlias
+     * 返回tableAlias.
      *
      * @return tableAlias
      */
@@ -63,7 +70,7 @@ public class ColumnElement extends AbstractSqlElement {
     }
 
     /**
-     * 设置tableAlias
+     * 设置tableAlias.
      *
      * @param tableAlias tableAlias
      */

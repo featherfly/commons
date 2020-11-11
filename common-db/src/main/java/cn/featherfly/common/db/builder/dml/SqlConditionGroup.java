@@ -26,12 +26,15 @@ import cn.featherfly.common.repository.operate.QueryOperator;
  * <p>
  * sql condition group builder sql条件逻辑组构造器
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
 
     /**
+     * Instantiates a new sql condition group.
+     *
      * @param dialect dialect
      * @param sort    SortBuilder
      */
@@ -40,6 +43,8 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
     }
 
     /**
+     * Instantiates a new sql condition group.
+     *
      * @param dialect    dialect
      * @param queryAlias queryAlias
      * @param sort       SortBuilder
@@ -49,6 +54,8 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
     }
 
     /**
+     * Instantiates a new sql condition group.
+     *
      * @param dialect    dialect
      * @param parent     上级组
      * @param sort       排序器
@@ -352,20 +359,35 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
      */
     private boolean ignoreEmpty = true;
 
+    /**
+     * Checks if is ignore empty.
+     *
+     * @return true, if is ignore empty
+     */
     public boolean isIgnoreEmpty() {
         return ignoreEmpty;
     }
 
+    /**
+     * Sets the ignore empty.
+     *
+     * @param ignoreEmpty the new ignore empty
+     */
     public void setIgnoreEmpty(boolean ignoreEmpty) {
         this.ignoreEmpty = ignoreEmpty;
     }
 
+    /**
+     * Gets the conditions.
+     *
+     * @return the conditions
+     */
     public List<Expression> getConditions() {
         return conditions;
     }
 
     /**
-     * 返回queryAlias
+     * 返回queryAlias.
      *
      * @return queryAlias
      */
@@ -374,7 +396,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
     }
 
     /**
-     * 设置queryAlias
+     * 设置queryAlias.
      *
      * @param queryAlias queryAlias
      */

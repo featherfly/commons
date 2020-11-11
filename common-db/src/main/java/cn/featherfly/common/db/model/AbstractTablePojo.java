@@ -9,8 +9,11 @@ import cn.featherfly.common.repository.Index;
  * <p>
  * AbstractTable
  * </p>
+ * .
  *
  * @author zhongj
+ * @param <T> the generic type
+ * @param <C> the generic type
  */
 public abstract class AbstractTablePojo<T extends AbstractTablePojo<T, C>, C extends AbstractColumnPojo<C>>
         extends AbstractTable<C> {
@@ -73,6 +76,7 @@ public abstract class AbstractTablePojo<T extends AbstractTablePojo<T, C>, C ext
      * 添加索引.
      *
      * @param index 索引
+     * @return the t
      */
     @SuppressWarnings("unchecked")
     public T addIndex(Index index) {
@@ -84,6 +88,7 @@ public abstract class AbstractTablePojo<T extends AbstractTablePojo<T, C>, C ext
      * 添加索引.
      *
      * @param indexs 索引对象数组
+     * @return the t
      */
     @SuppressWarnings("unchecked")
     public T addIndex(Index... indexs) {
@@ -97,6 +102,7 @@ public abstract class AbstractTablePojo<T extends AbstractTablePojo<T, C>, C ext
      * 添加索引.
      *
      * @param indexs 索引集合
+     * @return the t
      */
     @SuppressWarnings("unchecked")
     public T addIndex(Collection<Index> indexs) {

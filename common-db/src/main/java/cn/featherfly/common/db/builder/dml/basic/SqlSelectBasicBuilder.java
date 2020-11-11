@@ -25,27 +25,39 @@ import cn.featherfly.common.repository.operate.AggregateFunction;
  */
 public class SqlSelectBasicBuilder implements SqlBuilder {
 
+    /** The table alias. */
     protected String tableAlias;
 
+    /** The table name. */
     protected String tableName;
 
+    /** The build with from. */
     protected boolean buildWithFrom = true;
 
+    /** The columns. */
     protected List<SelectColumnElement> columns = new ArrayList<>(0);
 
+    /** The dialect. */
     protected Dialect dialect;
 
+    /** The class mapping. */
     protected ClassMapping<?> classMapping;
 
+    /** The default select columns basic builder. */
     protected SqlSelectColumnsBasicBuilder defaultSelectColumnsBasicBuilder;
 
+    /** The sql join on basic builders. */
     protected List<SqlJoinOnBasicBuilder> sqlJoinOnBasicBuilders = new ArrayList<>(0);
 
+    /** The join select columns basic builders. */
     protected List<SqlSelectColumnsBasicBuilder> joinSelectColumnsBasicBuilders = new ArrayList<>(0);
 
+    /** The mapping factory. */
     protected MappingFactory mappingFactory;
 
     /**
+     * Instantiates a new sql select basic builder.
+     *
      * @param dialect   dialect
      * @param tableName tableName
      */
@@ -54,6 +66,8 @@ public class SqlSelectBasicBuilder implements SqlBuilder {
     }
 
     /**
+     * Instantiates a new sql select basic builder.
+     *
      * @param dialect    dialect
      * @param tableName  tableName
      * @param tableAlias alias
@@ -98,7 +112,7 @@ public class SqlSelectBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * 返回alias
+     * 返回alias.
      *
      * @return alias
      */
@@ -107,7 +121,7 @@ public class SqlSelectBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * 设置alias
+     * 设置alias.
      *
      * @param tableAlias tableAlias
      */
@@ -117,7 +131,7 @@ public class SqlSelectBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * 返回tableName
+     * 返回tableName.
      *
      * @return tableName
      */
@@ -126,7 +140,7 @@ public class SqlSelectBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * 设置tableName
+     * 设置tableName.
      *
      * @param tableName tableName
      */
@@ -135,7 +149,7 @@ public class SqlSelectBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * 返回buildWithFrom
+     * 返回buildWithFrom.
      *
      * @return buildWithFrom
      */
@@ -144,7 +158,7 @@ public class SqlSelectBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * 设置buildWithFrom
+     * 设置buildWithFrom.
      *
      * @param buildWithFrom buildWithFrom
      */
@@ -153,7 +167,7 @@ public class SqlSelectBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * add column
+     * add column.
      *
      * @param column            column
      * @param aggregateFunction aggregateFunction
@@ -165,7 +179,7 @@ public class SqlSelectBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * add column
+     * add column.
      *
      * @param column            column
      * @param aggregateFunction aggregateFunction
@@ -178,7 +192,7 @@ public class SqlSelectBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * add column
+     * add column.
      *
      * @param column column
      * @return this
@@ -189,7 +203,7 @@ public class SqlSelectBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * add column
+     * add column.
      *
      * @param column column
      * @param asName asName
@@ -201,7 +215,7 @@ public class SqlSelectBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * addColumns
+     * addColumns.
      *
      * @param columns columns
      * @return this
@@ -212,7 +226,7 @@ public class SqlSelectBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * addColumns
+     * addColumns.
      *
      * @param columns columns
      * @return this
@@ -396,6 +410,11 @@ public class SqlSelectBasicBuilder implements SqlBuilder {
     // return new SqlSelectJoinOnBasicBuilder(this, joinSelectColumnsBuilder);
     // }
 
+    /**
+     * Adds the join select columns basic builder.
+     *
+     * @param joinSelectColumnsBuilder the join select columns builder
+     */
     void addJoinSelectColumnsBasicBuilder(SqlSelectColumnsBasicBuilder joinSelectColumnsBuilder) {
         joinSelectColumnsBasicBuilders.add(joinSelectColumnsBuilder);
     }

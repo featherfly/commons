@@ -18,8 +18,20 @@ import cn.featherfly.common.lang.GenericType;
  */
 public interface JavaSqlTypeMapper<E extends Object> {
 
+    /**
+     * Support.
+     *
+     * @param sqlType the sql type
+     * @return true, if successful
+     */
     boolean support(SQLType sqlType);
 
+    /**
+     * Support.
+     *
+     * @param type the type
+     * @return true, if successful
+     */
     boolean support(GenericType<E> type);
 
     /**

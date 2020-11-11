@@ -14,21 +14,30 @@ import cn.featherfly.common.db.dialect.Join;
  */
 public class SqlJoinOnBasicBuilder implements SqlBuilder {
 
+    /** The table alias. */
     protected String tableAlias;
 
+    /** The table name. */
     protected String tableName;
 
+    /** The column name. */
     protected String columnName;
 
+    /** The condition table alias. */
     protected String conditionTableAlias;
 
+    /** The condition column. */
     protected String conditionColumn;
 
+    /** The dialect. */
     protected Dialect dialect;
 
+    /** The join. */
     protected Join join;
 
     /**
+     * Instantiates a new sql join on basic builder.
+     *
      * @param dialect         dialect
      * @param tableName       tableName
      * @param columnName      columnName
@@ -39,6 +48,8 @@ public class SqlJoinOnBasicBuilder implements SqlBuilder {
     }
 
     /**
+     * Instantiates a new sql join on basic builder.
+     *
      * @param dialect         dialect
      * @param join            join type
      * @param tableName       tableName
@@ -51,6 +62,8 @@ public class SqlJoinOnBasicBuilder implements SqlBuilder {
     }
 
     /**
+     * Instantiates a new sql join on basic builder.
+     *
      * @param dialect             dialect
      * @param tableName           tableName
      * @param tableAlias          alias
@@ -64,6 +77,8 @@ public class SqlJoinOnBasicBuilder implements SqlBuilder {
     }
 
     /**
+     * Instantiates a new sql join on basic builder.
+     *
      * @param dialect             dialect
      * @param join                join type
      * @param tableName           tableName
@@ -88,7 +103,7 @@ public class SqlJoinOnBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * 返回alias
+     * 返回alias.
      *
      * @return alias
      */
@@ -97,7 +112,7 @@ public class SqlJoinOnBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * 设置alias
+     * 设置alias.
      *
      * @param tableAlias tableAlias
      */
@@ -106,7 +121,7 @@ public class SqlJoinOnBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * 返回tableName
+     * 返回tableName.
      *
      * @return tableName
      */
@@ -115,7 +130,7 @@ public class SqlJoinOnBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * 设置tableName
+     * 设置tableName.
      *
      * @param tableName tableName
      */

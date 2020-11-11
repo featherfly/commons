@@ -9,6 +9,7 @@ import cn.featherfly.common.db.dialect.Dialect;
  * <p>
  * SqlUpdateSetBasicBuilder
  * </p>
+ * .
  *
  * @author zhongj
  */
@@ -18,17 +19,28 @@ public class SqlDeleteFromBasicBuilder implements SqlBuilder {
 
     private Dialect dialect;
 
+    /**
+     * Instantiates a new sql delete from basic builder.
+     *
+     * @param dialect the dialect
+     */
     public SqlDeleteFromBasicBuilder(Dialect dialect) {
         this(dialect, null);
     }
 
+    /**
+     * Instantiates a new sql delete from basic builder.
+     *
+     * @param dialect   the dialect
+     * @param tableName the table name
+     */
     public SqlDeleteFromBasicBuilder(Dialect dialect, String tableName) {
         this.tableName = tableName;
         this.dialect = dialect;
     }
 
     /**
-     * 设置tableName
+     * 设置tableName.
      *
      * @param tableName tableName
      */
@@ -37,7 +49,7 @@ public class SqlDeleteFromBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * 返回tableName
+     * 返回tableName.
      *
      * @return tableName
      */

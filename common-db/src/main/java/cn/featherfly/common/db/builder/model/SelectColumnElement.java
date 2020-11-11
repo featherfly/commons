@@ -8,16 +8,21 @@ import cn.featherfly.common.repository.operate.AggregateFunction;
  * <p>
  * Column
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class SelectColumnElement extends ColumnElement {
 
+    /** The aggregate functions. */
     protected AggregateFunction aggregateFunctions;
 
+    /** The as name. */
     protected String asName;
 
     /**
+     * Instantiates a new select column element.
+     *
      * @param dialect dialect
      * @param name    name
      */
@@ -26,6 +31,8 @@ public class SelectColumnElement extends ColumnElement {
     }
 
     /**
+     * Instantiates a new select column element.
+     *
      * @param dialect    dialect
      * @param name       name
      * @param tableAlias table alias name
@@ -35,6 +42,8 @@ public class SelectColumnElement extends ColumnElement {
     }
 
     /**
+     * Instantiates a new select column element.
+     *
      * @param dialect            dialect
      * @param name               name
      * @param tableAlias         tableAlias
@@ -45,6 +54,8 @@ public class SelectColumnElement extends ColumnElement {
     }
 
     /**
+     * Instantiates a new select column element.
+     *
      * @param dialect    dialect
      * @param name       name
      * @param tableAlias tableAlias
@@ -55,6 +66,8 @@ public class SelectColumnElement extends ColumnElement {
     }
 
     /**
+     * Instantiates a new select column element.
+     *
      * @param dialect            dialect
      * @param name               name
      * @param tableAlias         tableAlias
@@ -69,7 +82,7 @@ public class SelectColumnElement extends ColumnElement {
     }
 
     /**
-     * 返回aggregateFunctions
+     * 返回aggregateFunctions.
      *
      * @return aggregateFunctions
      */
@@ -78,7 +91,7 @@ public class SelectColumnElement extends ColumnElement {
     }
 
     /**
-     * 设置aggregateFunctions
+     * 设置aggregateFunctions.
      *
      * @param aggregateFunctions aggregateFunctions
      */

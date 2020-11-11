@@ -12,6 +12,7 @@ import java.lang.annotation.Target;
  * <p>
  * ColumnDefault
  * </p>
+ * .
  *
  * @author zhongj
  */
@@ -19,5 +20,10 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 public @interface ColumnDefault {
 
+    /**
+     * Value.
+     *
+     * @return the string
+     */
     String value() default "";
 }

@@ -11,21 +11,52 @@ import cn.featherfly.common.repository.Index;
  * <p>
  * Table
  * </p>
+ * .
  *
  * @author zhongj
  */
 public interface Table {
 
+    /**
+     * Gets the name.
+     *
+     * @return the name
+     */
     String getName();
 
+    /**
+     * Gets the type.
+     *
+     * @return the type
+     */
     String getType();
 
+    /**
+     * Gets the remark.
+     *
+     * @return the remark
+     */
     String getRemark();
 
+    /**
+     * Gets the catalog.
+     *
+     * @return the catalog
+     */
     String getCatalog();
 
+    /**
+     * Gets the schema.
+     *
+     * @return the schema
+     */
     String getSchema();
 
+    /**
+     * Gets the indexs.
+     *
+     * @return the indexs
+     */
     List<Index> getIndexs();
 
     /**
@@ -66,7 +97,7 @@ public interface Table {
     Column getColumn(String columnName);
 
     /**
-     * hasColumn
+     * hasColumn.
      *
      * @param columnName columnName
      * @return boolean
@@ -93,7 +124,7 @@ public interface Table {
     Index getIndex(String indexName);
 
     /**
-     * hasIndex
+     * hasIndex.
      *
      * @param indexName indexName
      * @return boolean

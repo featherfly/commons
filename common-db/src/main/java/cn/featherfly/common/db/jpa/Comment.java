@@ -13,6 +13,7 @@ import java.lang.annotation.Target;
  * <p>
  * Comment
  * </p>
+ * .
  *
  * @author zhongj
  */
@@ -20,5 +21,10 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 public @interface Comment {
 
+    /**
+     * Value.
+     *
+     * @return the string
+     */
     String value() default "";
 }

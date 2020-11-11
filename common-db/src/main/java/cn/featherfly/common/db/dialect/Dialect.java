@@ -31,6 +31,7 @@ public interface Dialect {
     /** 命名参数查询的查询条件默认数量名称. */
     String LIMIT_PARAM_NAME = "dialect_paging_limit";
 
+    /** The primary key index name. */
     String PRIMARY_KEY_INDEX_NAME = "PRIMARY";
 
     /** The param name start symbol. */

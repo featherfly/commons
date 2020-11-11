@@ -21,14 +21,17 @@ import cn.featherfly.common.lang.Strings;
  * <p>
  * SQLite Dialect
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class SQLiteDialect extends AbstractDialect {
 
+    /** The Constant TEXT_TYPE. */
     public static final String TEXT_TYPE = "TEXT";
 
     /**
+     * Instantiates a new SQ lite dialect.
      */
     public SQLiteDialect() {
     }
@@ -148,6 +151,9 @@ public class SQLiteDialect extends AbstractDialect {
         return "`";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getTableColumnsDDL(Table table) {
         StringBuilder ddl = new StringBuilder();
@@ -181,22 +187,34 @@ public class SQLiteDialect extends AbstractDialect {
         return ddl.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getTableComment(Table table) {
         return Lang.isEmpty(table.getRemark()) ? "" : BuilderUtils.link("--", table.getRemark());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getColumnComment(Column column) {
         return Lang.isEmpty(column.getRemark()) ? "" : BuilderUtils.link("--", column.getRemark());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getColumnDDL(Column column) {
         return BuilderUtils.link(wrapName(column.getName()), getColumnTypeDDL(column), getColumnNotNull(column),
                 getDefaultValue(column), getAutoIncrement(column));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getAutoIncrement(Column column) {
         if (column.isAutoincrement()) {
@@ -206,6 +224,9 @@ public class SQLiteDialect extends AbstractDialect {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getColumnTypeDDL(Column column, String extra) {
         int size = column.getSize();
@@ -224,6 +245,9 @@ public class SQLiteDialect extends AbstractDialect {
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getColumnTypeName(SQLType sqlType) {
         JDBCType type = JDBCType.valueOf(sqlType.getVendorTypeNumber());
@@ -277,17 +301,26 @@ public class SQLiteDialect extends AbstractDialect {
         return sql.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isAutoGenerateKeyBatch() {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String buildAlterTableAddColumnDDL(String schema, String tableName, Column... columns) {
         // TODO 未实现
         throw new UnsupportedException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String buildAlterTableDropColumnDDL(String schema, String tableName, String... columnNames) {
         // TODO 未实现
@@ -303,6 +336,9 @@ public class SQLiteDialect extends AbstractDialect {
         throw new UnsupportedException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String buildAlterTableModifyColumnDDL(String schema, String tableName, Column... columns) {
         // TODO 未实现

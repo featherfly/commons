@@ -136,6 +136,12 @@ public abstract class AbstractMappingFactory implements MappingFactory {
         }
     }
 
+    /**
+     * Sets the column mapping.
+     *
+     * @param mapping      the mapping
+     * @param beanProperty the bean property
+     */
     protected void setColumnMapping(PropertyMapping mapping, BeanProperty<?> beanProperty) {
         boolean isPk = beanProperty.hasAnnotation(Id.class);
         Column column = beanProperty.getAnnotation(Column.class);

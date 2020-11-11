@@ -7,14 +7,18 @@ import cn.featherfly.common.db.dialect.Dialect;
  * <p>
  * SqlElement
  * </p>
+ * .
  *
  * @author zhongj
  */
 public abstract class AbstractSqlElement implements SqlElement {
 
+    /** The dialect. */
     protected Dialect dialect;
 
     /**
+     * Instantiates a new abstract sql element.
+     *
      * @param dialect dialect
      */
     public AbstractSqlElement(Dialect dialect) {
@@ -23,7 +27,7 @@ public abstract class AbstractSqlElement implements SqlElement {
     }
 
     /**
-     * 返回dialect
+     * 返回dialect.
      *
      * @return dialect
      */

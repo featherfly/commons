@@ -16,6 +16,7 @@ import java.util.Map;
  * <p>
  * BasicSqlTypeMapping
  * </p>
+ * .
  *
  * @author zhongj
  */
@@ -103,9 +104,19 @@ public class DefaultSqlTypeMapping {
         SQL_TO_JAVA_MAP.put(JDBCType.BIT, Boolean.class);
     }
 
+    /**
+     * Instantiates a new default sql type mapping.
+     */
     public DefaultSqlTypeMapping() {
     }
 
+    /**
+     * Gets the sql type.
+     *
+     * @param <E>      the element type
+     * @param javaType the java type
+     * @return the sql type
+     */
     public <E extends Object> SQLType getSqlType(Class<E> javaType) {
         if (javaType.isEnum()) {
             if (enumWithOrdinal) {
@@ -130,7 +141,7 @@ public class DefaultSqlTypeMapping {
     }
 
     /**
-     * 返回enumWithOrdinal
+     * 返回enumWithOrdinal.
      *
      * @return enumWithOrdinal
      */
@@ -139,7 +150,7 @@ public class DefaultSqlTypeMapping {
     }
 
     /**
-     * 设置enumWithOrdinal
+     * 设置enumWithOrdinal.
      *
      * @param enumWithOrdinal enumWithOrdinal
      */
@@ -148,7 +159,7 @@ public class DefaultSqlTypeMapping {
     }
 
     /**
-     * 返回enumOrdinalType
+     * 返回enumOrdinalType.
      *
      * @return enumOrdinalType
      */
@@ -157,7 +168,7 @@ public class DefaultSqlTypeMapping {
     }
 
     /**
-     * 设置enumOrdinalType
+     * 设置enumOrdinalType.
      *
      * @param enumOrdinalType enumOrdinalType
      */

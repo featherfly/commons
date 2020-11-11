@@ -7,14 +7,18 @@ import cn.featherfly.common.db.dialect.Dialect;
  * <p>
  * UpdateColumnElement
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class UpdateColumnElement extends ParamedColumnElement {
 
+    /** The set type. */
     protected SetType setType;
 
     /**
+     * Instantiates a new update column element.
+     *
      * @param dialect dialect
      * @param name    name
      * @param param   param
@@ -24,6 +28,8 @@ public class UpdateColumnElement extends ParamedColumnElement {
     }
 
     /**
+     * Instantiates a new update column element.
+     *
      * @param dialect    dialect
      * @param name       name
      * @param param      param
@@ -34,6 +40,8 @@ public class UpdateColumnElement extends ParamedColumnElement {
     }
 
     /**
+     * Instantiates a new update column element.
+     *
      * @param dialect    dialect
      * @param name       name
      * @param param      param
@@ -62,8 +70,15 @@ public class UpdateColumnElement extends ParamedColumnElement {
         }
     }
 
+    /**
+     * The Enum SetType.
+     */
     public enum SetType {
+
+        /** The set. */
         SET,
+
+        /** The incr. */
         INCR
     }
 }

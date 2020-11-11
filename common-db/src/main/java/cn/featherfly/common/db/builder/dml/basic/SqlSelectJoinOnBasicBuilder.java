@@ -10,11 +10,13 @@ import cn.featherfly.common.repository.operate.AggregateFunction;
  * <p>
  * SqlSelectJoinOnBasicBuilder
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
 
+    /** The select builder. */
     private SqlSelectBasicBuilder selectBuilder;
 
     private SqlSelectColumnsBasicBuilder joinSelectColumnsBuilder;
@@ -35,7 +37,7 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * add column
+     * add column.
      *
      * @param column            column
      * @param aggregateFunction aggregateFunction
@@ -48,7 +50,7 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * add column
+     * add column.
      *
      * @param column            column
      * @param aggregateFunction aggregateFunction
@@ -63,7 +65,7 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * add column
+     * add column.
      *
      * @param column column
      * @return this
@@ -75,7 +77,7 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * add column
+     * add column.
      *
      * @param column column
      * @param asName asName
@@ -88,7 +90,7 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * addColumns
+     * addColumns.
      *
      * @param columns columns
      * @return this
@@ -100,7 +102,7 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * addColumns
+     * addColumns.
      *
      * @param columns columns
      * @return this
@@ -111,15 +113,32 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
         return this;
     }
 
+    /**
+     * End join.
+     *
+     * @return the sql select basic builder
+     */
     public SqlSelectBasicBuilder endJoin() {
         return selectBuilder;
     }
 
+    /**
+     * Fetch.
+     *
+     * @return the sql select basic builder
+     */
     public SqlSelectBasicBuilder fetch() {
         addJoinSelectColumnsBuilder();
         return endJoin();
     }
 
+    /**
+     * Fetch.
+     *
+     * @param fetchProperty      the fetch property
+     * @param fetchPropertyAlias the fetch property alias
+     * @return the sql select basic builder
+     */
     public SqlSelectBasicBuilder fetch(String fetchProperty, String fetchPropertyAlias) {
         if (!fetched) {
             selectBuilder.addSelectProperty(fetchProperty, fetchPropertyAlias);

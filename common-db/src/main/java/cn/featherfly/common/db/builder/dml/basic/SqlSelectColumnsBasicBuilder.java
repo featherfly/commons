@@ -26,19 +26,27 @@ import cn.featherfly.common.repository.operate.AggregateFunction;
  */
 public class SqlSelectColumnsBasicBuilder implements SqlBuilder {
 
+    /** The table alias. */
     protected String tableAlias;
 
+    /** The columns. */
     protected List<SelectColumnElement> columns = new ArrayList<>(0);
 
+    /** The dialect. */
     protected Dialect dialect;
 
+    /** The class mapping. */
     protected cn.featherfly.common.repository.mapping.ClassMapping<?> classMapping;
 
+    /** The fetch properties. */
     protected Map<String, String> fetchProperties = new HashMap<>(0);
 
+    /** The mapping factory. */
     protected MappingFactory mappingFactory;
 
     /**
+     * Instantiates a new sql select columns basic builder.
+     *
      * @param dialect dialect
      */
     public SqlSelectColumnsBasicBuilder(Dialect dialect) {
@@ -46,6 +54,8 @@ public class SqlSelectColumnsBasicBuilder implements SqlBuilder {
     }
 
     /**
+     * Instantiates a new sql select columns basic builder.
+     *
      * @param dialect    dialect
      * @param tableAlias table name alias
      */
@@ -55,6 +65,8 @@ public class SqlSelectColumnsBasicBuilder implements SqlBuilder {
     }
 
     /**
+     * Instantiates a new sql select columns basic builder.
+     *
      * @param dialect        dialect
      * @param classMapping   classMapping
      * @param mappingFactory mappingFactory
@@ -64,6 +76,8 @@ public class SqlSelectColumnsBasicBuilder implements SqlBuilder {
     }
 
     /**
+     * Instantiates a new sql select columns basic builder.
+     *
      * @param dialect        dialect
      * @param classMapping   classMapping
      * @param tableAlias     table name alias
@@ -78,7 +92,7 @@ public class SqlSelectColumnsBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * 返回alias
+     * 返回alias.
      *
      * @return alias
      */
@@ -87,7 +101,7 @@ public class SqlSelectColumnsBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * 设置alias
+     * 设置alias.
      *
      * @param tableAlias tableAlias
      */
@@ -96,7 +110,7 @@ public class SqlSelectColumnsBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * add column
+     * add column.
      *
      * @param column            column
      * @param aggregateFunction aggregateFunction
@@ -108,7 +122,7 @@ public class SqlSelectColumnsBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * add column
+     * add column.
      *
      * @param column            column
      * @param aggregateFunction aggregateFunction
@@ -122,7 +136,7 @@ public class SqlSelectColumnsBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * add column
+     * add column.
      *
      * @param column column
      * @return this
@@ -133,7 +147,7 @@ public class SqlSelectColumnsBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * add column
+     * add column.
      *
      * @param column column
      * @param asName asName
@@ -145,7 +159,7 @@ public class SqlSelectColumnsBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * addColumns
+     * addColumns.
      *
      * @param columns columns
      * @return this
@@ -158,7 +172,7 @@ public class SqlSelectColumnsBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * addColumns
+     * addColumns.
      *
      * @param columns columns
      * @return this

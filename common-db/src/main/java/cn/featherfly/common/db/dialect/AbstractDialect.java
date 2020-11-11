@@ -86,6 +86,9 @@ public abstract class AbstractDialect implements Dialect {
         this.tableAndColumnNameUppercase = tableAndColumnNameUppercase;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String buildAlterTableDDL(String schema, String tableName, Column[] addColumns, Column[] modifyColumns,
             Column[] dropColumns) {
@@ -125,6 +128,12 @@ public abstract class AbstractDialect implements Dialect {
         return ddl.append(Chars.NEW_LINE).append(buildAddColumnDDL(columns)).append(Chars.SEMI).toString();
     }
 
+    /**
+     * Builds the add column DDL.
+     *
+     * @param columns the columns
+     * @return the string
+     */
     protected String buildAddColumnDDL(Column... columns) {
         StringBuilder ddl = new StringBuilder(Chars.SPACE);
         for (Column column : columns) {
@@ -145,6 +154,12 @@ public abstract class AbstractDialect implements Dialect {
         return ddl.append(Chars.NEW_LINE).append(buildModifyColumnDDL(columns)).append(Chars.SEMI).toString();
     }
 
+    /**
+     * Builds the modify column DDL.
+     *
+     * @param columns the columns
+     * @return the string
+     */
     protected String buildModifyColumnDDL(Column... columns) {
         StringBuilder ddl = new StringBuilder(Chars.SPACE);
         for (Column column : columns) {
@@ -174,6 +189,12 @@ public abstract class AbstractDialect implements Dialect {
         return ddl.append(Chars.NEW_LINE).append(buildDropColumnDDL(columnNames)).append(Chars.SEMI).toString();
     }
 
+    /**
+     * Builds the drop column DDL.
+     *
+     * @param columns the columns
+     * @return the string
+     */
     protected String buildDropColumnDDL(Column... columns) {
         String[] columnNames = new String[columns.length];
         for (int i = 0; i < columns.length; i++) {
@@ -182,6 +203,12 @@ public abstract class AbstractDialect implements Dialect {
         return buildDropColumnDDL(columnNames);
     }
 
+    /**
+     * Builds the drop column DDL.
+     *
+     * @param columnNames the column names
+     * @return the string
+     */
     protected String buildDropColumnDDL(String... columnNames) {
         StringBuilder ddl = new StringBuilder(Chars.SPACE);
         for (String columnName : columnNames) {
@@ -196,8 +223,7 @@ public abstract class AbstractDialect implements Dialect {
     /**
      * Builds the create table sql.
      *
-     * @param schema the schema
-     * @param table  the table
+     * @param table the table
      * @return the string
      */
     @Override

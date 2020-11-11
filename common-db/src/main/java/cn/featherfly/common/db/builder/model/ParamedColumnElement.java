@@ -7,14 +7,18 @@ import cn.featherfly.common.db.dialect.Dialect;
  * <p>
  * ParamedColumnElement
  * </p>
+ * .
  *
  * @author zhongj
  */
 public abstract class ParamedColumnElement extends ColumnElement {
 
+    /** The param. */
     protected Object param;
 
     /**
+     * Instantiates a new paramed column element.
+     *
      * @param dialect dialect
      * @param name    name
      * @param param   param
@@ -24,6 +28,8 @@ public abstract class ParamedColumnElement extends ColumnElement {
     }
 
     /**
+     * Instantiates a new paramed column element.
+     *
      * @param dialect    dialect
      * @param name       name
      * @param param      param
@@ -35,7 +41,7 @@ public abstract class ParamedColumnElement extends ColumnElement {
     }
 
     /**
-     * 返回param
+     * 返回param.
      *
      * @return param
      */
@@ -44,7 +50,7 @@ public abstract class ParamedColumnElement extends ColumnElement {
     }
 
     /**
-     * 设置param
+     * 设置param.
      *
      * @param param param
      */

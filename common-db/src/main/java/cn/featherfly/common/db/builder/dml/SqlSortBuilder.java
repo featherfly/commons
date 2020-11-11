@@ -9,6 +9,7 @@ import cn.featherfly.common.repository.builder.dml.SortBuilder;
  * <p>
  * sql sort builder
  * </p>
+ * .
  *
  * @author zhongj
  */
@@ -18,10 +19,21 @@ public class SqlSortBuilder implements SortBuilder, SqlBuilder {
 
     private String tableAlias;
 
+    /**
+     * Instantiates a new sql sort builder.
+     *
+     * @param dialect the dialect
+     */
     public SqlSortBuilder(Dialect dialect) {
         this(dialect, null);
     }
 
+    /**
+     * Instantiates a new sql sort builder.
+     *
+     * @param dialect    the dialect
+     * @param tableAlias the table alias
+     */
     public SqlSortBuilder(Dialect dialect, String tableAlias) {
         orderByBuilder = new SqlOrderByBasicBuilder(dialect);
         this.tableAlias = tableAlias;
@@ -66,7 +78,7 @@ public class SqlSortBuilder implements SortBuilder, SqlBuilder {
     }
 
     /**
-     * 返回tableAlias
+     * 返回tableAlias.
      *
      * @return tableAlias
      */
@@ -75,7 +87,7 @@ public class SqlSortBuilder implements SortBuilder, SqlBuilder {
     }
 
     /**
-     * 设置tableAlias
+     * 设置tableAlias.
      *
      * @param tableAlias tableAlias
      */

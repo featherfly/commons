@@ -11,6 +11,7 @@ import cn.featherfly.common.repository.operate.AggregateFunction;
  * <p>
  * abstract sql Select builder
  * </p>
+ * .
  *
  * @author zhongj
  */
@@ -18,9 +19,12 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
 
     private SqlSelectBasicBuilder selectBuilder;
 
+    /** The condition builder. */
     protected SqlConditionGroup conditionBuilder;
 
     /**
+     * Instantiates a new abstract sql select builder.
+     *
      * @param dialect          dialect
      * @param conditionBuilder conditionBuilder
      */
@@ -29,6 +33,8 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     }
 
     /**
+     * Instantiates a new abstract sql select builder.
+     *
      * @param dialect          dialect
      * @param tableName        tableName
      * @param conditionBuilder conditionBuilder
@@ -38,6 +44,8 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     }
 
     /**
+     * Instantiates a new abstract sql select builder.
+     *
      * @param dialect          dialect
      * @param tableName        tableName
      * @param alias            alias
@@ -50,7 +58,7 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     }
 
     /**
-     * addSelectColumn
+     * addSelectColumn.
      *
      * @param columnName columnName
      * @param function   function
@@ -60,7 +68,7 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     }
 
     /**
-     * addSelectColumn
+     * addSelectColumn.
      *
      * @param columnName columnName
      * @param asName     asName
@@ -70,7 +78,7 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     }
 
     /**
-     * addSelectColumn
+     * addSelectColumn.
      *
      * @param columnNames columnNames
      * @param function    function
@@ -81,7 +89,7 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     }
 
     /**
-     * addSelectColumn
+     * addSelectColumn.
      *
      * @param columnNames columnNames
      */
@@ -92,7 +100,7 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     }
 
     /**
-     * 返回tableAlias
+     * 返回tableAlias.
      *
      * @return tableAlias
      */
@@ -101,7 +109,7 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     }
 
     /**
-     * 设置alias
+     * 设置alias.
      *
      * @param tableAlias tableAlias
      */
@@ -110,7 +118,7 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     }
 
     /**
-     * 返回tableName
+     * 返回tableName.
      *
      * @return tableName
      */
@@ -119,7 +127,7 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     }
 
     /**
-     * 设置tableName
+     * 设置tableName.
      *
      * @param tableName tableName
      */
@@ -128,7 +136,7 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     }
 
     /**
-     * 返回buildWithFrom
+     * 返回buildWithFrom.
      *
      * @return buildWithFrom
      */
@@ -137,7 +145,7 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     }
 
     /**
-     * 设置buildWithFrom
+     * 设置buildWithFrom.
      *
      * @param buildWithFrom buildWithFrom
      */

@@ -16,12 +16,15 @@ import cn.featherfly.common.repository.builder.dml.ConditionBuilder;
  * <p>
  * TableQuery
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class TableQuery implements Query {
 
     /**
+     * Instantiates a new table query.
+     *
      * @param dialect   dialect
      * @param tableName tableName
      */
@@ -30,6 +33,8 @@ public class TableQuery implements Query {
     }
 
     /**
+     * Instantiates a new table query.
+     *
      * @param dialect          dialect
      * @param tableName        tableName
      * @param conditionBuilder ConditionBuilder
@@ -48,6 +53,11 @@ public class TableQuery implements Query {
         this.tableName = tableName;
     }
 
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     */
     public static void main(String[] args) {
         ConditionBuilder builder = new SqlConditionGroup(Dialects.MYSQL, new SqlSortBuilder(Dialects.MYSQL));
         builder.eq("name", "yufei").and().gt("age", 18);
@@ -68,6 +78,11 @@ public class TableQuery implements Query {
         return tableName;
     }
 
+    /**
+     * Gets the sql.
+     *
+     * @return the sql
+     */
     public String getSql() {
         return sql;
     }

@@ -13,12 +13,15 @@ import cn.featherfly.common.repository.operate.AggregateFunction;
  * <p>
  * sql find builder
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class SqlFindBuilder extends AbstractSqlSelectBuilder implements FindBuilder, SqlBuilder {
 
     /**
+     * Instantiates a new sql find builder.
+     *
      * @param dialect          dialect
      * @param conditionBuilder conditionBuilder
      */
@@ -27,6 +30,8 @@ public class SqlFindBuilder extends AbstractSqlSelectBuilder implements FindBuil
     }
 
     /**
+     * Instantiates a new sql find builder.
+     *
      * @param dialect          dialect
      * @param tableName        tableName
      * @param conditionBuilder conditionBuilder
@@ -36,6 +41,8 @@ public class SqlFindBuilder extends AbstractSqlSelectBuilder implements FindBuil
     }
 
     /**
+     * Instantiates a new sql find builder.
+     *
      * @param dialect          dialect
      * @param tableName        tableName
      * @param alias            alias
@@ -58,6 +65,13 @@ public class SqlFindBuilder extends AbstractSqlSelectBuilder implements FindBuil
         return this;
     }
 
+    /**
+     * With.
+     *
+     * @param propertyName      the property name
+     * @param aggregateFunction the aggregate function
+     * @return the find builder
+     */
     public FindBuilder with(String propertyName, AggregateFunction aggregateFunction) {
         addSelectColumn(propertyName, aggregateFunction);
         return this;

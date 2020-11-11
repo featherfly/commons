@@ -17,6 +17,7 @@ import cn.featherfly.common.db.dialect.Dialect.Keyworld;
  * <p>
  * SqlUpdateSetBasicBuilder
  * </p>
+ * .
  *
  * @author zhongj
  */
@@ -30,21 +31,49 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
 
     private Dialect dialect;
 
+    /**
+     * Instantiates a new sql update set basic builder.
+     *
+     * @param dialect   the dialect
+     * @param tableName the table name
+     */
     public SqlUpdateSetBasicBuilder(Dialect dialect, String tableName) {
         this(dialect, tableName, null);
     }
 
+    /**
+     * Instantiates a new sql update set basic builder.
+     *
+     * @param dialect   the dialect
+     * @param tableName the table name
+     * @param alias     the alias
+     */
     public SqlUpdateSetBasicBuilder(Dialect dialect, String tableName, String alias) {
         this.tableName = tableName;
         this.alias = alias;
         this.dialect = dialect;
     }
 
+    /**
+     * Sets the value.
+     *
+     * @param columnName the column name
+     * @param value      the value
+     * @return the sql update set basic builder
+     */
     public SqlUpdateSetBasicBuilder setValue(String columnName, Object value) {
         params.add(new UpdateColumnElement(dialect, columnName, value, alias));
         return this;
     }
 
+    /**
+     * Sets the value.
+     *
+     * @param columnName the column name
+     * @param value      the value
+     * @param setType    the set type
+     * @return the sql update set basic builder
+     */
     public SqlUpdateSetBasicBuilder setValue(String columnName, Object value, SetType setType) {
         params.add(new UpdateColumnElement(dialect, columnName, value, alias, setType));
         return this;
@@ -57,12 +86,17 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
     // return this;
     // }
 
+    /**
+     * Gets the params.
+     *
+     * @return the params
+     */
     public List<Object> getParams() {
         return params.stream().map(ParamedColumnElement::getParam).collect(Collectors.toList());
     }
 
     /**
-     * 设置tableName
+     * 设置tableName.
      *
      * @param tableName tableName
      */
@@ -71,7 +105,7 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * 返回tableName
+     * 返回tableName.
      *
      * @return tableName
      */
@@ -80,7 +114,7 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * 返回alias
+     * 返回alias.
      *
      * @return alias
      */
@@ -89,7 +123,7 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * 设置alias
+     * 设置alias.
      *
      * @param alias alias
      */

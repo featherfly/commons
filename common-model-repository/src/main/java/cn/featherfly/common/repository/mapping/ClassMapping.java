@@ -178,6 +178,16 @@ public class ClassMapping<T> {
     }
 
     /**
+     * Gets the index.
+     *
+     * @param indexName the index name
+     * @return the index
+     */
+    public Index getIndex(String indexName) {
+        return indexs.get(indexName);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

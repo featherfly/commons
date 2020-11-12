@@ -15,11 +15,12 @@ import javax.mail.Session;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.StringUtils;
+import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.mail.ImapMailServer;
 import cn.featherfly.common.mail.MailException;
 import cn.featherfly.common.mail.MailServer;
@@ -171,7 +172,7 @@ public abstract class AbstractMailClient {
     protected void setDebug() {
         // 有了这句便可以在发送邮件的过程中在console处显示过程信息，供调试使用（你可以在控制台（console)上看到发送邮件的过程）
         if (debug) {
-            if (StringUtils.isNotEmpty(mailLogFile)) {
+            if (Strings.isNotEmpty(mailLogFile)) {
                 try {
                     session.setDebugOut(new PrintStream(new FileOutputStream(mailLogFile, true)));
                 } catch (FileNotFoundException e) {

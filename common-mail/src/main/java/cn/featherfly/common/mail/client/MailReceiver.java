@@ -17,12 +17,14 @@ import javax.mail.search.SearchTerm;
 
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.mail.ImapMailServer;
+import cn.featherfly.common.mail.Mail;
 import cn.featherfly.common.mail.MailApiUtils;
 import cn.featherfly.common.mail.MailCreator;
 import cn.featherfly.common.mail.MailException;
 import cn.featherfly.common.mail.MailHandler;
 import cn.featherfly.common.mail.MailUser;
 import cn.featherfly.common.mail.Pop3MailServer;
+import cn.featherfly.common.mail.SimpleMailCreator;
 
 /**
  * <p>
@@ -108,6 +110,32 @@ public class MailReceiver extends AbstractMailClient {
      * <p>
      * 处理从指定folder的所有邮件.
      * </p>
+     *
+     * @param mailHandler 处理对象
+     */
+    public void receive(MailHandler<Mail> mailHandler) {
+        receive(new SimpleMailCreator(), mailHandler);
+    }
+
+    /**
+     * <p>
+     * 处理从指定folder的所有邮件.
+     * </p>
+     *
+     * @param searchTerm  查询条件，如果为空则返回所有
+     * @param mailHandler 处理对象
+     */
+    public void receive(SearchTerm searchTerm, MailHandler<Mail> mailHandler) {
+        receive(searchTerm, new SimpleMailCreator(), mailHandler);
+    }
+
+    /**
+     * <p>
+     * 处理从指定folder的所有邮件.
+     * </p>
+     *
+     * @param mailCreator 邮件创建器
+     * @param mailHandler 处理对象
      */
     public <E> void receive(MailCreator<E> mailCreator, MailHandler<E> mailHandler) {
         receive(null, mailCreator, mailHandler);

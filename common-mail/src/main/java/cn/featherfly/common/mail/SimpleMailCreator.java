@@ -25,7 +25,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.UUIDGenerator;
 import cn.featherfly.common.mail.client.AbstractMailClient;
 
@@ -60,7 +60,7 @@ public class SimpleMailCreator implements MailCreator<Mail> {
 
         // 设置ID
         String[] headerId = message.getHeader("Message-ID");
-        if (LangUtils.isNotEmpty(headerId)) {
+        if (Lang.isNotEmpty(headerId)) {
             mail.setId(headerId[0]);
         } else {
             LOGGER.warn("没有找到Message-ID");

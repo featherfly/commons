@@ -4,7 +4,7 @@ package cn.featherfly.common.mail;
 import java.io.File;
 
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * <p>
@@ -35,7 +35,7 @@ public class MailAttach {
         AssertIllegalArgument.isNotNull(file, "String fileName");
         AssertIllegalArgument.isExists(file, "File file");
         this.file = file;
-        if (LangUtils.isEmpty(fileName)) {
+        if (Lang.isEmpty(fileName)) {
             this.fileName = file.getName();
         } else {
             this.fileName = fileName;

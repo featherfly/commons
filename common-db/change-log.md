@@ -8,7 +8,7 @@
     
 # 0.2.5 2020-7-19
     1.修复JdbcMappingFactory中@Transient不是使用javax.persistence.Transient的问题
-    2.JdbcMappingFactory加入严格的对象属性到数据库映射，类似JPA,与默认的混合映射不同，具体查看MappingMode枚举项的注释
+    2.JdbcMappingFactory加入严格的对象属性到数据库映射，类似JPA,与默认的混合映射不同，具体查看JdbcMappingFactory.MappingMode枚举项的注释
     3.加入ObjectDbMixedMappingFacotry和ObjectToDbMappingFacotry,JdbcMappingFactory只是作为这两个具体实现的代理
     4.加入Migrator，实现通过映射创建数据库表的一些列方法
     

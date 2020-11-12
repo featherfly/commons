@@ -157,6 +157,18 @@ public class Migrator {
     /**
      * Creates the sql.
      *
+     * @param tableMapping the table mapping
+     * @param dropIfExists the drop if exists
+     * @return the string
+     */
+    private String createSql(TableMapping tableMapping, boolean dropIfExists) {
+        return createSql(tableMapping.table, dropIfExists,
+                tableMapping.classMapping == null ? null : tableMapping.classMapping.getType());
+    }
+
+    /**
+     * Creates the sql.
+     *
      * @param table        the table
      * @param dropIfExists the drop if exists
      * @param type         the type
@@ -168,7 +180,11 @@ public class Migrator {
             appendSqlWithEnd(sql, dialect.buildDropTableDDL(schema, table.getName(), true));
         }
         String result = sql.append(dialect.buildCreateTableDDL(table)).toString();
-        LOGGER.debug("create sql for entity {} -> \n{}", type.getName(), result);
+        if (type == null) {
+            LOGGER.debug("create sql for table {} -> \n{}", table.getName(), result);
+        } else {
+            LOGGER.debug("create sql for entity {} -> \n{}", type.getName(), result);
+        }
         return result;
     }
 
@@ -184,11 +200,118 @@ public class Migrator {
     /**
      * Gets the update sql.
      *
+     * @param previousDataSource the previous data source
+     * @param currentDataSource  the current data source
+     * @return the string
+     */
+    public String updateSql(DataSource previousDataSource, DataSource currentDataSource) {
+        return updateSql(previousDataSource, currentDataSource, ModifyType.MODIFY);
+    }
+
+    /**
+     * Update sql.
+     *
+     * @param previousDataSource the previous data source
+     * @param currentDataSource  the current data source
+     * @param modifyType         the modify type
+     * @return the string
+     */
+    public String updateSql(DataSource previousDataSource, DataSource currentDataSource, ModifyType modifyType) {
+        return updateSql(previousDataSource, currentDataSource, modifyType, true);
+    }
+
+    /**
+     * Update sql.
+     *
+     * @param previousDataSource the previous data source
+     * @param tableModifyType    the table modify type
+     * @param dropNotExistTable  the drop not exist table
+     * @param columnModifyType   the column modify type
+     * @param dropNotExistColumn the drop not exist column
+     * @param dropNotExistIndex  the drop not exist index
+     * @return the string
+     */
+    public String updateSql(DataSource previousDataSource, ModifyType tableModifyType, boolean dropNotExistTable,
+            ModifyType columnModifyType, boolean dropNotExistColumn, boolean dropNotExistIndex) {
+        return updateSql(previousDataSource, sqlExecutor.getDataSource(), tableModifyType, dropNotExistTable,
+                columnModifyType, dropNotExistColumn, dropNotExistIndex);
+    }
+
+    /**
+     * Update sql.
+     *
+     * @param previousDataSource the previous data source
+     * @param currentDataSource  the current data source
+     * @param modifyType         the modify type
+     * @param dropNotExist       the drop not exist
+     * @return the string
+     */
+    public String updateSql(DataSource previousDataSource, DataSource currentDataSource, ModifyType modifyType,
+            boolean dropNotExist) {
+        return updateSql(previousDataSource, currentDataSource, modifyType, dropNotExist, modifyType, dropNotExist,
+                dropNotExist);
+    }
+
+    /**
+     * Update sql.
+     *
+     * @param previousDataSource the previous data source
+     * @param currentDataSource  the current data source
+     * @param tableModifyType    the table modify type
+     * @param dropNotExistTable  the drop not exist table
+     * @param columnModifyType   the column modify type
+     * @param dropNotExistColumn the drop not exist column
+     * @param dropNotExistIndex  the drop not exist index
+     * @return the string
+     */
+    public String updateSql(DataSource previousDataSource, DataSource currentDataSource, ModifyType tableModifyType,
+            boolean dropNotExistTable, ModifyType columnModifyType, boolean dropNotExistColumn,
+            boolean dropNotExistIndex) {
+        DatabaseMetadata previousMetadata = DatabaseMetadataManager.getDefaultManager().reCreate(previousDataSource);
+        DatabaseMetadata currentMetadata = DatabaseMetadataManager.getDefaultManager().reCreate(currentDataSource);
+        return updateSql(previousMetadata, currentMetadata, tableModifyType, dropNotExistTable, columnModifyType,
+                dropNotExistColumn, dropNotExistIndex);
+    }
+
+    /**
+     * Update sql.
+     *
+     * @param previousMetadata   the previous metadata
+     * @param currentMetadata    the current metadata
+     * @param tableModifyType    the table modify type
+     * @param dropNotExistTable  the drop not exist table
+     * @param columnModifyType   the column modify type
+     * @param dropNotExistColumn the drop not exist column
+     * @param dropNotExistIndex  the drop not exist index
+     * @return the string
+     */
+    public String updateSql(DatabaseMetadata previousMetadata, DatabaseMetadata currentMetadata,
+            ModifyType tableModifyType, boolean dropNotExistTable, ModifyType columnModifyType,
+            boolean dropNotExistColumn, boolean dropNotExistIndex) {
+        Diff diff = new Diff();
+        Set<String> tableNameSet = new HashSet<>();
+        for (Table current : currentMetadata.getTables()) {
+            Table previous = previousMetadata.getTable(current.getName());
+            tableNameSet.add(diff(previous, current, null, diff));
+        }
+        for (Table previous : previousMetadata.getTables()) {
+            // 判断数据库表是否没有映射
+            if (!tableNameSet.contains(previous.getName())) {
+                diff.notExistTables.add(previous);
+            }
+        }
+        return diffSql(diff, tableModifyType, dropNotExistTable, columnModifyType, dropNotExistColumn,
+                dropNotExistIndex);
+    }
+
+    /**
+     * Gets the update sql.
+     *
      * @param classMappings the class mappings
      * @return the inits the sql
      */
     public String updateSql(Set<ClassMapping<?>> classMappings) {
-        return updateSql(classMappings, ModifyType.MODIFY, false);
+        return updateSql(classMappings, ModifyType.MODIFY, true);
     }
 
     /**
@@ -201,6 +324,27 @@ public class Migrator {
      */
     public String updateSql(Set<ClassMapping<?>> classMappings, ModifyType modifyType, boolean dropNoMapping) {
         return updateSql(classMappings, modifyType, dropNoMapping, modifyType, dropNoMapping, dropNoMapping);
+    }
+
+    /**
+     * Gets the update sql with cached DatabaseMetadata(maybe different from
+     * database).
+     *
+     * @param classMappings       the class mappings
+     * @param tableModifyType     the table modify type
+     * @param dropNoMappingTable  if true, drop the table which no mapping with
+     *                            object; if false, do nothing.
+     * @param columnModifyType    the column modify type
+     * @param dropNoMappingColumn if true, drop the column which no mapping with
+     *                            object; if false, do nothing.
+     * @param dropNoMappingIndex  if true, drop the index which no mapping with
+     *                            object; if false, do nothing.
+     * @return the inits the sql
+     */
+    public String updateSql(Set<ClassMapping<?>> classMappings, ModifyType tableModifyType, boolean dropNoMappingTable,
+            ModifyType columnModifyType, boolean dropNoMappingColumn, boolean dropNoMappingIndex) {
+        return updateSql(classMappings, tableModifyType, dropNoMappingTable, columnModifyType, dropNoMappingColumn,
+                dropNoMappingIndex, DatabaseMetadataManager.getDefaultManager().reCreate(sqlExecutor.getDataSource()));
     }
 
     /**
@@ -221,21 +365,24 @@ public class Migrator {
     public String updateSql(Set<ClassMapping<?>> classMappings, ModifyType tableModifyType, boolean dropNoMappingTable,
             ModifyType columnModifyType, boolean dropNoMappingColumn, boolean dropNoMappingIndex,
             DatabaseMetadata databaseMetadata) {
-        UpdateMapping updateMapping = new UpdateMapping();
-
+        //        UpdateMapping updateMapping = new UpdateMapping();
+        Diff diff = new Diff();
         Set<String> tableNameSet = new HashSet<>();
         for (ClassMapping<?> classMapping : classMappings) {
             Table tableMetadata = databaseMetadata.getTable(classMapping.getRepositoryName());
             Table table = ClassMappingUtils.createTable(classMapping, dialect, sqlTypeMappingManager);
+            tableNameSet.add(diff(tableMetadata, table, classMapping, diff));
+            /*Table tableMetadata = databaseMetadata.getTable(classMapping.getRepositoryName());
+            Table table = ClassMappingUtils.createTable(classMapping, dialect, sqlTypeMappingManager);
             tableNameSet.add(table.getName());
             if (tableMetadata == null) {
                 // 数据库没有该表，添加新表
-                updateMapping.newClassMappings.put(classMapping, table);
+                diff.news.add(new TableMapping(table, classMapping));
             } else if (!tableMetadata.equals(table)) {
-                ModifyTable modifyTable = updateMapping.modifyTables.getModifyTable(table);
+                ModifyTable modifyTable = diff.modifyTables.getModifyTable(table);
                 if (modifyTable == null) {
                     modifyTable = new ModifyTable(table, classMapping);
-                    updateMapping.modifyTables.put(modifyTable);
+                    diff.modifyTables.put(modifyTable);
                 }
                 for (Column column : table.getColumns()) {
                     Column columnMetadata = tableMetadata.getColumn(column.getName());
@@ -275,22 +422,26 @@ public class Migrator {
                         modifyTable.noMappingIndexs.add(indexMetadata);
                     }
                 }
-            }
+            }*/
         }
         for (Table tableMetadata : databaseMetadata.getTables()) {
             // 判断数据库表是否没有映射
             if (!tableNameSet.contains(tableMetadata.getName())) {
-                updateMapping.noMappingTables.add(tableMetadata);
+                diff.notExistTables.add(tableMetadata);
+                //                diff.noMappingTables.add(tableMetadata);
             }
         }
-        StringBuilder sql = new StringBuilder();
+        /*StringBuilder sql = new StringBuilder();
         // 添加头部
         sql.append(dialect.getInitSqlHeader()).append(Chars.SEMI).append(Chars.NEW_LINE);
         // 添加新的对象映射
-        updateMapping.newClassMappings.forEach((classMapping, table) -> {
-            appendSqlWithEnd(sql, createSql(table, true, classMapping.getType()));
+        //        diff.newClassMappings.forEach((classMapping, table) -> {
+        //            appendSqlWithEnd(sql, createSql(table, true, classMapping.getType()));
+        //        });
+        diff.newTables.forEach(tableMapping -> {
+            appendSqlWithEnd(sql, createSql(tableMapping, true));
         });
-        for (Entry<Table, ModifyTable> entry : updateMapping.modifyTables.modifyTableMap.entrySet()) {
+        for (Entry<Table, ModifyTable> entry : diff.modifyTables.modifyTableMap.entrySet()) {
             Table table = entry.getKey();
             ModifyTable modifyTable = entry.getValue();
             if (ModifyType.MODIFY == tableModifyType) {
@@ -301,7 +452,7 @@ public class Migrator {
                 }
                 dropIndex.addAll(modifyTable.dropIndexs);
                 if (dropNoMappingIndex) {
-                    dropIndex.addAll(modifyTable.noMappingIndexs);
+                    dropIndex.addAll(modifyTable.notExistIndexs);
                 }
 
                 // 删除的索引
@@ -353,7 +504,10 @@ public class Migrator {
         }
         // 删除没有对象映射的表
         if (dropNoMappingTable) {
-            updateMapping.noMappingTables.forEach(table -> {
+            //            diff.noMappingTables.forEach(table -> {
+            //                appendSqlWithEnd(sql, dialect.buildDropTableDDL(schema, table.getName()));
+            //            });
+            diff.notExistTables.forEach(table -> {
                 appendSqlWithEnd(sql, dialect.buildDropTableDDL(schema, table.getName()));
             });
         }
@@ -364,68 +518,10 @@ public class Migrator {
             LOGGER.debug("create update sql -> \n{}", result);
         } else {
             LOGGER.debug("create update sql for {} -> \n{}", schema, result);
-        }
-        return result;
+        }*/
+        return diffSql(diff, tableModifyType, dropNoMappingTable, columnModifyType, dropNoMappingColumn,
+                dropNoMappingIndex);
     }
-
-    /**
-     * Gets the update sql with cached DatabaseMetadata(maybe different from
-     * database).
-     *
-     * @param classMappings       the class mappings
-     * @param tableModifyType     the table modify type
-     * @param dropNoMappingTable  if true, drop the table which no mapping with
-     *                            object; if false, do nothing.
-     * @param columnModifyType    the column modify type
-     * @param dropNoMappingColumn if true, drop the column which no mapping with
-     *                            object; if false, do nothing.
-     * @param dropNoMappingIndex  if true, drop the index which no mapping with
-     *                            object; if false, do nothing.
-     * @return the inits the sql
-     */
-    public String updateSql(Set<ClassMapping<?>> classMappings, ModifyType tableModifyType, boolean dropNoMappingTable,
-            ModifyType columnModifyType, boolean dropNoMappingColumn, boolean dropNoMappingIndex) {
-        return updateSql(classMappings, tableModifyType, dropNoMappingTable, columnModifyType, dropNoMappingColumn,
-                dropNoMappingIndex, DatabaseMetadataManager.getDefaultManager().create(sqlExecutor.getDataSource()));
-    }
-
-    //    /**
-    //     * Gets the update sql.
-    //     *
-    //     * @param classMapping         the class mapping
-    //     * @param propertyMappings     the property mappings
-    //     * @param tableModifyType      the table modify type
-    //     * @param dropTableNotMapping  if true, drop the table which no mapping with
-    //     *                             object; if false, do nothing.
-    //     * @param columnModifyType     the column modify type
-    //     * @param dropColumnNotMapping if true, drop the column which no mapping
-    //     *                             with object; if false, do nothing.
-    //     * @return the inits the sql
-    //     */
-    //    private String updateSql(ClassMapping<?> classMapping, List<PropertyMapping> propertyMappings,
-    //            ModifyType tableModifyType, boolean dropTableNotMapping, ModifyType columnModifyType,
-    //            boolean dropColumnNotMapping) {
-    //        Table table = ClassMappingUtils.createTable(classMapping, dialect, sqlTypeMappingManager);
-    //        StringBuilder sql = new StringBuilder();
-    //        if (ModifyType.DROP_AND_CREATE == tableModifyType) {
-    //            // drop and create table
-    //            sql.append(createSql(classMapping, true)).append(Chars.SEMI).append(Chars.NEW_LINE);
-    //        } else {
-    //            for (PropertyMapping propertyMapping : propertyMappings) {
-    //                Column column = table.getColumn(propertyMapping.getRepositoryFieldName());
-    //                if (ModifyType.DROP_AND_CREATE == columnModifyType) {
-    //                    sql.append(dialect.buildAlterTableDropColumnDDL(table.getName(), column)).append(Chars.SEMI)
-    //                            .append(Chars.NEW_LINE);
-    //                    sql.append(dialect.buildAlterTableAddColumnDDL(table.getName(), column)).append(Chars.SEMI)
-    //                            .append(Chars.NEW_LINE);
-    //                } else {
-    //                    sql.append(dialect.buildAlterTableModifyColumnDDL(table.getName(), column)).append(Chars.SEMI)
-    //                            .append(Chars.NEW_LINE);
-    //                }
-    //            }
-    //        }
-    //        return sql.toString();
-    //    }
 
     /**
      * merge database info for classMappings.
@@ -450,6 +546,147 @@ public class Migrator {
             ModifyType columnModifyType, boolean dropColumnNotMapping, boolean dropIndexNotMapping) {
         sqlExecutor.execute(updateSql(classMappings, tableModifyType, dropTableNotMapping, columnModifyType,
                 dropColumnNotMapping, dropIndexNotMapping));
+    }
+
+    private String diff(Table previous, Table current, ClassMapping<?> classMapping, Diff diff) {
+        if (previous == null) {
+            // 数据库没有该表，添加新表
+            diff.newTables.add(new TableMapping(current, classMapping));
+        } else if (!previous.equals(current)) {
+            ModifyTable modifyTable = diff.modifyTables.getModifyTable(current);
+            if (modifyTable == null) {
+                modifyTable = new ModifyTable(current, classMapping);
+                diff.modifyTables.put(modifyTable);
+            }
+            for (Column column : current.getColumns()) {
+                Column columnMetadata = previous.getColumn(column.getName());
+                if (columnMetadata == null) {
+                    // 数据库元数据没有该列，添加新列
+                    modifyTable.newColumns.put(classMapping.getPropertyMappingByPersitField(column.getName()), column);
+                } else if (!columnMetadata.equals(column)) {
+                    //                        System.err.println(column);
+                    //                        System.err.println(columnMetadata);
+                    modifyTable.modifyColumns.put(classMapping.getPropertyMappingByPersitField(column.getName()),
+                            column);
+                }
+            }
+            for (Column columnMetadata : previous.getColumns()) {
+                // 判断数据库表的列是否没有映射
+                if (current.getColumn(columnMetadata.getName()) == null) {
+                    //                        String key = table.getName().toUpperCase();
+                    modifyTable.noMappingColumns.add(columnMetadata);
+                }
+            }
+
+            // 索引
+            for (Index index : current.getIndexs()) {
+                Index indexMetadata = previous.getIndex(index.getName());
+                if (indexMetadata == null) {
+                    // 数据库索引数据没有该索引，添加新索引
+                    modifyTable.addIndexs.add(index);
+                } else if (!indexMetadata.equals(index)) {
+                    modifyTable.dropIndexs.add(indexMetadata);
+                    modifyTable.addIndexs.add(index);
+                }
+            }
+            for (Index indexMetadata : previous.getIndexs()) {
+                // 判断数据库表的索引是否没有映射
+                if (!current.hasIndex(indexMetadata.getName())) {
+                    modifyTable.notExistIndexs.add(indexMetadata);
+                }
+            }
+        }
+        return current.getName();
+    }
+
+    private String diffSql(Diff diff, ModifyType tableModifyType, boolean dropNotExistTable,
+            ModifyType columnModifyType, boolean dropNotExistColumn, boolean dropNotExistIndex) {
+        StringBuilder sql = new StringBuilder();
+        // 添加头部
+        sql.append(dialect.getInitSqlHeader()).append(Chars.SEMI).append(Chars.NEW_LINE);
+        // 添加新的对象映射
+        //        diff.newClassMappings.forEach((classMapping, table) -> {
+        //            appendSqlWithEnd(sql, createSql(table, true, classMapping.getType()));
+        //        });
+        diff.newTables.forEach(tableMapping -> {
+            appendSqlWithEnd(sql, createSql(tableMapping, true));
+        });
+        for (Entry<Table, ModifyTable> entry : diff.modifyTables.modifyTableMap.entrySet()) {
+            Table table = entry.getKey();
+            ModifyTable modifyTable = entry.getValue();
+            if (ModifyType.MODIFY == tableModifyType) {
+                List<Column> dropColumns = new ArrayList<>();
+                List<Index> dropIndex = new ArrayList<>();
+                if (dropNotExistColumn) {
+                    dropColumns.addAll(modifyTable.noMappingColumns);
+                }
+                dropIndex.addAll(modifyTable.dropIndexs);
+                if (dropNotExistIndex) {
+                    dropIndex.addAll(modifyTable.notExistIndexs);
+                }
+
+                // 删除的索引
+                for (Index index : dropIndex) {
+                    appendSqlWithEnd(sql,
+                            dialect.buildDropIndexDDL(table.getSchema(), table.getName(), index.getName()));
+                }
+
+                if (ModifyType.MODIFY == columnModifyType) {
+                    appendSqlWithEnd(sql, dialect.buildAlterTableDDL(schema, table.getName(),
+                            //  添加新的属性列映射
+                            CollectionUtils.toArray(modifyTable.newColumns.values(), Column.class),
+                            // 需要修改的对象映射
+                            CollectionUtils.toArray(modifyTable.modifyColumns.values(), Column.class),
+                            // 删除没有对象映射的列
+                            CollectionUtils.toArray(dropColumns, Column.class)));
+                } else if (ModifyType.DROP_AND_CREATE == columnModifyType) {
+                    dropColumns.addAll(modifyTable.modifyColumns.values());
+
+                    appendSqlWithEnd(sql, dialect.buildAlterTableDropColumnDDL(schema, table.getName(),
+                            CollectionUtils.toArray(dropColumns, Column.class)));
+
+                    List<Column> addColumns = new ArrayList<>();
+                    addColumns.addAll(modifyTable.newColumns.values());
+                    addColumns.addAll(modifyTable.modifyColumns.values());
+
+                    appendSqlWithEnd(sql, dialect.buildAlterTableDDL(schema, table.getName(),
+                            //  添加新的属性列映射
+                            CollectionUtils.toArray(addColumns, Column.class),
+                            // 需要修改的对象映射
+                            new Column[] {},
+                            // 删除没有对象映射的列
+                            CollectionUtils.toArray(dropColumns, Column.class)));
+                } else {
+                    throw new JdbcMappingException("no support ModifyType for columnModifyType -> " + columnModifyType);
+                }
+
+                // 新增加的索引
+                for (Index index : modifyTable.addIndexs) {
+                    appendSqlWithEnd(sql, dialect.buildCreateIndexDDL(table.getSchema(), table.getName(),
+                            index.getName(), index.getColumns()));
+                }
+
+            } else if (ModifyType.DROP_AND_CREATE == tableModifyType) {
+                appendSqlWithEnd(sql, createSql(modifyTable.classMapping, true));
+            } else {
+                throw new JdbcMappingException("no support ModifyType for tableModifyType -> " + tableModifyType);
+            }
+        }
+        // 删除没有对象映射的表
+        if (dropNotExistTable) {
+            diff.notExistTables.forEach(table -> {
+                appendSqlWithEnd(sql, dialect.buildDropTableDDL(schema, table.getName()));
+            });
+        }
+        // 添加尾部
+        sql.append(dialect.getInitSqlFooter()).append(Chars.SEMI).append(Chars.NEW_LINE);
+        String result = sql.toString();
+        if (Lang.isEmpty(schema)) {
+            LOGGER.debug("create update sql -> \n{}", result);
+        } else {
+            LOGGER.debug("create update sql for {} -> \n{}", schema, result);
+        }
+        return result;
     }
 
     /**
@@ -498,7 +735,7 @@ public class Migrator {
     }
 
     /**
-     * 返回schema
+     * 返回schema.
      *
      * @return schema
      */

@@ -18,20 +18,44 @@ import cn.featherfly.common.repository.mapping.PropertyMapping;
  * <p>
  * UpdateMapping
  * </p>
+ * .
  *
  * @author zhongj
  */
-public class UpdateMapping {
+public class Diff {
     // FIXME 差表基本信息修改
 
-    Map<ClassMapping<?>, Table> newClassMappings = new HashMap<>();
+    /** The new tables. */
+    Set<TableMapping> newTables = new HashSet<>();
 
-    Set<Table> noMappingTables = new HashSet<>();
+    /** The no exits tables. */
+    Set<Table> notExistTables = new HashSet<>();
 
+    /** The modify tables. */
     ModifyTables modifyTables = new ModifyTables();
 
-    UpdateMapping() {
+    /**
+     * Instantiates a new diff.
+     */
+    Diff() {
     }
+}
+
+class TableMapping {
+    /**
+     * Instantiates a new modify table.
+     *
+     * @param table        the table
+     * @param classMapping the class mapping
+     */
+    TableMapping(Table table, ClassMapping<?> classMapping) {
+        this.table = table;
+        this.classMapping = classMapping;
+    }
+
+    Table table;
+
+    ClassMapping<?> classMapping;
 }
 
 class ModifyTables {
@@ -84,6 +108,6 @@ class ModifyTable {
 
     Set<Index> addIndexs = new LinkedHashSet<>();
 
-    Set<Index> noMappingIndexs = new LinkedHashSet<>();
+    Set<Index> notExistIndexs = new LinkedHashSet<>();
 
 }

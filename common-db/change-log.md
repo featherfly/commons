@@ -1,3 +1,6 @@
+# 0.3.1 
+    1.Migrator加入updateSql(DataSource previousDataSource, DataSource currentDataSource)等一些列方法，用于比较两个数据库生成更新sql
+    
 # 0.3.1 2020-11-11
     1.Dialect实现索引的创建·更新·删除（Mysql,Postgresql）
     2.实现从Entity生成的ClassMapping支持索引，并且生成的建表、更新表的语句已经加上索引信息

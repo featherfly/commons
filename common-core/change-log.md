@@ -1,5 +1,6 @@
-# 1.8.13 
+# 1.8.13 2020-11-16
     1.Properties加入PropertiesPlus(java.util.Properties defaults)构造器
+    2.修正1.8.12使用了jdk15构建的问题,重新使用jdk8构建
 
 # 1.8.12 2020-11-10
 

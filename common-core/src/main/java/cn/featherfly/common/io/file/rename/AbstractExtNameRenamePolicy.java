@@ -12,7 +12,7 @@ import cn.featherfly.common.lang.Lang;
  *
  * @author zhongj
  */
-public abstract class AbstractExtNameRenamePolicy implements RenamePolicy{
+public abstract class AbstractExtNameRenamePolicy implements RenamePolicy {
 
     /**
      */
@@ -23,15 +23,16 @@ public abstract class AbstractExtNameRenamePolicy implements RenamePolicy{
      * <p>
      * 为重命名的文件名称附加扩展名
      * </p>
+     *
      * @param newFileName 重命名后的名称
-     * @param fileName 原始文件名称
+     * @param fileName    原始文件名称
      * @return 重命名的文件名称附加扩展名后的完整字符串
-      */
+     */
     protected String appendExtName(String newFileName, String fileName) {
         if (withExtName) {
             String extName = FileUtils.getFileExtName(fileName);
             if (Lang.isNotEmpty(extName)) {
-                return newFileName + "." + FileUtils.getFileExtName(fileName);
+                return newFileName + "." + extName;
             }
         }
         return newFileName;
@@ -41,7 +42,6 @@ public abstract class AbstractExtNameRenamePolicy implements RenamePolicy{
     //    property
     // ********************************************************************
 
-
     /**
      * 是否包含扩展名
      */
@@ -49,6 +49,7 @@ public abstract class AbstractExtNameRenamePolicy implements RenamePolicy{
 
     /**
      * 返回是否包含扩展名
+     *
      * @return withExtName
      */
     public boolean isWithExtName() {
@@ -57,6 +58,7 @@ public abstract class AbstractExtNameRenamePolicy implements RenamePolicy{
 
     /**
      * 设置是否包含扩展名
+     *
      * @param withExtName withExtName
      */
     public void setWithExtName(boolean withExtName) {

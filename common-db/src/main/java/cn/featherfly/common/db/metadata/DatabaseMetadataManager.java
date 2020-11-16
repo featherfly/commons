@@ -258,10 +258,10 @@ public class DatabaseMetadataManager {
                 if (Lang.isNotEmpty(tableSchema)) {
                     tableMetadata.setSchema(tableSchema);
                 } else {
+                    // TODO 这里是否需要
                     tableMetadata.setSchema(tableMetadata.getCatalog());
                 }
                 tableMetadata.setRemark(rs.getString(REMARKS));
-                //                tableMetadata.addcolu
                 tableMetadata.addIndex(
                         createIndexs(metaData, tableName, tableMetadata.getCatalog(), tableMetadata.getSchema()));
                 addColumns(metaData, tableMetadata);

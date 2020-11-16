@@ -125,9 +125,10 @@ public class ObjectToDbMappingFactory extends AbstractMappingFactory {
         if (table != null) {
             schema = table.schema();
         }
-        if (Lang.isEmpty(schema)) {
-            schema = dialect.getDefaultSchema(metadata.getName());
-        }
+        // object to db 严格按照对象映射
+        //        if (Lang.isEmpty(schema)) {
+        //            schema = dialect.getDefaultSchema(metadata.getName());
+        //        }
         if (logger.isDebugEnabled()) {
             logInfo.append(
                     String.format("###%s类%s映射到表%s", SystemPropertyUtils.getLineSeparator(), type.getName(), tableName));

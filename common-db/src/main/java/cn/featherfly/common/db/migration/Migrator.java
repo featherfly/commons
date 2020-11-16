@@ -63,7 +63,7 @@ public class Migrator {
     private SqlTypeMappingManager sqlTypeMappingManager;
 
     /** The database name. */
-    private String schema;
+    //    private String schema;
 
     /**
      * Instantiates a new migrator.
@@ -106,7 +106,7 @@ public class Migrator {
         this.sqlTypeMappingManager = sqlTypeMappingManager;
         sqlExecutor = new SqlExecutor(dataSource);
         if (generateSchema) {
-            this.schema = schema;
+            //            this.schema = schema;
         }
     }
 
@@ -118,17 +118,21 @@ public class Migrator {
      */
     public String initSql(Set<ClassMapping<?>> classMappings) {
         StringBuilder sql = new StringBuilder();
-        sql.append(dialect.getInitSqlHeader()).append(Chars.SEMI).append(Chars.NEW_LINE);
+        //        sql.append(dialect.getInitSqlHeader()).append(Chars.SEMI).append(Chars.NEW_LINE);
+        appendSqlWithEnd(sql, dialect.getInitSqlHeader());
         for (ClassMapping<?> classMapping : classMappings) {
-            sql.append(createSql(classMapping, true)).append(Chars.SEMI).append(Chars.NEW_LINE);
+            //            sql.append(createSql(classMapping, true)).append(Chars.SEMI).append(Chars.NEW_LINE);
+            appendSqlWithEnd(sql, createSql(classMapping, true));
         }
-        sql.append(dialect.getInitSqlFooter()).append(Chars.SEMI).append(Chars.NEW_LINE);
+        //        sql.append(dialect.getInitSqlFooter()).append(Chars.SEMI).append(Chars.NEW_LINE);
+        appendSqlWithEnd(sql, dialect.getInitSqlFooter());
         String result = sql.toString();
-        if (Lang.isEmpty(schema)) {
-            LOGGER.debug("create init sql -> \n{}", result);
-        } else {
-            LOGGER.debug("create init sql for {} -> \n{}", schema, result);
-        }
+        LOGGER.debug("create init sql -> \n{}", result);
+        //        if (Lang.isEmpty(schema)) {
+        //            LOGGER.debug("create init sql -> \n{}", result);
+        //        } else {
+        //            LOGGER.debug("create init sql for {} -> \n{}", schema, result);
+        //        }
         return result;
     }
 
@@ -177,7 +181,7 @@ public class Migrator {
     private String createSql(Table table, boolean dropIfExists, Class<?> type) {
         StringBuilder sql = new StringBuilder();
         if (dropIfExists) {
-            appendSqlWithEnd(sql, dialect.buildDropTableDDL(schema, table.getName(), true));
+            appendSqlWithEnd(sql, dialect.buildDropTableDDL(table.getSchema(), table.getName(), true));
         }
         String result = sql.append(dialect.buildCreateTableDDL(table)).toString();
         if (type == null) {
@@ -372,153 +376,13 @@ public class Migrator {
             Table tableMetadata = databaseMetadata.getTable(classMapping.getRepositoryName());
             Table table = ClassMappingUtils.createTable(classMapping, dialect, sqlTypeMappingManager);
             tableNameSet.add(diff(tableMetadata, table, classMapping, diff));
-            /*Table tableMetadata = databaseMetadata.getTable(classMapping.getRepositoryName());
-            Table table = ClassMappingUtils.createTable(classMapping, dialect, sqlTypeMappingManager);
-            tableNameSet.add(table.getName());
-            if (tableMetadata == null) {
-                // 数据库没有该表，添加新表
-                diff.news.add(new TableMapping(table, classMapping));
-            } else if (!tableMetadata.equals(table)) {
-                ModifyTable modifyTable = diff.modifyTables.getModifyTable(table);
-                if (modifyTable == null) {
-                    modifyTable = new ModifyTable(table, classMapping);
-                    diff.modifyTables.put(modifyTable);
-                }
-                for (Column column : table.getColumns()) {
-                    Column columnMetadata = tableMetadata.getColumn(column.getName());
-                    if (columnMetadata == null) {
-                        // 数据库元数据没有该列，添加新列
-                        modifyTable.newColumns.put(classMapping.getPropertyMappingByPersitField(column.getName()),
-                                column);
-                    } else if (!columnMetadata.equals(column)) {
-                        //                        System.err.println(column);
-                        //                        System.err.println(columnMetadata);
-                        modifyTable.modifyColumns.put(classMapping.getPropertyMappingByPersitField(column.getName()),
-                                column);
-                    }
-                }
-                for (Column columnMetadata : tableMetadata.getColumns()) {
-                    // 判断数据库表的列是否没有映射
-                    if (table.getColumn(columnMetadata.getName()) == null) {
-                        //                        String key = table.getName().toUpperCase();
-                        modifyTable.noMappingColumns.add(columnMetadata);
-                    }
-                }
-
-                // 索引
-                for (Index index : table.getIndexs()) {
-                    Index indexMetadata = tableMetadata.getIndex(index.getName());
-                    if (indexMetadata == null) {
-                        // 数据库索引数据没有该索引，添加新索引
-                        modifyTable.addIndexs.add(index);
-                    } else if (!indexMetadata.equals(index)) {
-                        modifyTable.dropIndexs.add(indexMetadata);
-                        modifyTable.addIndexs.add(index);
-                    }
-                }
-                for (Index indexMetadata : tableMetadata.getIndexs()) {
-                    // 判断数据库表的索引是否没有映射
-                    if (!table.hasIndex(indexMetadata.getName())) {
-                        modifyTable.noMappingIndexs.add(indexMetadata);
-                    }
-                }
-            }*/
         }
         for (Table tableMetadata : databaseMetadata.getTables()) {
             // 判断数据库表是否没有映射
             if (!tableNameSet.contains(tableMetadata.getName())) {
                 diff.notExistTables.add(tableMetadata);
-                //                diff.noMappingTables.add(tableMetadata);
             }
         }
-        /*StringBuilder sql = new StringBuilder();
-        // 添加头部
-        sql.append(dialect.getInitSqlHeader()).append(Chars.SEMI).append(Chars.NEW_LINE);
-        // 添加新的对象映射
-        //        diff.newClassMappings.forEach((classMapping, table) -> {
-        //            appendSqlWithEnd(sql, createSql(table, true, classMapping.getType()));
-        //        });
-        diff.newTables.forEach(tableMapping -> {
-            appendSqlWithEnd(sql, createSql(tableMapping, true));
-        });
-        for (Entry<Table, ModifyTable> entry : diff.modifyTables.modifyTableMap.entrySet()) {
-            Table table = entry.getKey();
-            ModifyTable modifyTable = entry.getValue();
-            if (ModifyType.MODIFY == tableModifyType) {
-                List<Column> dropColumns = new ArrayList<>();
-                List<Index> dropIndex = new ArrayList<>();
-                if (dropNoMappingColumn) {
-                    dropColumns.addAll(modifyTable.noMappingColumns);
-                }
-                dropIndex.addAll(modifyTable.dropIndexs);
-                if (dropNoMappingIndex) {
-                    dropIndex.addAll(modifyTable.notExistIndexs);
-                }
-
-                // 删除的索引
-                for (Index index : dropIndex) {
-                    appendSqlWithEnd(sql,
-                            dialect.buildDropIndexDDL(table.getSchema(), table.getName(), index.getName()));
-                }
-
-                if (ModifyType.MODIFY == columnModifyType) {
-                    appendSqlWithEnd(sql, dialect.buildAlterTableDDL(schema, table.getName(),
-                            //  添加新的属性列映射
-                            CollectionUtils.toArray(modifyTable.newColumns.values(), Column.class),
-                            // 需要修改的对象映射
-                            CollectionUtils.toArray(modifyTable.modifyColumns.values(), Column.class),
-                            // 删除没有对象映射的列
-                            CollectionUtils.toArray(dropColumns, Column.class)));
-                } else if (ModifyType.DROP_AND_CREATE == columnModifyType) {
-                    dropColumns.addAll(modifyTable.modifyColumns.values());
-
-                    appendSqlWithEnd(sql, dialect.buildAlterTableDropColumnDDL(schema, table.getName(),
-                            CollectionUtils.toArray(dropColumns, Column.class)));
-
-                    List<Column> addColumns = new ArrayList<>();
-                    addColumns.addAll(modifyTable.newColumns.values());
-                    addColumns.addAll(modifyTable.modifyColumns.values());
-
-                    appendSqlWithEnd(sql, dialect.buildAlterTableDDL(schema, table.getName(),
-                            //  添加新的属性列映射
-                            CollectionUtils.toArray(addColumns, Column.class),
-                            // 需要修改的对象映射
-                            new Column[] {},
-                            // 删除没有对象映射的列
-                            CollectionUtils.toArray(dropColumns, Column.class)));
-                } else {
-                    throw new JdbcMappingException("no support ModifyType for columnModifyType -> " + columnModifyType);
-                }
-
-                // 新增加的索引
-                for (Index index : modifyTable.addIndexs) {
-                    appendSqlWithEnd(sql, dialect.buildCreateIndexDDL(table.getSchema(), table.getName(),
-                            index.getName(), index.getColumns()));
-                }
-
-            } else if (ModifyType.DROP_AND_CREATE == tableModifyType) {
-                appendSqlWithEnd(sql, createSql(modifyTable.classMapping, true));
-            } else {
-                throw new JdbcMappingException("no support ModifyType for tableModifyType -> " + tableModifyType);
-            }
-        }
-        // 删除没有对象映射的表
-        if (dropNoMappingTable) {
-            //            diff.noMappingTables.forEach(table -> {
-            //                appendSqlWithEnd(sql, dialect.buildDropTableDDL(schema, table.getName()));
-            //            });
-            diff.notExistTables.forEach(table -> {
-                appendSqlWithEnd(sql, dialect.buildDropTableDDL(schema, table.getName()));
-            });
-        }
-        // 添加尾部
-        sql.append(dialect.getInitSqlFooter()).append(Chars.SEMI).append(Chars.NEW_LINE);
-        String result = sql.toString();
-        if (Lang.isEmpty(schema)) {
-            LOGGER.debug("create update sql -> \n{}", result);
-        } else {
-            LOGGER.debug("create update sql for {} -> \n{}", schema, result);
-        }*/
         return diffSql(diff, tableModifyType, dropNoMappingTable, columnModifyType, dropNoMappingColumn,
                 dropNoMappingIndex);
     }
@@ -564,8 +428,6 @@ public class Migrator {
                     // 数据库元数据没有该列，添加新列
                     modifyTable.newColumns.put(classMapping.getPropertyMappingByPersitField(column.getName()), column);
                 } else if (!columnMetadata.equals(column)) {
-                    //                        System.err.println(column);
-                    //                        System.err.println(columnMetadata);
                     modifyTable.modifyColumns.put(classMapping.getPropertyMappingByPersitField(column.getName()),
                             column);
                 }
@@ -577,7 +439,6 @@ public class Migrator {
                     modifyTable.noMappingColumns.add(columnMetadata);
                 }
             }
-
             // 索引
             for (Index index : current.getIndexs()) {
                 Index indexMetadata = previous.getIndex(index.getName());
@@ -605,9 +466,6 @@ public class Migrator {
         // 添加头部
         sql.append(dialect.getInitSqlHeader()).append(Chars.SEMI).append(Chars.NEW_LINE);
         // 添加新的对象映射
-        //        diff.newClassMappings.forEach((classMapping, table) -> {
-        //            appendSqlWithEnd(sql, createSql(table, true, classMapping.getType()));
-        //        });
         diff.newTables.forEach(tableMapping -> {
             appendSqlWithEnd(sql, createSql(tableMapping, true));
         });
@@ -632,7 +490,7 @@ public class Migrator {
                 }
 
                 if (ModifyType.MODIFY == columnModifyType) {
-                    appendSqlWithEnd(sql, dialect.buildAlterTableDDL(schema, table.getName(),
+                    appendSqlWithEnd(sql, dialect.buildAlterTableDDL(table.getSchema(), table.getName(),
                             //  添加新的属性列映射
                             CollectionUtils.toArray(modifyTable.newColumns.values(), Column.class),
                             // 需要修改的对象映射
@@ -642,14 +500,14 @@ public class Migrator {
                 } else if (ModifyType.DROP_AND_CREATE == columnModifyType) {
                     dropColumns.addAll(modifyTable.modifyColumns.values());
 
-                    appendSqlWithEnd(sql, dialect.buildAlterTableDropColumnDDL(schema, table.getName(),
+                    appendSqlWithEnd(sql, dialect.buildAlterTableDropColumnDDL(table.getSchema(), table.getName(),
                             CollectionUtils.toArray(dropColumns, Column.class)));
 
                     List<Column> addColumns = new ArrayList<>();
                     addColumns.addAll(modifyTable.newColumns.values());
                     addColumns.addAll(modifyTable.modifyColumns.values());
 
-                    appendSqlWithEnd(sql, dialect.buildAlterTableDDL(schema, table.getName(),
+                    appendSqlWithEnd(sql, dialect.buildAlterTableDDL(table.getSchema(), table.getName(),
                             //  添加新的属性列映射
                             CollectionUtils.toArray(addColumns, Column.class),
                             // 需要修改的对象映射
@@ -675,17 +533,18 @@ public class Migrator {
         // 删除没有对象映射的表
         if (dropNotExistTable) {
             diff.notExistTables.forEach(table -> {
-                appendSqlWithEnd(sql, dialect.buildDropTableDDL(schema, table.getName()));
+                appendSqlWithEnd(sql, dialect.buildDropTableDDL(table.getSchema(), table.getName()));
             });
         }
         // 添加尾部
         sql.append(dialect.getInitSqlFooter()).append(Chars.SEMI).append(Chars.NEW_LINE);
         String result = sql.toString();
-        if (Lang.isEmpty(schema)) {
-            LOGGER.debug("create update sql -> \n{}", result);
-        } else {
-            LOGGER.debug("create update sql for {} -> \n{}", schema, result);
-        }
+        LOGGER.debug("create update sql -> \n{}", result);
+        //        if (Lang.isEmpty(schema)) {
+        //            LOGGER.debug("create update sql -> \n{}", result);
+        //        } else {
+        //            LOGGER.debug("create update sql for {} -> \n{}", schema, result);
+        //        }
         return result;
     }
 
@@ -734,12 +593,12 @@ public class Migrator {
         return sqlTypeMappingManager;
     }
 
-    /**
-     * 返回schema.
-     *
-     * @return schema
-     */
-    public String getSchema() {
-        return schema;
-    }
+    //    /**
+    //     * 返回schema.
+    //     *
+    //     * @return schema
+    //     */
+    //    public String getSchema() {
+    //        return schema;
+    //    }
 }

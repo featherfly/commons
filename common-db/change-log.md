@@ -1,5 +1,9 @@
-# 0.3.1 
+# 0.3.3 2020-11-16
+    1.加入VersionManager
+    
+# 0.3.2 2020-11-16
     1.Migrator加入updateSql(DataSource previousDataSource, DataSource currentDataSource)等一些列方法，用于比较两个数据库生成更新sql
+    2.修正0.3.1使用了jdk15构建的问题,重新使用jdk8构建
     
 # 0.3.1 2020-11-11
     1.Dialect实现索引的创建·更新·删除（Mysql,Postgresql）

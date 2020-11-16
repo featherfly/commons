@@ -38,7 +38,7 @@ import cn.featherfly.common.repository.mapping.PropertyNameConversion;
  *
  * @author zhongj
  */
-public class ObjectToDbMappingFactory extends AbstractMappingFactory {
+public class ObjectToDbMappingFactory extends AbstractJdbcMappingFactory {
 
     private boolean checkMapping = true;
 

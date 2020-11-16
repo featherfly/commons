@@ -44,7 +44,7 @@ import cn.featherfly.common.repository.mapping.PropertyNameConversion;
  *
  * @author zhongj
  */
-public class ObjectDbMixedMappingFactory extends AbstractMappingFactory {
+public class ObjectDbMixedMappingFactory extends AbstractJdbcMappingFactory {
 
     /**
      * Instantiates a new object db mixed mapping factory.

@@ -28,7 +28,6 @@ import cn.featherfly.common.repository.mapping.ClassMapping;
 import cn.featherfly.common.repository.mapping.ClassNameConversion;
 import cn.featherfly.common.repository.mapping.ClassNameJpaConversion;
 import cn.featherfly.common.repository.mapping.ClassNameUnderlineConversion;
-import cn.featherfly.common.repository.mapping.MappingFactory;
 import cn.featherfly.common.repository.mapping.PropertyMapping;
 import cn.featherfly.common.repository.mapping.PropertyNameConversion;
 import cn.featherfly.common.repository.mapping.PropertyNameJpaConversion;
@@ -42,7 +41,7 @@ import cn.featherfly.common.repository.mapping.PropertyNameUnderlineConversion;
  *
  * @author zhongj
  */
-public abstract class AbstractMappingFactory implements MappingFactory {
+public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
 
     /** The logger. */
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -71,7 +70,7 @@ public abstract class AbstractMappingFactory implements MappingFactory {
      * @param metadata the metadata
      * @param dialect  the dialect
      */
-    protected AbstractMappingFactory(DatabaseMetadata metadata, Dialect dialect) {
+    protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect) {
         this(metadata, dialect, null);
     }
 
@@ -82,7 +81,7 @@ public abstract class AbstractMappingFactory implements MappingFactory {
      * @param dialect               the dialect
      * @param sqlTypeMappingManager the sql type mapping manager
      */
-    protected AbstractMappingFactory(DatabaseMetadata metadata, Dialect dialect,
+    protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
             SqlTypeMappingManager sqlTypeMappingManager) {
         this(metadata, dialect, sqlTypeMappingManager, null, null);
     }
@@ -95,7 +94,7 @@ public abstract class AbstractMappingFactory implements MappingFactory {
      * @param classNameConversions    the class name conversions
      * @param propertyNameConversions the property name conversions
      */
-    protected AbstractMappingFactory(DatabaseMetadata metadata, Dialect dialect,
+    protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
             List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions) {
         this(metadata, dialect, new SqlTypeMappingManager(), classNameConversions, propertyNameConversions);
     }
@@ -109,7 +108,7 @@ public abstract class AbstractMappingFactory implements MappingFactory {
      * @param classNameConversions    classNameConversions
      * @param propertyNameConversions propertyNameConversions
      */
-    protected AbstractMappingFactory(DatabaseMetadata metadata, Dialect dialect,
+    protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
             SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
             List<PropertyNameConversion> propertyNameConversions) {
         super();
@@ -221,6 +220,7 @@ public abstract class AbstractMappingFactory implements MappingFactory {
      *
      * @return dialect
      */
+    @Override
     public Dialect getDialect() {
         return dialect;
     }
@@ -275,6 +275,7 @@ public abstract class AbstractMappingFactory implements MappingFactory {
      *
      * @return metadata
      */
+    @Override
     public DatabaseMetadata getMetadata() {
         return metadata;
     }

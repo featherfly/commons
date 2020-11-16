@@ -1,3 +1,6 @@
+# 0.3.4 2020-11-16
+    1.加入JdbcMappingFactory接口，并把原来的JdbcMappingFactory类改为JdbcMappingFactoryImpl
+    
 # 0.3.3 2020-11-16
     1.加入VersionManager
     

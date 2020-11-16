@@ -13,6 +13,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import cn.featherfly.common.exception.ExceptionWrapper;
+import cn.featherfly.common.exception.IOException;
 
 /**
  * 对一些在语法上显得拖沓的常用操作进行封装的工具类 .
@@ -780,6 +781,16 @@ public final class Lang {
     public static void wrapThrow(Throwable throwable) {
         AssertIllegalArgument.isNotNull(throwable, "throwable");
         WRAPPER.throwException(throwable);
+    }
+
+    /**
+     * Wrap throw.
+     *
+     * @param ioException the io exception
+     */
+    public static void wrapThrow(java.io.IOException ioException) {
+        AssertIllegalArgument.isNotNull(ioException, "ioException");
+        throw new IOException(ioException);
     }
 
     /**

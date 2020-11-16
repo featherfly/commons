@@ -1,13 +1,11 @@
 
 package cn.featherfly.common.exception;
 
-import cn.featherfly.common.exception.ExceptionCode;
-
 /**
  * <p>
- * SimpleExceptionCode 
+ * SimpleExceptionCode
  * </p>
- * 
+ *
  * @author zhongj
  * @since 1.7
  * @version 1.7

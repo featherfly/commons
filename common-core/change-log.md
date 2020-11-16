@@ -1,3 +1,8 @@
+# 1.8.14 2020-11-16
+    1.加入Lang.wrapThrow(java.io.IOException)方法
+    2.删除Dates.parse(String strDate)方法
+    3.加入VersionRenamePolicy
+    
 # 1.8.13 2020-11-16
     1.Properties加入PropertiesPlus(java.util.Properties defaults)构造器
     2.修正1.8.12使用了jdk15构建的问题,重新使用jdk8构建

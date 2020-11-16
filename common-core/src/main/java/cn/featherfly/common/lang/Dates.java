@@ -326,22 +326,6 @@ public final class Dates {
     }
 
     /**
-     * <p>
-     * 将传入的参数转换为日期
-     * </p>
-     * .
-     *
-     * @param strDate 日期的字符串表示
-     * @return 转换后的日期
-     */
-    @SuppressWarnings("deprecation")
-    public static Date parse(String strDate) {
-        LOGGER.debug("parse: strDate={}", strDate);
-        AssertIllegalArgument.isNotBlank(strDate, "String strDate");
-        return new Date(strDate);
-    }
-
-    /**
      * 根据指定的 year,month,day 返回Date实例.
      *
      * @param year  年

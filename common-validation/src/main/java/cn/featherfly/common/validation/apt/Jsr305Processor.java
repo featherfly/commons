@@ -3,8 +3,6 @@ package cn.featherfly.common.validation.apt;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -16,45 +14,23 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 
-import com.sun.tools.javac.api.JavacTrees;
 import com.sun.tools.javac.model.JavacElements;
-import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.JCTree.JCIf;
 import com.sun.tools.javac.tree.JCTree.JCMethodDecl;
 import com.sun.tools.javac.tree.JCTree.JCStatement;
 import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
-import com.sun.tools.javac.tree.TreeMaker;
-import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.List;
-import com.sun.tools.javac.util.Names;
 
-import cn.featherfly.common.ast.Javac;
+import cn.featherfly.common.ast.JavacProcessor;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes({ "javax.annotation.Nonnull" })
 @SupportedOptions("debug")
-public class Jsr305Processor extends AbstractProcessor {
-
-    private Messager messager;
-    private JavacTrees trees;
-    private TreeMaker treeMaker;
-    private Names names;
-    private JavacElements elementUtils;
-
-    private Javac javac;
+public class Jsr305Processor extends JavacProcessor {
 
     @Override
-    public synchronized void init(@Nonnull ProcessingEnvironment processingEnv) {
-        super.init(processingEnv);
-        messager = processingEnv.getMessager();
-        trees = JavacTrees.instance(processingEnv);
-        Context context = ((JavacProcessingEnvironment) processingEnv).getContext();
-        treeMaker = TreeMaker.instance(context);
-        names = Names.instance(context);
-        elementUtils = (JavacElements) processingEnv.getElementUtils();
-
-        javac = new Javac(treeMaker, trees, names, messager, processingEnv);
+    public void doInit(@Nonnull ProcessingEnvironment processingEnv) {
 
         messager.printMessage(Diagnostic.Kind.NOTE, "SupportedOptions");
         messager.printMessage(Diagnostic.Kind.NOTE, getSupportedOptions().toString());

@@ -80,28 +80,36 @@ public class Version {
     }
 
     /**
-     * {@inheritDoc}
+     * Gets the version.
+     *
+     * @return the version
      */
     public String getVersion() {
         return major + Chars.DOT + minor + Chars.DOT + patch;
     }
 
     /**
-     * {@inheritDoc}
+     * Gets the next version.
+     *
+     * @return the next version
      */
     public String getNextVersion() {
         return major + 1 + Chars.DOT + minor + Chars.DOT + patch;
     }
 
     /**
-     * {@inheritDoc}
+     * Gets the next minor version.
+     *
+     * @return the next minor version
      */
     public String getNextMinorVersion() {
         return major + Chars.DOT + (minor + 1) + Chars.DOT + patch;
     }
 
     /**
-     * {@inheritDoc}
+     * Gets the next patch version.
+     *
+     * @return the next patch version
      */
     public String getNextPatchVersion() {
         return major + Chars.DOT + minor + Chars.DOT + (patch + 1);

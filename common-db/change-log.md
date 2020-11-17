@@ -1,3 +1,7 @@
+# 0.3.5 2020-11-17
+    1.ClassMappingUtils加入getDeleteSqlAndParamPositions(int batchSize,
+            ClassMapping<?> classMapping, Dialect dialect)方法
+    
 # 0.3.4 2020-11-16
     1.加入JdbcMappingFactory接口，并把原来的JdbcMappingFactory类改为JdbcMappingFactoryImpl
     

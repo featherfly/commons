@@ -278,37 +278,114 @@ public class ClassMappingUtils {
      */
     public static Tuple2<String, Map<Integer, String>> getDeleteSqlAndParamPositions(ClassMapping<?> classMapping,
             Dialect dialect) {
+        //        Map<Integer, String> propertyPositions = new LinkedHashMap<>();
+        //        StringBuilder deleteSql = new StringBuilder();
+        //        deleteSql.append(dialect.getKeywords().delete()).append(Chars.SPACE).append(dialect.getKeywords().from())
+        //                .append(Chars.SPACE).append(dialect.wrapName(classMapping.getRepositoryName())).append(Chars.SPACE)
+        //                .append(dialect.getKeywords().where()).append(Chars.SPACE);
+        //        int columnNum = 0;
+        //        for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
+        //            if (Lang.isEmpty(propertyMapping.getPropertyMappings())) {
+        //                if (propertyMapping.isPrimaryKey()) {
+        //                    if (columnNum > 0) {
+        //                        deleteSql.append(dialect.getKeywords().and()).append(Chars.SPACE);
+        //                    }
+        //                    deleteSql.append(dialect.wrapName(propertyMapping.getRepositoryFieldName())).append(" = ? ");
+        //                    columnNum++;
+        //                    propertyPositions.put(columnNum, propertyMapping.getPropertyName());
+        //                }
+        //            } else {
+        //                for (PropertyMapping subPropertyMapping : propertyMapping.getPropertyMappings()) {
+        //                    if (subPropertyMapping.isPrimaryKey()) {
+        //                        if (columnNum > 0) {
+        //                            deleteSql.append(dialect.getKeywords().and()).append(Chars.SPACE);
+        //                        }
+        //                        deleteSql.append(dialect.wrapName(subPropertyMapping.getRepositoryFieldName())).append(" = ? ");
+        //                        columnNum++;
+        //                        propertyPositions.put(columnNum,
+        //                                propertyMapping.getPropertyName() + "." + subPropertyMapping.getPropertyName());
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        return Tuples.of(deleteSql.toString().trim(), propertyPositions);
+        return getDeleteSqlAndParamPositions(1, classMapping, dialect);
+    }
+
+    /**
+     * Gets the delete sql and param positions.
+     *
+     * @param classMapping the class mapping
+     * @param dialect      the dialect
+     * @return the delete sql and param positions
+     */
+    public static Tuple2<String, Map<Integer, String>> getDeleteSqlAndParamPositions(int batchSize,
+            ClassMapping<?> classMapping, Dialect dialect) {
+        if (batchSize < 1) {
+            batchSize = 1;
+        }
         Map<Integer, String> propertyPositions = new LinkedHashMap<>();
         StringBuilder deleteSql = new StringBuilder();
         deleteSql.append(dialect.getKeywords().delete()).append(Chars.SPACE).append(dialect.getKeywords().from())
                 .append(Chars.SPACE).append(dialect.wrapName(classMapping.getRepositoryName())).append(Chars.SPACE)
-                .append(dialect.getKeywords().where()).append(Chars.SPACE);
-        int columnNum = 0;
-        for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
-            if (Lang.isEmpty(propertyMapping.getPropertyMappings())) {
-                if (propertyMapping.isPrimaryKey()) {
-                    if (columnNum > 0) {
-                        deleteSql.append(dialect.getKeywords().and()).append(Chars.SPACE);
-                    }
-                    deleteSql.append(dialect.wrapName(propertyMapping.getRepositoryFieldName())).append(" = ? ");
-                    columnNum++;
-                    propertyPositions.put(columnNum, propertyMapping.getPropertyName());
-                }
+                .append(dialect.getKeywords().where()).append(Chars.SPACE).append(deleteCondition(batchSize, dialect,
+                        propertyPositions, classMapping.getPrivaryKeyPropertyMappings()));
+        return Tuples.of(deleteSql.toString().trim(), propertyPositions);
+    }
+
+    private static String deleteCondition(int batchSize, Dialect dialect, Map<Integer, String> propertyPositions,
+            List<PropertyMapping> pkPropertyMappings) {
+        StringBuilder deleteSqlCondition = new StringBuilder();
+        if (pkPropertyMappings.size() == 1) {
+            PropertyMapping propertyMapping = pkPropertyMappings.get(0);
+            String fieldName = propertyMapping.getRepositoryFieldName();
+            String propertyName = propertyMapping.getParent() != null
+                    ? propertyMapping.getParent().getPropertyName() + "." + propertyMapping.getPropertyName()
+                    : propertyMapping.getPropertyName();
+            if (batchSize == 1) {
+                deleteSqlCondition.append(dialect.wrapName(fieldName)).append(" = ? ");
             } else {
-                for (PropertyMapping subPropertyMapping : propertyMapping.getPropertyMappings()) {
-                    if (subPropertyMapping.isPrimaryKey()) {
-                        if (columnNum > 0) {
-                            deleteSql.append(dialect.getKeywords().and()).append(Chars.SPACE);
-                        }
-                        deleteSql.append(dialect.wrapName(subPropertyMapping.getRepositoryFieldName())).append(" = ? ");
-                        columnNum++;
-                        propertyPositions.put(columnNum,
-                                propertyMapping.getPropertyName() + "." + subPropertyMapping.getPropertyName());
+                deleteSqlCondition.append(dialect.wrapName(fieldName)).append(Chars.SPACE)
+                        .append(dialect.getKeywords().in()).append(Chars.SPACE).append(Chars.PAREN_L);
+                for (int i = 0; i < batchSize; i++) {
+                    deleteSqlCondition.append(Chars.QUESTION).append(Chars.COMMA);
+                    propertyPositions.put(i + 1, propertyName);
+                }
+                deleteSqlCondition.deleteCharAt(deleteSqlCondition.length() - 1).append(Chars.PAREN_R);
+            }
+        } else {
+            int columnNum = 0;
+            if (batchSize > 1) {
+                deleteSqlCondition.append(Chars.SPACE).append(Chars.PAREN_L);
+            }
+            for (PropertyMapping propertyMapping : pkPropertyMappings) {
+                String fieldName = propertyMapping.getRepositoryFieldName();
+                String propertyName = propertyMapping.getParent() != null
+                        ? propertyMapping.getParent().getPropertyName() + "." + propertyMapping.getPropertyName()
+                        : propertyMapping.getPropertyName();
+                if (columnNum > 0) {
+                    deleteSqlCondition.append(Chars.SPACE).append(dialect.getKeywords().and()).append(Chars.SPACE);
+                }
+                deleteSqlCondition.append(dialect.wrapName(fieldName)).append(" = ?");
+                columnNum++;
+                propertyPositions.put(columnNum, propertyName);
+            }
+            if (batchSize > 1) {
+                deleteSqlCondition.append(Chars.PAREN_R);
+            }
+            if (batchSize > 1) {
+                String condition = deleteSqlCondition.toString();
+                Map<Integer, String> conditionMap = new HashMap<>(propertyPositions);
+                for (int i = 1; i < batchSize; i++) {
+                    deleteSqlCondition.append(Chars.SPACE).append(dialect.getKeywords().or()).append(Chars.SPACE)
+                            .append(condition);
+                    for (Entry<Integer, String> entry : conditionMap.entrySet()) {
+                        propertyPositions.put(entry.getKey() + columnNum * i, entry.getValue());
                     }
                 }
             }
         }
-        return Tuples.of(deleteSql.toString().trim(), propertyPositions);
+        return deleteSqlCondition.toString();
     }
 
     /**

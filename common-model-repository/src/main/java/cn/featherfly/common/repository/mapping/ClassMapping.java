@@ -124,7 +124,9 @@ public class ClassMapping<T> {
      *
      * @return 所有属性映射
      */
+
     public List<PropertyMapping> getPrivaryKeyPropertyMappings() {
+        // FIXME 没有处理主键使用@Embedded组合对象的情况
         return propertyMappings.values().stream().filter(p -> p.isPrimaryKey()).collect(Collectors.toList());
     }
 

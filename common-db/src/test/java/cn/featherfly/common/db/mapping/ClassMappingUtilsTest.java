@@ -94,6 +94,22 @@ public class ClassMappingUtilsTest {
     }
 
     @Test
+    void testDeleteBatch() {
+        Tuple2<String, Map<Integer, String>> t = null;
+        t = ClassMappingUtils.getDeleteSqlAndParamPositions(3, getUserClassMapping(), dialect);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get0(), "DELETE FROM `user` WHERE `id` IN (?,?,?)");
+
+        t = ClassMappingUtils.getDeleteSqlAndParamPositions(2, getUserRoleClassMapping(), dialect);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+        assertEquals(t.get0(),
+                "DELETE FROM `user_role` WHERE  (`user_id` = ? AND `role_id` = ?) OR  (`user_id` = ? AND `role_id` = ?)");
+    }
+
+    @Test
     void testMerge() {
         User user = new User();
         user.setId(12L);

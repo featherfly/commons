@@ -1,8 +1,6 @@
 
 package cn.featherfly.common.log;
 
-import cn.featherfly.common.lang.function.ArraySupplier;
-
 /**
  * <p>
  * Logger
@@ -11,7 +9,7 @@ import cn.featherfly.common.lang.function.ArraySupplier;
  *
  * @author zhongj
  */
-public interface Logger {
+public interface Logger extends LoggerFunctionArgs {
 
     /**
      * Return the name of this <code>Logger</code> instance.
@@ -371,45 +369,45 @@ public interface Logger {
      */
     void error(String msg, Throwable t);
 
-    /**
-     * trace.
-     *
-     * @param msg      the msg
-     * @param supplier the supplier
-     */
-    void trace(String msg, ArraySupplier<Object> supplier);
-
-    /**
-     * debug.
-     *
-     * @param msg      the msg
-     * @param supplier the supplier
-     */
-    void debug(String msg, ArraySupplier<Object> supplier);
-
-    /**
-     * info.
-     *
-     * @param msg      the msg
-     * @param supplier the supplier
-     */
-    void info(String msg, ArraySupplier<Object> supplier);
-
-    /**
-     * warn.
-     *
-     * @param msg      the msg
-     * @param supplier the supplier
-     */
-    void warn(String msg, ArraySupplier<Object> supplier);
-
-    /**
-     * error.
-     *
-     * @param msg      the msg
-     * @param supplier the supplier
-     */
-    void error(String msg, ArraySupplier<Object> supplier);
+    //    /**
+    //     * trace.
+    //     *
+    //     * @param msg      the msg
+    //     * @param supplier the supplier
+    //     */
+    //    void trace(String msg, ArraySupplier<Object> supplier);
+    //
+    //    /**
+    //     * debug.
+    //     *
+    //     * @param msg      the msg
+    //     * @param supplier the supplier
+    //     */
+    //    void debug(String msg, ArraySupplier<Object> supplier);
+    //
+    //    /**
+    //     * info.
+    //     *
+    //     * @param msg      the msg
+    //     * @param supplier the supplier
+    //     */
+    //    void info(String msg, ArraySupplier<Object> supplier);
+    //
+    //    /**
+    //     * warn.
+    //     *
+    //     * @param msg      the msg
+    //     * @param supplier the supplier
+    //     */
+    //    void warn(String msg, ArraySupplier<Object> supplier);
+    //
+    //    /**
+    //     * error.
+    //     *
+    //     * @param msg      the msg
+    //     * @param supplier the supplier
+    //     */
+    //    void error(String msg, ArraySupplier<Object> supplier);
 
     //    /**
     //     * trace.

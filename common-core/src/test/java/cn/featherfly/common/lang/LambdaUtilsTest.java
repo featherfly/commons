@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 
 import org.testng.annotations.Test;
 
+import cn.featherfly.common.lang.LambdaUtils.SerializableSupplierLambdaInfo;
 import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
 import cn.featherfly.common.lang.function.GetFunction;
 import cn.featherfly.common.lang.function.ReturnNumberFunction;
@@ -161,6 +162,17 @@ public class LambdaUtilsTest {
         User2 user = new User2();
         user.setAge(18);
         assertUser(user);
+    }
+
+    @Test
+    public void test11() {
+        User2 user = new User2();
+        user.setAge(18);
+
+        SerializableSupplierLambdaInfo<Integer> info = LambdaUtils.getSerializableSupplierLambdaInfo(user::getAge);
+        System.out.println(info.getValue());
+
+        assertEquals(info.getValue(), user.getAge());
     }
 
     public static void main(String[] args) {

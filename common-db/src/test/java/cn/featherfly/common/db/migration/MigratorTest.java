@@ -44,6 +44,13 @@ public class MigratorTest extends JdbcTestBase {
     }
 
     @Test
+    public void testInitSql2() {
+        Set<ClassMapping<?>> mappings = new HashSet<>();
+        mappings.add(factory.getClassMapping(Entity3.class));
+        System.out.println(migrator.initSql(mappings));
+    }
+
+    @Test
     public void testInitSql() {
         System.out.println(migrator.initSql(classMappings()));
     }

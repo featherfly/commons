@@ -133,13 +133,12 @@ public class ObjectToDbMappingFactory extends AbstractJdbcMappingFactory {
             logInfo.append(
                     String.format("###%s类%s映射到表%s", SystemPropertyUtils.getLineSeparator(), type.getName(), tableName));
         }
-        Table tm = getMappingTable(tableName);
 
         Collection<BeanProperty<?>> bps = bd.getBeanProperties();
         boolean findPk = false;
         int pkNo = 0;
         for (BeanProperty<?> beanProperty : bps) {
-            if (mappingWithJpa(beanProperty, tableMapping, logInfo, tm)) {
+            if (mappingWithJpa(beanProperty, tableMapping, logInfo)) {
                 findPk = true;
                 pkNo++;
             }
@@ -148,6 +147,7 @@ public class ObjectToDbMappingFactory extends AbstractJdbcMappingFactory {
             throw new JdbcMappingException("#id.map.not.exists", new Object[] { type.getName() });
         }
         if (checkMapping) {
+            Table tm = getMappingTable(tableName);
             checkMapping(bd, tableMapping, tm);
         }
         if (logger.isDebugEnabled()) {
@@ -170,7 +170,7 @@ public class ObjectToDbMappingFactory extends AbstractJdbcMappingFactory {
     }
 
     private boolean mappingWithJpa(BeanProperty<?> beanProperty, Map<String, PropertyMapping> tableMapping,
-            StringBuilder logInfo, Table tableMetadata) {
+            StringBuilder logInfo) {
         if (isTransient(beanProperty, logInfo)) {
             return false;
         }
@@ -179,7 +179,7 @@ public class ObjectToDbMappingFactory extends AbstractJdbcMappingFactory {
 
         Embedded embedded = beanProperty.getAnnotation(Embedded.class);
         if (embedded != null) {
-            mappinEmbedded(mapping, beanProperty, logInfo, tableMetadata);
+            mappinEmbedded(mapping, beanProperty, logInfo);
             tableMapping.put(mapping.getRepositoryFieldName(), mapping);
         } else {
             String columnName = getMappingColumnName(beanProperty);
@@ -208,13 +208,10 @@ public class ObjectToDbMappingFactory extends AbstractJdbcMappingFactory {
         return isPk;
     }
 
-    private void mappinEmbedded(PropertyMapping mapping, BeanProperty<?> beanProperty, StringBuilder logInfo,
-            Table tableMetadata) {
+    private void mappinEmbedded(PropertyMapping mapping, BeanProperty<?> beanProperty, StringBuilder logInfo) {
         mapping.setPropertyName(beanProperty.getName());
         mapping.setPropertyType(beanProperty.getType());
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
-        // Collection<BeanProperty<?>> bps = bd.findBeanPropertys(new
-        // BeanPropertyAnnotationMatcher(Column.class));
         Collection<BeanProperty<?>> bps = bd.getBeanProperties();
         for (BeanProperty<?> bp : bps) {
             if (isTransient(bp, logInfo)) {
@@ -248,8 +245,6 @@ public class ObjectToDbMappingFactory extends AbstractJdbcMappingFactory {
             columnMpping.setRepositoryFieldName(columnName);
             columnMpping.setPropertyType(bp.getType());
             columnMpping.setPropertyName(bp.getName());
-            // columnMpping.setPropertyPath(dialect.wrapName(beanProperty.getName()
-            // + "." + bp.getName()));
             columnMpping.setPrimaryKey(hasPk);
             if (logger.isDebugEnabled()) {
                 logInfo.append(String.format("%s###\t%s -> %s", SystemPropertyUtils.getLineSeparator(),

@@ -11,6 +11,7 @@ import cn.featherfly.common.locale.ResourceBundleUtils;
  * <p>
  * 支持国际化消息输出的异常
  * </p>
+ * .
  *
  * @author zhongj
  */
@@ -24,18 +25,19 @@ public abstract class LocalizedException extends BaseException {
 
     private String localizedMessage;
 
+    /** The charset. */
     protected Charset charset;
 
     private LocalizedMessage localeMessage;
 
     /**
-     * 构造方法
+     * 构造方法.
      */
     protected LocalizedException() {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param ex 异常
      */
@@ -44,7 +46,7 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param message 信息
      * @param ex      异常
@@ -54,7 +56,7 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param message 信息
      * @param args    消息绑定参数
@@ -68,7 +70,7 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param message 信息
      * @param locale  locale
@@ -79,7 +81,7 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param message 信息
      * @param args    消息绑定参数
@@ -90,7 +92,7 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param message 信息
      * @param args    消息绑定参数
@@ -103,7 +105,7 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param message 信息
      * @param locale  locale
@@ -113,7 +115,7 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param message 信息
      * @param args    消息绑定参数
@@ -124,7 +126,7 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param message 信息
      */
@@ -133,7 +135,7 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param message 信息
      * @param ex      异常
@@ -143,7 +145,7 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param message 信息
      * @param args    消息绑定参数
@@ -157,7 +159,7 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param message 信息
      * @param locale  locale
@@ -168,7 +170,7 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param message 信息
      * @param args    消息绑定参数
@@ -179,7 +181,7 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param message 信息
      * @param args    消息绑定参数
@@ -192,7 +194,7 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param message 信息
      * @param locale  locale
@@ -202,7 +204,7 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param message 信息
      * @param args    消息绑定参数
@@ -213,7 +215,7 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param message 信息
      */
@@ -225,12 +227,12 @@ public abstract class LocalizedException extends BaseException {
      * {@inheritDoc}
      */
     @Override
-    public String getLocalizedMessage() {
+    public String getMessage() {
         if (localeMessage != null) {
-            return getMessage();
+            return super.getMessage();
         }
         if (Lang.isEmpty(localizedMessage)) {
-            String message = getMessage();
+            String message = super.getMessage();
             if (Lang.isEmpty(message)) {
                 return message;
             }
@@ -249,7 +251,35 @@ public abstract class LocalizedException extends BaseException {
     }
 
     /**
-     * 返回charset
+     * {@inheritDoc}
+     */
+    @Override
+    public String getLocalizedMessage() {
+        return getMessage();
+        //        if (localeMessage != null) {
+        //            return getMessage();
+        //        }
+        //        if (Lang.isEmpty(localizedMessage)) {
+        //            String message = getMessage();
+        //            if (Lang.isEmpty(message)) {
+        //                return message;
+        //            }
+        //            int keyIndex = message.indexOf(ResourceBundleUtils.KEY_SIGN);
+        //            char firstChar = message.charAt(0);
+        //            if (firstChar == ResourceBundleUtils.RESOURCE_SIGN && keyIndex != -1) {
+        //                localizedMessage = ResourceBundleUtils.getString(message, args, locale, charset);
+        //            } else if (firstChar == ResourceBundleUtils.KEY_SIGN) {
+        //                localizedMessage = ResourceBundleUtils.getString(this.getClass(), message.substring(1), args, locale,
+        //                        charset);
+        //            } else {
+        //                localizedMessage = message;
+        //            }
+        //        }
+        //        return localizedMessage;
+    }
+
+    /**
+     * 返回charset.
      *
      * @return charset
      */

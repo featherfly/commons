@@ -19,6 +19,8 @@ public class LogTest2 {
 
     protected final Slf4jLogger logger2 = LoggerFactory.getLogger();
 
+    protected final Logger logger3 = LoggerFactory.getLogger();
+
     @Test
     public void test() {
         logger.info("info");
@@ -27,6 +29,11 @@ public class LogTest2 {
         });
         logger2.info("info");
         logger2.info("info {}, {}", () -> {
+            return new Object[] { "argu1", "argu2" };
+        });
+
+        logger3.info("info");
+        logger3.info("info {}, {}", () -> {
             return new Object[] { "argu1", "argu2" };
         });
 

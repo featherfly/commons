@@ -1,3 +1,6 @@
+# 1.8.15 2020-11-19
+    1.LocalizedException.getMessage修改为返回本地化后的字符串
+
 # 1.8.14 2020-11-16
     1.加入Lang.wrapThrow(java.io.IOException)方法
     2.删除Dates.parse(String strDate)方法

@@ -28,19 +28,25 @@ public class ExceptionTest {
 
         Locale.setDefault(Locale.CHINESE);
 
+        String msg = "cn没有这样的属性：pn";
+
         try {
             throw new PracticeException(code);
         } catch (PracticeException e) {
-            assertEquals(e.getMessage(), key);
-            assertEquals(e.getLocalizedMessage(), "cn没有这样的属性：pn");
+            //            assertEquals(e.getMessage(), key);
+            assertEquals(e.getMessage(), msg);
+            assertEquals(e.getLocalizedMessage(), msg);
         }
+
+        msg = "cn has no such property：pn";
 
         Locale.setDefault(Locale.ENGLISH);
         try {
             throw new PracticeException(code);
         } catch (PracticeException e) {
-            assertEquals(e.getMessage(), key);
-            assertEquals(e.getLocalizedMessage(), "cn has no such property：pn");
+            //            assertEquals(e.getMessage(), key);
+            assertEquals(e.getMessage(), msg);
+            assertEquals(e.getLocalizedMessage(), msg);
         }
     }
 
@@ -60,20 +66,21 @@ public class ExceptionTest {
     @Test
     public void testUnsupportedException() {
         try {
+            Locale.setDefault(Locale.CHINESE);
             throw new UnsupportedException();
         } catch (UnsupportedException e) {
-            assertEquals(e.getMessage(), "#unsupported");
-            System.out.println(e.getLocalizedMessage());
-        }
-    }
-
-    @Test
-    public void testUnsupportedException2() {
-        try {
-            throw new UnsupportedException();
-        } catch (UnsupportedException e) {
-            assertEquals(e.getMessage(), "#unsupported");
+            //            assertEquals(e.getMessage(), "#unsupported");
+            assertEquals(e.getMessage(), "未提供支持");
             Locale.setDefault(Locale.ENGLISH);
+            System.out.println(e.getMessage());
+            System.err.println(e.getLocalizedMessage());
+        }
+
+        try {
+            Locale.setDefault(Locale.ENGLISH);
+            throw new UnsupportedException();
+        } catch (UnsupportedException e) {
+            assertEquals(e.getMessage(), "unsupported exception");
             System.out.println(e.getLocalizedMessage());
         }
     }

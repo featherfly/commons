@@ -1,0 +1,15 @@
+ext {
+    asmv = '9.0' 
+}
+  
+dependencies {
+    api project(":common-core")
+    
+    api group: 'org.ow2.asm', name: 'asm', version: asmv
+    implementation group: 'org.ow2.asm', name: 'asm-tree', version: asmv
+    implementation group: 'org.ow2.asm', name: 'asm-util', version: asmv
+    implementation group: 'org.ow2.asm', name: 'asm-common', version: asmv
+    
+    testImplementation group: 'com.github.houbb', name: 'asm-tool', version: '0.0.3'
+    
+}

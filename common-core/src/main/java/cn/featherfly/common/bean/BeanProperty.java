@@ -11,6 +11,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cn.featherfly.common.exception.ReflectException;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.GenericType;
@@ -33,6 +34,8 @@ public class BeanProperty<T> implements GenericType<T> {
 
     // 属性类型，支持泛型类型自动探测
     private Class<T> type;
+
+    private Class<?>[] genericTypes;
 
     private Method setter;
 
@@ -69,6 +72,17 @@ public class BeanProperty<T> implements GenericType<T> {
         this.getter = getter;
         initAnnotation();
     }
+
+    //    private void initGenericType() {
+    //        if (field != null) {
+    //            genericTypes = ClassUtils.getFieldGenericParameterTypes(ownerType, field).toArray(new Class<?>[] {});
+    //            //            return ClassUtils.getFieldGenericType(ownerType, field);
+    //        } else if (getter != null) {
+    //            genericTypes = ClassUtils.getMethodReturnTypeGenericParameterType(ownerType, getter);
+    //        } else {
+    //            return ClassUtils.getMethodGenericParameterType(ownerType, setter);
+    //        }
+    //    }
 
     private void initAnnotation() {
         annotations = new HashSet<>();
@@ -124,7 +138,7 @@ public class BeanProperty<T> implements GenericType<T> {
                     setter.invoke(obj, value);
                 }
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new ReflectException(e);
             }
         } else {
             // throw new
@@ -149,7 +163,11 @@ public class BeanProperty<T> implements GenericType<T> {
             checkType(obj.getClass());
             try {
                 field.setAccessible(true);
-                field.set(obj, value);
+                if (type == Optional.class) {
+                    field.set(obj, Optional.of(value));
+                } else {
+                    field.set(obj, value);
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -236,11 +254,11 @@ public class BeanProperty<T> implements GenericType<T> {
      */
     public Class<?> getGenericType() {
         if (field != null) {
-            return ClassUtils.getFieldGenericType(field);
+            return ClassUtils.getFieldGenericParameterType(ownerType, field);
         } else if (getter != null) {
-            return ClassUtils.getMethodGenericReturnType(getter);
+            return ClassUtils.getMethodReturnTypeGenericParameterType(ownerType, getter);
         } else {
-            return ClassUtils.getMethodGenericParameterType(setter);
+            return ClassUtils.getMethodGenericParameterType(ownerType, setter);
         }
     }
 

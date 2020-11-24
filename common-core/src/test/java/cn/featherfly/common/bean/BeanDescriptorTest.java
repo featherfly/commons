@@ -15,6 +15,7 @@ import cn.featherfly.common.bean.vo.ClassRoom;
 import cn.featherfly.common.bean.vo.Person;
 import cn.featherfly.common.bean.vo.Student;
 import cn.featherfly.common.bean.vo.User;
+import cn.featherfly.common.lang.vo.GenericTest;
 
 public class BeanDescriptorTest {
     @Test
@@ -120,11 +121,12 @@ public class BeanDescriptorTest {
         //		System.out.println(user.getAddresses());
     }
 
-    @Test
+    @Test(expectedExceptions = NoSuchPropertyException.class)
     public void test6() {
         User user = new User();
         BeanDescriptor<User> bd = BeanDescriptor.getBeanDescriptor(User.class);
 
+        // 直接给list中的对象设置参数需要使用addresses[0].name等方式，目前不支持
         bd.setProperty(user, "addresses.name", "成都市");
 
         System.out.println(user.getAddresses());
@@ -174,6 +176,14 @@ public class BeanDescriptorTest {
         assertEquals(user.getUsername().get(), "featherfly");
 
         assertEquals(username.getValue(user), user.getUsername());
+
+    }
+
+    @Test
+    public void testGeneric2() {
+        BeanDescriptor<GenericTest> bd = BeanDescriptor.getBeanDescriptor(GenericTest.class);
+
+        System.out.println(bd.getBeanProperty("id"));
 
     }
 

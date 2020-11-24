@@ -97,7 +97,7 @@ public class BeanDescriptor<T> {
      */
     protected void initTypeGenericParam(Class<T> type) {
         // 得到泛型父类
-        typeGenericParams = ClassUtils.getSuperClassGenricTypeMap(type);
+        typeGenericParams = ClassUtils.getSuperClassGenericTypeMap(type);
     }
 
     // 从field开始初始化
@@ -555,6 +555,15 @@ public class BeanDescriptor<T> {
 
     /** 类型. */
     protected Class<T> type;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "BeanDescriptor [beanProperties=" + beanProperties + ", typeGenericParams=" + typeGenericParams
+                + ", type=" + type + "]";
+    }
 
     /**
      * Gets the type.

@@ -1,3 +1,7 @@
+# 1.8.16 2020-11-24
+    1.ClassUtils的方法getFieldType,getMethodReturnType,getMethodParameterType如果为泛型支持获取已经在父类中具现化的类型
+    2.ClassUtils的方法getFieldGenericParameterType,getMethodReturnTypeGenericParameterType,getMethodGenericParameterType支持获取泛型类型已经在父类中具现化的类型
+    
 # 1.8.15 2020-11-19
     1.LocalizedException.getMessage修改为返回本地化后的字符串
 

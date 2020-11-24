@@ -1,3 +1,6 @@
+# 0.1.8 2020-11-24
+    1.ClassMapping.getPrivaryKeyPropertyMappings支持嵌套对象
+    
 # 0.1.7 2020-11-16
     1.使用jdk8构建,修复0.1.6使用jdk15构建的问题
     

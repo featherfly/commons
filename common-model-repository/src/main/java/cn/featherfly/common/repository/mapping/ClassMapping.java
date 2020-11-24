@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.Index;
 
 /**
@@ -124,10 +125,21 @@ public class ClassMapping<T> {
      *
      * @return 所有属性映射
      */
-
     public List<PropertyMapping> getPrivaryKeyPropertyMappings() {
-        // FIXME 没有处理主键使用@Embedded组合对象的情况
-        return propertyMappings.values().stream().filter(p -> p.isPrimaryKey()).collect(Collectors.toList());
+        List<PropertyMapping> pks = new ArrayList<>();
+        for (PropertyMapping pk : propertyMappings.values().stream().filter(p -> p.isPrimaryKey())
+                .collect(Collectors.toList())) {
+            if (Lang.isEmpty(pk.getPropertyMappings())) {
+                pks.add(pk);
+            } else {
+                for (PropertyMapping spk : pk.getPropertyMappings()) {
+                    if (spk.isPrimaryKey()) {
+                        pks.add(spk);
+                    }
+                }
+            }
+        }
+        return pks;
     }
 
     /**

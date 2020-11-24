@@ -86,11 +86,14 @@ public class ClassMappingUtilsTest {
         System.out.println(t.get1());
 
         assertEquals(t.get0(), "DELETE FROM `user` WHERE `id` = ?");
+        assertEquals(t.get1().get(1), "id");
 
         t = ClassMappingUtils.getDeleteSqlAndParamPositions(getUserRoleClassMapping(), dialect);
         System.out.println(t.get0());
         System.out.println(t.get1());
         assertEquals(t.get0(), "DELETE FROM `user_role` WHERE `user_id` = ? AND `role_id` = ?");
+        assertEquals(t.get1().get(1), "userId");
+        assertEquals(t.get1().get(2), "roleId");
     }
 
     @Test
@@ -292,4 +295,5 @@ public class ClassMappingUtilsTest {
 
         return mapping;
     }
+
 }

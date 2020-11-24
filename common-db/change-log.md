@@ -1,3 +1,6 @@
+# 0.3.6 2020-11-24
+    1.修复getDeleteSqlAndParamPositions单列主键时没有返回参数映射map的问题
+            
 # 0.3.5 2020-11-17
     1.ClassMappingUtils加入getDeleteSqlAndParamPositions(int batchSize,
             ClassMapping<?> classMapping, Dialect dialect)方法

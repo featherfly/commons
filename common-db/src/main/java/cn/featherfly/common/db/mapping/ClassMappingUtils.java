@@ -344,6 +344,7 @@ public class ClassMappingUtils {
                     : propertyMapping.getPropertyName();
             if (batchSize == 1) {
                 deleteSqlCondition.append(dialect.wrapName(fieldName)).append(" = ? ");
+                propertyPositions.put(1, propertyName);
             } else {
                 deleteSqlCondition.append(dialect.wrapName(fieldName)).append(Chars.SPACE)
                         .append(dialect.getKeywords().in()).append(Chars.SPACE).append(Chars.PAREN_L);

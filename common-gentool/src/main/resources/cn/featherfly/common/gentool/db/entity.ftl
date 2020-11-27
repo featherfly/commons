@@ -1,6 +1,5 @@
 package ${packageName};
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,7 +10,7 @@ import javax.persistence.Table;
  * <#if author??>@author ${author}</#if>
  * create by cn.featherlfy.common:common-db generate tool at ${createTime?string('yyyy-MM-dd')}
  */
-@Entity
+@javax.persistence.Entity
 @Table(name = "${table.name}")
 public class ${entityName}{
 

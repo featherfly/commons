@@ -4,6 +4,7 @@ package cn.featherfly.common.gentool.db;
 import java.sql.SQLType;
 
 import cn.featherfly.common.db.Column;
+import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.builder.ColumnModel;
 import cn.featherfly.common.db.builder.TableModel;
 
@@ -124,5 +125,13 @@ public class UserTable extends TableModel {
             return column.isAutoincrement();
         }
 
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public Table getTable() {
+            // YUFEI_TODO Auto-generated method stub
+            return null;
+        }
     }
 }

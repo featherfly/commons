@@ -1,3 +1,6 @@
+# 0.3.7 2020-11-27 
+    1.加入ReadonlyTable类
+    
 # 0.3.6 2020-11-24
     1.修复getDeleteSqlAndParamPositions单列主键时没有返回参数映射map的问题
             

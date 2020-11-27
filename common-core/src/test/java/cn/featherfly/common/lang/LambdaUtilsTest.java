@@ -3,12 +3,16 @@ package cn.featherfly.common.lang;
 
 import static org.testng.Assert.assertEquals;
 
+import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Method;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.testng.annotations.Test;
 
+import cn.featherfly.common.exception.ReflectException;
 import cn.featherfly.common.lang.LambdaUtils.SerializableSupplierLambdaInfo;
 import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
 import cn.featherfly.common.lang.function.GetFunction;
@@ -176,18 +180,46 @@ public class LambdaUtilsTest {
     }
 
     public static void main(String[] args) {
-        SerializedLambda s;
-        s = get(User::isLocked);
-        p(s);
+        //        SerializedLambda s;
+        //        s = get(User::isLocked);
+        //        p(s);
+        //
+        //        s = get(User2::isLocked);
+        //        p(s);
 
-        s = get(User2::isLocked);
-        p(s);
+        User user = new User();
 
-        //        User user = null;
+        Supplier<String> supplier = user::getName;
+        Function<User, String> function = User::getName;
+        System.out.println(supplier.getClass().isAssignableFrom(Supplier.class));
+        System.out.println(function.getClass().isAssignableFrom(Function.class));
+        System.out.println(Supplier.class.isAssignableFrom(supplier.getClass()));
+        System.out.println(Serializable.class.isAssignableFrom(supplier.getClass()));
+        System.out.println(Supplier.class.isAssignableFrom(function.getClass()));
+        System.out.println(Function.class.isAssignableFrom(function.getClass()));
+        System.out.println(Serializable.class.isAssignableFrom(function.getClass()));
+        System.out.println(Function.class.isAssignableFrom(supplier.getClass()));
+
+        LambdaUtils.getSerializedLambda((Serializable) function);
         //        t(user::setLocked);
         //        t(System.out::println);
         //        Arrays.stream(new String[0]).forEach(System.out::println);
         //        eq(User::isLocked, User::isLocked);
+    }
+
+    private static SerializedLambda computeSerializedLambda(Serializable lambda) {
+        try {
+            Class<?> cl = lambda.getClass();
+            Method m = cl.getDeclaredMethod("writeReplace");
+            m.setAccessible(true);
+            Object replacement = m.invoke(lambda);
+            if (!(replacement instanceof SerializedLambda)) {
+                return null; // custom interface implementation
+            }
+            return (SerializedLambda) replacement;
+        } catch (Exception e) {
+            throw new ReflectException("get SerializedLambda fail", e);
+        }
     }
 
     void assertUser(User user) {

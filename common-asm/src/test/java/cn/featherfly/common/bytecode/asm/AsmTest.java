@@ -28,6 +28,10 @@ public class AsmTest {
 
     }
 
+    public static void set(String name, Double d, Integer age, Long l) {
+
+    }
+
     private static void paramName(Method method) {
         for (Parameter param : method.getParameters()) {
             System.out.println(param.getName());
@@ -35,17 +39,17 @@ public class AsmTest {
     }
 
     public static void main(String[] args) throws Exception {
-        Method method = AsmTest.class.getMethod("set", String.class);
+        Method method = AsmUtilsTest.class.getMethod("set", String.class);
         paramName(method);
         List<String> param = AsmMethods.getParamNamesByAsm(method);
         System.out.println(param);
 
-        method = AsmTest.class.getMethod("set", String.class, Integer.class);
+        method = AsmUtilsTest.class.getMethod("set", String.class, Integer.class);
         paramName(method);
         param = AsmMethods.getParamNamesByAsm(method);
         System.out.println(param);
 
-        method = AsmTest.class.getMethod("set", String.class, Double.class, Integer.class);
+        method = AsmUtilsTest.class.getMethod("set", String.class, Double.class, Integer.class);
         paramName(method);
         param = AsmMethods.getParamNamesByAsm(method);
         System.out.println(param);

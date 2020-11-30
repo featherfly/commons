@@ -23,6 +23,7 @@ import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.ParameterNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
@@ -298,22 +299,32 @@ public class Asm {
      * @return 结果列表
      */
     private static String[] getParamNames(final MethodNode asmMethod, final boolean isStatic) {
-        List<LocalVariableNode> localVariableNodes = asmMethod.localVariables;
-
         // TreeMap能够把它保存的记录根据key排序,默认是按升序排序
-        Map<Integer, String> names = new TreeMap<>();
-
-        for (LocalVariableNode variableNode : localVariableNodes) {
-            // index-记录了正确的方法本地变量索引。
-            // (方法本地变量顺序可能会被打乱。而index记录了原始的顺序)
-            int index = variableNode.index;
-            String name = variableNode.name;
-            // 非静态方法,第一个参数是this
-            if (!isThisVarName(isStatic, variableNode)) {
-                names.put(index, name);
+        if (asmMethod.parameters != null) {
+            String[] names = new String[asmMethod.parameters.size()];
+            int index = 0;
+            for (ParameterNode parameterNode : asmMethod.parameters) {
+                names[index] = parameterNode.name;
+                index++;
             }
+            return names;
+        } else if (asmMethod.localVariables != null) {
+            Map<Integer, String> names = new TreeMap<>();
+            for (LocalVariableNode variableNode : asmMethod.localVariables) {
+                // index-记录了正确的方法本地变量索引。
+                // (方法本地变量顺序可能会被打乱。而index记录了原始的顺序)
+                int index = variableNode.index;
+                String name = variableNode.name;
+                // 非静态方法,第一个参数是this
+                if (!isThisVarName(isStatic, variableNode)) {
+                    names.put(index, name);
+                }
+            }
+            return names.values().toArray(new String[names.size()]);
+        } else {
+            // 如果是interface，没有开启-parameter编译，则asmMethod.localVariables为空，就拿不到方法参数名
+            return null;
         }
-        return names.values().toArray(new String[names.size()]);
     }
 
     /**

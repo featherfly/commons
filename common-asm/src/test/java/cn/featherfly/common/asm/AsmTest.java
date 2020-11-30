@@ -6,8 +6,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
 
-import cn.featherfly.common.asm.Asm;
-
 /**
  * <p>
  * AsmTest
@@ -80,5 +78,22 @@ public class AsmTest {
             System.out.println("constructor param names: " + Arrays.toString(param));
             System.out.println();
         }
+        System.out.println("**********************************************************");
+        for (Method method : Test2.class.getDeclaredMethods()) {
+            paramName(method);
+            String[] param = Asm.getParamNames(method);
+            System.out.println(method.getName() + " param names: " + Arrays.toString(param));
+        }
     }
+}
+
+interface Test2 {
+
+    void set(String name);
+
+    void set(String name, Integer age);
+
+    void set(String name, Double d, Integer age);
+
+    void set(String name, Double d, Integer age, Long l);
 }

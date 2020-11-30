@@ -17,7 +17,7 @@ public abstract class AbstractGenericJavaSqlTypeMapper<E extends Object> extends
      */
     public AbstractGenericJavaSqlTypeMapper() {
         super();
-        Class<E> javaType = ClassUtils.getSuperClassGenricType(this.getClass());
+        Class<E> javaType = ClassUtils.getSuperClassGenericType(this.getClass());
         setGenericType(new GenericClass<>(javaType));
     }
 }

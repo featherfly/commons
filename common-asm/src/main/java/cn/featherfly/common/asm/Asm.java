@@ -322,7 +322,7 @@ public class Asm {
             }
             return names.values().toArray(new String[names.size()]);
         } else {
-            // 如果是interface，没有开启-parameter编译，则asmMethod.localVariables为空，就拿不到方法参数名
+            // 如果是interface或抽象类，没有开启-parameter编译，则asmMethod.localVariables为空，就拿不到方法参数名
             return null;
         }
     }

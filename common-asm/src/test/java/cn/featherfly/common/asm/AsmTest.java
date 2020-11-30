@@ -84,6 +84,12 @@ public class AsmTest {
             String[] param = Asm.getParamNames(method);
             System.out.println(method.getName() + " param names: " + Arrays.toString(param));
         }
+        System.out.println("==================================");
+        for (Method method : Test3.class.getDeclaredMethods()) {
+            paramName(method);
+            String[] param = Asm.getParamNames(method);
+            System.out.println(method.getName() + " param names: " + Arrays.toString(param));
+        }
     }
 }
 
@@ -96,4 +102,15 @@ interface Test2 {
     void set(String name, Double d, Integer age);
 
     void set(String name, Double d, Integer age, Long l);
+}
+
+abstract class Test3 {
+
+    public abstract void set(String name);
+
+    public abstract void set(String name, Integer age);
+
+    public abstract void set(String name, Double d, Integer age);
+
+    public abstract void set(String name, Double d, Integer age, Long l);
 }

@@ -3,6 +3,7 @@ package cn.featherfly.common.asm;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -25,7 +26,9 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
+import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.ArrayUtils;
+import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
@@ -50,6 +53,8 @@ public class Asm {
 
     /** The Constant OPCODE_MAP. */
     public static final Map<Integer, String> OPCODE_MAP = new HashMap<>();
+
+    private static final Map<Executable, String[]> METHOD_PARAMS = new HashMap<>();
 
     static {
         boolean start = false;
@@ -172,12 +177,37 @@ public class Asm {
     }
 
     /**
+     * Gets the constructor or method param names.
+     *
+     * @param executable constructor or method
+     * @return the param names
+     */
+    public static String[] getParamNames(final Executable executable) {
+        AssertIllegalArgument.isNotNull(executable, "executable");
+        String[] names = METHOD_PARAMS.get(executable);
+        if (names == null) {
+            names = new String[executable.getParameterCount()];
+            if (executable instanceof Constructor) {
+                names = _getConstructorParamNames((Constructor<?>) executable);
+            } else if (executable instanceof Method) {
+                names = _getMethodParamNames((Method) executable);
+            } else {
+                // 截止jdk15应该不会走到这里
+                throw new UnsupportedException("not suppport for " + executable.getClass().getName());
+            }
+            METHOD_PARAMS.put(executable, names);
+        }
+        return names;
+
+    }
+
+    /**
      * Gets the method param names.
      *
      * @param method the method
      * @return the method param names
      */
-    public static String[] getParamNames(final Method method) {
+    private static String[] _getMethodParamNames(final Method method) {
         if (method == null) {
             return ArrayUtils.EMPTY_STRING_ARRAY;
         }
@@ -209,7 +239,7 @@ public class Asm {
      * @param constructor the constructor
      * @return the constructor param names
      */
-    public static String[] getParamNames(final Constructor<?> constructor) {
+    private static String[] _getConstructorParamNames(final Constructor<?> constructor) {
         if (constructor == null) {
             return ArrayUtils.EMPTY_STRING_ARRAY;
         }

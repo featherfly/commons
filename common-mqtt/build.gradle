@@ -1,0 +1,13 @@
+sourceSets {
+    main {
+        java {
+            //srcDirs = ["src-http", "src/main/java"]
+        }
+    }
+}
+  
+dependencies {
+	//implementation project(":common-core")
+	
+	implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
+}

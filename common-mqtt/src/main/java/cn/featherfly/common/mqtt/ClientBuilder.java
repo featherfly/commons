@@ -26,6 +26,8 @@ public class ClientBuilder {
     private MqttClientPersistence persistence;
     private Charset charset;
 
+    private boolean reconnectInNewThread = true;
+
     public ClientBuilder() {
     }
 
@@ -76,6 +78,16 @@ public class ClientBuilder {
         return this;
     }
 
+    public ClientBuilder charset(Charset charset) {
+        this.charset = charset;
+        return this;
+    }
+
+    public ClientBuilder reconnectInNewThread(boolean reconnectInNewThread) {
+        this.reconnectInNewThread = reconnectInNewThread;
+        return this;
+    }
+
     public EasyClient build() {
         EasyClient client = new EasyClient();
         init(client);
@@ -104,7 +116,7 @@ public class ClientBuilder {
             options = new MqttConnectOptions();
         }
         client.options = options;
-
+        client.reconnectInNewThread = reconnectInNewThread;
         if (charset != null) {
             client.charset = charset;
         }

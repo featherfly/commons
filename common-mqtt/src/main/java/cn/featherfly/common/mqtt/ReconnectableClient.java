@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
  * ReconnectableClient.
  *
  * @author zhongj
- * @param <C> the generic type
+ * @param <C> the generic ReconnectableClient type
  */
 public abstract class ReconnectableClient<C extends ReconnectableClient<C>> {
 
@@ -86,6 +86,8 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> {
     /** The charset. */
     Charset charset = StandardCharsets.UTF_8;
 
+    boolean reconnectInNewThread = true;
+
     /** The callback. */
     MqttCallback callback;
 
@@ -138,9 +140,13 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> {
             } catch (Exception e) {
                 // 开启线程自动重新连接
                 connected = false;
-                new Thread(() -> {
+                if (reconnectInNewThread) {
+                    new Thread(() -> {
+                        autoReconnect(1000);
+                    }).start();
+                } else {
                     autoReconnect(1000);
-                }).run();
+                }
             }
         }
         return (C) this;

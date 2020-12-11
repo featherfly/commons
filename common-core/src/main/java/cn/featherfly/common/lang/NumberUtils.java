@@ -326,7 +326,7 @@ public final class NumberUtils {
      * @param bytes bytes
      * @return int
      */
-    public static int toInt(byte[] bytes) {
+    public static int toInt(byte... bytes) {
         int iOutcome = 0;
         byte bLoop;
 
@@ -363,7 +363,7 @@ public final class NumberUtils {
      * @param bytes bytes
      * @return short
      */
-    public static short toShort(byte[] bytes) {
+    public static short toShort(byte... bytes) {
         short iOutcome = 0;
         byte bLoop;
 

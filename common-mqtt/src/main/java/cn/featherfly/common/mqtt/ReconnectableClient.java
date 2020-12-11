@@ -135,11 +135,13 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> {
                 client.setCallback(callback);
             }
             try {
+                logger.debug("client {}, address {}, options {}", clientId, address, options);
                 client.connect(options);
                 connected = true;
             } catch (Exception e) {
                 // 开启线程自动重新连接
                 connected = false;
+                logger.error(e.getMessage());
                 if (reconnectInNewThread) {
                     new Thread(() -> {
                         autoReconnect(1000);
@@ -159,12 +161,14 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> {
      */
     protected void autoReconnect(int delayTimes) {
         try {
+            logger.debug("client {}, address {}, options {}", clientId, address, options);
             client.connect(options);
             connected = true;
         } catch (Exception e) {
             logger.error(e.getMessage());
             connected = false;
             try {
+                logger.info("autoReconnect delay {}", delayTimes);
                 Thread.sleep(delayTimes);
                 if (delayTimes < 8000) {
                     autoReconnect(delayTimes * 2);
@@ -172,6 +176,7 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> {
                     autoReconnect(delayTimes);
                 }
             } catch (InterruptedException interruptedException) {
+                logger.error(interruptedException.getMessage());
             }
         }
     }
@@ -183,10 +188,12 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> {
      */
     public boolean disconnect() {
         try {
+            logger.debug("client {} disconnect", clientId);
             connected = false;
             client.disconnect();
             return true;
         } catch (MqttException e) {
+            logger.error(e.getMessage());
             return false;
         }
     }

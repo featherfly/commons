@@ -55,6 +55,12 @@ public class StringsTest {
         actual = Strings.format("hello $0$ at $1$ from [$2$] at $3$", args, '$', '$');
         assertEquals(actual, expected);
 
+        actual = Strings.format("hello {name} at {year} from [{name2}] at {time}", map);
+        assertEquals(actual, expected);
+
+        actual = Strings.format("hello {0} at {1} from [{2}] at {3}", name, year, name2, time);
+        assertEquals(actual, expected);
+
         // ------------------
 
         String str = "hello {yufei} {} at {2020}";

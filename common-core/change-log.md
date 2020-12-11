@@ -1,3 +1,7 @@
+# 1.8.17
+    1.Strings.format(String, Object[])修改为(String str, Object... args)
+    2.
+
 # 1.8.16 2020-11-24
     1.ClassUtils的方法getFieldType,getMethodReturnType,getMethodParameterType如果为泛型支持获取已经在父类中具现化的类型
     2.ClassUtils的方法getFieldGenericParameterType,getMethodReturnTypeGenericParameterType,getMethodGenericParameterType支持获取泛型类型已经在父类中具现化的类型

@@ -279,7 +279,6 @@ public class ClassUtilsTest {
         Method number = ClassUtils.getMethod(genericType, "number", Number.class);
         System.out.println(number);
         assertEquals(ClassUtils.getMethodParameterType(genericType, number), Number.class);
-
     }
 
     @SuppressWarnings("unchecked")

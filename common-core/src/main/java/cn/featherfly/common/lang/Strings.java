@@ -413,7 +413,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * @param args format args
      * @return formated str
      */
-    public static String format(String str, Object[] args) {
+    public static String format(String str, Object... args) {
         return FORMATTER.format(str, args);
     }
 

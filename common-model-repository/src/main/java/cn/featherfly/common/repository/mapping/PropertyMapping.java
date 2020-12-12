@@ -9,10 +9,11 @@ import java.util.Map;
  * <p>
  * 属性与列的映射对象
  * </p>
+ * .
  *
  * @author zhongj
- * @since 0.1.0
  * @version 0.1.0
+ * @since 0.1.0
  */
 /**
  * <p>
@@ -24,6 +25,7 @@ import java.util.Map;
 public class PropertyMapping {
 
     /**
+     * Instantiates a new property mapping.
      */
     public PropertyMapping() {
 
@@ -65,7 +67,7 @@ public class PropertyMapping {
     private int index = 0;
 
     /**
-     * 返回index
+     * 返回index.
      *
      * @return index
      */
@@ -74,7 +76,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 设置index
+     * 设置index.
      *
      * @param index index
      */
@@ -83,7 +85,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 返回unique
+     * 返回unique.
      *
      * @return unique
      */
@@ -92,7 +94,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 设置unique
+     * 设置unique.
      *
      * @param unique unique
      */
@@ -101,7 +103,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 返回size
+     * 返回size.
      *
      * @return size
      */
@@ -110,7 +112,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 设置size
+     * 设置size.
      *
      * @param size size
      */
@@ -119,7 +121,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 返回remark
+     * 返回remark.
      *
      * @return remark
      */
@@ -128,7 +130,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 设置remark
+     * 设置remark.
      *
      * @param remark remark
      */
@@ -137,7 +139,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 返回nullable
+     * 返回nullable.
      *
      * @return nullable
      */
@@ -146,7 +148,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 设置nullable
+     * 设置nullable.
      *
      * @param nullable nullable
      */
@@ -155,7 +157,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 返回insertable
+     * 返回insertable.
      *
      * @return insertable
      */
@@ -164,7 +166,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 设置insertable
+     * 设置insertable.
      *
      * @param insertable insertable
      */
@@ -173,7 +175,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 返回updatable
+     * 返回updatable.
      *
      * @return updatable
      */
@@ -182,7 +184,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 设置updatable
+     * 设置updatable.
      *
      * @param updatable updatable
      */
@@ -191,7 +193,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 返回decimalDigits
+     * 返回decimalDigits.
      *
      * @return decimalDigits
      */
@@ -200,7 +202,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 设置decimalDigits
+     * 设置decimalDigits.
      *
      * @param decimalDigits decimalDigits
      */
@@ -209,7 +211,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 返回autoincrement
+     * 返回autoincrement.
      *
      * @return autoincrement
      */
@@ -218,7 +220,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 设置autoincrement
+     * 设置autoincrement.
      *
      * @param autoincrement autoincrement
      */
@@ -227,6 +229,8 @@ public class PropertyMapping {
     }
 
     /**
+     * Gets the property type.
+     *
      * @return 返回propertyType
      */
     public Class<?> getPropertyType() {
@@ -234,6 +238,8 @@ public class PropertyMapping {
     }
 
     /**
+     * Sets the property type.
+     *
      * @param propertyType 设置propertyType
      */
     public void setPropertyType(Class<?> propertyType) {
@@ -241,6 +247,8 @@ public class PropertyMapping {
     }
 
     /**
+     * Checks if is primary key.
+     *
      * @return 返回primaryKey
      */
     public boolean isPrimaryKey() {
@@ -248,6 +256,8 @@ public class PropertyMapping {
     }
 
     /**
+     * Sets the primary key.
+     *
      * @param primaryKey 设置primaryKey
      */
     public void setPrimaryKey(boolean primaryKey) {
@@ -255,6 +265,8 @@ public class PropertyMapping {
     }
 
     /**
+     * Gets the property name.
+     *
      * @return 返回propertyName
      */
     public String getPropertyName() {
@@ -262,6 +274,21 @@ public class PropertyMapping {
     }
 
     /**
+     * Gets the property full name.
+     *
+     * @return the property full name
+     */
+    public String getPropertyFullName() {
+        if (parent != null) {
+            return parent.getPropertyFullName() + "." + getPropertyName();
+        } else {
+            return getPropertyName();
+        }
+    }
+
+    /**
+     * Sets the property name.
+     *
      * @param propertyName 设置propertyName
      */
     public void setPropertyName(String propertyName) {
@@ -269,6 +296,8 @@ public class PropertyMapping {
     }
 
     /**
+     * Gets the repository field name.
+     *
      * @return 返回repositoryFiledName
      */
     public String getRepositoryFieldName() {
@@ -276,6 +305,8 @@ public class PropertyMapping {
     }
 
     /**
+     * Sets the repository field name.
+     *
      * @param repositoryFieldName 设置repositoryFieldName
      */
     public void setRepositoryFieldName(String repositoryFieldName) {
@@ -283,7 +314,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 返回defaultValue
+     * 返回defaultValue.
      *
      * @return defaultValue
      */
@@ -292,7 +323,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 设置defaultValue
+     * 设置defaultValue.
      *
      * @param defaultValue defaultValue
      */
@@ -301,7 +332,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 返回parent
+     * 返回parent.
      *
      * @return parent
      */
@@ -310,7 +341,7 @@ public class PropertyMapping {
     }
 
     /**
-     * 返回PropertyMappings
+     * 返回PropertyMappings.
      *
      * @return PropertyMappings
      */
@@ -348,7 +379,7 @@ public class PropertyMapping {
     }
 
     /**
-     * add nested property mapping
+     * add nested property mapping.
      *
      * @param propertyMapping propertyMapping
      * @return this

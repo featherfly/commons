@@ -1,3 +1,6 @@
+# 0.1.9 2020-12-12
+    1.加入PropertyMapping.getPropertyFullName方法，返回带全路径的属性名(user.id)
+    
 # 0.1.8 2020-11-24
     1.ClassMapping.getPrivaryKeyPropertyMappings支持嵌套对象
     

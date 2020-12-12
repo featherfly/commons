@@ -1,6 +1,7 @@
-# 1.8.17
+# 1.8.17 2020-12-12
     1.Strings.format(String, Object[])修改为(String str, Object... args)
-    2.
+    2.修正LambdaUtils.getSerializableSupplierLambdaInfo在linux出错的问题
+    3.ILocalizedAssert数字大小判断改为泛型N extends Number,同时加入NumberSupplier<N> value参数的方法
 
 # 1.8.16 2020-11-24
     1.ClassUtils的方法getFieldType,getMethodReturnType,getMethodParameterType如果为泛型支持获取已经在父类中具现化的类型

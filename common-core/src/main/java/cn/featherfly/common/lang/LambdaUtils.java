@@ -6,15 +6,22 @@ import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.exception.ReflectException;
+import cn.featherfly.common.exception.UnsupportedException;
+import cn.featherfly.common.lang.function.SerializableConsumer;
 import cn.featherfly.common.lang.function.SerializableSupplier;
 
 /**
  * <p>
  * LambdaUtils
  * </p>
+ * .
  *
  * @author zhongj
  */
@@ -25,6 +32,9 @@ public class LambdaUtils {
     // private static final Map<SerializedLambda, String> CACHE_FIELD_NAME = new
     // ConcurrentHashMap<>(8);
 
+    /**
+     * The Class SerializedLambdaInfo.
+     */
     public static class SerializedLambdaInfo {
 
         private String methodName;
@@ -40,7 +50,7 @@ public class LambdaUtils {
         private SerializedLambda serializedLambda;
 
         /**
-         * 返回propertyName
+         * 返回propertyName.
          *
          * @return propertyName
          */
@@ -49,7 +59,7 @@ public class LambdaUtils {
         }
 
         /**
-         * 返回methodName
+         * 返回methodName.
          *
          * @return methodName
          */
@@ -58,7 +68,7 @@ public class LambdaUtils {
         }
 
         /**
-         * 返回methodDeclaredClassName
+         * 返回methodDeclaredClassName.
          *
          * @return methodDeclaredClassName
          */
@@ -67,7 +77,7 @@ public class LambdaUtils {
         }
 
         /**
-         * 返回methodInstanceClassName
+         * 返回methodInstanceClassName.
          *
          * @return methodInstanceClassName
          */
@@ -76,7 +86,7 @@ public class LambdaUtils {
         }
 
         /**
-         * 返回serializedLambda
+         * 返回serializedLambda.
          *
          * @return serializedLambda
          */
@@ -85,7 +95,7 @@ public class LambdaUtils {
         }
 
         /**
-         * 返回method
+         * 返回method.
          *
          * @return method
          */
@@ -106,32 +116,29 @@ public class LambdaUtils {
 
     }
 
-    public static class SerializableSupplierLambdaInfo<T> {
-
-        private T value;
+    /**
+     * The Class InstanceLambdaInfo.
+     */
+    public static abstract class InstanceLambdaInfo {
 
         private SerializedLambdaInfo serializedLambdaInfo;
 
-        /**
-         * @param serializedLambdaInfo serializedLambdaInfo
-         * @param value                value
-         */
-        private SerializableSupplierLambdaInfo(SerializedLambdaInfo serializedLambdaInfo, T value) {
-            this.serializedLambdaInfo = serializedLambdaInfo;
-            this.value = value;
-        }
+        private Object instance;
 
         /**
-         * 返回value
+         * Instantiates a new instance lambda info.
          *
-         * @return value
+         * @param serializedLambdaInfo the serialized lambda info
+         * @param instance             the instance
          */
-        public T getValue() {
-            return value;
+        public InstanceLambdaInfo(SerializedLambdaInfo serializedLambdaInfo, Object instance) {
+            super();
+            this.serializedLambdaInfo = serializedLambdaInfo;
+            this.instance = instance;
         }
 
         /**
-         * 返回serializedLambdaInfo
+         * 返回serializedLambdaInfo.
          *
          * @return serializedLambdaInfo
          */
@@ -140,15 +147,103 @@ public class LambdaUtils {
         }
 
         /**
+         * 返回instance.
+         *
+         * @return instance
+         */
+        public Object getInstance() {
+            return instance;
+        }
+
+        /**
          * {@inheritDoc}
          */
         @Override
         public String toString() {
-            return "SerializableSupplierLambdaInfo [value=" + value + ", serializedLambdaInfo=" + serializedLambdaInfo
-                    + "]";
+            return this.getClass().getSimpleName() + " [serializedLambdaInfo=" + serializedLambdaInfo + ", instance="
+                    + instance + "]";
+        }
+
+    }
+
+    /**
+     * The Class SerializableConsumerLambdaInfo.
+     *
+     * @param <T> the generic type
+     */
+    public static class SerializableConsumerLambdaInfo<T> extends InstanceLambdaInfo implements Consumer<T> {
+
+        private Consumer<T> consumer;
+
+        private SerializableConsumerLambdaInfo(SerializedLambdaInfo serializedLambdaInfo, Consumer<T> consumer) {
+            super(serializedLambdaInfo, serializedLambdaInfo.getSerializedLambda().getCapturedArg(0));
+            this.consumer = consumer;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void accept(T t) {
+            consumer.accept(t);
         }
     }
 
+    /**
+     * The Class SerializableSupplierLambdaInfo.
+     *
+     * @param <T> the generic type
+     */
+    public static class SerializableSupplierLambdaInfo<T> extends InstanceLambdaInfo implements Supplier<T> {
+
+        private T value;
+
+        private Supplier<T> supplier;
+
+        private boolean init;
+
+        private SerializableSupplierLambdaInfo(SerializedLambdaInfo serializedLambdaInfo, Supplier<T> supplier) {
+            super(serializedLambdaInfo, serializedLambdaInfo.getSerializedLambda().getCapturedArg(0));
+            this.supplier = supplier;
+        }
+
+        /**
+         * 返回value.
+         *
+         * @return value
+         */
+        public T getValue() {
+            if (!init) {
+                value = get();
+                init = true;
+            }
+            return value;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return this.getClass().getSimpleName() + " [value=" + getValue() + ", serializedLambdaInfo="
+                    + getSerializedLambdaInfo() + ", instance=" + getInstance() + "]";
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public T get() {
+            return supplier.get();
+        }
+    }
+
+    /**
+     * Gets the lambda info.
+     *
+     * @param lambda the lambda
+     * @return the lambda info
+     */
     public static SerializedLambdaInfo getLambdaInfo(Serializable lambda) {
         SerializedLambda serializedLambda = getSerializedLambda(lambda);
         SerializedLambdaInfo info = CACHE_LAMBDA_INFO.get(serializedLambda);
@@ -163,29 +258,65 @@ public class LambdaUtils {
                 o -> serializedLambda.getCapturedArgCount() == o.getParameterCount()
                         && o.getName().equals(info2.methodName));
         info2.propertyName = methodToPropertyName(info2.methodName);
-        if (lambda instanceof java.util.function.Function) {
+        if (lambda instanceof Function || lambda instanceof BiConsumer || lambda instanceof BiFunction) {
             info2.methodInstanceClassName = org.apache.commons.lang3.StringUtils
                     .substringBefore(serializedLambda.getInstantiatedMethodType(), ";").substring(2)
                     .replaceAll("/", ".");
+        } else if (lambda instanceof Supplier) {
+            Class<?> obj = serializedLambda.getCapturedArg(0).getClass();
+            info2.methodInstanceClassName = obj.getName();
+        } else if (lambda instanceof Consumer) {
+            info2.methodInstanceClassName = serializedLambda.getCapturedArg(0).getClass().getName();
         } else {
-            info2.methodInstanceClassName = lambda.getClass().getDeclaredMethods()[2].getParameterTypes()[0].getName();
+            throw new UnsupportedException("unsupported for " + lambda.getClass().getName());
         }
         CACHE_LAMBDA_INFO.put(serializedLambda, info2);
         return info2;
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * Gets the serializable supplier lambda info.
+     *
+     * @param <T>    the generic type
+     * @param lambda the lambda
+     * @return the serializable supplier lambda info
+     */
     public static <
             T> SerializableSupplierLambdaInfo<T> getSerializableSupplierLambdaInfo(SerializableSupplier<T> lambda) {
         SerializedLambdaInfo info = getLambdaInfo(lambda);
-        Object value = BeanUtils.getProperty(info.getSerializedLambda().getCapturedArg(0), info.getPropertyName());
-        return new SerializableSupplierLambdaInfo<>(info, (T) value);
+        //        Object value = BeanUtils.getProperty(info.getSerializedLambda().getCapturedArg(0), info.getPropertyName());
+        return new SerializableSupplierLambdaInfo<>(info, lambda);
     }
 
+    /**
+     * Gets the serializable supplier lambda info.
+     *
+     * @param <T>    the generic type
+     * @param lambda the lambda
+     * @return the serializable supplier lambda info
+     */
+    public static <
+            T> SerializableConsumerLambdaInfo<T> getSerializableConsumerLambdaInfo(SerializableConsumer<T> lambda) {
+        SerializedLambdaInfo info = getLambdaInfo(lambda);
+        return new SerializableConsumerLambdaInfo<>(info, lambda);
+    }
+
+    /**
+     * Gets the serialized lambda.
+     *
+     * @param lambda the lambda
+     * @return the serialized lambda
+     */
     public static SerializedLambda getSerializedLambda(Serializable lambda) {
         return computeSerializedLambda(lambda);
     }
 
+    /**
+     * Gets the lambda method.
+     *
+     * @param lambda the lambda
+     * @return the lambda method
+     */
     public static Method getLambdaMethod(SerializedLambda lambda) {
         String className = lambda.getImplClass().replaceAll("/", ".");
         String methodName = lambda.getImplMethodName();
@@ -194,22 +325,52 @@ public class LambdaUtils {
         return method;
     }
 
+    /**
+     * Gets the lambda method.
+     *
+     * @param lambda the lambda
+     * @return the lambda method
+     */
     public static Method getLambdaMethod(Serializable lambda) {
         return getLambdaMethod(getSerializedLambda(lambda));
     }
 
+    /**
+     * Gets the lambda method name.
+     *
+     * @param lambda the lambda
+     * @return the lambda method name
+     */
     public static String getLambdaMethodName(Serializable lambda) {
         return getLambdaMethodName(computeSerializedLambda(lambda));
     }
 
+    /**
+     * Gets the lambda method name.
+     *
+     * @param lambda the lambda
+     * @return the lambda method name
+     */
     public static String getLambdaMethodName(SerializedLambda lambda) {
         return lambda.getImplMethodName();
     }
 
+    /**
+     * Gets the lambda property name.
+     *
+     * @param lambda the lambda
+     * @return the lambda property name
+     */
     public static String getLambdaPropertyName(Serializable lambda) {
         return getLambdaPropertyName(computeSerializedLambda(lambda));
     }
 
+    /**
+     * Gets the lambda property name.
+     *
+     * @param lambda the lambda
+     * @return the lambda property name
+     */
     public static String getLambdaPropertyName(SerializedLambda lambda) {
         return methodToPropertyName(getLambdaMethodName(lambda));
     }

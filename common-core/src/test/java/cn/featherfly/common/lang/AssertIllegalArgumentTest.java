@@ -141,6 +141,80 @@ public class AssertIllegalArgumentTest {
         illegalArgumentAssert.isNotBlank(user::getName);
     }
 
+    @Test
+    public void testGt() {
+        User user = new User();
+        user.setAge(18);
+        illegalArgumentAssert.isGt(user::getAge, 17);
+    }
+
+    @Test(expectedExceptions = { IllegalArgumentException.class })
+    public void testGt2() {
+        User user = new User();
+        user.setAge(18);
+        illegalArgumentAssert.isGt(user::getAge, 18);
+    }
+
+    @Test
+    public void testGe() {
+        User user = new User();
+        user.setAge(18);
+        illegalArgumentAssert.isGe(user::getAge, 18);
+    }
+
+    @Test(expectedExceptions = { IllegalArgumentException.class })
+    public void testGe2() {
+        User user = new User();
+        user.setAge(18);
+        illegalArgumentAssert.isGe(user::getAge, 19);
+    }
+
+    @Test
+    public void testLt() {
+        User user = new User();
+        user.setAge(18);
+        illegalArgumentAssert.isLt(user::getAge, 19);
+    }
+
+    @Test(expectedExceptions = { IllegalArgumentException.class })
+    public void testLt2() {
+        User user = new User();
+        user.setAge(18);
+        illegalArgumentAssert.isLt(user::getAge, 18);
+    }
+
+    @Test
+    public void testLe() {
+        User user = new User();
+        user.setAge(18);
+        illegalArgumentAssert.isLe(user::getAge, 18);
+    }
+
+    @Test(expectedExceptions = { IllegalArgumentException.class })
+    public void testLe2() {
+        User user = new User();
+        user.setAge(18);
+        illegalArgumentAssert.isLe(user::getAge, 17);
+    }
+
+    @Test
+    public void testInRange() {
+        User user = new User();
+        user.setAge(18);
+        illegalArgumentAssert.isInRange(user::getAge, 1, 30);
+
+        illegalArgumentAssert.isInRange(user::getAge, 1, 18);
+
+        illegalArgumentAssert.isInRange(user::getAge, 18, 30);
+    }
+
+    @Test(expectedExceptions = { IllegalArgumentException.class })
+    public void testInRange2() {
+        User user = new User();
+        user.setAge(18);
+        illegalArgumentAssert.isInRange(user::getAge, 19, 30);
+    }
+
     //	@Test
     //	public void testIsTree(){
     //		AssertIllegalArgument.isTrue(true, "");

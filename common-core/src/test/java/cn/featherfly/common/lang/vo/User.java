@@ -190,7 +190,7 @@ public class User {
 
     /**
      * 返回optional
-     * 
+     *
      * @return optional
      */
     public Optional<String> getOptional() {
@@ -199,7 +199,7 @@ public class User {
 
     /**
      * 设置optional
-     * 
+     *
      * @param optional optional
      */
     public void setOptional(Optional<String> optional) {
@@ -208,7 +208,7 @@ public class User {
 
     /**
      * 返回obj
-     * 
+     *
      * @return obj
      */
     public Optional<?> getObj() {
@@ -217,7 +217,7 @@ public class User {
 
     /**
      * 设置obj
-     * 
+     *
      * @param obj obj
      */
     public void setObj(Optional<?> obj) {
@@ -226,7 +226,7 @@ public class User {
 
     /**
      * 返回obj1
-     * 
+     *
      * @return obj1
      */
     public Optional<? extends Number> getObj1() {
@@ -235,7 +235,7 @@ public class User {
 
     /**
      * 设置obj1
-     * 
+     *
      * @param obj1 obj1
      */
     public void setObj1(Optional<? extends Number> obj1) {
@@ -244,7 +244,7 @@ public class User {
 
     /**
      * 返回obj2
-     * 
+     *
      * @return obj2
      */
     public Optional<? super User> getObj2() {
@@ -253,7 +253,7 @@ public class User {
 
     /**
      * 设置obj2
-     * 
+     *
      * @param obj2 obj2
      */
     public void setObj2(Optional<? super User> obj2) {
@@ -262,7 +262,7 @@ public class User {
 
     /**
      * 返回obj3
-     * 
+     *
      * @return obj3
      */
     public Optional getObj3() {
@@ -271,7 +271,7 @@ public class User {
 
     /**
      * 设置obj3
-     * 
+     *
      * @param obj3 obj3
      */
     public void setObj3(Optional obj3) {
@@ -280,7 +280,7 @@ public class User {
 
     /**
      * 返回map
-     * 
+     *
      * @return map
      */
     public Map<String, Integer> getMap() {
@@ -289,11 +289,32 @@ public class User {
 
     /**
      * 设置map
-     * 
+     *
      * @param map map
      */
     public void setMap(Map<String, Integer> map) {
         this.map = map;
+    }
+
+    public void set(String name, Integer age) {
+        setName(name);
+        setAge(age);
+    }
+
+    public String get() {
+        return "name = " + name + " age = " + age;
+    }
+
+    public String getDescp(String name) {
+        return "name = " + name + " age = " + age;
+    }
+
+    public void setAgeInt(int age) {
+        this.age = age;
+    }
+
+    public int getAgeInt() {
+        return age;
     }
 
 }

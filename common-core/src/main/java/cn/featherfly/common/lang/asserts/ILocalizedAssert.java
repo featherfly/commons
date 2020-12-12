@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 
+import cn.featherfly.common.lang.function.NumberSupplier;
 import cn.featherfly.common.lang.function.SerializableSupplier;
 
 /**
@@ -188,12 +189,23 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     /**
      * if value is &lt; min or &gt; max, throw exception.
      *
+     * @param <N>       the number type
      * @param value     value
      * @param min       min
      * @param max       max
      * @param arguDescp arguDescp
      */
-    void isInRange(int value, int min, int max, String arguDescp);
+    <N extends Number> void isInRange(N value, N min, N max, String arguDescp);
+
+    /**
+     * if value is &lt; min or &gt; max, throw exception.
+     *
+     * @param <N>   the number type
+     * @param value the value
+     * @param min   the min
+     * @param max   the max
+     */
+    <N extends Number> void isInRange(NumberSupplier<N> value, N min, N max);
 
     /**
      * if value is &lt;= min throw exception.
@@ -202,7 +214,16 @@ public interface ILocalizedAssert<E extends RuntimeException> {
      * @param min       min
      * @param arguDescp arguDescp
      */
-    void isGt(int value, int min, String arguDescp);
+    <N extends Number> void isGt(N value, N min, String arguDescp);
+
+    /**
+     * if value is &lt;= min throw exception.
+     *
+     * @param value     value
+     * @param min       min
+     * @param arguDescp arguDescp
+     */
+    <N extends Number> void isGt(NumberSupplier<N> value, N min);
 
     /**
      * if value is &lt; min throw exception.
@@ -211,7 +232,16 @@ public interface ILocalizedAssert<E extends RuntimeException> {
      * @param min       min
      * @param arguDescp arguDescp
      */
-    void isGe(int value, int min, String arguDescp);
+    <N extends Number> void isGe(N value, N min, String arguDescp);
+
+    /**
+     * if value is &lt; min throw exception.
+     *
+     * @param value     value
+     * @param min       min
+     * @param arguDescp arguDescp
+     */
+    <N extends Number> void isGe(NumberSupplier<N> value, N min);
 
     /**
      * if value is &gt;= max, throw exception.
@@ -220,7 +250,16 @@ public interface ILocalizedAssert<E extends RuntimeException> {
      * @param max       max
      * @param arguDescp arguDescp
      */
-    void isLt(int value, int max, String arguDescp);
+    <N extends Number> void isLt(N value, N max, String arguDescp);
+
+    /**
+     * if value is &gt;= max, throw exception.
+     *
+     * @param value     value
+     * @param max       max
+     * @param arguDescp arguDescp
+     */
+    <N extends Number> void isLt(NumberSupplier<N> value, N max);
 
     /**
      * if value is &gt; max, throw exception.
@@ -229,5 +268,14 @@ public interface ILocalizedAssert<E extends RuntimeException> {
      * @param max       max
      * @param arguDescp arguDescp
      */
-    void isLe(int value, int max, String arguDescp);
+    <N extends Number> void isLe(N value, N max, String arguDescp);
+
+    /**
+     * if value is &gt; max, throw exception.
+     *
+     * @param value     value
+     * @param max       max
+     * @param arguDescp arguDescp
+     */
+    <N extends Number> void isLe(NumberSupplier<N> value, N max);
 }

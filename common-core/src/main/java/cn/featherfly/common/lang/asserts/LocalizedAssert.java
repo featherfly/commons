@@ -4,13 +4,15 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 
-import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.exception.LocalizedExceptionUtils;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.LambdaUtils;
+import cn.featherfly.common.lang.LambdaUtils.SerializableSupplierLambdaInfo;
 import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
 import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.lang.NumberUtils;
 import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.function.NumberSupplier;
 import cn.featherfly.common.lang.function.SerializableSupplier;
 
 /**
@@ -201,8 +203,11 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      * {@inheritDoc}
      */
     @Override
-    public void isInRange(int value, int min, int max, String arguDescp) {
-        if (value < min || value > max) {
+    public <N extends Number> void isInRange(N value, N min, N max, String arguDescp) {
+        isNotNull(min, "min");
+        isNotNull(max, "max");
+        isNotNull(value, "value");
+        if (NumberUtils.compare(value, min) == -1 || NumberUtils.compare(value, max) == 1) {
             throwException("#isInRange", value, min, max, arguDescp);
         }
     }
@@ -211,8 +216,19 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      * {@inheritDoc}
      */
     @Override
-    public void isGt(int value, int min, String arguDescp) {
-        if (value <= min) {
+    public <N extends Number> void isInRange(NumberSupplier<N> value, N min, N max) {
+        SerializableSupplierLambdaInfo<N> info = LambdaUtils.getSerializableSupplierLambdaInfo(value);
+        isInRange(info.getValue(), min, max, createDescp(info.getSerializedLambdaInfo()));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <N extends Number> void isGt(N value, N min, String arguDescp) {
+        isNotNull(min, "min");
+        isNotNull(value, "value");
+        if (NumberUtils.compare(value, min) == -1 || NumberUtils.compare(value, min) == 0) {
             throwException("#isGt", value, min, arguDescp);
         }
     }
@@ -221,8 +237,19 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      * {@inheritDoc}
      */
     @Override
-    public void isGe(int value, int min, String arguDescp) {
-        if (value < min) {
+    public <N extends Number> void isGt(NumberSupplier<N> value, N min) {
+        SerializableSupplierLambdaInfo<N> info = LambdaUtils.getSerializableSupplierLambdaInfo(value);
+        isGt(info.getValue(), min, createDescp(info.getSerializedLambdaInfo()));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <N extends Number> void isGe(N value, N min, String arguDescp) {
+        isNotNull(min, "min");
+        isNotNull(value, "value");
+        if (NumberUtils.compare(value, min) == -1) {
             throwException("#isGe", value, min, arguDescp);
         }
     }
@@ -231,8 +258,19 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      * {@inheritDoc}
      */
     @Override
-    public void isLt(int value, int max, String arguDescp) {
-        if (value >= max) {
+    public <N extends Number> void isGe(NumberSupplier<N> value, N min) {
+        SerializableSupplierLambdaInfo<N> info = LambdaUtils.getSerializableSupplierLambdaInfo(value);
+        isGe(info.getValue(), min, createDescp(info.getSerializedLambdaInfo()));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <N extends Number> void isLt(N value, N max, String arguDescp) {
+        isNotNull(max, "max");
+        isNotNull(value, "value");
+        if (NumberUtils.compare(value, max) == 0 || NumberUtils.compare(value, max) == 1) {
             throwException("#isLt", value, max, arguDescp);
         }
     }
@@ -241,8 +279,19 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      * {@inheritDoc}
      */
     @Override
-    public void isLe(int value, int max, String arguDescp) {
-        if (value > max) {
+    public <N extends Number> void isLt(NumberSupplier<N> value, N max) {
+        SerializableSupplierLambdaInfo<N> info = LambdaUtils.getSerializableSupplierLambdaInfo(value);
+        isLt(info.getValue(), max, createDescp(info.getSerializedLambdaInfo()));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <N extends Number> void isLe(N value, N max, String arguDescp) {
+        isNotNull(max, "max");
+        isNotNull(value, "value");
+        if (NumberUtils.compare(value, max) == 1) {
             throwException("#isLe", value, max, arguDescp);
         }
     }
@@ -251,10 +300,18 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      * {@inheritDoc}
      */
     @Override
+    public <N extends Number> void isLe(NumberSupplier<N> value, N max) {
+        SerializableSupplierLambdaInfo<N> info = LambdaUtils.getSerializableSupplierLambdaInfo(value);
+        isLe(info.getValue(), max, createDescp(info.getSerializedLambdaInfo()));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public <T> void isNotNull(SerializableSupplier<T> propertySupplier) {
-        SerializedLambdaInfo info = LambdaUtils.getLambdaInfo(propertySupplier);
-        Object value = BeanUtils.getProperty(info.getSerializedLambda().getCapturedArg(0), info.getPropertyName());
-        isNotNull(value, createDescp(info));
+        SerializableSupplierLambdaInfo<T> info = LambdaUtils.getSerializableSupplierLambdaInfo(propertySupplier);
+        isNotNull(info.getValue(), createDescp(info.getSerializedLambdaInfo()));
     }
 
     /**
@@ -262,11 +319,10 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      */
     @Override
     public void isNotBlank(SerializableSupplier<String> propertySupplier) {
-        SerializedLambdaInfo info = LambdaUtils.getLambdaInfo(propertySupplier);
-        Object value = BeanUtils.getProperty(info.getSerializedLambda().getCapturedArg(0), info.getPropertyName());
-        String descp = createDescp(info);
-        isNotNull(value, descp);
-        isNotBlank(value.toString(), descp);
+        SerializableSupplierLambdaInfo<String> info = LambdaUtils.getSerializableSupplierLambdaInfo(propertySupplier);
+        String descp = createDescp(info.getSerializedLambdaInfo());
+        isNotNull(info.getValue(), descp);
+        isNotBlank(info.getValue(), descp);
     }
 
     /**
@@ -274,13 +330,13 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      */
     @Override
     public <T> void isNotEmpty(SerializableSupplier<T> propertySupplier) {
-        SerializedLambdaInfo info = LambdaUtils.getLambdaInfo(propertySupplier);
-        Object value = BeanUtils.getProperty(info.getSerializedLambda().getCapturedArg(0), info.getPropertyName());
-        isNotEmpty(value, createDescp(info));
+        SerializableSupplierLambdaInfo<T> info = LambdaUtils.getSerializableSupplierLambdaInfo(propertySupplier);
+        isNotEmpty(info.getValue(), createDescp(info.getSerializedLambdaInfo()));
     }
 
     private String createDescp(SerializedLambdaInfo info) {
         return org.apache.commons.lang3.StringUtils.substringAfterLast(info.getMethodInstanceClassName(), ".") + "."
                 + info.getPropertyName();
     }
+
 }

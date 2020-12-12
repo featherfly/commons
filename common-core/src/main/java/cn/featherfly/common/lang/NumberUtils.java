@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.featherfly.common.constant.Chars;
+import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.number.Radix;
 
 /**
@@ -101,6 +102,44 @@ public final class NumberUtils {
      */
     public static <T extends Number> T convert(Number number, Class<T> targetClass) {
         return value(number, targetClass);
+    }
+
+    /**
+     * Compare.
+     *
+     * @param <T>     the generic type
+     * @param number1 the number 1
+     * @param number2 the number 2
+     * @return the int
+     */
+    public static <T extends Number> int compare(T number1, T number2) {
+        if (number1 == null && number2 == null) {
+            return 0;
+        } else if (number1 == null) {
+            return 1;
+        } else if (number2 == null) {
+            return -1;
+        } else {
+            if (number1 instanceof Byte) {
+                return Byte.compare(number1.byteValue(), number2.byteValue());
+            } else if (number1 instanceof Short) {
+                return Short.compare(number1.shortValue(), number2.shortValue());
+            } else if (number1 instanceof Integer) {
+                return Integer.compare(number1.intValue(), number2.intValue());
+            } else if (number1 instanceof Long) {
+                return Long.compare(number1.longValue(), number2.longValue());
+            } else if (number1 instanceof Float) {
+                return Float.compare(number1.floatValue(), number2.floatValue());
+            } else if (number1 instanceof Double) {
+                return Double.compare(number1.doubleValue(), number2.doubleValue());
+            } else if (number1 instanceof BigInteger) {
+                return ((BigInteger) number1).compareTo((BigInteger) number2);
+            } else if (number1 instanceof BigDecimal) {
+                return ((BigDecimal) number1).compareTo((BigDecimal) number2);
+            } else {
+                throw new UnsupportedException("unsupported for " + number1.getClass().getName());
+            }
+        }
     }
 
     /**

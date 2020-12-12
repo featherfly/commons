@@ -1,22 +1,26 @@
 
 package cn.featherfly.common.lang;
 
+import static org.junit.Assert.assertTrue;
 import static org.testng.Assert.assertEquals;
 
 import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Method;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.testng.annotations.Test;
 
-import cn.featherfly.common.exception.ReflectException;
+import cn.featherfly.common.lang.LambdaUtils.SerializableConsumerLambdaInfo;
 import cn.featherfly.common.lang.LambdaUtils.SerializableSupplierLambdaInfo;
 import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
-import cn.featherfly.common.lang.function.GetFunction;
 import cn.featherfly.common.lang.function.ReturnNumberFunction;
+import cn.featherfly.common.lang.function.SerializableBiConsumer;
+import cn.featherfly.common.lang.function.SerializableBiFunction;
 import cn.featherfly.common.lang.function.SerializableConsumer;
 import cn.featherfly.common.lang.function.SerializableFunction;
 import cn.featherfly.common.lang.function.SerializableSupplier;
@@ -36,30 +40,31 @@ import cn.featherfly.common.lang.vo.User2;
 public class LambdaUtilsTest {
 
     @Test
-    public void test() {
+    public void testPropertyName() {
         String name = propertyName(User::getAge);
         String method = methodName(User::getAge);
 
         assertEquals(name, "age");
         assertEquals(method, "getAge");
-    }
 
-    @Test
-    public void test2() {
-        String name = propertyName(User::getName);
-        String method = methodName(User::getName);
+        name = propertyName(User::getName);
+        method = methodName(User::getName);
 
         assertEquals(name, "name");
         assertEquals(method, "getName");
-    }
 
-    @Test
-    public void test3() {
-        String name = propertyName(User::isLocked);
-        String method = methodName(User::isLocked);
+        name = propertyName(User::isLocked);
+        method = methodName(User::isLocked);
 
         assertEquals(name, "locked");
         assertEquals(method, "isLocked");
+
+    }
+
+    @Test
+    public void testPropertyNumberName() {
+        assertEquals(propertyName(User::getAge), "age");
+        assertEquals(propertyNumberName(User::getAge), "age");
     }
 
     @Test
@@ -80,13 +85,6 @@ public class LambdaUtilsTest {
         assertEquals(false, ClassUtils.invokeMethod(user2, info.getMethod(), new Object[0]));
         user2.setLocked(true);
         assertEquals(true, ClassUtils.invokeMethod(user2, info.getMethod(), new Object[0]));
-    }
-
-    @Test
-    public void test5() {
-        assertEquals(propertyName(User::getAge), "age");
-        assertEquals(propertyNumberName(User::getAge), "age");
-        //        propertyNumberName(User::getName);
     }
 
     @Test
@@ -169,7 +167,7 @@ public class LambdaUtilsTest {
     }
 
     @Test
-    public void test11() {
+    public void testSupplier() {
         User2 user = new User2();
         user.setAge(18);
 
@@ -177,6 +175,113 @@ public class LambdaUtilsTest {
         System.out.println(info.getValue());
 
         assertEquals(info.getValue(), user.getAge());
+
+        assertTrue(user == info.getInstance());
+
+        user.setName(null);
+        SerializableSupplierLambdaInfo<String> info2 = LambdaUtils.getSerializableSupplierLambdaInfo(user::getName);
+        System.out.println(info2.getValue());
+
+        assertTrue(user == info2.getInstance());
+    }
+
+    @Test
+    public void testConsumer() {
+        Integer age = 18;
+        User2 user = new User2();
+        user.setAge(age);
+
+        SerializedLambdaInfo info = info(user::setName);
+
+        System.out.println(info);
+
+        System.out.println(info.getMethodDeclaredClassName());
+        System.out.println(info.getMethodInstanceClassName());
+
+        assertEquals(info.getMethodDeclaredClassName(), user.getClass().getSuperclass().getName());
+        assertEquals(info.getMethodInstanceClassName(), user.getClass().getName());
+
+        SerializableConsumerLambdaInfo<Integer> consumerLambdaInfo = LambdaUtils
+                .getSerializableConsumerLambdaInfo(user::setAge);
+
+        assertTrue(consumerLambdaInfo.getInstance() == user);
+
+        assertEquals(user.getAge(), age);
+        age = 16;
+        consumerLambdaInfo.accept(age);
+        assertEquals(user.getAge(), age);
+
+    }
+
+    @Test
+    public void testBiConsumer() {
+        Integer age = 18;
+        User2 user = new User2();
+        user.setAge(age);
+
+        SerializedLambdaInfo info = info(User::setName);
+
+        System.out.println(info);
+
+        System.out.println(info.getMethodDeclaredClassName());
+        System.out.println(info.getMethodInstanceClassName());
+
+        Method setName = ClassUtils.getMethod(user.getClass(), "setName", String.class);
+
+        assertEquals(info.getMethodDeclaredClassName(), setName.getDeclaringClass().getName());
+        assertEquals(info.getMethodInstanceClassName(), setName.getDeclaringClass().getName());
+    }
+
+    @Test
+    public void testBiFunction() {
+        Integer age = 18;
+        User2 user = new User2();
+        user.setAge(age);
+
+        SerializedLambdaInfo info = info(User::getDescp);
+
+        System.out.println(info);
+
+        System.out.println(info.getMethodDeclaredClassName());
+        System.out.println(info.getMethodInstanceClassName());
+
+        Method getDescp = ClassUtils.getMethod(user.getClass(), "getDescp", String.class);
+
+        assertEquals(info.getMethodDeclaredClassName(), getDescp.getDeclaringClass().getName());
+        assertEquals(info.getMethodInstanceClassName(), getDescp.getDeclaringClass().getName());
+    }
+
+    @Test
+    public void testPrimitive() {
+        Integer age = 18;
+        User2 user = new User2();
+        user.setAge(age);
+
+        SerializedLambdaInfo info = info(User::setAgeInt);
+
+        System.out.println(info);
+
+        System.out.println(info.getMethodDeclaredClassName());
+        System.out.println(info.getMethodInstanceClassName());
+
+        info = info(user::getAgeInt);
+
+        System.out.println(info);
+
+        System.out.println(info.getMethodDeclaredClassName());
+        System.out.println(info.getMethodInstanceClassName());
+
+        SerializableSupplierLambdaInfo<Integer> supplier = LambdaUtils
+                .getSerializableSupplierLambdaInfo(user::getAgeInt);
+
+        System.out.println(supplier.get());
+
+        info = info(user::setAgeInt);
+
+        System.out.println(info);
+
+        System.out.println(info.getMethodDeclaredClassName());
+        System.out.println(info.getMethodInstanceClassName());
     }
 
     public static void main(String[] args) {
@@ -188,9 +293,24 @@ public class LambdaUtilsTest {
         //        p(s);
 
         User user = new User();
-
         Supplier<String> supplier = user::getName;
         Function<User, String> function = User::getName;
+        //        BiConsumer<User, String> set = user::set;
+        Consumer<String> consumer = user::setName;
+        consumer.accept("yufei");
+        System.out.println("user.name " + user.getName());
+        System.out.println("user.name " + function.apply(user));
+        System.out.println("user.name " + supplier.get());
+
+        BiConsumer<User, String> con = User::setName;
+        con.accept(user, "featherfly");
+        System.out.println("user.name " + user.getName());
+        System.out.println("user.name " + function.apply(user));
+        System.out.println("user.name " + supplier.get());
+
+        BiFunction<User, String, String> bifunction = User::getDescp;
+        System.out.println("user.descp " + bifunction.apply(user, "yi"));
+
         System.out.println(supplier.getClass().isAssignableFrom(Supplier.class));
         System.out.println(function.getClass().isAssignableFrom(Function.class));
         System.out.println(Supplier.class.isAssignableFrom(supplier.getClass()));
@@ -205,21 +325,6 @@ public class LambdaUtilsTest {
         //        t(System.out::println);
         //        Arrays.stream(new String[0]).forEach(System.out::println);
         //        eq(User::isLocked, User::isLocked);
-    }
-
-    private static SerializedLambda computeSerializedLambda(Serializable lambda) {
-        try {
-            Class<?> cl = lambda.getClass();
-            Method m = cl.getDeclaredMethod("writeReplace");
-            m.setAccessible(true);
-            Object replacement = m.invoke(lambda);
-            if (!(replacement instanceof SerializedLambda)) {
-                return null; // custom interface implementation
-            }
-            return (SerializedLambda) replacement;
-        } catch (Exception e) {
-            throw new ReflectException("get SerializedLambda fail", e);
-        }
     }
 
     void assertUser(User user) {
@@ -273,6 +378,18 @@ public class LambdaUtilsTest {
         return LambdaUtils.getLambdaInfo(f);
     }
 
+    private <T, U, R> SerializedLambdaInfo info(SerializableBiFunction<T, U, R> f) {
+        return LambdaUtils.getLambdaInfo(f);
+    }
+
+    private <T> SerializedLambdaInfo info(SerializableConsumer<T> f) {
+        return LambdaUtils.getLambdaInfo(f);
+    }
+
+    private <T, U> SerializedLambdaInfo info(SerializableBiConsumer<T, U> f) {
+        return LambdaUtils.getLambdaInfo(f);
+    }
+
     private <T, R> String methodName(SerializableFunction<T, R> f) {
         return LambdaUtils.getLambdaMethodName(f);
     }
@@ -310,14 +427,6 @@ public class LambdaUtilsTest {
     }
 
     <T, N extends Number> void g1(ReturnNumberFunction<T, N> f) {
-
-    }
-
-    <N extends Number> void g2(GetFunction<N> f) {
-
-    }
-
-    <N extends Number> void g3(SerializableFunction<Void, N> f) {
 
     }
 

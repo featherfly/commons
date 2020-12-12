@@ -15,6 +15,7 @@ import cn.featherfly.common.bean.vo.ClassRoom;
 import cn.featherfly.common.bean.vo.Person;
 import cn.featherfly.common.bean.vo.Student;
 import cn.featherfly.common.bean.vo.User;
+import cn.featherfly.common.bean.vo.Zipcode;
 import cn.featherfly.common.lang.vo.GenericTest;
 
 public class BeanDescriptorTest {
@@ -185,6 +186,18 @@ public class BeanDescriptorTest {
 
         System.out.println(bd.getBeanProperty("id"));
 
+    }
+
+    @Test
+    public void testNested() {
+        Address address = new Address();
+        String pn = "zipcode.code";
+        String code = "610000";
+        address.setZipcode(new Zipcode(code));
+        BeanDescriptor<Address> bd = BeanDescriptor.getBeanDescriptor(Address.class);
+        BeanProperty<Object> bp = bd.getBeanProperty(pn);
+        assertEquals(bp.getName(), "code");
+        assertEquals(BeanUtils.getProperty(address, pn), code);
     }
 
 }

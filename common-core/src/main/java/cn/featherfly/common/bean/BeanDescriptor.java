@@ -263,11 +263,23 @@ public class BeanDescriptor<T> {
      */
     @SuppressWarnings("unchecked")
     public <E> BeanProperty<E> getBeanProperty(String name) {
-        BeanProperty<?> property = beanProperties.get(name);
-        if (property == null) {
-            throw new NoSuchPropertyException(type, name);
+        int index = name.indexOf(".");
+        if (index != -1) {
+            String fn = name.substring(0, index);
+            String last = name.substring(index + 1, name.length());
+            BeanProperty<?> property = beanProperties.get(fn);
+            if (property == null) {
+                throw new NoSuchPropertyException(type, name);
+            }
+            BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperties.get(fn).getType());
+            return bd.getBeanProperty(last);
+        } else {
+            BeanProperty<?> property = beanProperties.get(name);
+            if (property == null) {
+                throw new NoSuchPropertyException(type, name);
+            }
+            return (BeanProperty<E>) property;
         }
-        return (BeanProperty<E>) property;
     }
 
     /**

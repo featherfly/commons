@@ -1,3 +1,7 @@
+# 1.8.18 2020-12-12
+    1.BeanDescriptor.getBeanProperty加入内嵌属性支持(user.name)
+    2.修复ArrayUtils.toString参数数组中有null时报错的问题
+     
 # 1.8.17 2020-12-12
     1.Strings.format(String, Object[])修改为(String str, Object... args)
     2.修正LambdaUtils.getSerializableSupplierLambdaInfo在linux出错的问题

@@ -157,7 +157,12 @@ public final class ArrayUtils {
     public static <A> String toString(A[] array, char linkSymbol) {
         StringBuilder sb = new StringBuilder();
         for (A a : array) {
-            sb.append(a).append(linkSymbol);
+            if (a == null) {
+                sb.append("null");
+            } else {
+                sb.append(a);
+            }
+            sb.append(linkSymbol);
         }
         if (sb.length() > 0) {
             sb.deleteCharAt(sb.length() - 1);
@@ -182,7 +187,13 @@ public final class ArrayUtils {
                 sb.append(Chars.BRACK_L);
                 StringBuilder result = new StringBuilder();
                 for (int i = 0; i < Array.getLength(array); i++) {
-                    result.append(Array.get(array, i)).append(Chars.COMMA);
+                    Object a = Array.get(array, i);
+                    if (a == null) {
+                        result.append("null");
+                    } else {
+                        result.append(a);
+                    }
+                    result.append(Chars.COMMA);
                 }
                 if (result.length() > 0) {
                     result.deleteCharAt(result.length() - 1);
@@ -211,7 +222,12 @@ public final class ArrayUtils {
         sb.append(Chars.BRACK_L);
         if (objects != null && objects.length > 0) {
             for (Object object : objects) {
-                sb.append(object.toString()).append(Chars.COMMA);
+                if (object == null) {
+                    sb.append("null");
+                } else {
+                    sb.append(object.toString());
+                }
+                sb.append(Chars.COMMA);
             }
             sb.deleteCharAt(sb.length() - 1);
         }

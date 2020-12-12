@@ -174,7 +174,6 @@ public final class DateUtils {
      * @param strDate 日期的字符串表示
      * @return 转换后的日期
      */
-    @SuppressWarnings("deprecation")
     public static Date parse(String strDate) {
         LOGGER.debug("parse: strDate={}", strDate);
         AssertIllegalArgument.isNotBlank(strDate, "String strDate");

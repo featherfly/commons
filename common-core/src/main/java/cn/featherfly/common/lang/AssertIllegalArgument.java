@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import cn.featherfly.common.lang.asserts.IllegalArgumentAssert;
+import cn.featherfly.common.lang.function.NumberSupplier;
 import cn.featherfly.common.lang.function.SerializableSupplier;
 
 /**
@@ -184,67 +185,138 @@ public final class AssertIllegalArgument {
     /**
      * Checks if is in range.
      *
+     * @param <N>       the number type
      * @param value     the value
      * @param min       the min
      * @param max       the max
      * @param arguDescp the argu descp
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isInRange(int,
-     *      int, int, java.lang.String)
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isInRange(java.lang.Number,
+     *      java.lang.Number, java.lang.Number, java.lang.String)
      */
-    public static void isInRange(int value, int min, int max, String arguDescp) {
+    public static <N extends Number> void isInRange(N value, N min, N max, String arguDescp) {
         ASSERT.isInRange(value, min, max, arguDescp);
+    }
+
+    /**
+     * Checks if is in range.
+     *
+     * @param <N>   the number type
+     * @param value the value
+     * @param min   the min
+     * @param max   the max
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isInRange(cn.featherfly.common.lang.function.NumberSupplier,
+     *      java.lang.Number, java.lang.Number)
+     */
+    public static <N extends Number> void isInRange(NumberSupplier<N> value, N min, N max) {
+        ASSERT.isInRange(value, min, max);
     }
 
     /**
      * Checks if is gt.
      *
+     * @param <N>       the number type
      * @param value     the value
      * @param min       the min
      * @param arguDescp the argu descp
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGt(int, int,
-     *      java.lang.String)
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGt(java.lang.Number,
+     *      java.lang.Number, java.lang.String)
      */
-    public static void isGt(int value, int min, String arguDescp) {
+    public static <N extends Number> void isGt(N value, N min, String arguDescp) {
         ASSERT.isGt(value, min, arguDescp);
+    }
+
+    /**
+     * Checks if is gt.
+     *
+     * @param <N>   the number type
+     * @param value the value
+     * @param min   the min
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGt(cn.featherfly.common.lang.function.NumberSupplier,
+     *      java.lang.Number)
+     */
+    public static <N extends Number> void isGt(NumberSupplier<N> value, N min) {
+        ASSERT.isGt(value, min);
     }
 
     /**
      * Checks if is ge.
      *
+     * @param <N>       the number type
      * @param value     the value
      * @param min       the min
      * @param arguDescp the argu descp
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGe(int, int,
-     *      java.lang.String)
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGe(java.lang.Number,
+     *      java.lang.Number, java.lang.String)
      */
-    public static void isGe(int value, int min, String arguDescp) {
+    public static <N extends Number> void isGe(N value, N min, String arguDescp) {
         ASSERT.isGe(value, min, arguDescp);
+    }
+
+    /**
+     * Checks if is ge.
+     *
+     * @param <N>   the number type
+     * @param value the value
+     * @param min   the min
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGe(cn.featherfly.common.lang.function.NumberSupplier,
+     *      java.lang.Number)
+     */
+    public static <N extends Number> void isGe(NumberSupplier<N> value, N min) {
+        ASSERT.isGe(value, min);
     }
 
     /**
      * Checks if is lt.
      *
+     * @param <N>       the number type
      * @param value     the value
      * @param max       the max
      * @param arguDescp the argu descp
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLt(int, int,
-     *      java.lang.String)
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLt(java.lang.Number,
+     *      java.lang.Number, java.lang.String)
      */
-    public static void isLt(int value, int max, String arguDescp) {
+    public static <N extends Number> void isLt(N value, N max, String arguDescp) {
         ASSERT.isLt(value, max, arguDescp);
+    }
+
+    /**
+     * Checks if is lt.
+     *
+     * @param <N>   the number type
+     * @param value the value
+     * @param max   the max
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLt(cn.featherfly.common.lang.function.NumberSupplier,
+     *      java.lang.Number)
+     */
+    public static <N extends Number> void isLt(NumberSupplier<N> value, N max) {
+        ASSERT.isLt(value, max);
     }
 
     /**
      * Checks if is le.
      *
+     * @param <N>       the number type
      * @param value     the value
      * @param max       the max
      * @param arguDescp the argu descp
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLe(int, int,
-     *      java.lang.String)
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLe(java.lang.Number,
+     *      java.lang.Number, java.lang.String)
      */
-    public static void isLe(int value, int max, String arguDescp) {
+    public static <N extends Number> void isLe(N value, N max, String arguDescp) {
         ASSERT.isLe(value, max, arguDescp);
+    }
+
+    /**
+     * Checks if is le.
+     *
+     * @param <N>   the number type
+     * @param value the value
+     * @param max   the max
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLe(cn.featherfly.common.lang.function.NumberSupplier,
+     *      java.lang.Number)
+     */
+    public <N extends Number> void isLe(NumberSupplier<N> value, N max) {
+        ASSERT.isLe(value, max);
     }
 
     /**

@@ -210,6 +210,7 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     /**
      * if value is &lt;= min throw exception.
      *
+     * @param <N>       the number type
      * @param value     value
      * @param min       min
      * @param arguDescp arguDescp
@@ -219,15 +220,16 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     /**
      * if value is &lt;= min throw exception.
      *
-     * @param value     value
-     * @param min       min
-     * @param arguDescp arguDescp
+     * @param <N>   the number type
+     * @param value value
+     * @param min   min
      */
     <N extends Number> void isGt(NumberSupplier<N> value, N min);
 
     /**
      * if value is &lt; min throw exception.
      *
+     * @param <N>       the number type
      * @param value     value
      * @param min       min
      * @param arguDescp arguDescp
@@ -237,15 +239,16 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     /**
      * if value is &lt; min throw exception.
      *
-     * @param value     value
-     * @param min       min
-     * @param arguDescp arguDescp
+     * @param <N>   the number type
+     * @param value value
+     * @param min   min
      */
     <N extends Number> void isGe(NumberSupplier<N> value, N min);
 
     /**
      * if value is &gt;= max, throw exception.
      *
+     * @param <N>       the number type
      * @param value     value
      * @param max       max
      * @param arguDescp arguDescp
@@ -255,15 +258,16 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     /**
      * if value is &gt;= max, throw exception.
      *
-     * @param value     value
-     * @param max       max
-     * @param arguDescp arguDescp
+     * @param <N>   the number type
+     * @param value value
+     * @param max   max
      */
     <N extends Number> void isLt(NumberSupplier<N> value, N max);
 
     /**
      * if value is &gt; max, throw exception.
      *
+     * @param <N>       the number type
      * @param value     value
      * @param max       max
      * @param arguDescp arguDescp
@@ -273,9 +277,9 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     /**
      * if value is &gt; max, throw exception.
      *
-     * @param value     value
-     * @param max       max
-     * @param arguDescp arguDescp
+     * @param <N>   the number type
+     * @param value value
+     * @param max   max
      */
     <N extends Number> void isLe(NumberSupplier<N> value, N max);
 }

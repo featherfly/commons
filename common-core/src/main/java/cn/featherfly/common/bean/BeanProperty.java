@@ -35,7 +35,7 @@ public class BeanProperty<T> implements GenericType<T> {
     // 属性类型，支持泛型类型自动探测
     private Class<T> type;
 
-    private Class<?>[] genericTypes;
+    //    private Class<?>[] genericTypes;
 
     private Method setter;
 

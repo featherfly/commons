@@ -11,5 +11,7 @@ sourceSets {
 
 dependencies {
     implementation project(":common-core")
-    implementation group: 'org.javassist', name: 'javassist', version: '3.25.0-GA'
+    implementation group: 'org.javassist', name: 'javassist', version: '3.27.0-GA'
+    
+    testImplementation 'commons-beanutils:commons-beanutils:latest.integration'
 }

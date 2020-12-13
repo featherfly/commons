@@ -17,29 +17,9 @@ public class Content implements Serializable {
      */
     private static final long serialVersionUID = -8784165418053178812L;
 
-    private String title;
-
     private String descp;
 
     private String img;
-
-    /**
-     * 返回title
-     *
-     * @return title
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    /**
-     * 设置title
-     *
-     * @param title title
-     */
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     /**
      * 返回descp
@@ -82,7 +62,7 @@ public class Content implements Serializable {
      */
     @Override
     public String toString() {
-        return "Content [title=" + title + ", descp=" + descp + ", img=" + img + "]";
+        return "Content [descp=" + descp + ", img=" + img + "]";
     }
 
     /**
@@ -94,7 +74,6 @@ public class Content implements Serializable {
         int result = 1;
         result = prime * result + (descp == null ? 0 : descp.hashCode());
         result = prime * result + (img == null ? 0 : img.hashCode());
-        result = prime * result + (title == null ? 0 : title.hashCode());
         return result;
     }
 
@@ -127,14 +106,6 @@ public class Content implements Serializable {
         } else if (!img.equals(other.img)) {
             return false;
         }
-        if (title == null) {
-            if (other.title != null) {
-                return false;
-            }
-        } else if (!title.equals(other.title)) {
-            return false;
-        }
         return true;
     }
-
 }

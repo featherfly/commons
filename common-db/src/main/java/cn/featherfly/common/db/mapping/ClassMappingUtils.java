@@ -1,6 +1,7 @@
 
 package cn.featherfly.common.db.mapping;
 
+import java.sql.SQLType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -105,17 +106,26 @@ public class ClassMappingUtils {
     private static ColumnModel createColumn(PropertyMapping propertyMapping,
             SqlTypeMappingManager sqlTypeMappingManager, int index, Dialect dialect) {
         ColumnModel column = new ColumnModel();
-        column.setName(propertyMapping.getRepositoryFieldName());
-        column.setPrimaryKey(propertyMapping.isPrimaryKey());
-        column.setAutoincrement(propertyMapping.isAutoincrement());
-        column.setDecimalDigits(propertyMapping.getDecimalDigits());
-        column.setDefaultValue(propertyMapping.getDefaultValue());
-        column.setNullable(propertyMapping.isNullable());
-        column.setRemark(propertyMapping.getRemark());
-        column.setSize(propertyMapping.getSize());
+        PropertyMapping pm = propertyMapping;
+        if (propertyMapping.getParent() != null
+                && Lang.isNotEmpty(propertyMapping.getParent().getRepositoryFieldName())) {
+            pm = propertyMapping.getParent();
+        }
+        column.setName(pm.getRepositoryFieldName());
+        column.setPrimaryKey(pm.isPrimaryKey());
+        column.setAutoincrement(pm.isAutoincrement());
+        column.setDecimalDigits(pm.getDecimalDigits());
+        column.setDefaultValue(pm.getDefaultValue());
+        column.setNullable(pm.isNullable());
+        column.setRemark(pm.getRemark());
+        column.setSize(pm.getSize());
         column.setColumnIndex(index);
-        column.setSqlType(
-                sqlTypeMappingManager.getSqlType((Class<? extends Object>) propertyMapping.getPropertyType()));
+        // pm.getPropertyType()是对象，所以使用propertyMapping.getPropertyType()
+        SQLType sqlType = sqlTypeMappingManager.getSqlType((Class<? extends Object>) propertyMapping.getPropertyType());
+        if (sqlType == null) {
+            throw new JdbcMappingException("no SqlType found for type " + propertyMapping.getPropertyType());
+        }
+        column.setSqlType(sqlType);
         column.setTypeName(dialect.getColumnTypeName(column.getSqlType()));
         return column;
     }
@@ -315,6 +325,7 @@ public class ClassMappingUtils {
     /**
      * Gets the delete sql and param positions.
      *
+     * @param batchSize    the batch size
      * @param classMapping the class mapping
      * @param dialect      the dialect
      * @return the delete sql and param positions

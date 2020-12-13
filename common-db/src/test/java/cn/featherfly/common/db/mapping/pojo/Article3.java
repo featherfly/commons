@@ -1,6 +1,7 @@
 
 package cn.featherfly.common.db.mapping.pojo;
 
+import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -12,13 +13,14 @@ import javax.persistence.Table;
  * @author zhongj
  */
 @Table(name = "cms_article")
-public class Article2 {
+public class Article3 {
 
     @Id
     private Long id;
 
     private String title;
 
+    @Embedded
     private Content content2;
 
     /**

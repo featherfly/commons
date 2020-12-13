@@ -241,7 +241,6 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
         String insert = "INSERT INTO `db_test`.`cms_article` (`ID`, `title`, `content2`) VALUES (null, ?, ?)";
         Content content = new Content();
-        content.setTitle("c_title");
         content.setDescp("c_descp");
         content.setImg("c_img");
 

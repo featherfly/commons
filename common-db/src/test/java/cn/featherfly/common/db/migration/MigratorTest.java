@@ -10,9 +10,11 @@ import org.testng.annotations.Test;
 import cn.featherfly.common.db.JdbcTestBase;
 import cn.featherfly.common.db.mapping.ObjectToDbMappingFactory;
 import cn.featherfly.common.db.mapping.SqlTypeMappingManager;
+import cn.featherfly.common.db.mapping.pojo.Article3;
 import cn.featherfly.common.db.mapping.pojo.Entity;
 import cn.featherfly.common.db.mapping.pojo.Entity2;
 import cn.featherfly.common.db.mapping.pojo.Entity3;
+import cn.featherfly.common.db.mapping.pojo.UserRole2;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
 import cn.featherfly.common.db.migration.Migrator.ModifyType;
@@ -56,6 +58,21 @@ public class MigratorTest extends JdbcTestBase {
     }
 
     @Test
+    public void testInitSqlUserRole2() {
+        System.out.println(migrator.initSql(classMappingsUserRole()));
+    }
+
+    @Test
+    public void testInitSqlArticle2() {
+        System.out.println(migrator.initSql(classMappingsArticle2()));
+    }
+
+    @Test
+    public void testInitSqlArticle3() {
+        System.out.println(migrator.initSql(classMappingsArticle3()));
+    }
+
+    @Test
     public void testInitCreate() {
         migrator.create(classMappings());
     }
@@ -91,6 +108,24 @@ public class MigratorTest extends JdbcTestBase {
         System.out.println("migrator.updateSql(classMappings(), ModifyType.MODIFY, true, ModifyType.MODIFY, true)");
         System.err.println(migrator.updateSql(mappings, ModifyType.MODIFY, true, ModifyType.MODIFY, true, true));
 
+    }
+
+    private Set<ClassMapping<?>> classMappingsArticle2() {
+        Set<ClassMapping<?>> set = new HashSet<>();
+        set.add(factory.getClassMapping(Article3.class));
+        return set;
+    }
+
+    private Set<ClassMapping<?>> classMappingsArticle3() {
+        Set<ClassMapping<?>> set = new HashSet<>();
+        set.add(factory.getClassMapping(Article3.class));
+        return set;
+    }
+
+    private Set<ClassMapping<?>> classMappingsUserRole() {
+        Set<ClassMapping<?>> set = new HashSet<>();
+        set.add(factory.getClassMapping(UserRole2.class));
+        return set;
     }
 
     private Set<ClassMapping<?>> classMappings() {

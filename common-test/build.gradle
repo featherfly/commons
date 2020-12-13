@@ -35,8 +35,8 @@ dependencies {
     )
     testImplementation group: 'com.google.inject', name: 'guice', version: '4.2.3'
     
-    testImplementation 'cn.featherfly.common:common-core:1.8.12'
-    compile group: 'cn.featherfly.common', name: 'common-bean-javassist', version: '1.4.1'
+    testImplementation 'cn.featherfly.common:common-core:1.8.18'
+    testImplementation group: 'cn.featherfly.common', name: 'common-bean-javassist', version: '1.4.1'
     testImplementation 'commons-beanutils:commons-beanutils:latest.integration'
     testImplementation 'javassist:javassist:3.12.1.GA'
     testImplementation 'com.alibaba:fastjson:1.1.41'

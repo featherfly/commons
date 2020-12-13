@@ -25,7 +25,7 @@ public class BeanUtilsTestPerformence {
     int max = 2000000;
 
     @Test
-    public void test1() throws Exception {
+    public void testWithJavassit() throws Exception {
 
         System.out.println("直接方法调用：");
         start = new Date();

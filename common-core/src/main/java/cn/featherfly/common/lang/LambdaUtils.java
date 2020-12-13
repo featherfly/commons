@@ -12,6 +12,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.apache.commons.lang3.StringUtils;
+
 import cn.featherfly.common.exception.ReflectException;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.function.SerializableConsumer;
@@ -44,6 +46,8 @@ public class LambdaUtils {
         private String methodInstanceClassName;
 
         private String propertyName;
+
+        private Class<?> propertyType;
 
         private Method method;
 
@@ -101,6 +105,15 @@ public class LambdaUtils {
          */
         public Method getMethod() {
             return method;
+        }
+
+        /**
+         * 返回propertyType
+         *
+         * @return propertyType
+         */
+        public Class<?> getPropertyType() {
+            return propertyType;
         }
 
         /**
@@ -254,24 +267,72 @@ public class LambdaUtils {
         info2.serializedLambda = serializedLambda;
         info2.methodDeclaredClassName = serializedLambda.getImplClass().replaceAll("/", ".");
         info2.methodName = serializedLambda.getImplMethodName();
-        info2.method = ClassUtils.findMethod(ClassUtils.forName(info2.methodDeclaredClassName),
-                o -> serializedLambda.getCapturedArgCount() == o.getParameterCount()
-                        && o.getName().equals(info2.methodName));
         info2.propertyName = methodToPropertyName(info2.methodName);
         if (lambda instanceof Function || lambda instanceof BiConsumer || lambda instanceof BiFunction) {
-            info2.methodInstanceClassName = org.apache.commons.lang3.StringUtils
+            Class<?>[] pts = getParamaeterTypes(serializedLambda.getImplMethodSignature());
+            info2.method = ClassUtils.getMethod(ClassUtils.forName(info2.methodDeclaredClassName), info2.methodName,
+                    pts);
+            if (Lang.isEmpty(pts)) {
+                info2.propertyType = info2.method.getReturnType();
+            } else {
+                info2.propertyType = pts[0];
+            }
+            info2.methodInstanceClassName = StringUtils
                     .substringBefore(serializedLambda.getInstantiatedMethodType(), ";").substring(2)
                     .replaceAll("/", ".");
         } else if (lambda instanceof Supplier) {
             Class<?> obj = serializedLambda.getCapturedArg(0).getClass();
             info2.methodInstanceClassName = obj.getName();
+            info2.method = ClassUtils.getMethod(ClassUtils.forName(info2.methodDeclaredClassName), info2.methodName,
+                    ArrayUtils.EMPTY_CLASS_ARRAY);
+            info2.propertyType = info2.method.getReturnType();
         } else if (lambda instanceof Consumer) {
             info2.methodInstanceClassName = serializedLambda.getCapturedArg(0).getClass().getName();
+            Class<?>[] pts = getParamaeterTypes(serializedLambda.getImplMethodSignature());
+            info2.method = ClassUtils.getMethod(ClassUtils.forName(info2.methodDeclaredClassName), info2.methodName,
+                    pts);
+            info2.propertyType = pts[0];
         } else {
             throw new UnsupportedException("unsupported for " + lambda.getClass().getName());
         }
         CACHE_LAMBDA_INFO.put(serializedLambda, info2);
         return info2;
+    }
+
+    //    private static Class<?> getPropertyType(String methodSignature) {
+    //        Class<?> type = getReturnType(methodSignature);
+    //        if (type == Void.TYPE) {
+    //            Class<?>[] types = getParamaeterTypes(methodSignature);
+    //            if (Lang.isNotEmpty(types)) {
+    //                type = types[0];
+    //            }
+    //        }
+    //        return type;
+    //    }
+    //    private static Class<?> getReturnType(String methodSignature) {
+    //        // ()Ljava/lang/Integer;
+    //        String str = StringUtils.substringAfterLast(methodSignature, ")");
+    //        if (str.equals("V")) {
+    //            return Void.TYPE;
+    //        } else {
+    //            str = StringUtils.substringAfter(str, "L");
+    //            return ClassUtils.forName(str.replaceAll("/", "."));
+    //        }
+    //    }
+
+    private static Class<?>[] getParamaeterTypes(String methodSignature) {
+        //        "(Ljava/lang/String;)V"
+        String str = StringUtils.substringAfter(methodSignature, "(L");
+        str = StringUtils.substringBefore(str, ";)");
+        if (Lang.isEmpty(str)) {
+            return ArrayUtils.EMPTY_CLASS_ARRAY;
+        }
+        String[] types = str.split(";L");
+        Class<?>[] classes = new Class<?>[types.length];
+        for (int i = 0; i < types.length; i++) {
+            classes[i] = ClassUtils.forName(types[i].replaceAll("/", "."));
+        }
+        return classes;
     }
 
     /**

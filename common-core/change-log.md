@@ -1,3 +1,7 @@
+# 1.8.19 2020-12-13
+    1.SerializedLambdaInfo加入propertyType属性
+    2.修复SerializedLambdaInfo.method有时候为null的问题
+    
 # 1.8.18 2020-12-12
     1.BeanDescriptor.getBeanProperty加入内嵌属性支持(user.name)
     2.修复ArrayUtils.toString参数数组中有null时报错的问题

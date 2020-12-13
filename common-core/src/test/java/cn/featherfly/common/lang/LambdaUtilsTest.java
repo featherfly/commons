@@ -284,6 +284,35 @@ public class LambdaUtilsTest {
         System.out.println(info.getMethodInstanceClassName());
     }
 
+    @Test
+    public void testInfo() {
+        Integer age = 18;
+        User2 user = new User2();
+        user.setAge(age);
+
+        System.out.println("User::getAge");
+        SerializedLambdaInfo info = info(User::getAge);
+        System.out.println("user::getAge");
+        SerializedLambdaInfo info2 = info(user::getAge);
+        System.out.println("user::setName");
+        SerializedLambdaInfo info3 = info(user::setName);
+        System.out.println("User::setName");
+        SerializedLambdaInfo info4 = info(User::setName);
+        System.out.println("User::getDescp");
+        SerializedLambdaInfo info5 = info(User::getDescp);
+
+        System.out.println(info.getMethod());
+        System.out.println(info.getPropertyType());
+        System.out.println(info2.getMethod());
+        System.out.println(info2.getPropertyType());
+        System.out.println(info3.getMethod());
+        System.out.println(info3.getPropertyType());
+        System.out.println(info4.getMethod());
+        System.out.println(info4.getPropertyType());
+        System.out.println(info5.getMethod());
+        System.out.println(info5.getPropertyType());
+    }
+
     public static void main(String[] args) {
         //        SerializedLambda s;
         //        s = get(User::isLocked);

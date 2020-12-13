@@ -1932,6 +1932,64 @@ public final class ClassUtils {
     }
 
     /**
+     * Gets the primitive wrapped.
+     *
+     * @param type the type
+     * @return the primitive wrapped
+     */
+    public static Class<?> getPrimitiveWrapped(Class<?> type) {
+        if (type.isPrimitive()) {
+            if (type == Boolean.TYPE) {
+                return Boolean.class;
+            } else if (type == Byte.TYPE) {
+                return Byte.class;
+            } else if (type == Integer.TYPE) {
+                return Integer.class;
+            } else if (type == Long.TYPE) {
+                return Long.class;
+            } else if (type == Float.TYPE) {
+                return Float.class;
+            } else if (type == Double.TYPE) {
+                return Double.class;
+            } else if (type == Character.TYPE) {
+                return Character.class;
+            } else if (type == Short.TYPE) {
+                return Short.class;
+            } else if (type == Void.TYPE) {
+                return Void.class;
+            }
+        }
+        return type;
+    }
+
+    /**
+     * Gets the primitive wrapped.
+     *
+     * @param type the type
+     * @return the primitive wrapped
+     */
+    public static String getPrimitiveClassValueMethodName(Class<?> type) {
+        if (type == Boolean.TYPE || type == Boolean.class) {
+            return "booleanValue";
+        } else if (type == Byte.TYPE || type == Byte.class) {
+            return "byteValue";
+        } else if (type == Integer.TYPE || type == Integer.class) {
+            return "intValue";
+        } else if (type == Long.TYPE || type == Long.class) {
+            return "longValue";
+        } else if (type == Float.TYPE || type == Float.class) {
+            return "floatValue";
+        } else if (type == Double.TYPE || type == Double.class) {
+            return "doubleValue";
+        } else if (type == Character.TYPE || type == Character.class) {
+            return "charValue";
+        } else if (type == Short.TYPE || type == Short.class) {
+            return "shortValue";
+        }
+        return null;
+    }
+
+    /**
      * getRawType.
      *
      * @param type type

@@ -48,6 +48,11 @@ dependencies {
     
     api group: 'org.javassist', name: 'javassist', version: '3.25.0-GA'
     
+    testImplementation group: 'cn.featherfly.common', name: 'common-bean-javassist', version: '1.4.1'
+    
+    testImplementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
+    testImplementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
+    
     testImplementation 'javax.annotation:javax.annotation-api:1.3.2'
     testImplementation 'javax.xml.bind:jaxb-api:2.3.1'
     testImplementation 'com.sun.xml.bind:jaxb-core:2.3.0.1'

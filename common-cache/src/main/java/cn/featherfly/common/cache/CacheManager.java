@@ -1,12 +1,15 @@
 
 package cn.featherfly.common.cache;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.Map;
+import java.util.OptionalLong;
 import java.util.Properties;
 
 import javax.cache.Cache;
 import javax.cache.Caching;
+import javax.cache.configuration.CompleteConfiguration;
 import javax.cache.configuration.Configuration;
 import javax.cache.configuration.MutableConfiguration;
 import javax.cache.expiry.Duration;
@@ -36,18 +39,49 @@ public class CacheManager implements javax.cache.CacheManager {
         for (java.util.Map.Entry<String, CacheConfig> entry : cacheConfigs.entrySet()) {
             MutableConfiguration<Object, Object> configuration = new MutableConfiguration<>();
             CacheConfig config = entry.getValue();
-
-            Duration ttl = Duration.ETERNAL;
-            if (config.getTTL() > 0) {
-                ttl = new Duration(config.getTimeUnit(), config.getTTL());
+            if ("com.github.benmanes.caffeine.jcache.CacheManagerImpl".equals(cacheManager.getClass().getName())) {
+                try {
+                    @SuppressWarnings("unchecked")
+                    CompleteConfiguration<Object, Object> cc = (CompleteConfiguration<Object, Object>) Class
+                            .forName("com.github.benmanes.caffeine.jcache.configuration.CaffeineConfiguration")
+                            .getConstructor(CompleteConfiguration.class).newInstance(configuration);
+                    if (config.getTTL() > 0) {
+                        setValue(cc, "setExpireAfterWrite",
+                                OptionalLong.of(config.getTimeUnit().toNanos(config.getTTL())));
+                    }
+                    if (config.getMaxIdleTime() > 0) {
+                        setValue(cc, "setExpireAfterAccess",
+                                OptionalLong.of(config.getTimeUnit().toNanos(config.getMaxIdleTime())));
+                    }
+                    if (config.getMaxSize() > 0) {
+                        setValue(cc, "setMaximumSize", OptionalLong.of(config.getMaxSize()));
+                    }
+                    cacheManager.createCache(entry.getKey(), cc);
+                } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+                        | InvocationTargetException | NoSuchMethodException | SecurityException
+                        | ClassNotFoundException e) {
+                    // TODO 后续加入自定义异常
+                    throw new RuntimeException(e);
+                }
+            } else {
+                Duration ttl = Duration.ETERNAL;
+                if (config.getTTL() > 0) {
+                    ttl = new Duration(config.getTimeUnit(), config.getTTL());
+                }
+                Duration idleTime = null;
+                if (config.getMaxIdleTime() > 0) {
+                    idleTime = new Duration(config.getTimeUnit(), config.getMaxIdleTime());
+                }
+                configuration.setExpiryPolicyFactory(ExpiryPolicyImpl.factoryOf(ttl, idleTime));
+                cacheManager.createCache(entry.getKey(), configuration);
             }
-            Duration idleTime = null;
-            if (config.getMaxIdleTime() > 0) {
-                idleTime = new Duration(config.getTimeUnit(), config.getMaxIdleTime());
-            }
-            configuration.setExpiryPolicyFactory(ExpiryPolicyImpl.factoryOf(ttl, idleTime));
-            cacheManager.createCache(entry.getKey(), configuration);
         }
+    }
+
+    private void setValue(CompleteConfiguration<Object, Object> cc, String setMethodName, Object value)
+            throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
+            SecurityException {
+        cc.getClass().getMethod(setMethodName, OptionalLong.class).invoke(cc, value);
     }
 
     /**
@@ -55,10 +89,15 @@ public class CacheManager implements javax.cache.CacheManager {
      */
     @Override
     public <K, V> Cache<K, V> getCache(String cacheName) {
-        if (cacheManager != null) {
-            return cacheManager.getCache(cacheName);
-        }
-        return null;
+        return cacheManager.getCache(cacheName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <K, V> Cache<K, V> getCache(String cacheName, Class<K> keyType, Class<V> valueType) {
+        return cacheManager.getCache(cacheName, keyType, valueType);
     }
 
     /**
@@ -100,14 +139,6 @@ public class CacheManager implements javax.cache.CacheManager {
     public <K, V, C extends Configuration<K, V>> Cache<K, V> createCache(String cacheName, C configuration)
             throws IllegalArgumentException {
         return cacheManager.createCache(cacheName, configuration);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <K, V> Cache<K, V> getCache(String cacheName, Class<K> keyType, Class<V> valueType) {
-        return cacheManager.getCache(cacheName, keyType, valueType);
     }
 
     /**

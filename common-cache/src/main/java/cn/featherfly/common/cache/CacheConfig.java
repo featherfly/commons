@@ -75,6 +75,48 @@ public class CacheConfig {
     }
 
     /**
+     * Creates config object.
+     *
+     * @param ttl         - time to live for key\value entry in milliseconds. If
+     *                    <code>0</code> then time to live doesn't affect entry
+     *                    expiration.
+     * @param maxIdleTime - max idle time for key\value entry in milliseconds.
+     *                    <p>
+     *                    if <code>maxIdleTime</code> and <code>ttl</code>
+     *                    params are equal to <code>0</code> then entry stores
+     *                    infinitely.
+     * @param maxSize     the max size
+     */
+    public CacheConfig(long ttl, long maxIdleTime, int maxSize) {
+        super();
+        this.ttl = ttl;
+        this.maxIdleTime = maxIdleTime;
+        this.maxSize = maxSize;
+    }
+
+    /**
+     * Creates config object.
+     *
+     * @param ttl         - time to live for key\value entry in milliseconds. If
+     *                    <code>0</code> then time to live doesn't affect entry
+     *                    expiration.
+     * @param maxIdleTime - max idle time for key\value entry in milliseconds.
+     *                    <p>
+     *                    if <code>maxIdleTime</code> and <code>ttl</code>
+     *                    params are equal to <code>0</code> then entry stores
+     *                    infinitely.
+     * @param timeUnit    the time unit
+     * @param maxSize     the max size
+     */
+    public CacheConfig(long ttl, long maxIdleTime, TimeUnit timeUnit, int maxSize) {
+        super();
+        this.ttl = ttl;
+        this.maxIdleTime = maxIdleTime;
+        this.timeUnit = timeUnit;
+        this.maxSize = maxSize;
+    }
+
+    /**
      * Gets the ttl.
      *
      * @return the ttl

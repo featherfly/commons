@@ -70,15 +70,65 @@ public class TestCache {
     @Test
     public void testCacheManager() throws InterruptedException {
         Map<String, CacheConfig> cacheConfigs = new HashMap<>();
-        cacheConfigs.put("cache1", new CacheConfig(2));
+        CacheConfig c = new CacheConfig(0);
+        c.setMaxSize(10);
+        cacheConfigs.put("cache1", c);
+
+        try (cn.featherfly.common.cache.CacheManager cm = new cn.featherfly.common.cache.CacheManager(cacheConfigs)) {
+            testExpire(cm.getCache("cache1"));
+        }
+    }
+
+    @Test
+    public void testCacheManager1() throws InterruptedException {
+        Map<String, CacheConfig> cacheConfigs = new HashMap<>();
+        CacheConfig c = new CacheConfig(2, 1);
+        //        c.setMaxSize(2);
+        cacheConfigs.put("cache1", c);
+
+        try (cn.featherfly.common.cache.CacheManager cm = new cn.featherfly.common.cache.CacheManager(cacheConfigs)) {
+            testExpire(cm.getCache("cache1"));
+        }
+    }
+
+    @Test
+    public void testCacheManager2() throws InterruptedException {
+        Map<String, CacheConfig> cacheConfigs = new HashMap<>();
+        CacheConfig c = new CacheConfig();
+        cacheConfigs.put("cache1", c);
+
+        try (cn.featherfly.common.cache.CacheManager cm = new cn.featherfly.common.cache.CacheManager(cacheConfigs)) {
+            testExpire(cm.getCache("cache1"), 1000, 1000);
+        }
+    }
+
+    @Test
+    public void testCacheManager3() throws InterruptedException {
+        Map<String, CacheConfig> cacheConfigs = new HashMap<>();
+        CacheConfig c = new CacheConfig(2);
+        c.setMaxSize(10);
+        cacheConfigs.put("cache1", c);
         cacheConfigs.put("cache2", new CacheConfig(0, 1));
         cacheConfigs.put("cache3", new CacheConfig(2, 1));
 
-        cn.featherfly.common.cache.CacheManager cacheManager = new cn.featherfly.common.cache.CacheManager(
-                cacheConfigs);
+        try (cn.featherfly.common.cache.CacheManager cm = new cn.featherfly.common.cache.CacheManager(cacheConfigs)) {
+            testExpire(cm.getCache("cache1"), cm.getCache("cache2"), cm.getCache("cache3"));
+        }
+    }
 
-        testExpire(cacheManager.getCache("cache1"), cacheManager.getCache("cache2"), cacheManager.getCache("cache3"));
+    void testExpire(javax.cache.Cache<Object, Object> cache1, int times, int delay) throws InterruptedException {
+        String key = "key";
+        String s1 = "s1";
+        cache1.put(key, s1);
+        System.out.println("cache1.getIfPresent(key) " + cache1.get(key));
+        for (int i = 0; i < times; i++) {
+            Thread.sleep(delay);
+            System.out.println("cache1.getIfPresent(key) " + cache1.get(key));
+        }
+    }
 
+    void testExpire(javax.cache.Cache<Object, Object> cache1) throws InterruptedException {
+        testExpire(cache1, 4, 800);
     }
 
     void testExpire(javax.cache.Cache<Object, Object> cache1, javax.cache.Cache<Object, Object> cache2,

@@ -2,6 +2,8 @@
 package cn.featherfly.common.cache;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.cache.CacheManager;
@@ -9,10 +11,10 @@ import javax.cache.Caching;
 import javax.cache.configuration.MutableConfiguration;
 import javax.cache.spi.CachingProvider;
 
+import org.testng.annotations.Test;
+
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-
-import cn.featherfly.common.cache.caffeine.CaffeineCachingProvider;
 
 /**
  * <p>
@@ -21,9 +23,10 @@ import cn.featherfly.common.cache.caffeine.CaffeineCachingProvider;
  *
  * @author zhongj
  */
-public class Test {
+public class TestCache {
 
-    public static void jsr107() throws InterruptedException {
+    @Test
+    public void jsr107() throws InterruptedException {
         MutableConfiguration<Object, Object> mutableConfiguration = new MutableConfiguration<>();
 
         mutableConfiguration.setExpiryPolicyFactory(ExpiryPolicyImpl.factoryOf(Duration.ofSeconds(2)));
@@ -64,7 +67,21 @@ public class Test {
         //        String jdk7CodeName = cache.get("JDK1.7");
     }
 
-    static void testExpire(javax.cache.Cache<Object, Object> cache1, javax.cache.Cache<Object, Object> cache2,
+    @Test
+    public void testCacheManager() throws InterruptedException {
+        Map<String, CacheConfig> cacheConfigs = new HashMap<>();
+        cacheConfigs.put("cache1", new CacheConfig(2));
+        cacheConfigs.put("cache2", new CacheConfig(0, 1));
+        cacheConfigs.put("cache3", new CacheConfig(2, 1));
+
+        cn.featherfly.common.cache.CacheManager cacheManager = new cn.featherfly.common.cache.CacheManager(
+                cacheConfigs);
+
+        testExpire(cacheManager.getCache("cache1"), cacheManager.getCache("cache2"), cacheManager.getCache("cache3"));
+
+    }
+
+    void testExpire(javax.cache.Cache<Object, Object> cache1, javax.cache.Cache<Object, Object> cache2,
             javax.cache.Cache<Object, Object> cache3) throws InterruptedException {
 
         String key = "key";
@@ -94,12 +111,14 @@ public class Test {
         System.out.println("cache3.getIfPresent(key) " + cache3.get(key));
     }
 
-    static void testExpire() throws InterruptedException {
+    @Test
+    void testExpire() throws InterruptedException {
         Cache<Object, Object> cache = Caffeine.newBuilder().recordStats().expireAfterWrite(2, TimeUnit.SECONDS).build();
         Cache<Object, Object> cache2 = Caffeine.newBuilder().recordStats().expireAfterAccess(1, TimeUnit.SECONDS)
                 .build();
         Cache<Object, Object> cache3 = Caffeine.newBuilder().recordStats().expireAfterAccess(1, TimeUnit.SECONDS)
                 .expireAfterWrite(2, TimeUnit.SECONDS).build();
+        Cache<Object, Object> cache4 = Caffeine.newBuilder().recordStats().build();
 
         String key = "key";
         String s1 = "s1";
@@ -110,25 +129,36 @@ public class Test {
         cache.put(key, s1);
         cache2.put(key, s1);
         cache3.put(key, s1);
+        cache4.put(key, s1);
         System.out.println("cache.getIfPresent(key) " + cache.getIfPresent(key));
         System.out.println("cache2.getIfPresent(key) " + cache2.getIfPresent(key));
         System.out.println("cache3.getIfPresent(key) " + cache3.getIfPresent(key));
+        System.out.println("cache4.getIfPresent(key) " + cache4.getIfPresent(key));
         Thread.sleep(800);
         System.out.println("cache.getIfPresent(key) " + cache.getIfPresent(key));
         System.out.println("cache2.getIfPresent(key) " + cache2.getIfPresent(key));
         System.out.println("cache3.getIfPresent(key) " + cache3.getIfPresent(key));
+        System.out.println("cache4.getIfPresent(key) " + cache4.getIfPresent(key));
         Thread.sleep(800);
         System.out.println("cache.getIfPresent(key) " + cache.getIfPresent(key));
         System.out.println("cache2.getIfPresent(key) " + cache2.getIfPresent(key));
         System.out.println("cache3.getIfPresent(key) " + cache3.getIfPresent(key));
+        System.out.println("cache4.getIfPresent(key) " + cache4.getIfPresent(key));
         Thread.sleep(800);
         System.out.println("cache.getIfPresent(key) " + cache.getIfPresent(key));
         System.out.println("cache2.getIfPresent(key) " + cache2.getIfPresent(key));
         System.out.println("cache3.getIfPresent(key) " + cache3.getIfPresent(key));
+        System.out.println("cache4.getIfPresent(key) " + cache4.getIfPresent(key));
         Thread.sleep(800);
         System.out.println("cache.getIfPresent(key) " + cache.getIfPresent(key));
         System.out.println("cache2.getIfPresent(key) " + cache2.getIfPresent(key));
         System.out.println("cache3.getIfPresent(key) " + cache3.getIfPresent(key));
+        System.out.println("cache4.getIfPresent(key) " + cache4.getIfPresent(key));
+
+        while (cache4.getIfPresent(key) != null) {
+            Thread.sleep(1000);
+            System.out.println("cache4.getIfPresent(key) " + cache4.getIfPresent(key));
+        }
     }
 
     //    static void testNoExpire() throws InterruptedException {
@@ -139,9 +169,4 @@ public class Test {
     //        cache.put(key, s1);
     //        System.out.println("cache.getIfPresent(key) " + cache.getIfPresent(key));
     //    }
-
-    public static void main(String[] args) throws InterruptedException {
-        System.out.println(CaffeineCachingProvider.DEFAULT_URI);
-        jsr107();
-    }
 }

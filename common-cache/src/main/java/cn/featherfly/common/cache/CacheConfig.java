@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class CacheConfig {
 
-    private TimeUnit timeUnit = TimeUnit.MILLISECONDS;
+    private TimeUnit timeUnit = TimeUnit.SECONDS;
 
     private long ttl;
 
@@ -22,6 +22,18 @@ public class CacheConfig {
      * <code>maxIdleTime = 0</code>.
      */
     public CacheConfig() {
+    }
+
+    /**
+     * Creates config object.
+     *
+     * @param ttl - time to live for key\value entry in milliseconds. If
+     *            <code>0</code> then time to live doesn't affect entry
+     *            expiration.
+     */
+    public CacheConfig(long ttl) {
+        super();
+        this.ttl = ttl;
     }
 
     /**
@@ -53,6 +65,7 @@ public class CacheConfig {
      *                    if <code>maxIdleTime</code> and <code>ttl</code>
      *                    params are equal to <code>0</code> then entry stores
      *                    infinitely.
+     * @param timeUnit    the time unit
      */
     public CacheConfig(long ttl, long maxIdleTime, TimeUnit timeUnit) {
         super();
@@ -122,7 +135,7 @@ public class CacheConfig {
     }
 
     /**
-     * 返回timeUnit
+     * Gets the time unit.
      *
      * @return timeUnit
      */
@@ -131,7 +144,7 @@ public class CacheConfig {
     }
 
     /**
-     * 设置timeUnit
+     * Sets the time unit.
      *
      * @param timeUnit timeUnit
      */

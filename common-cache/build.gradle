@@ -10,9 +10,9 @@ dependencies {
     api group: 'javax.cache', name: 'cache-api', version: '1.1.1'
 
     testImplementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.8.8'
-    //testImplementation group: 'com.github.ben-manes.caffeine', name: 'jcache', version: '2.8.8'
+    testImplementation group: 'com.github.ben-manes.caffeine', name: 'jcache', version: '2.8.8'
     
-    testImplementation group: 'org.redisson', name: 'redisson', version: '3.14.0'
+    //testImplementation group: 'org.redisson', name: 'redisson', version: '3.14.0'
     
     //api group: 'org.jsr107.ri', name: 'cache-annotations-ri-cdi', version: '1.1.1'
     

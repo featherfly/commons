@@ -8,15 +8,18 @@ import cn.featherfly.common.lang.GenericType;
  * <p>
  * GenericClass
  * </p>
+ * .
  *
- * @param <T> 类型
  * @author zhongj
+ * @param <T> 类型
  */
 public class GenericClass<T> implements GenericType<T> {
 
     private Class<T> c;
 
     /**
+     * Instantiates a new generic class.
+     *
      * @param c classType
      */
     public GenericClass(Class<T> c) {
@@ -52,5 +55,13 @@ public class GenericClass<T> implements GenericType<T> {
             return false;
         }
         return c.equals(((GenericClass<?>) obj).c);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTypeName() {
+        return c.getName();
     }
 }

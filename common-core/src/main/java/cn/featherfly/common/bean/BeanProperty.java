@@ -440,4 +440,12 @@ public class BeanProperty<T> implements GenericType<T> {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTypeName() {
+        return type.getName();
+    }
+
 }

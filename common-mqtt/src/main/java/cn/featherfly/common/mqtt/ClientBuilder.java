@@ -28,14 +28,44 @@ public class ClientBuilder {
 
     private boolean reconnectInNewThread = true;
 
+    /**
+     * Instantiates a new client builder.
+     */
     public ClientBuilder() {
     }
 
+    /**
+     * Instantiates a new client builder.
+     *
+     * @param address  the address
+     * @param clientId the client id
+     */
     public ClientBuilder(String address, String clientId) {
         this.address = address;
         this.clientId = clientId;
     }
 
+    /**
+     * Instantiates a new client builder.
+     *
+     * @param host     the host
+     * @param port     the port
+     * @param clientId the client id
+     */
+    public ClientBuilder(String host, int port, String clientId) {
+        this.host = host;
+        this.port = port;
+        this.clientId = clientId;
+    }
+
+    /**
+     * Instantiates a new client builder.
+     *
+     * @param protocol the protocol
+     * @param host     the host
+     * @param port     the port
+     * @param clientId the client id
+     */
     public ClientBuilder(String protocol, String host, int port, String clientId) {
         this.protocol = protocol;
         this.host = host;
@@ -43,57 +73,121 @@ public class ClientBuilder {
         this.clientId = clientId;
     }
 
+    /**
+     * Protocol.
+     *
+     * @param protocol the protocol
+     * @return the client builder
+     */
     public ClientBuilder protocol(String protocol) {
         this.protocol = protocol;
         return this;
     }
 
+    /**
+     * Host.
+     *
+     * @param host the host
+     * @return the client builder
+     */
     public ClientBuilder host(String host) {
         this.host = host;
         return this;
     }
 
+    /**
+     * Port.
+     *
+     * @param port the port
+     * @return the client builder
+     */
     public ClientBuilder port(int port) {
         this.port = port;
         return this;
     }
 
+    /**
+     * Address.
+     *
+     * @param address the address
+     * @return the client builder
+     */
     public ClientBuilder address(String address) {
         this.address = address;
         return this;
     }
 
+    /**
+     * Client id.
+     *
+     * @param clientId the client id
+     * @return the client builder
+     */
     public ClientBuilder clientId(String clientId) {
         this.clientId = clientId;
         return this;
     }
 
+    /**
+     * Options.
+     *
+     * @param options the options
+     * @return the client builder
+     */
     public ClientBuilder options(MqttConnectOptions options) {
         this.options = options;
         return this;
     }
 
+    /**
+     * Persistence.
+     *
+     * @param persistence the persistence
+     * @return the client builder
+     */
     public ClientBuilder persistence(MqttClientPersistence persistence) {
         this.persistence = persistence;
         return this;
     }
 
+    /**
+     * Charset.
+     *
+     * @param charset the charset
+     * @return the client builder
+     */
     public ClientBuilder charset(Charset charset) {
         this.charset = charset;
         return this;
     }
 
+    /**
+     * Reconnect in new thread.
+     *
+     * @param reconnectInNewThread the reconnect in new thread
+     * @return the client builder
+     */
     public ClientBuilder reconnectInNewThread(boolean reconnectInNewThread) {
         this.reconnectInNewThread = reconnectInNewThread;
         return this;
     }
 
+    /**
+     * Builds the.
+     *
+     * @return the easy client
+     */
     public EasyClient build() {
         EasyClient client = new EasyClient();
         init(client);
         return client;
     }
 
+    /**
+     * Builds the simple client.
+     *
+     * @return the simple client
+     */
     public SimpleClient buildSimpleClient() {
         SimpleClient client = new SimpleClient();
         init(client);

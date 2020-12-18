@@ -4,6 +4,8 @@ package cn.featherfly.common.lang;
 import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
@@ -322,17 +324,46 @@ public class LambdaUtils {
 
     private static Class<?>[] getParamaeterTypes(String methodSignature) {
         //        "(Ljava/lang/String;)V"
-        String str = StringUtils.substringAfter(methodSignature, "(L");
-        str = StringUtils.substringBefore(str, ";)");
+        String str = StringUtils.substringAfter(methodSignature, "(");
+        str = StringUtils.substringBefore(str, ")");
         if (Lang.isEmpty(str)) {
             return ArrayUtils.EMPTY_CLASS_ARRAY;
         }
-        String[] types = str.split(";L");
-        Class<?>[] classes = new Class<?>[types.length];
-        for (int i = 0; i < types.length; i++) {
-            classes[i] = ClassUtils.forName(types[i].replaceAll("/", "."));
+        List<Class<?>> types = new ArrayList<>();
+        for (int i = 0; i < str.length();) {
+            char c = str.charAt(i);
+            if (c == 'L') {
+                int start = i + 1;
+                for (int j = start; j < str.length(); j++) {
+                    char e = str.charAt(j);
+                    if (e == ';') {
+                        String type = str.substring(start, j);
+                        type = type.replaceAll("/", ".");
+                        types.add(ClassUtils.forName(type));
+                        i = j;
+                        break;
+                    }
+                }
+            } else if (c == 'I') {
+                types.add(Integer.TYPE);
+            } else if (c == 'J') {
+                types.add(Long.TYPE);
+            } else if (c == 'F') {
+                types.add(Float.TYPE);
+            } else if (c == 'D') {
+                types.add(Double.TYPE);
+            } else if (c == 'Z') {
+                types.add(Boolean.TYPE);
+            } else if (c == 'B') {
+                types.add(Byte.TYPE);
+            } else if (c == 'S') {
+                types.add(Short.TYPE);
+            } else if (c == 'C') {
+                types.add(Character.TYPE);
+            }
+            i++;
         }
-        return classes;
+        return types.toArray(new Class[types.size()]);
     }
 
     /**

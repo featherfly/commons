@@ -1,5 +1,6 @@
-# 1.8.20
+# 1.8.20 2020-12-19
 1. LocationPoint经纬度默认值改为-1,实现equals,hashcode,toString方法
+2. LambdaUtils修复参数是值类型(primitive type)出错的问题 
 
 # 1.8.19 2020-12-13
 1. SerializedLambdaInfo加入propertyType属性

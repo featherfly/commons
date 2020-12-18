@@ -9,7 +9,6 @@ sourceSets {
 dependencies {
 	implementation project(":common-core")
 
-
     api 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
 	
 	implementation group: 'com.esotericsoftware', name: 'kryo', version: '4.0.2'

@@ -1,6 +1,8 @@
 
 package cn.featherfly.common.serialization;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -18,12 +20,14 @@ public class JacksonSerializer implements Serializer {
      */
     public JacksonSerializer() {
         mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     /**
      * @param mapper
      */
-    protected JacksonSerializer(ObjectMapper mapper) {
+    public JacksonSerializer(ObjectMapper mapper) {
         super();
         this.mapper = mapper;
     }

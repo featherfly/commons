@@ -1,108 +1,98 @@
+# 1.8.20
+1. LocationPoint经纬度默认值改为-1,实现equals,hashcode,toString方法
+
 # 1.8.19 2020-12-13
-    1.SerializedLambdaInfo加入propertyType属性
-    2.修复SerializedLambdaInfo.method有时候为null的问题
+1. SerializedLambdaInfo加入propertyType属性
+2. 修复SerializedLambdaInfo.method有时候为null的问题
     
 # 1.8.18 2020-12-12
-    1.BeanDescriptor.getBeanProperty加入内嵌属性支持(user.name)
-    2.修复ArrayUtils.toString参数数组中有null时报错的问题
+1. BeanDescriptor.getBeanProperty加入内嵌属性支持(user.name)
+2. 修复ArrayUtils.toString参数数组中有null时报错的问题
      
 # 1.8.17 2020-12-12
-    1.Strings.format(String, Object[])修改为(String str, Object... args)
-    2.修正LambdaUtils.getSerializableSupplierLambdaInfo在linux出错的问题
-    3.ILocalizedAssert数字大小判断改为泛型N extends Number,同时加入NumberSupplier<N> value参数的方法
+1. Strings.format(String, Object[])修改为(String str, Object... args)
+2. 修正LambdaUtils.getSerializableSupplierLambdaInfo在linux出错的问题
+3. ILocalizedAssert数字大小判断改为泛型N extends Number,同时加入NumberSupplier<N> value参数的方法
 
 # 1.8.16 2020-11-24
-    1.ClassUtils的方法getFieldType,getMethodReturnType,getMethodParameterType如果为泛型支持获取已经在父类中具现化的类型
-    2.ClassUtils的方法getFieldGenericParameterType,getMethodReturnTypeGenericParameterType,getMethodGenericParameterType支持获取泛型类型已经在父类中具现化的类型
+1. ClassUtils的方法getFieldType,getMethodReturnType,getMethodParameterType如果为泛型支持获取已经在父类中具现化的类型
+2. ClassUtils的方法getFieldGenericParameterType,getMethodReturnTypeGenericParameterType,getMethodGenericParameterType支持获取泛型类型已经在父类中具现化的类型
     
 # 1.8.15 2020-11-19
-    1.LocalizedException.getMessage修改为返回本地化后的字符串
+1. LocalizedException.getMessage修改为返回本地化后的字符串
 
 # 1.8.14 2020-11-16
-    1.加入Lang.wrapThrow(java.io.IOException)方法
-    2.删除Dates.parse(String strDate)方法
-    3.加入VersionRenamePolicy
+1. 加入Lang.wrapThrow(java.io.IOException)方法
+2. 删除Dates.parse(String strDate)方法
+3. 加入VersionRenamePolicy
     
 # 1.8.13 2020-11-16
-    1.Properties加入PropertiesPlus(java.util.Properties defaults)构造器
-    2.修正1.8.12使用了jdk15构建的问题,重新使用jdk8构建
+1. Properties加入PropertiesPlus(java.util.Properties defaults)构造器
+2. 修正1.8.12使用了jdk15构建的问题,重新使用jdk8构建
 
 # 1.8.12 2020-11-10
-
-    1.ArrayUtils加入fillAll相关的方法
-    2.NumberUtils加入128进制的转换，64进制转换中@替换为~
+1. ArrayUtils加入fillAll相关的方法
+2. NumberUtils加入128进制的转换，64进制转换中@替换为~
     
 # 1.8.11 2020-7-19
-
-    1.修正Lang.wrapThrow(Throwable, Class<E>)
-    2.ArrayUtils,Lang的加入toMapStringKey，toArray2标注为废弃
-    3.Lang加入array方法
+1. 修正Lang.wrapThrow(Throwable, Class<E>)
+2. ArrayUtils,Lang的加入toMapStringKey，toArray2标注为废弃
+3. Lang加入array方法
     
 # 1.8.10 2020-7-4
-
-    1.修正ClassUtils.isGetter(Method)方法的问题
+1. 修正ClassUtils.isGetter(Method)方法的问题
     
 # 1.8.9 2020-6-30
-
-    1.LambdaUtils加入getSerializableSupplierLambdaInfo(SerializableSupplier<T> lambda)方法
+1. LambdaUtils加入getSerializableSupplierLambdaInfo(SerializableSupplier<T> lambda)方法
     
     
 # 1.8.8 2020-6-19
-
-    1.加入Randoms代替RandomUtils,后续大版本会删除RandomUtils
-    2.Lang,CollectionUtils加入each方法
+1. 加入Randoms代替RandomUtils,后续大版本会删除RandomUtils
+2. Lang,CollectionUtils加入each方法
     
 # 1.8.7 2020-6-3
-
-    1.Lang.isEmpty,isNotEmpty等一系列判断方法加入Option支持
-    2.加入Dates替代DateUtils,后续大版本会删除DateUtils
-    3.Dates加入getTime(LocalDateTime),getTime(LocalDateTime,ZoneId)
-    4.Dates中部分使用Calendar实现的功能使用LocalDate,LocalTime,LocalDateTime重构
-    5.ArrayUtils加入#contain(String[], String, boolean), toNumbers(Class<A>, String...), each(T[], BiConsumer<T, Integer>)
-        , toString(A[], char)和一些列空数组定义
-    6.GenericClass,BeanProperty加入hashcode(),equals实现
+1. Lang.isEmpty,isNotEmpty等一系列判断方法加入Option支持
+2. 加入Dates替代DateUtils,后续大版本会删除DateUtils
+3. Dates加入getTime(LocalDateTime),getTime(LocalDateTime,ZoneId)
+4. Dates中部分使用Calendar实现的功能使用LocalDate,LocalTime,LocalDateTime重构
+5. ArrayUtils加入#contain(String[], String, boolean), toNumbers(Class<A>, String...), each(T[], BiConsumer<T, Integer>)
+    , toString(A[], char)和一些列空数组定义
+6. GenericClass,BeanProperty加入hashcode(),equals实现
 
 # 1.8.6 2020-5-29
-
-    1.加入Lang替代LangUtils，后续大版本会删除LangUtils
-    2.加入Strings替代StringUtils，后续大版本会删除StringUtils
-    3.加入StringFormatter,Strings.format方法使用StringFormatter实现
-    4.部分接口移动到common-api中
+1. 加入Lang替代LangUtils，后续大版本会删除LangUtils
+2. 加入Strings替代StringUtils，后续大版本会删除StringUtils
+3. 加入StringFormatter,Strings.format方法使用StringFormatter实现
+4. 部分接口移动到common-api中
 
 # 1.8.5 2020-5-29
-
-    1. 加入ThreadLocalMap
-    2. 加入SimplagePage,Page加入getSize,getNumber方法，原来的getPageSize,getPageNumber标注为废弃，后续版本会删除
+1. 加入ThreadLocalMap
+2. 加入SimplagePage,Page加入getSize,getNumber方法，原来的getPageSize,getPageNumber标注为废弃，后续版本会删除
 
 # 1.8.4 2020-5-19
-
-    1. NumberUtils加入62 64进制字符串和数字互相转换的方法
-    2. ArrayUtils加入fill(T[] target, T[] source)方法
+1. NumberUtils加入62 64进制字符串和数字互相转换的方法
+2. ArrayUtils加入fill(T[] target, T[] source)方法
     
 # 1.8.3 2020-4-20
-
-    1. ClassUtils加入setFieldValue
+1. ClassUtils加入setFieldValue
     
 # 1.8.2 2020-4-20
-
-    1. 升级common-algorithm依赖
-    2. 加入LocaleMessage
+1. 升级common-algorithm依赖
+2. 加入LocaleMessage
     
     
 # 1.8.1 2020-4-15
-
-    1. AssertIllegalArgument加入IllegalArgumentAssert新增加方法
-    2. ExceptionCodeException加入更多包含Throwable的构造方法
-    3. ClassUtils加入packageToFile(Class<?> type, boolean containExt) {
+1. AssertIllegalArgument加入IllegalArgumentAssert新增加方法
+2. ExceptionCodeException加入更多包含Throwable的构造方法
+3. ClassUtils加入packageToFile(Class<?> type, boolean containExt) {
 
 # 1.8.0 2020-4-11
-
-    1.ResouceBundleJdkProxy实现传入字符集自动转码功能，如果没有指定则不操作
-    2.LocalizedException加入charset属性，用于设置国际化输出是否需要转码
-    3.删除AlgorithmUtils，引入common-algorithm包
-    4.LangUtils加入isEmpty(o, Consumer), isNotEmpty(o, Consumer)方法
-    5.加入Properties,PropertiesImpl,PropertiesPlus
-    6.StringUtils加入format(String content, Map<String, String> params)方法
+1. ResouceBundleJdkProxy实现传入字符集自动转码功能，如果没有指定则不操作
+2. LocalizedException加入charset属性，用于设置国际化输出是否需要转码
+3. 删除AlgorithmUtils，引入common-algorithm包
+4. LangUtils加入isEmpty(o, Consumer), isNotEmpty(o, Consumer)方法
+5. 加入Properties,PropertiesImpl,PropertiesPlus
+6. StringUtils加入format(String content, Map<String, String> params)方法
     
 # 1.7.16 2020-3-17
 

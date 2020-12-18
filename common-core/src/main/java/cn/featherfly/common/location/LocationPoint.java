@@ -5,9 +5,9 @@ package cn.featherfly.common.location;
  */
 public class LocationPoint {
 
-    private double latitude = 0d;
+    private double latitude = -1d;
 
-    private double longitude = 0d;
+    private double longitude = -1d;
 
     /**
      * Instantiates a new Location point.
@@ -60,5 +60,52 @@ public class LocationPoint {
      */
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "LocationPoint [latitude=" + latitude + ", longitude=" + longitude + "]";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        long temp;
+        temp = Double.doubleToLongBits(latitude);
+        result = prime * result + (int) (temp ^ temp >>> 32);
+        temp = Double.doubleToLongBits(longitude);
+        result = prime * result + (int) (temp ^ temp >>> 32);
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        LocationPoint other = (LocationPoint) obj;
+        if (Double.doubleToLongBits(latitude) != Double.doubleToLongBits(other.latitude)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(longitude) != Double.doubleToLongBits(other.longitude)) {
+            return false;
+        }
+        return true;
     }
 }

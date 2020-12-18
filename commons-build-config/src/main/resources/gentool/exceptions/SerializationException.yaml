@@ -1,0 +1,45 @@
+author: zhongj
+packageName: cn.featherfly.common.serialization
+exception:
+  packageName: cn.featherfly.common.serialization
+  name: SerializationException
+  descp: SerializationException
+  author: zhongj
+code:
+  packageName: "cn.featherfly.common.serialization"
+  name: "SerializationExceptionCode"
+  descp: null
+  author: "zhongj"
+  module: "EASYSOCKET"
+  codes:
+  - num: 10001
+    key: "serialize_error"
+    name: "SerializeError"
+    messages:
+      zh: "序列化[{0}]出错 -> {1}"
+      en: "serialize [{0}] error -> {1}"
+    argus:
+    - type: "java.lang.String"
+      name: "className"
+    - type: "java.lang.String"
+      name: "errorMessage"
+  - num: 10002
+    key: "deserialize_error"
+    name: "DeserializeError"
+    messages:
+      zh: "反序列化[{0}]出错 -> {1}"
+      en: "deserialize [{0}] error -> {1}"
+    argus:
+    - type: "java.lang.String"
+      name: "className"
+    - type: "java.lang.String"
+      name: "errorMessage"
+  - num: 10003
+    key: "no_serializer_for_mime_type"
+    name: "NoSerializerForMimeType"
+    messages:
+      zh: "未找到[{0}]对应的序列化器"
+      en: "no serializer for [{0}]"
+    argus:
+    - type: "java.lang.String"
+      name: "mimeType"

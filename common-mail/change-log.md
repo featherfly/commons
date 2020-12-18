@@ -1,3 +1,6 @@
+# 0.4.3 2020-12-18
+    1.修复i18n资源文件目录位置不对的问题
+    
 # 0.4.2 2020-11-12
     1.MailReceiver加入receive(MailHandler<Mail> mailHandler)和receive(SearchTerm searchTerm, MailHandler<Mail> mailHandler)方法
     2.common-core升级，替换所有使用了废弃API的地方

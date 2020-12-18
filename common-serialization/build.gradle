@@ -7,7 +7,7 @@ sourceSets {
 }
   
 dependencies {
-	implementation project(":common-core")
+	api project(":common-core")
 
     api 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
 	

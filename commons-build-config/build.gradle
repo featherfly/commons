@@ -3,28 +3,30 @@ allprojects {
     apply from: rootDir.getAbsolutePath() + '/maven_push.gradle'
         
     ext {
-	}
+    }
 
     dependencies {
-		api group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
-		implementation 'org.slf4j:slf4j-log4j12:1.7.30'
-		
-	    testImplementation (
-	    	'org.testng:testng:7.3.0',
-	    	'org.slf4j:slf4j-log4j12:1.7.30'
-	    )
+        api group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+        implementation 'org.slf4j:slf4j-log4j12:1.7.30'
+        
+        testImplementation (
+            'org.testng:testng:7.3.0',
+            'org.slf4j:slf4j-log4j12:1.7.30'
+        )
         testImplementation group: 'com.google.inject', name: 'guice', version: '4.2.3'
-	}
+    }
 }
-	
+    
 dependencies {
-	//implementation project(':common-core')
-	//compile 'cn.featherfly:featherfly-common:1.8.11'
-	implementation 'cn.featherfly:featherfly-common-bean-javassist:1.4.0'
-	implementation 'commons-beanutils:commons-beanutils:latest.integration'
-	implementation 'javassist:javassist:3.12.1.GA'
-	implementation 'com.alibaba:fastjson:1.1.41'
-	implementation 'org.slf4j:slf4j-log4j12:1.6.1'
+    //implementation project(':common-core')
+    //compile 'cn.featherfly:featherfly-common:1.8.11'
+    //implementation project(":common-gentool");
+    implementation "cn.featherfly.common:common-gentool:0.2.2";
+    implementation 'cn.featherfly.common:common-bean-javassist:1.4.2'
+    implementation 'commons-beanutils:commons-beanutils:latest.integration'
+    implementation 'javassist:javassist:3.12.1.GA'
+    implementation 'com.alibaba:fastjson:1.1.41'
+    implementation 'org.slf4j:slf4j-log4j12:1.6.1'
     implementation 'log4j:log4j:1.2.16'
     
     implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.18.Final'
@@ -46,10 +48,6 @@ test {
     }
 }
 */
-
-dependencies {
-    implementation project(":common-gentool");
-}
 
 ext {
     exceptions = [

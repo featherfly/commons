@@ -73,7 +73,7 @@ public class OkHttpRequest implements HttpRequest {
      *
      * @param config        the config
      * @param serialization the serialization
-     * @param charset       the charset
+     * @param mediaType     the media type
      */
     public OkHttpRequest(HttpRequestConfig config, Serialization serialization, MediaType mediaType) {
         this(new OkHttpClient.Builder().cache(new okhttp3.Cache(config.cacheDir, config.cacheMaxSize))
@@ -417,7 +417,7 @@ public class OkHttpRequest implements HttpRequest {
     }
 
     /**
-     * get deserializeWithContentType value
+     * get deserializeWithContentType value.
      *
      * @return deserializeWithContentType
      */
@@ -426,7 +426,7 @@ public class OkHttpRequest implements HttpRequest {
     }
 
     /**
-     * set deserializeWithContentType value
+     * set deserializeWithContentType value.
      *
      * @param deserializeWithContentType deserializeWithContentType
      */

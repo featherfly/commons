@@ -17,7 +17,9 @@ public class BrowerRequest implements HttpRequest {
     private HttpRequest httpRequest;
 
     /**
-     * @param httpRequest
+     * Instantiates a new brower request.
+     *
+     * @param httpRequest the http request
      */
     public BrowerRequest(HttpRequest httpRequest) {
         super();
@@ -33,6 +35,9 @@ public class BrowerRequest implements HttpRequest {
         return sendCompletion(method, url, requestBody, new HashMap<>(), responseType);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <R, T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, R requestBody,
             Map<String, String> headers, Class<T> responseType) {
@@ -40,12 +45,18 @@ public class BrowerRequest implements HttpRequest {
         return httpRequest.sendCompletion(method, url, requestBody, headers, responseType);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <R, T> T send(HttpMethod method, String url, R requestBody, Class<T> responseType,
             ErrorListener errorListener) {
         return send(method, url, requestBody, new HashMap<>(), responseType, errorListener);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <R, T> T send(HttpMethod method, String url, R requestBody, Map<String, String> headers,
             Class<T> responseType, ErrorListener errorListener) {
@@ -53,6 +64,9 @@ public class BrowerRequest implements HttpRequest {
         return httpRequest.send(method, url, requestBody, headers, responseType, errorListener);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <R, T> T send(HttpMethod method, String url, R requestBody, Map<String, String> headers,
             Class<T> responseType, ErrorListener errorListener, long requestTimeoutSeconds) {
@@ -60,6 +74,9 @@ public class BrowerRequest implements HttpRequest {
         return httpRequest.send(method, url, requestBody, headers, responseType, errorListener, requestTimeoutSeconds);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, Serializable> params,
             Map<String, String> headers, Class<T> responseType) {
@@ -67,12 +84,18 @@ public class BrowerRequest implements HttpRequest {
         return httpRequest.sendCompletion(method, url, params, headers, responseType);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, Serializable> params,
             Class<T> responseType) {
         return sendCompletion(method, url, params, new HashMap<>(), responseType);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T> T send(HttpMethod method, String url, Map<String, Serializable> params, Map<String, String> headers,
             Class<T> responseType, ErrorListener errorListener) {
@@ -80,6 +103,9 @@ public class BrowerRequest implements HttpRequest {
         return httpRequest.send(method, url, params, headers, responseType, errorListener);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T> T send(HttpMethod method, String url, Map<String, Serializable> params, Class<T> responseType,
             ErrorListener errorListener) {

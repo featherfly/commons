@@ -2,6 +2,8 @@ package cn.featherfly.common.http;
 
 import java.util.Map;
 
+import io.reactivex.Observable;
+
 /**
  * The Interface HttpRequest.
  *
@@ -20,7 +22,20 @@ public interface HttpRequest {
      * @param responseType 返回类型
      * @return the http request handler
      */
-    <R, T> HttpRequestHandler<T> send(HttpMethod method, String url, R requestBody, Class<T> responseType);
+    <R, T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, R requestBody, Class<T> responseType);
+
+    /**
+     * 发送请求（请求体作为参数），异步网络请求，回调处理.
+     *
+     * @param <R>          请求对象类型
+     * @param <T>          返回内容转换的对象类型
+     * @param method       httpmethod
+     * @param url          url
+     * @param requestBody  请求体参数
+     * @param responseType 返回类型
+     * @return the http request handler
+     */
+    <R, T> Observable<T> sendObservable(HttpMethod method, String url, R requestBody, Class<T> responseType);
 
     /**
      * 发送请求（请求体作为参数），异步网络请求，回调处理.
@@ -34,7 +49,22 @@ public interface HttpRequest {
      * @param responseType 返回类型
      * @return the http request handler
      */
-    <R, T> HttpRequestHandler<T> send(HttpMethod method, String url, R requestBody, Map<String, String> headers,
+    <R, T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, R requestBody,
+            Map<String, String> headers, Class<T> responseType);
+
+    /**
+     * 发送请求（请求体作为参数），异步网络请求，回调处理.
+     *
+     * @param <R>          请求对象类型
+     * @param <T>          返回内容转换的对象类型
+     * @param method       httpmethod
+     * @param url          url
+     * @param requestBody  请求体参数
+     * @param headers      请求头
+     * @param responseType 返回类型
+     * @return the http request handler
+     */
+    <R, T> Observable<T> sendObservable(HttpMethod method, String url, R requestBody, Map<String, String> headers,
             Class<T> responseType);
 
     /**
@@ -95,7 +125,21 @@ public interface HttpRequest {
      * @param responseType 返回类型
      * @return the http request handler
      */
-    <T> HttpRequestHandler<T> send(HttpMethod method, String url, Map<String, String> params,
+    <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, String> params,
+            Map<String, String> headers, Class<T> responseType);
+
+    /**
+     * 发送请求（请求体作为参数），异步网络请求，回调处理.
+     *
+     * @param <T>          返回内容转换的对象类型
+     * @param method       httpmethod
+     * @param url          url
+     * @param params       请求参数
+     * @param headers      请求头
+     * @param responseType 返回类型
+     * @return the http request handler
+     */
+    <T> Observable<T> sendObservable(HttpMethod method, String url, Map<String, String> params,
             Map<String, String> headers, Class<T> responseType);
 
     /**
@@ -108,7 +152,20 @@ public interface HttpRequest {
      * @param responseType 返回类型
      * @return the http request handler
      */
-    <T> HttpRequestHandler<T> send(HttpMethod method, String url, Map<String, String> params, Class<T> responseType);
+    <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, String> params,
+            Class<T> responseType);
+
+    /**
+     * 发送请求（请求体作为参数），异步网络请求，回调处理.
+     *
+     * @param <T>          返回内容转换的对象类型
+     * @param method       httpmethod
+     * @param url          url
+     * @param params       请求参数
+     * @param responseType 返回类型
+     * @return the http request handler
+     */
+    <T> Observable<T> sendObservable(HttpMethod method, String url, Map<String, String> params, Class<T> responseType);
 
     /**
      * 发送请求（请求体作为参数），异步网络请求，使用Future转换为同步方法调用方式.

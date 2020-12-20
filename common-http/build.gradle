@@ -12,4 +12,7 @@ dependencies {
 	
     api 'com.squareup.okhttp3:okhttp:3.14.9'
     
+    api group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.20'
+    
+    
 }

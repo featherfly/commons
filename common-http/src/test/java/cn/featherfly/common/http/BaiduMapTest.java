@@ -30,7 +30,7 @@ public class BaiduMapTest {
 
         AtomicBoolean executed = new AtomicBoolean(false);
 
-        request.send(HttpMethod.GET, url, new HashMap<>(), ReverseGeocoding.class).completion(r -> {
+        request.sendCompletion(HttpMethod.GET, url, new HashMap<>(), ReverseGeocoding.class).completion(r -> {
             System.out.println(r);
             executed.set(true);
         }).error(e -> {
@@ -63,10 +63,30 @@ public class BaiduMapTest {
 
         AtomicBoolean executed = new AtomicBoolean(false);
 
-        request.send(HttpMethod.GET, url, new HashMap<>(), ReverseGeocoding.class).completion(r -> {
+        request.sendCompletion(HttpMethod.GET, url, new HashMap<>(), ReverseGeocoding.class).completion(r -> {
             System.out.println(r);
             executed.set(true);
         }).error(e -> {
+            System.out.println(e.getMessage());
+            executed.set(true);
+        });
+
+        request.sendCompletion(HttpMethod.GET, url, new HashMap<>(), ReverseGeocoding.class).completion(r -> {
+            System.out.println("Completion2");
+            System.out.println(r);
+            executed.set(true);
+        }, e -> {
+            System.out.println("Completion2 error");
+            System.out.println(e.getMessage());
+            executed.set(true);
+        });
+
+        request.sendObservable(HttpMethod.GET, url, new HashMap<>(), ReverseGeocoding.class).subscribe(r -> {
+            System.out.println("Observable");
+            System.out.println(r);
+            executed.set(true);
+        }, e -> {
+            System.out.println("Observable error");
             System.out.println(e.getMessage());
             executed.set(true);
         });

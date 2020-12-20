@@ -9,12 +9,12 @@ import java.util.function.Consumer;
  *
  * @author zhongj
  */
-public class HttpRequestHandlerImpl<T> implements HttpRequestHandler<T> {
+public class HttpRequestCompletionImpl<T> implements HttpRequestCompletion<T> {
 
     CompletableFuture<T> completableFuture;
     CompletableFuture<HttpErrorResponse> errorFuture;
 
-    public HttpRequestHandlerImpl() {
+    public HttpRequestCompletionImpl() {
         completableFuture = new CompletableFuture<>();
         errorFuture = new CompletableFuture<>();
     }
@@ -41,7 +41,7 @@ public class HttpRequestHandlerImpl<T> implements HttpRequestHandler<T> {
      * {@inheritDoc}
      */
     @Override
-    public HttpRequestHandler<T> completion(Consumer<T> action) {
+    public HttpRequestCompletion<T> completion(Consumer<T> action) {
         completableFuture.thenAccept(action);
         return this;
     }
@@ -50,7 +50,7 @@ public class HttpRequestHandlerImpl<T> implements HttpRequestHandler<T> {
      * {@inheritDoc}
      */
     @Override
-    public HttpRequestHandler<T> error(Consumer<HttpErrorResponse> action) {
+    public HttpRequestCompletion<T> error(Consumer<HttpErrorResponse> action) {
         errorFuture.thenAccept(action);
         return this;
     }
@@ -59,7 +59,7 @@ public class HttpRequestHandlerImpl<T> implements HttpRequestHandler<T> {
      * {@inheritDoc}
      */
     @Override
-    public HttpRequestHandler<T> completion(Consumer<T> success, Consumer<HttpErrorResponse> error) {
+    public HttpRequestCompletion<T> completion(Consumer<T> success, Consumer<HttpErrorResponse> error) {
         completableFuture.thenAccept(success);
         errorFuture.thenAccept(error);
         return this;

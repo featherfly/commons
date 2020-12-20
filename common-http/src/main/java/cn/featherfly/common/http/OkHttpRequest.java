@@ -1,8 +1,6 @@
 package cn.featherfly.common.http;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -15,6 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.serialization.Serialization;
+import cn.featherfly.common.serialization.SerializationException;
+import cn.featherfly.common.serialization.SerializationExceptionCode;
 import cn.featherfly.common.serialization.Serializer;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -27,23 +27,24 @@ import okhttp3.Response;
 
 /**
  * The Class OkHttpRequest.
- * 
+ *
  * @author zhongj
  */
 public class OkHttpRequest implements HttpRequest {
 
-    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private static final String JSON_STR = "application/json; charset=utf-8";
+    private static final MediaType JSON = MediaType.parse(JSON_STR);
 
     /** The logger. */
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private Serialization serialization;
 
-    private Charset charset;
-
     private OkHttpClient client;
 
-    private Serializer jsonSerializer;
+    private Serializer serializer;
+
+    private MediaType mediaType;
 
     /**
      * Instantiates a new ok http request.
@@ -61,7 +62,7 @@ public class OkHttpRequest implements HttpRequest {
      * @param serialization the serialization
      */
     public OkHttpRequest(HttpRequestConfig config, Serialization serialization) {
-        this(config, serialization, StandardCharsets.UTF_8);
+        this(config, serialization, JSON);
     }
 
     /**
@@ -71,19 +72,31 @@ public class OkHttpRequest implements HttpRequest {
      * @param serialization the serialization
      * @param charset       the charset
      */
-    public OkHttpRequest(HttpRequestConfig config, Serialization serialization, Charset charset) {
-        client = new OkHttpClient.Builder().cache(new okhttp3.Cache(config.cacheDir, config.cacheMaxSize))
-                .connectTimeout(config.connectTimeout, TimeUnit.SECONDS).build();
+    public OkHttpRequest(HttpRequestConfig config, Serialization serialization, MediaType mediaType) {
+        this(new OkHttpClient.Builder().cache(new okhttp3.Cache(config.cacheDir, config.cacheMaxSize))
+                .connectTimeout(config.connectTimeout, TimeUnit.SECONDS).build(), serialization, mediaType);
+    }
+
+    /**
+     * Instantiates a new ok http request.
+     *
+     * @param okHttpClient  the ok http client
+     * @param serialization the serialization
+     * @param mediaType     the media type
+     */
+    public OkHttpRequest(OkHttpClient okHttpClient, Serialization serialization, MediaType mediaType) {
+        client = okHttpClient;
         if (serialization == null) {
             this.serialization = Serialization.getDefault();
         } else {
             this.serialization = serialization;
         }
-        this.charset = charset;
-        try {
-            jsonSerializer = this.serialization.getSerializer(new MimeType(JSON.type(), JSON.subtype()));
-        } catch (MimeTypeParseException e) {
+        if (mediaType == null) {
+            this.mediaType = JSON;
+        } else {
+            this.mediaType = mediaType;
         }
+        serializer = getSerializer(this.mediaType, true);
     }
 
     /**
@@ -128,7 +141,7 @@ public class OkHttpRequest implements HttpRequest {
 
         final String finalUrl = newUrl.toString();
 
-        RequestBody body = RequestBody.create(JSON, jsonSerializer.serialize(requestBody));
+        RequestBody body = RequestBody.create(mediaType, serializer.serialize(requestBody));
         Request request = new Request.Builder().url(finalUrl).method(method.toOkHttpCode(), body).build();
 
         HttpRequestHandlerImpl<T> hanlder = new HttpRequestHandlerImpl<>();
@@ -175,7 +188,7 @@ public class OkHttpRequest implements HttpRequest {
         final StringBuilder newUrl = new StringBuilder(url);
         preSend(method, newUrl, requestBody, headers, responseType);
         url = newUrl.toString();
-        RequestBody body = RequestBody.create(JSON, jsonSerializer.serialize(requestBody));
+        RequestBody body = RequestBody.create(mediaType, serializer.serialize(requestBody));
         Request request = new Request.Builder().url(url).method(method.toOkHttpCode(), body).build();
         try {
             return deserialize(client.newCall(request).execute(), responseType);
@@ -236,15 +249,6 @@ public class OkHttpRequest implements HttpRequest {
     @Override
     public <T> T send(HttpMethod method, String url, Map<String, String> params, Map<String, String> headers,
             Class<T> responseType, ErrorListener errorListener) {
-        return send(method, url, params, headers, responseType, errorListener, -1l);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T> T send(HttpMethod method, String url, Map<String, String> params, Map<String, String> headers,
-            Class<T> responseType, ErrorListener errorListener, long requestTimeoutSeconds) {
         StringBuilder newUrl = new StringBuilder(url);
         preSend(method, newUrl, params, headers, responseType);
         url = newUrl.toString();
@@ -301,16 +305,6 @@ public class OkHttpRequest implements HttpRequest {
      */
     @Override
     public <T> T send(HttpMethod method, String url, Map<String, String> params, Class<T> responseType,
-            ErrorListener errorListener, long requestTimeoutSeconds) {
-        return send(method, url, params, new HashMap<String, String>(), responseType, errorListener,
-                requestTimeoutSeconds);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T> T send(HttpMethod method, String url, Map<String, String> params, Class<T> responseType,
             ErrorListener errorListener) {
         return send(method, url, params, new HashMap<String, String>(), responseType, errorListener);
     }
@@ -330,8 +324,26 @@ public class OkHttpRequest implements HttpRequest {
     }
 
     private <T> T deserialize(Response response, final Class<T> responseType) throws IOException {
-        //    TODO 根据response的content-type来选择
-        return jsonSerializer.deserialize(response.body().bytes(), responseType);
+        Serializer serializer = getSerializer(MediaType.parse(response.header("Content-Type", JSON_STR)), false);
+        if (serializer == null) {
+            serializer = this.serializer;
+        }
+        return serializer.deserialize(response.body().bytes(), responseType);
+    }
+
+    private Serializer getSerializer(MediaType mediaType, boolean throwExceptionNoSerializer) {
+        Serializer serializer = null;
+        try {
+            MimeType mimeType = new MimeType(mediaType.type(), mediaType.subtype());
+            serializer = serialization.getSerializer(mimeType);
+            if (serializer == null && throwExceptionNoSerializer) {
+                throw new SerializationException(
+                        SerializationExceptionCode.createNoSerializerForMimeTypeCode(mimeType.getBaseType()));
+            }
+            logger.warn("no serializer found for content-type {}", mimeType.getBaseType());
+        } catch (MimeTypeParseException e) {
+        }
+        return serializer;
     }
 
     /**

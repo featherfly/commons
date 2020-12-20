@@ -55,4 +55,14 @@ public class HttpRequestHandlerImpl<T> implements HttpRequestHandler<T> {
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public HttpRequestHandler<T> completion(Consumer<T> success, Consumer<HttpErrorResponse> error) {
+        completableFuture.thenAccept(success);
+        errorFuture.thenAccept(error);
+        return this;
+    }
+
 }

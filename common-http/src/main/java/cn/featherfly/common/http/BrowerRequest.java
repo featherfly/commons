@@ -1,6 +1,7 @@
 
 package cn.featherfly.common.http;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,27 +61,27 @@ public class BrowerRequest implements HttpRequest {
     }
 
     @Override
-    public <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, String> params,
+    public <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, Serializable> params,
             Map<String, String> headers, Class<T> responseType) {
         addBrowerHeaders(headers);
         return httpRequest.sendCompletion(method, url, params, headers, responseType);
     }
 
     @Override
-    public <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, String> params,
+    public <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, Serializable> params,
             Class<T> responseType) {
         return sendCompletion(method, url, params, new HashMap<>(), responseType);
     }
 
     @Override
-    public <T> T send(HttpMethod method, String url, Map<String, String> params, Map<String, String> headers,
+    public <T> T send(HttpMethod method, String url, Map<String, Serializable> params, Map<String, String> headers,
             Class<T> responseType, ErrorListener errorListener) {
         addBrowerHeaders(headers);
         return httpRequest.send(method, url, params, headers, responseType, errorListener);
     }
 
     @Override
-    public <T> T send(HttpMethod method, String url, Map<String, String> params, Class<T> responseType,
+    public <T> T send(HttpMethod method, String url, Map<String, Serializable> params, Class<T> responseType,
             ErrorListener errorListener) {
         return send(method, url, params, new HashMap<>(), responseType, errorListener);
     }
@@ -122,7 +123,7 @@ public class BrowerRequest implements HttpRequest {
      * {@inheritDoc}
      */
     @Override
-    public <T> Observable<T> sendObservable(HttpMethod method, String url, Map<String, String> params,
+    public <T> Observable<T> sendObservable(HttpMethod method, String url, Map<String, Serializable> params,
             Map<String, String> headers, Class<T> responseType) {
         addBrowerHeaders(headers);
         return httpRequest.sendObservable(method, url, params, headers, responseType);
@@ -132,7 +133,7 @@ public class BrowerRequest implements HttpRequest {
      * {@inheritDoc}
      */
     @Override
-    public <T> Observable<T> sendObservable(HttpMethod method, String url, Map<String, String> params,
+    public <T> Observable<T> sendObservable(HttpMethod method, String url, Map<String, Serializable> params,
             Class<T> responseType) {
         return sendObservable(method, url, params, new HashMap<>(), responseType);
     }

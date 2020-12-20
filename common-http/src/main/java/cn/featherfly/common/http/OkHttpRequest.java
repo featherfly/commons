@@ -1,6 +1,7 @@
 package cn.featherfly.common.http;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -19,7 +20,6 @@ import cn.featherfly.common.serialization.Serializer;
 import io.reactivex.Observable;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -161,13 +161,13 @@ public class OkHttpRequest implements HttpRequest {
         }
         final StringBuilder newUrl = new StringBuilder(url);
         preSend(method, newUrl, requestBody, headers, responseType);
-        url = newUrl.toString();
+        final String finalUrl = newUrl.toString();
         RequestBody body = RequestBody.create(mediaType, serializer.serialize(requestBody));
-        Request request = new Request.Builder().url(url).method(method.toOkHttpCode(), body).build();
+        Request request = new Request.Builder().url(finalUrl).method(method.toOkHttpCode(), body).build();
         try {
             return deserialize(client.newCall(request).execute(), responseType);
         } catch (IOException e) {
-            logger.error("网络错误的URL:" + url);
+            logger.error("网络错误的URL:" + finalUrl);
             errorListener.error(new HttpErrorResponse(e.getMessage()));
             return null;
         }
@@ -177,30 +177,25 @@ public class OkHttpRequest implements HttpRequest {
      * {@inheritDoc}
      */
     @Override
-    public <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, String> params,
+    public <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, Serializable> params,
             Map<String, String> headers, final Class<T> responseType) {
         final StringBuilder newUrl = new StringBuilder(url);
         preSend(method, newUrl, params, headers, responseType);
-        final String finalUrl = newUrl.toString();
-
+        final String finalUrl;
         Request request = null;
         if (method == HttpMethod.GET || method == HttpMethod.HEAD) {
-            request = new Request.Builder().url(url).method(method.toOkHttpCode(), null).build();
+            finalUrl = HttpUtils.appendParam(newUrl.toString(), params);
+            request = new Request.Builder().url(finalUrl).method(method.toOkHttpCode(), null).build();
         } else {
-            FormBody.Builder formBodyBuilder = new FormBody.Builder();
-            if (params != null) {
-                for (Map.Entry<String, String> entry : params.entrySet()) {
-                    formBodyBuilder.add(entry.getKey(), entry.getValue());
-                }
-            }
-            RequestBody requestBody = formBodyBuilder.build();
-            request = new Request.Builder().url(url).method(method.toOkHttpCode(), requestBody).build();
+            finalUrl = newUrl.toString();
+            request = new Request.Builder().url(finalUrl)
+                    .method(method.toOkHttpCode(), HttpUtils.createFormBody(params)).build();
         }
         HttpRequestCompletionImpl<T> hanlder = new HttpRequestCompletionImpl<>();
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                logger.error("网络错误的URL:" + newUrl.toString());
+                logger.error("网络错误的URL:" + finalUrl);
                 hanlder.setHttpErrorResponse(new HttpErrorResponse(e.getMessage()));
             }
 
@@ -221,28 +216,24 @@ public class OkHttpRequest implements HttpRequest {
      * {@inheritDoc}
      */
     @Override
-    public <T> T send(HttpMethod method, String url, Map<String, String> params, Map<String, String> headers,
+    public <T> T send(HttpMethod method, String url, Map<String, Serializable> params, Map<String, String> headers,
             Class<T> responseType, ErrorListener errorListener) {
         StringBuilder newUrl = new StringBuilder(url);
         preSend(method, newUrl, params, headers, responseType);
-        url = newUrl.toString();
         Request request = null;
+        final String finalUrl;
         if (method == HttpMethod.GET || method == HttpMethod.HEAD) {
-            request = new Request.Builder().url(url).method(method.toOkHttpCode(), null).build();
+            finalUrl = HttpUtils.appendParam(newUrl.toString(), params);
+            request = new Request.Builder().url(finalUrl).method(method.toOkHttpCode(), null).build();
         } else {
-            FormBody.Builder formBodyBuilder = new FormBody.Builder();
-            if (params != null) {
-                for (Map.Entry<String, String> entry : params.entrySet()) {
-                    formBodyBuilder.add(entry.getKey(), entry.getValue());
-                }
-            }
-            RequestBody requestBody = formBodyBuilder.build();
-            request = new Request.Builder().url(url).method(method.toOkHttpCode(), requestBody).build();
+            finalUrl = newUrl.toString();
+            request = new Request.Builder().url(finalUrl)
+                    .method(method.toOkHttpCode(), HttpUtils.createFormBody(params)).build();
         }
         try {
             return deserialize(client.newCall(request).execute(), responseType);
         } catch (IOException e) {
-            logger.error("网络错误的URL:" + url);
+            logger.error("网络错误的URL:" + finalUrl);
             errorListener.error(new HttpErrorResponse(e.getMessage()));
             return null;
         }
@@ -270,7 +261,7 @@ public class OkHttpRequest implements HttpRequest {
      * {@inheritDoc}
      */
     @Override
-    public <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, String> params,
+    public <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, Serializable> params,
             Class<T> responseType) {
         return sendCompletion(method, url, params, new HashMap<String, String>(), responseType);
     }
@@ -279,7 +270,101 @@ public class OkHttpRequest implements HttpRequest {
      * {@inheritDoc}
      */
     @Override
-    public <T> T send(HttpMethod method, String url, Map<String, String> params, Class<T> responseType,
+    public <R, T> Observable<T> sendObservable(HttpMethod method, String url, R requestBody, Class<T> responseType) {
+        return sendObservable(method, url, requestBody, new HashMap<>(), responseType);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <R, T> Observable<T> sendObservable(HttpMethod method, String url, R requestBody,
+            Map<String, String> headers, Class<T> responseType) {
+        if (method != HttpMethod.POST && method != HttpMethod.PUT) {
+            throw new IllegalArgumentException("send方法请求method只能是POST或者PUT");
+        }
+        final StringBuilder newUrl = new StringBuilder(url);
+        preSend(method, newUrl, requestBody, headers, responseType);
+
+        final String finalUrl = newUrl.toString();
+
+        RequestBody body = RequestBody.create(mediaType, serializer.serialize(requestBody));
+        Request request = new Request.Builder().url(finalUrl).method(method.toOkHttpCode(), body).build();
+
+        return Observable.create(emitter -> {
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    logger.error("网络错误的URL:" + newUrl.toString());
+                    emitter.onError(e);
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.code() == 200) {
+                        emitter.onNext(deserialize(response, responseType));
+                    } else {
+                        emitter.onError(new HttpException(Strings.format("{0} error, code {1}, message {2}", finalUrl,
+                                response.code(), response.message())));
+                    }
+                }
+            });
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T> Observable<T> sendObservable(HttpMethod method, String url, Map<String, Serializable> params,
+            Map<String, String> headers, Class<T> responseType) {
+        final StringBuilder newUrl = new StringBuilder(url);
+        preSend(method, newUrl, params, headers, responseType);
+
+        final String finalUrl = newUrl.toString();
+        final Request request;
+        if (method == HttpMethod.GET || method == HttpMethod.HEAD) {
+            request = new Request.Builder().url(finalUrl).method(method.toOkHttpCode(), null).build();
+        } else {
+            request = new Request.Builder().url(finalUrl)
+                    .method(method.toOkHttpCode(), HttpUtils.createFormBody(params)).build();
+        }
+
+        return Observable.create(emitter -> {
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    logger.error("网络错误的URL:" + newUrl.toString());
+                    emitter.onError(e);
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.code() == 200) {
+                        emitter.onNext(deserialize(response, responseType));
+                    } else {
+                        emitter.onError(new HttpException(Strings.format("{0} error, code {1}, message {2}", finalUrl,
+                                response.code(), response.message())));
+                    }
+                }
+            });
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T> Observable<T> sendObservable(HttpMethod method, String url, Map<String, Serializable> params,
+            Class<T> responseType) {
+        return sendObservable(method, url, params, new HashMap<>(), responseType);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T> T send(HttpMethod method, String url, Map<String, Serializable> params, Class<T> responseType,
             ErrorListener errorListener) {
         return send(method, url, params, new HashMap<String, String>(), responseType, errorListener);
     }
@@ -347,105 +432,5 @@ public class OkHttpRequest implements HttpRequest {
      */
     public void setDeserializeWithContentType(boolean deserializeWithContentType) {
         this.deserializeWithContentType = deserializeWithContentType;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <R, T> Observable<T> sendObservable(HttpMethod method, String url, R requestBody, Class<T> responseType) {
-        return sendObservable(method, url, requestBody, new HashMap<>(), responseType);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <R, T> Observable<T> sendObservable(HttpMethod method, String url, R requestBody,
-            Map<String, String> headers, Class<T> responseType) {
-        if (method != HttpMethod.POST && method != HttpMethod.PUT) {
-            throw new IllegalArgumentException("send方法请求method只能是POST或者PUT");
-        }
-        final StringBuilder newUrl = new StringBuilder(url);
-        preSend(method, newUrl, requestBody, headers, responseType);
-
-        final String finalUrl = newUrl.toString();
-
-        RequestBody body = RequestBody.create(mediaType, serializer.serialize(requestBody));
-        Request request = new Request.Builder().url(finalUrl).method(method.toOkHttpCode(), body).build();
-
-        return Observable.create(emitter -> {
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    logger.error("网络错误的URL:" + newUrl.toString());
-                    emitter.onError(e);
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response.code() == 200) {
-                        emitter.onNext(deserialize(response, responseType));
-                    } else {
-                        emitter.onError(new HttpException(Strings.format("{0} error, code {1}, message {2}", finalUrl,
-                                response.code(), response.message())));
-                    }
-                }
-            });
-        });
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T> Observable<T> sendObservable(HttpMethod method, String url, Map<String, String> params,
-            Map<String, String> headers, Class<T> responseType) {
-        final StringBuilder newUrl = new StringBuilder(url);
-        preSend(method, newUrl, params, headers, responseType);
-
-        final String finalUrl = newUrl.toString();
-        final Request request;
-        if (method == HttpMethod.GET || method == HttpMethod.HEAD) {
-            request = new Request.Builder().url(finalUrl).method(method.toOkHttpCode(), null).build();
-        } else {
-            FormBody.Builder formBodyBuilder = new FormBody.Builder();
-            if (params != null) {
-                for (Map.Entry<String, String> entry : params.entrySet()) {
-                    formBodyBuilder.add(entry.getKey(), entry.getValue());
-                }
-            }
-            RequestBody requestBody = formBodyBuilder.build();
-            request = new Request.Builder().url(finalUrl).method(method.toOkHttpCode(), requestBody).build();
-        }
-
-        return Observable.create(emitter -> {
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    logger.error("网络错误的URL:" + newUrl.toString());
-                    emitter.onError(e);
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (response.code() == 200) {
-                        emitter.onNext(deserialize(response, responseType));
-                    } else {
-                        emitter.onError(new HttpException(Strings.format("{0} error, code {1}, message {2}", finalUrl,
-                                response.code(), response.message())));
-                    }
-                }
-            });
-        });
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T> Observable<T> sendObservable(HttpMethod method, String url, Map<String, String> params,
-            Class<T> responseType) {
-        return sendObservable(method, url, params, new HashMap<>(), responseType);
     }
 }

@@ -1,5 +1,6 @@
 package cn.featherfly.common.http;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -125,7 +126,7 @@ public interface HttpRequest {
      * @param responseType 返回类型
      * @return the http request handler
      */
-    <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, String> params,
+    <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, Serializable> params,
             Map<String, String> headers, Class<T> responseType);
 
     /**
@@ -139,7 +140,7 @@ public interface HttpRequest {
      * @param responseType 返回类型
      * @return the http request handler
      */
-    <T> Observable<T> sendObservable(HttpMethod method, String url, Map<String, String> params,
+    <T> Observable<T> sendObservable(HttpMethod method, String url, Map<String, Serializable> params,
             Map<String, String> headers, Class<T> responseType);
 
     /**
@@ -152,7 +153,7 @@ public interface HttpRequest {
      * @param responseType 返回类型
      * @return the http request handler
      */
-    <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, String> params,
+    <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, Serializable> params,
             Class<T> responseType);
 
     /**
@@ -165,7 +166,8 @@ public interface HttpRequest {
      * @param responseType 返回类型
      * @return the http request handler
      */
-    <T> Observable<T> sendObservable(HttpMethod method, String url, Map<String, String> params, Class<T> responseType);
+    <T> Observable<T> sendObservable(HttpMethod method, String url, Map<String, Serializable> params,
+            Class<T> responseType);
 
     /**
      * 发送请求（请求体作为参数），异步网络请求，使用Future转换为同步方法调用方式.
@@ -179,7 +181,7 @@ public interface HttpRequest {
      * @param errorListener 错误监听器
      * @return 返回内容转换后的对象
      */
-    <T> T send(HttpMethod method, String url, Map<String, String> params, Map<String, String> headers,
+    <T> T send(HttpMethod method, String url, Map<String, Serializable> params, Map<String, String> headers,
             Class<T> responseType, ErrorListener errorListener);
 
     /**
@@ -193,6 +195,6 @@ public interface HttpRequest {
      * @param errorListener 错误监听器
      * @return 返回内容转换后的对象
      */
-    <T> T send(HttpMethod method, String url, Map<String, String> params, Class<T> responseType,
+    <T> T send(HttpMethod method, String url, Map<String, Serializable> params, Class<T> responseType,
             ErrorListener errorListener);
 }

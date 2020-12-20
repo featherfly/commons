@@ -6,14 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import cn.featherfly.common.io.FileUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.Lang;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -29,20 +28,96 @@ public class Http {
             .cache(new okhttp3.Cache(FileUtils.getTempDirectory(), 1024)).connectTimeout(60, TimeUnit.SECONDS).build();
 
     /**
-     * To parame string.
+     * Gets the.
      *
+     * @param url the url
+     * @return the string
+     */
+    public static String get(String url) {
+        return get(url, new HashMap<>());
+    }
+
+    /**
+     * Gets the.
+     *
+     * @param url    the url
      * @param params the params
      * @return the string
      */
-    public static String toParameString(Map<String, Object> params) {
-        StringBuilder sb = new StringBuilder();
-        for (Entry<String, Object> entry : params.entrySet()) {
-            sb.append("&").append(entry.getKey()).append("=").append(entry.getValue());
+    public static String get(String url, Map<String, Serializable> params) {
+        Request request = new Request.Builder().url(HttpUtils.appendParam(url, params)).get().build();
+        try {
+            return CLIENT.newCall(request).execute().body().toString();
+        } catch (IOException e) {
+            throw new HttpException(e);
         }
-        if (sb.length() > 0) {
-            sb.deleteCharAt(0);
+    }
+
+    /**
+     * Post.
+     *
+     * @param url the url
+     * @return the string
+     */
+    public static String post(String url) {
+        return post(url, new HashMap<>());
+    }
+
+    /**
+     * Post.
+     *
+     * @param url    the url
+     * @param params the params
+     * @return the string
+     */
+    public static String post(String url, Map<String, Serializable> params) {
+        Request request = new Request.Builder().url(url).post(HttpUtils.createFormBody(params)).build();
+        try {
+            return CLIENT.newCall(request).execute().body().toString();
+        } catch (IOException e) {
+            throw new HttpException(e);
         }
-        return sb.toString();
+    }
+
+    /**
+     * Put.
+     *
+     * @param url the url
+     * @return the string
+     */
+    public static String put(String url) {
+        return put(url, new HashMap<>());
+    }
+
+    /**
+     * Put.
+     *
+     * @param url    the url
+     * @param params the params
+     * @return the string
+     */
+    public static String put(String url, Map<String, Serializable> params) {
+        Request request = new Request.Builder().url(url).put(HttpUtils.createFormBody(params)).build();
+        try {
+            return CLIENT.newCall(request).execute().body().toString();
+        } catch (IOException e) {
+            throw new HttpException(e);
+        }
+    }
+
+    /**
+     * Delete.
+     *
+     * @param url the url
+     * @return the string
+     */
+    public static String delete(String url) {
+        Request request = new Request.Builder().url(url).delete().build();
+        try {
+            return CLIENT.newCall(request).execute().body().toString();
+        } catch (IOException e) {
+            throw new HttpException(e);
+        }
     }
 
     /**
@@ -72,16 +147,8 @@ public class Http {
      * @param params the params
      * @param output the output
      */
-    public static final void download(String url, Map<String, Object> params, OutputStream output) {
-        if (Lang.isEmpty(params)) {
-            if (!url.contains("?")) {
-                url += "?";
-            } else {
-                url += "&";
-            }
-            url += toParameString(params);
-        }
-        Request request = new Request.Builder().url(url).get().build();
+    public static final void download(String url, Map<String, Serializable> params, OutputStream output) {
+        Request request = new Request.Builder().url(HttpUtils.appendParam(url, params)).get().build();
         try {
             Response response = CLIENT.newCall(request).execute();
             output.write(response.body().bytes());
@@ -97,7 +164,7 @@ public class Http {
      * @param params    the params
      * @param localFile the local file
      */
-    public static final void download(String url, Map<String, Object> params, File localFile) {
+    public static final void download(String url, Map<String, Serializable> params, File localFile) {
         AssertIllegalArgument.isNotNull(localFile, "localFile");
         FileUtils.makeDirectory(localFile);
         try {

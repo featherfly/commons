@@ -15,6 +15,8 @@ import org.testng.annotations.Test;
  */
 public class LogTest2 {
 
+    protected final org.slf4j.Logger logge4r = org.slf4j.LoggerFactory.getLogger(this.getClass());
+
     protected final Slf4jLogger logger = LoggerFactory.getLogger(this.getClass());
 
     protected final Slf4jLogger logger2 = LoggerFactory.getLogger();

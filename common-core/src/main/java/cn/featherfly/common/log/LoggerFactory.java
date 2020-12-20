@@ -50,10 +50,12 @@ public class LoggerFactory {
                     if (SystemPropertyUtils.getJavaClassPath().contains("slf4j-log4j12")) {
                         ClassPool pool = ClassPool.getDefault();
                         try {
+                            // FIXME 如果其他地方先加载了，这里会报错
                             CtClass ctClass = pool.get(LOG4J);
                             ctClass.addInterface(pool.get(Slf4jLogger.class.getName()));
                             addMethods(ctClass, pool);
-                            ctClass.toClass();
+                            ctClass.toClass(Thread.currentThread().getContextClassLoader(),
+                                    Thread.currentThread().getContextClassLoader().getClass().getProtectionDomain());
                             ctClass.detach();
                             init = true;
                         } catch (NotFoundException | CannotCompileException e) {

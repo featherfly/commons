@@ -46,6 +46,8 @@ public class OkHttpRequest implements HttpRequest {
 
     private MediaType mediaType;
 
+    private boolean deserializeWithContentType = true;
+
     /**
      * Instantiates a new ok http request.
      *
@@ -324,7 +326,10 @@ public class OkHttpRequest implements HttpRequest {
     }
 
     private <T> T deserialize(Response response, final Class<T> responseType) throws IOException {
-        Serializer serializer = getSerializer(MediaType.parse(response.header("Content-Type", JSON_STR)), false);
+        Serializer serializer = null;
+        if (deserializeWithContentType) {
+            serializer = getSerializer(MediaType.parse(response.header("Content-Type", JSON_STR)), false);
+        }
         if (serializer == null) {
             serializer = this.serializer;
         }
@@ -351,5 +356,23 @@ public class OkHttpRequest implements HttpRequest {
      */
     public void shutdown() {
         client.dispatcher().executorService().shutdown();
+    }
+
+    /**
+     * get deserializeWithContentType value
+     *
+     * @return deserializeWithContentType
+     */
+    public boolean isDeserializeWithContentType() {
+        return deserializeWithContentType;
+    }
+
+    /**
+     * set deserializeWithContentType value
+     *
+     * @param deserializeWithContentType deserializeWithContentType
+     */
+    public void setDeserializeWithContentType(boolean deserializeWithContentType) {
+        this.deserializeWithContentType = deserializeWithContentType;
     }
 }

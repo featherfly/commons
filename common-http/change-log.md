@@ -1,3 +1,8 @@
+# 0.3.0 2020-12-21 
+1. 实现HttpClient
+2. 基于HttpClient实现Http
+3. OkHttpRequest重命名为HttpClientRequest,重构内部实现
+
 # 0.2.0 2020-12-20
 1. HttpRequestHandler加入completion(Consumer<T> success, Consumer<HttpErrorResponse> error)方法
 2. HttpReqeust移除带connectTimeout参数的send方法

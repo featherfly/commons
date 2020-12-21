@@ -17,7 +17,7 @@ public class BaiduMapTest {
 
     @Test
     public void testBrower() {
-        OkHttpRequest request = new OkHttpRequest(new HttpRequestConfig());
+        HttpClientRequest request = new HttpClientRequest(new HttpRequestConfig());
 
         String url = "http://api.map.baidu.com/reverse_geocoding/v3/?ak=wwhuWsqLYCMuFPE8fNVPk4iUNzYCIFAk&output=json&coordtype=wgs84ll&location=30.664416,104.072294";
 
@@ -50,7 +50,7 @@ public class BaiduMapTest {
 
     @Test
     public void testServer() {
-        OkHttpRequest request = new OkHttpRequest(new HttpRequestConfig());
+        HttpClientRequest request = new HttpClientRequest(new HttpRequestConfig());
 
         String url = "http://api.map.baidu.com/reverse_geocoding/v3/?ak=0Zj0WEeN8dTr8XMMAFal5LPE8k5D53tR&output=json&coordtype=wgs84ll&location=31.225696563611,121.49884033194";
 
@@ -96,6 +96,102 @@ public class BaiduMapTest {
         }
 
         request.shutdown();
+
+        System.out.println("end");
+    }
+
+    @Test
+    public void testServerWithHttpClient() {
+        HttpClient request = new HttpClient();
+
+        String url = "http://api.map.baidu.com/reverse_geocoding/v3/?ak=0Zj0WEeN8dTr8XMMAFal5LPE8k5D53tR&output=json&coordtype=wgs84ll&location=31.225696563611,121.49884033194";
+
+        ReverseGeocoding reverseGeocoding = request.get(url, ReverseGeocoding.class);
+
+        System.out.println(reverseGeocoding);
+
+        AtomicBoolean executed = new AtomicBoolean(false);
+
+        request.getCompletion(url, ReverseGeocoding.class).completion(r -> {
+            System.out.println(r);
+            executed.set(true);
+        }).error(e -> {
+            System.out.println(e.getMessage());
+            executed.set(true);
+        });
+
+        request.getCompletion(url, ReverseGeocoding.class).completion(r -> {
+            System.out.println("Completion2");
+            System.out.println(r);
+            executed.set(true);
+        }, e -> {
+            System.out.println("Completion2 error");
+            System.out.println(e.getMessage());
+            executed.set(true);
+        });
+
+        request.getObservable(url, ReverseGeocoding.class).subscribe(r -> {
+            System.out.println("Observable");
+            System.out.println(r);
+            executed.set(true);
+        }, e -> {
+            System.out.println("Observable error");
+            System.out.println(e.getMessage());
+            executed.set(true);
+        });
+
+        while (!executed.get()) {
+
+        }
+
+        request.shutdown();
+
+        System.out.println("end");
+    }
+
+    @Test
+    public void testServerWithHttp() {
+        String url = "http://api.map.baidu.com/reverse_geocoding/v3/?ak=0Zj0WEeN8dTr8XMMAFal5LPE8k5D53tR&output=json&coordtype=wgs84ll&location=31.225696563611,121.49884033194";
+
+        ReverseGeocoding reverseGeocoding = Http.get(url, ReverseGeocoding.class);
+
+        System.out.println(reverseGeocoding);
+
+        AtomicBoolean executed = new AtomicBoolean(false);
+
+        Http.getCompletion(url, ReverseGeocoding.class).completion(r -> {
+            System.out.println(r);
+            executed.set(true);
+        }).error(e -> {
+            System.out.println(e.getMessage());
+            executed.set(true);
+        });
+
+        Http.getCompletion(url, ReverseGeocoding.class).completion(r -> {
+            System.out.println("Completion2");
+            System.out.println(r);
+            executed.set(true);
+        }, e -> {
+            System.out.println("Completion2 error");
+            System.out.println(e.getMessage());
+            executed.set(true);
+        });
+
+        Http.getObservable(url, ReverseGeocoding.class).subscribe(r -> {
+            System.out.println("Observable");
+            System.out.println(r);
+            executed.set(true);
+        }, e -> {
+            System.out.println("Observable error");
+            System.out.println(e.getMessage());
+            executed.set(true);
+        });
+
+        while (!executed.get()) {
+
+        }
+
+        Http.shutdown();
 
         System.out.println("end");
     }

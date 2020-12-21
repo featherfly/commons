@@ -6,9 +6,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.serialization.Serialization;
 import okhttp3.FormBody;
+import okhttp3.Headers;
 import okhttp3.MediaType;
-import okhttp3.Response;
 
 /**
  * Http.
@@ -18,17 +19,44 @@ import okhttp3.Response;
 public class HttpUtils {
 
     /** The Constant DEFAULT_CONTENT_TYPE. */
-    public static final String DEFAULT_CONTENT_TYPE = "text/html; charset=utf-8";
+    public static final String HTML_CONTENT_TYPE = "text/html; charset=utf-8";
 
-    /**
-     * Gets the content type.
-     *
-     * @param response the response
-     * @return the content type
-     */
-    public static MediaType getContentType(Response response) {
-        return MediaType.parse(response.header("Content-Type", DEFAULT_CONTENT_TYPE));
-    }
+    /** The Constant HTML_MEDIA_TYPE. */
+    public static final MediaType HTML_MEDIA_TYPE = MediaType.parse(HTML_CONTENT_TYPE);
+
+    /** The Constant JSON_CONTENT_TYPE. */
+    public static final String JSON_CONTENT_TYPE = Serialization.MIME_TYPE_JSON + "; charset=utf-8";
+
+    /** The Constant JSON_MEDIA_TYPE. */
+    public static final MediaType JSON_MEDIA_TYPE = MediaType.parse(JSON_CONTENT_TYPE);
+
+    /** The Constant JSON_CONTENT_TYPE. */
+    public static final String XML_CONTENT_TYPE = Serialization.MIME_TYPE_XML + "; charset=utf-8";
+
+    /** The Constant JSON_MEDIA_TYPE. */
+    public static final MediaType XML_MEDIA_TYPE = MediaType.parse(XML_CONTENT_TYPE);
+
+    /** The Constant KRYO_CONTENT_TYPE. */
+    public static final String KRYO_CONTENT_TYPE = Serialization.MIME_TYPE_KRYO + "; charset=utf-8";
+
+    /** The Constant KRYO_MEDIA_TYPE. */
+    public static final MediaType KRYO_MEDIA_TYPE = MediaType.parse(KRYO_CONTENT_TYPE);
+
+    /** The Constant PROTOBUFF_CONTENT_TYPE. */
+    public static final String PROTOBUFF_CONTENT_TYPE = Serialization.MIME_TYPE_PROTOBUFF + "; charset=utf-8";
+
+    /** The Constant PROTOBUFF_MEDIA_TYPE. */
+    public static final MediaType PROTOBUFF_MEDIA_TYPE = MediaType.parse(PROTOBUFF_CONTENT_TYPE);
+
+    //    /**
+    //     * Gets the content type.
+    //     *
+    //     * @param response the response
+    //     * @return the content type
+    //     */
+    //    public static MediaType getContentType(Response response) {
+    //        return MediaType.parse(response.header("Content-Type", HTML_CONTENT_TYPE));
+    //    }
 
     /**
      * Creates the form body.
@@ -46,6 +74,40 @@ public class HttpUtils {
             }
         }
         return formBodyBuilder.build();
+    }
+
+    /**
+     * Creates the headers.
+     *
+     * @param headers the headers
+     * @return the headers
+     */
+    public static Headers createHeaders(Map<String, String> headers) {
+        Headers.Builder builder = new Headers.Builder();
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            builder.add(entry.getKey(), entry.getValue());
+        }
+        return builder.build();
+    }
+
+    /**
+     * Creates the headers.
+     *
+     * @param headers        the headers
+     * @param defaultHeaders the default headers
+     * @return the headers
+     */
+    public static Headers createHeaders(Map<String, String> headers, Map<String, String> defaultHeaders) {
+        Headers.Builder builder = new Headers.Builder();
+        for (Map.Entry<String, String> entry : defaultHeaders.entrySet()) {
+            if (!headers.containsKey(entry.getKey())) {
+                builder.add(entry.getKey(), entry.getValue());
+            }
+        }
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            builder.add(entry.getKey(), entry.getValue());
+        }
+        return builder.build();
     }
 
     /**

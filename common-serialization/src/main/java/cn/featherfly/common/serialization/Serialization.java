@@ -7,12 +7,17 @@ import java.util.Map;
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Serialization.
  *
  * @author zhongj
  */
 public class Serialization {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Serialization.class);
 
     private Map<String, Serializer> serializers = new HashMap<>();
 
@@ -22,27 +27,32 @@ public class Serialization {
     /** The Constant DEFAULT. */
     private static final Serialization DEFAULT;
 
-    /** The Constant MIMETYPE_JSON. */
-    public static final String MIMETYPE_JSON = "application/json";
+    /** The Constant MIME_TYPE_JSON. */
+    public static final String MIME_TYPE_JSON = "application/json";
 
-    /** The Constant MIMETYPE_KRYO. */
-    public static final String MIMETYPE_KRYO = "application/kryo";
+    /** The Constant MIME_TYPE_KRYO. */
+    public static final String MIME_TYPE_KRYO = "application/kryo";
 
-    /** The Constant MIMETYPE_PROTOBUFF. */
-    public static final String MIMETYPE_PROTOBUFF = "application/protobuff";
+    /** The Constant MIME_TYPE_PROTOBUFF. */
+    public static final String MIME_TYPE_PROTOBUFF = "application/protobuff";
+
+    /** The Constant MIME_TYPE_XML. */
+    public static final String MIME_TYPE_XML = "application/xml";
 
     static {
         DEFAULT = new Serialization();
-        DEFAULT.serializers.put(MIMETYPE_JSON, DEFAULT_SERIALIZER);
+        DEFAULT.serializers.put(MIME_TYPE_JSON, DEFAULT_SERIALIZER);
         try {
             Class.forName("io.protostuff.ProtostuffIOUtil");
-            DEFAULT.serializers.put(MIMETYPE_PROTOBUFF, new ProtostuffSerializer());
+            DEFAULT.serializers.put(MIME_TYPE_PROTOBUFF, new ProtostuffSerializer());
         } catch (ClassNotFoundException e) {
+            LOG.warn(e.getMessage());
         }
         try {
             Class.forName("com.esotericsoftware.kryo.Kryo");
-            DEFAULT.serializers.put(MIMETYPE_KRYO, new KryoSerializer());
+            DEFAULT.serializers.put(MIME_TYPE_KRYO, new KryoSerializer());
         } catch (ClassNotFoundException e) {
+            LOG.warn(e.getMessage());
         }
     }
 

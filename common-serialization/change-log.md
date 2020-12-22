@@ -1,3 +1,6 @@
+# 0.2.0 2020-12-22
+1. 加入JacksonXmlSerializer
+
 # 0.1.1 2020-12-21
 1. Serialization MimeType常量名称修正
 

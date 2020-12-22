@@ -22,7 +22,7 @@ public class ProtostuffSerializer implements Serializer {
     /**
      * 避免每次序列化都重新申请Buffer空间
      */
-    private static LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
+    private static final LinkedBuffer BUFFER = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
     /**
      * 缓存Schema
      */
@@ -52,12 +52,12 @@ public class ProtostuffSerializer implements Serializer {
         Schema<O> schema = getSchema(clazz);
         byte[] data;
         try {
-            data = ProtostuffIOUtil.toByteArray(obj, schema, buffer);
+            data = ProtostuffIOUtil.toByteArray(obj, schema, BUFFER);
         } catch (Exception e) {
-            throw new SerializationException(
-                    SerializationExceptionCode.createSerializeErrorCode(obj.getClass().getName(), e.getLocalizedMessage()), e);
+            throw new SerializationException(SerializationExceptionCode
+                    .createSerializeErrorCode(obj.getClass().getName(), e.getLocalizedMessage()), e);
         } finally {
-            buffer.clear();
+            BUFFER.clear();
         }
         return data;
     }
@@ -72,9 +72,8 @@ public class ProtostuffSerializer implements Serializer {
         try {
             ProtostuffIOUtil.mergeFrom(bytes, obj, schema);
         } catch (Exception e) {
-            throw new SerializationException(
-                    SerializationExceptionCode.createDeserializeErrorCode(obj.getClass().getName(), e.getLocalizedMessage()),
-                    e);
+            throw new SerializationException(SerializationExceptionCode
+                    .createDeserializeErrorCode(obj.getClass().getName(), e.getLocalizedMessage()), e);
         }
         return obj;
     }

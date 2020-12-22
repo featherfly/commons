@@ -3,7 +3,8 @@ package cn.featherfly.common.serialization;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 /**
  * <p>
@@ -13,32 +14,34 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *
  * @author zhongj
  */
-public class JacksonSerializer implements Serializer {
+public class JacksonXmlSerializer implements Serializer {
 
     /** The Constant DEFAULT_MAPPER. */
-    public static final ObjectMapper DEFAULT_MAPPER;
+    public static final XmlMapper DEFAULT_MAPPER;
 
     static {
-        DEFAULT_MAPPER = new ObjectMapper();
+        JacksonXmlModule xmlModule = new JacksonXmlModule();
+        xmlModule.setDefaultUseWrapper(false);
+        DEFAULT_MAPPER = new XmlMapper(xmlModule);
         DEFAULT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         DEFAULT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    private ObjectMapper mapper;
+    private XmlMapper mapper;
 
     /**
-     * Instantiates a new jackson serializer.
+     * Instantiates a new jackson xml serializer.
      */
-    public JacksonSerializer() {
+    public JacksonXmlSerializer() {
         this(DEFAULT_MAPPER);
     }
 
     /**
-     * Instantiates a new jackson serializer.
+     * Instantiates a new jackson xml serializer.
      *
      * @param mapper the mapper
      */
-    public JacksonSerializer(ObjectMapper mapper) {
+    public JacksonXmlSerializer(XmlMapper mapper) {
         super();
         this.mapper = mapper;
     }

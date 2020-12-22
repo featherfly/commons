@@ -1,6 +1,8 @@
 
 package cn.featherfly.common.serialization;
 
+import static org.testng.Assert.assertEquals;
+
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.serialization.po.User;
@@ -23,13 +25,33 @@ public class SerializationTest {
         user.setAge(18);
     }
 
-    @Test(expectedExceptions = SerializationException.class)
-    public void test1() {
-        Serialization.serialize(new Object(), "application/xml");
-    }
-
     @Test
     public void testJson() {
         System.out.println(new String(Serialization.serialize(user)));
+    }
+
+    @Test
+    public void testXml() {
+        System.out.println(new String(Serialization.serialize(user, Serialization.MIME_TYPE_XML)));
+    }
+
+    @Test
+    public void testKryo() {
+        byte[] bs = Serialization.serialize(user, Serialization.MIME_TYPE_KRYO);
+        System.out.println(bs.length);
+
+        User u = Serialization.deserialize(bs, User.class, Serialization.MIME_TYPE_KRYO);
+        System.out.println(u);
+        assertEquals(u, user);
+    }
+
+    @Test
+    public void testProtobuff() {
+        byte[] bs = Serialization.serialize(user, Serialization.MIME_TYPE_PROTOBUFF);
+        System.out.println(bs.length);
+
+        User u = Serialization.deserialize(bs, User.class, Serialization.MIME_TYPE_PROTOBUFF);
+        System.out.println(u);
+        assertEquals(u, user);
     }
 }

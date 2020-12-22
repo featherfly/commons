@@ -22,7 +22,7 @@ public class Serialization {
     private Map<String, Serializer> serializers = new HashMap<>();
 
     /** The Constant DEFAULT_SERIALIZER. */
-    private static final Serializer DEFAULT_SERIALIZER = new JacksonSerializer();
+    private static final Serializer JSON_SERIALIZER = new JacksonSerializer();
 
     /** The Constant DEFAULT. */
     private static final Serialization DEFAULT;
@@ -41,7 +41,13 @@ public class Serialization {
 
     static {
         DEFAULT = new Serialization();
-        DEFAULT.serializers.put(MIME_TYPE_JSON, DEFAULT_SERIALIZER);
+        DEFAULT.serializers.put(MIME_TYPE_JSON, JSON_SERIALIZER);
+        try {
+            Class.forName("com.fasterxml.jackson.dataformat.xml.XmlMapper");
+            DEFAULT.serializers.put(MIME_TYPE_XML, new JacksonXmlSerializer());
+        } catch (ClassNotFoundException e) {
+            LOG.warn(e.getMessage());
+        }
         try {
             Class.forName("io.protostuff.ProtostuffIOUtil");
             DEFAULT.serializers.put(MIME_TYPE_PROTOBUFF, new ProtostuffSerializer());
@@ -169,7 +175,7 @@ public class Serialization {
      * @return the byte[]
      */
     public static <O> byte[] serialize(O obj) {
-        return DEFAULT_SERIALIZER.serialize(obj);
+        return JSON_SERIALIZER.serialize(obj);
     }
 
     /**
@@ -181,7 +187,7 @@ public class Serialization {
      * @return the o
      */
     public static <O> O deserialize(byte[] bytes, Class<O> type) {
-        return DEFAULT_SERIALIZER.deserialize(bytes, type);
+        return JSON_SERIALIZER.deserialize(bytes, type);
     }
 
     /**

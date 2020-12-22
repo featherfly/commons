@@ -1,3 +1,6 @@
+# 1.8.21 2020-12-22
+1. 加入TreeChianMap,LinkedHashChainMap,ConcurrentHashChainMap
+
 # 1.8.20 2020-12-19
 1. LocationPoint经纬度默认值改为-1,实现equals,hashcode,toString方法
 2. LambdaUtils修复参数是值类型(primitive type)出错的问题 

@@ -1,3 +1,7 @@
+# 0.4.0 2020-12-22
+1. 实现BrowerHttpClient
+2. HttpClient加入autoSubscribeOnIo属性，并根据该属性确定是否自动调用subscribeOn(Schedulers.io()),默认为true
+
 # 0.3.0 2020-12-21 
 1. 实现HttpClient
 2. 基于HttpClient实现Http

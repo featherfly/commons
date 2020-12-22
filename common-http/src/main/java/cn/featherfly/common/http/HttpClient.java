@@ -25,6 +25,7 @@ import cn.featherfly.common.serialization.SerializationException;
 import cn.featherfly.common.serialization.SerializationExceptionCode;
 import cn.featherfly.common.serialization.Serializer;
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;
@@ -57,6 +58,8 @@ public class HttpClient {
     private MediaType mediaType;
 
     private Headers headers;
+
+    private boolean autoSubscribeOnIo = true;
 
     private Map<String, String> headersMap = new HashMap<>();
 
@@ -107,6 +110,19 @@ public class HttpClient {
      */
     public HttpClient(OkHttpClient client, Map<String, String> headers, Serialization serialization,
             MediaType mediaType) {
+        init(client, headers, serialization, mediaType);
+    }
+
+    /**
+     * Inits the.
+     *
+     * @param client        the client
+     * @param headers       the headers
+     * @param serialization the serialization
+     * @param mediaType     the media type
+     */
+    protected void init(OkHttpClient client, Map<String, String> headers, Serialization serialization,
+            MediaType mediaType) {
         if (client == null) {
             this.client = new OkHttpClient.Builder()
                     .cache(new okhttp3.Cache(org.apache.commons.io.FileUtils.getTempDirectory(), 1024 * 10))
@@ -148,6 +164,24 @@ public class HttpClient {
      */
     public boolean isDeserializeWithContentType() {
         return deserializeWithContentType;
+    }
+
+    /**
+     * get autoSubscribeOnIo value.
+     *
+     * @return autoSubscribeOnIo
+     */
+    public boolean isAutoSubscribeOnIo() {
+        return autoSubscribeOnIo;
+    }
+
+    /**
+     * set autoSubscribeOnIo value.
+     *
+     * @param autoSubscribeOnIo autoSubscribeOnIo
+     */
+    public void setAutoSubscribeOnIo(boolean autoSubscribeOnIo) {
+        this.autoSubscribeOnIo = autoSubscribeOnIo;
     }
 
     /**
@@ -793,7 +827,7 @@ public class HttpClient {
      * @return response string
      */
     public String get(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return request(new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+        return request(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
                 .get().build());
     }
 
@@ -833,7 +867,7 @@ public class HttpClient {
      * @return responseType instance
      */
     public <R> R get(String url, Map<String, Serializable> params, Map<String, String> headers, Class<R> responseType) {
-        return request(new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+        return request(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
                 .get().build(), responseType);
     }
 
@@ -868,7 +902,7 @@ public class HttpClient {
      */
     public HttpRequestCompletion<String> getCompletion(String url, Map<String, Serializable> params,
             Map<String, String> headers) {
-        return completetion(new Request.Builder().url(HttpUtils.appendParam(url, params))
+        return completetion(new Request.Builder().url(HttpUtils.appendParams(url, params))
                 .headers(createHeaders(headers)).get().build());
     }
 
@@ -910,7 +944,7 @@ public class HttpClient {
      */
     public <R> HttpRequestCompletion<R> getCompletion(String url, Map<String, Serializable> params,
             Map<String, String> headers, Class<R> responseType) {
-        return completetion(new Request.Builder().url(HttpUtils.appendParam(url, params))
+        return completetion(new Request.Builder().url(HttpUtils.appendParams(url, params))
                 .headers(createHeaders(headers)).get().build(), responseType);
     }
 
@@ -944,7 +978,7 @@ public class HttpClient {
      * @return the observable
      */
     public Observable<String> getObservable(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return observation(new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+        return observation(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
                 .get().build());
     }
 
@@ -985,7 +1019,7 @@ public class HttpClient {
      */
     public <R> Observable<R> getObservable(String url, Map<String, Serializable> params, Map<String, String> headers,
             Class<R> responseType) {
-        return observation(new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+        return observation(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
                 .get().build(), responseType);
     }
 
@@ -1019,7 +1053,7 @@ public class HttpClient {
      * @return response string
      */
     public String head(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return request(new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+        return request(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
                 .head().build());
     }
 
@@ -1060,7 +1094,7 @@ public class HttpClient {
      */
     public <R> R head(String url, Map<String, Serializable> params, Map<String, String> headers,
             Class<R> responseType) {
-        return request(new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+        return request(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
                 .head().build(), responseType);
     }
 
@@ -1095,7 +1129,7 @@ public class HttpClient {
      */
     public HttpRequestCompletion<String> headCompletion(String url, Map<String, Serializable> params,
             Map<String, String> headers) {
-        return completetion(new Request.Builder().url(HttpUtils.appendParam(url, params))
+        return completetion(new Request.Builder().url(HttpUtils.appendParams(url, params))
                 .headers(createHeaders(headers)).head().build());
     }
 
@@ -1137,7 +1171,7 @@ public class HttpClient {
      */
     public <R> HttpRequestCompletion<R> headCompletion(String url, Map<String, Serializable> params,
             Map<String, String> headers, Class<R> responseType) {
-        return completetion(new Request.Builder().url(HttpUtils.appendParam(url, params))
+        return completetion(new Request.Builder().url(HttpUtils.appendParams(url, params))
                 .headers(createHeaders(headers)).head().build(), responseType);
     }
 
@@ -1172,7 +1206,7 @@ public class HttpClient {
      */
     public Observable<String> headObservable(String url, Map<String, Serializable> params,
             Map<String, String> headers) {
-        return observation(new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+        return observation(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
                 .head().build());
     }
 
@@ -1213,7 +1247,7 @@ public class HttpClient {
      */
     public <R> Observable<R> headObservable(String url, Map<String, Serializable> params, Map<String, String> headers,
             Class<R> responseType) {
-        return observation(new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+        return observation(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
                 .head().build(), responseType);
     }
 
@@ -2640,7 +2674,7 @@ public class HttpClient {
      */
     public void download(String url, Map<String, Serializable> params, Map<String, String> headers,
             OutputStream output) {
-        Request request = new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+        Request request = new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
                 .get().build();
         try {
             Response response = client.newCall(request).execute();
@@ -2729,7 +2763,7 @@ public class HttpClient {
      */
     public HttpRequestCompletion<Integer> downloadCompletion(String url, Map<String, Serializable> params,
             Map<String, String> headers, OutputStream output) {
-        Request request = new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+        Request request = new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
                 .get().build();
         HttpRequestCompletionImpl<Integer> completion = new HttpRequestCompletionImpl<>();
         client.newCall(request).enqueue(new Callback() {
@@ -2798,7 +2832,7 @@ public class HttpClient {
     }
 
     private Observable<String> observation(final Request request) {
-        return Observable.create(emitter -> {
+        Observable<String> observable = Observable.create(emitter -> {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -2817,10 +2851,14 @@ public class HttpClient {
                 }
             });
         });
+        if (autoSubscribeOnIo) {
+            return observable.subscribeOn(Schedulers.io());
+        }
+        return observable;
     }
 
     private <R> Observable<R> observation(final Request request, final Class<R> responseType) {
-        return Observable.create(emitter -> {
+        Observable<R> observable = Observable.create(emitter -> {
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -2839,6 +2877,10 @@ public class HttpClient {
                 }
             });
         });
+        if (autoSubscribeOnIo) {
+            return observable.subscribeOn(Schedulers.io());
+        }
+        return observable;
     }
 
     private <T> T deserialize(Response response, final Class<T> responseType) throws IOException {

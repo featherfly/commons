@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.serialization.Serialization;
 import okhttp3.FormBody;
@@ -130,16 +131,37 @@ public class HttpUtils {
     /**
      * Append param.
      *
+     * @param url   the url
+     * @param name  the name
+     * @param value the value
+     * @return the url string with param
+     */
+    public static String appendParam(String url, String name, Serializable value) {
+        String uri = url;
+        if (Lang.isNotEmpty(uri)) {
+            if (uri.contains(Chars.QUESTION)) {
+                uri += Chars.AMP;
+            } else {
+                uri += Chars.QUESTION;
+            }
+            uri += name + "=" + value;
+        }
+        return uri;
+    }
+
+    /**
+     * Append param.
+     *
      * @param url    the url
      * @param params the params
-     * @return the string
+     * @return the url string with params
      */
-    public static String appendParam(String url, Map<String, Serializable> params) {
-        if (Lang.isEmpty(params)) {
-            if (!url.contains("?")) {
-                url += "?";
+    public static String appendParams(String url, Map<String, Serializable> params) {
+        if (Lang.isNotEmpty(params)) {
+            if (url.contains(Chars.QUESTION)) {
+                url += Chars.AMP;
             } else {
-                url += "&";
+                url += Chars.QUESTION;
             }
             url += toParameString(params);
         }

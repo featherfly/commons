@@ -17,20 +17,20 @@ public class BaiduMapTest {
 
     @Test
     public void testBrower() {
-        HttpClientRequest request = new HttpClientRequest(new HttpRequestConfig());
+        BrowerHttpClient brower = new BrowerHttpClient();
 
         String url = "http://api.map.baidu.com/reverse_geocoding/v3/?ak=wwhuWsqLYCMuFPE8fNVPk4iUNzYCIFAk&output=json&coordtype=wgs84ll&location=30.664416,104.072294";
 
-        ReverseGeocoding reverseGeocoding = request.send(HttpMethod.GET, url, new HashMap<>(), ReverseGeocoding.class,
-                (ErrorListener) error -> {
-                    System.out.println(error.getMessage());
-                });
-
-        System.out.println(reverseGeocoding);
+        try {
+            ReverseGeocoding reverseGeocoding = brower.get(url, new HashMap<>(), ReverseGeocoding.class);
+            System.out.println(reverseGeocoding);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
         AtomicBoolean executed = new AtomicBoolean(false);
 
-        request.sendCompletion(HttpMethod.GET, url, new HashMap<>(), ReverseGeocoding.class).completion(r -> {
+        brower.getCompletion(url, new HashMap<>(), ReverseGeocoding.class).completion(r -> {
             System.out.println(r);
             executed.set(true);
         }).error(e -> {
@@ -42,7 +42,7 @@ public class BaiduMapTest {
 
         }
 
-        request.shutdown();
+        brower.shutdown();
 
         System.out.println("end");
 

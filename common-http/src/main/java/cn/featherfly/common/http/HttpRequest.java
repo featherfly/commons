@@ -69,7 +69,7 @@ public interface HttpRequest {
             Class<T> responseType);
 
     /**
-     * 发送请求（请求体作为参数），异步网络请求，使用Future转换为同步方法调用方式.
+     * 发送请求（请求体作为参数）
      *
      * @param <R>           请求对象类型
      * @param <T>           返回内容转换的对象类型
@@ -83,7 +83,7 @@ public interface HttpRequest {
     <R, T> T send(HttpMethod method, String url, R requestBody, Class<T> responseType, ErrorListener errorListener);
 
     /**
-     * 发送请求（请求体作为参数），异步网络请求，使用Future转换为同步方法调用方式.
+     * 发送请求（请求体作为参数）
      *
      * @param <R>           请求对象类型
      * @param <T>           返回内容转换的对象类型
@@ -99,7 +99,7 @@ public interface HttpRequest {
             ErrorListener errorListener);
 
     /**
-     * 发送请求（请求体作为参数），异步网络请求，使用Future转换为同步方法调用方式.
+     * 发送请求（请求体作为参数）
      *
      * @param <R>                   请求对象类型
      * @param <T>                   返回内容转换的对象类型
@@ -170,7 +170,7 @@ public interface HttpRequest {
             Class<T> responseType);
 
     /**
-     * 发送请求（请求体作为参数），异步网络请求，使用Future转换为同步方法调用方式.
+     * 发送请求（请求体作为参数）
      *
      * @param <T>           返回内容转换的对象类型
      * @param method        httpmethod
@@ -185,7 +185,7 @@ public interface HttpRequest {
             Class<T> responseType, ErrorListener errorListener);
 
     /**
-     * 发送请求（请求体作为参数），异步网络请求，使用Future转换为同步方法调用方式.
+     * 发送请求（请求体作为参数）
      *
      * @param <T>           返回内容转换的对象类型
      * @param method        httpmethod

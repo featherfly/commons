@@ -68,7 +68,16 @@ public class HttpClient {
      * Instantiates a new http client.
      */
     public HttpClient() {
-        this(null);
+        this(new HashMap<>());
+    }
+
+    /**
+     * Instantiates a new http client.
+     *
+     * @param config the config
+     */
+    public HttpClient(HttpRequestConfig config) {
+        this(config, null);
     }
 
     /**

@@ -1,10 +1,11 @@
 package cn.featherfly.common.http;
 
 import java.io.File;
+import java.util.concurrent.ExecutorService;
 
 /**
  * The Class HttpRequestConfig.
- * 
+ *
  * @author zhongj
  */
 public class HttpRequestConfig {
@@ -17,6 +18,15 @@ public class HttpRequestConfig {
 
     /** The cache max size. */
     public long cacheMaxSize = 5 * 1024 * 1024;
+
+    /** The executor service. */
+    public ExecutorService executorService;
+
+    /** The max requests. */
+    public int maxRequests = 64;
+
+    /** The max requests per host. */
+    public int maxRequestsPerHost = 5;
 
     /**
      * Instantiates a new http request config.

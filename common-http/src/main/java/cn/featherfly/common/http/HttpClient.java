@@ -28,6 +28,7 @@ import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Dispatcher;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -76,7 +77,41 @@ public class HttpClient {
      * @param headers the headers
      */
     public HttpClient(Map<String, String> headers) {
-        this(null, headers);
+        this(new HttpRequestConfig(), headers);
+    }
+
+    /**
+     * Instantiates a new http client.
+     *
+     * @param config  the config
+     * @param headers the headers
+     */
+    public HttpClient(HttpRequestConfig config, Map<String, String> headers) {
+        this(config, null, null);
+    }
+
+    /**
+     * Instantiates a new http client.
+     *
+     * @param config        the config
+     * @param serialization the serialization
+     * @param mediaType     the media type
+     */
+    public HttpClient(HttpRequestConfig config, Serialization serialization, MediaType mediaType) {
+        this(config, null, serialization, mediaType);
+    }
+
+    /**
+     * Instantiates a new http client.
+     *
+     * @param config        the config
+     * @param headers       the headers
+     * @param serialization the serialization
+     * @param mediaType     the media type
+     */
+    public HttpClient(HttpRequestConfig config, Map<String, String> headers, Serialization serialization,
+            MediaType mediaType) {
+        init(client, headers, serialization, mediaType);
     }
 
     /**
@@ -116,6 +151,30 @@ public class HttpClient {
     /**
      * Inits the.
      *
+     * @param config        the config
+     * @param headers       the headers
+     * @param serialization the serialization
+     * @param mediaType     the media type
+     */
+    protected void init(HttpRequestConfig config, Map<String, String> headers, Serialization serialization,
+            MediaType mediaType) {
+        init(okHttpClient(config), headers, serialization, mediaType);
+    }
+
+    private OkHttpClient okHttpClient(HttpRequestConfig config) {
+        if (config == null) {
+            config = new HttpRequestConfig();
+        }
+        Dispatcher dispatcher = new Dispatcher(config.executorService);
+        dispatcher.setMaxRequests(config.maxRequests);
+        dispatcher.setMaxRequestsPerHost(config.maxRequestsPerHost);
+        return new OkHttpClient.Builder().cache(new okhttp3.Cache(config.cacheDir, config.cacheMaxSize))
+                .dispatcher(dispatcher).connectTimeout(config.connectTimeout, TimeUnit.SECONDS).build();
+    }
+
+    /**
+     * Inits the.
+     *
      * @param client        the client
      * @param headers       the headers
      * @param serialization the serialization
@@ -124,9 +183,7 @@ public class HttpClient {
     protected void init(OkHttpClient client, Map<String, String> headers, Serialization serialization,
             MediaType mediaType) {
         if (client == null) {
-            this.client = new OkHttpClient.Builder()
-                    .cache(new okhttp3.Cache(org.apache.commons.io.FileUtils.getTempDirectory(), 1024 * 10))
-                    .connectTimeout(60, TimeUnit.SECONDS).build();
+            this.client = okHttpClient(null);
         } else {
             this.client = client;
         }
@@ -978,8 +1035,8 @@ public class HttpClient {
      * @return the observable
      */
     public Observable<String> getObservable(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return observation(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
-                .get().build());
+        return observation(new Request.Builder().url(HttpUtils.appendParams(url, params))
+                .headers(createHeaders(headers)).get().build());
     }
 
     /**
@@ -1019,8 +1076,8 @@ public class HttpClient {
      */
     public <R> Observable<R> getObservable(String url, Map<String, Serializable> params, Map<String, String> headers,
             Class<R> responseType) {
-        return observation(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
-                .get().build(), responseType);
+        return observation(new Request.Builder().url(HttpUtils.appendParams(url, params))
+                .headers(createHeaders(headers)).get().build(), responseType);
     }
 
     /**
@@ -1206,8 +1263,8 @@ public class HttpClient {
      */
     public Observable<String> headObservable(String url, Map<String, Serializable> params,
             Map<String, String> headers) {
-        return observation(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
-                .head().build());
+        return observation(new Request.Builder().url(HttpUtils.appendParams(url, params))
+                .headers(createHeaders(headers)).head().build());
     }
 
     /**
@@ -1247,8 +1304,8 @@ public class HttpClient {
      */
     public <R> Observable<R> headObservable(String url, Map<String, Serializable> params, Map<String, String> headers,
             Class<R> responseType) {
-        return observation(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
-                .head().build(), responseType);
+        return observation(new Request.Builder().url(HttpUtils.appendParams(url, params))
+                .headers(createHeaders(headers)).head().build(), responseType);
     }
 
     /**

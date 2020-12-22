@@ -13,12 +13,12 @@ public interface Version {
      *
      * @return the version
      */
-    long getVersion();
+    long version();
 
     /**
      * Gets the version name.
      *
      * @return the version name
      */
-    String getVersionName();
+    String versionName();
 }

@@ -1,5 +1,6 @@
 # 0.2.5 2020-12-22
 1. 加入Version接口
+2. 加入Platform接口和Platforms枚举
 
 # 0.2.4 2020-12-12
 1. 加入SerializableBiConsumer,SerializableBiFunction

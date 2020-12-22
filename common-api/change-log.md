@@ -1,6 +1,9 @@
+# 0.2.5 2020-12-22
+1. 加入Version接口
+
 # 0.2.4 2020-12-12
-    1.加入SerializableBiConsumer,SerializableBiFunction
-    2.删除GetFunction
+1. 加入SerializableBiConsumer,SerializableBiFunction
+2. 删除GetFunction
     
 # 0.2.3 2020-11-18
     1.加入LoggerFunctionArgs, Logger接口继承自LoggerFunctionArgs

@@ -1,5 +1,7 @@
 package cn.featherfly.common.flux.store;
 
+import cn.featherfly.common.flux.action.Action;
+
 /**
  * The Class StoreChangeEvent.
  *
@@ -7,26 +9,36 @@ package cn.featherfly.common.flux.store;
  */
 public class StoreChangeEvent {
 
-    private Object data;
+    private Action<?> action;
 
     /**
      * Instantiates a new store change event.
      *
-     * @param data the data
+     * @param action the action
      */
-    public StoreChangeEvent(Object data) {
+    public StoreChangeEvent(Action<?> action) {
         super();
-        this.data = data;
+        this.action = action;
+    }
+
+    /**
+     * get action value
+     *
+     * @return action
+     */
+    @SuppressWarnings("unchecked")
+    public <D> Action<D> getAction() {
+        return (Action<D>) action;
     }
 
     /**
      * 返回data.
      *
-     * @param <M> the generic type
+     * @param <D> the generic type
      * @return data
      */
     @SuppressWarnings("unchecked")
-    public <M> M getData() {
-        return (M) data;
+    public <D> D getData() {
+        return (D) action.getData();
     }
 }

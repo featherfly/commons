@@ -14,6 +14,11 @@ public class TestRunner {
     void test() {
         //        Dispatcher.get().register(ResourcesStroe.get());
         System.out.println(ResourcesStroe.get().getWorks());
+
+        ResourcesStroe.get().register(e -> {
+            System.out.println("change " + e.getAction());
+        });
+
         ResourcesBLL r = new ResourcesBLL();
         r.loadResource();
         System.out.println(ResourcesStroe.get().getWorks());

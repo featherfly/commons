@@ -40,4 +40,11 @@ public class SimpleAction<T> implements Action<T> {
         return type;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " [type=" + type + ", data=" + data + "]";
+    }
 }

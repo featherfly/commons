@@ -28,10 +28,14 @@ public class ResourcesStroe extends Store<ResourcesAction<?>> {
         Map<Type, StoreAction<ResourcesAction<?>>> storeActions = new HashMap<>();
 
         // 重新加载 works
-        storeActions.put(ResourcesAction.ResourcesActionType.LOAD_WORK,
-                action -> works = (List<String>) action.getData());
-        storeActions.put(ResourcesAction.ResourcesActionType.LOAD_INTERESTS,
-                action -> interests = (List<String>) action.getData());
+        storeActions.put(ResourcesAction.ResourcesActionType.LOAD_WORK, action -> {
+            works = (List<String>) action.getData();
+            storeChange(action);
+        });
+        storeActions.put(ResourcesAction.ResourcesActionType.LOAD_INTERESTS, action -> {
+            interests = (List<String>) action.getData();
+            storeChange(action);
+        });
 
         return storeActions;
     }

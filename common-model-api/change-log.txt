@@ -1,3 +1,5 @@
-2020
-0.1.0
+0.2.0 2020-12-23
+    1.Response 去掉status属性，加入SUCCESS_CODE属性
+    
+0.1.0 2020
     1.Response

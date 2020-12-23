@@ -1,14 +1,18 @@
 
 package cn.featherfly.common.api;
 
+import javax.annotation.Nonnull;
+
 /**
- * <p>
- * Api Response
- * </p>
+ * Api Response.
  *
  * @author zhongj
+ * @param <D> the generic type
  */
 public class Response<D> {
+
+    /** The Constant SUCCESS_CODE. */
+    public static final String SUCCESS_CODE = "OK";
 
     private D data;
 
@@ -16,15 +20,65 @@ public class Response<D> {
 
     private String code;
 
-    private Integer status = 1;
+    /**
+     * Checks if is success.
+     *
+     * @return true, if is success
+     */
+    public boolean isSuccess() {
+        return SUCCESS_CODE.equals(code);
+    }
 
     /**
+     * Checks if is success.
+     *
+     * @param response the response
+     * @return true, if is success
+     */
+    public static boolean isSuccess(Response<?> response) {
+        if (response != null) {
+            return response.isSuccess();
+        }
+        return false;
+    }
+
+    /**
+     * Creates the success.
+     *
+     * @param <D>  the generic type
+     * @param data the data
+     * @return the response
+     */
+    public static <D> Response<D> createSuccess(D data) {
+        Response<D> response = new Response<>();
+        response.setData(data);
+        response.setCode(SUCCESS_CODE);
+        return response;
+    }
+
+    /**
+     * Creates the failure.
+     *
+     * @param <D>     the generic type
+     * @param code    the code
+     * @param message the message
+     * @return the response
+     */
+    public static <D> Response<D> createFailure(@Nonnull String code, String message) {
+        Response<D> response = new Response<>();
+        response.setCode(code);
+        response.setMessage(message);
+        return response;
+    }
+
+    /**
+     * Instantiates a new response.
      */
     public Response() {
     }
 
     /**
-     * 返回message
+     * 返回message.
      *
      * @return message
      */
@@ -33,7 +87,7 @@ public class Response<D> {
     }
 
     /**
-     * 设置message
+     * 设置message.
      *
      * @param message message
      */
@@ -42,25 +96,7 @@ public class Response<D> {
     }
 
     /**
-     * 返回status
-     *
-     * @return status
-     */
-    public Integer getStatus() {
-        return status;
-    }
-
-    /**
-     * 设置status
-     *
-     * @param status status
-     */
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    /**
-     * 返回data
+     * 返回data.
      *
      * @return data
      */
@@ -69,7 +105,7 @@ public class Response<D> {
     }
 
     /**
-     * 设置data
+     * 设置data.
      *
      * @param data data
      */
@@ -78,7 +114,7 @@ public class Response<D> {
     }
 
     /**
-     * 返回code
+     * 返回code.
      *
      * @return code
      */
@@ -87,7 +123,7 @@ public class Response<D> {
     }
 
     /**
-     * 设置code
+     * 设置code.
      *
      * @param code code
      */

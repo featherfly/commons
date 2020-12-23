@@ -43,10 +43,13 @@ public class Jsr305Processor extends JavacProcessor {
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
         final JavacElements elementUtils = (JavacElements) processingEnv.getElementUtils();
         messager.printMessage(Diagnostic.Kind.NOTE, "start generate check for javax.annotation.Nonnull");
-        messager.printMessage(Diagnostic.Kind.NOTE,
-                "Nonull element size = " + roundEnvironment.getElementsAnnotatedWith(Nonnull.class).size());
 
-        for (Element element : roundEnvironment.getElementsAnnotatedWith(Nonnull.class)) {
+        @SuppressWarnings("unchecked")
+        Set<Element> elements = (Set<Element>) roundEnvironment.getElementsAnnotatedWith(Nonnull.class);
+
+        messager.printMessage(Diagnostic.Kind.NOTE, "Nonnull annotated element size = " + elements.size());
+
+        for (Element element : elements) {
             if (element.getKind() == ElementKind.PARAMETER) {
                 JCMethodDecl jcMethodDecl = (JCMethodDecl) elementUtils.getTree(element.getEnclosingElement());
                 JCVariableDecl jcVariableDecl = (JCVariableDecl) elementUtils.getTree(element);
@@ -54,9 +57,11 @@ public class Jsr305Processor extends JavacProcessor {
                 addAssertToBody(jcMethodDecl, jcVariableDecl);
                 //                throw new IllegalArgumentException(
                 //                        String.format("parameter [%s] can not be null", element.getSimpleName().toString()));
+                messager.printMessage(Diagnostic.Kind.NOTE,
+                        "Nonnull -> " + element.getEnclosingElement().getKind() + " "
+                                + element.getEnclosingElement().getSimpleName() + " " + element.getKind() + " "
+                                + element.getSimpleName());
             }
-            String name = element.getSimpleName().toString();
-            messager.printMessage(Diagnostic.Kind.NOTE, "Nonnull ->" + element.getKind() + "-" + name);
         }
 
         messager.printMessage(Diagnostic.Kind.NOTE, "end generate check for javax.annotation.Nonnull");
@@ -73,7 +78,7 @@ public class Jsr305Processor extends JavacProcessor {
         JCTree.JCExpression isEq = javac.eqNull(jcVariableDecl);
         JCStatement throwException = javac.throwException(IllegalArgumentException.class, message);
         JCIf jcIf = treeMaker.If(isEq, treeMaker.Block(0, List.of(throwException)), null);
-        messager.printMessage(Diagnostic.Kind.NOTE, jcMethodDecl.body.getStatements().toString());
+        //        messager.printMessage(Diagnostic.Kind.NOTE, jcMethodDecl.body.getStatements().toString());
         List<JCTree.JCStatement> stats = List.of(jcIf);
         stats = stats.appendList(jcMethodDecl.body.getStatements());
         jcMethodDecl.body.stats = List.from(stats);

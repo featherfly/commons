@@ -14,6 +14,9 @@ public class Response<D> {
     /** The Constant SUCCESS_CODE. */
     public static final String SUCCESS_CODE = "OK";
 
+    /** The Constant DEFAULT_ERROR_CODE. */
+    public static final String DEFAULT_ERROR_CODE = "ERROR";
+
     private D data;
 
     private String message;
@@ -67,6 +70,20 @@ public class Response<D> {
     public static <D> Response<D> createFailure(@Nonnull String code, String message) {
         Response<D> response = new Response<>();
         response.setCode(code);
+        response.setMessage(message);
+        return response;
+    }
+
+    /**
+     * Creates the failure.
+     *
+     * @param <D>     the generic type
+     * @param message the message
+     * @return the response
+     */
+    public static <D> Response<D> createError(String message) {
+        Response<D> response = new Response<>();
+        response.setCode(DEFAULT_ERROR_CODE);
         response.setMessage(message);
         return response;
     }

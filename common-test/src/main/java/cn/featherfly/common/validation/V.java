@@ -44,13 +44,19 @@ public class V {
             throw new java.lang.IllegalArgumentException("s is empty");
         }
         System.out.println("hi");
-        {
-            System.out.println("validation test not null -> " + s);
-        }
+        System.out.println("validation test not null -> " + s + ", " + s2);
     }
 
     public static void main(String[] args) {
         //        new V().notNull(null);
-        new V().noneNull(null, null);
+        if (args != null) {
+            if (args.length >= 2) {
+                new V().noneNull(args[0], args[1]);
+            } else if (args.length == 1) {
+                new V().noneNull(args[0], null);
+            } else {
+                new V().noneNull(null, null);
+            }
+        }
     }
 }

@@ -3,7 +3,7 @@ package cn.featherfly.common.http;
 import java.io.Serializable;
 import java.util.Map;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 /**
  * The Interface HttpRequest.

@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Map;
 
-import io.reactivex.Observable;
+import io.reactivex.rxjava3.core.Observable;
 
 /**
  * Http.

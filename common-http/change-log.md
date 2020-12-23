@@ -1,3 +1,6 @@
+# 0.4.1 2020-12-23
+1. 升级rxjava2到rxjava3
+
 # 0.4.0 2020-12-22
 1. 实现BrowerHttpClient
 2. HttpClient加入autoSubscribeOnIo属性，并根据该属性确定是否自动调用subscribeOn(Schedulers.io()),默认为true

@@ -1,3 +1,6 @@
+# 0.3.9
+    1.ObjectToJsonMapper加入storeAsString属性，写入string(varchar nvachar clob等等)或者byte array(blob)
+    
 # 0.3.8 2020-12-13 
     1.修复主键是关联对象时生成建表sql出错的问题
     2.修复废弃API调用

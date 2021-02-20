@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.db.mapping.SqlResultSet;
+import cn.featherfly.common.db.mapping.SqlTypeMappingManager;
 import cn.featherfly.common.db.wrapper.ConnectionWrapper;
 import cn.featherfly.common.db.wrapper.DataSourceWrapper;
 import cn.featherfly.common.db.wrapper.PreparedStatementWrapper;
@@ -35,6 +36,8 @@ import cn.featherfly.common.db.wrapper.ResultSetWrapper;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.LogUtils;
+import cn.featherfly.common.lang.WordUtils;
+import cn.featherfly.common.lang.reflect.GenericClass;
 import cn.featherfly.common.repository.mapping.RowMapper;
 
 /**
@@ -950,6 +953,34 @@ public final class JdbcUtils {
     }
 
     /**
+     * Gets the result set map.
+     *
+     * @param rs      the rs
+     * @param manager the manager
+     * @return the result set map
+     */
+    private static Map<String, Object> getResultSetMap(ResultSet rs, SqlTypeMappingManager manager) {
+        try {
+            Map<String, Object> resultMap = new HashMap<>();
+            ResultSetMetaData metaData = rs.getMetaData();
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                Class<?> type = manager.getJavaType(JDBCType.valueOf(metaData.getColumnType(i)));
+                Object value = null;
+                if (type != null) {
+                    value = manager.get(rs, i, new GenericClass<>(type));
+                } else {
+                    value = JdbcUtils.getResultSetValue(rs, i);
+                }
+                String name = JdbcUtils.lookupColumnName(metaData, i);
+                resultMap.put(WordUtils.parseToUpperFirst(name.toLowerCase(), '_'), value);
+            }
+            return resultMap;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
      * Gets the result set objects.
      *
      * @param <E>    the element type
@@ -1004,6 +1035,24 @@ public final class JdbcUtils {
             List<Map<String, Object>> list = new ArrayList<>();
             while (rs.next()) {
                 list.add(getResultSetMap(rs));
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * Gets the result set maps.
+     *
+     * @param rs the rs
+     * @return the result set maps
+     */
+    public static List<Map<String, Object>> getResultSetMaps(ResultSet rs, SqlTypeMappingManager manager) {
+        try {
+            List<Map<String, Object>> list = new ArrayList<>();
+            while (rs.next()) {
+                list.add(getResultSetMap(rs, manager));
             }
             return list;
         } catch (SQLException e) {

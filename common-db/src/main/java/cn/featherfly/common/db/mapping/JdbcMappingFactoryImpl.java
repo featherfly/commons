@@ -178,4 +178,14 @@ public class JdbcMappingFactoryImpl implements JdbcMappingFactory {
     public DatabaseMetadata getMetadata() {
         return factory.getMetadata();
     }
+
+    /**
+     * 返回sqlTypeMappingManager.
+     *
+     * @return sqlTypeMappingManager
+     */
+    @Override
+    public SqlTypeMappingManager getSqlTypeMappingManager() {
+        return factory.getSqlTypeMappingManager();
+    }
 }

@@ -21,12 +21,26 @@ public class SqlResultSet implements cn.featherfly.common.repository.mapping.Res
 
     private ResultSet proxy;
 
+    private SqlTypeMappingManager manager;
+
     /**
      * @param proxy java.sql.ResultSet
      */
     public SqlResultSet(ResultSet proxy) {
         super();
         this.proxy = proxy;
+    }
+
+    /**
+     * Instantiates a new sql result set.
+     *
+     * @param proxy   java.sql.ResultSet
+     * @param manager the manager
+     */
+    public SqlResultSet(ResultSet proxy, SqlTypeMappingManager manager) {
+        super();
+        this.proxy = proxy;
+        this.manager = manager;
     }
 
     /**
@@ -354,5 +368,14 @@ public class SqlResultSet implements cn.featherfly.common.repository.mapping.Res
      */
     public ResultSet getResultSet() {
         return proxy;
+    }
+
+    /**
+     * Gets the sql type mapping manager.
+     *
+     * @return the sql type mapping manager
+     */
+    public SqlTypeMappingManager getSqlTypeMappingManager() {
+        return manager;
     }
 }

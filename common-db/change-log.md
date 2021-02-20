@@ -1,3 +1,8 @@
+# 0.3.10
+1. JdbcUtils加入getResultSetMaps(ResultSet, SqlTypeMappingManager)和getResultSetMap(ResultSet, SqlTypeMappingManager)方法
+2. 修复SqlUtils.convertNamedParamSql参数后跟,)参数名不正确的问题
+3. SqlTypeMappingManager加入getSqlTypeMappingManager()方法
+
 # 0.3.9 2021-2-20
 1. ObjectToJsonMapper加入storeAsString属性，写入string(varchar nvachar clob等等)或者byte array(blob)
 2. 修复ObjectToJsonMapper返回值为null时报空指针错误的问题

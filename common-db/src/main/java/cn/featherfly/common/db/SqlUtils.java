@@ -132,6 +132,7 @@ public final class SqlUtils {
         boolean emptySymbol = Lang.isEmpty(endSymbol);
         char end = emptySymbol ? Chars.SPACE_CHAR : endSymbol;
         boolean isEnd = false;
+        boolean isEndSign = false;
         for (int index = 0; index < sql.length(); index++) {
             char c = sql.charAt(index);
             if (startSymbol == c) {
@@ -139,9 +140,11 @@ public final class SqlUtils {
             }
             if (nameStartIndex > 0) {
                 isEnd = index == sql.length() - 1;
-                if (c == end || isEnd) {
+                isEndSign = c == end || c == Chars.NEW_LINEZ_CHAR || c == Chars.COMMA_CHAR || c == ')'
+                        || c == Chars.TAB_CHAR;
+                if (isEndSign || isEnd) {
                     nameEndIndex = index;
-                    if (isEnd && emptySymbol) {
+                    if (!isEndSign && isEnd && emptySymbol) {
                         nameEndIndex++;
                     }
                     String name = sql.substring(nameStartIndex + 1, nameEndIndex);

@@ -98,4 +98,26 @@ public class SqlUtilsTest {
         assertEquals(execution.getExecution(), sql);
         assertEquals(execution.getParams(), params.values().toArray());
     }
+
+    @Test
+    void testConvertNamedParamSql2() {
+        String sql = "insert into role(name, descp) values(?, ?)";
+        Execution execution = null;
+        Map<String, Object> params = new LinkedHashMap<>();
+        params.put("name", "yufei");
+        params.put("descp", "descp11");
+
+        execution = SqlUtils.convertNamedParamSql("insert into role(name, descp) values(:name, :descp)", params);
+        assertEquals(execution.getExecution(), sql);
+        assertEquals(execution.getParams(), params.values().toArray());
+
+        execution = SqlUtils.convertNamedParamSql("insert into role(name, descp) values({name}, {descp})", params, '{',
+                '}');
+        assertEquals(execution.getExecution(), sql);
+        assertEquals(execution.getParams(), params.values().toArray());
+
+        execution = SqlUtils.convertNamedParamSql("insert into role(name, descp) values(@name, @descp)", params, '@');
+        assertEquals(execution.getExecution(), sql);
+        assertEquals(execution.getParams(), params.values().toArray());
+    }
 }

@@ -230,6 +230,7 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      *
      * @return sqlTypeMappingManager
      */
+    @Override
     public SqlTypeMappingManager getSqlTypeMappingManager() {
         return sqlTypeMappingManager;
     }

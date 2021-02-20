@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLType;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -102,7 +104,7 @@ public class ObjectToJsonMapper<E extends Serializable> extends AbstractJavaSqlT
     @Override
     public boolean support(SQLType sqlType) {
         if (storeAsString) {
-            return sqlType == JDBCType.VARCHAR || sqlType == JDBCType.NVARCHAR || sqlType == JDBCType.LONGVARBINARY
+            return sqlType == JDBCType.VARCHAR || sqlType == JDBCType.NVARCHAR || sqlType == JDBCType.LONGVARCHAR
                     || sqlType == JDBCType.LONGNVARCHAR || sqlType == JDBCType.CLOB || sqlType == JDBCType.NCLOB
                     || sqlType == JDBCType.JAVA_OBJECT;
         } else {
@@ -124,7 +126,7 @@ public class ObjectToJsonMapper<E extends Serializable> extends AbstractJavaSqlT
     @Override
     public SQLType getSqlType(GenericType<E> javaType) {
         if (storeAsString) {
-            return JDBCType.VARCHAR;
+            return JDBCType.LONGNVARCHAR;
         } else {
             return JDBCType.BLOB;
         }
@@ -136,12 +138,15 @@ public class ObjectToJsonMapper<E extends Serializable> extends AbstractJavaSqlT
     @Override
     public void set(PreparedStatement prep, int columnIndex, E value) {
         try {
+            if (value == null) {
+                prep.setObject(columnIndex, null);
+            }
             if (storeAsString) {
-                String json = objectMapper.writerFor(getGenericType().getClass()).writeValueAsString(value);
+                String json = objectMapper.writerFor(getGenericType().getType()).writeValueAsString(value);
                 prep.setString(columnIndex, json);
             } else {
                 ByteArrayInputStream is = new ByteArrayInputStream(
-                        objectMapper.writerFor(getGenericType().getClass()).writeValueAsBytes(value));
+                        objectMapper.writerFor(getGenericType().getType()).writeValueAsBytes(value));
                 prep.setBlob(columnIndex, is);
             }
         } catch (JsonProcessingException | SQLException e) {
@@ -158,10 +163,16 @@ public class ObjectToJsonMapper<E extends Serializable> extends AbstractJavaSqlT
         try {
             if (storeAsString) {
                 String json = rs.getString(columnIndex);
-                return objectMapper.readerFor(getGenericType().getClass()).readValue(json);
+                if (StringUtils.isBlank(json)) {
+                    return null;
+                }
+                return objectMapper.readerFor(getGenericType().getType()).readValue(json);
             } else {
                 Blob blob = rs.getBlob(columnIndex);
-                return objectMapper.readerFor(getGenericType().getClass()).readValue(blob.getBinaryStream());
+                if (blob == null) {
+                    return null;
+                }
+                return objectMapper.readerFor(getGenericType().getType()).readValue(blob.getBinaryStream());
             }
         } catch (IOException | SQLException e) {
             // TODO 优化错误信息

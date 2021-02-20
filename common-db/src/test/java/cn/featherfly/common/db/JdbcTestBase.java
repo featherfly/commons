@@ -31,12 +31,14 @@ public class JdbcTestBase {
 
     protected Dialect dialect;
 
+    protected SqlExecutor sqlExecutor;
+
     @BeforeClass
     @Parameters({ "dataBase" })
     public void initSetUp(@Optional("mysql") String dataBase) throws IOException {
         DOMConfigurator.configure(ClassLoaderUtils.getResource("log4j.xml", JdbcTestBase.class));
         initDataBase(dataBase);
-
+        sqlExecutor = new SqlExecutor(dataSource);
         // 初始化数据库
         //        SqlExecutor sqlExecutor = new SqlExecutor(dataSource);
         //        sqlExecutor.execute(

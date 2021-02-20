@@ -26,7 +26,6 @@ import cn.featherfly.common.db.JdbcTestBase;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.mappers.ObjectToJsonMapper;
 import cn.featherfly.common.db.mapping.pojo.Article;
-import cn.featherfly.common.db.mapping.pojo.Article2;
 import cn.featherfly.common.db.mapping.pojo.Content;
 import cn.featherfly.common.db.wrapper.ConnectionWrapper;
 import cn.featherfly.common.db.wrapper.PreparedStatementWrapper;
@@ -153,6 +152,8 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         SqlTypeMappingManager manager = new SqlTypeMappingManager();
         assertNull(manager.getSqlType(Long[].class));
 
+        sqlExecutor.execute("delete from cms_article");
+
         manager.regist(new JavaSqlTypeMapper<Long[]>() {
 
             private BeanProperty<Long[]> bp = BeanDescriptor.getBeanDescriptor(Article.class)
@@ -231,13 +232,17 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
     @Test
     public void testObjectToJsonMapper() {
+        // database varchar type
         SqlTypeMappingManager manager = new SqlTypeMappingManager();
         assertNull(manager.getSqlType(Content.class));
 
-        BeanDescriptor<Article2> bd = BeanDescriptor.getBeanDescriptor(Article2.class);
+        sqlExecutor.execute("delete from cms_article");
+
+        BeanDescriptor<Article> bd = BeanDescriptor.getBeanDescriptor(Article.class);
         BeanProperty<Content> contentProperty = bd.getBeanProperty("content2");
 
-        manager.regist(contentProperty, new ObjectToJsonMapper<>(Content.class));
+        manager.regist(contentProperty, new ObjectToJsonMapper<>(contentProperty));
+        //        manager.regist(contentProperty, new ObjectToJsonMapper<>(Content.class));
 
         String insert = "INSERT INTO `db_test`.`cms_article` (`ID`, `title`, `content2`) VALUES (null, ?, ?)";
         Content content = new Content();
@@ -261,7 +266,50 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
             GenericType<String> gts = new GenericClass<>(String.class);
             while (rs.next()) {
                 String title = manager.get(rs.getResultSet(), 2, gts);
-                Content contentResult = manager.get(rs.getResultSet(), 3, contentProperty);
+                Content contentResult = manager.get(rs.getResultSet(), 4, contentProperty);
+                System.out.println(title + " -> " + contentResult);
+                assertEquals(content, contentResult);
+            }
+        }
+    }
+
+    @Test
+    public void testObjectToJsonMapper2() {
+        // database json type
+        SqlTypeMappingManager manager = new SqlTypeMappingManager();
+        assertNull(manager.getSqlType(Content.class));
+
+        sqlExecutor.execute("delete from cms_article");
+
+        BeanDescriptor<Article> bd = BeanDescriptor.getBeanDescriptor(Article.class);
+        BeanProperty<Content> contentProperty = bd.getBeanProperty("content3");
+
+        manager.regist(contentProperty, new ObjectToJsonMapper<>(contentProperty));
+        //        manager.regist(contentProperty, new ObjectToJsonMapper<>(Content.class));
+
+        String insert = "INSERT INTO `db_test`.`cms_article` (`ID`, `title`, `content3`) VALUES (null, ?, ?)";
+        Content content = new Content();
+        content.setDescp("c_descp");
+        content.setImg("c_img");
+
+        try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
+                PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
+            manager.set(prep.getPreparedStatement(), 1, Randoms.getString(6));
+            //            manager.set(prep.getPreparedStatement(), 2, content);
+            manager.set(prep.getPreparedStatement(), 2, content, contentProperty);
+
+            boolean res = prep.execute();
+            System.out.println(res);
+        }
+
+        String select = "select * from cms_article";
+        try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
+                PreparedStatementWrapper prep = connection.prepareStatement(select)) {
+            ResultSetWrapper rs = prep.executeQuery();
+            GenericType<String> gts = new GenericClass<>(String.class);
+            while (rs.next()) {
+                String title = manager.get(rs.getResultSet(), 2, gts);
+                Content contentResult = manager.get(rs.getResultSet(), 5, contentProperty);
                 System.out.println(title + " -> " + contentResult);
                 assertEquals(content, contentResult);
             }

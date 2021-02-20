@@ -1,9 +1,7 @@
 package cn.featherfly.common.repository.mapping;
 
 /**
- * <p>
- * 记录行映射接口
- * </p>
+ * 记录行映射接口.
  *
  * @param <E> 要映射的具体类
  * @author zhongj
@@ -11,9 +9,7 @@ package cn.featherfly.common.repository.mapping;
 @FunctionalInterface
 public interface RowMapper<E> {
     /**
-     * <p>
-     * 映射记录到指定的对象
-     * </p>
+     * 映射记录到指定的对象.
      *
      * @param res    数据集
      * @param rowNum 行数

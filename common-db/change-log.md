@@ -1,4 +1,4 @@
-# 0.3.10
+# 0.3.10 2021-2-22
 1. JdbcUtils加入getResultSetMaps(ResultSet, SqlTypeMappingManager)和getResultSetMap(ResultSet, SqlTypeMappingManager)方法
 2. 修复SqlUtils.convertNamedParamSql参数后跟,)参数名不正确的问题
 3. SqlTypeMappingManager加入getSqlTypeMappingManager()方法

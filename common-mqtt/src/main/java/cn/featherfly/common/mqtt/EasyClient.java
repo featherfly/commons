@@ -67,9 +67,9 @@ public class EasyClient extends ReconnectableClient<EasyClient> {
     /**
      * Subscribe.
      *
-     * @param topic    the topic
-     * @param qos      the qos
-     * @param consumer the consumer
+     * @param topicFilter the topic filter
+     * @param qos         the qos
+     * @param consumer    the consumer
      * @return the easy client
      * @throws MqttException the mqtt exception
      */

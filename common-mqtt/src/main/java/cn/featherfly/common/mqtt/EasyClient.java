@@ -73,11 +73,10 @@ public class EasyClient extends ReconnectableClient<EasyClient> {
      * @return the easy client
      * @throws MqttException the mqtt exception
      */
-    public EasyClient subscribe(String topic, Qos qos, Consumer<MqttMessage> consumer) throws MqttException {
-        ((AutoDetectionMqttCallBack) callback).subscribe(topic, (t, message) -> {
+    public EasyClient subscribe(String topicFilter, Qos qos, Consumer<MqttMessage> consumer) throws MqttException {
+        client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
             consumer.accept(message);
         });
-        client.subscribe(topic, qos.ordinal());
         return this;
     }
 
@@ -92,8 +91,9 @@ public class EasyClient extends ReconnectableClient<EasyClient> {
      */
     public EasyClient subscribe(String topicFilter, Qos qos, BiConsumer<String, MqttMessage> consumer)
             throws MqttException {
-        ((AutoDetectionMqttCallBack) callback).subscribe(topicFilter, consumer);
-        client.subscribe(topicFilter, qos.ordinal());
+        client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
+            consumer.accept(topicFilter, message);
+        });
         return this;
     }
 

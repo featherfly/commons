@@ -74,4 +74,39 @@ public class StringsTest {
         assertEquals(Strings.format("hello $$$name$$$ $$$$ at $$$year$$$", map, '$'), str);
     }
 
+    @Test
+    public void testFormat2() {
+        String name = "yufei";
+        String expected = "hello yufei";
+        String src = "hello {name}";
+        String src2 = "hello {0}";
+
+        //        System.out.println(Strings.format(src, new HashChainMap<String, Object>().putChain("name", name)));
+        //        System.out.println(Strings.format(src2, name));
+
+        assertEquals(Strings.format(src, new HashChainMap<String, Object>().putChain("name", name)), expected);
+        assertEquals(Strings.format(src2, name), expected);
+    }
+
+    @Test
+    public void testFormat3() {
+        String expected = "{index:1, mid:2}";
+        String src = "{index:{0}, mid:{1}}";
+        int index = 1;
+        int mid = 2;
+
+        String actual = Strings.format(src, index, mid);
+
+        System.out.println(actual);
+
+        assertEquals(actual, expected);
+
+        src = "{index:{index}, mid:{mid}}";
+
+        actual = Strings.format(src, new HashChainMap<String, Object>().putChain("index", index).putChain("mid", mid));
+
+        System.out.println(actual);
+
+        assertEquals(actual, expected);
+    }
 }

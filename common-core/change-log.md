@@ -1,3 +1,6 @@
+# 1.8.22 2021-03-03
+1. StringFormatter.format实现{index:{index}, mid:{mid}}嵌套时忽略外层标签的功能
+	
 # 1.8.21 2020-12-22
 	1. 加入TreeChianMap,LinkedHashChainMap,ConcurrentHashChainMap
 

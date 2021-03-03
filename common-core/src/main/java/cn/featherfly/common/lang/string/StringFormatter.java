@@ -82,35 +82,44 @@ public class StringFormatter {
         if (Lang.isEmpty(str)) {
             return str;
         }
-        StringBuilder sql = new StringBuilder(str);
+        StringBuilder sb = new StringBuilder(str);
         int nameStartIndex = -1;
         int nameEndIndex = -1;
         boolean isEnd = false;
-        for (int index = 0; index < sql.length(); index++) {
-            char c = sql.charAt(index);
-            isEnd = index == sql.length() - 1;
+        boolean sameStartEnd = startSymbol == endSymbol;
+        for (int index = 0; index < sb.length(); index++) {
+            char c = sb.charAt(index);
+            isEnd = index == sb.length() - 1;
             if (nameStartIndex == -1) {
                 if (startSymbol == c) {
-                    if (!isEnd && sql.charAt(index + 1) == startSymbol) {
-                        sql.deleteCharAt(index);
+                    if (!isEnd && sb.charAt(index + 1) == startSymbol) {
+                        sb.deleteCharAt(index);
                     } else {
                         nameStartIndex = index;
                     }
                     continue;
                 }
                 if (c == endSymbol) {
-                    if (!isEnd && sql.charAt(index + 1) == endSymbol) {
-                        sql.deleteCharAt(index);
+                    if (!isEnd && sb.charAt(index + 1) == endSymbol) {
+                        sb.deleteCharAt(index);
                     }
                 }
             }
-            if (nameStartIndex > 0) {
+            if (nameStartIndex >= 0) {
+                if (startSymbol == c && !sameStartEnd) {
+                    if (!isEnd && sb.charAt(index + 1) == startSymbol) {
+                        sb.deleteCharAt(index);
+                    } else {
+                        nameStartIndex = index;
+                    }
+                    continue;
+                }
                 if (c == endSymbol || isEnd) {
                     nameEndIndex = index;
-                    String name = sql.substring(nameStartIndex + 1, nameEndIndex);
+                    String name = sb.substring(nameStartIndex + 1, nameEndIndex);
                     nameEndIndex++;
-                    sql.insert(nameEndIndex, args.get(name));
-                    sql.delete(nameStartIndex, nameEndIndex);
+                    sb.insert(nameEndIndex, args.get(name));
+                    sb.delete(nameStartIndex, nameEndIndex);
                     index -= nameEndIndex - nameStartIndex - 1;
                     // 查找name完成，start index 重置
                     nameStartIndex = -1;
@@ -118,6 +127,6 @@ public class StringFormatter {
                 }
             }
         }
-        return sql.toString();
+        return sb.toString();
     }
 }

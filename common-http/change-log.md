@@ -1,3 +1,6 @@
+# 0.5.2
+1. HttpClients的autoSubscribeOnIo属性读写从HttpRxjavaClient读写
+
 # 0.5.1 2021-03-05
 1. 加入HttpClients, 相当于上一个版本的HttpClient
 

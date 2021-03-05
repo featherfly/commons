@@ -33,8 +33,6 @@ public class HttpClients extends AbstractHttpClient {
 
     private HttpRxjavaClient rxjavaClient;
 
-    private boolean autoSubscribeOnIo;
-
     /**
      * Instantiates a new http client.
      */
@@ -97,19 +95,6 @@ public class HttpClients extends AbstractHttpClient {
     /**
      * Instantiates a new http client.
      *
-     * @param client        the client
-     * @param headers       the headers
-     * @param serialization the serialization
-     * @param mediaType     the media type
-     */
-    public HttpClients(OkHttpClient client, Map<String, String> headers, Serialization serialization,
-            MediaType mediaType) {
-        super(client, headers, serialization, mediaType);
-    }
-
-    /**
-     * Instantiates a new http client.
-     *
      * @param okhttpClient the client
      * @param headers      the headers
      */
@@ -126,6 +111,19 @@ public class HttpClients extends AbstractHttpClient {
      */
     public HttpClients(OkHttpClient okhttpClient, Serialization serialization, MediaType mediaType) {
         super(okhttpClient, serialization, mediaType);
+    }
+
+    /**
+     * Instantiates a new http client.
+     *
+     * @param okhttpClient  the client
+     * @param headers       the headers
+     * @param serialization the serialization
+     * @param mediaType     the media type
+     */
+    public HttpClients(OkHttpClient okhttpClient, Map<String, String> headers, Serialization serialization,
+            MediaType mediaType) {
+        super(okhttpClient, headers, serialization, mediaType);
     }
 
     /**
@@ -146,16 +144,16 @@ public class HttpClients extends AbstractHttpClient {
      * @return autoSubscribeOnIo
      */
     public boolean isAutoSubscribeOnIo() {
-        return autoSubscribeOnIo;
+        return rxjavaClient.isAutoSubscribeOnIo();
     }
 
     /**
-     * set autoSubscribeOnIo value.
+     * set autoSubscribeOnIo value
      *
      * @param autoSubscribeOnIo autoSubscribeOnIo
      */
     public void setAutoSubscribeOnIo(boolean autoSubscribeOnIo) {
-        this.autoSubscribeOnIo = autoSubscribeOnIo;
+        rxjavaClient.setAutoSubscribeOnIo(autoSubscribeOnIo);
     }
 
     /**

@@ -1,3 +1,6 @@
+# 0.1.3 
+1. ClientBuilder加入username,password选项
+
 # 0.1.2 2021-03-03
 1. 修复subscribe()
 

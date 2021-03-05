@@ -28,6 +28,10 @@ public class ClientBuilder {
 
     private boolean reconnectInNewThread = true;
 
+    private String username;
+
+    private String password;
+
     /**
      * Instantiates a new client builder.
      */
@@ -162,6 +166,28 @@ public class ClientBuilder {
     }
 
     /**
+     * Username.
+     *
+     * @param username the username
+     * @return the client builder
+     */
+    public ClientBuilder username(String username) {
+        this.username = username;
+        return this;
+    }
+
+    /**
+     * Password.
+     *
+     * @param password the password
+     * @return the client builder
+     */
+    public ClientBuilder password(String password) {
+        this.password = password;
+        return this;
+    }
+
+    /**
      * Reconnect in new thread.
      *
      * @param reconnectInNewThread the reconnect in new thread
@@ -208,6 +234,12 @@ public class ClientBuilder {
         client.persistence = persistence;
         if (options == null) {
             options = new MqttConnectOptions();
+        }
+        if (username != null) {
+            options.setUserName(username);
+        }
+        if (password != null) {
+            options.setPassword(password.toCharArray());
         }
         client.options = options;
         client.reconnectInNewThread = reconnectInNewThread;

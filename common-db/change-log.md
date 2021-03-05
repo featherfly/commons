@@ -1,5 +1,6 @@
 # 0.3.11
 1. AbstractJavaSqlTypeMapper加入getJavaType(SQLType sqlType)的默认实现
+2. ObjectToDbMappingFactory createIndex加入@Table的uniqueConstraints支持
 
 
 # 0.3.10 2021-2-22

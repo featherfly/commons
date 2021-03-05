@@ -13,6 +13,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.UniqueConstraint;
 
 import cn.featherfly.common.bean.BeanDescriptor;
 import cn.featherfly.common.bean.BeanProperty;
@@ -101,8 +102,11 @@ public class ObjectToDbMappingFactory extends AbstractJdbcMappingFactory {
     private <T> List<Index> createIndexs(javax.persistence.Table table) {
         List<Index> indexs = new ArrayList<>();
         if (table != null) {
-            for (javax.persistence.Index i : table.indexes()) {
-                indexs.add(new Index(i.name(), i.columnList().split(Chars.COMMA), i.unique()));
+            for (javax.persistence.Index index : table.indexes()) {
+                indexs.add(new Index(index.name(), index.columnList().split(Chars.COMMA), index.unique()));
+            }
+            for (UniqueConstraint unique : table.uniqueConstraints()) {
+                indexs.add(new Index(unique.name(), unique.columnNames(), true));
             }
         }
         return indexs;

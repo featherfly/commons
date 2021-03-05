@@ -1,6 +1,8 @@
 
 package cn.featherfly.common.db.mapping;
 
+import java.sql.SQLType;
+
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.GenericType;
 
@@ -58,6 +60,17 @@ public abstract class AbstractJavaSqlTypeMapper<E extends Object> implements Jav
      */
     public Class<E> getJavaType() {
         return genericType.getType();
+    }
+
+    /**
+     * Gets the java type.
+     *
+     * @param sqlType the sql type
+     * @return the java type
+     */
+    @Override
+    public Class<E> getJavaType(SQLType sqlType) {
+        return getJavaType();
     }
 
     /**

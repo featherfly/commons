@@ -1,3 +1,6 @@
+# 0.5.1 2021-03-05
+1. 加入HttpClients, 相当于上一个版本的HttpClient
+
 # 0.5.0 2021-03-05
 1. HttpClient拆分为HttpClient,HttpAsyncClient,HttpRxjavaClient
 2. Http拆分为Http,HttpAsync,HttpRxjava

@@ -30,17 +30,17 @@ public class BaiduMapTest {
 
         AtomicBoolean executed = new AtomicBoolean(false);
 
-        brower.getCompletion(url, new HashMap<>(), ReverseGeocoding.class).completion(r -> {
-            System.out.println(r);
-            executed.set(true);
-        }).error(e -> {
-            System.out.println(e.getMessage());
-            executed.set(true);
-        });
-
-        while (!executed.get()) {
-
-        }
+        //        brower.getCompletion(url, new HashMap<>(), ReverseGeocoding.class).completion(r -> {
+        //            System.out.println(r);
+        //            executed.set(true);
+        //        }).error(e -> {
+        //            System.out.println(e.getMessage());
+        //            executed.set(true);
+        //        });
+        //
+        //        while (!executed.get()) {
+        //
+        //        }
 
         brower.shutdown();
 
@@ -102,17 +102,19 @@ public class BaiduMapTest {
 
     @Test
     public void testServerWithHttpClient() {
-        HttpClient request = new HttpClient();
+        HttpClient client = new HttpClient();
 
         String url = "http://api.map.baidu.com/reverse_geocoding/v3/?ak=0Zj0WEeN8dTr8XMMAFal5LPE8k5D53tR&output=json&coordtype=wgs84ll&location=31.225696563611,121.49884033194";
 
-        ReverseGeocoding reverseGeocoding = request.get(url, ReverseGeocoding.class);
+        ReverseGeocoding reverseGeocoding = client.get(url, ReverseGeocoding.class);
 
         System.out.println(reverseGeocoding);
 
         AtomicBoolean executed = new AtomicBoolean(false);
 
-        request.getCompletion(url, ReverseGeocoding.class).completion(r -> {
+        HttpAsyncClient asyncClient = new HttpAsyncClient();
+
+        asyncClient.get(url, ReverseGeocoding.class).completion(r -> {
             System.out.println(r);
             executed.set(true);
         }).error(e -> {
@@ -120,7 +122,7 @@ public class BaiduMapTest {
             executed.set(true);
         });
 
-        request.getCompletion(url, ReverseGeocoding.class).completion(r -> {
+        asyncClient.get(url, ReverseGeocoding.class).completion(r -> {
             System.out.println("Completion2");
             System.out.println(r);
             executed.set(true);
@@ -130,7 +132,8 @@ public class BaiduMapTest {
             executed.set(true);
         });
 
-        request.getObservable(url, ReverseGeocoding.class).subscribe(r -> {
+        HttpRxjavaClient rxjavaClient = new HttpRxjavaClient();
+        rxjavaClient.get(url, ReverseGeocoding.class).subscribe(r -> {
             System.out.println("Observable");
             System.out.println(r);
             executed.set(true);
@@ -144,7 +147,7 @@ public class BaiduMapTest {
 
         }
 
-        request.shutdown();
+        rxjavaClient.shutdown();
 
         System.out.println("end");
     }
@@ -159,7 +162,7 @@ public class BaiduMapTest {
 
         AtomicBoolean executed = new AtomicBoolean(false);
 
-        Http.getCompletion(url, ReverseGeocoding.class).completion(r -> {
+        HttpAsync.get(url, ReverseGeocoding.class).completion(r -> {
             System.out.println(r);
             executed.set(true);
         }).error(e -> {
@@ -167,7 +170,7 @@ public class BaiduMapTest {
             executed.set(true);
         });
 
-        Http.getCompletion(url, ReverseGeocoding.class).completion(r -> {
+        HttpAsync.get(url, ReverseGeocoding.class).completion(r -> {
             System.out.println("Completion2");
             System.out.println(r);
             executed.set(true);
@@ -177,7 +180,7 @@ public class BaiduMapTest {
             executed.set(true);
         });
 
-        Http.getObservable(url, ReverseGeocoding.class).subscribe(r -> {
+        HttpRxjava.get(url, ReverseGeocoding.class).subscribe(r -> {
             System.out.println("Observable");
             System.out.println(r);
             executed.set(true);
@@ -194,6 +197,7 @@ public class BaiduMapTest {
         Http.shutdown();
 
         System.out.println("end");
+
     }
 
     public static void main(String[] args) {

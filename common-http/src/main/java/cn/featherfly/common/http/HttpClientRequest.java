@@ -24,6 +24,8 @@ public class HttpClientRequest implements HttpRequest {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private HttpClient client;
+    private HttpAsyncClient asyncClient;
+    private HttpRxjavaClient rxjavaClient;
 
     /**
      * Instantiates a new ok http request.
@@ -101,6 +103,8 @@ public class HttpClientRequest implements HttpRequest {
     public HttpClientRequest(OkHttpClient okHttpClient, Map<String, String> headers, Serialization serialization,
             MediaType mediaType) {
         client = new HttpClient(okHttpClient, headers, serialization, mediaType);
+        asyncClient = new HttpAsyncClient(okHttpClient, headers, serialization, mediaType);
+        rxjavaClient = new HttpRxjavaClient(okHttpClient, headers, serialization, mediaType);
     }
 
     /**
@@ -112,7 +116,7 @@ public class HttpClientRequest implements HttpRequest {
         final StringBuilder newUrl = new StringBuilder(url);
         preSend(method, newUrl, requestBody, headers, responseType);
         final String finalUrl = newUrl.toString();
-        return client.requestCompletion(method, finalUrl, requestBody, headers, responseType);
+        return asyncClient.request(method, finalUrl, requestBody, headers, responseType);
     }
 
     /**
@@ -150,7 +154,7 @@ public class HttpClientRequest implements HttpRequest {
         final StringBuilder newUrl = new StringBuilder(url);
         preSend(method, newUrl, params, headers, responseType);
         final String finalUrl = newUrl.toString();
-        return client.requestCompletion(method, finalUrl, params, headers, responseType);
+        return asyncClient.request(method, finalUrl, params, headers, responseType);
     }
 
     /**
@@ -214,7 +218,7 @@ public class HttpClientRequest implements HttpRequest {
         final StringBuilder newUrl = new StringBuilder(url);
         preSend(method, newUrl, requestBody, headers, responseType);
         final String finalUrl = newUrl.toString();
-        return client.requestObservable(method, finalUrl, requestBody, headers, responseType);
+        return rxjavaClient.request(method, finalUrl, requestBody, headers, responseType);
     }
 
     /**
@@ -226,7 +230,7 @@ public class HttpClientRequest implements HttpRequest {
         final StringBuilder newUrl = new StringBuilder(url);
         preSend(method, newUrl, params, headers, responseType);
         final String finalUrl = newUrl.toString();
-        return client.requestObservable(method, finalUrl, params, headers, responseType);
+        return rxjavaClient.request(method, finalUrl, params, headers, responseType);
     }
 
     /**

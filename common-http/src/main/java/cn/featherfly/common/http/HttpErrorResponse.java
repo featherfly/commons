@@ -4,7 +4,7 @@ import java.util.Map;
 
 /**
  * The Class HttpErrorResponse.
- * 
+ *
  * @author zhongj
  */
 public class HttpErrorResponse implements Error {
@@ -20,6 +20,18 @@ public class HttpErrorResponse implements Error {
      */
     public HttpErrorResponse(String message) {
         this.message = message;
+    }
+
+    /**
+     * Instantiates a new http error response.
+     *
+     * @param message      the message
+     * @param httpResponse the http response
+     */
+    public HttpErrorResponse(String message, HttpResponse httpResponse) {
+        super();
+        this.message = message;
+        this.httpResponse = httpResponse;
     }
 
     /**

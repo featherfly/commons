@@ -1,3 +1,7 @@
+# 0.5.0 2021-03-05
+1. HttpClient拆分为HttpClient,HttpAsyncClient,HttpRxjavaClient
+2. Http拆分为Http,HttpAsync,HttpRxjava
+
 # 0.4.1 2020-12-23
 1. 升级rxjava2到rxjava3
 

@@ -2,6 +2,7 @@
 package cn.featherfly.common.http;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -75,6 +76,20 @@ public class HttpUtils {
             }
         }
         return formBodyBuilder.build();
+    }
+
+    /**
+     * Headers to map.
+     *
+     * @param headers the headers
+     * @return the headers
+     */
+    public static Map<String, String> headersToMap(Headers headers) {
+        Map<String, String> headerMap = new HashMap<>();
+        for (String name : headers.names()) {
+            headerMap.put(name, headers.get(name));
+        }
+        return headerMap;
     }
 
     /**

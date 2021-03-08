@@ -3,6 +3,8 @@ package cn.featherfly.common.api;
 
 import javax.annotation.Nonnull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Api Response.
  *
@@ -28,6 +30,7 @@ public class Response<D> {
      *
      * @return true, if is success
      */
+    @JsonIgnore
     public boolean isSuccess() {
         return SUCCESS_CODE.equals(code);
     }

@@ -1,3 +1,6 @@
+# 0.2.1 2021-3-8
+1. Serialization加载ProtostuffSerializer, JacksonXmlSerializer使用反射加载
+
 # 0.2.0 2020-12-22
 1. 加入JacksonXmlSerializer
 

@@ -10,6 +10,8 @@ import javax.activation.MimeTypeParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cn.featherfly.common.lang.ClassUtils;
+
 /**
  * Serialization.
  *
@@ -44,19 +46,25 @@ public class Serialization {
         DEFAULT.serializers.put(MIME_TYPE_JSON, JSON_SERIALIZER);
         try {
             Class.forName("com.fasterxml.jackson.dataformat.xml.XmlMapper");
-            DEFAULT.serializers.put(MIME_TYPE_XML, new JacksonXmlSerializer());
+            //            DEFAULT.serializers.put(MIME_TYPE_XML, new JacksonXmlSerializer());
+            DEFAULT.serializers.put(MIME_TYPE_XML, (Serializer) ClassUtils
+                    .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.JacksonXmlSerializer")));
         } catch (ClassNotFoundException e) {
             LOG.warn(e.getMessage());
         }
         try {
             Class.forName("io.protostuff.ProtostuffIOUtil");
-            DEFAULT.serializers.put(MIME_TYPE_PROTOBUFF, new ProtostuffSerializer());
+            //            DEFAULT.serializers.put(MIME_TYPE_PROTOBUFF, new ProtostuffSerializer());
+            DEFAULT.serializers.put(MIME_TYPE_PROTOBUFF, (Serializer) ClassUtils
+                    .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.ProtostuffSerializer")));
         } catch (ClassNotFoundException e) {
             LOG.warn(e.getMessage());
         }
         try {
             Class.forName("com.esotericsoftware.kryo.Kryo");
-            DEFAULT.serializers.put(MIME_TYPE_KRYO, new KryoSerializer());
+            //            DEFAULT.serializers.put(MIME_TYPE_KRYO, new KryoSerializer());
+            DEFAULT.serializers.put(MIME_TYPE_KRYO, (Serializer) ClassUtils
+                    .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.KryoSerializer")));
         } catch (ClassNotFoundException e) {
             LOG.warn(e.getMessage());
         }

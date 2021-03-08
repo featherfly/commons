@@ -1,6 +1,7 @@
-# 0.3.11
+# 0.3.11 2021-3-8
 1. AbstractJavaSqlTypeMapper加入getJavaType(SQLType sqlType)的默认实现
 2. ObjectToDbMappingFactory createIndex加入@Table的uniqueConstraints支持
+3. JdbcUtils.getResultSetValue(ResultSet rs, int index, Class<?> requiredType)加入LocalDate,LocalTime,LocalDateTime支持
 
 
 # 0.3.10 2021-2-22

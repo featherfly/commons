@@ -16,7 +16,11 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +38,7 @@ import cn.featherfly.common.db.wrapper.DataSourceWrapper;
 import cn.featherfly.common.db.wrapper.PreparedStatementWrapper;
 import cn.featherfly.common.db.wrapper.ResultSetWrapper;
 import cn.featherfly.common.lang.ClassUtils;
+import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.LogUtils;
 import cn.featherfly.common.lang.WordUtils;
@@ -844,6 +849,21 @@ public final class JdbcUtils {
                 value = rs.getTime(index);
             } else if (java.sql.Timestamp.class.equals(requiredType) || java.util.Date.class.equals(requiredType)) {
                 value = rs.getTimestamp(index);
+            } else if (LocalDate.class.equals(requiredType)) {
+                value = rs.getDate(index);
+                if (value != null) {
+                    value = Dates.toLocalDate(new Date(((java.sql.Date) value).getTime()));
+                }
+            } else if (LocalTime.class.equals(requiredType)) {
+                value = rs.getTime(index);
+                if (value != null) {
+                    value = Dates.toLocalTime(new Date(((java.sql.Time) value).getTime()));
+                }
+            } else if (LocalDateTime.class.equals(requiredType)) {
+                value = rs.getTimestamp(index);
+                if (value != null) {
+                    value = Dates.toLocalDateTime(new Date(((java.sql.Timestamp) value).getTime()));
+                }
             } else if (BigDecimal.class.equals(requiredType)) {
                 value = rs.getBigDecimal(index);
             } else if (Blob.class.equals(requiredType)) {

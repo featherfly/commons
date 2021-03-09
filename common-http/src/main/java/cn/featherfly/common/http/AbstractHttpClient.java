@@ -109,7 +109,7 @@ public abstract class AbstractHttpClient {
      */
     public AbstractHttpClient(HttpRequestConfig config, Map<String, String> headers, Serialization serialization,
             MediaType mediaType) {
-        init(client, headers, serialization, mediaType);
+        init(config, headers, serialization, mediaType);
     }
 
     /**

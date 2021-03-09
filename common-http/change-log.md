@@ -1,5 +1,6 @@
-# 0.5.2
+# 0.5.2 2021-03-09
 1. HttpClients的autoSubscribeOnIo属性读写从HttpRxjavaClient读写
+1. 修复AbstractHttpClient的参数传递错误
 
 # 0.5.1 2021-03-05
 1. 加入HttpClients, 相当于上一个版本的HttpClient

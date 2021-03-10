@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +26,7 @@ public class Serialization {
     private static final Serializer JSON_SERIALIZER = new JacksonSerializer();
 
     /** The Constant DEFAULT. */
-    private static final Serialization DEFAULT;
+    private static final Serialization DEFAULT = new Serialization();
 
     /** The Constant MIME_TYPE_JSON. */
     public static final String MIME_TYPE_JSON = "application/json";
@@ -41,34 +40,35 @@ public class Serialization {
     /** The Constant MIME_TYPE_XML. */
     public static final String MIME_TYPE_XML = "application/xml";
 
-    static {
-        DEFAULT = new Serialization();
-        DEFAULT.serializers.put(MIME_TYPE_JSON, JSON_SERIALIZER);
-        try {
-            Class.forName("com.fasterxml.jackson.dataformat.xml.XmlMapper");
-            //            DEFAULT.serializers.put(MIME_TYPE_XML, new JacksonXmlSerializer());
-            DEFAULT.serializers.put(MIME_TYPE_XML, (Serializer) ClassUtils
-                    .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.JacksonXmlSerializer")));
-        } catch (ClassNotFoundException e) {
-            LOG.warn(e.getMessage());
-        }
-        try {
-            Class.forName("io.protostuff.ProtostuffIOUtil");
-            //            DEFAULT.serializers.put(MIME_TYPE_PROTOBUFF, new ProtostuffSerializer());
-            DEFAULT.serializers.put(MIME_TYPE_PROTOBUFF, (Serializer) ClassUtils
-                    .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.ProtostuffSerializer")));
-        } catch (ClassNotFoundException e) {
-            LOG.warn(e.getMessage());
-        }
-        try {
-            Class.forName("com.esotericsoftware.kryo.Kryo");
-            //            DEFAULT.serializers.put(MIME_TYPE_KRYO, new KryoSerializer());
-            DEFAULT.serializers.put(MIME_TYPE_KRYO, (Serializer) ClassUtils
-                    .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.KryoSerializer")));
-        } catch (ClassNotFoundException e) {
-            LOG.warn(e.getMessage());
-        }
-    }
+    // 这种写法在android上会导致调试卡死
+    //    static {
+    //        DEFAULT = new Serialization();
+    //        DEFAULT.serializers.put(MIME_TYPE_JSON, JSON_SERIALIZER);
+    //        try {
+    //            Class.forName("com.fasterxml.jackson.dataformat.xml.XmlMapper");
+    //            //            DEFAULT.serializers.put(MIME_TYPE_XML, new JacksonXmlSerializer());
+    //            DEFAULT.serializers.put(MIME_TYPE_XML, (Serializer) ClassUtils
+    //                    .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.JacksonXmlSerializer")));
+    //        } catch (ClassNotFoundException e) {
+    //            LOG.warn(e.getMessage());
+    //        }
+    //        try {
+    //            Class.forName("io.protostuff.ProtostuffIOUtil");
+    //            //            DEFAULT.serializers.put(MIME_TYPE_PROTOBUFF, new ProtostuffSerializer());
+    //            DEFAULT.serializers.put(MIME_TYPE_PROTOBUFF, (Serializer) ClassUtils
+    //                    .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.ProtostuffSerializer")));
+    //        } catch (ClassNotFoundException e) {
+    //            LOG.warn(e.getMessage());
+    //        }
+    //        try {
+    //            Class.forName("com.esotericsoftware.kryo.Kryo");
+    //            //            DEFAULT.serializers.put(MIME_TYPE_KRYO, new KryoSerializer());
+    //            DEFAULT.serializers.put(MIME_TYPE_KRYO, (Serializer) ClassUtils
+    //                    .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.KryoSerializer")));
+    //        } catch (ClassNotFoundException e) {
+    //            LOG.warn(e.getMessage());
+    //        }
+    //    }
 
     /**
      * Instantiates a new serialization.
@@ -92,6 +92,33 @@ public class Serialization {
      * @return the default
      */
     public static Serialization getDefault() {
+        if (DEFAULT.serializers.isEmpty()) {
+            DEFAULT.serializers.put(MIME_TYPE_JSON, JSON_SERIALIZER);
+            try {
+                Class.forName("com.fasterxml.jackson.dataformat.xml.XmlMapper");
+                //                        DEFAULT.serializers.put(MIME_TYPE_XML, new JacksonXmlSerializer());
+                DEFAULT.serializers.put(MIME_TYPE_XML, (Serializer) ClassUtils
+                        .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.JacksonXmlSerializer")));
+            } catch (Throwable e) {
+                LOG.warn(e.getMessage());
+            }
+            try {
+                Class.forName("io.protostuff.ProtostuffIOUtil");
+                //                                    DEFAULT.serializers.put(MIME_TYPE_PROTOBUFF, new ProtostuffSerializer());
+                DEFAULT.serializers.put(MIME_TYPE_PROTOBUFF, (Serializer) ClassUtils
+                        .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.ProtostuffSerializer")));
+            } catch (Throwable e) {
+                LOG.warn(e.getMessage());
+            }
+            try {
+                Class.forName("com.esotericsoftware.kryo.Kryo");
+                //                                    DEFAULT.serializers.put(MIME_TYPE_KRYO, new KryoSerializer());
+                DEFAULT.serializers.put(MIME_TYPE_KRYO, (Serializer) ClassUtils
+                        .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.KryoSerializer")));
+            } catch (Throwable e) {
+                LOG.warn(e.getMessage());
+            }
+        }
         return DEFAULT;
     }
 
@@ -198,20 +225,20 @@ public class Serialization {
         return JSON_SERIALIZER.deserialize(bytes, type);
     }
 
-    /**
-     * The main method.
-     *
-     * @param args the arguments
-     * @throws MimeTypeParseException the mime type parse exception
-     */
-    public static void main(String[] args) throws MimeTypeParseException {
-        MimeType mimeType = new MimeType("application/json; charset=utf-8");
-        mimeType.setParameter("charset", "utf-8");
-        System.out.println(mimeType);
-        System.out.println(mimeType.getBaseType());
-        System.out.println(mimeType.getPrimaryType());
-        System.out.println(mimeType.getSubType());
-        System.out.println(mimeType.getParameters().get("charset"));
-
-    }
+    //    /**
+    //     * The main method.
+    //     *
+    //     * @param args the arguments
+    //     * @throws MimeTypeParseException the mime type parse exception
+    //     */
+    //    public static void main(String[] args) throws MimeTypeParseException {
+    //        MimeType mimeType = new MimeType("application/json; charset=utf-8");
+    //        mimeType.setParameter("charset", "utf-8");
+    //        System.out.println(mimeType);
+    //        System.out.println(mimeType.getBaseType());
+    //        System.out.println(mimeType.getPrimaryType());
+    //        System.out.println(mimeType.getSubType());
+    //        System.out.println(mimeType.getParameters().get("charset"));
+    //
+    //    }
 }

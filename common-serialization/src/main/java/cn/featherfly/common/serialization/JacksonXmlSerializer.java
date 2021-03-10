@@ -17,15 +17,16 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 public class JacksonXmlSerializer implements Serializer {
 
     /** The Constant DEFAULT_MAPPER. */
-    public static final XmlMapper DEFAULT_MAPPER;
+    private static XmlMapper defaultMapper;
 
-    static {
-        JacksonXmlModule xmlModule = new JacksonXmlModule();
-        xmlModule.setDefaultUseWrapper(false);
-        DEFAULT_MAPPER = new XmlMapper(xmlModule);
-        DEFAULT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-        DEFAULT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    }
+    // 这种写法android有问题
+    //    static {
+    //        JacksonXmlModule xmlModule = new JacksonXmlModule();
+    //        xmlModule.setDefaultUseWrapper(false);
+    //        DEFAULT_MAPPER = new XmlMapper(xmlModule);
+    //        DEFAULT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+    //        DEFAULT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    //    }
 
     private XmlMapper mapper;
 
@@ -33,7 +34,14 @@ public class JacksonXmlSerializer implements Serializer {
      * Instantiates a new jackson xml serializer.
      */
     public JacksonXmlSerializer() {
-        this(DEFAULT_MAPPER);
+        if (defaultMapper == null) {
+            JacksonXmlModule xmlModule = new JacksonXmlModule();
+            xmlModule.setDefaultUseWrapper(false);
+            defaultMapper = new XmlMapper(xmlModule);
+            defaultMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+            defaultMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        }
+        mapper = defaultMapper;
     }
 
     /**

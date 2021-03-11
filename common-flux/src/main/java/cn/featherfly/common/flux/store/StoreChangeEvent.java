@@ -22,8 +22,9 @@ public class StoreChangeEvent {
     }
 
     /**
-     * get action value
+     * get action value.
      *
+     * @param <D> the generic type
      * @return action
      */
     @SuppressWarnings("unchecked")

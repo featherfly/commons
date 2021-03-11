@@ -20,7 +20,7 @@ public abstract class Store<A extends Action<?>> {
 
     private static final RxBus bus = RxBus.getDefault();
 
-    private Map<Type, StoreAction<A>> storeActions;
+    private final Map<Type, StoreAction<A>> storeActions;
 
     private ConcurrentHashMap<StoreChangeListener, Disposable> toObserverableViews = new ConcurrentHashMap<>();
 
@@ -28,10 +28,11 @@ public abstract class Store<A extends Action<?>> {
      * Instantiates a new store.
      */
     protected Store() {
-        storeActions = initStoreActions();
+        Map<Type, StoreAction<A>> storeActions = initStoreActions();
         if (storeActions == null) {
             storeActions = new HashMap<>(0);
         }
+        this.storeActions = storeActions;
         Dispatcher.get().register(this);
     }
 

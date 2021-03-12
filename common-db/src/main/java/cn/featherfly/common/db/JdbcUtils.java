@@ -1065,7 +1065,8 @@ public final class JdbcUtils {
     /**
      * Gets the result set maps.
      *
-     * @param rs the rs
+     * @param rs      the rs
+     * @param manager the manager
      * @return the result set maps
      */
     public static List<Map<String, Object>> getResultSetMaps(ResultSet rs, SqlTypeMappingManager manager) {

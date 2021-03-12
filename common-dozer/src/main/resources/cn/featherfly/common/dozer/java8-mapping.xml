@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozermapper.github.io/schema/bean-mapping"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping http://dozermapper.github.io/schema/bean-mapping.xsd">
+    <configuration>
+        <custom-converters>
+            <converter type="cn.featherfly.common.dozer.converter.TimestampToLocalDateConverter">
+                <class-a>java.sql.Timestamp</class-a>
+                <class-b>java.time.LocalDate</class-b>
+            </converter>
+            <converter type="cn.featherfly.common.dozer.converter.TimestampToLocalDateTimeConverter">
+                <class-a>java.sql.Timestamp</class-a>
+                <class-b>java.time.LocalDateTime</class-b>
+            </converter>
+            <converter type="cn.featherfly.common.dozer.converter.DateToLocalDateConverter">
+                <class-a>java.util.Date</class-a>
+                <class-b>java.time.LocalDate</class-b>
+            </converter>
+            <converter type="cn.featherfly.common.dozer.converter.DateToLocalDateTimeConverter">
+                <class-a>java.util.Date</class-a>
+                <class-b>java.time.LocalDateTime</class-b>
+            </converter>
+            <converter type="cn.featherfly.common.dozer.converter.StringFormatToLocalDateTimeConverter">
+                <class-a>java.lang.String</class-a>
+                <class-b>java.time.LocalDateTime</class-b>
+            </converter>
+        </custom-converters>
+    </configuration>
+
+</mappings>

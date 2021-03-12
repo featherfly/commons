@@ -1,0 +1,21 @@
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src/main/java"]
+        }
+        resources {
+            srcDirs = ["src/main/resources"]
+        }
+    }
+}
+
+dependencies {
+    //api 'net.sf.dozer:dozer:5.5.1'
+    //api 'net.sf.dozer:dozer-spring:5.5.1'
+    api group: 'com.github.dozermapper', name: 'dozer-core', version: '6.5.0'
+    
+    implementation group: 'org.glassfish', name: 'javax.el', version: '3.0.1-b12'
+    compileOnly group: 'org.osgi', name: 'org.osgi.core', version: '6.0.0'
+    
+
+}

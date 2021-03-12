@@ -1,3 +1,6 @@
+# 0.3.12 2021-3-12
+1. ClassMappingUtils.getMergeSqlAndParamPositions返回Tuple3,新加入需要更新的值的数量
+
 # 0.3.11 2021-3-8
 1. AbstractJavaSqlTypeMapper加入getJavaType(SQLType sqlType)的默认实现
 2. ObjectToDbMappingFactory createIndex加入@Table的uniqueConstraints支持

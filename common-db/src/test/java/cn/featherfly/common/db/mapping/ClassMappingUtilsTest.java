@@ -8,6 +8,7 @@ import java.util.Map;
 import org.testng.annotations.Test;
 
 import com.speedment.common.tuple.Tuple2;
+import com.speedment.common.tuple.Tuple3;
 
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.Dialects;
@@ -117,7 +118,7 @@ public class ClassMappingUtilsTest {
         User user = new User();
         user.setId(12L);
         user.setName("yufei");
-        Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getMergeSqlAndParamPositions(user,
+        Tuple3<String, Map<Integer, String>, Integer> t = ClassMappingUtils.getMergeSqlAndParamPositions(user,
                 getUserClassMapping(), false, dialect);
         System.out.println(t.get0());
         System.out.println(t.get1());
@@ -156,6 +157,19 @@ public class ClassMappingUtilsTest {
 
         assertEquals(t.get0(),
                 "UPDATE `user_role` SET `descp` = ?, `descp2` = ? WHERE `user_id` = ? AND `role_id` = ?");
+    }
+
+    @Test
+    void testMergeNoColumnChange() {
+        User user = new User();
+        user.setId(12L);
+        Tuple3<String, Map<Integer, String>, Integer> t = ClassMappingUtils.getMergeSqlAndParamPositions(user,
+                getUserClassMapping(), false, dialect);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get2(), new Integer(0));
+        assertEquals(t.get0(), "UPDATE `user` WHERE `id` = ?");
     }
 
     @Test

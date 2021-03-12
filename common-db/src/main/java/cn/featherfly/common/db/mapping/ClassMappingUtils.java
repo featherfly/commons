@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.speedment.common.tuple.Tuple2;
+import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.Tuples;
 
 import cn.featherfly.common.bean.BeanUtils;
@@ -408,17 +409,17 @@ public class ClassMappingUtils {
      * @param classMapping the class mapping
      * @param onlyNull     the only null
      * @param dialect      the dialect
-     * @return the merge sql and param positions
+     * @return the merge sql and param positions and set value number
      */
-    public static <T> Tuple2<String, Map<Integer, String>> getMergeSqlAndParamPositions(T entity,
+    public static <T> Tuple3<String, Map<Integer, String>, Integer> getMergeSqlAndParamPositions(T entity,
             ClassMapping<?> classMapping, boolean onlyNull, Dialect dialect) {
         LinkedHashMap<Integer, String> propertyPositions = new LinkedHashMap<>();
         StringBuilder updateSql = new StringBuilder();
         updateSql.append(dialect.getKeywords().update()).append(Chars.SPACE)
-                .append(dialect.wrapName(classMapping.getRepositoryName())).append(Chars.SPACE)
-                .append(dialect.getKeywords().set()).append(Chars.SPACE);
+                .append(dialect.wrapName(classMapping.getRepositoryName()));
         int columnNum = 0;
         List<PropertyMapping> pkms = new ArrayList<>();
+        List<PropertyMapping> setms = new ArrayList<>();
         for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
             if (propertyMapping.getPropertyMappings().isEmpty()) {
                 // 如果为空忽略 ignore when null
@@ -428,6 +429,7 @@ public class ClassMappingUtils {
                 if (propertyMapping.isPrimaryKey()) {
                     pkms.add(propertyMapping);
                 } else if (propertyMapping.isUpdatable()) {
+                    setms.add(propertyMapping);
                     columnNum = set(entity, propertyMapping, updateSql, propertyPositions, columnNum, dialect);
                 }
             } else {
@@ -438,25 +440,30 @@ public class ClassMappingUtils {
                     if (subPropertyMapping.isPrimaryKey()) {
                         pkms.add(subPropertyMapping);
                     } else if (propertyMapping.isUpdatable()) {
+                        setms.add(propertyMapping);
                         columnNum = set(entity, subPropertyMapping, updateSql, propertyPositions, columnNum, dialect);
                     }
                 }
             }
         }
         if (columnNum > 0) {
+            updateSql.append(Chars.SPACE).append(dialect.getKeywords().set()).append(Chars.SPACE);
             updateSql.deleteCharAt(updateSql.length() - 1);
         }
-        int pkNum = 0;
-        updateSql.append(Chars.SPACE).append(dialect.getKeywords().where()).append(Chars.SPACE);
-        for (PropertyMapping pm : pkms) {
-            if (pkNum > 0) {
-                updateSql.append(dialect.getKeywords().and()).append(Chars.SPACE);
+        // where 后面的主键条件
+        if (!pkms.isEmpty()) {
+            int pkNum = 0;
+            updateSql.append(Chars.SPACE).append(dialect.getKeywords().where()).append(Chars.SPACE);
+            for (PropertyMapping pm : pkms) {
+                if (pkNum > 0) {
+                    updateSql.append(dialect.getKeywords().and()).append(Chars.SPACE);
+                }
+                updateSql.append(dialect.wrapName(pm.getRepositoryFieldName())).append(" = ? ");
+                pkNum++;
+                propertyPositions.put(columnNum + pkNum, ClassMappingUtils.getPropertyAliasName(pm));
             }
-            updateSql.append(dialect.wrapName(pm.getRepositoryFieldName())).append(" = ? ");
-            pkNum++;
-            propertyPositions.put(columnNum + pkNum, ClassMappingUtils.getPropertyAliasName(pm));
         }
-        return Tuples.of(updateSql.toString().trim(), propertyPositions);
+        return Tuples.of(updateSql.toString().trim(), propertyPositions, columnNum);
     }
 
     /**

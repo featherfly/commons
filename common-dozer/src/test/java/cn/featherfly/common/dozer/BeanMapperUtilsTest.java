@@ -12,7 +12,10 @@ package cn.featherfly.common.dozer;
 
 import static org.testng.Assert.assertEquals;
 
-import org.junit.Test;
+import java.time.LocalDate;
+import java.util.Date;
+
+import org.testng.annotations.Test;
 
 /**
  * BeanMapperUtilsTest.
@@ -20,26 +23,6 @@ import org.junit.Test;
  * @author zhongj
  */
 public class BeanMapperUtilsTest {
-
-    int times = 10000;
-
-    void time(Object d, Object s) {
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < times; i++) {
-            BeanMappers.copy(d, s);
-        }
-        long end = System.currentTimeMillis();
-        System.out.println("time : " + (end - start));
-    }
-
-    void time2(Object d, Object s) {
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < times; i++) {
-            //            BeanMappers.copyProperties(d, s);
-        }
-        long end = System.currentTimeMillis();
-        System.out.println("time2 : " + (end - start));
-    }
 
     @Test
     public void test() {
@@ -84,12 +67,30 @@ public class BeanMapperUtilsTest {
         assertEquals(u.getId(), u3.getId());
         assertEquals(u.getName(), result.getName());
         assertEquals(u.getAge(), result.getAge());
+    }
 
-        //        System.out.println(BeanMappers.copyProperties(u, u3));
+    @Test
+    public void test2() {
 
-        //        time(u2, u3);
+        User result = new User();
+        User2 result2 = new User2();
 
-        //        time2(u, u3);
+        User u = new User();
+        u.setId(1L);
+        u.setName("yufei");
+        u.setAge(18);
+        u.setBirthday(new Date());
 
+        User2 u2 = new User2();
+        u2.setId(2L);
+        u2.setName("yi");
+        u2.setAge(20);
+        u2.setBirthday(LocalDate.now().withYear(1999));
+
+        System.out.println(BeanMappers.copy(u, u2));
+
+        u.setBirthday(new Date());
+
+        System.out.println(BeanMappers.copy(u2, u));
     }
 }

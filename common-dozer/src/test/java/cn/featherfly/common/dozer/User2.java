@@ -10,6 +10,8 @@
  */
 package cn.featherfly.common.dozer;
 
+import java.time.LocalDate;
+
 /**
  * User2.
  *
@@ -22,6 +24,8 @@ public class User2 {
     private String name;
 
     private Integer age;
+
+    private LocalDate birthday;
 
     /**
      * get id value
@@ -78,11 +82,28 @@ public class User2 {
     }
 
     /**
+     * Getter for property 'birthday'.
+     *
+     * @return Value for property 'birthday'.
+     */
+    public LocalDate getBirthday() {
+        return birthday;
+    }
+
+    /**
+     * Setter for property 'birthday'.
+     *
+     * @param birthday Value to set for property 'birthday'.
+     */
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public String toString() {
-        return "User2 [id=" + id + ", name=" + name + ", age=" + age + "]";
+        return "User2{" + "id=" + id + ", name='" + name + '\'' + ", age=" + age + ", birthday=" + birthday + '}';
     }
-
 }

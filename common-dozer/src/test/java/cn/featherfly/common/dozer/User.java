@@ -10,6 +10,8 @@
  */
 package cn.featherfly.common.dozer;
 
+import java.util.Date;
+
 /**
  * User.
  *
@@ -22,6 +24,8 @@ public class User {
     private String name;
 
     private Integer age;
+
+    private Date birthday;
 
     /**
      * get id value
@@ -78,11 +82,28 @@ public class User {
     }
 
     /**
+     * Getter for property 'birthday'.
+     *
+     * @return Value for property 'birthday'.
+     */
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    /**
+     * Setter for property 'birthday'.
+     *
+     * @param birthday Value to set for property 'birthday'.
+     */
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public String toString() {
-        return "User [id=" + id + ", name=" + name + ", age=" + age + "]";
+        return "User{" + "id=" + id + ", name='" + name + '\'' + ", age=" + age + ", birthday=" + birthday + '}';
     }
-
 }

@@ -340,6 +340,39 @@ public final class NumberUtils {
     }
 
     /**
+     * 将传入的long转换为长度为8的字节数组.
+     *
+     * @param longSource longSource
+     * @return byte[]
+     */
+    public static byte[] toByteArray(long longSource) {
+        byte[] byteArray = new byte[Long.BYTES];
+        int j = Long.BYTES - 1;
+        for (int i = 0; i < Long.BYTES; i++, j--) {
+            byteArray[i] = (byte) (longSource >> 8 * j);
+        }
+        return byteArray;
+    }
+
+    /**
+     * 将传入的字节数组转换为long.
+     *
+     * @param bytes bytes
+     * @return int
+     */
+    public static long toLong(byte... bytes) {
+        long iOutcome = 0;
+        byte bLoop;
+        int j = Long.BYTES - 1;
+        long oxff = 0xFFL;
+        for (int i = 0; i < bytes.length; i++, j--) {
+            bLoop = bytes[i];
+            iOutcome += (bLoop & oxff) << 8 * j;
+        }
+        return iOutcome;
+    }
+
+    /**
      * <p>
      * 将传入的int转换为长度为4的字节数组
      * </p>
@@ -368,7 +401,6 @@ public final class NumberUtils {
     public static int toInt(byte... bytes) {
         int iOutcome = 0;
         byte bLoop;
-
         for (int i = 0; i < bytes.length; i++) {
             bLoop = bytes[i];
             iOutcome += (bLoop & 0xFF) << 8 * i;

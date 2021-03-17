@@ -71,6 +71,52 @@ public final class CollectionUtils {
 
     /**
      * <p>
+     * 批量添加元素到集合，如果collection==null返回false,或者elements为空返回false，其他情况请参考{@link java.util.Collections#addAll(Collection, Object...)}
+     * </p>
+     *
+     * @param collection 集合
+     * @param elements   需要批量添加的元素
+     * @return 是否添加
+     */
+    public static boolean addByteArray(Collection<Byte> collection, byte... elements) {
+        if (collection == null) {
+            return false;
+        }
+        if (Lang.isEmpty(elements)) {
+            return false;
+        }
+        boolean result = false;
+        for (byte element : elements) {
+            result = collection.add(element);
+        }
+        return result;
+    }
+
+    /**
+     * <p>
+     * 批量添加元素到集合，如果collection==null返回false,或者elements为空返回false，其他情况请参考{@link java.util.Collections#addAll(Collection, Object...)}
+     * </p>
+     *
+     * @param collection 集合
+     * @param elements   需要批量添加的元素
+     * @return 是否添加
+     */
+    public static boolean addIntArray(Collection<Integer> collection, int... elements) {
+        if (collection == null) {
+            return false;
+        }
+        if (Lang.isEmpty(elements)) {
+            return false;
+        }
+        boolean result = false;
+        for (int element : elements) {
+            result = collection.add(element);
+        }
+        return result;
+    }
+
+    /**
+     * <p>
      * 转换为数组. 如果传入集合为空（null或者size=0），返回长度为0的数组（不会返回null）.
      * </p>
      *
@@ -85,6 +131,44 @@ public final class CollectionUtils {
             collection = new ArrayList<>();
         }
         return doToArray(collection, type);
+    }
+
+    /**
+     * 转换为数组. 如果传入集合为空（null或者size=0），返回长度为0的数组（不会返回null）.
+     *
+     * @param collection 集合
+     * @return 数组
+     */
+    public static byte[] toByteArray(Collection<Byte> collection) {
+        if (collection == null) {
+            collection = new ArrayList<>();
+        }
+        byte[] bs = new byte[collection.size()];
+        int index = 0;
+        for (Byte b : collection) {
+            bs[index] = b;
+            index++;
+        }
+        return bs;
+    }
+
+    /**
+     * 转换为数组. 如果传入集合为空（null或者size=0），返回长度为0的数组（不会返回null）.
+     *
+     * @param collection 集合
+     * @return 数组
+     */
+    public static int[] toIntArray(Collection<Integer> collection) {
+        if (collection == null) {
+            collection = new ArrayList<>();
+        }
+        int[] bs = new int[collection.size()];
+        int index = 0;
+        for (Integer b : collection) {
+            bs[index] = b;
+            index++;
+        }
+        return bs;
     }
 
     /**

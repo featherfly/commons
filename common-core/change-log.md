@@ -1,3 +1,7 @@
+# 1.8.23
+1. NumberUtils加入toLong(byte...)，toByteArray(long)
+2. CollectionUtils加入addByteArray，addIntArray, toByteArray, toIntArray，用于处理基本类型byte, int，因为基本类型无法使用泛型处理
+
 # 1.8.22 2021-03-03
 1. StringFormatter.format实现{index:{index}, mid:{mid}}嵌套时忽略外层标签的功能
 	

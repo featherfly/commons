@@ -995,7 +995,6 @@ public final class JdbcUtils {
                 String name = metaData.getColumnLabel(i);
                 if (Lang.isEmpty(name)) {
                     name = metaData.getColumnName(i);
-                } else {
                     name = WordUtils.parseToUpperFirst(name.toLowerCase(), '_');
                 }
                 resultMap.put(name, value);

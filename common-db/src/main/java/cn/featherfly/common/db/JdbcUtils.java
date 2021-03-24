@@ -991,8 +991,14 @@ public final class JdbcUtils {
                 } else {
                     value = JdbcUtils.getResultSetValue(rs, i);
                 }
-                String name = JdbcUtils.lookupColumnName(metaData, i);
-                resultMap.put(WordUtils.parseToUpperFirst(name.toLowerCase(), '_'), value);
+                //                String name = JdbcUtils.lookupColumnName(metaData, i);
+                String name = metaData.getColumnLabel(i);
+                if (Lang.isEmpty(name)) {
+                    name = metaData.getColumnName(i);
+                } else {
+                    name = WordUtils.parseToUpperFirst(name.toLowerCase(), '_');
+                }
+                resultMap.put(name, value);
             }
             return resultMap;
         } catch (SQLException e) {

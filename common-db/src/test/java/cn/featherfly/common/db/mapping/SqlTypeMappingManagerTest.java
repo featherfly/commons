@@ -156,8 +156,8 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
         manager.regist(new JavaSqlTypeMapper<Long[]>() {
 
-            private BeanProperty<Long[]> bp = BeanDescriptor.getBeanDescriptor(Article.class)
-                    .getBeanProperty("content");
+            //            private BeanProperty<Long[]> bp = BeanDescriptor.getBeanDescriptor(Article.class)
+            //                    .getBeanProperty("content");
 
             @Override
             public boolean support(SQLType sqlType) {

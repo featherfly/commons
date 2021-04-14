@@ -547,6 +547,17 @@ public class SqlTypeMappingManager {
                         return true;
                     }
                 }
+                //                TODO 这里是否加入这个逻辑再定
+                //                if (javaType instanceof BeanProperty) {
+                //                    // 使用对应的原始数据类型再进行匹配，即class对象
+                //                    if (javaSqlTypeMapper.support((GenericType) new GenericClass<>(javaType.getType()))) {
+                //                        SQLType sqlType = javaSqlTypeMapper.getSqlType((GenericType) javaType);
+                //                        if (sqlType != null) {
+                //                            ((JavaSqlTypeMapper<Object>) javaSqlTypeMapper).set(prep, columnIndex, columnValue);
+                //                            return true;
+                //                        }
+                //                    }
+                //                }
             }
             return false;
         }

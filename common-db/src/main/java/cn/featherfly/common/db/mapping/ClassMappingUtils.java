@@ -414,12 +414,11 @@ public class ClassMappingUtils {
     public static <T> Tuple3<String, Map<Integer, String>, Integer> getMergeSqlAndParamPositions(T entity,
             ClassMapping<?> classMapping, boolean onlyNull, Dialect dialect) {
         LinkedHashMap<Integer, String> propertyPositions = new LinkedHashMap<>();
-        StringBuilder updateSql = new StringBuilder();
-        updateSql.append(dialect.getKeywords().update()).append(Chars.SPACE)
-                .append(dialect.wrapName(classMapping.getRepositoryName()));
         int columnNum = 0;
         List<PropertyMapping> pkms = new ArrayList<>();
         List<PropertyMapping> setms = new ArrayList<>();
+
+        StringBuilder setSql = new StringBuilder();
         for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
             if (propertyMapping.getPropertyMappings().isEmpty()) {
                 // 如果为空忽略 ignore when null
@@ -430,7 +429,7 @@ public class ClassMappingUtils {
                     pkms.add(propertyMapping);
                 } else if (propertyMapping.isUpdatable()) {
                     setms.add(propertyMapping);
-                    columnNum = set(entity, propertyMapping, updateSql, propertyPositions, columnNum, dialect);
+                    columnNum = set(entity, propertyMapping, setSql, propertyPositions, columnNum, dialect);
                 }
             } else {
                 for (PropertyMapping subPropertyMapping : propertyMapping.getPropertyMappings()) {
@@ -441,13 +440,17 @@ public class ClassMappingUtils {
                         pkms.add(subPropertyMapping);
                     } else if (propertyMapping.isUpdatable()) {
                         setms.add(propertyMapping);
-                        columnNum = set(entity, subPropertyMapping, updateSql, propertyPositions, columnNum, dialect);
+                        columnNum = set(entity, subPropertyMapping, setSql, propertyPositions, columnNum, dialect);
                     }
                 }
             }
         }
+
+        StringBuilder updateSql = new StringBuilder();
+        updateSql.append(dialect.getKeywords().update()).append(Chars.SPACE)
+                .append(dialect.wrapName(classMapping.getRepositoryName()));
         if (columnNum > 0) {
-            updateSql.append(Chars.SPACE).append(dialect.getKeywords().set()).append(Chars.SPACE);
+            updateSql.append(Chars.SPACE).append(dialect.getKeywords().set()).append(Chars.SPACE).append(setSql);
             updateSql.deleteCharAt(updateSql.length() - 1);
         }
         // where 后面的主键条件

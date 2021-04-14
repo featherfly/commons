@@ -1,3 +1,6 @@
+# 0.3.13 2021-4-14
+1. 修复ClassMappingUtils.getMergeSqlAndParamPositions生成sql出错的问题
+
 # 0.3.13 2021-3-24
 1. JdbcUtils.getResultSetMap(ResultSet rs, SqlTypeMappingManager manager)修复设置了label的名称不处理，而没设置label的字段使用驼峰命名转换
 

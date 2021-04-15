@@ -1,4 +1,4 @@
-# 0.3.13 2021-4-14
+# 0.3.14 2021-4-14
 1. 修复ClassMappingUtils.getMergeSqlAndParamPositions生成sql出错的问题
 
 # 0.3.13 2021-3-24

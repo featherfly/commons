@@ -32,6 +32,9 @@ public enum Radix {
     /** The radix64. */
     RADIX64(64),
 
+    /** The radix93. */
+    RADIX93(93),
+
     /** The radix128. */
     RADIX128(128);
 
@@ -43,7 +46,7 @@ public enum Radix {
      *
      * @param value the value
      */
-    private Radix(int value) {
+    Radix(int value) {
         this.value = value;
     }
 

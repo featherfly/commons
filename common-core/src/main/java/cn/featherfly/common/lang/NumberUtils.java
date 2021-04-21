@@ -27,6 +27,8 @@ public final class NumberUtils {
     /** The Constant LETTERS64. */
     private static final char[] LETTERS64;
 
+    private static final char[] LETTERS93;
+
     /** The Constant LETTERS128 */
     private static final char[] LETTERS128;
 
@@ -42,41 +44,76 @@ public final class NumberUtils {
     static {
         LETTERS62 = new char[Radix.RADIX62.value()];
         LETTERS64 = new char[Radix.RADIX64.value()];
+        LETTERS93 = new char[Radix.RADIX93.value()];
         LETTERS128 = new char[Radix.RADIX128.value()];
 
         for (int i = 0; i < NUMBER_TEN; i++) {
             LETTERS62[i] = (char) ('0' + i);
             LETTERS64[i] = (char) ('0' + i);
+            LETTERS93[i] = (char) ('0' + i);
         }
         for (int i = NUMBER_TEN; i < NUMBER_THREETY_SIX; i++) {
             LETTERS62[i] = (char) ('a' + i - NUMBER_TEN);
             LETTERS64[i] = (char) ('a' + i - NUMBER_TEN);
+            LETTERS93[i] = (char) ('a' + i - NUMBER_TEN);
         }
         for (int i = NUMBER_THREETY_SIX; i < Radix.RADIX62.value(); i++) {
             LETTERS62[i] = (char) ('A' + i - NUMBER_THREETY_SIX);
             LETTERS64[i] = (char) ('A' + i - NUMBER_THREETY_SIX);
+            LETTERS93[i] = (char) ('A' + i - NUMBER_THREETY_SIX);
         }
-        LETTERS64[Radix.RADIX62.value()] = '_';
-        LETTERS64[Radix.RADIX62.value() + 1] = '~';
-
-        int max = 0;
-        for (char c : LETTERS64) {
-            if (c > max) {
-                max = c;
+        // 64补充
+        char c63 = '_';
+        char c64 = '~';
+        LETTERS64[Radix.RADIX62.value()] = c63;
+        LETTERS64[Radix.RADIX62.value() + 1] = c64;
+        LETTERS93[Radix.RADIX62.value()] = c63;
+        LETTERS93[Radix.RADIX62.value() + 1] = c64;
+        // 93补充
+        int offset = 1;
+        for (int i = 33; i < 48; i++) {
+            if (i == '-') { // - 作为负数符号，不能使用
+                continue;
             }
+            LETTERS93[Radix.RADIX62.value() + ++offset] = (char) i;
         }
+        for (int i = 58; i < 65; i++) {
+            LETTERS93[Radix.RADIX62.value() + ++offset] = (char) i;
+        }
+        for (int i = 91; i < 97; i++) {
+            if (i == c63) {
+                continue;
+            }
+            LETTERS93[Radix.RADIX62.value() + ++offset] = (char) i;
+        }
+        //        for (int i = 123; i < 127; i++) {
+        for (int i = 123; i < 126; i++) { // 126是~,前面已经加入了
+            LETTERS93[Radix.RADIX62.value() + ++offset] = (char) i;
+        }
+        // 93
+
+        //        int max = 0;
+        //        for (char c : LETTERS64) {
+        //            if (c > max) {
+        //                max = c;
+        //            }
+        //        }
         //        for (int i = 0; i < LETTERS64.length; i++) {
         //            LETTERS128_DIGITS_MAP.put(LETTERS64[i], i);
         //
         //            LETTERS128[i] = LETTERS64[i];
         //        }
 
-        ArrayUtils.fillAll(LETTERS128, LETTERS64);
-        ArrayUtils.fillAll(LETTERS128, Radix.RADIX64.value(),
-                new char[] { '©', 'ß', '¿', '£', '¤', '¥', '¦', '§', 'µ', '¶', 'À', 'Á', 'Â', 'Ä', 'Å', 'Æ', 'È', 'É',
-                        'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'à',
-                        'á', 'â', 'ä', 'å', 'æ', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ð', 'ñ', 'ò', 'ó', 'ô', 'õ',
-                        'ö', 'ù', 'ú', 'û', 'ü', 'ý', '¯', '®' });
+        //        ArrayUtils.fillAll(LETTERS128, LETTERS64);
+        //        ArrayUtils.fillAll(LETTERS128, Radix.RADIX64.value(),
+        //                new char[] { '©', 'ß', '¿', '£', '¤', '¥', '¦', '§', 'µ', '¶', 'À', 'Á', 'Â', 'Ä', 'Å', 'Æ', 'È', 'É',
+        //                        'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'à',
+        //                        'á', 'â', 'ä', 'å', 'æ', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ð', 'ñ', 'ò', 'ó', 'ô', 'õ',
+        //                        'ö', 'ù', 'ú', 'û', 'ü', 'ý', '¯', '®' });
+        ArrayUtils.fillAll(LETTERS128, LETTERS93);
+        ArrayUtils.fillAll(LETTERS128, Radix.RADIX93.value(),
+                new char[] { '©', 'ß', '¿', '£', '¤', '¥', '¦', '§', 'µ', '¶', 'Â', 'Ä', 'Æ', 'Ê', 'Ë', 'Î', 'Ï', 'Ð',
+                        'Ñ', 'Ô', 'Ö', 'Û', 'Ü', 'Ý', 'â', 'ä', 'æ', 'ê', 'ë', 'î', 'ð', 'ñ', 'ý', '¯', '®' });
 
         for (int i = 0; i < LETTERS128.length; i++) {
             LETTERS128_DIGITS_MAP.put(LETTERS128[i], i);
@@ -672,6 +709,88 @@ public final class NumberUtils {
     }
 
     /**
+     * To string 93 unit.
+     *
+     * @param number the number
+     * @return the string
+     */
+    public static String toString93Unit(byte number) {
+        return toString93Unit((long) number);
+    }
+
+    /**
+     * To string 93 unit.
+     *
+     * @param number the number
+     * @return the string
+     */
+    public static String toString93Unit(short number) {
+        return toString93Unit((long) number);
+    }
+
+    /**
+     * To string 93 unit.
+     *
+     * @param number the number
+     * @return the string
+     */
+    public static String toString93Unit(int number) {
+        return toString93Unit((long) number);
+    }
+
+    /**
+     * To string 93 unit.
+     *
+     * @param number the number
+     * @return the string
+     */
+    public static String toString93Unit(long number) {
+        boolean reverse = false;
+        if (number < 0) {
+            reverse = true;
+            number = 0 - number;
+        } else if (number == 0) {
+            return Chars.ZERO_STR;
+        }
+        StringBuilder buf = new StringBuilder();
+        while (number != 0) {
+            buf.append(LETTERS93[(int) (number % Radix.RADIX93.value())]);
+            number /= Radix.RADIX93.value();
+        }
+        if (reverse) {
+            buf.append(Chars.MINUS_CHAR);
+        }
+        return buf.reverse().toString();
+    }
+
+    /**
+     * To string 93 unit.
+     *
+     * @param number the number
+     * @return the string
+     */
+    public static String toString93Unit(BigInteger number) {
+        if (number.equals(BigInteger.ZERO)) {
+            return Chars.ZERO_STR;
+        }
+        boolean reverse = false;
+        BigInteger abs = number.abs();
+        reverse = !abs.equals(number);
+        if (reverse) {
+            number = abs;
+        }
+        StringBuilder buf = new StringBuilder();
+        while (!number.equals(BigInteger.ZERO)) {
+            buf.append(LETTERS93[number.mod(BigInteger.valueOf(Radix.RADIX93.value())).intValue()]);
+            number = number.divide(BigInteger.valueOf(Radix.RADIX93.value()));
+        }
+        if (reverse) {
+            buf.append(Chars.MINUS_CHAR);
+        }
+        return buf.reverse().toString();
+    }
+
+    /**
      * To string 128 unit.
      *
      * @param number the number
@@ -766,6 +885,8 @@ public final class NumberUtils {
                 return parse62Unit(numberStr);
             case RADIX64:
                 return parse64Unit(numberStr);
+            case RADIX93:
+                return parse93Unit(numberStr);
             case RADIX128:
                 return parse128Unit(numberStr);
             default:
@@ -898,6 +1019,68 @@ public final class NumberUtils {
     }
 
     /**
+     * Parses the 93 unit to int.
+     *
+     * @param numberStr the number str
+     * @return the int
+     */
+    public static int parse93UnitToInt(String numberStr) {
+        return parse93Unit(numberStr).intValue();
+    }
+
+    /**
+     * Parses the 93 unit to long.
+     *
+     * @param numberStr the number str
+     * @return the long
+     */
+    public static long parse93UnitToLong(String numberStr) {
+        boolean reverse = false;
+        if (numberStr.charAt(0) == Chars.MINUS_CHAR) {
+            reverse = true;
+            numberStr = numberStr.substring(1);
+        }
+        long result = 0L;
+        long multiplier = 1;
+        for (int pos = numberStr.length() - 1; pos >= 0; pos--) {
+            int index = getIndex(numberStr, pos, Radix.RADIX93);
+            result += index * multiplier;
+            multiplier *= Radix.RADIX93.value();
+        }
+        if (reverse) {
+            return 0 - result;
+        } else {
+            return result;
+        }
+    }
+
+    /**
+     * Parses the 93 unit.
+     *
+     * @param numberStr the number str
+     * @return the big integer
+     */
+    public static BigInteger parse93Unit(String numberStr) {
+        boolean reverse = false;
+        if (numberStr.charAt(0) == Chars.MINUS_CHAR) {
+            reverse = true;
+            numberStr = numberStr.substring(1);
+        }
+        BigInteger result = BigInteger.ZERO;
+        BigInteger multiplier = BigInteger.ONE;
+        for (int pos = numberStr.length() - 1; pos >= 0; pos--) {
+            int index = getIndex(numberStr, pos, Radix.RADIX93);
+            result = result.add(multiplier.multiply(BigInteger.valueOf(index)));
+            multiplier = multiplier.multiply(BigInteger.valueOf(Radix.RADIX93.value()));
+        }
+        if (reverse) {
+            return BigInteger.ZERO.subtract(result);
+        } else {
+            return result;
+        }
+    }
+
+    /**
      * Parses the 128 unit to int.
      *
      * @param numberStr the number str
@@ -963,6 +1146,11 @@ public final class NumberUtils {
             case RADIX64:
                 if (value == null) {
                     throw new IllegalArgumentException("Unknow character for unit64 " + c);
+                }
+                break;
+            case RADIX93:
+                if (value == null) {
+                    throw new IllegalArgumentException("Unknow character for unit93 " + c);
                 }
                 break;
             case RADIX128:

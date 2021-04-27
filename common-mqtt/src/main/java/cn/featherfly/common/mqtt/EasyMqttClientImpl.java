@@ -65,8 +65,13 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
      * {@inheritDoc}
      */
     @Override
-    public EasyMqttClientImpl subscribe(String topicFilter, Qos qos, Consumer<MqttMessage> consumer) throws MqttException {
+    public EasyMqttClientImpl subscribe(String topicFilter, Qos qos, Consumer<MqttMessage> consumer)
+            throws MqttException {
         client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
+            if (logger.isDebugEnabled()) {
+                logger.debug("receive topic -> {0}, msgId -> {1}, qos -> {2}, payload -> {3}", topic, message.getId(),
+                        message.getQos(), new String(message.getPayload(), charset));
+            }
             consumer.accept(message);
         });
         return this;
@@ -79,7 +84,11 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
     public EasyMqttClientImpl subscribe(String topicFilter, Qos qos, BiConsumer<String, MqttMessage> consumer)
             throws MqttException {
         client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
-            consumer.accept(topicFilter, message);
+            if (logger.isDebugEnabled()) {
+                logger.debug("receive topic -> {0}, msgId -> {1}, qos -> {2}, payload -> {3}", topic, message.getId(),
+                        message.getQos(), new String(message.getPayload(), charset));
+            }
+            consumer.accept(topic, message);
         });
         return this;
     }
@@ -122,11 +131,12 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
      * {@inheritDoc}
      */
     @Override
-    public EasyMqttClientImpl publish(String topic, String msg, Qos qos, Charset charset, Consumer<IMqttDeliveryToken> consumer)
-            throws MqttPersistenceException, MqttException {
+    public EasyMqttClientImpl publish(String topic, String msg, Qos qos, Charset charset,
+            Consumer<IMqttDeliveryToken> consumer) throws MqttPersistenceException, MqttException {
         if (consumer != null) {
             ((AutoDetectionMqttCallBack) callback).publish(topic, consumer);
         }
+        logger.debug("publish topic -> {0}, qos -> {1}, msg -> {2}", topic, qos.ordinal(), msg);
         MqttMessage message = new MqttMessage();
         message.setQos(qos.ordinal());
         message.setRetained(true);

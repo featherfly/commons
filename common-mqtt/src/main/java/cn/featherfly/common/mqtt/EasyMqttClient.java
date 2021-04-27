@@ -34,6 +34,13 @@ public interface EasyMqttClient {
     String getClientId();
 
     /**
+     * Gets the charset.
+     *
+     * @return the charset
+     */
+    Charset getCharset();
+
+    /**
      * Connect client.
      *
      * @return the client

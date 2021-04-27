@@ -201,6 +201,16 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> impl
     }
 
     /**
+     * get charset value
+     *
+     * @return charset
+     */
+    @Override
+    public Charset getCharset() {
+        return charset;
+    }
+
+    /**
      * Publish.
      *
      * @param topic   the topic

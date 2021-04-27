@@ -1,7 +1,10 @@
 
 package cn.featherfly.common.lang;
 
+import java.math.BigInteger;
 import java.util.Date;
+
+import cn.featherfly.common.lang.number.Radix;
 
 /**
  * <p>
@@ -34,10 +37,29 @@ public class UUIDTest {
         for (byte b : UUIDGenerator.generateUUID().getBytes()) {
             sb.append(Integer.toHexString(b) + " ");
         }
-        for (byte b : DateUtils.formart(new Date(), "yyMMdd").getBytes()) {
+        for (byte b : Dates.format(new Date(), "yyMMdd").getBytes()) {
             sb.append(Integer.toHexString(b) + " ");
         }
 
         System.out.println(sb.toString());
+
+        String uuid = UUIDGenerator.generateUUID();
+        System.out.println("uuid: " + uuid + " length: " + uuid.length());
+        BigInteger bi = NumberUtils.parse(uuid, Radix.RADIX16);
+        System.out.println("int: " + bi);
+        System.out.println("62: " + NumberUtils.toString62Unit(bi));
+        System.out.println("64: " + NumberUtils.toString64Unit(bi));
+        System.out.println("93: " + NumberUtils.toString93Unit(bi));
+        System.out.println("128: " + NumberUtils.toString128Unit(bi));
+
+        System.out.println();
+        uuid = "47E1ABCD371743692000410F";
+        System.out.println("uuid: " + uuid + " length: " + uuid.length());
+        bi = NumberUtils.parse(uuid, Radix.RADIX16);
+        System.out.println("int: " + bi);
+        System.out.println("62: " + NumberUtils.toString62Unit(bi));
+        System.out.println("64: " + NumberUtils.toString64Unit(bi));
+        System.out.println("93: " + NumberUtils.toString93Unit(bi));
+        System.out.println("128: " + NumberUtils.toString128Unit(bi));
     }
 }

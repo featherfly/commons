@@ -67,6 +67,7 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
     @Override
     public EasyMqttClientImpl subscribe(String topicFilter, Qos qos, Consumer<MqttMessage> consumer)
             throws MqttException {
+        logger.debug("subscribe topicFilter -> {}, qos -> {}", topicFilter, qos);
         client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
             if (logger.isDebugEnabled()) {
                 logger.debug("receive topic -> {}, msgId -> {}, qos -> {}, payload -> {}", topic, message.getId(),
@@ -83,6 +84,7 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
     @Override
     public EasyMqttClientImpl subscribe(String topicFilter, Qos qos, BiConsumer<String, MqttMessage> consumer)
             throws MqttException {
+        logger.debug("subscribe topicFilter -> {}, qos -> {}", topicFilter, qos);
         client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
             if (logger.isDebugEnabled()) {
                 logger.debug("receive topic -> {}, msgId -> {}, qos -> {}, payload -> {}", topic, message.getId(),

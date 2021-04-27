@@ -69,7 +69,7 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
             throws MqttException {
         client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
             if (logger.isDebugEnabled()) {
-                logger.debug("receive topic -> {0}, msgId -> {1}, qos -> {2}, payload -> {3}", topic, message.getId(),
+                logger.debug("receive topic -> {}, msgId -> {}, qos -> {}, payload -> {}", topic, message.getId(),
                         message.getQos(), new String(message.getPayload(), charset));
             }
             consumer.accept(message);
@@ -85,7 +85,7 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
             throws MqttException {
         client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
             if (logger.isDebugEnabled()) {
-                logger.debug("receive topic -> {0}, msgId -> {1}, qos -> {2}, payload -> {3}", topic, message.getId(),
+                logger.debug("receive topic -> {}, msgId -> {}, qos -> {}, payload -> {}", topic, message.getId(),
                         message.getQos(), new String(message.getPayload(), charset));
             }
             consumer.accept(topic, message);
@@ -136,7 +136,7 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
         if (consumer != null) {
             ((AutoDetectionMqttCallBack) callback).publish(topic, consumer);
         }
-        logger.debug("publish topic -> {0}, qos -> {1}, msg -> {2}", topic, qos.ordinal(), msg);
+        logger.debug("publish topic -> {}, qos -> {}, msg -> {}", topic, qos.ordinal(), msg);
         MqttMessage message = new MqttMessage();
         message.setQos(qos.ordinal());
         message.setRetained(true);

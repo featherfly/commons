@@ -1,3 +1,6 @@
+# 0.1.5 2021-04-27
+1. 加入日志
+
 # 0.1.4 2021-04-27
 1. 加入EasyMqttClient接口，删除SimpleClient,重命名EasyClient,ClientBuilder为EasyMqttClientImpl,EasyMqttClientBuilder
 2. 修复AutoDetectionMqttCallBack中deliveryComplete(IMqttDeliveryToken token)方法中token.getTopics()返回null时的空指针异常

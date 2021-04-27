@@ -19,15 +19,14 @@ import org.eclipse.paho.client.mqttv3.MqttException;
  *
  * @author zhongj
  */
-public class EasyClientTest {
+public class EasyMqttClientTest {
 
     public static void main(String[] args) throws MqttException {
-        final EasyClient easyClient = new ClientBuilder().host("127.0.0.1").clientId("client-test")
+        final EasyMqttClient easyClient = new EasyMqttClientBuilder().host("127.0.0.1").clientId("client-test")
                 .charset(StandardCharsets.UTF_8).build();
         easyClient.connect();
         new Thread(() -> {
             try {
-
                 easyClient.subscribe("/device/#", Qos.ONLY_ONCE, (topic, message) -> {
                     System.out.println("--------------------------------------");
                     System.out.println();

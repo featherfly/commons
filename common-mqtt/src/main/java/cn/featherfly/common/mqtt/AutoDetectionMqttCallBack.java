@@ -14,7 +14,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class AutoDetectionMqttCallBack implements AutoReconnectMqttCallback {
 
-    private EasyClient client;
+    private ReconnectableClient<?> client;
 
     //    private BiPredicate<String, String> topicMatcher;
 
@@ -27,7 +27,7 @@ public class AutoDetectionMqttCallBack implements AutoReconnectMqttCallback {
      *
      * @param client the client
      */
-    public AutoDetectionMqttCallBack(EasyClient client) {
+    public AutoDetectionMqttCallBack(ReconnectableClient<?> client) {
         this.client = client;
     }
 
@@ -76,7 +76,7 @@ public class AutoDetectionMqttCallBack implements AutoReconnectMqttCallback {
      * {@inheritDoc}
      */
     @Override
-    public EasyClient getClient() {
+    public ReconnectableClient<?> getClient() {
         return client;
     }
 
@@ -109,6 +109,9 @@ public class AutoDetectionMqttCallBack implements AutoReconnectMqttCallback {
      */
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
+        if (token.getTopics() == null) {
+            return;
+        }
         for (String topic : token.getTopics()) {
             List<Consumer<IMqttDeliveryToken>> list = publishConsumers.get(topic);
             if (list != null) {

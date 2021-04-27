@@ -16,22 +16,19 @@ import org.eclipse.paho.client.mqttv3.MqttTopic;
  *
  * @author zhongj
  */
-public class EasyClient extends ReconnectableClient<EasyClient> {
+public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> {
 
     /**
      * Instantiates a new Client.
      */
-    EasyClient() {
+    EasyMqttClientImpl() {
     }
 
     /**
-     * Connect client.
-     *
-     * @return the client
-     * @throws MqttException the mqtt exception
+     * {@inheritDoc}
      */
     @Override
-    public EasyClient connect() throws MqttException {
+    public EasyMqttClientImpl connect() throws MqttException {
         return connect(new AutoDetectionMqttCallBack(this));
     }
 
@@ -65,15 +62,10 @@ public class EasyClient extends ReconnectableClient<EasyClient> {
     //    }
 
     /**
-     * Subscribe.
-     *
-     * @param topicFilter the topic filter
-     * @param qos         the qos
-     * @param consumer    the consumer
-     * @return the easy client
-     * @throws MqttException the mqtt exception
+     * {@inheritDoc}
      */
-    public EasyClient subscribe(String topicFilter, Qos qos, Consumer<MqttMessage> consumer) throws MqttException {
+    @Override
+    public EasyMqttClientImpl subscribe(String topicFilter, Qos qos, Consumer<MqttMessage> consumer) throws MqttException {
         client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
             consumer.accept(message);
         });
@@ -81,15 +73,10 @@ public class EasyClient extends ReconnectableClient<EasyClient> {
     }
 
     /**
-     * Subscribe client.
-     *
-     * @param topicFilter the topic filter
-     * @param qos         the qos
-     * @param consumer    the consumer
-     * @return the client
-     * @throws MqttException the mqtt exception
+     * {@inheritDoc}
      */
-    public EasyClient subscribe(String topicFilter, Qos qos, BiConsumer<String, MqttMessage> consumer)
+    @Override
+    public EasyMqttClientImpl subscribe(String topicFilter, Qos qos, BiConsumer<String, MqttMessage> consumer)
             throws MqttException {
         client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
             consumer.accept(topicFilter, message);
@@ -98,75 +85,44 @@ public class EasyClient extends ReconnectableClient<EasyClient> {
     }
 
     /**
-     * Publish client.
-     *
-     * @param topicFilter the topic
-     * @param msg         the msg
-     * @return the client
-     * @throws MqttPersistenceException the mqtt persistence exception
-     * @throws MqttException            the mqtt exception
+     * {@inheritDoc}
      */
-    public EasyClient publish(String topicFilter, String msg) throws MqttPersistenceException, MqttException {
+    @Override
+    public EasyMqttClientImpl publish(String topicFilter, String msg) throws MqttPersistenceException, MqttException {
         return publish(topicFilter, msg, Qos.ONLY_ONCE);
     }
 
     /**
-     * Publish client.
-     *
-     * @param topic    the topic
-     * @param msg      the msg
-     * @param consumer the consumer
-     * @return the client
-     * @throws MqttPersistenceException the mqtt persistence exception
-     * @throws MqttException            the mqtt exception
+     * {@inheritDoc}
      */
-    public EasyClient publish(String topic, String msg, Consumer<IMqttDeliveryToken> consumer)
+    @Override
+    public EasyMqttClientImpl publish(String topic, String msg, Consumer<IMqttDeliveryToken> consumer)
             throws MqttPersistenceException, MqttException {
         return publish(topic, msg, Qos.ONLY_ONCE, consumer);
     }
 
     /**
-     * Publish client.
-     *
-     * @param topic the topic
-     * @param msg   the msg
-     * @param qos   the qos
-     * @return the client
-     * @throws MqttException the mqtt exception
+     * {@inheritDoc}
      */
-    public EasyClient publish(String topic, String msg, Qos qos) throws MqttException {
+    @Override
+    public EasyMqttClientImpl publish(String topic, String msg, Qos qos) throws MqttException {
         return publish(topic, msg, qos, null);
     }
 
     /**
-     * Publish client.
-     *
-     * @param topic    the topic
-     * @param msg      the msg
-     * @param qos      the qos
-     * @param consumer the consumer
-     * @return the client
-     * @throws MqttPersistenceException the mqtt persistence exception
-     * @throws MqttException            the mqtt exception
+     * {@inheritDoc}
      */
-    public EasyClient publish(String topic, String msg, Qos qos, Consumer<IMqttDeliveryToken> consumer)
+    @Override
+    public EasyMqttClientImpl publish(String topic, String msg, Qos qos, Consumer<IMqttDeliveryToken> consumer)
             throws MqttPersistenceException, MqttException {
         return publish(topic, msg, qos, charset, consumer);
     }
 
     /**
-     * Publish client.
-     *
-     * @param topic    the topic
-     * @param msg      the msg
-     * @param qos      the qos
-     * @param charset  the charset
-     * @param consumer the consumer
-     * @return the client
-     * @throws MqttPersistenceException the mqtt persistence exception
-     * @throws MqttException            the mqtt exception
+     * {@inheritDoc}
      */
-    public EasyClient publish(String topic, String msg, Qos qos, Charset charset, Consumer<IMqttDeliveryToken> consumer)
+    @Override
+    public EasyMqttClientImpl publish(String topic, String msg, Qos qos, Charset charset, Consumer<IMqttDeliveryToken> consumer)
             throws MqttPersistenceException, MqttException {
         if (consumer != null) {
             ((AutoDetectionMqttCallBack) callback).publish(topic, consumer);

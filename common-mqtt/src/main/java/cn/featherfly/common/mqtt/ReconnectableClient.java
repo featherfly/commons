@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * @author zhongj
  * @param <C> the generic ReconnectableClient type
  */
-public abstract class ReconnectableClient<C extends ReconnectableClient<C>> {
+public abstract class ReconnectableClient<C extends ReconnectableClient<C>> implements EasyMqttClient {
 
     /** The logger. */
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -105,14 +105,6 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> {
     void reconnect() throws MqttException {
         connect(callback);
     }
-
-    /**
-     * Connect client.
-     *
-     * @return the client
-     * @throws MqttException the mqtt exception
-     */
-    public abstract C connect() throws MqttException;
 
     /**
      * Connect client.
@@ -203,6 +195,7 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> {
      *
      * @return the client id
      */
+    @Override
     public String getClientId() {
         return clientId;
     }

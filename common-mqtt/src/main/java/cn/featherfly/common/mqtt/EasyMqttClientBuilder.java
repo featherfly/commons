@@ -7,18 +7,20 @@ import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import cn.featherfly.common.lang.Strings;
+
 /**
  * ClientBuilder.
  *
  * @author zhongj
  */
-public class ClientBuilder {
+public class EasyMqttClientBuilder {
 
     private String host;
 
-    private int port = EasyClient.DEFAULT_PORT;
+    private int port = EasyMqttClientImpl.DEFAULT_PORT;
 
-    private String protocol = EasyClient.DEFAULT_PROTOCOL;
+    private String protocol = EasyMqttClientImpl.DEFAULT_PROTOCOL;
 
     private String address;
     private String clientId;
@@ -35,7 +37,7 @@ public class ClientBuilder {
     /**
      * Instantiates a new client builder.
      */
-    public ClientBuilder() {
+    public EasyMqttClientBuilder() {
     }
 
     /**
@@ -44,7 +46,7 @@ public class ClientBuilder {
      * @param address  the address
      * @param clientId the client id
      */
-    public ClientBuilder(String address, String clientId) {
+    public EasyMqttClientBuilder(String address, String clientId) {
         this.address = address;
         this.clientId = clientId;
     }
@@ -56,7 +58,7 @@ public class ClientBuilder {
      * @param port     the port
      * @param clientId the client id
      */
-    public ClientBuilder(String host, int port, String clientId) {
+    public EasyMqttClientBuilder(String host, int port, String clientId) {
         this.host = host;
         this.port = port;
         this.clientId = clientId;
@@ -70,7 +72,7 @@ public class ClientBuilder {
      * @param port     the port
      * @param clientId the client id
      */
-    public ClientBuilder(String protocol, String host, int port, String clientId) {
+    public EasyMqttClientBuilder(String protocol, String host, int port, String clientId) {
         this.protocol = protocol;
         this.host = host;
         this.port = port;
@@ -83,7 +85,7 @@ public class ClientBuilder {
      * @param protocol the protocol
      * @return the client builder
      */
-    public ClientBuilder protocol(String protocol) {
+    public EasyMqttClientBuilder protocol(String protocol) {
         this.protocol = protocol;
         return this;
     }
@@ -94,7 +96,7 @@ public class ClientBuilder {
      * @param host the host
      * @return the client builder
      */
-    public ClientBuilder host(String host) {
+    public EasyMqttClientBuilder host(String host) {
         this.host = host;
         return this;
     }
@@ -105,7 +107,7 @@ public class ClientBuilder {
      * @param port the port
      * @return the client builder
      */
-    public ClientBuilder port(int port) {
+    public EasyMqttClientBuilder port(int port) {
         this.port = port;
         return this;
     }
@@ -116,7 +118,7 @@ public class ClientBuilder {
      * @param address the address
      * @return the client builder
      */
-    public ClientBuilder address(String address) {
+    public EasyMqttClientBuilder address(String address) {
         this.address = address;
         return this;
     }
@@ -127,7 +129,7 @@ public class ClientBuilder {
      * @param clientId the client id
      * @return the client builder
      */
-    public ClientBuilder clientId(String clientId) {
+    public EasyMqttClientBuilder clientId(String clientId) {
         this.clientId = clientId;
         return this;
     }
@@ -138,7 +140,7 @@ public class ClientBuilder {
      * @param options the options
      * @return the client builder
      */
-    public ClientBuilder options(MqttConnectOptions options) {
+    public EasyMqttClientBuilder options(MqttConnectOptions options) {
         this.options = options;
         return this;
     }
@@ -149,7 +151,7 @@ public class ClientBuilder {
      * @param persistence the persistence
      * @return the client builder
      */
-    public ClientBuilder persistence(MqttClientPersistence persistence) {
+    public EasyMqttClientBuilder persistence(MqttClientPersistence persistence) {
         this.persistence = persistence;
         return this;
     }
@@ -160,7 +162,7 @@ public class ClientBuilder {
      * @param charset the charset
      * @return the client builder
      */
-    public ClientBuilder charset(Charset charset) {
+    public EasyMqttClientBuilder charset(Charset charset) {
         this.charset = charset;
         return this;
     }
@@ -171,7 +173,7 @@ public class ClientBuilder {
      * @param username the username
      * @return the client builder
      */
-    public ClientBuilder username(String username) {
+    public EasyMqttClientBuilder username(String username) {
         this.username = username;
         return this;
     }
@@ -182,7 +184,7 @@ public class ClientBuilder {
      * @param password the password
      * @return the client builder
      */
-    public ClientBuilder password(String password) {
+    public EasyMqttClientBuilder password(String password) {
         this.password = password;
         return this;
     }
@@ -193,7 +195,7 @@ public class ClientBuilder {
      * @param reconnectInNewThread the reconnect in new thread
      * @return the client builder
      */
-    public ClientBuilder reconnectInNewThread(boolean reconnectInNewThread) {
+    public EasyMqttClientBuilder reconnectInNewThread(boolean reconnectInNewThread) {
         this.reconnectInNewThread = reconnectInNewThread;
         return this;
     }
@@ -203,19 +205,8 @@ public class ClientBuilder {
      *
      * @return the easy client
      */
-    public EasyClient build() {
-        EasyClient client = new EasyClient();
-        init(client);
-        return client;
-    }
-
-    /**
-     * Builds the simple client.
-     *
-     * @return the simple client
-     */
-    public SimpleClient buildSimpleClient() {
-        SimpleClient client = new SimpleClient();
+    public EasyMqttClient build() {
+        EasyMqttClientImpl client = new EasyMqttClientImpl();
         init(client);
         return client;
     }
@@ -235,10 +226,11 @@ public class ClientBuilder {
         if (options == null) {
             options = new MqttConnectOptions();
         }
-        if (username != null) {
+
+        if (Strings.isNotEmpty(username)) {
             options.setUserName(username);
         }
-        if (password != null) {
+        if (Strings.isNotEmpty(password)) {
             options.setPassword(password.toCharArray());
         }
         client.options = options;

@@ -7,7 +7,8 @@ sourceSets {
 }
   
 dependencies {
-	//implementation project(":common-core")
-	
-	api 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
+    api project(":common-core")
+    
+    api 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
+
 }

@@ -1,4 +1,11 @@
-# 0.1.3 
+# 0.1.4 2021-04-27
+1. 加入EasyMqttClient接口，删除SimpleClient,重命名EasyClient,ClientBuilder为EasyMqttClientImpl,EasyMqttClientBuilder
+2. 修复AutoDetectionMqttCallBack中deliveryComplete(IMqttDeliveryToken token)方法中token.getTopics()返回null时的空指针异常
+
+# 0.1.3 2021-04-25
+1. ClientBuilder加入username,password选项
+
+# 0.1.3 2021-04-25
 1. ClientBuilder加入username,password选项
 
 # 0.1.2 2021-03-03

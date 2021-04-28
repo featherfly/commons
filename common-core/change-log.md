@@ -1,7 +1,8 @@
-# 1.8.23
+# 1.8.23 2021-04-28
 1. NumberUtils加入toLong(byte...)，toByteArray(long)
 2. CollectionUtils加入addByteArray，addIntArray, toByteArray, toIntArray，用于处理基本类型byte, int，因为基本类型无法使用泛型处理
 3. NumberUtils加入93进制相关的转换方法
+4. 修复FileUtils.getPathInJar在jar嵌套时没有获取正确路径的问题
 
 # 1.8.22 2021-03-03
 1. StringFormatter.format实现{index:{index}, mid:{mid}}嵌套时忽略外层标签的功能

@@ -813,7 +813,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
             return null;
         }
         if (isResourceInJar(resourceUrl)) {
-            return org.apache.commons.lang3.StringUtils.substringAfter(resourceUrl.getPath(), "!");
+            return org.apache.commons.lang3.StringUtils.substringAfterLast(resourceUrl.getPath(), ".jar!");
         } else {
             return resourceUrl.getPath();
         }

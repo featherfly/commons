@@ -539,6 +539,12 @@ public final class NumberUtils {
                 return toString62Unit(number);
             case RADIX64:
                 return toString64Unit(number);
+            case RADIX16:
+                String result = number.toString(radix.value());
+                if (result.length() % 2 == 1) {
+                    result = "0" + result;
+                }
+                return result;
             default:
                 return number.toString(radix.value());
         }

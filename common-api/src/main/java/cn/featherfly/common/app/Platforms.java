@@ -155,4 +155,32 @@ public enum Platforms implements Platform {
     public List<Platform> platforms() {
         return new ArrayList<>(platforms);
     }
+
+    /**
+     * value of id.
+     *
+     * @param id the id
+     * @return the platforms
+     */
+    public static Platforms valueOf(Integer id) {
+        if (id == null) {
+            return null;
+        }
+        return valueOf(id.intValue());
+    }
+
+    /**
+     * value of id.
+     *
+     * @param id the id
+     * @return the platforms
+     */
+    public static Platforms valueOf(int id) {
+        for (Platforms p : Platforms.values()) {
+            if (p.id() == id) {
+                return p;
+            }
+        }
+        return null;
+    }
 }

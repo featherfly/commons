@@ -1,5 +1,6 @@
-# 1.8.24
+# 1.8.24 2021-05-25
 1. Lang.toEnum加入从另一个enum转换传入enumType，使用name()进行转换（主要用于api定义后的接口枚举参数转换为业务定义的枚举，即除了包名不同，其他都相同）
+2. FileUtils加入getClassPathInJar(URL)方法
 
 # 1.8.23 2021-04-28
 1. NumberUtils加入toLong(byte...)，toByteArray(long)

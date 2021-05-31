@@ -29,7 +29,6 @@ public class PostgreSQLDialect extends AbstractDialect {
      * Instantiates a new postgre SQL dialect.
      */
     public PostgreSQLDialect() {
-        setTableAndColumnNameUppercase(false);
     }
 
     /**

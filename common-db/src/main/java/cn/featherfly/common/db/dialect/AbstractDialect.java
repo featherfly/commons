@@ -39,7 +39,7 @@ public abstract class AbstractDialect implements Dialect {
     private boolean keywordsUppercase = true;
 
     /** The table and column name uppercase. */
-    private boolean tableAndColumnNameUppercase = false;
+    private StringConverter tableAndColumnNameConverter = StringConverter.NONE;
 
     /**
      * Instantiates a new abstract dialect.
@@ -70,20 +70,20 @@ public abstract class AbstractDialect implements Dialect {
     /**
      * 返回tableAndColumnNameUppercase.
      *
-     * @return tableAndColumnNameUppercase
+     * @return StringConverter
      */
     @Override
-    public boolean isTableAndColumnNameUppercase() {
-        return tableAndColumnNameUppercase;
+    public StringConverter tableAndColumnNameConverter() {
+        return tableAndColumnNameConverter;
     }
 
     /**
      * 设置tableAndColumnNameUppercase.
      *
-     * @param tableAndColumnNameUppercase tableAndColumnNameUppercase
+     * @param tableAndColumnNameConverter tableAndColumnNameConverter
      */
-    public void setTableAndColumnNameUppercase(boolean tableAndColumnNameUppercase) {
-        this.tableAndColumnNameUppercase = tableAndColumnNameUppercase;
+    public void setTableAndColumnNameUppercase(StringConverter tableAndColumnNameConverter) {
+        this.tableAndColumnNameConverter = tableAndColumnNameConverter;
     }
 
     /**

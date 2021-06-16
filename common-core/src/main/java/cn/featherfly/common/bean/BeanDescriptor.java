@@ -19,8 +19,12 @@ import org.slf4j.LoggerFactory;
 import cn.featherfly.common.bean.matcher.BeanPropertyMatcher;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.CollectionUtils;
+import cn.featherfly.common.lang.LambdaUtils;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.ServiceLoaderUtils;
+import cn.featherfly.common.lang.function.SerializableConsumer;
+import cn.featherfly.common.lang.function.SerializableFunction;
+import cn.featherfly.common.lang.function.SerializableSupplier;
 
 /**
  * <p>
@@ -280,6 +284,48 @@ public class BeanDescriptor<T> {
             }
             return (BeanProperty<E>) property;
         }
+    }
+
+    /**
+     * <p>
+     * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常
+     * </p>
+     *
+     * @param <E>      the element type
+     * @param <R>      the property type
+     * @param property 属性
+     * @return 指定属性
+     */
+    public <E, R> BeanProperty<E> getBeanProperty(SerializableFunction<E, R> property) {
+        return getBeanProperty(LambdaUtils.getLambdaPropertyName(property));
+    }
+
+    /**
+     * <p>
+     * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常
+     * </p>
+     *
+     * @param <E>      the element type
+     * @param <R>      the property type
+     * @param property 属性
+     * @return 指定属性
+     */
+    public <E, R> BeanProperty<E> getBeanProperty(SerializableConsumer<R> property) {
+        return getBeanProperty(LambdaUtils.getLambdaPropertyName(property));
+    }
+
+    /**
+     * <p>
+     * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常
+     * </p>
+     *
+     * @param <E>      the element type
+     * @param <R>      the property type
+     * @param property 属性
+     * @return 指定属性
+     */
+    public <E, R> BeanProperty<E> getBeanProperty(SerializableSupplier<R> property) {
+        return getBeanProperty(LambdaUtils.getLambdaPropertyName(property));
     }
 
     /**

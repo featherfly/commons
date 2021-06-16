@@ -1,3 +1,7 @@
+# 1.8.25 2021-06-16
+1. BeanDescriptor加入方法getBeanProperty(SerializableFunction<E, R>),getBeanProperty(SerializableConsumer<R>),getBeanProperty(SerializableSupplier<R>)
+2. LambdaUtils.getLambdaPropertyName增加set方法支持
+
 # 1.8.24 2021-05-25
 1. Lang.toEnum加入从另一个enum转换传入enumType，使用name()进行转换（主要用于api定义后的接口枚举参数转换为业务定义的枚举，即除了包名不同，其他都相同）
 2. FileUtils加入getClassPathInJar(URL)方法

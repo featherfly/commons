@@ -22,6 +22,7 @@ import cn.featherfly.common.lang.CollectionUtils;
 import cn.featherfly.common.lang.LambdaUtils;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.ServiceLoaderUtils;
+import cn.featherfly.common.lang.function.SerializableBiConsumer;
 import cn.featherfly.common.lang.function.SerializableConsumer;
 import cn.featherfly.common.lang.function.SerializableFunction;
 import cn.featherfly.common.lang.function.SerializableSupplier;
@@ -297,6 +298,20 @@ public class BeanDescriptor<T> {
      * @return 指定属性
      */
     public <E, R> BeanProperty<E> getBeanProperty(SerializableFunction<E, R> property) {
+        return getBeanProperty(LambdaUtils.getLambdaPropertyName(property));
+    }
+
+    /**
+     * <p>
+     * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常
+     * </p>
+     *
+     * @param <E>      the element type
+     * @param <R>      the property type
+     * @param property 属性
+     * @return 指定属性
+     */
+    public <E, R> BeanProperty<E> getBeanProperty(SerializableBiConsumer<E, R> property) {
         return getBeanProperty(LambdaUtils.getLambdaPropertyName(property));
     }
 

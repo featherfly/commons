@@ -354,6 +354,12 @@ public class LambdaUtilsTest {
         //        t(System.out::println);
         //        Arrays.stream(new String[0]).forEach(System.out::println);
         //        eq(User::isLocked, User::isLocked);
+
+        //        Function<User, String> f = User::getName;
+        //        BiConsumer<User, String> bc = User::setName;
+        //        Consumer<String> c = user::setName;
+        //        Supplier<String> s = user::getName;
+
     }
 
     void assertUser(User user) {

@@ -40,11 +40,6 @@ public class BeanDescriptorTest {
         pAge = bd.getBeanProperty(User::getAge);
         pAva = bd.getBeanProperty(User::getAvailable);
 
-        //        Consumer<String> c = user::setName;
-        //        Supplier<String> s = user::getName;
-        //        Function<User, String> f = User::getName;
-        //        Function<User> f2 = User::setName;
-
         pName = bd.getBeanProperty(User::getName);
         pAge = bd.getBeanProperty(user::getAge);
         pAva = bd.getBeanProperty(user::setAvailable);

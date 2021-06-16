@@ -1,3 +1,6 @@
+# 1.8.26
+1. BeanDescriptor加入方法getBeanProperty(SerializableBiConsumer<E, R> property)
+
 # 1.8.25 2021-06-16
 1. BeanDescriptor加入方法getBeanProperty(SerializableFunction<E, R>),getBeanProperty(SerializableConsumer<R>),getBeanProperty(SerializableSupplier<R>)
 2. LambdaUtils.getLambdaPropertyName增加set方法支持

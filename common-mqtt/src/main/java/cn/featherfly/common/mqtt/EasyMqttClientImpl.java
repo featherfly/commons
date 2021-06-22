@@ -133,7 +133,25 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
      * {@inheritDoc}
      */
     @Override
+    public EasyMqttClient publish(String topic, String msg, Qos qos, boolean retained,
+            Consumer<IMqttDeliveryToken> consumer) throws MqttPersistenceException, MqttException {
+        return publish(topic, msg, qos, charset, retained, consumer);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public EasyMqttClientImpl publish(String topic, String msg, Qos qos, Charset charset,
+            Consumer<IMqttDeliveryToken> consumer) throws MqttPersistenceException, MqttException {
+        return publish(topic, msg, qos, charset, false, consumer);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public EasyMqttClientImpl publish(String topic, String msg, Qos qos, Charset charset, boolean retained,
             Consumer<IMqttDeliveryToken> consumer) throws MqttPersistenceException, MqttException {
         if (consumer != null) {
             ((AutoDetectionMqttCallBack) callback).publish(topic, consumer);
@@ -141,7 +159,7 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
         logger.debug("publish topic -> {}, qos -> {}, msg -> {}", topic, qos.ordinal(), msg);
         MqttMessage message = new MqttMessage();
         message.setQos(qos.ordinal());
-        message.setRetained(true);
+        message.setRetained(retained);
         message.setPayload(msg.getBytes(charset));
         MqttTopic mqttTopic = client.getTopic(topic);
         publish(mqttTopic, message);

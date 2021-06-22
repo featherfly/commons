@@ -121,6 +121,21 @@ public interface EasyMqttClient {
             throws MqttPersistenceException, MqttException;
 
     /**
+     * Publish.
+     *
+     * @param topic    the topic
+     * @param msg      the msg
+     * @param qos      the qos
+     * @param retained the retained
+     * @param consumer the consumer
+     * @return the easy mqtt client impl
+     * @throws MqttPersistenceException the mqtt persistence exception
+     * @throws MqttException            the mqtt exception
+     */
+    EasyMqttClient publish(String topic, String msg, Qos qos, boolean retained, Consumer<IMqttDeliveryToken> consumer)
+            throws MqttPersistenceException, MqttException;
+
+    /**
      * Publish client.
      *
      * @param topic    the topic
@@ -134,5 +149,21 @@ public interface EasyMqttClient {
      */
     EasyMqttClient publish(String topic, String msg, Qos qos, Charset charset, Consumer<IMqttDeliveryToken> consumer)
             throws MqttPersistenceException, MqttException;
+
+    /**
+     * Publish.
+     *
+     * @param topic    the topic
+     * @param msg      the msg
+     * @param qos      the qos
+     * @param charset  the charset
+     * @param retained the retained
+     * @param consumer the consumer
+     * @return the easy mqtt client impl
+     * @throws MqttPersistenceException the mqtt persistence exception
+     * @throws MqttException            the mqtt exception
+     */
+    EasyMqttClient publish(String topic, String msg, Qos qos, Charset charset, boolean retained,
+            Consumer<IMqttDeliveryToken> consumer) throws MqttPersistenceException, MqttException;
 
 }

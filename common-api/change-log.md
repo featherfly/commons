@@ -1,3 +1,7 @@
+# 0.2.6 2021-06-25
+1. Platforms加入valueOf(Integer),valueOf(int)方法
+
+
 # 0.2.5 2020-12-22
 1. 加入Version接口
 2. 加入Platform接口和Platforms枚举

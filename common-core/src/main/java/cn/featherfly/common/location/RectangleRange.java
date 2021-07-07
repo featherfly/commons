@@ -107,4 +107,73 @@ public class RectangleRange {
     public void setRightBottom(LocationPoint rightBottom) {
         this.rightBottom = rightBottom;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "RectangleRange [leftTop=" + leftTop + ", rightTop=" + rightTop + ", leftBottom=" + leftBottom
+                + ", rightBottom=" + rightBottom + "]";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (leftBottom == null ? 0 : leftBottom.hashCode());
+        result = prime * result + (leftTop == null ? 0 : leftTop.hashCode());
+        result = prime * result + (rightBottom == null ? 0 : rightBottom.hashCode());
+        result = prime * result + (rightTop == null ? 0 : rightTop.hashCode());
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        RectangleRange other = (RectangleRange) obj;
+        if (leftBottom == null) {
+            if (other.leftBottom != null) {
+                return false;
+            }
+        } else if (!leftBottom.equals(other.leftBottom)) {
+            return false;
+        }
+        if (leftTop == null) {
+            if (other.leftTop != null) {
+                return false;
+            }
+        } else if (!leftTop.equals(other.leftTop)) {
+            return false;
+        }
+        if (rightBottom == null) {
+            if (other.rightBottom != null) {
+                return false;
+            }
+        } else if (!rightBottom.equals(other.rightBottom)) {
+            return false;
+        }
+        if (rightTop == null) {
+            if (other.rightTop != null) {
+                return false;
+            }
+        } else if (!rightTop.equals(other.rightTop)) {
+            return false;
+        }
+        return true;
+    }
 }

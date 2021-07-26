@@ -61,6 +61,10 @@ public enum QueryOperator {
      * not in
      */
     NIN,
+    /**
+     * like
+     */
+    LK
     // /**
     // * 按位与 ： &
     // */
@@ -87,7 +91,7 @@ public enum QueryOperator {
     // br(">>")
     ;
 
-    private QueryOperator() {
+    QueryOperator() {
     }
 
 }

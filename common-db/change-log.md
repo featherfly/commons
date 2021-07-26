@@ -1,3 +1,6 @@
+# 0.3.16 2021-07-26
+1. ConditionColumnElement加入对QueryOperator.LK的支持
+
 # 0.3.15 2021-5-31
 1. DataTransformer.transform(currentRecordModel, originalRecordModel)方法加入参数原始数据，即没有被其他转换器处理过的原始数据
 2. Dialect加入StringConverter tableAndColumnNameConverter()替换boolean isTableAndColumnNameConverterUpperCase()方法

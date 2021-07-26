@@ -162,6 +162,16 @@ public class ConditionColumnElementTest {
         print(c);
         assertEquals(c.toSql(), "u.`tag` NOT IN (?,?)");
         assertEquals(((List<Object>) c.getParam()).toArray(), tags);
+
+        name = "fea";
+        c = new ConditionColumnElement(dialect, "name", name, QueryOperator.LK);
+        print(c);
+        assertEquals(c.toSql(), "`name` LIKE ?");
+        assertEquals(c.getParam(), name);
+        c = new ConditionColumnElement(dialect, "name", name, QueryOperator.LK, "u");
+        print(c);
+        assertEquals(c.toSql(), "u.`name` LIKE ?");
+        assertEquals(c.getParam(), name);
     }
 
     @SuppressWarnings("unchecked")
@@ -300,6 +310,16 @@ public class ConditionColumnElementTest {
         print(c);
         assertEquals(c.toSql(), "u.\"tag\" NOT IN (?,?)");
         assertEquals(((List<Object>) c.getParam()).toArray(), tags);
+
+        name = "fly";
+        c = new ConditionColumnElement(dialect, "name", name, QueryOperator.LK);
+        print(c);
+        assertEquals(c.toSql(), "\"name\" LIKE ?");
+        assertEquals(c.getParam(), name);
+        c = new ConditionColumnElement(dialect, "name", name, QueryOperator.LK, "u");
+        print(c);
+        assertEquals(c.toSql(), "u.\"name\" LIKE ?");
+        assertEquals(c.getParam(), name);
     }
 
     @SuppressWarnings("unchecked")
@@ -438,5 +458,15 @@ public class ConditionColumnElementTest {
         print(c);
         assertEquals(c.toSql(), "u.'tag' NOT IN (?,?)");
         assertEquals(((List<Object>) c.getParam()).toArray(), tags);
+
+        name = "fly";
+        c = new ConditionColumnElement(dialect, "name", name, QueryOperator.LK);
+        print(c);
+        assertEquals(c.toSql(), "'name' LIKE ?");
+        assertEquals(c.getParam(), name);
+        c = new ConditionColumnElement(dialect, "name", name, QueryOperator.LK, "u");
+        print(c);
+        assertEquals(c.toSql(), "u.'name' LIKE ?");
+        assertEquals(c.getParam(), name);
     }
 }

@@ -139,6 +139,8 @@ public class ConditionColumnElement extends ParamedColumnElement {
                 return dialect.getKeywords().in();
             case NIN:
                 return dialect.getKeywords().notIn();
+            case LK:
+                return dialect.getKeywords().like();
             default:
                 return "=";
         }

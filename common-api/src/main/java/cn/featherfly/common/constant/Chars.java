@@ -822,7 +822,7 @@ public interface Chars {
     /**
      * 换行符号
      */
-    char NEW_LINEZ_CHAR = '\n';
+    char NEW_LINE_CHAR = '\n';
     /**
      * 回车符号
      */

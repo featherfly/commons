@@ -1,3 +1,6 @@
+# 0.2.7 2021-08-16
+1. 修复Chars常量拼写错误
+
 # 0.2.6 2021-06-25
 1. Platforms加入valueOf(Integer),valueOf(int)方法
 

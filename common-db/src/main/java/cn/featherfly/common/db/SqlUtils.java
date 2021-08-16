@@ -1,7 +1,9 @@
 
 package cn.featherfly.common.db;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -125,45 +127,166 @@ public final class SqlUtils {
             Character endSymbol) {
         AssertIllegalArgument.isNotEmpty(namedParamSql, "namedParamSql");
         AssertIllegalArgument.isNotEmpty(startSymbol, "startSymbol");
-        List<Object> list = new ArrayList<>();
-        StringBuilder sql = new StringBuilder(namedParamSql);
+
+        StringBuilder sql = new StringBuilder();
+        List<Object> paramList = new ArrayList<>();
+
         int nameStartIndex = -1;
         int nameEndIndex = -1;
         boolean emptySymbol = Lang.isEmpty(endSymbol);
         char end = emptySymbol ? Chars.SPACE_CHAR : endSymbol;
         boolean isEnd = false;
         boolean isEndSign = false;
-        for (int index = 0; index < sql.length(); index++) {
-            char c = sql.charAt(index);
+        boolean isSplitSymbol = false;
+        for (int index = 0; index < namedParamSql.length(); index++) {
+            char c = namedParamSql.charAt(index);
+            isSplitSymbol = isSqlWordSplitChar(c);
+
             if (startSymbol == c) {
                 nameStartIndex = index;
             }
             if (nameStartIndex > 0) {
-                isEnd = index == sql.length() - 1;
-                isEndSign = c == end || c == Chars.NEW_LINEZ_CHAR || c == Chars.COMMA_CHAR || c == ')'
-                        || c == Chars.TAB_CHAR;
+                isEnd = index == namedParamSql.length() - 1;
+
+                isEndSign = c == end || isSplitSymbol;
                 if (isEndSign || isEnd) {
                     nameEndIndex = index;
                     if (!isEndSign && isEnd && emptySymbol) {
                         nameEndIndex++;
                     }
-                    String name = sql.substring(nameStartIndex + 1, nameEndIndex);
+                    String name = namedParamSql.substring(nameStartIndex + 1, nameEndIndex);
                     Object param = getNamedParam(params, name);
-                    list.add(param);
+
+                    if (param instanceof Collection) {
+                        paramList.addAll((Collection<?>) param);
+                        setParams(sql, ((Collection<?>) param).size(), namedParamSql, nameStartIndex);
+                    } else if (param.getClass().isArray()) {
+                        int length = Array.getLength(param);
+                        for (int i = 0; i < length; i++) {
+                            paramList.add(Array.get(param, i));
+                        }
+                        setParams(sql, length, namedParamSql, nameStartIndex);
+                    } else {
+                        paramList.add(param);
+                        sql.append(Chars.QUESTION_CHAR);
+                    }
                     if (!emptySymbol) {
                         nameEndIndex++;
                     }
-                    sql.insert(nameEndIndex, Chars.QUESTION_CHAR);
-                    sql.delete(nameStartIndex, nameEndIndex);
-                    index -= nameEndIndex - nameStartIndex - 1;
-                    // 查找name完成，start index 重置
+                    if (isSplitSymbol) {
+                        sql.append(c);
+                    }
                     nameStartIndex = -1;
                     nameEndIndex = -1;
                 }
+            } else {
+                sql.append(c);
             }
         }
-        return new SimpleExecution(sql.toString(), list.toArray());
+        return new SimpleExecution(sql.toString(), paramList.toArray());
     }
+
+    private static void setParams(StringBuilder sql, int length, String namedParamSql, int nameStartIndex) {
+        if (isInCondition(namedParamSql, nameStartIndex)) {
+            sqlInParams(sql, length);
+        } else {
+            sql.append(Chars.QUESTION_CHAR);
+        }
+    }
+
+    private static boolean isInCondition(String namedParamSql, int nameStartIndex) {
+        int endIndex = -1;
+        for (int i = nameStartIndex; i >= 0; i--) {
+            char c = namedParamSql.charAt(i);
+            if (isSqlWordSplitChar(c)) {
+                if (endIndex < 0) {
+                    endIndex = i;
+                } else {
+                    return "in".equalsIgnoreCase(namedParamSql.substring(i + 1, endIndex).trim());
+                }
+            }
+        }
+        return false;
+    }
+
+    private static void sqlInParams(StringBuilder sql, int size) {
+        sql.append(Chars.PAREN_L_CHAR);
+        for (int i = 0; i < size; i++) {
+            sql.append(Chars.QUESTION_CHAR).append(Chars.COMMA_CHAR);
+        }
+        if (sql.length() > 0) {
+            sql.deleteCharAt(sql.length() - 1);
+        }
+        sql.append(Chars.PAREN_R_CHAR);
+    }
+
+    private static boolean isSqlWordSplitChar(char c) {
+        return c == Chars.SPACE_CHAR || c == Chars.NEW_LINE_CHAR || c == Chars.COMMA_CHAR || c == ')'
+                || c == Chars.TAB_CHAR;
+    }
+
+    //    /**
+    //     * convert named param sql.
+    //     *
+    //     * @param namedParamSql the named param sql
+    //     * @param params        the params
+    //     * @param startSymbol   the start symbol
+    //     * @param endSymbol     the end symbol
+    //     * @return the execution
+    //     */
+    //    public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol,
+    //            Character endSymbol) {
+    //        AssertIllegalArgument.isNotEmpty(namedParamSql, "namedParamSql");
+    //        AssertIllegalArgument.isNotEmpty(startSymbol, "startSymbol");
+    //        List<Object> paramList = new ArrayList<>();
+    //        StringBuilder sql = new StringBuilder(namedParamSql);
+    //        int nameStartIndex = -1;
+    //        int nameEndIndex = -1;
+    //        boolean emptySymbol = Lang.isEmpty(endSymbol);
+    //        char end = emptySymbol ? Chars.SPACE_CHAR : endSymbol;
+    //        boolean isEnd = false;
+    //        boolean isEndSign = false;
+    //        for (int index = 0; index < sql.length(); index++) {
+    //            char c = sql.charAt(index);
+    //            if (startSymbol == c) {
+    //                nameStartIndex = index;
+    //            }
+    //            if (nameStartIndex > 0) {
+    //                isEnd = index == sql.length() - 1;
+    //                isEndSign = c == end || c == Chars.NEW_LINEZ_CHAR || c == Chars.COMMA_CHAR || c == ')'
+    //                        || c == Chars.TAB_CHAR;
+    //                if (isEndSign || isEnd) {
+    //                    nameEndIndex = index;
+    //                    if (!isEndSign && isEnd && emptySymbol) {
+    //                        nameEndIndex++;
+    //                    }
+    //                    String name = sql.substring(nameStartIndex + 1, nameEndIndex);
+    //                    Object param = getNamedParam(params, name);
+    //
+    //                    if (param instanceof Collection) {
+    //                        paramList.addAll((Collection<?>) param);
+    //                    } else if (param.getClass().isArray()) {
+    //                        int length = Array.getLength(param);
+    //                        for (int i = 0; i < length; i++) {
+    //                            paramList.add(Array.get(param, i));
+    //                        }
+    //                    } else {
+    //                        paramList.add(param);
+    //                    }
+    //                    if (!emptySymbol) {
+    //                        nameEndIndex++;
+    //                    }
+    //                    sql.insert(nameEndIndex, Chars.QUESTION_CHAR);
+    //                    sql.delete(nameStartIndex, nameEndIndex);
+    //                    index -= nameEndIndex - nameStartIndex - 1;
+    //                    // 查找name完成，start index 重置
+    //                    nameStartIndex = -1;
+    //                    nameEndIndex = -1;
+    //                }
+    //            }
+    //        }
+    //        return new SimpleExecution(sql.toString(), paramList.toArray());
+    //    }
 
     /**
      * Gets the named param.

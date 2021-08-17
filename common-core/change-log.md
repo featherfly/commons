@@ -1,23 +1,24 @@
-# 1.8.26
-1. BeanDescriptor加入方法getBeanProperty(SerializableBiConsumer<E, R> property)
-2. RectangleRange加入toString,hashcode,equals
+# 1.8.26 2021-08-17
+    1. BeanDescriptor加入方法getBeanProperty(SerializableBiConsumer<E, R> property)
+    2. RectangleRange加入toString,hashcode,equals
+    3. common-api依赖版本升级
 
 # 1.8.25 2021-06-16
-1. BeanDescriptor加入方法getBeanProperty(SerializableFunction<E, R>),getBeanProperty(SerializableConsumer<R>),getBeanProperty(SerializableSupplier<R>)
-2. LambdaUtils.getLambdaPropertyName增加set方法支持
+    1. BeanDescriptor加入方法getBeanProperty(SerializableFunction<E, R>),getBeanProperty(SerializableConsumer<R>),getBeanProperty(SerializableSupplier<R>)
+    2. LambdaUtils.getLambdaPropertyName增加set方法支持
 
 # 1.8.24 2021-05-25
-1. Lang.toEnum加入从另一个enum转换传入enumType，使用name()进行转换（主要用于api定义后的接口枚举参数转换为业务定义的枚举，即除了包名不同，其他都相同）
-2. FileUtils加入getClassPathInJar(URL)方法
+    1. Lang.toEnum加入从另一个enum转换传入enumType，使用name()进行转换（主要用于api定义后的接口枚举参数转换为业务定义的枚举，即除了包名不同，其他都相同）
+    2. FileUtils加入getClassPathInJar(URL)方法
 
 # 1.8.23 2021-04-28
-1. NumberUtils加入toLong(byte...)，toByteArray(long)
-2. CollectionUtils加入addByteArray，addIntArray, toByteArray, toIntArray，用于处理基本类型byte, int，因为基本类型无法使用泛型处理
-3. NumberUtils加入93进制相关的转换方法
-4. 修复FileUtils.getPathInJar在jar嵌套时没有获取正确路径的问题
+    1. NumberUtils加入toLong(byte...)，toByteArray(long)
+    2. CollectionUtils加入addByteArray，addIntArray, toByteArray, toIntArray，用于处理基本类型byte, int，因为基本类型无法使用泛型处理
+    3. NumberUtils加入93进制相关的转换方法
+    4. 修复FileUtils.getPathInJar在jar嵌套时没有获取正确路径的问题
 
 # 1.8.22 2021-03-03
-1. StringFormatter.format实现{index:{index}, mid:{mid}}嵌套时忽略外层标签的功能
+    1. StringFormatter.format实现{index:{index}, mid:{mid}}嵌套时忽略外层标签的功能
 	
 # 1.8.21 2020-12-22
 	1. 加入TreeChianMap,LinkedHashChainMap,ConcurrentHashChainMap

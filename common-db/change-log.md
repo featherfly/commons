@@ -1,4 +1,4 @@
-# 0.3.17 2021-07-26
+# 0.3.17 2021-08-16
 1. SqlUtils.convertNamedParamSql加入in的参数为Collection或Array根据长度占位符自动转换为(?,?...)的形式
 
 # 0.3.16 2021-07-26

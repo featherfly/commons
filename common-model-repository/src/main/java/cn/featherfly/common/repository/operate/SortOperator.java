@@ -8,7 +8,7 @@ package cn.featherfly.common.repository.operate;
  *
  * @author zhongj
  */
-public enum SortOperator {
+public enum SortOperator implements Operator {
     /**
      * 升序
      */

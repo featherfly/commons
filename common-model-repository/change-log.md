@@ -1,3 +1,6 @@
+# 0.1.10
+    1. 加入Operator接口，QueryOperator,SortOperator,LogicOperator都实现该接口
+    
 # 0.1.10 2021-07-26
     1. QueryOperator加入LK
     

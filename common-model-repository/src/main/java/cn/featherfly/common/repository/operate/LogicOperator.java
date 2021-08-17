@@ -8,7 +8,7 @@ package cn.featherfly.common.repository.operate;
  *
  * @author zhongj
  */
-public enum LogicOperator {
+public enum LogicOperator implements Operator {
     /**
      * and
      */

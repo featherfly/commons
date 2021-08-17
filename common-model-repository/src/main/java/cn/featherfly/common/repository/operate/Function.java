@@ -2,10 +2,8 @@
 package cn.featherfly.common.repository.operate;
 
 /**
- * <p>
- * AggregateFunction
- * </p>
- * 
+ * Function.
+ *
  * @author zhongj
  */
 public interface Function {

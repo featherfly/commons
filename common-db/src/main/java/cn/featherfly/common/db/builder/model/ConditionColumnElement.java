@@ -69,6 +69,18 @@ public class ConditionColumnElement extends ParamedColumnElement {
      * {@inheritDoc}
      */
     @Override
+    public Object getParam() {
+        if (QueryOperator.ISN == queryOperator || QueryOperator.INN == queryOperator) {
+            return null;
+        } else {
+            return param;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String toSql() {
         if (Lang.isEmpty(name)) {
             return "";

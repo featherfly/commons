@@ -1,3 +1,9 @@
+# 0.3.18 2021-08-26
+1. ConditionColumnElement.toSql()支持QueryOperator.ISN，QueryOperator.INN传入Boolean参数
+    null 表示忽略当前条件
+    true 表示当前操作类型条件
+    false 表示当前操作类型相反的条件（ISN变INN，INN变ISN）
+
 # 0.3.17 2021-08-16
 1. SqlUtils.convertNamedParamSql加入in的参数为Collection或Array根据长度占位符自动转换为(?,?...)的形式
 

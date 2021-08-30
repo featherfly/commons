@@ -26,13 +26,12 @@ def getRepositoryPassword() {
     return hasProperty('nexusPassword') ? nexusPassword : ""
 }
 
-task sourcesJar(type: Jar) {
+task sourcesJar(type: Jar, group: "build") {
     classifier = 'sources'
-    println sourceSets.main.java.srcDirs
-    from sourceSets.main.java.srcDirs
+    from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn:javadoc) {
+task javadocJar(type: Jar, group: "build", dependsOn:javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }

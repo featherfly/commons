@@ -2,6 +2,7 @@
 package cn.featherfly.common.lang;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import cn.featherfly.common.constant.Unit;
 import cn.featherfly.common.lang.number.ChineseNumber;
@@ -130,7 +131,7 @@ public final class WordUtils {
             total = total / max;
             double dm = mod / unitSize;
             BigDecimal bd = new BigDecimal(dm);
-            bd = bd.setScale(2, BigDecimal.ROUND_DOWN);
+            bd = bd.setScale(2, RoundingMode.DOWN);
             String dotNumber = bd.toString();
             strUnit = total + dotNumber.substring(1, dotNumber.length()) + " KB";
         }
@@ -139,7 +140,7 @@ public final class WordUtils {
             total = total / max;
             double dm = mod / unitSize;
             BigDecimal bd = new BigDecimal(dm);
-            bd = bd.setScale(2, BigDecimal.ROUND_DOWN);
+            bd = bd.setScale(2, RoundingMode.DOWN);
             String dotNumber = bd.toString();
             strUnit = total + dotNumber.substring(1, dotNumber.length()) + " MB";
         }
@@ -148,7 +149,7 @@ public final class WordUtils {
             total = total / max;
             double dm = mod / unitSize;
             BigDecimal bd = new BigDecimal(dm);
-            bd = bd.setScale(2, BigDecimal.ROUND_DOWN);
+            bd = bd.setScale(2, RoundingMode.DOWN);
             String dotNumber = bd.toString();
             strUnit = total + dotNumber.substring(1, dotNumber.length()) + " GB";
         }
@@ -167,7 +168,7 @@ public final class WordUtils {
     public static String parseToPercent(double num, int precision) {
         BigDecimal bd = BigDecimal.valueOf(num);
         bd = bd.multiply(BigDecimal.valueOf(Unit.HUNDRED));
-        bd = bd.setScale(precision, BigDecimal.ROUND_DOWN);
+        bd = bd.setScale(precision, RoundingMode.DOWN);
         String result = "%" + bd.toString();
         return result;
     }

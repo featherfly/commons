@@ -820,6 +820,23 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     }
 
     /**
+     * 获取jar包内的path. 如果resourceUrl为空，则返回空，如果不是jar包内资源，则直接返回path
+     *
+     * @param resourceUrl resource url
+     * @return path
+     */
+    public static String getClassPathInJar(URL resourceUrl) {
+        if (resourceUrl == null) {
+            return null;
+        }
+        if (isResourceInJar(resourceUrl)) {
+            return org.apache.commons.lang3.StringUtils.substringAfterLast(resourceUrl.getPath(), "!");
+        } else {
+            return resourceUrl.getPath();
+        }
+    }
+
+    /**
      * 判断传入资源是否是jar包内的资源.
      *
      * @param resourceUrl 资源定位

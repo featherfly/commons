@@ -562,13 +562,15 @@ public final class Lang {
      */
     public static <T extends Enum<T>> T toEnum(Class<T> toClass, Object object) {
         if (object != null) {
-            if (object instanceof String[]) {
-                return toEnum(toClass, ((String[]) object)[0]);
+            if (object instanceof Enum) {
+                return toEnum(toClass, ((Enum<?>) object).name());
             } else if (object instanceof String) {
                 return toEnum(toClass, (String) object);
             } else if (object instanceof Integer || object.getClass() == int.class) {
                 Integer ordinal = (Integer) object;
                 return toEnum(toClass, ordinal);
+            } else if (object instanceof String[]) {
+                return toEnum(toClass, ((String[]) object)[0]);
             } else if (object instanceof Byte || object.getClass() == byte.class) {
                 Byte ordinal = (Byte) object;
                 return toEnum(toClass, new Integer(ordinal));

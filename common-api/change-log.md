@@ -1,3 +1,13 @@
+# 0.2.8 2021-08-17
+1. 去掉不需要的依赖
+
+# 0.2.7 2021-08-16
+1. 修复Chars常量拼写错误
+
+# 0.2.6 2021-06-25
+1. Platforms加入valueOf(Integer),valueOf(int)方法
+
+
 # 0.2.5 2020-12-22
 1. 加入Version接口
 2. 加入Platform接口和Platforms枚举

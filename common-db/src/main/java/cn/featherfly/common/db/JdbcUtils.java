@@ -552,19 +552,16 @@ public final class JdbcUtils {
                 prep.setDate(position, (java.sql.Date) value);
             } else if (value instanceof Time) {
                 prep.setTime(position, (Time) value);
-            }
-            //            else if (value instanceof LocalDate) {
-            //                prep.setDate(position, new java.sql.Date(Dates.toDate((LocalDate) value).getTime()));
-            //            }
-            //            else if (value instanceof LocalTime) {
-            //                prep.setObject(position, value);
-            //            }
-            //            else if (value instanceof LocalDateTime) {
-            //                prep.setTimestamp(position, new Timestamp(Dates.getTime((LocalDateTime) value)));
-            //            } else if (value instanceof Date) {
-            //                prep.setTimestamp(position, new Timestamp(((Date) value).getTime()));
-            //            }
-            else if (value instanceof Timestamp) {
+            } else if (value instanceof LocalTime) {
+                prep.setTime(position, Time.valueOf((LocalTime) value));
+            } else if (value instanceof LocalDate) {
+                prep.setDate(position, new java.sql.Date(Dates.toDate((LocalDate) value).getTime()));
+            } else if (value instanceof LocalDateTime) {
+                prep.setTimestamp(position, new Timestamp(Dates.getTime((LocalDateTime) value)));
+                //                prep.setTimestamp(position, Timestamp.from(((LocalDateTime) value).atZone(ZoneId.systemDefault()).toInstant()));
+            } else if (value instanceof Date) {
+                prep.setTimestamp(position, new Timestamp(((Date) value).getTime()));
+            } else if (value instanceof Timestamp) {
                 prep.setTimestamp(position, (Timestamp) value);
             } else if (value.getClass().isEnum()) {
                 if (enumWithOridinal) {

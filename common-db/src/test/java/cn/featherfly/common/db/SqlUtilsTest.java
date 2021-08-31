@@ -3,11 +3,14 @@ package cn.featherfly.common.db;
 
 import static org.testng.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.testng.annotations.Test;
 
+import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.repository.Execution;
 
 /**
@@ -120,4 +123,64 @@ public class SqlUtilsTest {
         assertEquals(execution.getExecution(), sql);
         assertEquals(execution.getParams(), params.values().toArray());
     }
+
+    @Test
+    void testConvertNamedParamSqlInParams() {
+        String namedSql = "select * from user where id in :ids and gender = :gender";
+        String sql = "select * from user where id in (?) and gender = ?";
+        String sql2 = "select * from user where id in (?,?) and gender = ?";
+        String sql3 = "select * from user where id in (?,?,?) and gender = ?";
+        Execution execution = null;
+
+        Map<String, Object> params = new LinkedHashMap<>();
+        params.put("gender", "male");
+        List<Integer> idList = new ArrayList<>();
+        params.put("ids", idList);
+
+        idList.add(1);
+        execution = SqlUtils.convertNamedParamSql(namedSql, params);
+        System.out.println(execution.getExecution());
+        assertEquals(execution.getExecution(), sql);
+        System.out.println(ArrayUtils.toString(execution.getParams()));
+
+        idList.add(2);
+        execution = SqlUtils.convertNamedParamSql(namedSql, params);
+        System.out.println(execution.getExecution());
+        assertEquals(execution.getExecution(), sql2);
+        System.out.println(ArrayUtils.toString(execution.getParams()));
+
+        idList.add(3);
+        execution = SqlUtils.convertNamedParamSql(namedSql, params);
+        assertEquals(execution.getExecution(), sql3);
+
+        System.out.println(execution.getExecution());
+        System.out.println(ArrayUtils.toString(execution.getParams()));
+
+        // array
+
+        Integer[] idArray = { 1 };
+        params.put("ids", idArray);
+        execution = SqlUtils.convertNamedParamSql(namedSql, params);
+        assertEquals(execution.getExecution(), sql);
+
+        System.out.println(execution.getExecution());
+        System.out.println(ArrayUtils.toString(execution.getParams()));
+
+        Integer[] idArray2 = { 1, 2 };
+        params.put("ids", idArray2);
+        execution = SqlUtils.convertNamedParamSql(namedSql, params);
+        assertEquals(execution.getExecution(), sql2);
+
+        System.out.println(execution.getExecution());
+        System.out.println(ArrayUtils.toString(execution.getParams()));
+
+        Integer[] idArray3 = { 1, 2, 3 };
+        params.put("ids", idArray3);
+        execution = SqlUtils.convertNamedParamSql(namedSql, params);
+        assertEquals(execution.getExecution(), sql3);
+
+        System.out.println(execution.getExecution());
+        System.out.println(ArrayUtils.toString(execution.getParams()));
+    }
+
 }

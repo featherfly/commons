@@ -1,3 +1,7 @@
+# 0.1.6 2021-06-22
+1. publish(String topic, String msg, Qos qos, Charset charset, boolean retained,Consumer<IMqttDeliveryToken> consumer)
+2. MqttMessage.retain默认为false
+
 # 0.1.5 2021-04-27
 1. 加入日志
 

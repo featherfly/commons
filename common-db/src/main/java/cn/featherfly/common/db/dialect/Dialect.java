@@ -40,6 +40,10 @@ public interface Dialect {
     /** 默认的查询返回条数. */
     int DEFAULT_LIMIT = 10;
 
+    public enum StringConverter {
+        NONE, UPPER_CASE, LOWER_CASE
+    }
+
     /**
      * <p>
      * 转换普通sql为带分页的sql
@@ -208,12 +212,13 @@ public interface Dialect {
     }
 
     /**
-     * Checks if is table and column name uppercase.
+     * Checks if is table and column name to uppercase or lowercase or do
+     * nothing.
      *
      * @return true, if is table and column name uppercase
      */
-    default boolean isTableAndColumnNameUppercase() {
-        return false;
+    default StringConverter tableAndColumnNameConverter() {
+        return StringConverter.NONE;
     }
 
     /**
@@ -409,12 +414,14 @@ public interface Dialect {
             return tableOrColumnName;
         }
         String result = tableOrColumnName;
-        if (isTableAndColumnNameUppercase()) {
-            result = result.toUpperCase();
-        } else {
-            result = result.toLowerCase();
+        switch (tableAndColumnNameConverter()) {
+            case UPPER_CASE:
+                return result.toUpperCase();
+            case LOWER_CASE:
+                return result.toLowerCase();
+            default:
+                return result;
         }
-        return result;
     }
 
     /**

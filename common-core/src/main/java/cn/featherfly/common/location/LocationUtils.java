@@ -27,7 +27,7 @@ public class LocationUtils {
      *
      * @param point0 the point 0
      * @param point1 the point 1
-     * @return the distance
+     * @return the distance (unit meter)
      */
     public static double getDistance(LocationPoint point0, LocationPoint point1) {
         double lat0 = Math.toRadians(point0.getLatitude());
@@ -47,7 +47,7 @@ public class LocationUtils {
      * Gets rectangle range.
      *
      * @param point    the point
-     * @param distance the distance
+     * @param distance the distance (unit meter)
      * @return the rectangle 4 point
      */
     public static RectangleRange getRectanglePoint(LocationPoint point, double distance) {

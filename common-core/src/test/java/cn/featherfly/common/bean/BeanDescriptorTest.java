@@ -36,6 +36,17 @@ public class BeanDescriptorTest {
         assertEquals(age, pAge.getValue(user));
         //		assertEquals(available, pAva.getValue(user));
 
+        pName = bd.getBeanProperty(User::getName);
+        pAge = bd.getBeanProperty(User::getAge);
+        pAva = bd.getBeanProperty(User::getAvailable);
+
+        pName = bd.getBeanProperty(User::getName);
+        pAge = bd.getBeanProperty(user::getAge);
+        pAva = bd.getBeanProperty(user::setAvailable);
+
+        assertEquals(name, pName.getValue(user));
+        assertEquals(age, pAge.getValue(user));
+
         name = "featherfly";
         bd.setProperty(user, "name", name);
         assertEquals(name, bd.getProperty(user, "name"));

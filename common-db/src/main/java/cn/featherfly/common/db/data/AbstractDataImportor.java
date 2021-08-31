@@ -150,13 +150,14 @@ public abstract class AbstractDataImportor extends AbstractDataImpExp implements
      * @return RecordModel
      */
     protected RecordModel transform(RecordModel recordModel) {
-        // 数据变换
+        // 数据转换
+        RecordModel currentRecordModel = recordModel;
         if (Lang.isNotEmpty(transformers)) {
             for (DataTransformer transformer : transformers) {
-                recordModel = transformer.transform(recordModel);
+                currentRecordModel = transformer.transform(currentRecordModel, recordModel);
             }
         }
-        return recordModel;
+        return currentRecordModel;
     }
 
     // ********************************************************************

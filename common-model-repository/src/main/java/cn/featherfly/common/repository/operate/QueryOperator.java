@@ -8,7 +8,7 @@ package cn.featherfly.common.repository.operate;
  *
  * @author zhongj
  */
-public enum QueryOperator {
+public enum QueryOperator implements Operator {
     /**
      * 小于
      */
@@ -61,6 +61,10 @@ public enum QueryOperator {
      * not in
      */
     NIN,
+    /**
+     * like
+     */
+    LK
     // /**
     // * 按位与 ： &
     // */
@@ -87,7 +91,7 @@ public enum QueryOperator {
     // br(">>")
     ;
 
-    private QueryOperator() {
+    QueryOperator() {
     }
 
 }

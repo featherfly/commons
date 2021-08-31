@@ -1,3 +1,19 @@
+# 0.3.18 2021-08-26
+1. ConditionColumnElement.toSql()支持QueryOperator.ISN，QueryOperator.INN传入Boolean参数
+    null 表示忽略当前条件
+    true 表示当前操作类型条件
+    false 表示当前操作类型相反的条件（ISN变INN，INN变ISN）
+
+# 0.3.17 2021-08-16
+1. SqlUtils.convertNamedParamSql加入in的参数为Collection或Array根据长度占位符自动转换为(?,?...)的形式
+
+# 0.3.16 2021-07-26
+1. ConditionColumnElement加入对QueryOperator.LK的支持
+
+# 0.3.15 2021-5-31
+1. DataTransformer.transform(currentRecordModel, originalRecordModel)方法加入参数原始数据，即没有被其他转换器处理过的原始数据
+2. Dialect加入StringConverter tableAndColumnNameConverter()替换boolean isTableAndColumnNameConverterUpperCase()方法
+
 # 0.3.14 2021-4-14
 1. 修复ClassMappingUtils.getMergeSqlAndParamPositions生成sql出错的问题
 

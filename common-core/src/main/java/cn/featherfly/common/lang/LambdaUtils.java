@@ -488,6 +488,8 @@ public class LambdaUtils {
             name = methodName.substring(3);
         } else if (methodName.startsWith("is")) {
             name = methodName.substring(2);
+        } else if (methodName.startsWith("set")) {
+            name = methodName.substring(3);
         } else {
             name = methodName;
         }

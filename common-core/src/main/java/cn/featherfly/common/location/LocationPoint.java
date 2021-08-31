@@ -5,8 +5,10 @@ package cn.featherfly.common.location;
  */
 public class LocationPoint {
 
+    // 纬度
     private double latitude = -1d;
 
+    // 经度
     private double longitude = -1d;
 
     /**

@@ -69,6 +69,18 @@ public class ConditionColumnElement extends ParamedColumnElement {
      * {@inheritDoc}
      */
     @Override
+    public Object getParam() {
+        if (QueryOperator.ISN == queryOperator || QueryOperator.INN == queryOperator) {
+            return null;
+        } else {
+            return param;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String toSql() {
         if (Lang.isEmpty(name)) {
             return "";
@@ -79,9 +91,7 @@ public class ConditionColumnElement extends ParamedColumnElement {
         // if (Lang.isNotEmpty(tableAlias)) {
         // condition.append(tableAlias).append(".");
         // }
-        if (QueryOperator.ISN == queryOperator || QueryOperator.INN == queryOperator) {
-            condition.append(name).append(Chars.SPACE).append(toOperator(queryOperator));
-        } else if (Lang.isNotEmpty(value)) {
+        if (Lang.isNotEmpty(value)) {
             if (QueryOperator.IN == queryOperator || QueryOperator.NIN == queryOperator) {
                 int length = 1;
                 if (value instanceof Collection) {
@@ -98,8 +108,22 @@ public class ConditionColumnElement extends ParamedColumnElement {
                 }
                 condition.append(")");
             } else {
-                condition.append(name).append(Chars.SPACE).append(toOperator(queryOperator)).append(Chars.SPACE)
-                        .append(Chars.QUESTION);
+                condition.append(name).append(Chars.SPACE);
+                if (QueryOperator.ISN == queryOperator) {
+                    if ((Boolean) value) {
+                        condition.append(toOperator(queryOperator));
+                    } else {
+                        condition.append(toOperator(QueryOperator.INN));
+                    }
+                } else if (QueryOperator.INN == queryOperator) {
+                    if ((Boolean) value) {
+                        condition.append(toOperator(queryOperator));
+                    } else {
+                        condition.append(toOperator(QueryOperator.ISN));
+                    }
+                } else {
+                    condition.append(toOperator(queryOperator)).append(Chars.SPACE).append(Chars.QUESTION);
+                }
             }
         } else {
             return "";
@@ -139,6 +163,8 @@ public class ConditionColumnElement extends ParamedColumnElement {
                 return dialect.getKeywords().in();
             case NIN:
                 return dialect.getKeywords().notIn();
+            case LK:
+                return dialect.getKeywords().like();
             default:
                 return "=";
         }

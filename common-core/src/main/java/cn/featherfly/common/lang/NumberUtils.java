@@ -197,21 +197,21 @@ public final class NumberUtils {
         }
         T value = null;
         if (toType == Integer.class || toType == Integer.TYPE) {
-            value = (T) new Integer(number.intValue());
+            value = (T) Integer.valueOf(number.intValue());
         } else if (toType == Long.class || toType == Long.TYPE) {
-            value = (T) new Long(number.longValue());
+            value = (T) Long.valueOf(number.longValue());
         } else if (toType == Double.class || toType == Double.TYPE) {
-            value = (T) new Double(number.doubleValue());
+            value = (T) Double.valueOf(number.doubleValue());
         } else if (toType == Float.class || toType == Float.TYPE) {
-            value = (T) new Float(number.floatValue());
+            value = (T) Float.valueOf(number.floatValue());
         } else if (toType == BigInteger.class) {
             value = (T) new BigInteger(number.toString());
         } else if (toType == BigDecimal.class) {
             value = (T) new BigDecimal(number.toString());
         } else if (toType == Byte.class || toType == Byte.TYPE) {
-            value = (T) new Byte(number.byteValue());
+            value = (T) Byte.valueOf(number.byteValue());
         } else if (toType == Short.class || toType == Short.TYPE) {
-            value = (T) new Short(number.shortValue());
+            value = (T) Short.valueOf(number.shortValue());
         }
         if (value != null) {
             return value;
@@ -237,21 +237,21 @@ public final class NumberUtils {
         }
         T value = null;
         if (toType == Integer.class || toType == Integer.TYPE) {
-            value = (T) new Integer(Integer.parseInt(source));
+            value = (T) Integer.valueOf(Integer.parseInt(source));
         } else if (toType == Long.class || toType == Long.TYPE) {
-            value = (T) new Long(Long.parseLong(source));
+            value = (T) Long.valueOf(Long.parseLong(source));
         } else if (toType == Double.class || toType == Double.TYPE) {
-            value = (T) new Double(Double.parseDouble(source));
+            value = (T) Double.valueOf(Double.parseDouble(source));
         } else if (toType == Float.class || toType == Float.TYPE) {
-            value = (T) new Float(Float.parseFloat(source));
+            value = (T) Float.valueOf(Float.parseFloat(source));
         } else if (toType == BigInteger.class) {
             value = (T) new BigInteger(source);
         } else if (toType == BigDecimal.class) {
             value = (T) new BigDecimal(source);
         } else if (toType == Byte.class || toType == Byte.TYPE) {
-            value = (T) new Byte(Byte.parseByte(source));
+            value = (T) Byte.valueOf(Byte.parseByte(source));
         } else if (toType == Short.class || toType == Short.TYPE) {
-            value = (T) new Short(Short.parseShort(source));
+            value = (T) Short.valueOf(Short.parseShort(source));
         }
         if (value != null) {
             return value;

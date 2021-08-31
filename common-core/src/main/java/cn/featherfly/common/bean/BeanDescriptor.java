@@ -445,11 +445,12 @@ public class BeanDescriptor<T> {
                     } else if (property.getType() == Optional.class) {
                         LOGGER.trace("类{}的属性[{}]为空，对象为Optional容器，自动创建Optional和其对应的泛型对象",
                                 new Object[] { property.getOwnerType().getName(), property.getName() });
-                        propertyValue = Optional.of(property.getGenericType().newInstance());
+                        propertyValue = Optional.of(ClassUtils.newInstance(property.getGenericType()));
                     } else {
                         LOGGER.trace("类{}的属性[{}]为空，自动创建该属性对象[使用newInstance()]",
                                 new Object[] { property.getOwnerType().getName(), property.getName() });
-                        propertyValue = property.getType().newInstance();
+
+                        propertyValue = ClassUtils.newInstance(property.getType());
                     }
                     property.setValue(obj, propertyValue);
                 } catch (Exception e) {

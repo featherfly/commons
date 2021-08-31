@@ -573,10 +573,10 @@ public final class Lang {
                 return toEnum(toClass, ((String[]) object)[0]);
             } else if (object instanceof Byte || object.getClass() == byte.class) {
                 Byte ordinal = (Byte) object;
-                return toEnum(toClass, new Integer(ordinal));
+                return toEnum(toClass, Integer.valueOf(ordinal));
             } else if (object instanceof Short || object.getClass() == short.class) {
                 Short ordinal = (Short) object;
-                return toEnum(toClass, new Integer(ordinal));
+                return toEnum(toClass, Integer.valueOf(ordinal));
             }
         }
         return null;

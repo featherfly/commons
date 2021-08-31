@@ -43,6 +43,18 @@ public final class WordUtils {
      * @return 转换完成的字符串
      */
     public static String parseToUpperFirst(String word, char sign) {
+        return parseToUpperFirst(word, sign, true);
+    }
+
+    /**
+     * 将传入字符串中含有相应符号后的首个字符转换为大写，并去符号
+     *
+     * @param word        需要转换的字符串
+     * @param sign        符号
+     * @param toLowerCase 不需要大写的字符都转换为小写
+     * @return 转换完成的字符串
+     */
+    public static String parseToUpperFirst(String word, char sign, boolean toLowerCase) {
         if (Lang.isEmpty(word)) {
             return "";
         }
@@ -56,7 +68,11 @@ public final class WordUtils {
                 if (isSign) {
                     sb.append(Character.toUpperCase(c));
                 } else {
-                    sb.append(c);
+                    if (toLowerCase) {
+                        sb.append(Character.toLowerCase(c));
+                    } else {
+                        sb.append(c);
+                    }
                 }
                 isSign = false;
             }

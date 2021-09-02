@@ -1,3 +1,6 @@
+# 0.3.19 2021-09-02
+1. JdbcUtils.setParameter支持BigInteger,AtomicInteger,AtomicLong,AtomicBoolean
+    
 # 0.3.18 2021-08-26
 1. ConditionColumnElement.toSql()支持QueryOperator.ISN，QueryOperator.INN传入Boolean参数
     null 表示忽略当前条件

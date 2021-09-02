@@ -2,6 +2,7 @@ package cn.featherfly.common.db;
 
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Connection;
@@ -25,6 +26,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.sql.DataSource;
 
@@ -542,6 +546,8 @@ public final class JdbcUtils {
                 prep.setDouble(position, ((Double) value).doubleValue());
             } else if (value instanceof BigDecimal) {
                 prep.setBigDecimal(position, (BigDecimal) value);
+            } else if (value instanceof BigInteger) {
+                prep.setLong(position, ((BigInteger) value).longValue());
             } else if (value instanceof Byte) {
                 prep.setByte(position, ((Byte) value).byteValue());
             } else if (value instanceof Character) {
@@ -555,9 +561,11 @@ public final class JdbcUtils {
             } else if (value instanceof LocalTime) {
                 prep.setTime(position, Time.valueOf((LocalTime) value));
             } else if (value instanceof LocalDate) {
-                prep.setDate(position, new java.sql.Date(Dates.toDate((LocalDate) value).getTime()));
+                prep.setDate(position, java.sql.Date.valueOf((LocalDate) value));
+                //                prep.setDate(position, new java.sql.Date(Dates.toDate((LocalDate) value).getTime()));
             } else if (value instanceof LocalDateTime) {
-                prep.setTimestamp(position, new Timestamp(Dates.getTime((LocalDateTime) value)));
+                prep.setTimestamp(position, Timestamp.valueOf((LocalDateTime) value));
+                //                prep.setTimestamp(position, new Timestamp(Dates.getTime((LocalDateTime) value)));
                 //                prep.setTimestamp(position, Timestamp.from(((LocalDateTime) value).atZone(ZoneId.systemDefault()).toInstant()));
             } else if (value instanceof Date) {
                 prep.setTimestamp(position, new Timestamp(((Date) value).getTime()));
@@ -571,6 +579,12 @@ public final class JdbcUtils {
                 }
             } else if (value instanceof Optional) {
                 setParameter(prep, position, ((Optional<?>) value).orElse(null));
+            } else if (value instanceof AtomicInteger) {
+                prep.setInt(position, ((AtomicInteger) value).get());
+            } else if (value instanceof AtomicLong) {
+                prep.setLong(position, ((AtomicLong) value).get());
+            } else if (value instanceof AtomicBoolean) {
+                prep.setBoolean(position, ((AtomicBoolean) value).get());
             } else {
                 prep.setObject(position, value);
             }
@@ -578,154 +592,6 @@ public final class JdbcUtils {
             throw new JdbcException(e);
         }
     }
-
-    //    /**
-    //     * 设置参数.
-    //     *
-    //     * @param prep                  PreparedStatement
-    //     * @param parameterIndex        param index
-    //     * @param value                 param value
-    //     * @param sqlTypeMappingManager sql java type mapping manager
-    //     */
-    //    public static void setParameter(PreparedStatement prep, int parameterIndex, Serializable value,
-    //            SqlTypeMappingManager sqlTypeMappingManager) {
-    //        try {
-    //            if (value == null) {
-    //                prep.setObject(parameterIndex, value);
-    //            } else {
-    //                Class<Serializable> javaType = ClassUtils.castGenericType(value.getClass(), Serializable.class);
-    //                SqlType sqlType = sqlTypeMappingManager.getSqlType(javaType);
-    //                switch (sqlType) {
-    //                    case BIT:
-    //                        prep.setBoolean(parameterIndex, (Boolean) value);
-    //                        break;
-    //                    case BOOLEAN:
-    //                        prep.setBoolean(parameterIndex, (Boolean) value);
-    //                        break;
-    //                    case TINYINT:
-    //                        prep.setInt(parameterIndex, (Integer) value);
-    //                        break;
-    //                    case SMALLINT:
-    //                        prep.setInt(parameterIndex, (Integer) value);
-    //                        break;
-    //                    case INTEGER:
-    //                        prep.setInt(parameterIndex, (Integer) value);
-    //                        break;
-    //                    case BIGINT:
-    //                        prep.setLong(parameterIndex, (Long) value);
-    //                        break;
-    //                    case FLOAT:
-    //                        //                        prep.setFloat(parameterIndex, (BigDecimal) value);
-    //                        break;
-    //                    case DOUBLE:
-    //                        prep.setDouble(parameterIndex, (Double) value);
-    //                        break;
-    //                    case REAL:
-    //                        prep.setBigDecimal(parameterIndex, (BigDecimal) value);
-    //                        break;
-    //                    case NUMERIC:
-    //                        prep.setBigDecimal(parameterIndex, (BigDecimal) value);
-    //                        break;
-    //                    case DECIMAL:
-    //                        prep.setBigDecimal(parameterIndex, (BigDecimal) value);
-    //                        break;
-    //
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.TINYINT, Integer.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.SMALLINT, Integer.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.INTEGER, Integer.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.BIGINT, Long.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.FLOAT, BigDecimal.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.DOUBLE, BigDecimal.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.REAL, BigDecimal.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.NUMERIC, BigDecimal.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.DECIMAL, BigDecimal.class);
-    //
-    //                    default:
-    //                        prep.setObject(parameterIndex, value);
-    //                        break;
-    //
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.BOOLEAN, Boolean.TYPE);
-    //                    //                        //  str types
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.CHAR, String.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.NCHAR, String.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.VARCHAR, String.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.NVARCHAR, String.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.LONGVARCHAR, String.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.LONGNVARCHAR, String.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.CLOB, String.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.NCLOB, String.class);
-    //                    //
-    //                    //                        //  number types
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.TINYINT, Integer.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.SMALLINT, Integer.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.INTEGER, Integer.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.BIGINT, Long.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.FLOAT, BigDecimal.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.DOUBLE, BigDecimal.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.REAL, BigDecimal.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.NUMERIC, BigDecimal.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.DECIMAL, BigDecimal.class);
-    //                    //
-    //                    //                        // date types
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.DATE, Date.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.TIME, Date.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.TIMESTAMP, Date.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.TIME_WITH_TIMEZONE, LocalTime.class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.TIMESTAMP_WITH_TIMEZONE, LocalDateTime.class);
-    //                    //
-    //                    //                        // data binary
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.BLOB, byte[].class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.BINARY, byte[].class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.LONGVARBINARY, byte[].class);
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.VARBINARY, byte[].class);
-    //                    //
-    //                    //                        SQL_TO_JAVA_MAP.put(SqlType.BIT, Boolean.class);
-    //
-    //                    //                        BIT(Types.BIT),
-    //                    //                        TINYINT(Types.TINYINT),
-    //                    //                        SMALLINT(Types.SMALLINT),
-    //                    //                        INTEGER(Types.INTEGER),
-    //                    //                        BIGINT(Types.BIGINT),
-    //                    //                        FLOAT(Types.FLOAT),
-    //                    //                        REAL(Types.REAL),
-    //                    //                        DOUBLE(Types.DOUBLE),
-    //                    //                        NUMERIC(Types.NUMERIC),
-    //                    //                        DECIMAL(Types.DECIMAL),
-    //                    //                        CHAR(Types.CHAR),
-    //                    //                        VARCHAR(Types.VARCHAR),
-    //                    //                        LONGVARCHAR(Types.LONGVARCHAR),
-    //                    //                        DATE(Types.DATE),
-    //                    //                        TIME(Types.TIME),
-    //                    //                        TIMESTAMP(Types.TIMESTAMP),
-    //                    //                        BINARY(Types.BINARY),
-    //                    //                        VARBINARY(Types.VARBINARY),
-    //                    //                        LONGVARBINARY(Types.LONGVARBINARY),
-    //                    //                        NULL(Types.NULL),
-    //                    //                        OTHER(Types.OTHER),
-    //                    //                        JAVA_OBJECT(Types.JAVA_OBJECT),
-    //                    //                        DISTINCT(Types.DISTINCT),
-    //                    //                        STRUCT(Types.STRUCT),
-    //                    //                        ARRAY(Types.ARRAY),
-    //                    //                        BLOB(Types.BLOB),
-    //                    //                        CLOB(Types.CLOB),
-    //                    //                        REF(Types.REF),
-    //                    //                        DATALINK(Types.DATALINK),
-    //                    //                        BOOLEAN(Types.BOOLEAN),
-    //                    //                        ROWID(Types.ROWID),
-    //                    //                        NCHAR(Types.NCHAR),
-    //                    //                        NVARCHAR(Types.NVARCHAR),
-    //                    //                        LONGNVARCHAR(Types.LONGNVARCHAR),
-    //                    //                        NCLOB(Types.NCLOB),
-    //                    //                        SQLXML(Types.SQLXML),
-    //                    //                        REF_CURSOR(Types.REF_CURSOR),
-    //                    //                        TIME_WITH_TIMEZONE(Types.TIME_WITH_TIMEZONE),
-    //                    //                        TIMESTAMP_WITH_TIMEZONE(Types.TIMESTAMP_WITH_TIMEZONE);
-    //                }
-    //            }
-    //        } catch (SQLException e) {
-    //            throw new JdbcException(e);
-    //        }
-    //    }
 
     /**
      * Gets the column index.

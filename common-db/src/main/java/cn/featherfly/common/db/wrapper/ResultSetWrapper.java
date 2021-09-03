@@ -12,7 +12,6 @@ import java.sql.Date;
 import java.sql.NClob;
 import java.sql.Ref;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.RowId;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
@@ -763,9 +762,9 @@ public class ResultSetWrapper implements AutoCloseable {
      * @return the meta data
      * @see java.sql.ResultSet
      */
-    public ResultSetMetaData getMetaData() {
+    public ResultSetMetaDataWrapper getMetaData() {
         try {
-            return resultSet.getMetaData();
+            return new ResultSetMetaDataWrapper(resultSet.getMetaData());
         } catch (SQLException e) {
             throw new JdbcException(e);
         }

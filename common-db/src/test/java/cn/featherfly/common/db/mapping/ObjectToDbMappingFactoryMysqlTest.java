@@ -11,7 +11,6 @@ import cn.featherfly.common.db.mapping.pojo.User;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
 import cn.featherfly.common.repository.mapping.ClassMapping;
-import cn.featherfly.common.repository.mapping.MappingException;
 
 /**
  * <p>
@@ -39,7 +38,7 @@ public class ObjectToDbMappingFactoryMysqlTest extends JdbcTestBase {
         System.out.println(ClassMappingUtils.getCreateTableSql(mapping, dialect, sqlTypeMappingManager));
     }
 
-    @Test(expectedExceptions = MappingException.class)
+    @Test(expectedExceptions = JdbcMappingException.class)
     public void test2() {
         ClassMapping<User> mapping = factory.getClassMapping(User.class);
         System.out.println(ClassMappingUtils.getCreateTableSql(mapping, dialect, sqlTypeMappingManager));

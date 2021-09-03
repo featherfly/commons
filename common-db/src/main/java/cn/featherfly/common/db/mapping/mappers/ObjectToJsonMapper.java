@@ -22,10 +22,7 @@ import cn.featherfly.common.lang.GenericType;
 import cn.featherfly.common.lang.reflect.GenericClass;
 
 /**
- * <p>
- * ObjectToJsonMapper
- * </p>
- * .
+ * ObjectToJsonMapper.
  *
  * @author zhongj
  * @param <E> the element type
@@ -102,7 +99,7 @@ public class ObjectToJsonMapper<E extends Serializable> extends AbstractJavaSqlT
      * {@inheritDoc}
      */
     @Override
-    public boolean support(SQLType sqlType) {
+    protected boolean support(SQLType sqlType) {
         if (storeAsString) {
             return sqlType == JDBCType.VARCHAR || sqlType == JDBCType.NVARCHAR || sqlType == JDBCType.LONGVARCHAR
                     || sqlType == JDBCType.LONGNVARCHAR || sqlType == JDBCType.CLOB || sqlType == JDBCType.NCLOB

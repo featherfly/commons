@@ -24,7 +24,7 @@ public class PlatformJavaSqlTypeMapper extends AbstractGenericJavaSqlTypeMapper<
      * @return true, if successful
      */
     @Override
-    public boolean support(SQLType sqlType) {
+    protected boolean support(SQLType sqlType) {
         return JDBCType.INTEGER == sqlType || JDBCType.BIGINT == sqlType || JDBCType.SMALLINT == sqlType
                 || JDBCType.TINYINT == sqlType;
     }

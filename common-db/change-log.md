@@ -1,3 +1,6 @@
+# 0.3.20 2021-09-03
+1. 自定义数据映射加入数据库返回数据到java对象映射时，加入其相关元数据（列名，表名）进行更具体的映射
+
 # 0.3.19 2021-09-02
 1. JdbcUtils.setParameter支持BigInteger,AtomicInteger,AtomicLong,AtomicBoolean
     

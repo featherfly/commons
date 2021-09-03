@@ -21,10 +21,12 @@ public interface JavaSqlTypeMapper<E extends Object> {
     /**
      * Support.
      *
-     * @param sqlType the sql type
+     * @param sqlType    the sql type
+     * @param tableName  the table name
+     * @param columnName the column name
      * @return true, if successful
      */
-    boolean support(SQLType sqlType);
+    boolean support(SQLType sqlType, String tableName, String columnName);
 
     /**
      * Support.

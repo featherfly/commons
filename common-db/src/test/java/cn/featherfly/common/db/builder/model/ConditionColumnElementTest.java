@@ -127,39 +127,39 @@ public class ConditionColumnElementTest {
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.ISN);
         print(c);
         assertEquals(c.toSql(), "`mobile` IS NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.ISN, "u");
         print(c);
         assertEquals(c.toSql(), "u.`mobile` IS NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
 
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.INN);
         print(c);
         assertEquals(c.toSql(), "`mobile` IS NOT NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.INN, "u");
         print(c);
         assertEquals(c.toSql(), "u.`mobile` IS NOT NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
 
         value = false;
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.ISN);
         print(c);
         assertEquals(c.toSql(), "`mobile` IS NOT NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.ISN, "u");
         print(c);
         assertEquals(c.toSql(), "u.`mobile` IS NOT NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
 
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.INN);
         print(c);
         assertEquals(c.toSql(), "`mobile` IS NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.INN, "u");
         print(c);
         assertEquals(c.toSql(), "u.`mobile` IS NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
 
         value = null;
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.ISN);
@@ -312,39 +312,39 @@ public class ConditionColumnElementTest {
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.ISN);
         print(c);
         assertEquals(c.toSql(), "\"mobile\" IS NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.ISN, "u");
         print(c);
         assertEquals(c.toSql(), "u.\"mobile\" IS NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
 
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.INN);
         print(c);
         assertEquals(c.toSql(), "\"mobile\" IS NOT NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.INN, "u");
         print(c);
         assertEquals(c.toSql(), "u.\"mobile\" IS NOT NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
 
         value = false;
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.ISN);
         print(c);
         assertEquals(c.toSql(), "\"mobile\" IS NOT NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.ISN, "u");
         print(c);
         assertEquals(c.toSql(), "u.\"mobile\" IS NOT NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
 
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.INN);
         print(c);
         assertEquals(c.toSql(), "\"mobile\" IS NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.INN, "u");
         print(c);
         assertEquals(c.toSql(), "u.\"mobile\" IS NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
 
         value = null;
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.ISN);
@@ -497,39 +497,39 @@ public class ConditionColumnElementTest {
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.ISN);
         print(c);
         assertEquals(c.toSql(), "'mobile' IS NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.ISN, "u");
         print(c);
         assertEquals(c.toSql(), "u.'mobile' IS NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
 
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.INN);
         print(c);
         assertEquals(c.toSql(), "'mobile' IS NOT NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.INN, "u");
         print(c);
         assertEquals(c.toSql(), "u.'mobile' IS NOT NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
 
         value = false;
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.ISN);
         print(c);
         assertEquals(c.toSql(), "'mobile' IS NOT NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.ISN, "u");
         print(c);
         assertEquals(c.toSql(), "u.'mobile' IS NOT NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
 
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.INN);
         print(c);
         assertEquals(c.toSql(), "'mobile' IS NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.INN, "u");
         print(c);
         assertEquals(c.toSql(), "u.'mobile' IS NULL");
-        assertEquals(c.getParam(), value);
+        assertEquals(c.getParam(), null);
 
         value = null;
         c = new ConditionColumnElement(dialect, "mobile", value, QueryOperator.ISN);

@@ -159,8 +159,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
             //            private BeanProperty<Long[]> bp = BeanDescriptor.getBeanDescriptor(Article.class)
             //                    .getBeanProperty("content");
 
-            @Override
-            public boolean support(SQLType sqlType) {
+            protected boolean support(SQLType sqlType) {
                 return JDBCType.VARCHAR.equals(sqlType);
             }
 
@@ -202,6 +201,11 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
                 } catch (SQLException e) {
                     throw new JdbcException(e);
                 }
+            }
+
+            @Override
+            public boolean support(SQLType sqlType, String tableName, String columnName) {
+                return support(sqlType);
             }
         });
 
@@ -312,6 +316,108 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
                 Content contentResult = manager.get(rs.getResultSet(), 5, contentProperty);
                 System.out.println(title + " -> " + contentResult);
                 assertEquals(content, contentResult);
+            }
+        }
+    }
+
+    @Test
+    public void testObjectToJsonMapper3() {
+        // database json type
+        SqlTypeMappingManager manager = new SqlTypeMappingManager();
+        assertNull(manager.getSqlType(Content.class));
+
+        sqlExecutor.execute("delete from cms_article");
+
+        GenericType<Content> type = new GenericClass<>(Content.class);
+
+        manager.regist(
+                new ObjectToJsonMapper<>(type).addAllow("cms_article", "content2").addAllow("cms_article", "content3"));
+
+        String insert = "INSERT INTO `db_test`.`cms_article` (`ID`, `title`, `content2`, `content3`) VALUES (null, ?, ?, ?)";
+        Content content3 = new Content();
+        content3.setDescp("c_descp");
+        content3.setImg("c_img");
+        Content content2 = new Content();
+        content2.setDescp("c2_descp");
+        content2.setImg("c2_img");
+
+        try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
+                PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
+            manager.set(prep.getPreparedStatement(), 1, Randoms.getString(6));
+            manager.set(prep.getPreparedStatement(), 2, content2, type);
+            manager.set(prep.getPreparedStatement(), 3, content3, type);
+
+            boolean res = prep.execute();
+            System.out.println(res);
+        }
+
+        String select = "select * from cms_article";
+        try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
+                PreparedStatementWrapper prep = connection.prepareStatement(select)) {
+            ResultSetWrapper rs = prep.executeQuery();
+            GenericType<String> gts = new GenericClass<>(String.class);
+            while (rs.next()) {
+                String title = manager.get(rs.getResultSet(), 2, gts);
+
+                Content content3Result = manager.get(rs.getResultSet(), 5, type);
+                System.out.println(title + " -> " + content3Result);
+                assertEquals(content3, content3Result);
+
+                Content content2Result = manager.get(rs.getResultSet(), 4, type);
+                System.out.println(title + " -> " + content2Result);
+                assertEquals(content2, content2Result);
+            }
+        }
+    }
+
+    @Test(expectedExceptions = ClassCastException.class)
+    public void testObjectToJsonMapper4() {
+        // database json type
+        SqlTypeMappingManager manager = new SqlTypeMappingManager();
+        assertNull(manager.getSqlType(Content.class));
+
+        sqlExecutor.execute("delete from cms_article");
+
+        GenericType<Content> type = new GenericClass<>(Content.class);
+
+        manager.regist(new ObjectToJsonMapper<>(type).addAllow("cms_article", "content3"));
+        // 因为添加了许可条件，则会进行表名，列名的筛选
+        // 只添加了表名的content3的映射，下面使用Content对象对content2获取时就会出现错误
+
+        String insert = "INSERT INTO `db_test`.`cms_article` (`ID`, `title`, `content2`, `content3`) VALUES (null, ?, ?, ?)";
+        Content content3 = new Content();
+        content3.setDescp("c_descp");
+        content3.setImg("c_img");
+        Content content2 = new Content();
+        content2.setDescp("c2_descp");
+        content2.setImg("c2_img");
+
+        try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
+                PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
+            manager.set(prep.getPreparedStatement(), 1, Randoms.getString(6));
+            manager.set(prep.getPreparedStatement(), 2, content2, type);
+            manager.set(prep.getPreparedStatement(), 3, content3, type);
+
+            boolean res = prep.execute();
+            System.out.println(res);
+        }
+
+        String select = "select * from cms_article";
+        try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
+                PreparedStatementWrapper prep = connection.prepareStatement(select)) {
+            ResultSetWrapper rs = prep.executeQuery();
+            GenericType<String> gts = new GenericClass<>(String.class);
+            while (rs.next()) {
+                String title = manager.get(rs.getResultSet(), 2, gts);
+
+                Content content3Result = manager.get(rs.getResultSet(), 5, type);
+                System.out.println(title + " -> " + content3Result);
+                assertEquals(content3, content3Result);
+
+                // 因为添加了许可条件，则会进行表名，列名的筛选，而又没有添加content2列进入映射
+                Content content2Result = manager.get(rs.getResultSet(), 4, type);
+                System.out.println(title + " -> " + content2Result);
+                assertEquals(content2, content2Result);
             }
         }
     }

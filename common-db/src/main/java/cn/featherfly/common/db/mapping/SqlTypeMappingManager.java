@@ -441,8 +441,9 @@ public class SqlTypeMappingManager {
             GenericClass<? extends Object> type = new GenericClass<>(register.getJavaType());
             JavaToSqlTypeRegister<? extends Object> oldRegister = null;
             if ((oldRegister = javaToSqlTypeRegisterMap.get(type)) != null) {
-                throw new JdbcMappingException("#java.type.registed", new Object[] { type.getType().getName(),
-                        oldRegister.getClass().getName(), oldRegister.getSqlType().getName() });
+                throw new JdbcMappingException("#java.type.registed",
+                        new Object[] { type.getType().getName(), oldRegister.getClass().getName(),
+                                oldRegister.getSqlType().getName(), register.getClass().getName() });
             }
             javaToSqlTypeRegisterMap.put(type, register);
             logger.debug("regist java type {} with sql type {}", type.getType().getName(),
@@ -460,7 +461,8 @@ public class SqlTypeMappingManager {
             if ((oldRegister = sqlTypeToJavaRegisterMap.get(register.getSqlType())) != null) {
                 throw new JdbcMappingException("#sql.type.registed",
                         new Object[] { oldRegister.get0().getSqlType().getName(),
-                                oldRegister.get0().getClass().getName(), oldRegister.get1().getName() });
+                                oldRegister.get0().getClass().getName(), oldRegister.get1().getName(),
+                                register.getClass().getName() });
             }
             sqlTypeToJavaRegisterMap.put(register.getSqlType(), Tuples.of(register, type));
             logger.debug("regist java type {} with sql type {}", type.getName(), register.getSqlType().getName());
@@ -543,6 +545,9 @@ public class SqlTypeMappingManager {
                 if (javaSqlTypeMapper.support((GenericType) javaType)) {
                     SQLType sqlType = javaSqlTypeMapper.getSqlType((GenericType) javaType);
                     if (sqlType != null) {
+                        logger.debug("set value javatype {}[{}]  to sqltype {} with mapper {}",
+                                javaType.getClass().getSimpleName(), javaType.getType().getName(), sqlType.toString(),
+                                javaSqlTypeMapper.getClass().getName());
                         ((JavaSqlTypeMapper<Object>) javaSqlTypeMapper).set(prep, columnIndex, columnValue);
                         return true;
                     }
@@ -576,7 +581,11 @@ public class SqlTypeMappingManager {
             SQLType sqlType = JdbcUtils.getResultSQLType(rs, columnIndex);
             for (JavaSqlTypeMapper<? extends Object> sqlTypeToJavaMapper : javaSqlTypeMappers) {
                 JavaSqlTypeMapper<Object> mapper = (JavaSqlTypeMapper<Object>) sqlTypeToJavaMapper;
-                if (mapper.support(sqlType) && mapper.support((GenericType<Object>) javaType)) {
+                String tableName = JdbcUtils.getTableName(rs, columnIndex);
+                String columnName = JdbcUtils.getColumnName(rs, columnIndex);
+                if (mapper.support(sqlType, tableName, columnName) && mapper.support((GenericType<Object>) javaType)) {
+                    logger.debug("get value from {}.{} [{}] with mapper {}", tableName, columnName, sqlType.toString(),
+                            mapper.getClass().getName());
                     return (E) mapper.get(rs, columnIndex);
                 }
             }
@@ -593,7 +602,7 @@ public class SqlTypeMappingManager {
         @SuppressWarnings("unchecked")
         private <E extends Object> Class<E> getJavaType(SQLType sqlType) {
             for (JavaSqlTypeMapper<? extends Object> sqlTypeToJavaMapper : javaSqlTypeMappers) {
-                if (sqlTypeToJavaMapper.support(sqlType)) {
+                if (sqlTypeToJavaMapper.support(sqlType, null, null)) { // TODO 需要测试是否如此
                     Class<? extends Object> type = sqlTypeToJavaMapper.getJavaType(sqlType);
                     if (type != null) {
                         return (Class<E>) type;

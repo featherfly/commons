@@ -594,6 +594,66 @@ public final class JdbcUtils {
     }
 
     /**
+     * Gets the column name.
+     *
+     * @param rs          the rs
+     * @param columnIndex the column index
+     * @return the column name
+     */
+    public static String getColumnName(ResultSet rs, int columnIndex) {
+        try {
+            return getColumnName(rs.getMetaData(), columnIndex);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * Gets the column name.
+     *
+     * @param metaData    the meta data
+     * @param columnIndex the column index
+     * @return the column name
+     */
+    public static String getColumnName(ResultSetMetaData metaData, int columnIndex) {
+        try {
+            return metaData.getColumnName(columnIndex);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * Gets the table name.
+     *
+     * @param rs          the rs
+     * @param columnIndex the column index
+     * @return the table name
+     */
+    public static String getTableName(ResultSet rs, int columnIndex) {
+        try {
+            return getTableName(rs.getMetaData(), columnIndex);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * Gets the table name.
+     *
+     * @param metaData    the meta data
+     * @param columnIndex the column index
+     * @return the table name
+     */
+    public static String getTableName(ResultSetMetaData metaData, int columnIndex) {
+        try {
+            return metaData.getTableName(columnIndex);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
      * Gets the column index.
      *
      * @param rs   the rs

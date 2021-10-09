@@ -305,6 +305,11 @@ public class User {
         return "name = " + name + " age = " + age;
     }
 
+    public void setDescp(String name, Integer age) {
+        this.name = name;
+        this.age = age;
+    }
+
     public String getDescp(String name) {
         return "name = " + name + " age = " + age;
     }
@@ -315,6 +320,14 @@ public class User {
 
     public int getAgeInt() {
         return age;
+    }
+
+    public static void setStatic(String n) {
+
+    }
+
+    public static String getStatic() {
+        return null;
     }
 
 }

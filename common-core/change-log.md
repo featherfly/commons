@@ -1,3 +1,7 @@
+# 1.8.27 
+    1. 修复LambdaUtils获取Function || BiConsumer || BiFunction的methodInstanceClassName在特定情况出错的问题
+    2.
+
 # 1.8.26 2021-08-17
     1. BeanDescriptor加入方法getBeanProperty(SerializableBiConsumer<E, R> property)
     2. RectangleRange加入toString,hashcode,equals

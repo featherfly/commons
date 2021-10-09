@@ -279,9 +279,14 @@ public class LambdaUtils {
             } else {
                 info2.propertyType = pts[0];
             }
-            info2.methodInstanceClassName = StringUtils
-                    .substringBefore(serializedLambda.getInstantiatedMethodType(), ";").substring(2)
-                    .replaceAll("/", ".");
+            if (serializedLambda.getCapturedArgCount() > 0) {
+                info2.methodInstanceClassName = serializedLambda.getCapturedArg(0).getClass().getName();
+            } else {
+                info2.methodInstanceClassName = StringUtils
+                        .substringBefore(serializedLambda.getInstantiatedMethodType(), ";").substring(2)
+                        .replaceAll("/", ".");
+            }
+
         } else if (lambda instanceof Supplier) {
             Class<?> obj = serializedLambda.getCapturedArg(0).getClass();
             info2.methodInstanceClassName = obj.getName();

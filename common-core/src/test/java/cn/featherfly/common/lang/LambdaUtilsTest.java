@@ -219,7 +219,7 @@ public class LambdaUtilsTest {
         User2 user = new User2();
         user.setAge(age);
 
-        SerializedLambdaInfo info = info(User::setName);
+        SerializedLambdaInfo info = info(User2::setName);
 
         System.out.println(info);
 
@@ -229,7 +229,46 @@ public class LambdaUtilsTest {
         Method setName = ClassUtils.getMethod(user.getClass(), "setName", String.class);
 
         assertEquals(info.getMethodDeclaredClassName(), setName.getDeclaringClass().getName());
-        assertEquals(info.getMethodInstanceClassName(), setName.getDeclaringClass().getName());
+        assertEquals(info.getMethodInstanceClassName(), User2.class.getName());
+
+        SerializedLambdaInfo info2 = info(user::setDescp);
+
+        System.out.println(info2);
+        System.out.println(info2.getMethodDeclaredClassName());
+        System.out.println(info2.getMethodInstanceClassName());
+
+        Method setDescp = ClassUtils.getMethod(user.getClass(), "setDescp", String.class, Integer.class);
+
+        assertEquals(info.getMethodDeclaredClassName(), setDescp.getDeclaringClass().getName());
+        assertEquals(info.getMethodInstanceClassName(), User2.class.getName());
+    }
+
+    @Test
+    public void testFunction() {
+        Integer age = 18;
+        User2 user = new User2();
+        user.setAge(age);
+
+        SerializedLambdaInfo info = info(User::getName);
+
+        System.out.println(info);
+        System.out.println(info.getMethodDeclaredClassName());
+        System.out.println(info.getMethodInstanceClassName());
+
+        Method getName = ClassUtils.getMethod(user.getClass(), "getName");
+
+        assertEquals(info.getMethodDeclaredClassName(), getName.getDeclaringClass().getName());
+        assertEquals(info.getMethodInstanceClassName(), getName.getDeclaringClass().getName());
+
+        SerializedLambdaInfo info2 = info(user::getDescp);
+        System.out.println(info2);
+        System.out.println(info2.getMethodDeclaredClassName());
+        System.out.println(info2.getMethodInstanceClassName());
+
+        Method getDescp = ClassUtils.getMethod(user.getClass(), "getDescp", String.class);
+
+        assertEquals(info2.getMethodDeclaredClassName(), getDescp.getDeclaringClass().getName());
+        assertEquals(info2.getMethodInstanceClassName(), user.getClass().getName());
     }
 
     @Test
@@ -321,12 +360,20 @@ public class LambdaUtilsTest {
         //        s = get(User2::isLocked);
         //        p(s);
 
+        Consumer<String> consumerStatic = User::setStatic;
+        consumerStatic.accept("static");
+        Supplier<String> supplierStatic = User::getStatic;
+        supplierStatic.get();
+
         User user = new User();
         Supplier<String> supplier = user::getName;
-        Function<User, String> function = User::getName;
+
         //        BiConsumer<User, String> set = user::set;
         Consumer<String> consumer = user::setName;
         consumer.accept("yufei");
+
+        Function<User, String> function = User::getName;
+
         System.out.println("user.name " + user.getName());
         System.out.println("user.name " + function.apply(user));
         System.out.println("user.name " + supplier.get());
@@ -348,6 +395,21 @@ public class LambdaUtilsTest {
         System.out.println(Function.class.isAssignableFrom(function.getClass()));
         System.out.println(Serializable.class.isAssignableFrom(function.getClass()));
         System.out.println(Function.class.isAssignableFrom(supplier.getClass()));
+
+        Function<String, String> function2 = user::getDescp;
+        System.out.println(function2.apply("user::getDescp"));
+
+        System.out.println(function.getClass());
+        try {
+            System.out.println(ArrayUtils.toString(function.getClass().getMethods()));
+            System.out.println(ArrayUtils.toString(function.getClass().getDeclaredMethods()));
+            System.out.println(ArrayUtils.toString(function.getClass().getFields()));
+            System.out.println(ArrayUtils.toString(function.getClass().getDeclaredFields()));
+            //            Method m = function.getClass().getDeclaredMethod("writeReplace");
+            //            System.out.println(m);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         LambdaUtils.getSerializedLambda((Serializable) function);
         //        t(user::setLocked);

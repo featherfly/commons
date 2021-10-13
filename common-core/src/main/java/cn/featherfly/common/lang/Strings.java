@@ -382,33 +382,6 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * Strings.format("my name is {0}, i am {1} years old", new Object[]{"yufei", 18});
      * </code>
      *
-     * @param str format string
-     * @param arg format arg
-     * @return formated str
-     */
-    public static String format(String str, Object arg) {
-        return FORMATTER.format(str, arg);
-    }
-
-    /**
-     * format str. <code>
-     * Strings.format("my name is {0}, i am {1} years old", new Object[]{"yufei", 18});
-     * </code>
-     *
-     * @param str  format string
-     * @param arg1 format arg1
-     * @param arg2 format arg2
-     * @return formated str
-     */
-    public static String format(String str, Object arg1, Object arg2) {
-        return FORMATTER.format(str, arg1, arg2);
-    }
-
-    /**
-     * format str. <code>
-     * Strings.format("my name is {0}, i am {1} years old", new Object[]{"yufei", 18});
-     * </code>
-     *
      * @param str  format string
      * @param args format args
      * @return formated str
@@ -491,6 +464,58 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * @return the string
      */
     public static String format(String content, Map<String, Object> args, char startSymbol, char endSymbol) {
+        return new StringFormatter(startSymbol, endSymbol).format(content, args);
+    }
+
+    /**
+     * format str. <code>
+     * User user = new User();
+     * user.setName("yufei");
+     * user.setAge(18);
+     * StringFormatter formatter = new StringFormatter('{', '}');
+     * formatter.format("my name is {0}, i am {1} years old", user);
+     * </code>
+     *
+     * @param str  format string
+     * @param args format args
+     * @return formated str
+     */
+    public static String format(String content, Object args) {
+        return FORMATTER.format(content, args);
+    }
+
+    /**
+     * format str. <code>
+     * User user = new User();
+     * user.setName("yufei");
+     * user.setAge(18);
+     * Strings.format("my name is：$name$, i am $age$ years old", user , '$');
+     * </code>
+     *
+     * @param content the content
+     * @param args    the args
+     * @param symbol  the symbol
+     * @return the string
+     */
+    public static String format(String content, Object args, char symbol) {
+        return format(content, args, symbol, symbol);
+    }
+
+    /**
+     * format str. <code>
+     * User user = new User();
+     * user.setName("yufei");
+     * user.setAge(18);
+     * Strings.format("my name is：{name}, i am {age} years old", user, '{', '}');
+     * </code>
+     *
+     * @param content     the content
+     * @param args        the args
+     * @param startSymbol the start symbol
+     * @param endSymbol   the end symbol
+     * @return the string
+     */
+    public static String format(String content, Object args, char startSymbol, char endSymbol) {
         return new StringFormatter(startSymbol, endSymbol).format(content, args);
     }
 

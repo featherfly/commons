@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.testng.annotations.Test;
 
+import cn.featherfly.common.lang.vo.User;
 import cn.featherfly.common.structure.HashChainMap;
 
 public class StringsTest {
@@ -83,9 +84,11 @@ public class StringsTest {
 
         //        System.out.println(Strings.format(src, new HashChainMap<String, Object>().putChain("name", name)));
         //        System.out.println(Strings.format(src2, name));
+        User user = new User("yufei", 15);
 
         assertEquals(Strings.format(src, new HashChainMap<String, Object>().putChain("name", name)), expected);
-        assertEquals(Strings.format(src2, name), expected);
+        assertEquals(Strings.format(src2, new Object[] { name }), expected);
+        assertEquals(Strings.format(src, user), expected);
     }
 
     @Test

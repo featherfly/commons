@@ -2,14 +2,13 @@
 package cn.featherfly.common.lang.string;
 
 import java.util.Map;
+import java.util.function.Function;
 
+import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.lang.Lang;
 
 /**
- * <p>
- * JdkStringFormatter
- * </p>
- * .
+ * StringFormatter.
  *
  * @author zhongj
  */
@@ -78,10 +77,37 @@ public class StringFormatter {
         return format(str, startSymbol, endSymbol, args);
     }
 
-    private String format(String str, char startSymbol, char endSymbol, Map<String, Object> args) {
+    /**
+     * format str. <code>
+     * User user = new User();
+     * user.setName("yufei");
+     * user.setAge(18);
+     * StringFormatter formatter = new StringFormatter('{', '}');
+     * formatter.format("my name is {0}, i am {1} years old", user);
+     * </code>
+     *
+     * @param str  format string
+     * @param args format args
+     * @return formated str
+     */
+    public <O extends Object> String format(String str, O args) {
+        return format(str, startSymbol, endSymbol, args);
+    }
+
+    private String format(String str, char startSymbol, char endSymbol, Object args) {
         if (Lang.isEmpty(str)) {
             return str;
         }
+
+        Function<String, Object> getParam;
+        if (args instanceof Map) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> argsMap = (Map<String, Object>) args;
+            getParam = (name) -> argsMap.get(name);
+        } else {
+            getParam = (name) -> BeanUtils.getProperty(args, name);
+        }
+
         StringBuilder sb = new StringBuilder(str);
         int nameStartIndex = -1;
         int nameEndIndex = -1;
@@ -118,7 +144,7 @@ public class StringFormatter {
                     nameEndIndex = index;
                     String name = sb.substring(nameStartIndex + 1, nameEndIndex);
                     nameEndIndex++;
-                    sb.insert(nameEndIndex, args.get(name));
+                    sb.insert(nameEndIndex, getParam.apply(name));
                     sb.delete(nameStartIndex, nameEndIndex);
                     index -= nameEndIndex - nameStartIndex - 1;
                     // 查找name完成，start index 重置

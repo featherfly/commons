@@ -1,3 +1,6 @@
+# 0.5.3
+1. 修复getSerializer日志没有在正确的逻辑条件内输出的问题
+
 # 0.5.2 2021-03-09
 1. HttpClients的autoSubscribeOnIo属性读写从HttpRxjavaClient读写
 1. 修复AbstractHttpClient的参数传递错误

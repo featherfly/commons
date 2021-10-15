@@ -284,12 +284,15 @@ public abstract class AbstractHttpClient {
         try {
             MimeType mimeType = new MimeType(mediaType.type(), mediaType.subtype());
             serializer = serialization.getSerializer(mimeType);
-            if (serializer == null && throwExceptionNoSerializer) {
-                throw new SerializationException(
-                        SerializationExceptionCode.createNoSerializerForMimeTypeCode(mimeType.getBaseType()));
+            if (serializer == null) {
+                if (throwExceptionNoSerializer) {
+                    throw new SerializationException(
+                            SerializationExceptionCode.createNoSerializerForMimeTypeCode(mimeType.getBaseType()));
+                }
+                logger.warn("no serializer found for content-type {}", mimeType.getBaseType());
             }
-            logger.warn("no serializer found for content-type {}", mimeType.getBaseType());
         } catch (MimeTypeParseException e) {
+            logger.error(e.getMessage(), e);
         }
         return serializer;
     }

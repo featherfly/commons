@@ -86,6 +86,7 @@ public class StringFormatter {
      * formatter.format("my name is {0}, i am {1} years old", user);
      * </code>
      *
+     * @param <O>  the generic type
      * @param str  format string
      * @param args format args
      * @return formated str

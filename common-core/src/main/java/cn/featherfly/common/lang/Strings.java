@@ -476,8 +476,8 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * formatter.format("my name is {0}, i am {1} years old", user);
      * </code>
      *
-     * @param str  format string
-     * @param args format args
+     * @param content the content
+     * @param args    format args
      * @return formated str
      */
     public static String format(String content, Object args) {

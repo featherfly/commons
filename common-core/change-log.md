@@ -1,7 +1,8 @@
-# 1.8.27 
+# 1.8.27  2021-11-08
     1. 修复LambdaUtils获取Function || BiConsumer || BiFunction的methodInstanceClassName在特定情况出错的问题
     2. StringFormatter加入format(String, Object)方法，使用对象属性格式化字符串（类似Map)
     3. Strings加入对应StringFormatter.format(String, Object)的一系列方法
+    4. 修复BeanProperty<R> getBeanProperty(SerializableFunction<E, R> property)返回泛型用错的问题
 
 # 1.8.26 2021-08-17
     1. BeanDescriptor加入方法getBeanProperty(SerializableBiConsumer<E, R> property)

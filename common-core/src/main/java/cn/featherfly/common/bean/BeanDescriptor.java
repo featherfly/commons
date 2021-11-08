@@ -244,9 +244,7 @@ public class BeanDescriptor<T> {
     }
 
     /**
-     * <p>
      * 返回指定索引属性.
-     * </p>
      *
      * @param <E>   the element type
      * @param index 索引
@@ -258,9 +256,7 @@ public class BeanDescriptor<T> {
     }
 
     /**
-     * <p>
-     * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常
-     * </p>
+     * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常.
      *
      * @param <E>  the element type
      * @param name 属性名
@@ -288,58 +284,48 @@ public class BeanDescriptor<T> {
     }
 
     /**
-     * <p>
-     * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常
-     * </p>
+     * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常.
      *
      * @param <E>      the element type
      * @param <R>      the property type
      * @param property 属性
      * @return 指定属性
      */
-    public <E, R> BeanProperty<E> getBeanProperty(SerializableFunction<E, R> property) {
+    public <E, R> BeanProperty<R> getBeanProperty(SerializableFunction<E, R> property) {
         return getBeanProperty(LambdaUtils.getLambdaPropertyName(property));
     }
 
     /**
-     * <p>
-     * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常
-     * </p>
+     * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常.
      *
      * @param <E>      the element type
      * @param <R>      the property type
      * @param property 属性
      * @return 指定属性
      */
-    public <E, R> BeanProperty<E> getBeanProperty(SerializableBiConsumer<E, R> property) {
+    public <E, R> BeanProperty<R> getBeanProperty(SerializableBiConsumer<E, R> property) {
         return getBeanProperty(LambdaUtils.getLambdaPropertyName(property));
     }
 
     /**
-     * <p>
-     * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常
-     * </p>
+     * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常.
      *
-     * @param <E>      the element type
      * @param <R>      the property type
      * @param property 属性
      * @return 指定属性
      */
-    public <E, R> BeanProperty<E> getBeanProperty(SerializableConsumer<R> property) {
+    public <R> BeanProperty<R> getBeanProperty(SerializableConsumer<R> property) {
         return getBeanProperty(LambdaUtils.getLambdaPropertyName(property));
     }
 
     /**
-     * <p>
-     * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常
-     * </p>
+     * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常.
      *
-     * @param <E>      the element type
      * @param <R>      the property type
      * @param property 属性
      * @return 指定属性
      */
-    public <E, R> BeanProperty<E> getBeanProperty(SerializableSupplier<R> property) {
+    public <R> BeanProperty<R> getBeanProperty(SerializableSupplier<R> property) {
         return getBeanProperty(LambdaUtils.getLambdaPropertyName(property));
     }
 

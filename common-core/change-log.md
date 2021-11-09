@@ -1,3 +1,6 @@
+# 1.8.29  2021-11-09
+    1. 还原String.format(String,Object)方法的原来意义（之前改了实现导致兼容性问题）
+    
 # 1.8.28  2021-11-09
     1. 还原String.format(String,Object)方法的原来意义（之前改了实现导致兼容性问题）
     

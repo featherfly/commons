@@ -379,6 +379,19 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
 
     /**
      * format str. <code>
+     * Strings.format("my name is {0}", "yufei");
+     * </code>
+     *
+     * @param str  format string
+     * @param args format args
+     * @return formated str
+     */
+    public static String format(String str, Object argu) {
+        return FORMATTER.format(str, new Object[] { argu });
+    }
+
+    /**
+     * format str. <code>
      * Strings.format("my name is {0}, i am {1} years old", new Object[]{"yufei", 18});
      * </code>
      *

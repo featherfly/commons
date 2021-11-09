@@ -1,3 +1,6 @@
+# 1.8.28  2021-11-09
+    1. 还原String.format(String,Object)方法的原来意义（之前改了实现导致兼容性问题）
+    
 # 1.8.27  2021-11-08
     1. 修复LambdaUtils获取Function || BiConsumer || BiFunction的methodInstanceClassName在特定情况出错的问题
     2. StringFormatter加入format(String, Object)方法，使用对象属性格式化字符串（类似Map)

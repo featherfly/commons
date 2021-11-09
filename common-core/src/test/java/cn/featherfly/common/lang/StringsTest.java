@@ -87,8 +87,9 @@ public class StringsTest {
         User user = new User("yufei", 15);
 
         assertEquals(Strings.format(src, new HashChainMap<String, Object>().putChain("name", name)), expected);
+        assertEquals(Strings.format(src2, name), expected);
         assertEquals(Strings.format(src2, new Object[] { name }), expected);
-        assertEquals(Strings.format(src, user), expected);
+        assertEquals(Strings.format2(src, user), expected);
     }
 
     @Test

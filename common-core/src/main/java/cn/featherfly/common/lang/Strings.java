@@ -383,7 +383,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * </code>
      *
      * @param str  format string
-     * @param args format args
+     * @param argu format argu
      * @return formated str
      */
     public static String format(String str, Object argu) {

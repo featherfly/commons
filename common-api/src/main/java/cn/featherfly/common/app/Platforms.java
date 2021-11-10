@@ -12,94 +12,103 @@ import java.util.List;
 public enum Platforms implements Platform {
 
     /** The mobile. */
-    MOBILE(-1, null),
+    MOBILE(1, null),
+
+    /** The mobile html5 */
+    MOBILE_H5(100, MOBILE),
 
     /** The android. */
-    ANDROID(0, MOBILE),
+    ANDROID(101, MOBILE),
 
     /** The ios. */
-    IOS(1, MOBILE),
+    IOS(102, MOBILE),
 
     /** The windows phone. */
-    WINDOWS_PHONE(2, MOBILE),
+    WINDOWS_PHONE(103, MOBILE),
 
     /** The pc. */
-    PC(-2, null),
+    PC(2, null),
+
+    /** The pc html5 */
+    PC_H5(200, MOBILE),
 
     /** The windows. */
-    WINDOWS(20, PC),
+    WINDOWS(201, PC),
 
     /** The linux. */
-    LINUX(21, PC),
+    LINUX(202, PC),
 
     /** The macos. */
-    MACOS(22, PC),
+    MACOS(203, PC),
 
     /** The freebsd. */
-    FREEBSD(23, PC),
+    FREEBSD(204, PC),
 
     /** The rtos. */
-    RTOS(-3, null),
+    RTOS(3, null),
 
     /** The free rtos. */
-    FREE_RTOS(40, RTOS),
+    FREE_RTOS(300, RTOS),
 
     /** The rt thread. */
-    RT_THREAD(41, RTOS),
+    RT_THREAD(301, RTOS),
 
     /** The alios things. */
-    ALIOS_THINGS(42, RTOS),
+    ALIOS_THINGS(302, RTOS),
 
     /** The huawei liteos. */
-    HUAWEI_LITEOS(43, RTOS),
+    HUAWEI_LITEOS(303, RTOS),
 
     /** The tencentos tiny. */
-    TENCENTOS_TINY(44, RTOS),
+    TENCENTOS_TINY(304, RTOS),
 
     /** The uclinux. */
-    UCLINUX(45, RTOS),
+    UCLINUX(305, RTOS),
 
     /** The ucosii. */
-    UCOSII(46, RTOS),
+    UCOSII(306, RTOS),
 
     /** The ecos. */
-    ECOS(47, RTOS),
+    ECOS(307, RTOS),
 
     /** The mbedos. */
-    MBEDOS(48, RTOS),
+    MBEDOS(308, RTOS),
 
     /** The rtx. */
-    RTX(49, RTOS),
+    RTX(309, RTOS),
 
     /** The vxworks. */
-    VXWORKS(50, RTOS),
+    VXWORKS(310, RTOS),
 
     /** The qnx. */
-    QNX(51, RTOS),
+    QNX(311, RTOS),
 
     /** The nuttx. */
-    NUTTX(52, RTOS),
+    NUTTX(312, RTOS),
 
     /** The sylixos. */
-    SYLIXOS(53, RTOS),
+    SYLIXOS(313, RTOS),
 
     /** The tock. */
-    TOCK(54, RTOS),
+    TOCK(314, RTOS),
 
     /** The embedded. */
-    EMBEDDED(-4, null),
+    EMBEDDED(4, null),
 
     /** The arduino. */
-    ARDUINO(60, EMBEDDED),
+    ARDUINO(400, EMBEDDED),
 
     /** The rust halt. */
-    RUST_HALT(61, EMBEDDED),
+    RUST_HALT(401, EMBEDDED),
 
     /** The stm32 cube. */
-    STM32_CUBE(62, EMBEDDED),
+    STM32_CUBE(402, EMBEDDED),
 
-    /** The esp iot. */
-    ESP_IOT(63, EMBEDDED);
+    /** The esp idf. */
+    ESP_IDF(403, EMBEDDED),
+
+    /** The rm cmsis. */
+    ARM_CMSIS(404, EMBEDDED);
 
     private int id;
 

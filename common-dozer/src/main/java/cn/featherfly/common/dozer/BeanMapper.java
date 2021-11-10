@@ -16,9 +16,13 @@ public class BeanMapper {
 
     private Mapper mapper;
 
+    BeanMapper(Mapper mapper) {
+        this.mapper = mapper;
+    }
+
     BeanMapper(int sign) {
         List<String> mappingFiles = new ArrayList<>();
-        mappingFiles.add("cn/featherfly/common/dozer/java8-mapping.xml");
+        mappingFiles.add(DozerConstants.JAVA8_MAPPING);
         if (sign == 0) {
             mapper = FeatherflyDozerBeanMapperBuilder.create().withMapNull(false).withMappingFiles(mappingFiles)
                     .build();

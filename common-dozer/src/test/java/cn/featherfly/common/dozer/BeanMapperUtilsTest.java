@@ -93,4 +93,31 @@ public class BeanMapperUtilsTest {
 
         System.out.println(BeanMappers.copy(u2, u));
     }
+
+    @Test
+    public void testBuilder() {
+
+        BeanMapper mapper = BeanMappers.builder().build();
+
+        User result = new User();
+        User2 result2 = new User2();
+
+        User u = new User();
+        u.setId(1L);
+        u.setName("yufei");
+        u.setAge(18);
+        u.setBirthday(new Date());
+
+        User2 u2 = new User2();
+        u2.setId(2L);
+        u2.setName("yi");
+        u2.setAge(20);
+        u2.setBirthday(LocalDate.now().withYear(1999));
+
+        System.out.println(mapper.copy(u, u2));
+
+        u.setBirthday(new Date());
+
+        System.out.println(mapper.copy(u2, u));
+    }
 }

@@ -26,6 +26,15 @@ public final class BeanMappers {
     }
 
     /**
+     * BeanMapperBuilder.
+     *
+     * @return the bean mapper builder
+     */
+    public static BeanMapperBuilder builder() {
+        return new BeanMapperBuilder();
+    }
+
+    /**
      * Copy the value from A to B, use Default DozerBeanMapper.
      *
      * @param <T>               the generic type

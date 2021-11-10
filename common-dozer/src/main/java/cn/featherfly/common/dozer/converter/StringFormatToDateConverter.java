@@ -12,6 +12,8 @@ import com.github.dozermapper.core.DozerConverter;
  */
 public class StringFormatToDateConverter extends DozerConverter<String, Date> {
 
+    private static final DateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     public StringFormatToDateConverter() {
         super(String.class, Date.class);
     }
@@ -20,8 +22,7 @@ public class StringFormatToDateConverter extends DozerConverter<String, Date> {
     public Date convertTo(String source, Date destination) {
         if (source != null && !"".equals(source)) {
             try {
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                return df.parse(source);
+                return FORMAT.parse(source);
             } catch (ParseException e) {
                 throw new IllegalArgumentException(e);
             }
@@ -32,8 +33,7 @@ public class StringFormatToDateConverter extends DozerConverter<String, Date> {
     @Override
     public String convertFrom(Date source, String destination) {
         if (source != null) {
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            return df.format(source);
+            return FORMAT.format(source);
         }
         return null;
     }

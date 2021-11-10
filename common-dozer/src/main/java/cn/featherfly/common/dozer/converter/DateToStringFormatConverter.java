@@ -1,25 +1,28 @@
 package cn.featherfly.common.dozer.converter;
 
-import com.github.dozermapper.core.DozerConverter;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.github.dozermapper.core.DozerConverter;
+
 /**
  * Created by zj
  */
 public class DateToStringFormatConverter extends DozerConverter<Date, String> {
+
+    private static final DateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     public DateToStringFormatConverter() {
         super(Date.class, String.class);
     }
+
     @Override
     public String convertTo(Date source, String destination) {
         String value = null;
         if (source != null) {
-            DateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            value = sf.format(source);
+            value = FORMAT.format(source);
         }
         return value;
     }
@@ -29,13 +32,11 @@ public class DateToStringFormatConverter extends DozerConverter<Date, String> {
         Date value = null;
         try {
             if (source != null) {
-                DateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                value = sf.parse(source);
+                value = FORMAT.parse(source);
             }
             return value;
-        }catch (ParseException e){
-            e.printStackTrace();
+        } catch (ParseException e) {
+            throw new IllegalArgumentException(e);
         }
-            return null;
     }
 }

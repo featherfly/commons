@@ -1,13 +1,13 @@
 buildscript {
     ext {
-        springBootVersion = "2.4.0"
-        springCloundVersion = '2.2.6.RELEASE'
+        springBootVersion = "2.5.6"
+        springCloundVersion = '3.0.4'
     }
 
     repositories {
         mavenLocal()
         maven {
-            url  "http://maven.aliyun.com/nexus/content/groups/public/"
+            url 'https://maven.aliyun.com/repository/central'
         }
         mavenCentral()
     }

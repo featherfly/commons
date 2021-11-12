@@ -16,6 +16,7 @@ import javax.tools.Diagnostic;
 
 import com.sun.tools.javac.model.JavacElements;
 import com.sun.tools.javac.tree.JCTree;
+import com.sun.tools.javac.tree.JCTree.JCClassDecl;
 import com.sun.tools.javac.tree.JCTree.JCIf;
 import com.sun.tools.javac.tree.JCTree.JCMethodDecl;
 import com.sun.tools.javac.tree.JCTree.JCStatement;
@@ -52,9 +53,11 @@ public class Jsr305Processor extends JavacProcessor {
         for (Element element : elements) {
             if (element.getKind() == ElementKind.PARAMETER) {
                 JCMethodDecl jcMethodDecl = (JCMethodDecl) elementUtils.getTree(element.getEnclosingElement());
+                JCClassDecl jcClassDecl = (JCClassDecl) elementUtils
+                        .getTree(element.getEnclosingElement().getEnclosingElement());
                 JCVariableDecl jcVariableDecl = (JCVariableDecl) elementUtils.getTree(element);
                 //                addImportInfo(element, IllegalArgumentException.class);
-                addAssertToBody(jcMethodDecl, jcVariableDecl);
+                addAssertToBody(jcClassDecl, jcMethodDecl, jcVariableDecl);
                 //                throw new IllegalArgumentException(
                 //                        String.format("parameter [%s] can not be null", element.getSimpleName().toString()));
                 messager.printMessage(Diagnostic.Kind.NOTE,
@@ -68,14 +71,14 @@ public class Jsr305Processor extends JavacProcessor {
         return true;
     }
 
-    private void addAssertToBody(JCMethodDecl jcMethodDecl, JCVariableDecl jcVariableDecl) {
+    private void addAssertToBody(JCClassDecl jcClassDecl, JCMethodDecl jcMethodDecl, JCVariableDecl jcVariableDecl) {
         //        messager.printMessage(Diagnostic.Kind.NOTE, "addAssertToBody ");
         //        messager.printMessage(Diagnostic.Kind.NOTE, jcMethodDecl.name.toString());
         //        messager.printMessage(Diagnostic.Kind.NOTE, jcVariableDecl.name.toString());
         //        messager.printMessage(Diagnostic.Kind.NOTE, jcMethodDecl.body.toString());
         int paramIndex = jcMethodDecl.params.indexOf(jcVariableDecl);
-        String message = String.format("method %s args[%d] - %s  can not be null", jcMethodDecl.name.toString(),
-                paramIndex, jcVariableDecl.name.toString());
+        String message = String.format("class %s method %s args[%d] - %s  can not be null", jcClassDecl.name.toString(),
+                jcMethodDecl.name.toString(), paramIndex, jcVariableDecl.name.toString());
         JCTree.JCExpression isEq = javac.eqNull(jcVariableDecl);
         JCStatement throwException = javac.throwException(IllegalArgumentException.class, message);
         JCIf jcIf = treeMaker.If(isEq, treeMaker.Block(0, List.of(throwException)), null);

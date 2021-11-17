@@ -1,3 +1,6 @@
+# 0.2.2 2021-3-10
+1. 修复android不能调试的问题
+
 # 0.2.1 2021-3-8
 1. Serialization加载ProtostuffSerializer, JacksonXmlSerializer使用反射加载
 

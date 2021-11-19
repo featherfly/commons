@@ -1,3 +1,7 @@
+# 1.8.30  2021-11-19
+    1. Lang.ifEmpty 中的泛型值与传入的判断对象关联    
+    2. 加入Groupable和ChainMapImpl
+    
 # 1.8.29  2021-11-09
     1. 还原String.format(String,Object)方法的原来意义（之前改了实现导致兼容性问题）
     

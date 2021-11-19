@@ -124,14 +124,13 @@ public final class Lang {
     /**
      * ifTrue.
      *
-     * @param <O>     the generic type
      * @param <R>     the generic type
      * @param bool    bool
      * @param isTrue  exec when bool is true
      * @param isFalse exec when bool is false
      * @return obj
      */
-    public static <O, R> R ifTrue(boolean bool, Supplier<R> isTrue, Supplier<R> isFalse) {
+    public static <R> R ifTrue(boolean bool, Supplier<R> isTrue, Supplier<R> isFalse) {
         if (bool) {
             return isTrue.get();
         } else {
@@ -142,14 +141,13 @@ public final class Lang {
     /**
      * ifTrue.
      *
-     * @param <O>     the generic type
      * @param <R>     the generic type
      * @param bool    bool
      * @param isFalse exec when bool is false
      * @param isTrue  exec when bool is true
      * @return obj
      */
-    public static <O, R> R ifFalse(boolean bool, Supplier<R> isFalse, Supplier<R> isTrue) {
+    public static <R> R ifFalse(boolean bool, Supplier<R> isFalse, Supplier<R> isTrue) {
         if (bool) {
             return isTrue.get();
         } else {
@@ -167,7 +165,7 @@ public final class Lang {
      * @param notEmpty exec when not empty
      * @return object
      */
-    public static <O, R> R ifEmpty(O object, Supplier<R> empty, Supplier<R> notEmpty) {
+    public static <O, R extends O> R ifEmpty(O object, Supplier<R> empty, Supplier<R> notEmpty) {
         if (isEmpty(object)) {
             return empty.get();
         } else {
@@ -185,7 +183,7 @@ public final class Lang {
      * @param notEmpty exec when not empty
      * @return object
      */
-    public static <O, R> R ifEmpty(O object, Supplier<R> empty, Function<O, R> notEmpty) {
+    public static <O, R extends O> R ifEmpty(O object, Supplier<R> empty, Function<O, R> notEmpty) {
         if (isEmpty(object)) {
             return empty.get();
         } else {
@@ -216,7 +214,7 @@ public final class Lang {
      * @param empty    the empty
      * @return object
      */
-    public static <O, R> R ifNotEmpty(O object, Supplier<R> notEmpty, Supplier<R> empty) {
+    public static <O, R extends O> R ifNotEmpty(O object, Supplier<R> notEmpty, Supplier<R> empty) {
         if (isNotEmpty(object)) {
             return notEmpty.get();
         } else {
@@ -234,7 +232,7 @@ public final class Lang {
      * @param empty    the empty
      * @return object
      */
-    public static <O, R> R ifNotEmpty(O object, Function<O, R> notEmpty, Supplier<R> empty) {
+    public static <O, R extends O> R ifNotEmpty(O object, Function<O, R> notEmpty, Supplier<R> empty) {
         if (isNotEmpty(object)) {
             return notEmpty.apply(object);
         } else {

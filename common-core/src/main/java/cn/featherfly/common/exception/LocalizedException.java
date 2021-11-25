@@ -153,7 +153,7 @@ public abstract class LocalizedException extends BaseException {
      * @param ex      异常
      */
     protected LocalizedException(LocalizedMessage message, Object[] args, Locale locale, Throwable ex) {
-        super(message.getMessage(args), ex);
+        super(message.getMessage(locale, args), ex);
         this.args = args;
         this.locale = locale;
     }
@@ -177,7 +177,7 @@ public abstract class LocalizedException extends BaseException {
      * @param ex      异常
      */
     protected LocalizedException(LocalizedMessage message, Object[] args, Throwable ex) {
-        this(message, args, null, ex);
+        this(message, args, Locale.getDefault(), ex);
     }
 
     /**
@@ -188,7 +188,7 @@ public abstract class LocalizedException extends BaseException {
      * @param locale  locale
      */
     protected LocalizedException(LocalizedMessage message, Object[] args, Locale locale) {
-        super(message.getMessage(args));
+        super(message.getMessage(locale, args));
         this.args = args;
         this.locale = locale;
     }
@@ -210,8 +210,7 @@ public abstract class LocalizedException extends BaseException {
      * @param args    消息绑定参数
      */
     protected LocalizedException(LocalizedMessage message, Object[] args) {
-        super(message.getMessage(args));
-        this.args = args;
+        this(message, args, Locale.getDefault());
     }
 
     /**

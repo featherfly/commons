@@ -9,6 +9,7 @@ import cn.featherfly.common.app.Platform;
 import cn.featherfly.common.app.Platforms;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.AbstractGenericJavaSqlTypeMapper;
+import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.GenericType;
 
 /**
@@ -31,7 +32,7 @@ public class PlatformJavaSqlTypeMapper extends AbstractGenericJavaSqlTypeMapper<
 
     @Override
     public boolean support(GenericType<Platform> type) {
-        return getGenericType().getType().equals(type.getType());
+        return ClassUtils.isParent(getGenericType().getType(), type.getType());
     }
 
     /**

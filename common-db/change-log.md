@@ -1,3 +1,6 @@
+# 0.3.21 
+1. PlatformJavaSqlTypeMapper.support(GenericType<Platform> type)实现为所有实现了Platform接口的类型都返回true
+
 # 0.3.20 2021-09-03
 1. 自定义数据映射加入数据库返回数据到java对象映射时，加入其相关元数据（列名，表名）进行更具体的映射
 

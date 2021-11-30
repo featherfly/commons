@@ -26,6 +26,8 @@ public final class Lang {
     /** The Constant WRAPPER. */
     private static final ExceptionWrapper<RuntimeException> WRAPPER = new ExceptionWrapper<>(RuntimeException.class);
 
+    public static List<EnumConvertor> enumConvertors = ServiceLoaderUtils.loadAll(EnumConvertor.class);
+
     /**
      * Instantiates a new lang utils.
      */
@@ -559,6 +561,25 @@ public final class Lang {
      * @return 转换后的枚举，如果是无法转换或不存在的枚举类型，则返回null
      */
     public static <T extends Enum<T>> T toEnum(Class<T> toClass, Object object) {
+        T result = null;
+        for (EnumConvertor enumConvertor : enumConvertors) {
+            result = enumConvertor.toEnum(toClass, object);
+            if (result != null) {
+                return result;
+            }
+        }
+        return toEnum0(toClass, object);
+    }
+
+    /**
+     * 将传入对象转换为枚举 .
+     *
+     * @param <T>     泛型
+     * @param toClass 枚举的类型
+     * @param object  需要转换的对象
+     * @return 转换后的枚举，如果是无法转换或不存在的枚举类型，则返回null
+     */
+    public static <T extends Enum<T>> T toEnum0(Class<T> toClass, Object object) {
         if (object != null) {
             if (object instanceof Enum) {
                 return Enum.valueOf(toClass, ((Enum<?>) object).name());

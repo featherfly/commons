@@ -1,3 +1,7 @@
+# 1.8.31
+    1. 修复LocalizedException传入LocalizedMessage,Locale参数时，没有使用传入的Locale的问题
+    2. 修复Lang.toEnum传入对象是一个枚举（Enum）时，转换出错的问题
+    
 # 1.8.30  2021-11-19
     1. Lang.ifEmpty 中的泛型值与传入的判断对象关联    
     2. 加入Groupable和ChainMapImpl

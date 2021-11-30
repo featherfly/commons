@@ -561,7 +561,7 @@ public final class Lang {
     public static <T extends Enum<T>> T toEnum(Class<T> toClass, Object object) {
         if (object != null) {
             if (object instanceof Enum) {
-                return toEnum(toClass, ((Enum<?>) object).name());
+                return Enum.valueOf(toClass, ((Enum<?>) object).name());
             } else if (object instanceof String) {
                 return toEnum(toClass, (String) object);
             } else if (object instanceof Integer || object.getClass() == int.class) {

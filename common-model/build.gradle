@@ -1,0 +1,9 @@
+ext {
+}
+  
+dependencies {    
+    api project(":common-api")
+    //api group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+    //api group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.12.2'
+    
+}

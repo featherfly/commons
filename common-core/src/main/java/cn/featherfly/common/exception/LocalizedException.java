@@ -255,26 +255,6 @@ public abstract class LocalizedException extends BaseException {
     @Override
     public String getLocalizedMessage() {
         return getMessage();
-        //        if (localeMessage != null) {
-        //            return getMessage();
-        //        }
-        //        if (Lang.isEmpty(localizedMessage)) {
-        //            String message = getMessage();
-        //            if (Lang.isEmpty(message)) {
-        //                return message;
-        //            }
-        //            int keyIndex = message.indexOf(ResourceBundleUtils.KEY_SIGN);
-        //            char firstChar = message.charAt(0);
-        //            if (firstChar == ResourceBundleUtils.RESOURCE_SIGN && keyIndex != -1) {
-        //                localizedMessage = ResourceBundleUtils.getString(message, args, locale, charset);
-        //            } else if (firstChar == ResourceBundleUtils.KEY_SIGN) {
-        //                localizedMessage = ResourceBundleUtils.getString(this.getClass(), message.substring(1), args, locale,
-        //                        charset);
-        //            } else {
-        //                localizedMessage = message;
-        //            }
-        //        }
-        //        return localizedMessage;
     }
 
     /**

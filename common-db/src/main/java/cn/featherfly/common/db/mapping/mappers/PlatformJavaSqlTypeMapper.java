@@ -5,12 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLType;
 
-import cn.featherfly.common.app.Platform;
-import cn.featherfly.common.app.Platforms;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.AbstractGenericJavaSqlTypeMapper;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.GenericType;
+import cn.featherfly.common.model.app.Platform;
+import cn.featherfly.common.model.app.Platforms;
 
 /**
  * The type Product category java sql type mapper.
@@ -67,7 +67,7 @@ public class PlatformJavaSqlTypeMapper extends AbstractGenericJavaSqlTypeMapper<
     @Override
     public void set(PreparedStatement prep, int parameterIndex, Platform value) {
         if (value != null) {
-            JdbcUtils.setParameter(prep, parameterIndex, value.id());
+            JdbcUtils.setParameter(prep, parameterIndex, value.value());
         } else {
             JdbcUtils.setParameter(prep, parameterIndex, -1);
         }

@@ -14,6 +14,7 @@ package cn.featherfly.common.bean;
  * BeanPropertyValue.
  *
  * @author zhongj
+ * @param <T> the generic type
  */
 public class BeanPropertyValue<T> {
 
@@ -22,8 +23,10 @@ public class BeanPropertyValue<T> {
     private T value;
 
     /**
-     * @param beanProperty
-     * @param value
+     * Instantiates a new bean property value.
+     *
+     * @param beanProperty the bean property
+     * @param value        the value
      */
     public BeanPropertyValue(BeanProperty<T> beanProperty, T value) {
         super();
@@ -32,7 +35,7 @@ public class BeanPropertyValue<T> {
     }
 
     /**
-     * get beanProperty value
+     * get beanProperty value.
      *
      * @return beanProperty
      */
@@ -41,7 +44,7 @@ public class BeanPropertyValue<T> {
     }
 
     /**
-     * get value value
+     * get value value.
      *
      * @return value
      */

@@ -83,22 +83,11 @@ public abstract class AbstractJavaSqlTypeMapper<E extends Object> implements Jav
     }
 
     /**
-     * Gets the java type.
-     *
-     * @param sqlType the sql type
-     * @return the java type
-     */
-    @Override
-    public Class<E> getJavaType(SQLType sqlType) {
-        return getJavaType();
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
     public boolean support(GenericType<E> type) {
-        return this.genericType.equals(type);
+        return this.genericType.equals(type) || this.genericType.getType().equals(type.getType());
     }
 
     /**

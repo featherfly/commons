@@ -1,9 +1,7 @@
 package cn.featherfly.common.db.mapping.mappers;
 
-import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLType;
 
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.AbstractGenericJavaSqlTypeMapper;
@@ -24,11 +22,14 @@ public abstract class AbstractValueJavaSqlTypeMapper<V extends Value<E>, E>
     /** The element type. */
     protected Class<E> elementType;
 
+    protected Class<V> valueType;
+
     /**
      * Instantiates a new abstract value java sql type mapper.
      */
     public AbstractValueJavaSqlTypeMapper() {
         super();
+        valueType = ClassUtils.getSuperClassGenericType(this.getClass(), 0);
         elementType = ClassUtils.getSuperClassGenericType(this.getClass(), 1);
     }
 
@@ -38,28 +39,6 @@ public abstract class AbstractValueJavaSqlTypeMapper<V extends Value<E>, E>
     @Override
     public boolean support(GenericType<V> type) {
         return ClassUtils.isParent(getGenericType().getType(), type.getType());
-    }
-
-    /**
-     * Gets the java type.
-     *
-     * @param sqlType the sql type
-     * @return the java type
-     */
-    @Override
-    public Class<V> getJavaType(SQLType sqlType) {
-        return getJavaType();
-    }
-
-    /**
-     * Gets the sql type.
-     *
-     * @param javaType the java type
-     * @return the sql type
-     */
-    @Override
-    public SQLType getSqlType(GenericType<V> javaType) {
-        return JDBCType.INTEGER;
     }
 
     /**

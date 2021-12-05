@@ -37,22 +37,6 @@ public interface JavaSqlTypeMapper<E extends Object> {
     boolean support(GenericType<E> type);
 
     /**
-     * Gets the java type.
-     *
-     * @param sqlType the sql type
-     * @return the java type
-     */
-    Class<E> getJavaType(SQLType sqlType);
-
-    /**
-     * Gets the sql type.
-     *
-     * @param javaType the java type
-     * @return the sql type
-     */
-    SQLType getSqlType(GenericType<E> javaType);
-
-    /**
      * Sets the value.
      *
      * @param prep           the prep

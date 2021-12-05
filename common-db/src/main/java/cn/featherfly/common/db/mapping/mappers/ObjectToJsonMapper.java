@@ -113,26 +113,6 @@ public class ObjectToJsonMapper<E extends Serializable> extends AbstractJavaSqlT
      * {@inheritDoc}
      */
     @Override
-    public Class<E> getJavaType(SQLType sqlType) {
-        return getGenericType().getType();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public SQLType getSqlType(GenericType<E> javaType) {
-        if (storeAsString) {
-            return JDBCType.LONGNVARCHAR;
-        } else {
-            return JDBCType.BLOB;
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void set(PreparedStatement prep, int columnIndex, E value) {
         try {
             if (value == null) {
@@ -176,5 +156,4 @@ public class ObjectToJsonMapper<E extends Serializable> extends AbstractJavaSqlT
             throw new JdbcException(e);
         }
     }
-
 }

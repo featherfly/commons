@@ -18,6 +18,11 @@ import cn.featherfly.common.model.app.Platforms;
  * @author zhongj
  */
 public class PlatformJavaSqlTypeMapper extends AbstractGenericJavaSqlTypeMapper<Platform> {
+
+    public PlatformJavaSqlTypeMapper() {
+        super();
+    }
+
     /**
      * Support.
      *
@@ -30,31 +35,12 @@ public class PlatformJavaSqlTypeMapper extends AbstractGenericJavaSqlTypeMapper<
                 || JDBCType.TINYINT == sqlType;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean support(GenericType<Platform> type) {
         return ClassUtils.isParent(getGenericType().getType(), type.getType());
-    }
-
-    /**
-     * Gets the java type.
-     *
-     * @param sqlType the sql type
-     * @return the java type
-     */
-    @Override
-    public Class<Platform> getJavaType(SQLType sqlType) {
-        return getJavaType();
-    }
-
-    /**
-     * Gets the sql type.
-     *
-     * @param javaType the java type
-     * @return the sql type
-     */
-    @Override
-    public SQLType getSqlType(GenericType<Platform> javaType) {
-        return JDBCType.INTEGER;
     }
 
     /**
@@ -69,7 +55,7 @@ public class PlatformJavaSqlTypeMapper extends AbstractGenericJavaSqlTypeMapper<
         if (value != null) {
             JdbcUtils.setParameter(prep, parameterIndex, value.value());
         } else {
-            JdbcUtils.setParameter(prep, parameterIndex, -1);
+            JdbcUtils.setParameter(prep, parameterIndex, null);
         }
     }
 
@@ -89,4 +75,5 @@ public class PlatformJavaSqlTypeMapper extends AbstractGenericJavaSqlTypeMapper<
             return null;
         }
     }
+
 }

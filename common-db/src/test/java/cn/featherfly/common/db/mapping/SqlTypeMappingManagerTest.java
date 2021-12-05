@@ -168,25 +168,25 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
                 return type.getType().equals(Long[].class);
             }
 
-            @Override
-            public Class<Long[]> getJavaType(SQLType sqlType) {
-                return Long[].class;
-                //                if (JDBCType.VARCHAR.equals(sqlType)) {
-                //                    return Long[].class;
-                //                } else {
-                //                    return null;
-                //                }
-            }
-
-            @Override
-            public SQLType getSqlType(GenericType<Long[]> javaType) {
-                return JDBCType.VARCHAR;
-                //                if (javaType.getType().equals(Long[].class)) {
-                //                    return JDBCType.VARCHAR;
-                //                } else {
-                //                    return null;
-                //                }
-            }
+            //            @Override
+            //            public Class<Long[]> getJavaType(SQLType sqlType) {
+            //                return Long[].class;
+            //                //                if (JDBCType.VARCHAR.equals(sqlType)) {
+            //                //                    return Long[].class;
+            //                //                } else {
+            //                //                    return null;
+            //                //                }
+            //            }
+            //
+            //            @Override
+            //            public SQLType getSqlType(GenericType<Long[]> javaType) {
+            //                return JDBCType.VARCHAR;
+            //                //                if (javaType.getType().equals(Long[].class)) {
+            //                //                    return JDBCType.VARCHAR;
+            //                //                } else {
+            //                //                    return null;
+            //                //                }
+            //            }
 
             @Override
             public void set(PreparedStatement prep, int columnIndex, Long[] value) {
@@ -416,6 +416,57 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
                 // 因为添加了许可条件，则会进行表名，列名的筛选，而又没有添加content2列进入映射
                 Content content2Result = manager.get(rs.getResultSet(), 4, type);
+                System.out.println(title + " -> " + content2Result);
+                assertEquals(content2, content2Result);
+            }
+        }
+    }
+
+    @Test
+    public void testObjectToJsonMapper5() {
+        // database json type
+        SqlTypeMappingManager manager = new SqlTypeMappingManager();
+        assertNull(manager.getSqlType(Content.class));
+
+        sqlExecutor.execute("delete from cms_article");
+
+        GenericType<Content> type = new GenericClass<>(Content.class);
+
+        manager.regist(Article.class, new ObjectToJsonMapper<>(type));
+
+        String insert = "INSERT INTO `db_test`.`cms_article` (`ID`, `title`, `content2`, `content3`) VALUES (null, ?, ?, ?)";
+        Content content3 = new Content();
+        content3.setDescp("c_descp");
+        content3.setImg("c_img");
+        Content content2 = new Content();
+        content2.setDescp("c2_descp");
+        content2.setImg("c2_img");
+
+        BeanDescriptor<Article> bd = BeanDescriptor.getBeanDescriptor(Article.class);
+
+        try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
+                PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
+            manager.set(prep.getPreparedStatement(), 1, Randoms.getString(6));
+            manager.set(prep.getPreparedStatement(), 2, content2, bd.getBeanProperty(Article::getContent2));
+            manager.set(prep.getPreparedStatement(), 3, content3, bd.getBeanProperty(Article::getContent3));
+
+            boolean res = prep.execute();
+            System.out.println(res);
+        }
+
+        String select = "select * from cms_article";
+        try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
+                PreparedStatementWrapper prep = connection.prepareStatement(select)) {
+            ResultSetWrapper rs = prep.executeQuery();
+            GenericType<String> gts = new GenericClass<>(String.class);
+            while (rs.next()) {
+                String title = manager.get(rs.getResultSet(), 2, gts);
+
+                Content content3Result = manager.get(rs.getResultSet(), 5, bd.getBeanProperty(Article::getContent3));
+                System.out.println(title + " -> " + content3Result);
+                assertEquals(content3, content3Result);
+
+                Content content2Result = manager.get(rs.getResultSet(), 4, bd.getBeanProperty(Article::getContent2));
                 System.out.println(title + " -> " + content2Result);
                 assertEquals(content2, content2Result);
             }

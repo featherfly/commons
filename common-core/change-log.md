@@ -1,3 +1,6 @@
+# 1.8.32 2011-12-05
+    1. 加入BeanPropertyValue
+    
 # 1.8.31 2011-11-30
     1. 修复LocalizedException传入LocalizedMessage,Locale参数时，没有使用传入的Locale的问题
     2. 修复Lang.toEnum传入对象是一个枚举（Enum）时，转换出错的问题

@@ -1,3 +1,8 @@
+# 0.3.22 2021-12-05
+1. JavaSqlTypeMapper去掉getJavaType(SQLType),getSqlType(GenericType<E>)方法
+2. DefaultSqlTypeMapping加入JDBCType.SQLXML, JDBCType.ROWID支持
+3. 加入ObjectToJsonTypeRegister,PlatformsTypeRegister,PlatformTypeRegister,ValueTypeRegister
+
 # 0.3.21 2021-12-01
 1. PlatformJavaSqlTypeMapper.support(GenericType<Platform> type)实现为所有实现了Platform接口的类型都返回true
 2. 加入AbstractValueJavaSqlTypeMapper

@@ -67,6 +67,8 @@ public class DefaultSqlTypeMapping {
         // sql to java
         // ------------------------------------------------------------------------------------------
         SQL_TO_JAVA_MAP.put(JDBCType.BOOLEAN, Boolean.TYPE);
+        SQL_TO_JAVA_MAP.put(JDBCType.BIT, Boolean.class);
+
         //  str types
         SQL_TO_JAVA_MAP.put(JDBCType.CHAR, String.class);
         SQL_TO_JAVA_MAP.put(JDBCType.NCHAR, String.class);
@@ -76,6 +78,8 @@ public class DefaultSqlTypeMapping {
         SQL_TO_JAVA_MAP.put(JDBCType.LONGNVARCHAR, String.class);
         SQL_TO_JAVA_MAP.put(JDBCType.CLOB, String.class);
         SQL_TO_JAVA_MAP.put(JDBCType.NCLOB, String.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.SQLXML, String.class);
+        SQL_TO_JAVA_MAP.put(JDBCType.ROWID, String.class);
 
         //  number types
         SQL_TO_JAVA_MAP.put(JDBCType.TINYINT, Integer.class);
@@ -100,8 +104,6 @@ public class DefaultSqlTypeMapping {
         SQL_TO_JAVA_MAP.put(JDBCType.BINARY, byte[].class);
         SQL_TO_JAVA_MAP.put(JDBCType.LONGVARBINARY, byte[].class);
         SQL_TO_JAVA_MAP.put(JDBCType.VARBINARY, byte[].class);
-
-        SQL_TO_JAVA_MAP.put(JDBCType.BIT, Boolean.class);
     }
 
     /**

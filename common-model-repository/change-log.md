@@ -1,3 +1,6 @@
+# 0.2.0 2021-12-05
+    1. 加入ExecutionInterceptor，InterceptionExecution接口
+    
 # 0.1.11 2021-08-17
     1. 加入Operator接口，QueryOperator,SortOperator,LogicOperator都实现该接口
     

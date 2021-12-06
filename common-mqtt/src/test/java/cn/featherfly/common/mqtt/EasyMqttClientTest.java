@@ -21,13 +21,13 @@ import org.eclipse.paho.client.mqttv3.MqttException;
  */
 public class EasyMqttClientTest {
 
-    public static void main(String[] args) throws MqttException {
-        final EasyMqttClient easyClient = new EasyMqttClientBuilder().host("127.0.0.1").clientId("client-test")
-                .charset(StandardCharsets.UTF_8).build();
+    public static void main(String[] args) throws MqttException, InterruptedException {
+        final EasyMqttClientImpl easyClient = (EasyMqttClientImpl) new EasyMqttClientBuilder().host("127.0.0.1")
+                .clientId("client-test").charset(StandardCharsets.UTF_8).username("cdzkdc").password("123456").build();
         easyClient.connect();
         new Thread(() -> {
             try {
-                easyClient.subscribe("/device/#", Qos.ONLY_ONCE, (topic, message) -> {
+                easyClient.subscribe("device/1", Qos.ONLY_ONCE, (topic, message) -> {
                     System.out.println("--------------------------------------");
                     System.out.println();
                     System.out.println("topic -> " + topic);
@@ -37,12 +37,26 @@ public class EasyMqttClientTest {
                     System.out.println();
                     System.out.println("--------------------------------------");
                 });
+
+                easyClient.subscribe("device/1", Qos.ONLY_ONCE, (topic, message) -> {
+                    System.out.println("***************************************");
+                    System.out.println("topic -> " + topic);
+                    System.out.println("message.id -> " + message.getId());
+                    System.out.println("message.qos -> " + message.getQos());
+                    System.out.println(" -> " + new String(message.getPayload(), StandardCharsets.UTF_8));
+                    System.out.println("***************************************");
+                });
+                System.out.println("subscribe1");
             } catch (MqttException e) {
                 e.printStackTrace();
             }
         }).start();
-        while (true) {
+        Thread.sleep(1000 * 60);
 
+        if (easyClient.disconnect()) {
+            System.out.println("disconnect success");
+        } else {
+            System.out.println("disconnect error");
         }
     }
 }

@@ -178,6 +178,7 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> impl
      *
      * @return true, if successful
      */
+    @Override
     public boolean disconnect() {
         try {
             logger.debug("client {} disconnect", clientId);

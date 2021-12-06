@@ -49,6 +49,13 @@ public interface EasyMqttClient {
     EasyMqttClient connect() throws MqttException;
 
     /**
+     * Disconnect.
+     *
+     * @return true, if successful
+     */
+    boolean disconnect();
+
+    /**
      * Subscribe.
      *
      * @param topicFilter the topic filter
@@ -70,6 +77,21 @@ public interface EasyMqttClient {
      */
     EasyMqttClient subscribe(String topicFilter, Qos qos, BiConsumer<String, MqttMessage> consumer)
             throws MqttException;
+
+    /**
+     * Clear subscribe.
+     *
+     * @param topicFilter the topic filter
+     * @return the easy mqtt client
+     */
+    EasyMqttClient clearSubscribe(String topicFilter);
+
+    /**
+     * Clear all subscribe.
+     *
+     * @return the easy mqtt client
+     */
+    EasyMqttClient clearAllSubscribe();
 
     /**
      * Publish client.

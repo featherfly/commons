@@ -1,3 +1,8 @@
+# 0.2.0 2021-12-06
+1. subscribe支持对同一个topic多次订阅，消费时依次调用
+2. EasyMqttClient加入clearSubscribe，clearAllSubscribe, disconnect
+3. 优化EasyMqttClientImpl.connect()
+
 # 0.1.6 2021-06-22
 1. publish(String topic, String msg, Qos qos, Charset charset, boolean retained,Consumer<IMqttDeliveryToken> consumer)
 2. MqttMessage.retain默认为false

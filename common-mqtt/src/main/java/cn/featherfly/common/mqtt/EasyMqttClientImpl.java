@@ -2,6 +2,10 @@
 package cn.featherfly.common.mqtt;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -28,8 +32,12 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
      * {@inheritDoc}
      */
     @Override
-    public EasyMqttClientImpl connect() throws MqttException {
-        return connect(new AutoDetectionMqttCallBack(this));
+    public EasyMqttClient connect() throws MqttException {
+        if (connected) {
+            return this;
+        } else {
+            return connect(new AutoDetectionMqttCallBack(this));
+        }
     }
 
     //    /**
@@ -65,16 +73,38 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
      * {@inheritDoc}
      */
     @Override
-    public EasyMqttClientImpl subscribe(String topicFilter, Qos qos, Consumer<MqttMessage> consumer)
-            throws MqttException {
+    public EasyMqttClient subscribe(String topicFilter, Qos qos, Consumer<MqttMessage> consumer) throws MqttException {
         logger.debug("subscribe topicFilter -> {}, qos -> {}", topicFilter, qos);
-        client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
-            if (logger.isDebugEnabled()) {
-                logger.debug("receive topic -> {}, msgId -> {}, qos -> {}, payload -> {}", topic, message.getId(),
-                        message.getQos(), new String(message.getPayload(), charset));
-            }
-            consumer.accept(message);
-        });
+
+        Consumers consumers = getConsumers(topicFilter);
+        if (consumers == null) {
+            consumers = new Consumers();
+            topicConsumers.put(topicFilter, consumers);
+
+            client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("receive topic -> {}, msgId -> {}, qos -> {}, payload -> {}", topic, message.getId(),
+                            message.getQos(), new String(message.getPayload(), charset));
+                }
+                Consumers cs = getConsumers(topicFilter);
+                if (cs != null) {
+                    for (Consumer<MqttMessage> c : cs.consumers) {
+                        c.accept(message);
+                    }
+                }
+                //                consumer.accept(topic, message);
+            });
+        }
+
+        consumers.consumers.add(consumer);
+
+        //        client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
+        //            if (logger.isDebugEnabled()) {
+        //                logger.debug("receive topic -> {}, msgId -> {}, qos -> {}, payload -> {}", topic, message.getId(),
+        //                        message.getQos(), new String(message.getPayload(), charset));
+        //            }
+        //            consumer.accept(message);
+        //        });
         return this;
     }
 
@@ -82,16 +112,51 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
      * {@inheritDoc}
      */
     @Override
-    public EasyMqttClientImpl subscribe(String topicFilter, Qos qos, BiConsumer<String, MqttMessage> consumer)
+    public EasyMqttClient subscribe(String topicFilter, Qos qos, BiConsumer<String, MqttMessage> consumer)
             throws MqttException {
         logger.debug("subscribe topicFilter -> {}, qos -> {}", topicFilter, qos);
-        client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
-            if (logger.isDebugEnabled()) {
-                logger.debug("receive topic -> {}, msgId -> {}, qos -> {}, payload -> {}", topic, message.getId(),
-                        message.getQos(), new String(message.getPayload(), charset));
-            }
-            consumer.accept(topic, message);
-        });
+
+        Consumers consumers = getConsumers(topicFilter);
+        if (consumers == null) {
+            consumers = new Consumers();
+            topicConsumers.put(topicFilter, consumers);
+
+            client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("receive topic -> {}, msgId -> {}, qos -> {}, payload -> {}", topic, message.getId(),
+                            message.getQos(), new String(message.getPayload(), charset));
+                }
+                Consumers cs = getConsumers(topicFilter);
+                if (cs != null) {
+                    for (BiConsumer<String, MqttMessage> bi : cs.biConsumers) {
+                        bi.accept(topicFilter, message);
+                    }
+                }
+                //                consumer.accept(topic, message);
+            });
+        }
+
+        consumers.biConsumers.add(consumer);
+
+        //        client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
+        //            if (logger.isDebugEnabled()) {
+        //                logger.debug("receive topic -> {}, msgId -> {}, qos -> {}, payload -> {}", topic, message.getId(),
+        //                        message.getQos(), new String(message.getPayload(), charset));
+        //            }
+        //            consumer.accept(topic, message);
+        //        });
+        return this;
+    }
+
+    @Override
+    public EasyMqttClient clearSubscribe(String topicFilter) {
+        topicConsumers.remove(topicFilter);
+        return this;
+    }
+
+    @Override
+    public EasyMqttClient clearAllSubscribe() {
+        topicConsumers.clear();
         return this;
     }
 
@@ -99,7 +164,7 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
      * {@inheritDoc}
      */
     @Override
-    public EasyMqttClientImpl publish(String topicFilter, String msg) throws MqttPersistenceException, MqttException {
+    public EasyMqttClient publish(String topicFilter, String msg) throws MqttPersistenceException, MqttException {
         return publish(topicFilter, msg, Qos.ONLY_ONCE);
     }
 
@@ -107,7 +172,7 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
      * {@inheritDoc}
      */
     @Override
-    public EasyMqttClientImpl publish(String topic, String msg, Consumer<IMqttDeliveryToken> consumer)
+    public EasyMqttClient publish(String topic, String msg, Consumer<IMqttDeliveryToken> consumer)
             throws MqttPersistenceException, MqttException {
         return publish(topic, msg, Qos.ONLY_ONCE, consumer);
     }
@@ -116,7 +181,7 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
      * {@inheritDoc}
      */
     @Override
-    public EasyMqttClientImpl publish(String topic, String msg, Qos qos) throws MqttException {
+    public EasyMqttClient publish(String topic, String msg, Qos qos) throws MqttException {
         return publish(topic, msg, qos, null);
     }
 
@@ -124,7 +189,7 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
      * {@inheritDoc}
      */
     @Override
-    public EasyMqttClientImpl publish(String topic, String msg, Qos qos, Consumer<IMqttDeliveryToken> consumer)
+    public EasyMqttClient publish(String topic, String msg, Qos qos, Consumer<IMqttDeliveryToken> consumer)
             throws MqttPersistenceException, MqttException {
         return publish(topic, msg, qos, charset, consumer);
     }
@@ -142,7 +207,7 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
      * {@inheritDoc}
      */
     @Override
-    public EasyMqttClientImpl publish(String topic, String msg, Qos qos, Charset charset,
+    public EasyMqttClient publish(String topic, String msg, Qos qos, Charset charset,
             Consumer<IMqttDeliveryToken> consumer) throws MqttPersistenceException, MqttException {
         return publish(topic, msg, qos, charset, false, consumer);
     }
@@ -151,7 +216,7 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
      * {@inheritDoc}
      */
     @Override
-    public EasyMqttClientImpl publish(String topic, String msg, Qos qos, Charset charset, boolean retained,
+    public EasyMqttClient publish(String topic, String msg, Qos qos, Charset charset, boolean retained,
             Consumer<IMqttDeliveryToken> consumer) throws MqttPersistenceException, MqttException {
         if (consumer != null) {
             ((AutoDetectionMqttCallBack) callback).publish(topic, consumer);
@@ -164,5 +229,19 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
         MqttTopic mqttTopic = client.getTopic(topic);
         publish(mqttTopic, message);
         return this;
+    }
+
+    private class Consumers {
+
+        private List<Consumer<MqttMessage>> consumers = new ArrayList<>(0);
+
+        private List<BiConsumer<String, MqttMessage>> biConsumers = new ArrayList<>(0);
+
+    }
+
+    private Map<String, Consumers> topicConsumers = new HashMap<>();
+
+    private Consumers getConsumers(String topic) {
+        return topicConsumers.get(topic);
     }
 }

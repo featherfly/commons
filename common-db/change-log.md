@@ -1,3 +1,6 @@
+# 0.3.23
+1. 加入PlatformListJavaSqlTypeMapper,PlatformArrayJavaSqlTypeMapper,NumberListJavaSqlTypeMapper,NumberArrayJavaSqlTypeMapper
+
 # 0.3.22 2021-12-05
 1. JavaSqlTypeMapper去掉getJavaType(SQLType),getSqlType(GenericType<E>)方法
 2. DefaultSqlTypeMapping加入JDBCType.SQLXML, JDBCType.ROWID支持

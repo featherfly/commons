@@ -22,7 +22,7 @@ import cn.featherfly.common.lang.GenericType;
 import cn.featherfly.common.lang.reflect.GenericClass;
 
 /**
- * ObjectToJsonMapper.
+ * The Class ObjectToJsonMapper.
  *
  * @author zhongj
  * @param <E> the element type

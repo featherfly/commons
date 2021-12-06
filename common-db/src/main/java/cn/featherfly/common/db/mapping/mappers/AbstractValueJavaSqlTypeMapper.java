@@ -10,7 +10,7 @@ import cn.featherfly.common.lang.GenericType;
 import cn.featherfly.common.model.Value;
 
 /**
- * The type Product category java sql type mapper.
+ * The Class AbstractValueJavaSqlTypeMapper.
  *
  * @author zhongj
  * @param <V> the value type
@@ -22,6 +22,7 @@ public abstract class AbstractValueJavaSqlTypeMapper<V extends Value<E>, E>
     /** The element type. */
     protected Class<E> elementType;
 
+    /** The value type. */
     protected Class<V> valueType;
 
     /**

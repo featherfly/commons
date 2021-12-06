@@ -13,21 +13,21 @@ import cn.featherfly.common.model.app.Platform;
 import cn.featherfly.common.model.app.Platforms;
 
 /**
- * The type Product category java sql type mapper.
+ * The Class PlatformJavaSqlTypeMapper.
  *
  * @author zhongj
  */
 public class PlatformJavaSqlTypeMapper extends AbstractGenericJavaSqlTypeMapper<Platform> {
 
+    /**
+     * Instantiates a new platform java sql type mapper.
+     */
     public PlatformJavaSqlTypeMapper() {
         super();
     }
 
     /**
-     * Support.
-     *
-     * @param sqlType the sql type
-     * @return true, if successful
+     * {@inheritDoc}
      */
     @Override
     protected boolean support(SQLType sqlType) {
@@ -44,11 +44,7 @@ public class PlatformJavaSqlTypeMapper extends AbstractGenericJavaSqlTypeMapper<
     }
 
     /**
-     * Sets the value.
-     *
-     * @param prep           the prep
-     * @param parameterIndex the parameter index
-     * @param value          the value
+     * {@inheritDoc}
      */
     @Override
     public void set(PreparedStatement prep, int parameterIndex, Platform value) {
@@ -60,11 +56,7 @@ public class PlatformJavaSqlTypeMapper extends AbstractGenericJavaSqlTypeMapper<
     }
 
     /**
-     * Gets the.
-     *
-     * @param rs          the rs
-     * @param columnIndex the column index
-     * @return the e
+     * {@inheritDoc}
      */
     @Override
     public Platform get(ResultSet rs, int columnIndex) {

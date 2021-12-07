@@ -1,3 +1,6 @@
+# 0.2.1 2021-12-07
+1. 修复断线重连后订阅失效的问题
+
 # 0.2.0 2021-12-06
 1. subscribe支持对同一个topic多次订阅，消费时依次调用
 2. EasyMqttClient加入clearSubscribe，clearAllSubscribe, disconnect

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -33,40 +34,20 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
      */
     @Override
     public EasyMqttClient connect() throws MqttException {
-        if (connected) {
+        if (isConnected()) {
             return this;
         } else {
-            return connect(new AutoDetectionMqttCallBack(this));
+            return connect(new AutoDetectionMqttCallBack(this), null);
         }
     }
 
-    //    /**
-    //     * Connect client.
-    //     *
-    //     * @return the client
-    //     * @throws MqttException the mqtt exception
-    //     */
-    //    private EasyClient _connect(AutoDetectionMqttCallBack callback) throws MqttException {
-    //        // host为主机名，clientid即连接MQTT的客户端ID，一般以唯一标识符表示，MemoryPersistence设置clientid的保存形式，默认为以内存保存
-    //        if (!connected) {
-    //            if (address == null) {
-    //                address = protocol + "://" + host + ":" + port;
-    //            }
-    //            client = new MqttClient(address, clientId, persistence);
-    //            this.callback = callback;
-    //            client.setCallback(callback);
-    //            try {
-    //                client.connect(options);
-    //                connected = true;
-    //            } catch (Exception e) {
-    //                // 开启线程自动重新连接
-    //                connected = false;
-    //                new Thread(() -> {
-    //                    autoReconnect(1000);
-    //                }).run();
-    //            }
+    //    @Override
+    //    public void connect(Consumer<EasyMqttClient> consumer) throws MqttException {
+    //        if (isConnected()) {
+    //            consumer.accept(this);
+    //        } else {
+    //            connect(new AutoDetectionMqttCallBack(this), consumer);
     //        }
-    //        return this;
     //    }
 
     /**
@@ -149,15 +130,47 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
     }
 
     @Override
-    public EasyMqttClient clearSubscribe(String topicFilter) {
+    public EasyMqttClient unsubscribe(String topicFilter) throws MqttException {
         topicConsumers.remove(topicFilter);
+        client.unsubscribe(topicFilter);
         return this;
     }
 
     @Override
-    public EasyMqttClient clearAllSubscribe() {
+    public EasyMqttClient unsubscribeAll() throws MqttException {
+        for (String topic : topicConsumers.keySet()) {
+            client.unsubscribe(topic);
+        }
         topicConsumers.clear();
         return this;
+    }
+
+    private void resubscribeAll() throws MqttException {
+        for (Entry<String, Consumers> entry : topicConsumers.entrySet()) {
+            String topic = entry.getKey();
+
+            List<Consumer<MqttMessage>> consumers = new ArrayList<>(entry.getValue().consumers);
+            List<BiConsumer<String, MqttMessage>> biConsumers = new ArrayList<>(entry.getValue().biConsumers);
+
+            unsubscribe(topic);
+
+            for (Consumer<MqttMessage> consumer : consumers) {
+                subscribe(topic, Qos.ONLY_ONCE, consumer);
+            }
+            for (BiConsumer<String, MqttMessage> consumer : biConsumers) {
+                subscribe(topic, Qos.ONLY_ONCE, consumer);
+            }
+        }
+    }
+
+    @Override
+    protected void connected() throws MqttException {
+        if (connectedConsumer == null) {
+            resubscribeAll();
+        } else {
+            unsubscribeAll();
+        }
+        super.connected();
     }
 
     /**

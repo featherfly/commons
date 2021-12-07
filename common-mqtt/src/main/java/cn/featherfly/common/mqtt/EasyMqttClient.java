@@ -48,12 +48,21 @@ public interface EasyMqttClient {
      */
     EasyMqttClient connect() throws MqttException;
 
+    //    void connect(Consumer<EasyMqttClient> consumer) throws MqttException;
+
     /**
      * Disconnect.
      *
      * @return true, if successful
      */
     boolean disconnect();
+
+    /**
+     * Checks if is connected.
+     *
+     * @return true, if is connected
+     */
+    boolean isConnected();
 
     /**
      * Subscribe.
@@ -83,15 +92,17 @@ public interface EasyMqttClient {
      *
      * @param topicFilter the topic filter
      * @return the easy mqtt client
+     * @throws MqttException the mqtt exception
      */
-    EasyMqttClient clearSubscribe(String topicFilter);
+    EasyMqttClient unsubscribe(String topicFilter) throws MqttException;
 
     /**
      * Clear all subscribe.
      *
      * @return the easy mqtt client
+     * @throws MqttException the mqtt exception
      */
-    EasyMqttClient clearAllSubscribe();
+    EasyMqttClient unsubscribeAll() throws MqttException;
 
     /**
      * Publish client.

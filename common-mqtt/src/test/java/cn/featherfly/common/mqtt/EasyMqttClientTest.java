@@ -12,6 +12,7 @@ package cn.featherfly.common.mqtt;
 
 import java.nio.charset.StandardCharsets;
 
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
@@ -22,9 +23,18 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 public class EasyMqttClientTest {
 
     public static void main(String[] args) throws MqttException, InterruptedException {
+        MqttConnectOptions options = new MqttConnectOptions();
+
+        options.setKeepAliveInterval(5);
+        options.setConnectionTimeout(8);
+
         final EasyMqttClientImpl easyClient = (EasyMqttClientImpl) new EasyMqttClientBuilder().host("127.0.0.1")
-                .clientId("client-test").charset(StandardCharsets.UTF_8).username("cdzkdc").password("123456").build();
+                .clientId("client-test").charset(StandardCharsets.UTF_8).username("cdzkdc").password("123456")
+                .reconnectInNewThread(false).options(options).build();
         easyClient.connect();
+
+        System.out.println("after connect() client.isConnected()  -> " + easyClient.client.isConnected());
+
         new Thread(() -> {
             try {
                 easyClient.subscribe("device/1", Qos.ONLY_ONCE, (topic, message) -> {
@@ -51,7 +61,7 @@ public class EasyMqttClientTest {
                 e.printStackTrace();
             }
         }).start();
-        Thread.sleep(1000 * 60);
+        Thread.sleep(1000 * 600);
 
         if (easyClient.disconnect()) {
             System.out.println("disconnect success");

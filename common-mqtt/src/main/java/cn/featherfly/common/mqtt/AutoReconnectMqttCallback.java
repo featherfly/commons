@@ -22,7 +22,6 @@ public interface AutoReconnectMqttCallback extends MqttCallback {
     default void connectionLost(Throwable cause) {
         // 连接丢失后，一般在这里面进行重连
         ReconnectableClient<?> client = getClient();
-        client.connected = false;
         try {
             client.reconnect(); // reconnect() 有自动重连
         } catch (MqttException e) {

@@ -23,9 +23,9 @@ public class EasyMqttClientBuilder {
     private String protocol = EasyMqttClientImpl.DEFAULT_PROTOCOL;
 
     private String address;
+
     private String clientId;
-    private MqttConnectOptions options;
-    private MqttClientPersistence persistence;
+
     private Charset charset;
 
     private boolean reconnectInNewThread = true;
@@ -33,6 +33,11 @@ public class EasyMqttClientBuilder {
     private String username;
 
     private String password;
+
+    // 下面属性与 paho.client 耦合了
+    private MqttConnectOptions options;
+
+    private MqttClientPersistence persistence;
 
     /**
      * Instantiates a new client builder.

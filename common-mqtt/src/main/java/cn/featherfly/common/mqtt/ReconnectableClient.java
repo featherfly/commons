@@ -1,8 +1,19 @@
+/*
+ * All rights Reserved, Designed By zhongj
+ * @Title: ReconnectableClient.java
+ * @Package cn.featherfly.common.mqtt
+ * @Description: todo (用一句话描述该文件做什么)
+ * @author: zhongj
+ * @date: 2021年12月7日 下午6:40:30
+ * @version V1.0
+ * @Copyright: 2021 www.featherfly.cn Inc. All rights reserved.
+ */
 
 package cn.featherfly.common.mqtt;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.function.Consumer;
 
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -36,9 +47,6 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> impl
      * The constant DEFAULT_PROTOCOL.
      */
     public static final String DEFAULT_PROTOCOL = "tcp";
-
-    /** 连接状态. */
-    boolean connected;
 
     /**
      * The Protocol.
@@ -78,6 +86,9 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> impl
      */
     MqttClientPersistence persistence;
 
+    /** The connected consumer. */
+    protected Consumer<EasyMqttClient> connectedConsumer;
+
     /**
      * The Client.
      */
@@ -86,6 +97,7 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> impl
     /** The charset. */
     Charset charset = StandardCharsets.UTF_8;
 
+    /** The reconnect in new thread. */
     boolean reconnectInNewThread = true;
 
     /** The callback. */
@@ -103,36 +115,46 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> impl
      * @throws MqttException the mqtt exception
      */
     void reconnect() throws MqttException {
-        connect(callback);
+        connect(null, null);
     }
 
     /**
      * Connect client.
      *
      * @param callback the callback
+     * @param consumer the consumer
      * @return the client
      * @throws MqttException the mqtt exception
      */
     @SuppressWarnings("unchecked")
-    protected C connect(MqttCallback callback) throws MqttException {
+    protected C connect(MqttCallback callback, Consumer<EasyMqttClient> consumer) throws MqttException {
         // host为主机名，clientid即连接MQTT的客户端ID，一般以唯一标识符表示，MemoryPersistence设置clientid的保存形式，默认为以内存保存
-        if (!connected) {
-            if (address == null) {
-                address = protocol + "://" + host + ":" + port;
+        if (!isConnected()) {
+            if (client == null) {
+                if (address == null) {
+                    address = protocol + "://" + host + ":" + port;
+                }
+                client = new MqttClient(address, clientId, persistence);
             }
-            client = new MqttClient(address, clientId, persistence);
-            //            client.setCallback(new ClientCallback(this));
+
             if (callback != null) {
                 this.callback = callback;
-                client.setCallback(callback);
             }
+            if (this.callback != null) {
+                client.setCallback(this.callback);
+            }
+
+            if (consumer != null) {
+                this.connectedConsumer = consumer;
+            }
+
             try {
                 logger.debug("client {}, address {}, options {}", clientId, address, options);
                 client.connect(options);
-                connected = true;
+                logger.debug("client connect success");
+                connected();
             } catch (Exception e) {
                 // 开启线程自动重新连接
-                connected = false;
                 logger.error(e.getMessage());
                 if (reconnectInNewThread) {
                     new Thread(() -> {
@@ -153,12 +175,15 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> impl
      */
     protected void autoReconnect(int delayTimes) {
         try {
+            if (client.isConnected()) {
+                return;
+            }
             logger.debug("client {}, address {}, options {}", clientId, address, options);
             client.connect(options);
-            connected = true;
+            logger.debug("client connect success");
+            connected();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            connected = false;
             try {
                 logger.info("autoReconnect delay {}", delayTimes);
                 Thread.sleep(delayTimes);
@@ -174,6 +199,17 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> impl
     }
 
     /**
+     * Connected.
+     *
+     * @throws MqttException the mqtt exception
+     */
+    protected void connected() throws MqttException {
+        if (connectedConsumer != null) {
+            connectedConsumer.accept(this);
+        }
+    }
+
+    /**
      * Disconnect.
      *
      * @return true, if successful
@@ -182,7 +218,6 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> impl
     public boolean disconnect() {
         try {
             logger.debug("client {} disconnect", clientId);
-            connected = false;
             client.disconnect();
             return true;
         } catch (MqttException e) {
@@ -202,7 +237,7 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> impl
     }
 
     /**
-     * get charset value
+     * get charset value.
      *
      * @return charset
      */
@@ -222,6 +257,14 @@ public abstract class ReconnectableClient<C extends ReconnectableClient<C>> impl
     protected void publish(MqttTopic topic, MqttMessage message) throws MqttPersistenceException, MqttException {
         MqttDeliveryToken token = topic.publish(message);
         token.waitForCompletion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isConnected() {
+        return client != null && client.isConnected();
     }
 
 }

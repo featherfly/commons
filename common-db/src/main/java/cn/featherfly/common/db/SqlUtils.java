@@ -225,69 +225,6 @@ public final class SqlUtils {
                 || c == Chars.TAB_CHAR;
     }
 
-    //    /**
-    //     * convert named param sql.
-    //     *
-    //     * @param namedParamSql the named param sql
-    //     * @param params        the params
-    //     * @param startSymbol   the start symbol
-    //     * @param endSymbol     the end symbol
-    //     * @return the execution
-    //     */
-    //    public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol,
-    //            Character endSymbol) {
-    //        AssertIllegalArgument.isNotEmpty(namedParamSql, "namedParamSql");
-    //        AssertIllegalArgument.isNotEmpty(startSymbol, "startSymbol");
-    //        List<Object> paramList = new ArrayList<>();
-    //        StringBuilder sql = new StringBuilder(namedParamSql);
-    //        int nameStartIndex = -1;
-    //        int nameEndIndex = -1;
-    //        boolean emptySymbol = Lang.isEmpty(endSymbol);
-    //        char end = emptySymbol ? Chars.SPACE_CHAR : endSymbol;
-    //        boolean isEnd = false;
-    //        boolean isEndSign = false;
-    //        for (int index = 0; index < sql.length(); index++) {
-    //            char c = sql.charAt(index);
-    //            if (startSymbol == c) {
-    //                nameStartIndex = index;
-    //            }
-    //            if (nameStartIndex > 0) {
-    //                isEnd = index == sql.length() - 1;
-    //                isEndSign = c == end || c == Chars.NEW_LINEZ_CHAR || c == Chars.COMMA_CHAR || c == ')'
-    //                        || c == Chars.TAB_CHAR;
-    //                if (isEndSign || isEnd) {
-    //                    nameEndIndex = index;
-    //                    if (!isEndSign && isEnd && emptySymbol) {
-    //                        nameEndIndex++;
-    //                    }
-    //                    String name = sql.substring(nameStartIndex + 1, nameEndIndex);
-    //                    Object param = getNamedParam(params, name);
-    //
-    //                    if (param instanceof Collection) {
-    //                        paramList.addAll((Collection<?>) param);
-    //                    } else if (param.getClass().isArray()) {
-    //                        int length = Array.getLength(param);
-    //                        for (int i = 0; i < length; i++) {
-    //                            paramList.add(Array.get(param, i));
-    //                        }
-    //                    } else {
-    //                        paramList.add(param);
-    //                    }
-    //                    if (!emptySymbol) {
-    //                        nameEndIndex++;
-    //                    }
-    //                    sql.insert(nameEndIndex, Chars.QUESTION_CHAR);
-    //                    sql.delete(nameStartIndex, nameEndIndex);
-    //                    index -= nameEndIndex - nameStartIndex - 1;
-    //                    // 查找name完成，start index 重置
-    //                    nameStartIndex = -1;
-    //                    nameEndIndex = -1;
-    //                }
-    //            }
-    //        }
-    //        return new SimpleExecution(sql.toString(), paramList.toArray());
-    //    }
-
     /**
      * Gets the named param.
      *

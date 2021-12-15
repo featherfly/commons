@@ -7,7 +7,9 @@ import java.sql.SQLType;
 
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.AbstractGenericJavaSqlTypeMapper;
+import cn.featherfly.common.db.mapping.JdbcMappingException;
 import cn.featherfly.common.lang.GenericType;
+import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.model.app.Platform;
 import cn.featherfly.common.model.app.Platforms;
 
@@ -71,7 +73,16 @@ public class PlatformArrayJavaSqlTypeMapper extends AbstractGenericJavaSqlTypeMa
             String[] values = value.split(",");
             Platform[] platforms = new Platform[values.length];
             for (int i = 0; i < values.length; i++) {
-                platforms[i] = Platforms.valueOf(values[i]);
+                try {
+                    platforms[i] = Platforms.valueOf(values[i]);
+                } catch (IllegalArgumentException e) {
+                    try {
+                        platforms[i] = Platforms.valueOf(Integer.parseInt(values[i]));
+                    } catch (NumberFormatException e2) {
+                        throw new JdbcMappingException(
+                                Strings.format("convert {0} to type {1} error", values[i], Platforms.class.getName()));
+                    }
+                }
             }
             return platforms;
         } else {

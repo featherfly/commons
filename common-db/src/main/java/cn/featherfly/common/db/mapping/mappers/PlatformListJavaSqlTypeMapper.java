@@ -9,7 +9,9 @@ import java.util.List;
 
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.AbstractGenericJavaSqlTypeMapper;
+import cn.featherfly.common.db.mapping.JdbcMappingException;
 import cn.featherfly.common.lang.GenericType;
+import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.model.app.Platform;
 import cn.featherfly.common.model.app.Platforms;
 
@@ -72,8 +74,17 @@ public class PlatformListJavaSqlTypeMapper extends AbstractGenericJavaSqlTypeMap
         if (value != null) {
             String[] values = value.split(",");
             List<Platform> platforms = new ArrayList<>(values.length);
-            for (String v : values) {
-                platforms.add(Platforms.valueOf(v));
+            for (int i = 0; i < values.length; i++) {
+                try {
+                    platforms.add(Platforms.valueOf(values[i]));
+                } catch (IllegalArgumentException e) {
+                    try {
+                        platforms.add(Platforms.valueOf(Integer.parseInt(values[i])));
+                    } catch (NumberFormatException e2) {
+                        throw new JdbcMappingException(
+                                Strings.format("convert {0} to type {1} error", values[i], Platforms.class.getName()));
+                    }
+                }
             }
             return platforms;
         } else {

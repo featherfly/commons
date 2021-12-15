@@ -10,19 +10,16 @@ import org.slf4j.LoggerFactory;
 import cn.featherfly.common.io.FileUtils;
 
 /**
- * <p>
- * 本地和远程都存储的存储实现
- * </p>
+ * 本地和远程都存储的存储实现.
  * <p>
  * copyright featherfly 2010-2020, all rights reserved.
  * </p>
  *
  * @author zhongj
  */
-public class FileLocalAndRemoteStorage implements FileStorage{
+public class FileLocalAndRemoteStorage implements FileStorage {
 
-    private static final Logger LOGGER = LoggerFactory
-                        .getLogger(FileLocalAndRemoteStorage.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileLocalAndRemoteStorage.class);
 
     private FileLocalDirStorage localDirStorage;
 
@@ -30,7 +27,7 @@ public class FileLocalAndRemoteStorage implements FileStorage{
 
     /**
      * @param localDirStorage 本地存储
-     * @param remoteStorages 远程存储
+     * @param remoteStorages  远程存储
      */
     public FileLocalAndRemoteStorage(FileLocalDirStorage localDirStorage, List<RemoteFileStorage> remoteStorages) {
         ASSERT.isNotNull(localDirStorage, "localDirStorage");
@@ -47,19 +44,18 @@ public class FileLocalAndRemoteStorage implements FileStorage{
         File file = localDirStorage.retrieve(id);
         if (file != null && file.exists()) {
             LOGGER.debug("使用本地存储[{}]查找文件存储唯一标示[{}]的文件，找到文件：{}",
-                            new Object[]{localDirStorage, id, file.getAbsolutePath()});
+                    new Object[] { localDirStorage, id, file.getAbsolutePath() });
             return file;
         } else {
             LOGGER.debug("使用本地存储[{}]查找文件存储唯一标示[{}]的文件，未找到", localDirStorage, id);
             for (RemoteFileStorage remoteStorage : remoteStorages) {
                 file = remoteStorage.retrieve(id);
                 if (file != null && file.exists()) {
-                    LOGGER.debug("使用远程存储[{}]查找文件存储唯一标示[{}]的文件，找到文件：{}", new Object[]
-                    {remoteStorage, id, file.getAbsolutePath()});
+                    LOGGER.debug("使用远程存储[{}]查找文件存储唯一标示[{}]的文件，找到文件：{}",
+                            new Object[] { remoteStorage, id, file.getAbsolutePath() });
                     return file;
                 } else {
-                    LOGGER.debug("使用远程存储[{}]查找文件存储唯一标示[{}]的文件，未找到"
-                                    , new Object[]{remoteStorage, id});
+                    LOGGER.debug("使用远程存储[{}]查找文件存储唯一标示[{}]的文件，未找到", new Object[] { remoteStorage, id });
                 }
             }
         }
@@ -72,13 +68,12 @@ public class FileLocalAndRemoteStorage implements FileStorage{
     @Override
     public String store(File file) {
         String id = localDirStorage.store(file);
-        LOGGER.debug("使用本地存储[{}]存储指定文件[{}]，产生存储识别信息：{}",
-                        new Object[]{localDirStorage, file.getAbsolutePath(), id});
+        LOGGER.debug("使用本地存储[{}]存储指定文件[{}]，产生存储识别信息：{}", new Object[] { localDirStorage, file.getAbsolutePath(), id });
         for (RemoteFileStorage remoteStorage : remoteStorages) {
             String rid = remoteStorage.store(file);
             if (file != null && file.exists()) {
                 LOGGER.debug("使用远程存储[{}]存储指定文件[{}]，产生存储识别信息：{}",
-                    new Object[]{remoteStorage, file.getAbsolutePath(), rid});
+                        new Object[] { remoteStorage, file.getAbsolutePath(), rid });
             }
         }
         return id;
@@ -91,5 +86,14 @@ public class FileLocalAndRemoteStorage implements FileStorage{
     public boolean delete(String id) {
         File file = retrieve(id);
         return FileUtils.delete(file);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean exists(String id) {
+        File file = retrieve(id);
+        return file.exists();
     }
 }

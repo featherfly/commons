@@ -1,3 +1,6 @@
+# 1.8
+    1.storage加入boolean exists(ID id)方法
+
 # 1.8.32 2011-12-05
     1. 加入BeanPropertyValue
     

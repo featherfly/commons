@@ -15,22 +15,19 @@ import cn.featherfly.common.lang.UriUtils;
 import cn.featherfly.common.storage.StorageException;
 
 /**
- * <p>
- * 抽象文件存储对象
- * </p>
+ * 抽象文件存储对象.
  * <p>
  * copyright featherfly 2010-2020, all rights reserved.
  * </p>
  *
  * @author zhongj
  */
-public abstract class FileLocalDirStorage implements FileStorage{
+public abstract class FileLocalDirStorage implements FileStorage {
 
     /**
      * 日志对象
      */
-    protected final Logger logger = LoggerFactory
-                    .getLogger(this.getClass());
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      */
@@ -48,7 +45,7 @@ public abstract class FileLocalDirStorage implements FileStorage{
         try {
             String extDir = getExtDir();
             File targetFile = createTargetFile(file.getName(), extDir);
-            FileUtils.copyFile(file, targetFile);
+            org.apache.commons.io.FileUtils.copyFile(file, targetFile);
             return getId(targetFile, extDir);
         } catch (IOException e) {
             throw new StorageException(e);
@@ -61,14 +58,13 @@ public abstract class FileLocalDirStorage implements FileStorage{
     @Override
     public File retrieve(String id) {
         ASSERT.isNotEmpty(id, "id");
-        logger.debug("文件存储唯一标示：{}", id);
+        logger.debug("file storage id ：{}", id);
         File file = createRelativeDir();
-        file = new File(UriUtils.linkUri(
-                file.getAbsolutePath(), id));
-        logger.debug("获取文件：{}", file.getAbsolutePath());
+        file = new File(UriUtils.linkUri(file.getAbsolutePath(), id));
+        logger.debug("get file：{}", file.getAbsolutePath());
         return file;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -76,6 +72,15 @@ public abstract class FileLocalDirStorage implements FileStorage{
     public boolean delete(String id) {
         File file = retrieve(id);
         return FileUtils.delete(file);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean exists(String id) {
+        File file = retrieve(id);
+        return file.exists();
     }
 
     // ********************************************************************
@@ -86,6 +91,7 @@ public abstract class FileLocalDirStorage implements FileStorage{
      * <p>
      * 创建扩展目录
      * </p>
+     *
      * @return 扩展目录
      */
     protected abstract String getExtDir();
@@ -94,8 +100,9 @@ public abstract class FileLocalDirStorage implements FileStorage{
      * <p>
      * 获取文件存储后的唯一标示
      * </p>
+     *
      * @param targetFile 存储后的文件
-     * @param extDir 扩展目录
+     * @param extDir     扩展目录
      * @return 文件存储后的唯一标示
      */
     protected String getId(File targetFile, String extDir) {
@@ -153,8 +160,7 @@ public abstract class FileLocalDirStorage implements FileStorage{
      * @return 实际存储的文件
      */
     private File createTargetFile(String fileName, String extDir) {
-        File file = new File(UriUtils.linkUri(
-                createTargetDir(extDir).getAbsolutePath(), rename(fileName)));;
+        File file = new File(UriUtils.linkUri(createTargetDir(extDir).getAbsolutePath(), rename(fileName)));
         logger.debug("文件存储目标位置：{}", file.getAbsolutePath());
         FileUtils.createDirectory(file.getParentFile());
         return file;
@@ -207,6 +213,7 @@ public abstract class FileLocalDirStorage implements FileStorage{
 
     /**
      * 返回baseDir
+     *
      * @return baseDir
      */
     public String getBaseDir() {
@@ -215,6 +222,7 @@ public abstract class FileLocalDirStorage implements FileStorage{
 
     /**
      * 设置baseDir
+     *
      * @param baseDir baseDir
      */
     public void setBaseDir(String baseDir) {
@@ -224,6 +232,7 @@ public abstract class FileLocalDirStorage implements FileStorage{
 
     /**
      * 返回relativeDir
+     *
      * @return relativeDir
      */
     public String getRelativeDir() {
@@ -232,6 +241,7 @@ public abstract class FileLocalDirStorage implements FileStorage{
 
     /**
      * 设置relativeDir
+     *
      * @param relativeDir relativeDir
      */
     public void setRelativeDir(String relativeDir) {
@@ -240,6 +250,7 @@ public abstract class FileLocalDirStorage implements FileStorage{
 
     /**
      * 返回renamePolicy
+     *
      * @return renamePolicy
      */
     public RenamePolicy getRenamePolicy() {
@@ -248,6 +259,7 @@ public abstract class FileLocalDirStorage implements FileStorage{
 
     /**
      * 设置renamePolicy
+     *
      * @param renamePolicy renamePolicy
      */
     public void setRenamePolicy(RenamePolicy renamePolicy) {

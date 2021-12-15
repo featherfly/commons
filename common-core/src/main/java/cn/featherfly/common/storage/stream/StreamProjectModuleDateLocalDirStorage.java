@@ -61,11 +61,7 @@ public class StreamProjectModuleDateLocalDirStorage extends ProjectModuleDateLoc
      */
     @Override
     public InputStream retrieve(String id) {
-        ASSERT.isNotEmpty(id, "存储唯一标示不能为空");
-        logger.debug("存储唯一标示：{}", id);
-        File file = createRelativeDir();
-        file = new File(UriUtils.linkUri(file.getAbsolutePath(), id));
-        logger.debug("获取文件：{}", file.getAbsolutePath());
+        File file = retrieveFile(id);
         try {
             return new FileInputStream(file);
         } catch (FileNotFoundException e) {
@@ -78,11 +74,25 @@ public class StreamProjectModuleDateLocalDirStorage extends ProjectModuleDateLoc
      */
     @Override
     public boolean delete(String id) {
-        ASSERT.isNotEmpty(id, "存储唯一标示不能为空");
-        logger.debug("存储唯一标示：{}", id);
+        File file = retrieveFile(id);
+        return FileUtils.delete(file);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean exists(String id) {
+        File file = retrieveFile(id);
+        return file.exists();
+    }
+
+    private File retrieveFile(String id) {
+        ASSERT.isNotEmpty(id, "id");
+        logger.debug("file storage id ：{}", id);
         File file = createRelativeDir();
         file = new File(UriUtils.linkUri(file.getAbsolutePath(), id));
-        logger.debug("获取文件：{}", file.getAbsolutePath());
-        return FileUtils.delete(file);
+        logger.debug("get file：{}", file.getAbsolutePath());
+        return file;
     }
 }

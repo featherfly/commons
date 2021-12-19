@@ -156,4 +156,22 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
         return select.toString();
     }
 
+    /**
+     * get ignorePolicy value
+     *
+     * @return ignorePolicy
+     */
+    public Predicate<Object> getIgnorePolicy() {
+        return ignorePolicy;
+    }
+
+    /**
+     * set ignorePolicy value
+     *
+     * @param ignorePolicy ignorePolicy
+     */
+    public void setIgnorePolicy(Predicate<Object> ignorePolicy) {
+        this.ignorePolicy = ignorePolicy;
+    }
+
 }

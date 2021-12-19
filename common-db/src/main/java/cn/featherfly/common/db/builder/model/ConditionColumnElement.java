@@ -3,9 +3,11 @@ package cn.featherfly.common.db.builder.model;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
+import java.util.function.Predicate;
 
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.dialect.Dialect;
+import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.operate.QueryOperator;
 
@@ -13,6 +15,7 @@ import cn.featherfly.common.repository.operate.QueryOperator;
  * <p>
  * condition column element
  * </p>
+ * .
  *
  * @author zhongj
  */
@@ -21,32 +24,36 @@ public class ConditionColumnElement extends ParamedColumnElement {
     private QueryOperator queryOperator;
 
     /**
+     * Instantiates a new condition column element.
+     *
      * @param dialect       dialect
      * @param name          name
      * @param value         param value
      * @param queryOperator queryOperator
+     * @param ignorePolicy  the ignore policy
      */
-    public ConditionColumnElement(Dialect dialect, String name, Object value, QueryOperator queryOperator) {
-        this(dialect, name, value, queryOperator, null);
+    public ConditionColumnElement(Dialect dialect, String name, Object value, QueryOperator queryOperator,
+            Predicate<Object> ignorePolicy) {
+        this(dialect, name, value, queryOperator, null, ignorePolicy);
     }
 
     /**
+     * Instantiates a new condition column element.
+     *
      * @param dialect       dialect
      * @param name          name
-     * @param tableAlias    tableAlias
      * @param value         param value
      * @param queryOperator queryOperator
+     * @param tableAlias    tableAlias
+     * @param ignorePolicy  the ignore policy
      */
     public ConditionColumnElement(Dialect dialect, String name, Object value, QueryOperator queryOperator,
-            String tableAlias) {
-        super(dialect, name, value, tableAlias);
+            String tableAlias, Predicate<Object> ignorePolicy) {
+        super(dialect, name, value, tableAlias, ignorePolicy);
+        AssertIllegalArgument.isNotNull(queryOperator, "queryOperator");
         this.queryOperator = queryOperator;
-        // TODO 后续加入异常检测
-        // if (queryOperator == null) {
-        // throw new BuilderException("#query.operator.null");
-        // }
 
-        if (Lang.isNotEmpty(value)) {
+        if (!ignorePolicy.test(value)) { // 不忽略
             Object paramValue = null;
             switch (queryOperator) {
                 case SW:
@@ -88,10 +95,9 @@ public class ConditionColumnElement extends ParamedColumnElement {
         StringBuilder condition = new StringBuilder();
         Object value = param;
         String name = dialect.buildColumnSql(this.name, tableAlias);
-        // if (Lang.isNotEmpty(tableAlias)) {
-        // condition.append(tableAlias).append(".");
-        // }
-        if (Lang.isNotEmpty(value)) {
+        if (ignorePolicy.test(value)) { // 忽略
+            return "";
+        } else {
             if (QueryOperator.IN == queryOperator || QueryOperator.NIN == queryOperator) {
                 int length = 1;
                 if (value instanceof Collection) {
@@ -125,14 +131,8 @@ public class ConditionColumnElement extends ParamedColumnElement {
                     condition.append(toOperator(queryOperator)).append(Chars.SPACE).append(Chars.QUESTION);
                 }
             }
-        } else {
-            return "";
         }
         return condition.toString();
-
-        // return dialect.buildColumnSql(getName(), getTableAlias()) +
-        // Chars.SPACE + operator.toString() + Chars.SPACE
-        // + Chars.QUESTION;
     }
 
     private String toOperator(QueryOperator queryOperator) {

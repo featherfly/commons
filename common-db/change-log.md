@@ -1,5 +1,6 @@
 # 0.3.23
 1. 加入PlatformListJavaSqlTypeMapper,PlatformArrayJavaSqlTypeMapper,NumberListJavaSqlTypeMapper,NumberArrayJavaSqlTypeMapper,PlatformJavaSqlTypeStringMapper
+2. ParamedColumnElement加入Predicate<Object> ignorePolicy（使用了ParamedColumnElement的相关类都加入Predicate<Object> ignorePolicy）
 
 # 0.3.22 2021-12-05
 1. JavaSqlTypeMapper去掉getJavaType(SQLType),getSqlType(GenericType<E>)方法

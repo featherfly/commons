@@ -3,6 +3,7 @@ package cn.featherfly.common.db.builder.dml.basic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import cn.featherfly.common.constant.Chars;
@@ -12,6 +13,7 @@ import cn.featherfly.common.db.builder.model.UpdateColumnElement;
 import cn.featherfly.common.db.builder.model.UpdateColumnElement.SetType;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.Dialect.Keyworld;
+import cn.featherfly.common.lang.AssertIllegalArgument;
 
 /**
  * <p>
@@ -31,27 +33,33 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
 
     private Dialect dialect;
 
+    private Predicate<Object> ignorePolicy;
+
     /**
      * Instantiates a new sql update set basic builder.
      *
-     * @param dialect   the dialect
-     * @param tableName the table name
+     * @param dialect      the dialect
+     * @param tableName    the table name
+     * @param ignorePolicy the ignore policy
      */
-    public SqlUpdateSetBasicBuilder(Dialect dialect, String tableName) {
-        this(dialect, tableName, null);
+    public SqlUpdateSetBasicBuilder(Dialect dialect, String tableName, Predicate<Object> ignorePolicy) {
+        this(dialect, tableName, null, ignorePolicy);
     }
 
     /**
      * Instantiates a new sql update set basic builder.
      *
-     * @param dialect   the dialect
-     * @param tableName the table name
-     * @param alias     the alias
+     * @param dialect      the dialect
+     * @param tableName    the table name
+     * @param alias        the alias
+     * @param ignorePolicy the ignore policy
      */
-    public SqlUpdateSetBasicBuilder(Dialect dialect, String tableName, String alias) {
+    public SqlUpdateSetBasicBuilder(Dialect dialect, String tableName, String alias, Predicate<Object> ignorePolicy) {
+        AssertIllegalArgument.isNotNull(ignorePolicy, "ignorePolicy");
         this.tableName = tableName;
         this.alias = alias;
         this.dialect = dialect;
+        this.ignorePolicy = ignorePolicy;
     }
 
     /**
@@ -62,7 +70,7 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
      * @return the sql update set basic builder
      */
     public SqlUpdateSetBasicBuilder setValue(String columnName, Object value) {
-        params.add(new UpdateColumnElement(dialect, columnName, value, alias));
+        params.add(new UpdateColumnElement(dialect, columnName, value, alias, ignorePolicy));
         return this;
     }
 
@@ -75,7 +83,7 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
      * @return the sql update set basic builder
      */
     public SqlUpdateSetBasicBuilder setValue(String columnName, Object value, SetType setType) {
-        params.add(new UpdateColumnElement(dialect, columnName, value, alias, setType));
+        params.add(new UpdateColumnElement(dialect, columnName, value, alias, setType, ignorePolicy));
         return this;
     }
 

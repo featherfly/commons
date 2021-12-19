@@ -14,6 +14,7 @@ import cn.featherfly.common.db.builder.dml.SqlFindBuilder;
 import cn.featherfly.common.db.builder.dml.SqlQueryBuilder;
 import cn.featherfly.common.db.builder.dml.SqlSortBuilder;
 import cn.featherfly.common.db.dialect.Dialects;
+import cn.featherfly.common.repository.IgnorePolicy;
 import cn.featherfly.common.repository.builder.dml.ConditionBuilder;
 import cn.featherfly.common.repository.builder.dml.QueryBuilder;
 import cn.featherfly.common.repository.builder.dml.SortBuilder;
@@ -45,10 +46,10 @@ public class ConditionBuilderTest {
 
     @Test
     public void testSqlQueryBuilderFind() {
-        builder = new SqlQueryBuilder(Dialects.MYSQL);
+        builder = new SqlQueryBuilder(Dialects.MYSQL, IgnorePolicy.EMPTY);
         builder.find("user", "u").where().eq("name", name).and().eq("pwd", pwd).and().group().eq("sex", sex).or()
                 .gt("age", age).sort().asc("age", "sex").desc("name");
-        builder = new SqlQueryBuilder(Dialects.MYSQL);
+        builder = new SqlQueryBuilder(Dialects.MYSQL, IgnorePolicy.EMPTY);
         builder.find("user", "u").property("name", "pwd", "age", "sex").where().eq("name", name).and().eq("pwd", pwd)
                 .and().group().eq("sex", sex).or().gt("age", age).sort().asc("age", "sex").desc("name");
 
@@ -63,7 +64,7 @@ public class ConditionBuilderTest {
     @Test
     void testtestSqlQueryBuilderSelect() {
         //
-        SqlQueryBuilder builder2 = new SqlQueryBuilder(Dialects.MYSQL);
+        SqlQueryBuilder builder2 = new SqlQueryBuilder(Dialects.MYSQL, IgnorePolicy.EMPTY);
         builder2.from("user", "u").where().eq("name", name).and().eq("pwd", pwd).and().group().eq("sex", sex).or()
                 .gt("age", 18).sort().asc("age", "sex").desc("name");
         System.out.println(builder2.build());
@@ -73,7 +74,7 @@ public class ConditionBuilderTest {
                 builder2.build());
         assertEquals(params, builder2.getParams());
 
-        builder2 = new SqlQueryBuilder(Dialects.MYSQL);
+        builder2 = new SqlQueryBuilder(Dialects.MYSQL, IgnorePolicy.EMPTY);
         builder2.select(new String[] { "name", "pwd", "age", "sex" }).from("user", "u2").where().eq("name", name).and()
                 .eq("pwd", pwd).and().group().eq("sex", sex).or().gt("age", age).sort().asc("age", "sex").desc("name");
         System.out.println(builder2.build());
@@ -87,7 +88,7 @@ public class ConditionBuilderTest {
 
     @Test
     void testConditionBuilder() {
-        ConditionBuilder cb = new SqlConditionGroup(Dialects.MYSQL, null);
+        ConditionBuilder cb = new SqlConditionGroup(Dialects.MYSQL, IgnorePolicy.EMPTY, null);
         cb.eq("name", name).and().eq("pwd", pwd).and().group().eq("sex", sex).or().gt("age", age);
         System.out.println(cb.build());
         System.out.println(((SqlConditionGroup) cb).getParamValues());

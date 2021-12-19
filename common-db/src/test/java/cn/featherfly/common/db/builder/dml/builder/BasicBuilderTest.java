@@ -16,6 +16,7 @@ import cn.featherfly.common.db.builder.dml.basic.SqlSelectColumnsBasicBuilder;
 import cn.featherfly.common.db.builder.dml.basic.SqlUpdateSetBasicBuilder;
 import cn.featherfly.common.db.dialect.Dialects;
 import cn.featherfly.common.db.dialect.Join;
+import cn.featherfly.common.repository.IgnorePolicy;
 import cn.featherfly.common.repository.operate.AggregateFunction;
 
 /**
@@ -145,14 +146,14 @@ public class BasicBuilderTest {
         params.add(sex);
         params.add(pwd);
 
-        SqlUpdateSetBasicBuilder builder = new SqlUpdateSetBasicBuilder(Dialects.MYSQL, "user");
+        SqlUpdateSetBasicBuilder builder = new SqlUpdateSetBasicBuilder(Dialects.MYSQL, "user", IgnorePolicy.EMPTY);
         builder.setValue("name", name).setValue("age", age).setValue("sex", sex).setValue("pwd", pwd);
         System.out.println(builder.build());
         System.out.println(builder.getParams());
         assertEquals("UPDATE `user` SET `name` = ?, `age` = ?, `sex` = ?, `pwd` = ?", builder.build());
         assertEquals(params, builder.getParams());
 
-        builder = new SqlUpdateSetBasicBuilder(Dialects.MYSQL, "user", "u");
+        builder = new SqlUpdateSetBasicBuilder(Dialects.MYSQL, "user", "u", IgnorePolicy.EMPTY);
         builder.setValue("name", name).setValue("age", age).setValue("sex", sex).setValue("pwd", pwd);
         System.out.println(builder.build());
         System.out.println(builder.getParams());

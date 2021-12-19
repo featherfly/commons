@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.dialect.Dialect;
@@ -18,6 +19,7 @@ import cn.featherfly.common.repository.operate.AggregateFunction;
  * <p>
  * sql query builder
  * </p>
+ * .
  *
  * @author zhongj
  */
@@ -32,12 +34,15 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
     private SqlSelectBuilder selectBuilder;
 
     /**
-     * @param dialect dialect
+     * Instantiates a new sql query builder.
+     *
+     * @param dialect      dialect
+     * @param ignorePolicy the ignore policy
      */
-    public SqlQueryBuilder(Dialect dialect) {
+    public SqlQueryBuilder(Dialect dialect, Predicate<Object> ignorePolicy) {
         this.dialect = dialect;
         sortBuilder = new SqlSortBuilder(dialect);
-        conditionGroup = new SqlConditionGroup(dialect, sortBuilder);
+        conditionGroup = new SqlConditionGroup(dialect, ignorePolicy, sortBuilder);
     }
 
     /**
@@ -64,6 +69,7 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
      * <p>
      * 获取查询参数
      * </p>
+     * .
      *
      * @return 查询参数
      */
@@ -203,7 +209,7 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
     //    private Pagination pagination;
 
     /**
-     * 返回dialect
+     * 返回dialect.
      *
      * @return dialect
      */
@@ -212,7 +218,7 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
     }
 
     /**
-     * 设置dialect
+     * 设置dialect.
      *
      * @param dialect dialect
      */

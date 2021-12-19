@@ -2,10 +2,7 @@
 package cn.featherfly.common.db.data.query;
 
 import cn.featherfly.common.db.builder.BuilderUtils;
-import cn.featherfly.common.db.builder.dml.SqlConditionGroup;
-import cn.featherfly.common.db.builder.dml.SqlSortBuilder;
 import cn.featherfly.common.db.dialect.Dialect;
-import cn.featherfly.common.db.dialect.Dialects;
 import cn.featherfly.common.db.dialect.Keywords;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
@@ -51,18 +48,6 @@ public class TableQuery implements Query {
         }
         this.sql = sql.toString();
         this.tableName = tableName;
-    }
-
-    /**
-     * The main method.
-     *
-     * @param args the arguments
-     */
-    public static void main(String[] args) {
-        ConditionBuilder builder = new SqlConditionGroup(Dialects.MYSQL, new SqlSortBuilder(Dialects.MYSQL));
-        builder.eq("name", "yufei").and().gt("age", 18);
-        TableQuery q = new TableQuery(Dialects.MYSQL, "user", builder);
-        System.out.println(q.sql);
     }
 
     private String tableName;

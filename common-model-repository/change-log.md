@@ -1,3 +1,6 @@
+# 0.2.1 2021-12-19
+    1. 加入IgnorePolicy
+    
 # 0.2.0 2021-12-05
     1. 加入ExecutionInterceptor，InterceptionExecution接口
     

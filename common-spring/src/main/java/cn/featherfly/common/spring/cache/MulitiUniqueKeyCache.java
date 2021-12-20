@@ -16,15 +16,19 @@ import cn.featherfly.common.lang.Lang;
  * <p>
  * MulitiUniqueKeyCache
  * </p>
+ * .
  *
  * @author zhongj
  */
 public class MulitiUniqueKeyCache implements Cache {
 
+    /** The Constant DEFAULT_ID_KEY_PREFIX. */
     public static final String DEFAULT_ID_KEY_PREFIX = "MulitiUnique:id:";
 
+    /** The Constant DEFAULT_ID_PROPERTY_NAME. */
     public static final String DEFAULT_ID_PROPERTY_NAME = "id";
 
+    /** The logger. */
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private int targetNotFoundIdValue = Integer.MIN_VALUE;
@@ -44,11 +48,13 @@ public class MulitiUniqueKeyCache implements Cache {
     private Class<?> targetType;
 
     /**
-     * @param name
-     * @param targetCache
-     * @param targetUniqueKeyCache
-     * @param uniquePrefixPropertyMap
-     * @param targetType
+     * Instantiates a new muliti unique key cache.
+     *
+     * @param name                    the name
+     * @param targetCache             the target cache
+     * @param targetUniqueKeyCache    the target unique key cache
+     * @param uniquePrefixPropertyMap the unique prefix property map
+     * @param targetType              the target type
      */
     public MulitiUniqueKeyCache(String name, Cache targetCache, Cache targetUniqueKeyCache,
             Map<String, String> uniquePrefixPropertyMap, Class<?> targetType) {
@@ -57,13 +63,15 @@ public class MulitiUniqueKeyCache implements Cache {
     }
 
     /**
-     * @param name
-     * @param targetCache
-     * @param targetUniqueKeyCache
-     * @param uniquePrefixPropertyMap
-     * @param targetType
-     * @param idKeyPrefix
-     * @param idPropertyName
+     * Instantiates a new muliti unique key cache.
+     *
+     * @param name                    the name
+     * @param targetCache             the target cache
+     * @param targetUniqueKeyCache    the target unique key cache
+     * @param uniquePrefixPropertyMap the unique prefix property map
+     * @param targetType              the target type
+     * @param idKeyPrefix             the id key prefix
+     * @param idPropertyName          the id property name
      */
     public MulitiUniqueKeyCache(String name, Cache targetCache, Cache targetUniqueKeyCache,
             Map<String, String> uniquePrefixPropertyMap, Class<?> targetType, String idKeyPrefix,
@@ -77,16 +85,25 @@ public class MulitiUniqueKeyCache implements Cache {
         this.targetType = targetType;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return name;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object getNativeCache() {
         return targetCache.getNativeCache();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ValueWrapper get(Object key) {
         if (isUnique(key)) {
@@ -105,6 +122,9 @@ public class MulitiUniqueKeyCache implements Cache {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public <T> T get(Object key, Class<T> type) {
@@ -120,6 +140,9 @@ public class MulitiUniqueKeyCache implements Cache {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public <T> T get(Object key, Callable<T> valueLoader) {
         if (isUnique(key)) {
@@ -134,6 +157,9 @@ public class MulitiUniqueKeyCache implements Cache {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void put(Object key, Object value) {
         assertSupportType(value);
@@ -150,6 +176,9 @@ public class MulitiUniqueKeyCache implements Cache {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ValueWrapper putIfAbsent(Object key, Object value) {
         assertSupportType(value);
@@ -190,6 +219,9 @@ public class MulitiUniqueKeyCache implements Cache {
         return targetCache.putIfAbsent(key, value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void evict(Object key) {
         // 传入ID时应该把ID对应的全部唯一键都删除,传入唯一键时把唯一键对应的ID以及ID对应的其他唯一键全部删除
@@ -210,6 +242,9 @@ public class MulitiUniqueKeyCache implements Cache {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clear() {
         targetCache.clear();
@@ -242,7 +277,7 @@ public class MulitiUniqueKeyCache implements Cache {
     }
 
     /**
-     * 返回targetCache
+     * 返回targetCache.
      *
      * @return targetCache
      */
@@ -251,7 +286,7 @@ public class MulitiUniqueKeyCache implements Cache {
     }
 
     /**
-     * 设置targetCache
+     * 设置targetCache.
      *
      * @param targetCache targetCache
      */
@@ -260,7 +295,7 @@ public class MulitiUniqueKeyCache implements Cache {
     }
 
     /**
-     * 返回targetUniqueKeyCache
+     * 返回targetUniqueKeyCache.
      *
      * @return targetUniqueKeyCache
      */
@@ -269,7 +304,7 @@ public class MulitiUniqueKeyCache implements Cache {
     }
 
     /**
-     * 设置targetUniqueKeyCache
+     * 设置targetUniqueKeyCache.
      *
      * @param targetUniqueKeyCache targetUniqueKeyCache
      */
@@ -278,7 +313,7 @@ public class MulitiUniqueKeyCache implements Cache {
     }
 
     /**
-     * 返回uniquePrefixPropertyMap
+     * 返回uniquePrefixPropertyMap.
      *
      * @return uniquePrefixPropertyMap
      */
@@ -287,7 +322,7 @@ public class MulitiUniqueKeyCache implements Cache {
     }
 
     /**
-     * 设置uniquePrefixPropertyMap
+     * 设置uniquePrefixPropertyMap.
      *
      * @param uniquePrefixPropertyMap uniquePrefixPropertyMap
      */
@@ -296,7 +331,7 @@ public class MulitiUniqueKeyCache implements Cache {
     }
 
     /**
-     * 返回idKeyPrefix
+     * 返回idKeyPrefix.
      *
      * @return idKeyPrefix
      */
@@ -305,7 +340,7 @@ public class MulitiUniqueKeyCache implements Cache {
     }
 
     /**
-     * 设置idKeyPrefix
+     * 设置idKeyPrefix.
      *
      * @param idKeyPrefix idKeyPrefix
      */
@@ -314,7 +349,7 @@ public class MulitiUniqueKeyCache implements Cache {
     }
 
     /**
-     * 返回idPropertyName
+     * 返回idPropertyName.
      *
      * @return idPropertyName
      */
@@ -323,7 +358,7 @@ public class MulitiUniqueKeyCache implements Cache {
     }
 
     /**
-     * 设置idPropertyName
+     * 设置idPropertyName.
      *
      * @param idPropertyName idPropertyName
      */
@@ -332,7 +367,7 @@ public class MulitiUniqueKeyCache implements Cache {
     }
 
     /**
-     * 返回targetType
+     * 返回targetType.
      *
      * @return targetType
      */
@@ -341,7 +376,7 @@ public class MulitiUniqueKeyCache implements Cache {
     }
 
     /**
-     * 设置targetType
+     * 设置targetType.
      *
      * @param targetType targetType
      */
@@ -350,7 +385,7 @@ public class MulitiUniqueKeyCache implements Cache {
     }
 
     /**
-     * 设置name
+     * 设置name.
      *
      * @param name name
      */
@@ -359,7 +394,7 @@ public class MulitiUniqueKeyCache implements Cache {
     }
 
     /**
-     * 返回targetNotFoundIdValue
+     * 返回targetNotFoundIdValue.
      *
      * @return targetNotFoundIdValue
      */
@@ -368,7 +403,7 @@ public class MulitiUniqueKeyCache implements Cache {
     }
 
     /**
-     * 设置targetNotFoundIdValue
+     * 设置targetNotFoundIdValue.
      *
      * @param targetNotFoundIdValue targetNotFoundIdValue
      */

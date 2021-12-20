@@ -6,13 +6,7 @@ import java.util.Locale;
 import cn.featherfly.common.exception.LocalizedException;
 
 /**
- * <p>
- * CacheException
- * </p>
- * <p>
- * 2019-08-08
- * </p>
- * .
+ * CacheException.
  *
  * @author zhongj
  */

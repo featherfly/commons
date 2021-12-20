@@ -11,11 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.transaction.AbstractTransactionSupportingCacheManager;
+import org.springframework.cache.transaction.TransactionAwareCacheDecorator;
 
 /**
- * <p>
- * MulitiCacheManager
- * </p>
+ * MulitiCacheManager.
  *
  * @author zhongj
  */
@@ -67,5 +66,12 @@ public class MulitiCacheManager extends AbstractTransactionSupportingCacheManage
             }
         }
         return cacheMap.values();
+    }
+
+    @Override
+    protected Cache decorateCache(Cache cache) {
+        return isTransactionAware() ? new TransactionAwareCacheDecorator(cache instanceof TransactionAwareCacheDecorator
+                ? ((TransactionAwareCacheDecorator) cache).getTargetCache()
+                : cache) : cache;
     }
 }

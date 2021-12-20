@@ -8,11 +8,14 @@ import java.util.Set;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.transaction.AbstractTransactionSupportingCacheManager;
+import org.springframework.cache.transaction.TransactionAwareCacheDecorator;
 
 import cn.featherfly.common.lang.AssertIllegalArgument;
 
 /**
- * Created by zj on 2015/9/4.
+ * MulitiUniqueKeyCacheManager.
+ *
+ * @author zhongj
  */
 public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCacheManager {
     //        implements CacheManager,InitializingBean {
@@ -36,7 +39,7 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
     private Class<?> targetType;
 
     /**
-     * 返回cache
+     * 返回cache.
      *
      * @return cache
      */
@@ -45,7 +48,7 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
     }
 
     /**
-     * 设置cache
+     * 设置cache.
      *
      * @param cache cache
      */
@@ -54,7 +57,7 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
     }
 
     /**
-     * 返回cacheName
+     * 返回cacheName.
      *
      * @return cacheName
      */
@@ -63,7 +66,7 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
     }
 
     /**
-     * 设置cacheName
+     * 设置cacheName.
      *
      * @param cacheName cacheName
      */
@@ -72,7 +75,7 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
     }
 
     /**
-     * 返回idCacheName
+     * 返回idCacheName.
      *
      * @return idCacheName
      */
@@ -81,7 +84,7 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
     }
 
     /**
-     * 设置idCacheName
+     * 设置idCacheName.
      *
      * @param idCacheName idCacheName
      */
@@ -90,7 +93,7 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
     }
 
     /**
-     * 返回uniqueKeyCacheName
+     * 返回uniqueKeyCacheName.
      *
      * @return uniqueKeyCacheName
      */
@@ -99,7 +102,7 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
     }
 
     /**
-     * 设置uniqueKeyCacheName
+     * 设置uniqueKeyCacheName.
      *
      * @param uniqueKeyCacheName uniqueKeyCacheName
      */
@@ -108,7 +111,7 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
     }
 
     /**
-     * 返回uniquePrefixPropertyMap
+     * 返回uniquePrefixPropertyMap.
      *
      * @return uniquePrefixPropertyMap
      */
@@ -117,7 +120,7 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
     }
 
     /**
-     * 设置uniquePrefixPropertyMap
+     * 设置uniquePrefixPropertyMap.
      *
      * @param uniquePrefixPropertyMap uniquePrefixPropertyMap
      */
@@ -126,7 +129,7 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
     }
 
     /**
-     * 返回idKeyPrefix
+     * 返回idKeyPrefix.
      *
      * @return idKeyPrefix
      */
@@ -135,7 +138,7 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
     }
 
     /**
-     * 设置idKeyPrefix
+     * 设置idKeyPrefix.
      *
      * @param idKeyPrefix idKeyPrefix
      */
@@ -144,7 +147,7 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
     }
 
     /**
-     * 返回idPropertyName
+     * 返回idPropertyName.
      *
      * @return idPropertyName
      */
@@ -153,7 +156,7 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
     }
 
     /**
-     * 设置idPropertyName
+     * 设置idPropertyName.
      *
      * @param idPropertyName idPropertyName
      */
@@ -162,7 +165,7 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
     }
 
     /**
-     * 返回targetType
+     * 返回targetType.
      *
      * @return targetType
      */
@@ -171,7 +174,7 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
     }
 
     /**
-     * 设置targetType
+     * 设置targetType.
      *
      * @param targetType targetType
      */
@@ -179,14 +182,27 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
         this.targetType = targetType;
     }
 
+    /**
+     * Gets the cache manager.
+     *
+     * @return the cache manager
+     */
     public CacheManager getCacheManager() {
         return cacheManager;
     }
 
+    /**
+     * Sets the cache manager.
+     *
+     * @param cacheManager the new cache manager
+     */
     public void setCacheManager(CacheManager cacheManager) {
         this.cacheManager = cacheManager;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Cache getCache(String name) {
         if (cacheName.equals(name)) {
@@ -196,6 +212,9 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected Collection<? extends Cache> loadCaches() {
         AssertIllegalArgument.isNotEmpty(idCacheName, "idCacheName");
@@ -213,5 +232,15 @@ public class MulitiUniqueKeyCacheManager extends AbstractTransactionSupportingCa
         Set<Cache> caches = new HashSet<>();
         caches.add(cache);
         return caches;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Cache decorateCache(Cache cache) {
+        return isTransactionAware() ? new TransactionAwareCacheDecorator(cache instanceof TransactionAwareCacheDecorator
+                ? ((TransactionAwareCacheDecorator) cache).getTargetCache()
+                : cache) : cache;
     }
 }

@@ -17,5 +17,4 @@ package cn.featherfly.common.model;
  */
 public interface BeanProperty<V> extends Property<V> {
 
-    String propertyName();
 }

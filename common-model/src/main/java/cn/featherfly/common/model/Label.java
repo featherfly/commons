@@ -1,21 +1,21 @@
 
 /*
  * All rights Reserved, Designed By zhongj
- * @Title: Property.java
- * @Package cn.featherfly.model
- * @Description: property
+ * @Title: Label.java
+ * @Package cn.featherfly.common.model
+ * @Description: Value
  * @author: zhongj
- * @date: 2021-05-18 12:16:18
+ * @date: 2021-11-30 18:24:30
  * @Copyright: 2021 www.featherfly.cn Inc. All rights reserved.
  */
 package cn.featherfly.common.model;
 
 /**
- * Property.
+ * Label.
  *
  * @author zhongj
  */
-public interface Property<V> extends Value<V> {
+public interface Label {
 
-    String name();
+    String label();
 }

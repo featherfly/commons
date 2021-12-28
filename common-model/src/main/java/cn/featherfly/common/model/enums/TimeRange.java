@@ -2,9 +2,22 @@ package cn.featherfly.common.model.enums;
 
 import cn.featherfly.common.model.Property;
 
-public enum State implements Property<Integer> {
+/**
+ * TimeRange.
+ *
+ * @author zhongj
+ */
+public enum TimeRange implements Property<Integer> {
 
-    DISABLEMENT, ENABLEMENT;
+    DAYS,
+
+    WEEKS,
+
+    MONTHS,
+
+    QUARTER,
+
+    YEAR;
 
     /**
      * {@inheritDoc}

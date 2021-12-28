@@ -1,2 +1,5 @@
+# 0.2.0 2021-12-28
+1. BeanProperty,Label,AuditStatus,TimeRange,ChineseZodiac,Zodiac
+
 # 0.1.0 2021-11-30
-1. Response
+1. Value,Property,Platform,ValueEnumConvertor

@@ -3,6 +3,7 @@ package cn.featherfly.common.ast;
 import javax.annotation.Nonnull;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.tools.Diagnostic;
 
 import com.sun.tools.javac.api.JavacTrees;
 import com.sun.tools.javac.model.JavacElements;
@@ -17,7 +18,7 @@ import com.sun.tools.javac.util.Names;
 public abstract class JavacProcessor extends javax.annotation.processing.AbstractProcessor {
 
     /** The messager. */
-    protected Messager messager;
+    private Messager messager;
 
     /** The trees. */
     protected JavacTrees trees;
@@ -56,4 +57,20 @@ public abstract class JavacProcessor extends javax.annotation.processing.Abstrac
      * @param processingEnv the processing env
      */
     protected abstract void doInit(@Nonnull ProcessingEnvironment processingEnv);
+
+    protected void debug(String message) {
+        javac.debugMessage(message);
+    }
+
+    protected void notice(String message) {
+        messager.printMessage(Diagnostic.Kind.NOTE, message);
+    }
+
+    protected void warning(String message) {
+        messager.printMessage(Diagnostic.Kind.WARNING, message);
+    }
+
+    protected void error(String message) {
+        messager.printMessage(Diagnostic.Kind.ERROR, message);
+    }
 }

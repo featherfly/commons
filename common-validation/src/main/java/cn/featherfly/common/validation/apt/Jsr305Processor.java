@@ -12,7 +12,6 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
-import javax.tools.Diagnostic;
 
 import com.sun.tools.javac.model.JavacElements;
 import com.sun.tools.javac.tree.JCTree;
@@ -43,12 +42,12 @@ public class Jsr305Processor extends JavacProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
         final JavacElements elementUtils = (JavacElements) processingEnv.getElementUtils();
-        messager.printMessage(Diagnostic.Kind.NOTE, "start generate check for javax.annotation.Nonnull");
+        debug("start generate check for javax.annotation.Nonnull");
 
         @SuppressWarnings("unchecked")
         Set<Element> elements = (Set<Element>) roundEnvironment.getElementsAnnotatedWith(Nonnull.class);
 
-        messager.printMessage(Diagnostic.Kind.NOTE, "Nonnull annotated element size = " + elements.size());
+        debug("Nonnull annotated element size = " + elements.size());
 
         for (Element element : elements) {
             if (element.getKind() == ElementKind.PARAMETER) {
@@ -60,35 +59,37 @@ public class Jsr305Processor extends JavacProcessor {
                 addAssertToBody(jcClassDecl, jcMethodDecl, jcVariableDecl);
                 //                throw new IllegalArgumentException(
                 //                        String.format("parameter [%s] can not be null", element.getSimpleName().toString()));
-                messager.printMessage(Diagnostic.Kind.NOTE,
-                        "Nonnull -> " + element.getEnclosingElement().getKind() + " "
-                                + element.getEnclosingElement().getSimpleName() + " " + element.getKind() + " "
-                                + element.getSimpleName());
+                notice(javac.getImportInfos(element).toString());
+                notice("Nonnull -> " + element.getEnclosingElement().getKind() + " "
+                        + element.getEnclosingElement().getSimpleName() + " " + element.getKind() + " "
+                        + element.getSimpleName());
             }
         }
 
-        messager.printMessage(Diagnostic.Kind.NOTE, "end generate check for javax.annotation.Nonnull");
+        debug("end generate check for javax.annotation.Nonnull");
         return true;
     }
 
     private void addAssertToBody(JCClassDecl jcClassDecl, JCMethodDecl jcMethodDecl, JCVariableDecl jcVariableDecl) {
-        //        messager.printMessage(Diagnostic.Kind.NOTE, "addAssertToBody ");
-        //        messager.printMessage(Diagnostic.Kind.NOTE, jcMethodDecl.name.toString());
-        //        messager.printMessage(Diagnostic.Kind.NOTE, jcVariableDecl.name.toString());
-        //        messager.printMessage(Diagnostic.Kind.NOTE, jcMethodDecl.body.toString());
+        //        notice( "addAssertToBody ");
+        //        notice( jcMethodDecl.name.toString());
+        //        notice( jcVariableDecl.name.toString());
+        //        notice( jcMethodDecl.body.toString());
         int paramIndex = jcMethodDecl.params.indexOf(jcVariableDecl);
         String message = String.format("class %s method %s args[%d] - %s  can not be null", jcClassDecl.name.toString(),
                 jcMethodDecl.name.toString(), paramIndex, jcVariableDecl.name.toString());
         JCTree.JCExpression isEq = javac.eqNull(jcVariableDecl);
         JCStatement throwException = javac.throwException(IllegalArgumentException.class, message);
         JCIf jcIf = treeMaker.If(isEq, treeMaker.Block(0, List.of(throwException)), null);
-        //        messager.printMessage(Diagnostic.Kind.NOTE, jcMethodDecl.body.getStatements().toString());
+        //        javac.addImportInfo(null, getClass());
+        notice(jcVariableDecl.vartype + " : " + jcVariableDecl.name + " : " + jcVariableDecl.pos + ": "
+                + jcVariableDecl.type + " : " + jcVariableDecl.nameexpr);
         List<JCTree.JCStatement> stats = List.of(jcIf);
         stats = stats.appendList(jcMethodDecl.body.getStatements());
         jcMethodDecl.body.stats = List.from(stats);
-        //        messager.printMessage(Diagnostic.Kind.NOTE, " ********************** ");
-        //        messager.printMessage(Diagnostic.Kind.NOTE, " ############### ");
-        //        messager.printMessage(Diagnostic.Kind.NOTE, jcMethodDecl.body.toString());
+        //        notice( " ********************** ");
+        //        notice( " ############### ");
+        //        notice( jcMethodDecl.body.toString());
         //        jcMethodDecl.body = treeMaker
         //                .Block(0, List.of(
         //                        treeMaker.Exec(treeMaker.Apply(List.<JCTree.JCExpression>nil(),

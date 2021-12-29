@@ -3,7 +3,7 @@ ext {
   
 dependencies {
     api project(":common-core")
-    api project(":common-model")
+    //api project(":common-model")
     api project(":common-model-repository")
     api group: 'com.speedment.common', name: 'tuple', version: '3.2.9'
     api group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3'

@@ -2,10 +2,13 @@
 package cn.featherfly.common.ast;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.tools.Diagnostic;
 
 import com.sun.source.tree.Tree;
@@ -15,6 +18,7 @@ import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.code.TypeTag;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.JCTree.JCBinary;
+import com.sun.tools.javac.tree.JCTree.JCImport;
 import com.sun.tools.javac.tree.JCTree.JCThrow;
 import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
 import com.sun.tools.javac.tree.TreeMaker;
@@ -86,6 +90,28 @@ public class Javac {
         return maker.Binary(JCTree.Tag.EQ, maker.Ident(jcVariableDecl), maker.Literal(TypeTag.BOT, null));
     }
 
+    public Collection<JCImport> getImportInfos(Element element) {
+        Collection<JCImport> jcImports = new HashSet<>();
+        if (element == null) {
+            return jcImports;
+        }
+        if (element.getKind() != ElementKind.CLASS) {
+            return getImportInfos(element.getEnclosingElement());
+        }
+
+        TreePath treePath = trees.getPath(element);
+        Tree leaf = treePath.getLeaf();
+        if (treePath.getCompilationUnit() instanceof JCTree.JCCompilationUnit && leaf instanceof JCTree) {
+            JCTree.JCCompilationUnit jccu = (JCTree.JCCompilationUnit) treePath.getCompilationUnit();
+            for (JCTree jcTree : jccu.getImports()) {
+                if (jcTree != null && jcTree instanceof JCTree.JCImport) {
+                    jcImports.add((JCTree.JCImport) jcTree);
+                }
+            }
+        }
+        return jcImports;
+    }
+
     /**
      * Adds the import info.
      *
@@ -93,7 +119,7 @@ public class Javac {
      * @param importType the import type
      */
     public void addImportInfo(Element element, Class<?> importType) {
-        log("addImportInfo for type " + importType.toString());
+        debugMessage("addImportInfo for type " + importType.toString());
         TreePath treePath = trees.getPath(element);
         Tree leaf = treePath.getLeaf();
         if (treePath.getCompilationUnit() instanceof JCTree.JCCompilationUnit && leaf instanceof JCTree) {
@@ -123,7 +149,7 @@ public class Javac {
             JCTree.JCImport jcImport = maker.Import(maker.Select(ident, names.fromString(importType.getSimpleName())),
                     false);
             if (!trees.contains(jcImport)) {
-                log("add import " + jcImport.toString());
+                debugMessage("add import " + jcImport.toString());
                 trees.add(0, jcImport);
             }
             jccu.defs = List.from(trees);
@@ -188,7 +214,7 @@ public class Javac {
      * @param msg the msg
      * @return the javac
      */
-    public Javac log(String msg) {
+    public Javac debugMessage(String msg) {
         if (processingEnv.getOptions().containsKey("debug")) {
             processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, msg);
         }

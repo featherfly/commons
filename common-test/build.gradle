@@ -27,6 +27,8 @@ dependencies {
     implementation 'cn.featherfly.common:common-validation:0.1.0'
     annotationProcessor 'cn.featherfly.common:common-validation:0.1.0'
     
+    implementation 'cn.featherfly.common:common-model:0.1.0'
+        
     //implementation "net.ltgt.gradle:gradle-apt-plugin:0.21"
     
     testImplementation (
@@ -35,7 +37,7 @@ dependencies {
     )
     testImplementation group: 'com.google.inject', name: 'guice', version: '4.2.3'
     
-    testImplementation 'cn.featherfly.common:common-core:1.8.18'
+    testImplementation 'cn.featherfly.common:common-core:1.8.31'
     testImplementation group: 'cn.featherfly.common', name: 'common-bean-javassist', version: '1.4.1'
     testImplementation 'commons-beanutils:commons-beanutils:latest.integration'
     testImplementation 'javassist:javassist:3.12.1.GA'

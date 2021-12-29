@@ -18,23 +18,6 @@ import cn.featherfly.common.repository.mapping.PropertyNameConversion;
  */
 public class JdbcMappingFactoryImpl implements JdbcMappingFactory {
 
-    /**
-     * The Enum MappingMode.
-     */
-    public enum MappingMode {
-
-        /**
-         * obj db mixed. 如果对象的属性没有明确的jpa注释表示映射，则使用数据库元数据反向映射对象属性.
-         * 可能存在数据库列没有映射属性以及对象属性没有映射数据库列的情况.
-         */
-        OBJ_DB_MIXED,
-        /**
-         * The obj to db strict. 使用对象属性进行映射，如果对象属性映射的数据库列不存在，则抛出异常.
-         * 如果有属性不需要映射，使用javax.persistence.Transient注解注释该属性
-         */
-        OBJ_TO_DB;
-    }
-
     /** The factory. */
     private AbstractJdbcMappingFactory factory;
 
@@ -85,7 +68,7 @@ public class JdbcMappingFactoryImpl implements JdbcMappingFactory {
     public JdbcMappingFactoryImpl(DatabaseMetadata metadata, Dialect dialect,
             SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
             List<PropertyNameConversion> propertyNameConversions) {
-        this(MappingMode.OBJ_DB_MIXED, metadata, dialect, sqlTypeMappingManager, classNameConversions,
+        this(MappingMode.OBJ_DB_COMPATIBLE_MODE, metadata, dialect, sqlTypeMappingManager, classNameConversions,
                 propertyNameConversions);
     }
 
@@ -142,7 +125,7 @@ public class JdbcMappingFactoryImpl implements JdbcMappingFactory {
             SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
             List<PropertyNameConversion> propertyNameConversions) {
         super();
-        if (mappingMode == MappingMode.OBJ_TO_DB) {
+        if (mappingMode == MappingMode.OBJ_DB_STRICT_MODE) {
             factory = new ObjectToDbMappingFactory(metadata, dialect, sqlTypeMappingManager, classNameConversions,
                     propertyNameConversions);
         } else {

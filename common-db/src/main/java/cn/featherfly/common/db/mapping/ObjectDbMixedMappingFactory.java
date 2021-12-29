@@ -308,35 +308,31 @@ public class ObjectDbMixedMappingFactory extends AbstractJdbcMappingFactory {
     private <T> void mappingFromColumnMetadata(BeanDescriptor<T> bd, Map<String, PropertyMapping> tableMapping,
             cn.featherfly.common.db.Column cmd, StringBuilder logInfo) {
         Map<String, PropertyMapping> nameSet = new HashMap<>();
-        tableMapping.forEach((k, v) -> {
-            if (Lang.isNotEmpty(k)) {
-                nameSet.put(k, v);
+        tableMapping.forEach((column, propertyMapping) -> {
+            if (Lang.isNotEmpty(column)) {
+                // 名称转换为小写
+                nameSet.put(column.toLowerCase(), propertyMapping);
             } else {
-                if (Lang.isNotEmpty(v.getPropertyMappings())) {
-                    v.getPropertyMappings().forEach(pm -> {
-                        nameSet.put(pm.getRepositoryFieldName(), pm);
+                if (Lang.isNotEmpty(propertyMapping.getPropertyMappings())) {
+                    propertyMapping.getPropertyMappings().forEach(pm -> {
+                        nameSet.put(pm.getRepositoryFieldName().toLowerCase(), pm);
                     });
                 }
             }
         });
-        if (!nameSet.containsKey(cmd.getName())) {
+        // 名称转换为小写
+        String columnNameLowerCase = cmd.getName().toLowerCase();
+        if (!nameSet.containsKey(columnNameLowerCase)) {
             // 转换下划线，并使用驼峰
-            String columnName = cmd.getName().toLowerCase();
-            String propertyName = WordUtils.parseToUpperFirst(columnName, Chars.UNDER_LINE_CHAR);
+            String propertyName = WordUtils.parseToUpperFirst(columnNameLowerCase, Chars.UNDER_LINE_CHAR);
             BeanProperty<?> beanProperty = bd.findBeanProperty(new BeanPropertyNameRegexMatcher(propertyName));
             if (beanProperty != null && !isTransient(beanProperty, logInfo)) {
                 PropertyMapping mapping = new PropertyMapping();
                 mapping.setPropertyType(beanProperty.getType());
                 mapping.setPropertyName(propertyName);
-                mapping.setRepositoryFieldName(dialect.convertTableOrColumnName(columnName));
-                mapping.setRemark(cmd.getRemark());
-                mapping.setNullable(cmd.isNullable());
-                mapping.setDecimalDigits(cmd.getDecimalDigits());
-                mapping.setAutoincrement(cmd.isAutoincrement());
-                mapping.setSize(cmd.getSize());
-                mapping.setPrimaryKey(cmd.isPrimaryKey());
-                mapping.setDefaultValue(cmd.getDefaultValue());
-                mapping.setIndex(cmd.getColumnIndex());
+
+                setMappingColumnValue(mapping, cmd, false);
+
                 tableMapping.put(mapping.getRepositoryFieldName(), mapping);
                 if (logger.isDebugEnabled()) {
                     logInfo.append(String.format("%s###\t%s -> %s", SystemPropertyUtils.getLineSeparator(),
@@ -349,16 +345,30 @@ public class ObjectDbMixedMappingFactory extends AbstractJdbcMappingFactory {
                 }
             }
         } else {
-            PropertyMapping mapping = nameSet.get(cmd.getName());
-            mapping.setPrimaryKey(cmd.isPrimaryKey());
-            mapping.setDefaultValue(cmd.getDefaultValue());
-            mapping.setRemark(cmd.getRemark());
-            mapping.setNullable(cmd.isNullable());
-            mapping.setDecimalDigits(cmd.getDecimalDigits());
-            mapping.setAutoincrement(cmd.isAutoincrement());
-            mapping.setSize(cmd.getSize());
-            mapping.setIndex(cmd.getColumnIndex());
+            PropertyMapping mapping = nameSet.get(columnNameLowerCase);
+            setMappingColumnValue(mapping, cmd, false);
+            if (mapping.getPropertyMappings().size() == 1) {
+                setMappingColumnValue(mapping.getPropertyMappings().get(0), cmd, false);
+            }
         }
+    }
+
+    private void setMappingColumnValue(PropertyMapping mapping, cn.featherfly.common.db.Column cmd,
+            boolean convertColumnName) {
+        mapping.setRemark(cmd.getRemark());
+        mapping.setNullable(cmd.isNullable());
+        mapping.setDecimalDigits(cmd.getDecimalDigits());
+        mapping.setAutoincrement(cmd.isAutoincrement());
+        mapping.setSize(cmd.getSize());
+        mapping.setPrimaryKey(cmd.isPrimaryKey());
+        mapping.setDefaultValue(cmd.getDefaultValue());
+        mapping.setIndex(cmd.getColumnIndex());
+        if (convertColumnName) {
+            mapping.setRepositoryFieldName(dialect.convertTableOrColumnName(cmd.getName()));
+        } else {
+            mapping.setRepositoryFieldName(cmd.getName());
+        }
+
     }
 
     /**

@@ -1,135 +1,140 @@
-# 0.3.23 2021-12-19
+# 0.4.0 2021-12-19  
+1. MappingMode没去名称重构
+2. ObjectDbMixedMappingFactory实现统一使用数据库的列名进行映射，即jpa映射元数据的列名与数据库的列名大小写不一致（equals=false,equalsIgnoreCase=true）也会使用数据库的列名进行映射
+
+
+# 0.3.23 2021-12-19  
 1. 加入PlatformListJavaSqlTypeMapper,PlatformArrayJavaSqlTypeMapper,NumberListJavaSqlTypeMapper,NumberArrayJavaSqlTypeMapper,PlatformJavaSqlTypeStringMapper
 2. ParamedColumnElement加入Predicate<Object> ignorePolicy（使用了ParamedColumnElement的相关类都加入Predicate<Object> ignorePolicy）
 
-# 0.3.22 2021-12-05
+# 0.3.22 2021-12-05  
 1. JavaSqlTypeMapper去掉getJavaType(SQLType),getSqlType(GenericType<E>)方法
 2. DefaultSqlTypeMapping加入JDBCType.SQLXML, JDBCType.ROWID支持
 3. 加入ObjectToJsonTypeRegister,PlatformsTypeRegister,PlatformTypeRegister,ValueTypeRegister
 
-# 0.3.21 2021-12-01
+# 0.3.21 2021-12-01  
 1. PlatformJavaSqlTypeMapper.support(GenericType<Platform> type)实现为所有实现了Platform接口的类型都返回true
 2. 加入AbstractValueJavaSqlTypeMapper
 3. 兼容性升级Platform App等从common-api依赖改为common-model依赖
 
-# 0.3.20 2021-09-03
+# 0.3.20 2021-09-03  
 1. 自定义数据映射加入数据库返回数据到java对象映射时，加入其相关元数据（列名，表名）进行更具体的映射
 
-# 0.3.19 2021-09-02
+# 0.3.19 2021-09-02  
 1. JdbcUtils.setParameter支持BigInteger,AtomicInteger,AtomicLong,AtomicBoolean
     
-# 0.3.18 2021-08-26
+# 0.3.18 2021-08-26  
 1. ConditionColumnElement.toSql()支持QueryOperator.ISN，QueryOperator.INN传入Boolean参数
     null 表示忽略当前条件
     true 表示当前操作类型条件
     false 表示当前操作类型相反的条件（ISN变INN，INN变ISN）
 
-# 0.3.17 2021-08-16
+# 0.3.17 2021-08-16  
 1. SqlUtils.convertNamedParamSql加入in的参数为Collection或Array根据长度占位符自动转换为(?,?...)的形式
 
-# 0.3.16 2021-07-26
+# 0.3.16 2021-07-26  
 1. ConditionColumnElement加入对QueryOperator.LK的支持
 
-# 0.3.15 2021-5-31
+# 0.3.15 2021-5-31  
 1. DataTransformer.transform(currentRecordModel, originalRecordModel)方法加入参数原始数据，即没有被其他转换器处理过的原始数据
 2. Dialect加入StringConverter tableAndColumnNameConverter()替换boolean isTableAndColumnNameConverterUpperCase()方法
 
-# 0.3.14 2021-4-14
+# 0.3.14 2021-4-14  
 1. 修复ClassMappingUtils.getMergeSqlAndParamPositions生成sql出错的问题
 
-# 0.3.13 2021-3-24
+# 0.3.13 2021-3-24  
 1. JdbcUtils.getResultSetMap(ResultSet rs, SqlTypeMappingManager manager)修复设置了label的名称不处理，而没设置label的字段使用驼峰命名转换
 
-# 0.3.12 2021-3-12
+# 0.3.12 2021-3-12  
 1. ClassMappingUtils.getMergeSqlAndParamPositions返回Tuple3,新加入需要更新的值的数量
 
-# 0.3.11 2021-3-8
+# 0.3.11 2021-3-8  
 1. AbstractJavaSqlTypeMapper加入getJavaType(SQLType sqlType)的默认实现
 2. ObjectToDbMappingFactory createIndex加入@Table的uniqueConstraints支持
 3. JdbcUtils.getResultSetValue(ResultSet rs, int index, Class<?> requiredType)加入LocalDate,LocalTime,LocalDateTime支持
 
 
-# 0.3.10 2021-2-22
+# 0.3.10 2021-2-22  
 1. JdbcUtils加入getResultSetMaps(ResultSet, SqlTypeMappingManager)和getResultSetMap(ResultSet, SqlTypeMappingManager)方法
 2. 修复SqlUtils.convertNamedParamSql参数后跟,)参数名不正确的问题
 3. SqlTypeMappingManager加入getSqlTypeMappingManager()方法
 
-# 0.3.9 2021-2-20
+# 0.3.9 2021-2-20  
 1. ObjectToJsonMapper加入storeAsString属性，写入string(varchar nvachar clob等等)或者byte array(blob)
 2. 修复ObjectToJsonMapper返回值为null时报空指针错误的问题
 
-# 0.3.8 2020-12-13 
+# 0.3.8 2020-12-13  
 1. 修复主键是关联对象时生成建表sql出错的问题
 2. 修复废弃API调用
 
-# 0.3.7 2020-11-27 
+# 0.3.7 2020-11-27  
 1. 加入ReadonlyTable类
 
-# 0.3.6 2020-11-24
+# 0.3.6 2020-11-24  
 1. 修复getDeleteSqlAndParamPositions单列主键时没有返回参数映射map的问题
 
-# 0.3.5 2020-11-17
+# 0.3.5 2020-11-17  
 1. ClassMappingUtils加入getDeleteSqlAndParamPositions(int batchSize, ClassMapping<?> classMapping, Dialect dialect)方法
 
-# 0.3.4 2020-11-16
+# 0.3.4 2020-11-16  
 1. 加入JdbcMappingFactory接口，并把原来的JdbcMappingFactory类改为JdbcMappingFactoryImpl
 
-# 0.3.3 2020-11-16
+# 0.3.3 2020-11-16  
 1. 加入VersionManager
 
-# 0.3.2 2020-11-16
+# 0.3.2 2020-11-16  
 1. Migrator加入updateSql(DataSource previousDataSource, DataSource currentDataSource)等一些列方法，用于比较两个数据库生成更新sql
 2. 修正0.3.1使用了jdk15构建的问题,重新使用jdk8构建
 
-# 0.3.1 2020-11-11
+# 0.3.1 2020-11-11  
 1. Dialect实现索引的创建·更新·删除（Mysql,Postgresql）
 2. 实现从Entity生成的ClassMapping支持索引，并且生成的建表、更新表的语句已经加上索引信息
 3. Migrator的updateSql方法支持索引
 
-# 0.3.0 2020-7-21
+# 0.3.0 2020-7-21  
 1. 实现Migrator的initSql,updateSql方法
 
-# 0.2.5 2020-7-19
+# 0.2.5 2020-7-19  
 1. 修复JdbcMappingFactory中@Transient不是使用javax.persistence.Transient的问题
 2. JdbcMappingFactory加入严格的对象属性到数据库映射，类似JPA,与默认的混合映射不同，具体查看JdbcMappingFactory.MappingMode枚举项的注释
 3. 加入ObjectDbMixedMappingFacotry和ObjectToDbMappingFacotry,JdbcMappingFactory只是作为这两个具体实现的代理
 4. 加入Migrator，实现通过映射创建数据库表的一些列方法
 
-# 0.2.4 2020-7-15
+# 0.2.4 2020-7-15  
 1. 修复0.2.3版本SqlTypeMappingManager的setEnumWithOrdinal,isEnumWithOrdinal方法删除问题
 
-# 0.2.3 2020-7-15
+# 0.2.3 2020-7-15  
 1. SqlTypeMappingManager相关的泛型extends Seriable改为extends Object
 
-# 0.2.2 2020-7-15
+# 0.2.2 2020-7-15  
 1. SqlTypeMappingManager加入setEnumWithOrdinal,isEnumWithOrdinal方法
 2. JdbcMappingFactory构造参数加入SqlTypeMappingManager
 
-# 0.2.1 2020-6-24
+# 0.2.1 2020-6-24  
 1. 修复ClassMappingUtils.getInsertBatchSqlAndParamPositions返回的sql没字段使用对象属性的问题
 
-# 0.2.0 2020-6-3
+# 0.2.0 2020-6-3  
 1. 完善SqlTypeMappingManager相关功能
 2. 删除SqlType枚举,使用jdbc的JDBCType代替
 3. JdbcUtils.setParamaeter加入java.util.Optional支持,加入getColumnIndex,getResultSQLType等方法
 
-# 0.1.4 2020-5-29
+# 0.1.4 2020-5-29  
 1. 修改LangUtils为Lang,StringUtils为Strings
 2. SqlUtils.transferNamedParamSql改为convertNamedParamSql
 
-# 0.1.3 2020-5-23
+# 0.1.3 2020-5-23  
 1. SqlUtils.convertSelectToCount加入多行sql支持
 
-# 0.1.2 2020-4-20
+# 0.1.2 2020-4-20  
 1. 加入代码生成需要的
 
-# 0.1.1 2020-4-20
+# 0.1.1 2020-4-20  
 1. SqlUtils加入transferNamedParamSql方法，用于转换命名参数sql为传统sql
 2. 加入SqlTypeMappingManager，用于管理SqlType和JavaType的对应关系
 3. ClassMappingUtils加入各种sql生成方法
 4. Dialect加入批量插入sql生成方法
 
-# 0.1.0 2020-4-19
+# 0.1.0 2020-4-19  
 1. 从featherfly-db迁移过来
 2. dml builder重构，放弃featherfly-db的cn.featherfly.common.db.builder包的实现
 3. 依赖common-model-repository

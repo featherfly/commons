@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 import cn.featherfly.common.db.JdbcTestBase;
 import cn.featherfly.common.db.mapping.pojo.Entity;
 import cn.featherfly.common.db.mapping.pojo.Role;
-import cn.featherfly.common.db.mapping.pojo.User;
+import cn.featherfly.common.db.mapping.pojo.User2;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
 import cn.featherfly.common.repository.mapping.ClassMapping;
@@ -41,7 +41,7 @@ public class ObjectToDbMappingFactoryPostgresqlTest extends JdbcTestBase {
 
     @Test(expectedExceptions = MappingException.class)
     public void test2() {
-        ClassMapping<User> mapping = factory.getClassMapping(User.class);
+        ClassMapping<User2> mapping = factory.getClassMapping(User2.class);
         System.out.println(ClassMappingUtils.getCreateTableSql(mapping, dialect, sqlTypeMappingManager));
     }
 

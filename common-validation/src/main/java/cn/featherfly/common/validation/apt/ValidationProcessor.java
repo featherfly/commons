@@ -36,7 +36,7 @@ import cn.featherfly.common.ast.JavacProcessor;
         "javax.validation.constraints.PastOrPresent", "javax.validation.constraints.Pattern",
         "javax.validation.constraints.Positive", "javax.validation.constraints.PositiveOrZero",
         "javax.validation.constraints.Size" })
-@SupportedOptions("debug")
+@SupportedOptions("log")
 public class ValidationProcessor extends JavacProcessor {
 
     @Override
@@ -45,8 +45,12 @@ public class ValidationProcessor extends JavacProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
+        if (true) {
+            // TODO 后续来实现
+            return true;
+        }
         debug("start generate validation");
-        notice("" + roundEnvironment.getRootElements().size());
+        debug("" + roundEnvironment.getRootElements().size());
 
         //        for (Element element : roundEnvironment.getElementsAnnotatedWith(NotNull.class)) {
         //            String name = element.getSimpleName().toString();
@@ -67,7 +71,7 @@ public class ValidationProcessor extends JavacProcessor {
 
         for (Element element : roundEnvironment.getRootElements()) {
             String name = element.getSimpleName().toString();
-            notice(element.getKind() + "-" + name);
+            debug(element.getKind() + "-" + name);
             JCTree jcTree = trees.getTree(element);
             jcTree.accept(new TreeTranslator() {
                 @Override
@@ -76,20 +80,20 @@ public class ValidationProcessor extends JavacProcessor {
                     for (JCTree tree : jcClassDecl.defs) {
                         if (tree.getKind() == Tree.Kind.METHOD) {
                             JCTree.JCMethodDecl jcMethodDecl = (JCTree.JCMethodDecl) tree;
-                            notice("name: " + jcMethodDecl.name);
+                            debug("name: " + jcMethodDecl.name);
                             //                            notice( "parameters: " + jcMethodDecl.getParameters());
                             //                            notice(
                             //                                    "typeParameters: " + jcMethodDecl.getTypeParameters());
                             for (JCVariableDecl jcVariableDecl : jcMethodDecl.getParameters()) {
-                                notice("\tparam: " + jcVariableDecl.name.toString());
+                                debug("\tparam: " + jcVariableDecl.name.toString());
                                 for (AnnotationTree annotationTree : jcVariableDecl.mods.getAnnotations()) {
-                                    notice("\t\tannotation: " + annotationTree.getAnnotationType());
-                                    notice("\t\tannotation: " + annotationTree.getAnnotationType());
+                                    debug("\t\tannotation: " + annotationTree.getAnnotationType());
+                                    debug("\t\tannotation: " + annotationTree.getAnnotationType());
                                 }
                             }
                             if (jcMethodDecl.name.toString().equals("notNull")) {
-                                notice(jcMethodDecl.name + "\n" + jcMethodDecl.body.toString());
-                                notice("add System.out.println('Hello, world')");
+                                debug(jcMethodDecl.name + "\n" + jcMethodDecl.body.toString());
+                                debug("add System.out.println('Hello, world')");
                                 treeMaker.pos = jcMethodDecl.pos;
                                 jcMethodDecl.body = treeMaker
                                         .Block(0, List.of(
@@ -105,7 +109,7 @@ public class ValidationProcessor extends JavacProcessor {
                                                                         List.<JCTree.JCExpression>of(
                                                                                 treeMaker.Literal("Hello, world!!!")))),
                                                 jcMethodDecl.body));
-                                notice(jcMethodDecl.name + "\n" + jcMethodDecl.body.toString());
+                                debug(jcMethodDecl.name + "\n" + jcMethodDecl.body.toString());
                             }
                         }
                     }

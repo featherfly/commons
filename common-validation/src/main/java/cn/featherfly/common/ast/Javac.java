@@ -5,11 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
-import javax.annotation.processing.Messager;
-import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
-import javax.tools.Diagnostic;
 
 import com.sun.source.tree.Tree;
 import com.sun.source.util.TreePath;
@@ -42,27 +39,22 @@ public class Javac {
 
     private Names names;
 
-    private Messager messager;
-
-    private ProcessingEnvironment processingEnv;
+    private Logger logger;
 
     /**
      * Instantiates a new javac.
      *
-     * @param maker         the maker
-     * @param trees         the trees
-     * @param names         the names
-     * @param messager      the messager
-     * @param processingEnv the processing env
+     * @param maker  the maker
+     * @param trees  the trees
+     * @param names  the names
+     * @param logger the logger
      */
-    public Javac(TreeMaker maker, JavacTrees trees, Names names, Messager messager,
-            ProcessingEnvironment processingEnv) {
+    public Javac(TreeMaker maker, JavacTrees trees, Names names, Logger logger) {
         super();
         this.maker = maker;
         this.trees = trees;
         this.names = names;
-        this.messager = messager;
-        this.processingEnv = processingEnv;
+        this.logger = logger;
     }
 
     /**
@@ -88,6 +80,19 @@ public class Javac {
      */
     public <E extends RuntimeException> JCBinary eqNull(JCVariableDecl jcVariableDecl) {
         return maker.Binary(JCTree.Tag.EQ, maker.Ident(jcVariableDecl), maker.Literal(TypeTag.BOT, null));
+    }
+
+    public String getImportClassName(String className, Element element) {
+        if (!className.contains(".")) {
+            String end = "." + className;
+            for (JCImport jcImport : getImportInfos(element)) {
+                String type = jcImport.qualid.toString();
+                if (type.endsWith(end)) {
+                    return type;
+                }
+            }
+        }
+        return className;
     }
 
     public Collection<JCImport> getImportInfos(Element element) {
@@ -136,15 +141,15 @@ public class Javac {
                                 return;
                             }
                         } catch (NullPointerException e) {
-                            messager.printMessage(Diagnostic.Kind.ERROR, e.getMessage());
+                            logger.error(e.getMessage());
                         }
                     }
                 }
             }
             java.util.List<JCTree> trees = new ArrayList<>();
             trees.addAll(jccu.defs);
-            messager.printMessage(Diagnostic.Kind.NOTE, "jccu.defs");
-            messager.printMessage(Diagnostic.Kind.NOTE, jccu.defs.toString());
+            //            messager.printMessage(Diagnostic.Kind.NOTE, "jccu.defs");
+            //            messager.printMessage(Diagnostic.Kind.NOTE, jccu.defs.toString());
             JCTree.JCIdent ident = maker.Ident(names.fromString(importType.getPackage().getName()));
             JCTree.JCImport jcImport = maker.Import(maker.Select(ident, names.fromString(importType.getSimpleName())),
                     false);
@@ -208,16 +213,8 @@ public class Javac {
         return jcMethodDecl;
     }
 
-    /**
-     * Log.
-     *
-     * @param msg the msg
-     * @return the javac
-     */
-    public Javac debugMessage(String msg) {
-        if (processingEnv.getOptions().containsKey("debug")) {
-            processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, msg);
-        }
+    private Javac debugMessage(String msg) {
+        logger.debug(msg);
         return this;
     }
 

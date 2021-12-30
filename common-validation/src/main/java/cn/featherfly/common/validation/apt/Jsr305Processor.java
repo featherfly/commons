@@ -11,6 +11,7 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 
 import com.sun.tools.javac.model.JavacElements;
@@ -26,7 +27,7 @@ import cn.featherfly.common.ast.JavacProcessor;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes({ "javax.annotation.Nonnull" })
-@SupportedOptions("debug")
+@SupportedOptions("log")
 public class Jsr305Processor extends JavacProcessor {
 
     @Override
@@ -37,6 +38,7 @@ public class Jsr305Processor extends JavacProcessor {
         //        messager.printMessage(Diagnostic.Kind.NOTE, getSupportedAnnotationTypes().toString());
         //        messager.printMessage(Diagnostic.Kind.NOTE, "processingEnv.getOptions()");
         //        messager.printMessage(Diagnostic.Kind.NOTE, processingEnv.getOptions().toString());
+
     }
 
     @Override
@@ -52,17 +54,30 @@ public class Jsr305Processor extends JavacProcessor {
         for (Element element : elements) {
             if (element.getKind() == ElementKind.PARAMETER) {
                 JCMethodDecl jcMethodDecl = (JCMethodDecl) elementUtils.getTree(element.getEnclosingElement());
+                if (jcMethodDecl.body == null) {
+                    // 抽象方法，跳过
+                    continue;
+                }
+                JCVariableDecl jcVariableDecl = (JCVariableDecl) elementUtils.getTree(element);
                 JCClassDecl jcClassDecl = (JCClassDecl) elementUtils
                         .getTree(element.getEnclosingElement().getEnclosingElement());
-                JCVariableDecl jcVariableDecl = (JCVariableDecl) elementUtils.getTree(element);
+                PackageElement packageElement = elementUtils.getPackageOf(element);
                 //                addImportInfo(element, IllegalArgumentException.class);
-                addAssertToBody(jcClassDecl, jcMethodDecl, jcVariableDecl);
+                //                String varTypeName = javac.getImportClassName(jcVariableDecl.vartype.toString(), element);
+                addAssertToBody(packageElement, jcClassDecl, jcMethodDecl, jcVariableDecl);
                 //                throw new IllegalArgumentException(
                 //                        String.format("parameter [%s] can not be null", element.getSimpleName().toString()));
-                notice(javac.getImportInfos(element).toString());
-                notice("Nonnull -> " + element.getEnclosingElement().getKind() + " "
-                        + element.getEnclosingElement().getSimpleName() + " " + element.getKind() + " "
-                        + element.getSimpleName());
+                //                notice(javac.getImportInfos(element).toString());
+                //                notice(String.format("Nonnull -> %s %s %s %s %s %s",
+                //                        element.getEnclosingElement().getKind() + " " + element.getEnclosingElement().getSimpleName()
+                //                                + " " + element.getKind() + " " + element.getSimpleName()));
+
+                //                Collection<JCImport> imports = javac.getImportInfos(element);
+                //                for (JCImport jcImport : javac.getImportInfos(element)) {
+                //                    notice(jcImport.getTag().name());
+                //                    notice("qualid.toString() " + jcImport.qualid.toString());
+                //                }
+
             }
         }
 
@@ -70,23 +85,25 @@ public class Jsr305Processor extends JavacProcessor {
         return true;
     }
 
-    private void addAssertToBody(JCClassDecl jcClassDecl, JCMethodDecl jcMethodDecl, JCVariableDecl jcVariableDecl) {
-        //        notice( "addAssertToBody ");
-        //        notice( jcMethodDecl.name.toString());
-        //        notice( jcVariableDecl.name.toString());
-        //        notice( jcMethodDecl.body.toString());
+    private void addAssertToBody(PackageElement packageElement, JCClassDecl jcClassDecl, JCMethodDecl jcMethodDecl,
+            JCVariableDecl jcVariableDecl) {
         int paramIndex = jcMethodDecl.params.indexOf(jcVariableDecl);
-        String message = String.format("class [%s] method [%s] args[%d](%s) can not be null",
-                jcClassDecl.name.toString(), jcMethodDecl.name.toString(), paramIndex, jcVariableDecl.name.toString());
+        String descp = String.format("CLASS [%s.%s] METHOD %s PARAMETER[%d](%s) : %s",
+                packageElement.getQualifiedName(), jcClassDecl.name, jcMethodDecl.name, paramIndex, jcVariableDecl.name,
+                jcVariableDecl.vartype);
+        String message = String.format("%s can not be null", descp);
         JCTree.JCExpression isEq = javac.eqNull(jcVariableDecl);
         JCStatement throwException = javac.throwException(IllegalArgumentException.class, message);
         JCIf jcIf = treeMaker.If(isEq, treeMaker.Block(0, List.of(throwException)), null);
         //        javac.addImportInfo(null, getClass());
-        notice(jcVariableDecl.vartype + " : " + jcVariableDecl.name + " : " + jcVariableDecl.pos + ": "
-                + jcVariableDecl.type + " : " + jcVariableDecl.nameexpr);
+        info("@Nonnull -> " + descp);
+        //        notice(method jcMethodDecl.name.toString() + "  jcVariableDecl.vartype + " : " + jcVariableDecl.name + " : " + jcVariableDecl.pos + ": "
+        //                + jcVariableDecl.type + " : " + jcVariableDecl.nameexpr);
         List<JCTree.JCStatement> stats = List.of(jcIf);
         stats = stats.appendList(jcMethodDecl.body.getStatements());
+        //        notice(jcMethodDecl.body.toString());
         jcMethodDecl.body.stats = List.from(stats);
+
         //        notice( " ********************** ");
         //        notice( " ############### ");
         //        notice( jcMethodDecl.body.toString());

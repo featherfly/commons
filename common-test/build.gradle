@@ -18,18 +18,23 @@ plugins {
 apply from: './gradle/java_base.gradle'  
 apply from: './gradle/maven_push.gradle'
 
-  
+ext {
+    commonValidation = 'cn.featherfly.common:common-validation:0.1.1'
+}
 
 sourceSets {
 }
 
 dependencies {
-    implementation 'cn.featherfly.common:common-validation:0.1.0'
-    annotationProcessor 'cn.featherfly.common:common-validation:0.1.0'
+
+    implementation commonValidation
+    annotationProcessor commonValidation
     
-    implementation 'cn.featherfly.common:common-model:0.1.0'
+    implementation commonValidation
         
     //implementation "net.ltgt.gradle:gradle-apt-plugin:0.21"
+    
+    testAnnotationProcessor commonValidation
     
     testImplementation (
     	'org.testng:testng:7.1.0',
@@ -37,7 +42,8 @@ dependencies {
     )
     testImplementation group: 'com.google.inject', name: 'guice', version: '4.2.3'
     
-    testImplementation 'cn.featherfly.common:common-core:1.8.31'
+    testImplementation 'cn.featherfly.common:common-core:1.8.32'
+    testImplementation 'cn.featherfly.common:common-db-mapping-model:0.1.0'
     testImplementation group: 'cn.featherfly.common', name: 'common-bean-javassist', version: '1.4.1'
     testImplementation 'commons-beanutils:commons-beanutils:latest.integration'
     testImplementation 'javassist:javassist:3.12.1.GA'
@@ -46,5 +52,9 @@ dependencies {
     testImplementation 'log4j:log4j:1.2.16'
     
 }
-compileJava.options.compilerArgs << "-processor" << "cn.featherfly.common.validation.apt.Jsr305Processor"
+compileJava.options.compilerArgs << "-processor" << "cn.featherfly.common.validation.apt.Jsr305Processor" << "-Alog=info"
 //compileJava.options.compilerArgs << "-processor" << "cn.featherfly.common.validation.apt.ValidationProcessor"
+
+test {
+    useTestNG()
+}

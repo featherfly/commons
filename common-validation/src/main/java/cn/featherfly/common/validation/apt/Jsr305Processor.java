@@ -76,8 +76,8 @@ public class Jsr305Processor extends JavacProcessor {
         //        notice( jcVariableDecl.name.toString());
         //        notice( jcMethodDecl.body.toString());
         int paramIndex = jcMethodDecl.params.indexOf(jcVariableDecl);
-        String message = String.format("class %s method %s args[%d] - %s  can not be null", jcClassDecl.name.toString(),
-                jcMethodDecl.name.toString(), paramIndex, jcVariableDecl.name.toString());
+        String message = String.format("class [%s] method [%s] args[%d](%s) can not be null",
+                jcClassDecl.name.toString(), jcMethodDecl.name.toString(), paramIndex, jcVariableDecl.name.toString());
         JCTree.JCExpression isEq = javac.eqNull(jcVariableDecl);
         JCStatement throwException = javac.throwException(IllegalArgumentException.class, message);
         JCIf jcIf = treeMaker.If(isEq, treeMaker.Block(0, List.of(throwException)), null);

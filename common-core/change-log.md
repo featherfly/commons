@@ -1,24 +1,24 @@
 # 1.8
     1.storage加入boolean exists(ID id)方法
 
-# 1.8.32 2011-12-05
+# 1.8.32 2021-12-05
     1. 加入BeanPropertyValue
-    
-# 1.8.31 2011-11-30
+
+# 1.8.31 2021-11-30
     1. 修复LocalizedException传入LocalizedMessage,Locale参数时，没有使用传入的Locale的问题
     2. 修复Lang.toEnum传入对象是一个枚举（Enum）时，转换出错的问题
     3. Lang.toEnum加入EnumConvertor的扩展实现逻辑
-    
+
 # 1.8.30  2021-11-19
     1. Lang.ifEmpty 中的泛型值与传入的判断对象关联    
     2. 加入Groupable和ChainMapImpl
-    
+
 # 1.8.29  2021-11-09
     1. 还原String.format(String,Object)方法的原来意义（之前改了实现导致兼容性问题）
-    
+
 # 1.8.28  2021-11-09
     1. 还原String.format(String,Object)方法的原来意义（之前改了实现导致兼容性问题）
-    
+
 # 1.8.27  2021-11-08
     1. 修复LambdaUtils获取Function || BiConsumer || BiFunction的methodInstanceClassName在特定情况出错的问题
     2. StringFormatter加入format(String, Object)方法，使用对象属性格式化字符串（类似Map)
@@ -46,7 +46,7 @@
 
 # 1.8.22 2021-03-03
     1. StringFormatter.format实现{index:{index}, mid:{mid}}嵌套时忽略外层标签的功能
-	
+
 # 1.8.21 2020-12-22
 	1. 加入TreeChianMap,LinkedHashChainMap,ConcurrentHashChainMap
 
@@ -154,17 +154,17 @@
 
 # 1.7.15 2019-12-03
     1.修复LambdaUtils的bug
-    
+
 # 1.7.14 2019-12-03
     1.修改group名称
-    
+
 # 1.7.13 2019-11-28
     1.加入SerializableSupplier
     2.ILocalizedAssert中的isNotNull,isNotEmpty,isNotBlank加入传入SerializableSupplier参数的重载方法
-    
+
 # 1.7.12 2019-9-22
     1.LambdaUtils加入getLambdaPropertyName,getLambdaMethodName重载方法
-    
+
 # 1.7.11 2019-9-20
     1.LambdaUtils加入getLambdaInfo,getLambdaMethod,getSerializedLambda
     2.ClassUtils加入两个重载的invokeMethod
@@ -195,7 +195,7 @@
 # 1.7.5 2019-8-16
     1.FileUtils，StringUtils继承自common的同名文件，把以前的包装方法去除了
     2,加入LocaleNumber，Childnes, StringUtils加入toChineseMoneyNumber toChineseNumber方法
-    
+
 
 # 1.7.4 2019-8-15
     1.BeanUtils加入toString方法
@@ -214,13 +214,14 @@
     2.NumberUtils 加入short与byte[]以及short与byte[]互相转换的方法
     3.FileUtils加入 getPathInJar isResourceInJar方法
     4.SimplePagination加入 SimplePagination(Limit limit),SimplePagination(int offset, int limit)构造函数
-    
-    
+
+
+​    
 # 1.7.1 2019-7-19
     1.加入limit
     2.LangUtils.toEnum(Class<T> toClass, Object object)加入byte支持
     3.SystemPropertyUtils加入isWindows, isLinux方法
-    
+
 # 1.7.0 2019-6-24
     1.加入LocalizedCodeException,LocalizedExceptionCode,SimpleExceptionCode,SimpleLocalizedExceptionCode
         ,LoadedMessageLocalizedExceptionCode,LocalizedExceptionUtils等一些列方法
@@ -232,10 +233,10 @@
 
 # 1.6.3 2018-01-11
     1.加入LimitQueue
-    
+
 # 1.6.2 2017-09-06
     1.LocalizedException获取ResourceBundle首先从异常同目录查找同名资源文件，找不到再从根目录超找同名文件
-    
+
 # 1.6.1 2017-4-26
     1.RandomUtils加入getRandomFromTotal(double total, int num)
 
@@ -265,7 +266,7 @@
 
 # 1.4.2 2015-07-12
 	1.修复mergeProperties(E target, E from, CopyRuleEnum copyRuleEnum)方法调用了copyProperties方法BUG
-	
+
 # 1.4.1 2015-07-08
 	1.NumberUtils加入fillingAtStart方法
 
@@ -273,28 +274,29 @@
 	1.加入日志接口
 	2.使用LocalizedException代替StandardResourceBundleException
 	3.加入AssertLocalized
-	
+
 # 1.3.1 2015-06-28
 	1.BeanDescriptor初始化方式变更，使用方法开始的扫描方式，这样可以支持动态属性，即只有set或get方法的属性
-	
+
 # 1.3.0 2015-06-24
 	1.BeanDescriptor加入泛型支持
 	2.ClassUtils加入返回父类泛型映射的方法getSuperClassGenricTypeMap(Class<?> clazz)
-	
+
 # 1.2.9 2015-06-19
 	1.修复ResourceBundleUtils获取KEY的BUG
-	
+
 # 1.2.8 2015-06-19
 	1.加入ResourceBundleUtils
-	
+
 # 1.2.7 2015-06-17
 	1.BeanDescriptor.addProperty修正自动创建集合的实现，可以实现更多类型
 	2.加入BeanUtils.mergeProperties方法，用于对象属性合并，不需要继承关系
-	
-	
+
+
+​	
 # 1.2.6 2015-05-13
 	1.加入DateUtils.getAge方法
-	
+
 # 1.2.6 2015-05-06
 	1.取消Assert中的泛型
 
@@ -302,27 +304,27 @@
 	1.加入NumberUtils，把StringUtils.parse方法移动到NumberUtils
 	2.加入GenricType接口，GenericClass实现类
 	3.BeanProperty实现GenricType接口，加入泛型声明
-	
+
 # 1.2.3 2015-04-20
 	1.LangUtils加入equals hashcode方法
 	2.Assert类和其余几个Assert工具类方法都把传入参数进行返回了
 	3.StringUtils加入parse方法，用于parse各种数字
-	
+
 # 1.2.2 2015-03-16
 	1.去除Pagination接口的泛型参数
-	
+
 # 1.2.1 2014-07-23
 	1.合并standard
 	2.加入gradle构建
 	3.部署到maven中心库
-	
+
 
 # 1.2.0 2014-06-16
 	1.移植到cn.featherfly
 	2.TreeNode.setParentNode加入从本来的父节点删除当前节点的功能
 	3.加入ServiceLoaderUtils类
 	4.使用Java SPI加载BeanProperty的字节码增强实现（基于javassist）
-	
+
 # 1.1.3 2013-07-11
 	1.BeanDescriptor.addProperty修正为空时空指针异常问题
 	2.加入Assert和AssertUtils
@@ -386,5 +388,4 @@
 	2 BeanProperty私有方法checkType的判断从完全类型匹配改为类型匹配及子类匹配
 
 # 1.0 2011-06-16
-
 

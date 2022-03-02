@@ -66,6 +66,16 @@ public class SqlExecutor {
      * @param sqlFile the sql file
      * @throws IOException Signals that an I/O exception has occurred.
      */
+    public void execute(SqlFile sqlFile) throws IOException {
+        execute(Lang.toArray(sqlFile.getSqlList(), String.class));
+    }
+
+    /**
+     * read sql from file with UTF-8 and execute.
+     *
+     * @param sqlFile the sql file
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void execute(File sqlFile) throws IOException {
         execute(sqlFile, StandardCharsets.UTF_8);
     }

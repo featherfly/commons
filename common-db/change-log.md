@@ -1,3 +1,16 @@
+# 0.4.1 2022-03-02
+1. 加入SqlFile支持从sql文件中引入外部文件（使用//include xxx.sql）进行引入
+
+    ```sql
+    SET FOREIGN_KEY_CHECKS=0;
+
+    //include executor1.sql;
+    //include executor2.sql;
+    
+    SET FOREIGN_KEY_CHECKS=1;
+    ```
+2. SqlExecutor加入execute(SqlFile)方法
+
 # 0.4.0 2021-12-29  
 1. MappingMode没去名称重构
 2. ObjectDbMixedMappingFactory实现统一使用数据库的列名进行映射，即jpa映射元数据的列名与数据库的列名大小写不一致（equals=false,equalsIgnoreCase=true）也会使用数据库的列名进行映射

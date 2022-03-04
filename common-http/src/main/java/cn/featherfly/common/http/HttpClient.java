@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -990,6 +991,112 @@ public class HttpClient extends AbstractHttpClient {
         }
     }
 
+    /**
+     * Stream.
+     *
+     * @param httpMethod the http method
+     * @param url        the url
+     * @return the input stream
+     */
+    public InputStream stream(HttpMethod httpMethod, String url) {
+        return stream(httpMethod, url, new HashMap<>());
+    }
+
+    /**
+     * Stream.
+     *
+     * @param httpMethod the http method
+     * @param url        the url
+     * @param params     the params
+     * @return the input stream
+     */
+    public InputStream stream(HttpMethod httpMethod, String url, Map<String, Serializable> params) {
+        return stream(httpMethod, url, params, new HashMap<>());
+    }
+
+    /**
+     * Stream.
+     *
+     * @param httpMethod the http method
+     * @param url        the url
+     * @param params     the params
+     * @param headers    the headers
+     * @return the input stream
+     */
+    public InputStream stream(HttpMethod httpMethod, String url, Map<String, Serializable> params,
+            Map<String, String> headers) {
+        switch (httpMethod) {
+            case GET:
+                return stream(new Request.Builder().url(HttpUtils.appendParams(url, params))
+                        .headers(createHeaders(headers)).get().build());
+            case POST:
+                return stream(new Request.Builder().url(url).headers(createHeaders(headers))
+                        .post(HttpUtils.createFormBody(params)).build());
+            case PUT:
+                return stream(new Request.Builder().url(url).headers(createHeaders(headers))
+                        .put(HttpUtils.createFormBody(params)).build());
+            case DELETE:
+                return stream(new Request.Builder().url(url).headers(createHeaders(headers)).delete().build());
+            case HEAD:
+                return stream(new Request.Builder().url(HttpUtils.appendParams(url, params))
+                        .headers(createHeaders(headers)).head().build());
+            case PATCH:
+                return stream(new Request.Builder().url(url).headers(createHeaders(headers))
+                        .patch(HttpUtils.createFormBody(params)).build());
+            default:
+                throw new HttpException("unsupport http method " + httpMethod.toString());
+        }
+    }
+
+    /**
+     * Stream.
+     *
+     * @param httpMethod  the http method
+     * @param url         the url
+     * @param requestBody the request body
+     * @return the input stream
+     */
+    public InputStream stream(HttpMethod httpMethod, String url, Object requestBody) {
+        return stream(httpMethod, url, requestBody, new HashMap<>());
+    }
+
+    /**
+     * Stream.
+     *
+     * @param httpMethod  the http method
+     * @param url         the url
+     * @param requestBody the request body
+     * @param headers     the headers
+     * @return the input stream
+     */
+    public InputStream stream(HttpMethod httpMethod, String url, Object requestBody, Map<String, String> headers) {
+        switch (httpMethod) {
+            case GET:
+                throw new HttpException("http get method can not send request body");
+            //                return get(url, new HashMap<>(), headers);
+            case POST:
+                return stream(new Request.Builder().url(url).headers(createHeaders(headers))
+                        .post(RequestBody.create(mediaType, serializer.serialize(requestBody))).build());
+            case PUT:
+                return stream(new Request.Builder().url(url).headers(createHeaders(headers))
+                        .put(RequestBody.create(mediaType, serializer.serialize(requestBody))).build());
+            case DELETE:
+                return stream(new Request.Builder().url(url).headers(createHeaders(headers))
+                        .delete(RequestBody.create(mediaType, serializer.serialize(requestBody))).build());
+            case HEAD:
+                throw new HttpException("http head method can not send request body");
+            case PATCH:
+                return stream(new Request.Builder().url(url).headers(createHeaders(headers))
+                        .patch(RequestBody.create(mediaType, serializer.serialize(requestBody))).build());
+            default:
+                throw new HttpException("unsupport http method " + httpMethod.toString());
+        }
+    }
+
+    // ********************************************************************
+    //
+    // ********************************************************************
+
     private String request(final Request request) {
         try {
             return client.newCall(request).execute().body().string();
@@ -1001,6 +1108,14 @@ public class HttpClient extends AbstractHttpClient {
     private <R> R request(final Request request, Class<R> responseType) {
         try {
             return deserialize(client.newCall(request).execute(), responseType);
+        } catch (IOException e) {
+            throw new HttpException(e);
+        }
+    }
+
+    private InputStream stream(final Request request) {
+        try {
+            return client.newCall(request).execute().body().byteStream();
         } catch (IOException e) {
             throw new HttpException(e);
         }

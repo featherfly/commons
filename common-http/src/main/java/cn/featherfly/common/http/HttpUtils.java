@@ -71,7 +71,7 @@ public class HttpUtils {
         if (Lang.isNotEmpty(params)) {
             for (Map.Entry<String, Serializable> entry : params.entrySet()) {
                 if (entry.getValue() != null) {
-                    formBodyBuilder.add(entry.getKey(), entry.getValue().toString());
+                    formBodyBuilder.addEncoded(entry.getKey(), entry.getValue().toString());
                 }
             }
         }

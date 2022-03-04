@@ -1,5 +1,7 @@
-# 0.5.3
+# 0.5.3 2022-03-04
 1. 修复getSerializer日志没有在正确的逻辑条件内输出的问题
+2. HttpClient加入一些列返回InputStream的stream方法
+3. HttpUtils.createFormBody使用addEncoded方法编码参数
 
 # 0.5.2 2021-03-09
 1. HttpClients的autoSubscribeOnIo属性读写从HttpRxjavaClient读写

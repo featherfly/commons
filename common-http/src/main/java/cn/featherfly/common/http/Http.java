@@ -2,6 +2,7 @@
 package cn.featherfly.common.http;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Map;
@@ -948,4 +949,66 @@ public final class Http {
         return CLIENT.request(httpMethod, url, requestBody, headers, responseType);
     }
 
+    /**
+     * @param httpMethod
+     * @param url
+     * @return
+     * @see cn.featherfly.common.http.HttpClient#stream(cn.featherfly.common.http.HttpMethod,
+     *      java.lang.String)
+     */
+    public static InputStream stream(HttpMethod httpMethod, String url) {
+        return CLIENT.stream(httpMethod, url);
+    }
+
+    /**
+     * @param httpMethod
+     * @param url
+     * @param params
+     * @return
+     * @see cn.featherfly.common.http.HttpClient#stream(cn.featherfly.common.http.HttpMethod,
+     *      java.lang.String, java.util.Map)
+     */
+    public static InputStream stream(HttpMethod httpMethod, String url, Map<String, Serializable> params) {
+        return CLIENT.stream(httpMethod, url, params);
+    }
+
+    /**
+     * @param httpMethod
+     * @param url
+     * @param params
+     * @param headers
+     * @return
+     * @see cn.featherfly.common.http.HttpClient#stream(cn.featherfly.common.http.HttpMethod,
+     *      java.lang.String, java.util.Map, java.util.Map)
+     */
+    public static InputStream stream(HttpMethod httpMethod, String url, Map<String, Serializable> params,
+            Map<String, String> headers) {
+        return CLIENT.stream(httpMethod, url, params, headers);
+    }
+
+    /**
+     * @param httpMethod
+     * @param url
+     * @param requestBody
+     * @return
+     * @see cn.featherfly.common.http.HttpClient#stream(cn.featherfly.common.http.HttpMethod,
+     *      java.lang.String, java.lang.Object)
+     */
+    public static InputStream stream(HttpMethod httpMethod, String url, Object requestBody) {
+        return CLIENT.stream(httpMethod, url, requestBody);
+    }
+
+    /**
+     * @param httpMethod
+     * @param url
+     * @param requestBody
+     * @param headers
+     * @return
+     * @see cn.featherfly.common.http.HttpClient#stream(cn.featherfly.common.http.HttpMethod,
+     *      java.lang.String, java.lang.Object, java.util.Map)
+     */
+    public static InputStream stream(HttpMethod httpMethod, String url, Object requestBody,
+            Map<String, String> headers) {
+        return CLIENT.stream(httpMethod, url, requestBody, headers);
+    }
 }

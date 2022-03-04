@@ -1,9 +1,14 @@
 
 package cn.featherfly.common.http;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.commons.io.IOUtils;
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.http.po.ReverseGeocoding;
@@ -153,8 +158,16 @@ public class BaiduMapTest {
     }
 
     @Test
-    public void testServerWithHttp() {
+    public void testServerWithHttp() throws IOException {
         String url = "http://api.map.baidu.com/reverse_geocoding/v3/?ak=0Zj0WEeN8dTr8XMMAFal5LPE8k5D53tR&output=json&coordtype=wgs84ll&location=31.225696563611,121.49884033194";
+
+        InputStream is = Http.stream(HttpMethod.GET, url);
+
+        StringWriter sw = new StringWriter();
+
+        IOUtils.copy(is, sw, StandardCharsets.UTF_8);
+
+        System.out.println(sw.toString());
 
         ReverseGeocoding reverseGeocoding = Http.get(url, ReverseGeocoding.class);
 

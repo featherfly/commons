@@ -950,9 +950,11 @@ public final class Http {
     }
 
     /**
-     * @param httpMethod
-     * @param url
-     * @return
+     * Stream.
+     *
+     * @param httpMethod the http method
+     * @param url        the url
+     * @return the input stream
      * @see cn.featherfly.common.http.HttpClient#stream(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String)
      */
@@ -961,10 +963,12 @@ public final class Http {
     }
 
     /**
-     * @param httpMethod
-     * @param url
-     * @param params
-     * @return
+     * Stream.
+     *
+     * @param httpMethod the http method
+     * @param url        the url
+     * @param params     the params
+     * @return the input stream
      * @see cn.featherfly.common.http.HttpClient#stream(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.util.Map)
      */
@@ -973,11 +977,13 @@ public final class Http {
     }
 
     /**
-     * @param httpMethod
-     * @param url
-     * @param params
-     * @param headers
-     * @return
+     * Stream.
+     *
+     * @param httpMethod the http method
+     * @param url        the url
+     * @param params     the params
+     * @param headers    the headers
+     * @return the input stream
      * @see cn.featherfly.common.http.HttpClient#stream(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.util.Map, java.util.Map)
      */
@@ -987,10 +993,12 @@ public final class Http {
     }
 
     /**
-     * @param httpMethod
-     * @param url
-     * @param requestBody
-     * @return
+     * Stream.
+     *
+     * @param httpMethod  the http method
+     * @param url         the url
+     * @param requestBody the request body
+     * @return the input stream
      * @see cn.featherfly.common.http.HttpClient#stream(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.lang.Object)
      */
@@ -999,11 +1007,13 @@ public final class Http {
     }
 
     /**
-     * @param httpMethod
-     * @param url
-     * @param requestBody
-     * @param headers
-     * @return
+     * Stream.
+     *
+     * @param httpMethod  the http method
+     * @param url         the url
+     * @param requestBody the request body
+     * @param headers     the headers
+     * @return the input stream
      * @see cn.featherfly.common.http.HttpClient#stream(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.lang.Object, java.util.Map)
      */

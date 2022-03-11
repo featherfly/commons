@@ -1,5 +1,6 @@
 # 1.8
     1.storage加入boolean exists(ID id)方法
+    2.BeanPropertyValue实现自定义toString()方法
 
 # 1.8.32 2021-12-05
     1. 加入BeanPropertyValue

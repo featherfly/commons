@@ -52,4 +52,12 @@ public class BeanPropertyValue<T> {
         return value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "[beanProperty=" + beanProperty + ", value=" + value + "]";
+    }
+
 }

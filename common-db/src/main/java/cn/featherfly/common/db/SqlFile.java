@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import cn.featherfly.common.constant.Chars;
@@ -259,7 +261,11 @@ public class SqlFile {
     }
 
     private static void read(File file, Charset charset, final SqlFile sqlFile) throws IOException {
-        String content = org.apache.commons.io.FileUtils.readFileToString(file, charset);
+        read(file.toURI().toURL(), charset, sqlFile);
+    }
+
+    private static void read(URL resource, Charset charset, final SqlFile sqlFile) throws IOException {
+        String content = IOUtils.toString(resource, charset);
         String[] sqls = content.split(";");
         for (String sql : sqls) {
             sql = sql.trim();
@@ -267,19 +273,20 @@ public class SqlFile {
                 //                System.out.println(sql);
                 String includePath = StringUtils.substringAfter(sql, INCLUDE_SYMBOL).trim();
                 //                System.out.println(includeFile);
-                File includeFile = null;
+                URL includeResource = null;
                 if (!includePath.startsWith("/")) {
+                    File file = new File(resource.getPath());
                     String path = file.getParent() + "/" + includePath;
-                    includeFile = new File(path);
-                    if (!includeFile.exists()) {
-                        includeFile = null;
+                    File includeFile = new File(path);
+                    if (includeFile.exists()) {
+                        includeResource = includeFile.toURI().toURL();
                     }
                 }
-                if (includeFile == null) {
-                    includeFile = new File(ClassLoaderUtils.getResource(includePath).getFile());
+                if (includeResource == null) {
+                    includeResource = ClassLoaderUtils.getResource(includePath);
                 }
-                if (sqlFile.addInclude(file.getAbsolutePath(), includeFile.getAbsolutePath())) {
-                    read(includeFile, charset, sqlFile);
+                if (sqlFile.addInclude(resource.getFile(), includeResource.getFile())) {
+                    read(includeResource, charset, sqlFile);
                 }
             } else {
                 sqlFile.getSqlList().add(sql);

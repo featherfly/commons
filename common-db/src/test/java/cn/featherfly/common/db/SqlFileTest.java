@@ -77,4 +77,32 @@ public class SqlFileTest {
             System.out.println(sql);
         }
     }
+
+    @Test
+    public void testIncludeWithJar() throws IOException {
+        SqlFile sqlFile = SqlFile.read(
+                new File(ClassLoaderUtils.getResource("executor_sql/executor_include_with_jar.sql").getFile()),
+                StandardCharsets.UTF_8);
+        System.out.println("\nsqlList:\n");
+        for (String sql : sqlFile.getSqlList()) {
+            System.out.println(sql);
+        }
+
+        sqlFile.write(new File("executor_include_with_jar_merged.sql"));
+    }
+
+    public static void main(String[] args) throws IOException {
+        //        Iterator<URL> iter = ClassLoaderUtils.getResources("META-INF/MANIFEST.MF", false);
+        //        while (iter.hasNext()) {
+        //            URL url = iter.next();
+        //            Manifest manifest = new Manifest();
+        //            manifest.read(url.openStream());
+        //            if (url.getFile().contains("attoparser-2")) {
+        //                System.out.println(url.getFile());
+        //                System.out.println(manifest.getMainAttributes().entrySet());
+        //            }
+        //        }
+
+        System.out.println(ClassLoaderUtils.getResource("META-INF/test/user.sql"));
+    }
 }

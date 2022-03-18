@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -247,7 +248,7 @@ public class BeanProperty<T> implements GenericType<T> {
 
     /**
      * <pre>
-     * 如果属性是一个支持的对象，返回其泛型，如属性为类型java.util.Optional&lt;java.lang.String&gt;，则返回java.lang.String.
+     * 如果属性是一个支持泛型的对象，返回其泛型，如属性为类型java.util.Optional&lt;java.lang.String&gt;，则返回java.lang.String.
      * </pre>
      *
      * @return 泛型的定义类型
@@ -259,6 +260,24 @@ public class BeanProperty<T> implements GenericType<T> {
             return ClassUtils.getMethodReturnTypeGenericParameterType(ownerType, getter);
         } else {
             return ClassUtils.getMethodGenericParameterType(ownerType, setter);
+        }
+    }
+
+    /**
+     * <pre>
+     * 如果属性是一个支持泛型的对象，返回其所有泛型列表.
+     * 如属性为类型java.util.Map&lt;java.lang.String, java.lang.Integer&gt;，则返回[java.lang.String,java.lang.Integer].
+     * </pre>
+     *
+     * @return 泛型的定义类型
+     */
+    public List<Class<?>> getGenericTypes() {
+        if (field != null) {
+            return ClassUtils.getFieldGenericParameterTypes(ownerType, field);
+        } else if (getter != null) {
+            return ClassUtils.getMethodReturnTypeGenericParameterTypes(ownerType, getter);
+        } else {
+            return ClassUtils.getMethodGenericParameterTypes(ownerType, setter);
         }
     }
 

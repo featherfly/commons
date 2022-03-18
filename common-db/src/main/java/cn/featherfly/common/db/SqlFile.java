@@ -55,7 +55,7 @@ public class SqlFile {
     }
 
     /** The Constant INCLUDE_SYMBOL. */
-    public static final String INCLUDE_SYMBOL = "//include";
+    public static final String INCLUDE_SYMBOL = "--@include";
 
     /** The Constant END_SQL_SIGN. */
     public static final String END_SQL_SIGN = ";";
@@ -285,9 +285,12 @@ public class SqlFile {
                 if (includeResource == null) {
                     includeResource = ClassLoaderUtils.getResource(includePath);
                 }
+
+                sqlFile.getSqlList().add("\n-- include  " + includePath + " start");
                 if (sqlFile.addInclude(resource.getFile(), includeResource.getFile())) {
                     read(includeResource, charset, sqlFile);
                 }
+                sqlFile.getSqlList().add("\n-- include  " + includePath + " end");
             } else {
                 sqlFile.getSqlList().add(sql);
             }

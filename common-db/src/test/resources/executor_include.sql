@@ -15,6 +15,6 @@ CREATE TABLE `role` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COMMENT='系统用户';
 
-//include executor.sql;
+--@include executor.sql;
 
 SET FOREIGN_KEY_CHECKS=1

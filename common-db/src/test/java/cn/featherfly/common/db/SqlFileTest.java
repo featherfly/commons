@@ -24,6 +24,8 @@ public class SqlFileTest {
         for (String sql : sqlFile.getSqlList()) {
             System.out.println(sql);
         }
+
+        sqlFile.write(new File("executor_include_merged.sql"));
     }
 
     @Test

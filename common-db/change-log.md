@@ -1,3 +1,6 @@
+# 0.4.4 2022-03-18
+1. SqlFile从sql文件中引入外部文件的标志符变更为（--@include executor1.sql;）
+
 # 0.4.3 2022-03-18
 1. ObjectToJsonMapper实现对象属性为Array List Map时的Json转换
 

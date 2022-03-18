@@ -1,3 +1,6 @@
+# 1.8.34 
+    1.ChainMapImpl实现自定义toString()
+    
 # 1.8.33 2022-03-17
     1.storage加入boolean exists(ID id)方法
     2.BeanPropertyValue实现自定义toString()方法

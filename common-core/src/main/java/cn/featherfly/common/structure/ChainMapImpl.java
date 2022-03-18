@@ -369,4 +369,12 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     public V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
         return map.merge(key, value, remappingFunction);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return map.toString();
+    }
 }

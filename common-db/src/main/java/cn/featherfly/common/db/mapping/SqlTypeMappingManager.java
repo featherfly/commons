@@ -540,7 +540,7 @@ public class SqlTypeMappingManager {
             }
             for (JavaSqlTypeMapper<? extends Object> javaSqlTypeMapper : javaSqlTypeMappers) {
                 if (javaSqlTypeMapper.support((GenericType) javaType)) {
-                    logger.debug("set value javatype {}[{}]  with mapper {}", javaType.getClass().getSimpleName(),
+                    logger.debug("set value javatype {}[{}] with mapper {}", javaType.getClass().getSimpleName(),
                             javaType.getType().getName(), javaSqlTypeMapper.getClass().getName());
                     ((JavaSqlTypeMapper<Object>) javaSqlTypeMapper).set(prep, columnIndex, columnValue);
                     return true;

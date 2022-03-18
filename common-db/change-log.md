@@ -1,3 +1,6 @@
+# 0.4.3 2022-03-18
+1. ObjectToJsonMapper实现对象属性为Array List Map时的Json转换
+
 # 0.4.2 2022-03-15
 1. SqlFile支持从sql文件中引入外部文件，修复include读取jar包文件出错的问题
 

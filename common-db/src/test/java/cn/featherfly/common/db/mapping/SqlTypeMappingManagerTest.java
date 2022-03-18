@@ -16,6 +16,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.testng.annotations.Test;
 
@@ -26,6 +29,7 @@ import cn.featherfly.common.db.JdbcTestBase;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.mappers.ObjectToJsonMapper;
 import cn.featherfly.common.db.mapping.pojo.Article;
+import cn.featherfly.common.db.mapping.pojo.Article2;
 import cn.featherfly.common.db.mapping.pojo.Content;
 import cn.featherfly.common.db.wrapper.ConnectionWrapper;
 import cn.featherfly.common.db.wrapper.PreparedStatementWrapper;
@@ -34,6 +38,7 @@ import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.GenericType;
 import cn.featherfly.common.lang.Randoms;
 import cn.featherfly.common.lang.reflect.GenericClass;
+import cn.featherfly.common.structure.ChainMapImpl;
 
 /**
  * <p>
@@ -469,6 +474,81 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
                 Content content2Result = manager.get(rs.getResultSet(), 4, bd.getBeanProperty(Article::getContent2));
                 System.out.println(title + " -> " + content2Result);
                 assertEquals(content2, content2Result);
+            }
+        }
+    }
+
+    @Test
+    public void testObjectToJsonMapperBeanPropertyType() {
+        // 测试对象属性为 Array List Map的时的Json转换
+        // database json type
+        SqlTypeMappingManager manager = new SqlTypeMappingManager();
+        assertNull(manager.getSqlType(Content.class));
+
+        sqlExecutor.execute("delete from cms_article");
+
+        BeanDescriptor<Article2> bd = BeanDescriptor.getBeanDescriptor(Article2.class);
+
+        BeanProperty<?> bpContent = bd.getBeanProperty(Article2::getContent);
+        manager.regist(bpContent, new ObjectToJsonMapper<>(bpContent));
+
+        BeanProperty<?> bpContent2 = bd.getBeanProperty(Article2::getContent2);
+        manager.regist(bpContent2, new ObjectToJsonMapper<>(bpContent2));
+
+        BeanProperty<?> bpContent3 = bd.getBeanProperty(Article2::getContent3);
+        manager.regist(bpContent3, new ObjectToJsonMapper<>(bpContent3));
+
+        String insert = "INSERT INTO `db_test`.`cms_article` (`ID`, `title`, `content`, `content2`, `content3`) VALUES (null, ?, ?, ?, ?)";
+        Content content3 = new Content();
+        content3.setDescp("c3_descp");
+        content3.setImg("c3_img");
+        Content content2 = new Content();
+        content2.setDescp("c2_descp");
+        content2.setImg("c2_img");
+        Content content1 = new Content();
+        content1.setDescp("c1_descp");
+        content1.setImg("c1_img");
+
+        Content[] contentArray = new Content[] { content1, content2, content3 };
+        List<Content> content2List = ArrayUtils.toList(content3, content2, content1);
+        Map<String, Content> content3Map = new ChainMapImpl<>(new LinkedHashMap<String, Content>())
+                .putChain("content2", content2).putChain("content1", content1).putChain("content3", content3);
+
+        System.out.println("content3Map -> " + content3Map.toString());
+
+        try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
+                PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
+            manager.set(prep.getPreparedStatement(), 1, Randoms.getString(6));
+            manager.set(prep.getPreparedStatement(), 2, contentArray, bd.getBeanProperty(Article2::getContent));
+            manager.set(prep.getPreparedStatement(), 3, content2List, bd.getBeanProperty(Article2::getContent2));
+            manager.set(prep.getPreparedStatement(), 4, content3Map, bd.getBeanProperty(Article2::getContent3));
+
+            boolean res = prep.execute();
+            System.out.println(res);
+        }
+
+        String select = "select * from cms_article";
+        try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
+                PreparedStatementWrapper prep = connection.prepareStatement(select)) {
+            ResultSetWrapper rs = prep.executeQuery();
+            GenericType<String> gts = new GenericClass<>(String.class);
+            while (rs.next()) {
+                String title = manager.get(rs.getResultSet(), 2, gts);
+                System.out.println("title -> " + title);
+
+                Content[] contentResult = manager.get(rs.getResultSet(), 3, bd.getBeanProperty(Article2::getContent));
+                System.out.println("content -> " + ArrayUtils.toString(contentResult));
+                assertEquals(contentArray, contentResult);
+
+                List<Content> content2Result = manager.get(rs.getResultSet(), 4,
+                        bd.getBeanProperty(Article2::getContent2));
+                System.out.println("content2 -> " + content2Result);
+                assertEquals(content2List, content2Result);
+
+                Map<String, Content> content3Result = manager.get(rs.getResultSet(), 5,
+                        bd.getBeanProperty(Article2::getContent3));
+                System.out.println("content3 -> " + content3Result);
+                assertEquals(content3Map, content3Result);
             }
         }
     }

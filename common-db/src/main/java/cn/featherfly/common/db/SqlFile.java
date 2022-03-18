@@ -28,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.lang.ClassLoaderUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
 
 /**
@@ -260,12 +261,70 @@ public class SqlFile {
         return sqlFile;
     }
 
+    /**
+     * Read.
+     *
+     * @param file   the file
+     * @param params the params
+     * @return the sql file
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public static SqlFile read(File file, Map<String, Object> params) throws IOException {
+        return read(file, StandardCharsets.UTF_8, params);
+    }
+
+    /**
+     * Read.
+     *
+     * @param file    the file
+     * @param charset the charset
+     * @param params  the params
+     * @return the sql file
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public static SqlFile read(File file, Charset charset, Map<String, Object> params) throws IOException {
+        return read(file, charset, IncludeExistPolicy.IGNORE, params);
+    }
+
+    /**
+     * Read.
+     *
+     * @param file               the file
+     * @param charset            the charset
+     * @param includeExistPolicy the include exist policy
+     * @param params             the params
+     * @return the sql file
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public static SqlFile read(File file, Charset charset, IncludeExistPolicy includeExistPolicy,
+            Map<String, Object> params) throws IOException {
+        SqlFile sqlFile = new SqlFile(file.getAbsolutePath(), charset);
+        if (includeExistPolicy != null) {
+            sqlFile.includeExistPolicy = includeExistPolicy;
+        }
+        read(file, charset, sqlFile, params);
+        return sqlFile;
+    }
+
     private static void read(File file, Charset charset, final SqlFile sqlFile) throws IOException {
         read(file.toURI().toURL(), charset, sqlFile);
     }
 
+    private static void read(File file, Charset charset, final SqlFile sqlFile, Map<String, Object> params)
+            throws IOException {
+        read(file.toURI().toURL(), charset, sqlFile, params);
+    }
+
     private static void read(URL resource, Charset charset, final SqlFile sqlFile) throws IOException {
+        read(resource, charset, sqlFile, null);
+    }
+
+    private static void read(URL resource, Charset charset, final SqlFile sqlFile, Map<String, Object> params)
+            throws IOException {
         String content = IOUtils.toString(resource, charset);
+        if (Lang.isNotEmpty(params)) {
+            content = Strings.format(content, params);
+        }
         String[] sqls = content.split(";");
         for (String sql : sqls) {
             sql = sql.trim();
@@ -288,7 +347,7 @@ public class SqlFile {
 
                 sqlFile.getSqlList().add("\n-- include  " + includePath + " start");
                 if (sqlFile.addInclude(resource.getFile(), includeResource.getFile())) {
-                    read(includeResource, charset, sqlFile);
+                    read(includeResource, charset, sqlFile, params);
                 }
                 sqlFile.getSqlList().add("\n-- include  " + includePath + " end");
             } else {

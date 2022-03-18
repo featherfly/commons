@@ -4,11 +4,14 @@ package cn.featherfly.common.db;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.db.SqlFile.IncludeExistPolicy;
 import cn.featherfly.common.lang.ClassLoaderUtils;
+import cn.featherfly.common.lang.Dates;
+import cn.featherfly.common.structure.HashChainMap;
 
 /**
  * SqlFileTest.
@@ -91,6 +94,19 @@ public class SqlFileTest {
         }
 
         sqlFile.write(new File("executor_include_with_jar_merged.sql"));
+    }
+
+    @Test
+    public void testIncludeParams() throws IOException {
+        SqlFile sqlFile = SqlFile.read(new File(ClassLoaderUtils.getResource("executor_include_params.sql").getFile()),
+                StandardCharsets.UTF_8, new HashChainMap<String, Object>().putChain("name", "yufei").putChain("time",
+                        Dates.formatTime(new Date())));
+        System.out.println("\nsqlList:\n");
+        for (String sql : sqlFile.getSqlList()) {
+            System.out.println(sql);
+        }
+
+        sqlFile.write(new File("executor_include_params_merged.sql"));
     }
 
     public static void main(String[] args) throws IOException {

@@ -73,19 +73,10 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
                         c.accept(message);
                     }
                 }
-                //                consumer.accept(topic, message);
             });
         }
 
         consumers.consumers.add(consumer);
-
-        //        client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
-        //            if (logger.isDebugEnabled()) {
-        //                logger.debug("receive topic -> {}, msgId -> {}, qos -> {}, payload -> {}", topic, message.getId(),
-        //                        message.getQos(), new String(message.getPayload(), charset));
-        //            }
-        //            consumer.accept(message);
-        //        });
         return this;
     }
 
@@ -110,22 +101,12 @@ public class EasyMqttClientImpl extends ReconnectableClient<EasyMqttClientImpl> 
                 Consumers cs = getConsumers(topicFilter);
                 if (cs != null) {
                     for (BiConsumer<String, MqttMessage> bi : cs.biConsumers) {
-                        bi.accept(topicFilter, message);
+                        bi.accept(topic, message);
                     }
                 }
-                //                consumer.accept(topic, message);
             });
         }
-
         consumers.biConsumers.add(consumer);
-
-        //        client.subscribe(topicFilter, qos.ordinal(), (topic, message) -> {
-        //            if (logger.isDebugEnabled()) {
-        //                logger.debug("receive topic -> {}, msgId -> {}, qos -> {}, payload -> {}", topic, message.getId(),
-        //                        message.getQos(), new String(message.getPayload(), charset));
-        //            }
-        //            consumer.accept(topic, message);
-        //        });
         return this;
     }
 

@@ -1,3 +1,6 @@
+# 0.2.2 2022-03-19
+1. 修复subscribe(String topicFilter, Qos qos, BiConsumer<String, MqttMessage> consumer)中consumer第一个参数不是消息真实topic的问题
+
 # 0.2.1 2021-12-07
 1. 修复断线重连后订阅失效的问题
 

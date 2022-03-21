@@ -31,6 +31,19 @@ public class SqlFileTest {
         sqlFile.write(new File("executor_include_merged.sql"));
     }
 
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testIncludeNotFound() throws IOException {
+        SqlFile sqlFile = SqlFile.read(
+                new File(ClassLoaderUtils.getResource("executor_include_not_found.sql").getFile()),
+                StandardCharsets.UTF_8);
+        System.out.println("\nsqlList:\n");
+        for (String sql : sqlFile.getSqlList()) {
+            System.out.println(sql);
+        }
+
+        sqlFile.write(new File("executor_include_merged.sql"));
+    }
+
     @Test
     public void testInclude2() throws IOException {
         SqlFile sqlFile = SqlFile.read(

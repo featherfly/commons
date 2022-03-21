@@ -345,6 +345,11 @@ public class SqlFile {
                     includeResource = ClassLoaderUtils.getResource(includePath);
                 }
 
+                if (includeResource == null) {
+                    throw new IllegalArgumentException(
+                            Strings.format("can not found {0} in filepath and classpath ", includePath));
+                }
+
                 sqlFile.getSqlList().add("\n-- include  " + includePath + " start");
                 if (sqlFile.addInclude(resource.getFile(), includeResource.getFile())) {
                     read(includeResource, charset, sqlFile, params);

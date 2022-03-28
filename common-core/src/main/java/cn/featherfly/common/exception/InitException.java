@@ -20,13 +20,6 @@ public class InitException extends LocalizedException {
 
     /**
      * Instantiates a new inits the exception.
-     */
-    public InitException() {
-        super();
-    }
-
-    /**
-     * Instantiates a new inits the exception.
      *
      * @param message the message
      * @param locale  the locale

@@ -1,10 +1,12 @@
-# 1.8.34 
-    1.ChainMapImpl实现自定义toString()
+# 1.9.0 2022-03-28
+    1. ChainMapImpl实现自定义toString()
+    2. ExceptionCode、LocalizedExceptionCode迁移到common-api包
+    3. ExceptionCodeException、LocalizedCodeException实现ExceptionCodeSupport接口
     
 # 1.8.33 2022-03-17
-    1.storage加入boolean exists(ID id)方法
-    2.BeanPropertyValue实现自定义toString()方法
-    3.BeanProperty加入List<Class<?>> getGenericTypes()方法
+    1. storage加入boolean exists(ID id)方法
+    2. BeanPropertyValue实现自定义toString()方法
+    3. BeanProperty加入List<Class<?>> getGenericTypes()方法
 
 # 1.8.32 2021-12-05
     1. 加入BeanPropertyValue

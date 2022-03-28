@@ -32,12 +32,6 @@ public abstract class LocalizedException extends BaseException {
 
     /**
      * 构造方法.
-     */
-    protected LocalizedException() {
-    }
-
-    /**
-     * 构造方法.
      *
      * @param ex 异常
      */

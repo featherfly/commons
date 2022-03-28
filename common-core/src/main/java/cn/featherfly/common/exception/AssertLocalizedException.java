@@ -10,9 +10,7 @@ import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.lang.asserts.LocalizedAssert;
 
 /**
- * <p>
- * 断言工具类，对于满足断言的情况，抛出支持国际化消息输出的异常 一般用于检查传入参数是否合法
- * </p>
+ * 断言工具类，对于满足断言的情况，抛出支持国际化消息输出的异常 一般用于检查传入参数是否合法.
  *
  * @author zhongj
  * @since 1.3

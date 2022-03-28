@@ -2,29 +2,23 @@ package cn.featherfly.common.exception;
 
 import java.util.Locale;
 
+import cn.featherfly.common.locale.LocalizedMessage;
+
 /**
- * <p>
- * ExceptionCodeException
- * </p>
+ * ExceptionCodeException.
  *
  * @author zhongj
- * @since 1.7
  * @version 1.7
+ * @since 1.7
  */
-public abstract class ExceptionCodeException extends LocalizedException {
+public abstract class ExceptionCodeException extends LocalizedException implements ExceptionCodeSupport<ExceptionCode> {
 
     private static final long serialVersionUID = 5710245517160140690L;
 
     private ExceptionCode exceptionCode;
 
     /**
-     * 构造方法
-     */
-    protected ExceptionCodeException() {
-    }
-
-    /**
-     * 构造方法
+     * 构造方法.
      *
      * @param exceptionCode 错误码
      */
@@ -34,7 +28,7 @@ public abstract class ExceptionCodeException extends LocalizedException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param exceptionCode 错误码
      * @param ex            异常
@@ -45,7 +39,7 @@ public abstract class ExceptionCodeException extends LocalizedException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param exceptionCode 错误码
      * @param args          消息文本绑定参数
@@ -56,7 +50,7 @@ public abstract class ExceptionCodeException extends LocalizedException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param exceptionCode 错误码
      * @param args          消息文本绑定参数
@@ -68,7 +62,7 @@ public abstract class ExceptionCodeException extends LocalizedException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param exceptionCode 错误码
      * @param locale        locale
@@ -79,7 +73,7 @@ public abstract class ExceptionCodeException extends LocalizedException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param exceptionCode 错误码
      * @param locale        locale
@@ -91,7 +85,7 @@ public abstract class ExceptionCodeException extends LocalizedException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param exceptionCode 错误码
      * @param args          消息文本绑定参数
@@ -103,7 +97,7 @@ public abstract class ExceptionCodeException extends LocalizedException {
     }
 
     /**
-     * 构造方法
+     * 构造方法.
      *
      * @param exceptionCode 错误码
      * @param args          消息文本绑定参数
@@ -116,10 +110,188 @@ public abstract class ExceptionCodeException extends LocalizedException {
     }
 
     /**
-     * 返回exceptionCode
+     * Instantiates a new exception code exception.
+     *
+     * @param message the message
+     * @param locale  the locale
+     * @param ex      the ex
+     */
+    protected ExceptionCodeException(LocalizedMessage message, Locale locale, Throwable ex) {
+        super(message, locale, ex);
+    }
+
+    /**
+     * Instantiates a new exception code exception.
+     *
+     * @param message the message
+     * @param locale  the locale
+     */
+    protected ExceptionCodeException(LocalizedMessage message, Locale locale) {
+        super(message, locale);
+    }
+
+    /**
+     * Instantiates a new exception code exception.
+     *
+     * @param message the message
+     * @param args    the args
+     * @param locale  the locale
+     * @param ex      the ex
+     */
+    protected ExceptionCodeException(LocalizedMessage message, Object[] args, Locale locale, Throwable ex) {
+        super(message, args, locale, ex);
+    }
+
+    /**
+     * Instantiates a new exception code exception.
+     *
+     * @param message the message
+     * @param args    the args
+     * @param locale  the locale
+     */
+    protected ExceptionCodeException(LocalizedMessage message, Object[] args, Locale locale) {
+        super(message, args, locale);
+    }
+
+    /**
+     * Instantiates a new exception code exception.
+     *
+     * @param message the message
+     * @param args    the args
+     * @param ex      the ex
+     */
+    protected ExceptionCodeException(LocalizedMessage message, Object[] args, Throwable ex) {
+        super(message, args, ex);
+    }
+
+    /**
+     * Instantiates a new exception code exception.
+     *
+     * @param message the message
+     * @param args    the args
+     */
+    protected ExceptionCodeException(LocalizedMessage message, Object[] args) {
+        super(message, args);
+    }
+
+    /**
+     * Instantiates a new exception code exception.
+     *
+     * @param message the message
+     * @param ex      the ex
+     */
+    protected ExceptionCodeException(LocalizedMessage message, Throwable ex) {
+        super(message, ex);
+    }
+
+    /**
+     * Instantiates a new exception code exception.
+     *
+     * @param message the message
+     */
+    protected ExceptionCodeException(LocalizedMessage message) {
+        super(message);
+    }
+
+    /**
+     * Instantiates a new exception code exception.
+     *
+     * @param message the message
+     * @param locale  the locale
+     * @param ex      the ex
+     */
+    protected ExceptionCodeException(String message, Locale locale, Throwable ex) {
+        super(message, locale, ex);
+    }
+
+    /**
+     * Instantiates a new exception code exception.
+     *
+     * @param message the message
+     * @param locale  the locale
+     */
+    protected ExceptionCodeException(String message, Locale locale) {
+        super(message, locale);
+    }
+
+    /**
+     * Instantiates a new exception code exception.
+     *
+     * @param message the message
+     * @param args    the args
+     * @param locale  the locale
+     * @param ex      the ex
+     */
+    protected ExceptionCodeException(String message, Object[] args, Locale locale, Throwable ex) {
+        super(message, args, locale, ex);
+    }
+
+    /**
+     * Instantiates a new exception code exception.
+     *
+     * @param message the message
+     * @param args    the args
+     * @param locale  the locale
+     */
+    protected ExceptionCodeException(String message, Object[] args, Locale locale) {
+        super(message, args, locale);
+    }
+
+    /**
+     * Instantiates a new exception code exception.
+     *
+     * @param message the message
+     * @param args    the args
+     * @param ex      the ex
+     */
+    protected ExceptionCodeException(String message, Object[] args, Throwable ex) {
+        super(message, args, ex);
+    }
+
+    /**
+     * Instantiates a new exception code exception.
+     *
+     * @param message the message
+     * @param args    the args
+     */
+    protected ExceptionCodeException(String message, Object[] args) {
+        super(message, args);
+    }
+
+    /**
+     * Instantiates a new exception code exception.
+     *
+     * @param message the message
+     * @param ex      the ex
+     */
+    protected ExceptionCodeException(String message, Throwable ex) {
+        super(message, ex);
+    }
+
+    /**
+     * Instantiates a new exception code exception.
+     *
+     * @param message the message
+     */
+    protected ExceptionCodeException(String message) {
+        super(message);
+    }
+
+    /**
+     * Instantiates a new exception code exception.
+     *
+     * @param ex the ex
+     */
+    protected ExceptionCodeException(Throwable ex) {
+        super(ex);
+    }
+
+    /**
+     * 返回exceptionCode.
      *
      * @return exceptionCode
      */
+    @Override
     public ExceptionCode getExceptionCode() {
         return exceptionCode;
     }

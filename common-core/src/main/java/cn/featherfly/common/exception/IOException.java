@@ -20,13 +20,6 @@ public class IOException extends LocalizedException {
 
     /**
      * Instantiates a new IO exception.
-     */
-    public IOException() {
-        super();
-    }
-
-    /**
-     * Instantiates a new IO exception.
      *
      * @param message the message
      * @param locale  the locale

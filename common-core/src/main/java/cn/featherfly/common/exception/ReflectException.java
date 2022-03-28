@@ -21,13 +21,6 @@ public class ReflectException extends LocalizedException {
 
     /**
      * Instantiates a new inits the exception.
-     */
-    public ReflectException() {
-        super();
-    }
-
-    /**
-     * Instantiates a new inits the exception.
      *
      * @param message the message
      * @param locale  the locale

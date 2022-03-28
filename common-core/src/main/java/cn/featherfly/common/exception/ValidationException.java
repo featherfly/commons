@@ -25,13 +25,6 @@ public class ValidationException extends LocalizedException {
 
     /**
      * Instantiates a new validation exception.
-     */
-    public ValidationException() {
-        super();
-    }
-
-    /**
-     * Instantiates a new validation exception.
      *
      * @param message the message
      * @param locale  the locale

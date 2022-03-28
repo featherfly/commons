@@ -1,3 +1,7 @@
+# 0.4.0 2022-03-28
+1. 提炼出ExceptionCodeSupport
+2. 移动common-core的ExceptionCode、LocalizedExceptionCode到api包
+
 # 0.3.0 2021-11-39
 1. 移除app包
 2. 加入EnumConvertor

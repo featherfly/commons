@@ -1,6 +1,6 @@
 # 1.10.0
 1. ResourceBundleUtils加入一些列getBundle(Class<?>)方法
-2. 
+2. 优化ResourceBundleUtils.getString(Class<?> type ...)一些列方法的实现
 
 # 1.9.0 2022-03-28
     1. ChainMapImpl实现自定义toString()

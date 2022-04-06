@@ -389,11 +389,7 @@ public final class ResourceBundleUtils {
      * @see java.util.ResourceBundle#getString(java.lang.String) getString
      */
     public static String getString(Class<?> type, String key, Object[] argus, Locale locale, Charset charset) {
-        try {
-            return getString(type.getName(), key, argus, locale, charset);
-        } catch (MissingResourceException e) {
-            return getString(type.getSimpleName(), key, argus, locale, charset);
-        }
+        return format(getBundle(type, locale, charset).getString(key), argus);
     }
 
     private static String getStringFromBundle(String baseName, String key, Object[] argus, Locale locale,

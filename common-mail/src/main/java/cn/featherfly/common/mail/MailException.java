@@ -19,15 +19,8 @@ public class MailException extends LocalizedException {
     private static final long serialVersionUID = 6808611112386674974L;
 
     /**
-     *
-     */
-    public MailException() {
-        super();
-    }
-
-    /**
      * 构造方法
-     * 
+     *
      * @param message 信息
      * @param argus   信息绑定参数
      * @param locale  locale
@@ -39,7 +32,7 @@ public class MailException extends LocalizedException {
 
     /**
      * 构造方法
-     * 
+     *
      * @param message 信息
      * @param locale  locale
      * @param ex      异常
@@ -50,7 +43,7 @@ public class MailException extends LocalizedException {
 
     /**
      * 构造方法
-     * 
+     *
      * @param message 信息
      * @param argus   信息绑定参数
      * @param ex      异常
@@ -61,7 +54,7 @@ public class MailException extends LocalizedException {
 
     /**
      * 构造方法
-     * 
+     *
      * @param message 信息
      * @param ex      异常
      */
@@ -71,7 +64,7 @@ public class MailException extends LocalizedException {
 
     /**
      * 构造方法
-     * 
+     *
      * @param message 信息
      * @param argus   信息绑定参数
      * @param locale  locale
@@ -82,7 +75,7 @@ public class MailException extends LocalizedException {
 
     /**
      * 构造方法
-     * 
+     *
      * @param message 信息
      * @param argus   信息绑定参数
      */
@@ -92,7 +85,7 @@ public class MailException extends LocalizedException {
 
     /**
      * 构造方法
-     * 
+     *
      * @param message 信息
      * @param locale  locale
      */
@@ -102,7 +95,7 @@ public class MailException extends LocalizedException {
 
     /**
      * 构造方法
-     * 
+     *
      * @param message 信息
      */
     public MailException(String message) {
@@ -111,7 +104,7 @@ public class MailException extends LocalizedException {
 
     /**
      * 构造方法
-     * 
+     *
      * @param ex 异常
      */
     public MailException(Throwable ex) {

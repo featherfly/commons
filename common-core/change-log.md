@@ -1,3 +1,7 @@
+# 1.10.0
+1. ResourceBundleUtils加入一些列getBundle(Class<?>)方法
+2. 
+
 # 1.9.0 2022-03-28
     1. ChainMapImpl实现自定义toString()
     2. ExceptionCode、LocalizedExceptionCode迁移到common-api包

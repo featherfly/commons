@@ -1,3 +1,6 @@
+# 0.5.4 2022-04-06
+1. 修复common-core不兼容升级
+
 # 0.5.3 2022-03-04
 1. 修复getSerializer日志没有在正确的逻辑条件内输出的问题
 2. HttpClient加入一些列返回InputStream的stream方法

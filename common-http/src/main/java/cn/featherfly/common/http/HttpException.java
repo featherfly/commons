@@ -15,13 +15,6 @@ public class HttpException extends LocalizedException {
     private static final long serialVersionUID = 6808611112386674974L;
 
     /**
-     *
-     */
-    public HttpException() {
-        super();
-    }
-
-    /**
      * 构造方法
      *
      * @param message 信息

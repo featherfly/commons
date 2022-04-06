@@ -105,13 +105,6 @@ public abstract class MappingException extends LocalizedException {
 
     /**
      * Instantiates a new mapping exception.
-     */
-    public MappingException() {
-        super();
-    }
-
-    /**
-     * Instantiates a new mapping exception.
      *
      * @param message the message
      * @param locale  the locale

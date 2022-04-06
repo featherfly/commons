@@ -19,13 +19,6 @@ public class JdbcException extends LocalizedException {
 
     /**
      * Instantiates a new jdbc exception.
-     */
-    public JdbcException() {
-        super();
-    }
-
-    /**
-     * Instantiates a new jdbc exception.
      *
      * @param message message
      * @param locale  locale

@@ -16,13 +16,6 @@ public class ImportException extends JdbcException {
 
     /**
      * Instantiates a new import exception.
-     */
-    public ImportException() {
-        super();
-    }
-
-    /**
-     * Instantiates a new import exception.
      *
      * @param message message
      * @param locale  locale

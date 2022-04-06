@@ -19,13 +19,6 @@ public class JdbcMappingException extends MappingException {
 
     /**
      * Instantiates a new jdbc mapping exception.
-     */
-    public JdbcMappingException() {
-        super();
-    }
-
-    /**
-     * Instantiates a new jdbc mapping exception.
      *
      * @param message the message
      * @param locale  the locale

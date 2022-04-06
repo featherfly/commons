@@ -19,13 +19,6 @@ public class DatabaseMetadataException extends JdbcException {
 
     /**
      * Instantiates a new database metadata exception.
-     */
-    public DatabaseMetadataException() {
-        super();
-    }
-
-    /**
-     * Instantiates a new database metadata exception.
      *
      * @param message the message
      * @param locale  the locale

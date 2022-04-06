@@ -19,13 +19,6 @@ public class ExportException extends JdbcException {
 
     /**
      * Instantiates a new export exception.
-     */
-    public ExportException() {
-        super();
-    }
-
-    /**
-     * Instantiates a new export exception.
      *
      * @param message message
      * @param locale  locale

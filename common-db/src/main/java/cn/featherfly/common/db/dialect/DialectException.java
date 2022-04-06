@@ -16,13 +16,6 @@ public class DialectException extends LocalizedException {
     private static final long serialVersionUID = -4560008692923038454L;
 
     /**
-     *
-     */
-    public DialectException() {
-        super();
-    }
-
-    /**
      * @param message message
      * @param locale  locale
      * @param ex      ex

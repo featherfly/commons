@@ -1,4 +1,4 @@
-apply plugin: 'java-library'
+apply plugin: 'java'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
@@ -19,19 +19,27 @@ if (isReleaseBuild()) {
 }
 
 def getRepositoryUsername() {
-    return hasProperty('nexusUsername') ? nexusUsername : ""
+    if (hasProperty('localNexusUsername')) {
+        return hasProperty('localNexusUsername') ? localNexusUsername : ""
+    } else {
+        return hasProperty('nexusUsername') ? nexusUsername : ""
+    }
 }
 
 def getRepositoryPassword() {
-    return hasProperty('nexusPassword') ? nexusPassword : ""
+    if (hasProperty('localNexusPassword')) {
+        return hasProperty('localNexusPassword') ? localNexusPassword : ""
+    } else {
+        hasProperty('nexusPassword') ? nexusPassword : ""
+    }
 }
 
-task sourcesJar(type: Jar, group: "build") {
+task sourcesJar(type: Jar) {
     classifier = 'sources'
-    from sourceSets.main.allSource
+    from sourceSets.main.java.srcDirs
 }
 
-task javadocJar(type: Jar, group: "build", dependsOn:javadoc) {
+task javadocJar(type: Jar, dependsOn:javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
@@ -88,7 +96,7 @@ publishing {
 }
 
 signing {
-    //required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
-    //sign configurations.archives
+    required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
     sign publishing.publications.mavenJava
 }
+

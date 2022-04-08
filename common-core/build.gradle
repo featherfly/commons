@@ -17,9 +17,7 @@ dependencies {
     api group: 'commons-io', name: 'commons-io', version: '2.6'
     //compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'    
     //compile group: 'org.springframework', name: 'spring-core', version: '5.1.8.RELEASE'
-    
-    api group: 'org.javassist', name: 'javassist', version: '3.25.0-GA'
-    
+        
     testImplementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
     testImplementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
     testImplementation 'javax.annotation:javax.annotation-api:1.3.2'

@@ -46,7 +46,11 @@ import javassist.bytecode.annotation.StringMemberValue;
  *
  * @author zhongj
  */
-public class Javassist {
+public final class Javassist {
+
+    private Javassist() {
+        super();
+    }
 
     /**
      * Creates the method.
@@ -207,7 +211,7 @@ public class Javassist {
      * @return the class
      * @throws CannotCompileException the cannot compile exception
      */
-    public Class<?> toClass(CtClass ctClass, ClassLoader loader, Class<?> neighbor, ProtectionDomain domain)
+    public static Class<?> toClass(CtClass ctClass, ClassLoader loader, Class<?> neighbor, ProtectionDomain domain)
             throws CannotCompileException {
         ClassPool cp = ctClass.getClassPool();
         if (loader == null) {

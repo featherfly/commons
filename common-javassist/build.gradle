@@ -1,6 +1,7 @@
 dependencies {
     api project(":common-core")
-        
-    testImplementation group: 'com.github.houbb', name: 'asm-tool', version: '0.0.3'
-    testImplementation group: 'org.springframework', name: 'spring-core', version: '5.3.2'
+
+    api group: 'org.javassist', name: 'javassist', version: '3.28.0-GA'        
+    //testImplementation group: 'com.github.houbb', name: 'asm-tool', version: '0.0.3'
+    //testImplementation group: 'org.springframework', name: 'spring-core', version: '5.3.2'
 }

@@ -23,7 +23,7 @@ public class JdkResourceBundleFactory implements ResourceBundleFactory {
      */
     @Override
     public cn.featherfly.common.locale.ResourceBundle getBundle(String baseName, Locale locale) {
-        return new JdkResourceBundleProxy(ResourceBundle.getBundle(baseName, locale));
+        return getBundle(baseName, locale, null);
     }
 
     /**
@@ -31,6 +31,7 @@ public class JdkResourceBundleFactory implements ResourceBundleFactory {
      */
     @Override
     public cn.featherfly.common.locale.ResourceBundle getBundle(String baseName, Locale locale, Charset charset) {
-        return new JdkResourceBundleProxy(ResourceBundle.getBundle(baseName, locale), charset);
+        return new JdkResourceBundleProxy(
+                ResourceBundle.getBundle(baseName, locale == null ? locale : Locale.getDefault()), charset);
     }
 }

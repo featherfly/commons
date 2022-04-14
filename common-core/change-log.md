@@ -1,3 +1,6 @@
+# 1.10.2
+1. 
+
 # 1.10.0
 1. ResourceBundleUtils加入一些列getBundle(Class<?>)方法
 2. 优化ResourceBundleUtils.getString(Class<?> type ...)一些列方法的实现

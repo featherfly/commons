@@ -188,9 +188,11 @@ public class SqlFile {
     public void write(OutputStream os, Charset charset) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(os, charset);
         for (String sql : sqlList) {
-            writer.write(sql);
-            writer.write(END_SQL_SIGN);
-            writer.write(Chars.NEW_LINE_CHAR);
+            if (Lang.isNotEmpty(sql)) {
+                writer.write(sql);
+                writer.write(END_SQL_SIGN);
+                writer.write(Chars.NEW_LINE_CHAR);
+            }
         }
         writer.flush();
         writer.close();

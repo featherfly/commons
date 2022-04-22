@@ -301,7 +301,18 @@ public class PropertyMapping {
      * @return 返回repositoryFiledName
      */
     public String getRepositoryFieldName() {
-        return repositoryFieldName;
+        if (repositoryFieldName == null) {
+            StringBuilder name = new StringBuilder();
+            for (Map.Entry<String, PropertyMapping> entry : propertyMappings.entrySet()) {
+                name.append(entry.getKey()).append(",");
+            }
+            if (name.length() > 0) {
+                name.deleteCharAt(name.length() - 1);
+            }
+            return name.toString();
+        } else {
+            return repositoryFieldName;
+        }
     }
 
     /**
@@ -397,6 +408,7 @@ public class PropertyMapping {
     public String toString() {
         return "PropertyMapping [propertyName=" + propertyName + ", repositoryFieldName=" + repositoryFieldName
                 + ", propertyType=" + propertyType + ", primaryKey=" + primaryKey + ", defaultValue=" + defaultValue
-                + ", propertyMappings=" + propertyMappings + ", parent=" + parent + "]";
+                + ", propertyMappings=" + propertyMappings + ", parent="
+                + (parent == null ? "" : parent.getPropertyName()) + "]";
     }
 }

@@ -1,3 +1,6 @@
+# 0.2.3 2022-04-22
+1. PropertyMapping.getRepositoryFieldName()方法当repositoryFieldName为空并且子映射不为空时，返回子映射的repositoryFieldName的合集（xx,yy,zz）
+
 # 0.2.2 2022-04-06
 1. 修复common-core不兼容升级
 

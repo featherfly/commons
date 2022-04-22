@@ -5,8 +5,10 @@ import java.math.BigDecimal;
 import java.sql.SQLType;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -213,6 +215,35 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
                     SystemPropertyUtils.getLineSeparator(), beanProperty.getName()));
         }
         return result;
+    }
+
+    /**
+     * 检查tableMapping是否有问题
+     *
+     * @param tableMapping tableMapping
+     */
+    protected void checkTableMapping(Map<String, PropertyMapping> tableMapping) {
+        Set<String> columns = new HashSet<>();
+        for (PropertyMapping pm : tableMapping.values()) {
+            if (Lang.isEmpty(pm.getPropertyMappings())) {
+                if (pm.isInsertable()) {
+                    if (columns.contains(pm.getRepositoryFieldName())) {
+                        throw new JdbcMappingException("duplicate mapping column name " + pm.getRepositoryFieldName());
+                    }
+                    columns.add(pm.getRepositoryFieldName());
+                }
+            } else {
+                for (PropertyMapping subPm : pm.getPropertyMappings()) {
+                    if (pm.isInsertable()) {
+                        if (columns.contains(pm.getRepositoryFieldName())) {
+                            throw new JdbcMappingException(
+                                    "duplicate mapping column name " + pm.getRepositoryFieldName());
+                        }
+                        columns.add(subPm.getRepositoryFieldName());
+                    }
+                }
+            }
+        }
     }
 
     /**

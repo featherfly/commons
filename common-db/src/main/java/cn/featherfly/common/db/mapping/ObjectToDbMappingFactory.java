@@ -157,6 +157,10 @@ public class ObjectToDbMappingFactory extends AbstractJdbcMappingFactory {
         if (logger.isDebugEnabled()) {
             logger.debug(logInfo.toString());
         }
+
+        // 检查tableMapping
+        checkTableMapping(tableMapping);
+
         // 形成映射对象
         ClassMapping<T> classMapping = new ClassMapping<>(type, tableName, schema, remark);
         classMapping.addIndexs(createIndexs(table));

@@ -5,12 +5,10 @@ import java.sql.SQLType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.Tuple3;
@@ -166,25 +164,15 @@ public class ClassMappingUtils {
         insertSql.append(dialect.getKeywords().insert()).append(Chars.SPACE).append(dialect.getKeywords().into())
                 .append(Chars.SPACE).append(dialect.wrapName(classMapping.getRepositoryName())).append(" (");
         List<PropertyMapping> pms = new ArrayList<>();
-        Set<String> columns = new HashSet<>();
         for (PropertyMapping pm : classMapping.getPropertyMappings()) {
             if (Lang.isEmpty(pm.getPropertyMappings())) {
                 if (pm.isInsertable()) {
-                    if (columns.contains(pm.getRepositoryFieldName())) {
-                        throw new JdbcMappingException("duplicate mapping column name " + pm.getRepositoryFieldName());
-                    }
-                    columns.add(pm.getRepositoryFieldName());
                     insertSql.append(dialect.wrapName(pm.getRepositoryFieldName())).append(",");
                     pms.add(pm);
                 }
             } else {
                 for (PropertyMapping subPm : pm.getPropertyMappings()) {
                     if (subPm.isInsertable()) {
-                        if (columns.contains(subPm.getRepositoryFieldName())) {
-                            throw new JdbcMappingException(
-                                    "duplicate mapping column name " + subPm.getRepositoryFieldName());
-                        }
-                        columns.add(subPm.getRepositoryFieldName());
                         insertSql.append(dialect.wrapName(subPm.getRepositoryFieldName())).append(",");
                         pms.add(subPm);
                     }

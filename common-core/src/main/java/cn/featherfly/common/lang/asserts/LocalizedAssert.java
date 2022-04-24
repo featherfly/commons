@@ -207,7 +207,8 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
         isNotNull(min, "min");
         isNotNull(max, "max");
         isNotNull(value, "value");
-        if (NumberUtils.compare(value, min) == -1 || NumberUtils.compare(value, max) == 1) {
+        int result = NumberUtils.compare(value, min);
+        if (result == -1 || result == 1) {
             throwException("#isInRange", value, min, max, arguDescp);
         }
     }
@@ -228,7 +229,8 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     public <N extends Number> void isGt(N value, N min, String arguDescp) {
         isNotNull(min, "min");
         isNotNull(value, "value");
-        if (NumberUtils.compare(value, min) == -1 || NumberUtils.compare(value, min) == 0) {
+        int result = NumberUtils.compare(value, min);
+        if (result == -1 || result == 0) {
             throwException("#isGt", value, min, arguDescp);
         }
     }
@@ -270,7 +272,8 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     public <N extends Number> void isLt(N value, N max, String arguDescp) {
         isNotNull(max, "max");
         isNotNull(value, "value");
-        if (NumberUtils.compare(value, max) == 0 || NumberUtils.compare(value, max) == 1) {
+        int result = NumberUtils.compare(value, max);
+        if (result == 0 || result == 1) {
             throwException("#isLt", value, max, arguDescp);
         }
     }

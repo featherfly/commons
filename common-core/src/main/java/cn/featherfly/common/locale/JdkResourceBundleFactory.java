@@ -31,7 +31,7 @@ public class JdkResourceBundleFactory implements ResourceBundleFactory {
      */
     @Override
     public cn.featherfly.common.locale.ResourceBundle getBundle(String baseName, Locale locale, Charset charset) {
-        return new JdkResourceBundleProxy(
-                ResourceBundle.getBundle(baseName, locale == null ? Locale.getDefault() : locale), charset);
+        return new JdkResourceBundleProxy(ResourceBundle.getBundle(baseName,
+                locale == null ? ResourceBundleUtils.LOCALE_MANAGER.getLocale() : locale), charset);
     }
 }

@@ -1,5 +1,9 @@
 # 1.10.2
-1. 
+1. JdkResourceBundleFactory使用ResourceBundleUtils.LOCALE_MANAGER获取默认locale
+
+# 1.11.1
+1. 修复没有设置Locale导致的空指针异常
+2. 修复处理locale空的逻辑错误
 
 # 1.10.0
 1. ResourceBundleUtils加入一些列getBundle(Class<?>)方法

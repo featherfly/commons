@@ -27,7 +27,7 @@ public final class ResourceBundleUtils {
     private static final ResourceBundleFactory RESOURCE_BUNDLE_FACTORY = ServiceLoaderUtils
             .load(ResourceBundleFactory.class, new JdkResourceBundleFactory());
 
-    public static final LocaleManager LOCALE_MANAGER = ServiceLoaderUtils.load(LocaleManager.class,
+    private static final LocaleManager LOCALE_MANAGER = ServiceLoaderUtils.load(LocaleManager.class,
             new DefaultLocaleManager());
 
     /**

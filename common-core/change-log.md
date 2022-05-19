@@ -1,5 +1,5 @@
 # 1.10.2
-1. JdkResourceBundleFactory使用ResourceBundleUtils.LOCALE_MANAGER获取默认locale
+1. JdkResourceBundleFactory使用ResourceBundleUtils.getLocale()获取默认locale
 
 # 1.11.1
 1. 修复没有设置Locale导致的空指针异常

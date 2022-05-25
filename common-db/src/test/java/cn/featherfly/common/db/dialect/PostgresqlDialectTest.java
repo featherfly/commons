@@ -162,4 +162,28 @@ public class PostgresqlDialectTest extends DialectTest {
         sql = dialect.buildCreateIndexDDL(table, index, new String[] { "user_id" }, true);
         assertEquals(sql, "CREATE UNIQUE INDEX username_uq ON \"user\"(\"user_id\");");
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Test
+    void testUpsert() {
+        String sql = dialect.buildUpsertSql("user", new String[] { "id", "name", "age" }, "id");
+        System.out.println(sql);
+        assertEquals(sql,
+                "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET id=EXCLUDED.id, name=EXCLUDED.name, age=EXCLUDED.age");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Test
+    void testUpsertBatch() {
+        String sql = dialect.buildUpsertBatchSql("user", new String[] { "id", "name", "age" }, "id", 2);
+        System.out.println(sql);
+        assertEquals(sql,
+                "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (?, ?, ?),(?, ?, ?) ON CONFLICT (id) DO UPDATE SET id=EXCLUDED.id, name=EXCLUDED.name, age=EXCLUDED.age");
+    }
 }

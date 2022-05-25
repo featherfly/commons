@@ -229,4 +229,24 @@ public class OracleDialect extends AbstractDialect {
         // FIXME 未实现
         throw new UnsupportedException();
     }
+
+    @Override
+    public boolean isUpsert() {
+        return false;
+    }
+
+    @Override
+    public boolean isUpsertBatch() {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String buildUpsertBatchSql(String tableName, String[] columnNames, String[] uniqueColumns,
+            int insertAmount) {
+        // FIXME 未实现
+        throw new UnsupportedException();
+    }
 }

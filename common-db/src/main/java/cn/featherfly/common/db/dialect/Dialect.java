@@ -40,8 +40,19 @@ public interface Dialect {
     /** 默认的查询返回条数. */
     int DEFAULT_LIMIT = 10;
 
+    /**
+     * The Enum StringConverter.
+     *
+     * @author zhongj
+     */
     public enum StringConverter {
-        NONE, UPPER_CASE, LOWER_CASE
+
+        /** The none. */
+        NONE,
+        /** The upper case. */
+        UPPER_CASE,
+        /** The lower case. */
+        LOWER_CASE
     }
 
     /**
@@ -154,6 +165,24 @@ public interface Dialect {
     }
 
     /**
+     * Checks if is upsert.
+     *
+     * @return true, if is upsert
+     */
+    default boolean isUpsert() {
+        return true;
+    }
+
+    /**
+     * Checks if is upsert batch.
+     *
+     * @return true, if is upsert batch
+     */
+    default boolean isUpsertBatch() {
+        return true;
+    }
+
+    /**
      * Gets the inits the sql header.
      *
      * @return the inits the sql header
@@ -201,6 +230,20 @@ public interface Dialect {
         }
         return sql;
     }
+
+    default String buildUpsertSql(String tableName, String[] columnNames, String uniqueColumn) {
+        return buildUpsertSql(tableName, columnNames, new String[] { uniqueColumn });
+    }
+
+    default String buildUpsertSql(String tableName, String[] columnNames, String[] uniqueColumns) {
+        return buildUpsertBatchSql(tableName, columnNames, uniqueColumns, 1);
+    }
+
+    default String buildUpsertBatchSql(String tableName, String[] columnNames, String uniqueColumn, int insertAmount) {
+        return buildUpsertBatchSql(tableName, columnNames, new String[] { uniqueColumn }, insertAmount);
+    }
+
+    String buildUpsertBatchSql(String tableName, String[] columnNames, String[] uniqueColumns, int insertAmount);
 
     /**
      * Checks if is keywords uppercase.
@@ -981,6 +1024,8 @@ public interface Dialect {
 
     /**
      * The Class Keyworld.
+     *
+     * @author zhongj
      */
     public static class Keyworld {
 

@@ -1,3 +1,6 @@
+# 0.5.0 2022-5-25
+1. Dialect加入upsert相关功能
+
 # 0.4.9 2022-04-22
 1. 修复@Embedded修饰多个只映射最后一个对象的问题
 2. ClassMapping加入检测同一列映射多个的问题
@@ -38,7 +41,7 @@
 2. SqlExecutor加入execute(SqlFile)方法
 
 # 0.4.0 2021-12-29  
-1. MappingMode没去名称重构
+1. MappingMode枚举名称重构
 2. ObjectDbMixedMappingFactory实现统一使用数据库的列名进行映射，即jpa映射元数据的列名与数据库的列名大小写不一致（equals=false,equalsIgnoreCase=true）也会使用数据库的列名进行映射
 3. common-model相关的mapping类移动到common-db-mapping-model模块
 

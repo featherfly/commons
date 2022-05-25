@@ -212,4 +212,22 @@ public class MySQLDialect extends AbstractDialect {
                     tn) + Chars.SEMI;
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String buildUpsertBatchSql(String tableName, String[] columnNames, String[] uniqueColumns,
+            int insertAmount) {
+        String sql = buildInsertBatchSql(tableName, columnNames, insertAmount);
+        sql = BuilderUtils.link(sql, "ON DUPLICATE KEY UPDATE");
+        StringBuilder columns = new StringBuilder();
+        for (String columnName : columnNames) {
+            BuilderUtils.link(columns, Strings.format("{0}=values({0}),", columnName));
+        }
+        if (columns.length() > 0) {
+            columns.deleteCharAt(columns.length() - 1);
+        }
+        return BuilderUtils.link(sql, columns.toString());
+    }
 }

@@ -170,4 +170,28 @@ public class MysqlDialectTest extends DialectTest {
         sql = dialect.buildCreateIndexDDL(table, index, new String[] { "user_id" }, true);
         assertEquals(sql, "CREATE UNIQUE INDEX username_uq ON `user`(`user_id`);");
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Test
+    void testUpsert() {
+        String sql = dialect.buildUpsertSql("user", new String[] { "id", "name", "age" }, "id");
+        System.out.println(sql);
+        assertEquals(sql,
+                "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE id=values(id), name=values(name), age=values(age)");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Test
+    void testUpsertBatch() {
+        String sql = dialect.buildUpsertBatchSql("user", new String[] { "id", "name", "age" }, "id", 2);
+        System.out.println(sql);
+        assertEquals(sql,
+                "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?),(?, ?, ?) ON DUPLICATE KEY UPDATE id=values(id), name=values(name), age=values(age)");
+    }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 <suite name="common db Test Suite" parallel="tests"
 	thread-count="1">
 <!-- 	<parameter name="dataBase" value="mysql" /> -->
@@ -21,7 +21,7 @@
 <!-- 		</packages> -->
 <!-- 	</test> -->
     <suite-files>
-       <suite-file path="testng-test-mysql.xml"/>
-       <suite-file path="testng-test-postgresql.xml"/>
+       <suite-file path="testng-mysql.xml"/>
+       <suite-file path="testng-postgresql.xml"/>
     </suite-files>
 </suite>

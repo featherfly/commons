@@ -15,6 +15,7 @@ import cn.featherfly.common.db.mapping.JdbcMappingException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.repository.Index;
 
 /**
@@ -492,4 +493,28 @@ public abstract class AbstractDialect implements Dialect {
      * @return 字符串
      */
     protected abstract String convertValueToSql(Object value, int sqlType);
+
+    @Override
+    public String buildUpsertBatchSql(String tableName, String[] columnNames, String[] uniqueColumns,
+            int insertAmount) {
+        String sql = buildInsertBatchSql(tableName, columnNames, insertAmount);
+        StringBuilder conflict = new StringBuilder();
+        for (String uc : uniqueColumns) {
+            conflict.append(uc).append(",");
+        }
+        if (conflict.length() > 0) {
+            conflict.deleteCharAt(conflict.length() - 1);
+            conflict.insert(0, "(");
+            conflict.append(")");
+        }
+        sql = BuilderUtils.link(sql, "ON CONFLICT", conflict.toString(), "DO UPDATE SET");
+        StringBuilder columns = new StringBuilder();
+        for (String columnName : columnNames) {
+            BuilderUtils.link(columns, Strings.format("{0}=EXCLUDED.{0},", columnName));
+        }
+        if (columns.length() > 0) {
+            columns.deleteCharAt(columns.length() - 1);
+        }
+        return BuilderUtils.link(sql, columns.toString());
+    }
 }

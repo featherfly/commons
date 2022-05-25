@@ -1,11 +1,11 @@
-# 1.10.2
+# 1.10.2 2022-05-19
 1. JdkResourceBundleFactory使用ResourceBundleUtils.getLocale()获取默认locale
 
-# 1.11.1
+# 1.11.1 2022-04-14
 1. 修复没有设置Locale导致的空指针异常
 2. 修复处理locale空的逻辑错误
 
-# 1.10.0
+# 1.10.0 2022-04-8
 1. ResourceBundleUtils加入一些列getBundle(Class<?>)方法
 2. 优化ResourceBundleUtils.getString(Class<?> type ...)一些列方法的实现
 3. 移除JavassistUtils

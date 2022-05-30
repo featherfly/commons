@@ -1,3 +1,7 @@
+# 0.5.1 2022-5-30
+1. 修复Sqlite的batch insert
+2. ClassMappingUtils加入getUpsertSqlAndParamPositions和getUpsertBatchSqlAndParamPositions
+
 # 0.5.0 2022-5-25
 1. Dialect加入upsert相关功能
 

@@ -180,7 +180,7 @@ public class MysqlDialectTest extends DialectTest {
         String sql = dialect.buildUpsertSql("user", new String[] { "id", "name", "age" }, "id");
         System.out.println(sql);
         assertEquals(sql,
-                "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE id=values(id), name=values(name), age=values(age)");
+                "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `name`=values(`name`), `age`=values(`age`)");
     }
 
     /**
@@ -192,6 +192,28 @@ public class MysqlDialectTest extends DialectTest {
         String sql = dialect.buildUpsertBatchSql("user", new String[] { "id", "name", "age" }, "id", 2);
         System.out.println(sql);
         assertEquals(sql,
-                "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?),(?, ?, ?) ON DUPLICATE KEY UPDATE id=values(id), name=values(name), age=values(age)");
+                "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?),(?, ?, ?) ON DUPLICATE KEY UPDATE `name`=values(`name`), `age`=values(`age`)");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Test
+    void testInsert() {
+        String sql = dialect.buildInsertSql("user", new String[] { "id", "name", "age" });
+        System.out.println(sql);
+        assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?)");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Test
+    @Override
+    void testInsertBatch() {
+        String sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "age" }, 2);
+        System.out.println(sql);
+        assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?),(?, ?, ?)");
     }
 }

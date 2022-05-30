@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.Tuple3;
+import com.speedment.common.tuple.Tuple4;
 import com.speedment.common.tuple.Tuples;
 
 import cn.featherfly.common.bean.BeanUtils;
@@ -21,6 +22,7 @@ import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.builder.ColumnModel;
 import cn.featherfly.common.db.builder.TableModel;
 import cn.featherfly.common.db.dialect.Dialect;
+import cn.featherfly.common.lang.CollectionUtils;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.repository.Index;
@@ -185,6 +187,91 @@ public class ClassMappingUtils {
         insertSql.append(") ").append(dialect.getKeywords().values())
                 .append(getInsertValuesSqlPart(pms, propertyPositions));
         return Tuples.of(insertSql.toString(), propertyPositions);
+    }
+
+    /**
+     * Gets the upsert batch sql and param positions.
+     *
+     * @param upsertAmount the upsert amount
+     * @param classMapping the class mapping
+     * @param dialect      the dialect
+     * @return the insert batch sql and param positions
+     */
+    public static Tuple2<String, Map<Integer, String>> getUpsertBatchSqlAndParamPositions(int upsertAmount,
+            ClassMapping<?> classMapping, Dialect dialect) {
+        Tuple4<String, Map<Integer, String>, String[], String[]> tuple = getUpsertSqlAndParamPositionsColumnsAndIdsAnd(
+                classMapping, dialect);
+        String sql = dialect.buildUpsertBatchSql(classMapping.getRepositoryName(), tuple.get2(), tuple.get3(),
+                upsertAmount);
+        return Tuples.of(sql, tuple.get1());
+    }
+
+    /**
+     * Gets the upsert sql and param positions.
+     *
+     * @param classMapping the class mapping
+     * @param dialect      the dialect
+     * @return the insert sql and param positions
+     */
+    public static Tuple2<String, Map<Integer, String>> getUpsertSqlAndParamPositions(ClassMapping<?> classMapping,
+            Dialect dialect) {
+        Tuple4<String, Map<Integer, String>, String[], String[]> t = getUpsertSqlAndParamPositionsColumnsAndIdsAnd(
+                classMapping, dialect);
+        return Tuples.of(t.get0(), t.get1());
+    }
+
+    private static Tuple4<String, Map<Integer, String>, String[], String[]> getUpsertSqlAndParamPositionsColumnsAndIdsAnd(
+            ClassMapping<?> classMapping, Dialect dialect) {
+        List<PropertyMapping> pkms = new ArrayList<>();
+        List<PropertyMapping> pms = new ArrayList<>();
+        List<String> columns = new ArrayList<>();
+        List<String> ids = new ArrayList<>();
+        for (PropertyMapping pm : classMapping.getPropertyMappings()) {
+            if (Lang.isEmpty(pm.getPropertyMappings())) {
+                if (pm.isInsertable()) {
+                    columns.add(pm.getRepositoryFieldName());
+                    pms.add(pm);
+                }
+                if (pm.isPrimaryKey()) {
+                    ids.add(pm.getRepositoryFieldName());
+                    pkms.add(pm);
+                }
+            } else {
+                for (PropertyMapping subPm : pm.getPropertyMappings()) {
+                    if (subPm.isInsertable()) {
+                        columns.add(pm.getRepositoryFieldName());
+                        pms.add(subPm);
+                    }
+                    if (subPm.isPrimaryKey()) {
+                        ids.add(pm.getRepositoryFieldName());
+                        pkms.add(subPm);
+                    }
+                }
+            }
+        }
+        String[] cnArray = CollectionUtils.toArray(columns);
+        String[] idArray = CollectionUtils.toArray(ids);
+        String upsert = dialect.buildUpsertBatchSql(classMapping.getRepositoryName(), cnArray, idArray, 1);
+        return Tuples.of(upsert, propertyPositions(pms), cnArray, idArray);
+    }
+
+    private static Map<Integer, String> propertyPositions(List<PropertyMapping> pms) {
+        Map<Integer, String> propertyPositions = new LinkedHashMap<>();
+        int paramNum = 0;
+        for (int i = 0; i < pms.size(); i++) {
+            PropertyMapping pm = pms.get(i);
+            if (pm.isPrimaryKey() && pm.getDefaultValue() != null && !"null".equalsIgnoreCase(pm.getDefaultValue())) {
+            } else {
+                paramNum++;
+                if (pm.getParent() == null) {
+                    propertyPositions.put(paramNum, pm.getPropertyName());
+                } else {
+                    propertyPositions.put(paramNum,
+                            pm.getParent().getPropertyName() + Chars.DOT + pm.getPropertyName());
+                }
+            }
+        }
+        return propertyPositions;
     }
 
     /**

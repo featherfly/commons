@@ -4,11 +4,13 @@ import java.sql.JDBCType;
 import java.sql.SQLType;
 import java.sql.Types;
 import java.util.Date;
+import java.util.List;
 
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.SqlUtils;
 import cn.featherfly.common.db.builder.BuilderUtils;
+import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
@@ -221,13 +223,21 @@ public class MySQLDialect extends AbstractDialect {
             int insertAmount) {
         String sql = buildInsertBatchSql(tableName, columnNames, insertAmount);
         sql = BuilderUtils.link(sql, "ON DUPLICATE KEY UPDATE");
-        StringBuilder columns = new StringBuilder();
-        for (String columnName : columnNames) {
-            BuilderUtils.link(columns, Strings.format("{0}=values({0}),", columnName));
+
+        List<String> columns = ArrayUtils.toList(columnNames);
+        for (String uc : uniqueColumns) {
+            if (ArrayUtils.contain(columnNames, uc)) {
+                columns.remove(uc);
+            }
         }
-        if (columns.length() > 0) {
-            columns.deleteCharAt(columns.length() - 1);
+
+        StringBuilder columnsSql = new StringBuilder();
+        for (String columnName : columns) {
+            BuilderUtils.link(columnsSql, Strings.format("{0}=values({0}),", wrapName(columnName)));
         }
-        return BuilderUtils.link(sql, columns.toString());
+        if (columnsSql.length() > 0) {
+            columnsSql.deleteCharAt(columnsSql.length() - 1);
+        }
+        return BuilderUtils.link(sql, columnsSql.toString());
     }
 }

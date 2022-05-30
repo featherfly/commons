@@ -196,6 +196,25 @@ public interface Dialect {
      */
     String getInitSqlFooter();
 
+    default String buildInsertSql(String tableName, String[] columnNames) {
+        String sql = BuilderUtils.link(getKeyword(Keywords.INSERT), getKeyword(Keywords.INTO), wrapName(tableName),
+                Chars.PAREN_L);
+        StringBuilder names = new StringBuilder();
+        for (String column : columnNames) {
+            BuilderUtils.link(names, wrapName(column) + Chars.COMMA);
+        }
+        names.deleteCharAt(names.length() - 1).append(Chars.PAREN_R);
+        sql += names.toString();
+        sql = BuilderUtils.link(sql, getKeyword(Keywords.VALUES), Chars.PAREN_L);
+        StringBuilder ques = new StringBuilder();
+        for (int i = 0; i < columnNames.length; i++) {
+            BuilderUtils.link(ques, Chars.QUESTION + Chars.COMMA);
+        }
+        ques.deleteCharAt(ques.length() - 1).append(Chars.PAREN_R);
+        sql += ques.toString();
+        return sql;
+    }
+
     /**
      * dialect for database supports batch insert.
      *

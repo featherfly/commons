@@ -243,7 +243,73 @@ public class ClassMappingUtilsTest {
         //        }
 
         assertEquals(t.get0(),
-                "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp` UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
+                "INSERT INTO `user` VALUES (`id`,`name`,`descp`) SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
+        assertEquals(t.get1().get(1), "id");
+        assertEquals(t.get1().get(2), "name");
+        assertEquals(t.get1().get(3), "descp");
+    }
+
+    @Test
+    void testUpsertMysql() {
+        Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getUpsertSqlAndParamPositions(getUserClassMapping(),
+                Dialects.MYSQL);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get0(),
+                "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `name`=values(`name`), `descp`=values(`descp`)");
+    }
+
+    @Test
+    void testUpsertPostgresql() {
+        Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getUpsertSqlAndParamPositions(getUserClassMapping(),
+                Dialects.POSTGRESQL);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get0(),
+                "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"descp\"=EXCLUDED.\"descp\"");
+    }
+
+    @Test
+    void testUpsertSqlite() {
+        Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getUpsertSqlAndParamPositions(getUserClassMapping(),
+                Dialects.SQLITE);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get0(),
+                "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET `name`=EXCLUDED.`name`, `descp`=EXCLUDED.`descp`");
+    }
+
+    @Test
+    void testUpsertBatchMysql() {
+        Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getUpsertBatchSqlAndParamPositions(5,
+                getUserClassMapping(), dialect);
+        assertEquals(t.get0(),
+                "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?) ON DUPLICATE KEY UPDATE `name`=values(`name`), `descp`=values(`descp`)");
+        assertEquals(t.get1().get(1), "id");
+        assertEquals(t.get1().get(2), "name");
+        assertEquals(t.get1().get(3), "descp");
+    }
+
+    @Test
+    void testUpsertBatchPostgresql() {
+        Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getUpsertBatchSqlAndParamPositions(5,
+                getUserClassMapping(), Dialects.POSTGRESQL);
+        assertEquals(t.get0(),
+                "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"descp\"=EXCLUDED.\"descp\"");
+        assertEquals(t.get1().get(1), "id");
+        assertEquals(t.get1().get(2), "name");
+        assertEquals(t.get1().get(3), "descp");
+    }
+
+    @Test
+    void testUpsertBatchSqlite() {
+        Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getUpsertBatchSqlAndParamPositions(5,
+                getUserClassMapping(), Dialects.SQLITE);
+        assertEquals(t.get0(),
+                "INSERT INTO `user` VALUES (`id`,`name`,`descp`) SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? ON CONFLICT (id) DO UPDATE SET `name`=EXCLUDED.`name`, `descp`=EXCLUDED.`descp`");
         assertEquals(t.get1().get(1), "id");
         assertEquals(t.get1().get(2), "name");
         assertEquals(t.get1().get(3), "descp");

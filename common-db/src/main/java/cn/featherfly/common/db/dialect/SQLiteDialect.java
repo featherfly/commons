@@ -284,11 +284,25 @@ public class SQLiteDialect extends AbstractDialect {
      */
     @Override
     public String buildInsertBatchSql(String tableName, String[] columnNames, int insertAmount) {
+        if (insertAmount == 1) {
+            return buildInsertSql(tableName, columnNames);
+        }
         StringBuilder sql = new StringBuilder();
         BuilderUtils.link(sql, getKeyword(Keywords.INSERT), getKeyword(Keywords.INTO), wrapName(tableName),
-                getKeyword(Keywords.SELECT));
+                getKeyword(Keywords.VALUES));
+
+        StringBuilder columnNamesSql = new StringBuilder(Chars.PAREN_L);
         for (String column : columnNames) {
-            BuilderUtils.link(sql, Chars.QUESTION, getKeyword(Keywords.AS), wrapName(column) + Chars.COMMA);
+            columnNamesSql.append(wrapName(column)).append(Chars.COMMA);
+        }
+        if (columnNamesSql.length() > 0) {
+            columnNamesSql.deleteCharAt(columnNamesSql.length() - 1);
+        }
+        columnNamesSql.append(Chars.PAREN_R);
+        BuilderUtils.link(sql, columnNamesSql.toString(), getKeyword(Keywords.SELECT));
+
+        for (int i = 0; i < columnNames.length; i++) {
+            BuilderUtils.link(sql, Chars.QUESTION + Chars.COMMA);
         }
         sql.deleteCharAt(sql.length() - 1);
         for (int index = 1; index < insertAmount; index++) {

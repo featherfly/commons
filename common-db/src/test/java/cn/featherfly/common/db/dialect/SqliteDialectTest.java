@@ -8,9 +8,7 @@ import org.testng.annotations.Test;
 import cn.featherfly.common.exception.UnsupportedException;
 
 /**
- * <p>
- * SqliteDialectTest2
- * </p>
+ * SqliteDialectTest.
  *
  * @author zhongj
  */
@@ -129,18 +127,17 @@ public class SqliteDialectTest extends DialectTest {
         String sql = null;
 
         sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 1);
-        assertEquals(sql, "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp`");
+        assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?)");
 
         sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 2);
-        assertEquals(sql, "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp` UNION SELECT ?, ?, ?");
-
+        assertEquals(sql, "INSERT INTO `user` VALUES (`id`,`name`,`descp`) SELECT ?, ?, ? UNION SELECT ?, ?, ?");
         sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 3);
         assertEquals(sql,
-                "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp` UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
+                "INSERT INTO `user` VALUES (`id`,`name`,`descp`) SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
 
         sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 5);
         assertEquals(sql,
-                "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp` UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
+                "INSERT INTO `user` VALUES (`id`,`name`,`descp`) SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
 
     }
 
@@ -177,7 +174,7 @@ public class SqliteDialectTest extends DialectTest {
         String sql = dialect.buildUpsertSql("user", new String[] { "id", "name", "age" }, "id");
         System.out.println(sql);
         assertEquals(sql,
-                "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `age` ON CONFLICT (id) DO UPDATE SET id=EXCLUDED.id, name=EXCLUDED.name, age=EXCLUDED.age");
+                "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET `name`=EXCLUDED.`name`, `age`=EXCLUDED.`age`");
     }
 
     /**
@@ -189,6 +186,28 @@ public class SqliteDialectTest extends DialectTest {
         String sql = dialect.buildUpsertBatchSql("user", new String[] { "id", "name", "age" }, "id", 2);
         System.out.println(sql);
         assertEquals(sql,
-                "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `age` UNION SELECT ?, ?, ? ON CONFLICT (id) DO UPDATE SET id=EXCLUDED.id, name=EXCLUDED.name, age=EXCLUDED.age");
+                "INSERT INTO `user` VALUES (`id`,`name`,`age`) SELECT ?, ?, ? UNION SELECT ?, ?, ? ON CONFLICT (id) DO UPDATE SET `name`=EXCLUDED.`name`, `age`=EXCLUDED.`age`");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Test
+    @Override
+    void testInsert() {
+        String sql = dialect.buildInsertSql("user", new String[] { "id", "name", "age" });
+        System.out.println(sql);
+        assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?)");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Test
+    @Override
+    void testInsertBatch() {
+        String sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "age" }, 2);
+        System.out.println(sql);
+        assertEquals(sql, "INSERT INTO `user` VALUES (`id`,`name`,`age`) SELECT ?, ?, ? UNION SELECT ?, ?, ?");
     }
 }

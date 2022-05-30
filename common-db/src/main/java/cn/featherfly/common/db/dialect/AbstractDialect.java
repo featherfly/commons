@@ -2,6 +2,7 @@ package cn.featherfly.common.db.dialect;
 
 import java.sql.JDBCType;
 import java.sql.SQLType;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -499,8 +500,12 @@ public abstract class AbstractDialect implements Dialect {
             int insertAmount) {
         String sql = buildInsertBatchSql(tableName, columnNames, insertAmount);
         StringBuilder conflict = new StringBuilder();
+        List<String> columns = ArrayUtils.toList(columnNames);
         for (String uc : uniqueColumns) {
             conflict.append(uc).append(",");
+            if (ArrayUtils.contain(columnNames, uc)) {
+                columns.remove(uc);
+            }
         }
         if (conflict.length() > 0) {
             conflict.deleteCharAt(conflict.length() - 1);
@@ -508,13 +513,13 @@ public abstract class AbstractDialect implements Dialect {
             conflict.append(")");
         }
         sql = BuilderUtils.link(sql, "ON CONFLICT", conflict.toString(), "DO UPDATE SET");
-        StringBuilder columns = new StringBuilder();
-        for (String columnName : columnNames) {
-            BuilderUtils.link(columns, Strings.format("{0}=EXCLUDED.{0},", columnName));
+        StringBuilder columnsSql = new StringBuilder();
+        for (String columnName : columns) {
+            BuilderUtils.link(columnsSql, Strings.format("{0}=EXCLUDED.{0},", wrapName(columnName)));
         }
-        if (columns.length() > 0) {
-            columns.deleteCharAt(columns.length() - 1);
+        if (columnsSql.length() > 0) {
+            columnsSql.deleteCharAt(columnsSql.length() - 1);
         }
-        return BuilderUtils.link(sql, columns.toString());
+        return BuilderUtils.link(sql, columnsSql.toString());
     }
 }

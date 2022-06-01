@@ -1,6 +1,5 @@
 /**
- * @author zhongj - yufei
- *             Mar 19, 2009
+ * @author zhongj - yufei Mar 19, 2009
  */
 package cn.featherfly.common.structure.tree;
 
@@ -19,7 +18,7 @@ import cn.featherfly.common.structure.tree.matcher.TreeNodeEqualsMatcher;
 
 /**
  * <p>
- * 树节点
+ * 树节点.
  * </p>
  * <blockquote>
  * <ul>
@@ -29,10 +28,11 @@ import cn.featherfly.common.structure.tree.matcher.TreeNodeEqualsMatcher;
  * <li>修改人 zhongj 加入clone方法，实现深度复制
  * </ul>
  * </blockquote>
+ *
  * @param <E> 树节点存放的类型
  * @author zhongj
  */
-public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
+public class SimpleTreeNode<E> implements Cloneable, TreeNode<E> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TreeNode.class);
 
@@ -49,8 +49,8 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
 
     private int depth = ROOT_DEPTH;
 
-    private List<TreeNode<E>> childNodes = new ArrayList<TreeNode<E>>();
-        
+    private List<TreeNode<E>> childNodes = new ArrayList<>();
+
     // ********************************************************************
     //    constractor
     // ********************************************************************
@@ -72,9 +72,8 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
     public List<TreeNode<E>> getAncestors() {
         return getAncestors(new ArrayList<TreeNode<E>>(), this);
     }
-    
-    private List<TreeNode<E>> getAncestors(List<TreeNode<E>> ancestor,
-                    TreeNode<E> node) {
+
+    private List<TreeNode<E>> getAncestors(List<TreeNode<E>> ancestor, TreeNode<E> node) {
         TreeNode<E> parentNode = node.getParent();
         if (parentNode != null) {
             ancestor.add(parentNode);
@@ -83,6 +82,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
             return ancestor;
         }
     }
+
     /**
      * {@inheritDoc}
      */
@@ -100,32 +100,36 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
             }
         }
     }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isProgeny(TreeNode<E> ancestor) {        
+    public boolean isProgeny(TreeNode<E> ancestor) {
         return hasAncestor(ancestor);
     }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public List<TreeNode<E>> getEveryNode() {
-        List<TreeNode<E>> nodeList = new ArrayList<TreeNode<E>>();
+        List<TreeNode<E>> nodeList = new ArrayList<>();
         nodeList.add(this);
         getProgenys(nodeList, this);
         return nodeList;
     }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public List<TreeNode<E>> getProgenys() {
-        List<TreeNode<E>> nodeList = new ArrayList<TreeNode<E>>();
+        List<TreeNode<E>> nodeList = new ArrayList<>();
         getProgenys(nodeList, this);
         return nodeList;
     }
+
     private void getProgenys(List<TreeNode<E>> nodeList, TreeNode<E> node) {
         if (!node.isLeaf()) {
             Iterator<TreeNode<E>> iter = node.getChildNodes().iterator();
@@ -136,6 +140,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
             }
         }
     }
+
     /**
      * {@inheritDoc}
      */
@@ -160,14 +165,15 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
         }
         return false;
     }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isAncestor(TreeNode<E> progeny) {    
+    public boolean isAncestor(TreeNode<E> progeny) {
         return hasProgeny(progeny);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -177,10 +183,11 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
             return null;
         }
         // TODO 使用matcher重写
-        TreeNodeMatcher<TreeNode<E>> matcher = new TreeNodeEqualsMatcher<TreeNode<E>>(progeny);
+        TreeNodeMatcher<TreeNode<E>> matcher = new TreeNodeEqualsMatcher<>(progeny);
         return findTreeNode(matcher, this.getChildNodes());
-//        return findProgeny(progeny.getId());
+        //        return findProgeny(progeny.getId());
     }
+
     /**
      * {@inheritDoc}
      */
@@ -194,7 +201,8 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
             }
         }
         return null;
-    }    
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -207,24 +215,24 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
     }
 
     private TreeNode<E> findTreeNode(TreeNodeMatcher<TreeNode<E>> matcher, TreeNode<E> treeNode) {
-        if (matcher.match(treeNode)) {
+        if (matcher.test(treeNode)) {
             return treeNode;
         } else {
             findTreeNode(matcher, treeNode.getChildNodes());
-//            List<TreeNode<E>> childs = treeNode.getChildNodes();
-//            Iterator<TreeNode<E>> iter = childs.iterator();
-//            while (iter.hasNext()) {
-//                TreeNode<E> child = iter.next();
-//                TreeNode<E> result = null;
-//                result = ((SimpleTreeNode<E>) child).findTreeNode(matcher, child);
-//                if (result != null) {
-//                    return result;
-//                }
-//            }
+            //            List<TreeNode<E>> childs = treeNode.getChildNodes();
+            //            Iterator<TreeNode<E>> iter = childs.iterator();
+            //            while (iter.hasNext()) {
+            //                TreeNode<E> child = iter.next();
+            //                TreeNode<E> result = null;
+            //                result = ((SimpleTreeNode<E>) child).findTreeNode(matcher, child);
+            //                if (result != null) {
+            //                    return result;
+            //                }
+            //            }
         }
         return null;
     }
-    
+
     private TreeNode<E> findTreeNode(TreeNodeMatcher<TreeNode<E>> matcher, Collection<TreeNode<E>> treeNodes) {
         if (Lang.isNotEmpty(treeNodes)) {
             Iterator<TreeNode<E>> iter = treeNodes.iterator();
@@ -239,6 +247,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
         }
         return null;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -248,12 +257,12 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
             return null;
         }
         // TODO 使用matcher重写，写死的matcher
-        TreeNodeMatcher<TreeNode<E>> matcher = new TreeNodeEqualsMatcher<TreeNode<E>>(node);
+        TreeNodeMatcher<TreeNode<E>> matcher = new TreeNodeEqualsMatcher<>(node);
         return findTreeNode(matcher);
-//        return findTreeNode(node.getId());
-        
-        
+        //        return findTreeNode(node.getId());
+
     }
+
     /**
      * {@inheritDoc}
      */
@@ -292,9 +301,11 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
                 iter.next().each(executor);
             }
         }
-    }    
+    }
+
     /**
      * 改变当前节点的depth，级联改变子孙节点
+     *
      * @param depth 层级
      */
     public void changeDepth(int depth) {
@@ -318,6 +329,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
     public int indexOf(TreeNode<E> childNode) {
         return getChildNodes().indexOf(childNode);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -328,6 +340,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
         }
         return this.getParent().indexOf(this);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -335,6 +348,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
     public boolean hasChildNode(TreeNode<E> childNode) {
         return indexOf(childNode) != -1;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -342,6 +356,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
     public boolean isParent(TreeNode<E> childNode) {
         return this.equals(childNode.getParent());
     }
+
     /**
      * {@inheritDoc}
      */
@@ -352,6 +367,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
         }
         return parentNode.hasChildNode(this);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -359,6 +375,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
     public int getChildSize() {
         return getChildNodes().size();
     }
+
     /**
      * {@inheritDoc}
      */
@@ -367,11 +384,12 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
         readyForAddChild(childNode);
         getChildNodes().add(childNode);
     }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void addChildNodes(@SuppressWarnings("unchecked") TreeNode<E>...childNodes) {
+    public void addChildNodes(@SuppressWarnings("unchecked") TreeNode<E>... childNodes) {
         if (childNodes == null) {
             throw new IllegalArgumentException("传入参数childNodes不能为null");
         }
@@ -380,6 +398,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
             getChildNodes().add(childNode);
         }
     }
+
     /**
      * {@inheritDoc}
      */
@@ -393,6 +412,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
             getChildNodes().add(childNode);
         }
     }
+
     /**
      * {@inheritDoc}
      */
@@ -406,6 +426,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
             getChildNodes().add(childNode);
         }
     }
+
     /**
      * {@inheritDoc}
      */
@@ -415,6 +436,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
         int index = indexOf(refChildNode);
         insertChildNode(childNode, index);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -424,6 +446,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
         int index = indexOf(refChildNode);
         insertChildNode(childNode, index);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -432,18 +455,19 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
         readyForRemoveChild(childNode);
         getChildNodes().remove(childNode);
     }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void removeChildNodes() {
-        Iterator<TreeNode<E>> iter =  getChildNodes().iterator();
+        Iterator<TreeNode<E>> iter = getChildNodes().iterator();
         while (iter.hasNext()) {
-            readyForRemoveChild(
-                            iter.next());
+            readyForRemoveChild(iter.next());
         }
         getChildNodes().clear();
     }
+
     /**
      * {@inheritDoc}
      */
@@ -455,6 +479,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
             insertChildNode(newChild, index);
         }
     }
+
     /**
      * {@inheritDoc}
      */
@@ -462,14 +487,14 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
     public void mergeChild(TreeNode<E> child) {
         int index = indexOf(child);
         if (index != -1) {
-            LOGGER.debug("node[{}].mergeChild(node[{}]) as replace",
-                            this.getId(), child.getId());
+            LOGGER.debug("node[{}].mergeChild(node[{}]) as replace", this.getId(), child.getId());
             removeChildNode(child);
             insertChildNode(child, index);
         } else {
             addChildNode(child);
         }
     }
+
     /**
      * {@inheritDoc}
      */
@@ -480,6 +505,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
             parent.removeChildNode(this);
         }
     }
+
     /**
      * {@inheritDoc}
      */
@@ -490,6 +516,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
         }
         return null;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -500,6 +527,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
         }
         return null;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -515,6 +543,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
         }
         return null;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -530,6 +559,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
         }
         return null;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -537,6 +567,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
     public boolean isFirst() {
         return getPreviousSibling() == null;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -544,6 +575,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
     public boolean isLast() {
         return getNextSibling() == null;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -551,6 +583,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
     public void sort(Comparator<TreeNode<E>> comparator) {
         Collections.sort(getChildNodes(), comparator);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -571,7 +604,6 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
     // ********************************************************************
     //    判断关系的方法
     // ********************************************************************
-            
 
     // ********************************************************************
     //    private method
@@ -581,18 +613,19 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
     private void readyForAddChild(TreeNode<E> childNode) {
         SimpleTreeNode<E> stn = (SimpleTreeNode<E>) childNode;
         stn.depth = getDepth() + 1;
-//        childNode.setParentNode(this);
+        //        childNode.setParentNode(this);
         readyForSetParent(this, false);
     }
+
     // 在移除儿子节点前的处理
     private void readyForRemoveChild(TreeNode<E> childNode) {
         SimpleTreeNode<E> stn = (SimpleTreeNode<E>) childNode;
         stn.changeDepth(ROOT_DEPTH);
-//        childNode.changeDepth(ROOT_DEPTH);
-//        childNode.setParentNode(null);
+        //        childNode.changeDepth(ROOT_DEPTH);
+        //        childNode.setParentNode(null);
         readyForSetParent(null, false);
     }
-    
+
     // 在设置父节点前的处理
     private void readyForSetParent(TreeNode<E> parentNode, boolean autoAppendToParent) {
         // 如果当前父节点存在，从当前父节点中移除自己
@@ -604,7 +637,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
         if (autoAppendToParent) {
             parentNode.addChildNode(this);
         }
-            
+
     }
 
     // ********************************************************************
@@ -612,22 +645,24 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
     // ********************************************************************
 
     /**
-     *    返回一个复制的节点，迭代复制所有节点
-     *    @return 复制的节点
+     * 返回一个复制的节点，迭代复制所有节点
+     *
+     * @return 复制的节点
      */
     @Override
     public TreeNode<E> clone() {
-        SimpleTreeNode<E> node = new SimpleTreeNode<E>(getId());
+        SimpleTreeNode<E> node = new SimpleTreeNode<>(getId());
         node.setNodeObject(getNodeObject());
         if (!isLeaf()) {
             Iterator<TreeNode<E>> iter = getChildNodes().iterator();
             while (iter.hasNext()) {
-                TreeNode<E> cloneChild = ((SimpleTreeNode<E>) iter.next()).clone(); 
+                TreeNode<E> cloneChild = ((SimpleTreeNode<E>) iter.next()).clone();
                 node.addChildNode(cloneChild);
             }
         }
         return node;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -637,8 +672,9 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
         node.changeDepth(SimpleTreeNode.ROOT_DEPTH);
         node.setParentNode(null);
         return node;
-    }    
-    @Override 
+    }
+
+    @Override
     public boolean equals(Object object) {
         if (object == null || !(object instanceof TreeNode)) {
             return false;
@@ -647,14 +683,15 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
             return false;
         }
         @SuppressWarnings("unchecked")
-        TreeNode<E> treeNode = (TreeNode<E>) object;        
-        return this.getId().equals(treeNode.getId());        
+        TreeNode<E> treeNode = (TreeNode<E>) object;
+        return this.getId().equals(treeNode.getId());
     }
-    
+
     @Override
     public int hashCode() {
         return this.getId().hashCode();
     }
+
     @Override
     public String toString() {
         return this.getClass().getName() + "#" + this.getId().toString();
@@ -678,7 +715,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
     public void setNodeObject(E nodeObject) {
         this.nodeObject = nodeObject;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -717,7 +754,7 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
     @Override
     public String getId() {
         return id;
-    }    
+    }
 
     /**
      * {@inheritDoc}
@@ -729,9 +766,10 @@ public class SimpleTreeNode<E> implements Cloneable, TreeNode<E>{
 
     /**
      * 设置parentNode
+     *
      * @param parentNode parentNode
      */
     public void setParentNode(TreeNode<E> parentNode) {
-        readyForSetParent(parentNode, true);        
-    }        
+        readyForSetParent(parentNode, true);
+    }
 }

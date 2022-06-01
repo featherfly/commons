@@ -208,7 +208,11 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
         isNotNull(max, "max");
         isNotNull(value, "value");
         int result = NumberUtils.compare(value, min);
-        if (result == -1 || result == 1) {
+        if (result < 0) {
+            throwException("#isInRange", value, min, max, arguDescp);
+        }
+        result = NumberUtils.compare(value, max);
+        if (result > 0) {
             throwException("#isInRange", value, min, max, arguDescp);
         }
     }

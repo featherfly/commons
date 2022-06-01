@@ -12,14 +12,15 @@ import cn.featherfly.common.lang.ClassUtils;
  * <p>
  * 匹配Method的返回类型的实现
  * </p>
+ *
  * @author zhongj
  */
-public class MethodReturnTypeMatcher implements MethodMatcher{
-    
+public class MethodReturnTypeMatcher implements MethodMatcher {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodReturnTypeMatcher.class);
 
     private Class<?> returnType;
-    
+
     private boolean matchSubType;
 
     /**
@@ -28,20 +29,21 @@ public class MethodReturnTypeMatcher implements MethodMatcher{
     public MethodReturnTypeMatcher(Class<?> returnType) {
         this.returnType = returnType;
     }
+
     /**
-     * @param returnType 返回类型
+     * @param returnType   返回类型
      * @param matchSubType 是否匹配子类型
      */
     public MethodReturnTypeMatcher(Class<?> returnType, boolean matchSubType) {
         this.returnType = returnType;
         this.matchSubType = matchSubType;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean match(Method method) {
+    public boolean test(Method method) {
         if (returnType == null || method == null) {
             return false;
         }

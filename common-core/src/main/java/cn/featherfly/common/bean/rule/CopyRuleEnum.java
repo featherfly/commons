@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>
- * 自带的复制规则类型的枚举
- * </p>
+ * 自带的复制规则类型的枚举.
  *
  * @author zhongj
  */
@@ -21,13 +19,14 @@ public enum CopyRuleEnum {
      */
     ignoreCaseNull,
     /**
-     * ignoreCaseEmpty 忽略源对象为EMPTY的属性（包含null并判断array,collection,map,string为empty）
+     * ignoreCaseEmpty
+     * 忽略源对象为EMPTY的属性（包含null并判断array,collection,map,string为empty）
      */
     ignoreCaseEmpty;
 
     private static Map<CopyRuleEnum, CopyRule> copyRules;
     static {
-        copyRules = new HashMap<CopyRuleEnum, CopyRule>();
+        copyRules = new HashMap<>();
         copyRules.put(CopyRuleEnum.always, new CopyRuleAlwaysCopy());
         copyRules.put(CopyRuleEnum.ignoreCaseNull, new CopyRuleIgnoreCaseNull());
         copyRules.put(CopyRuleEnum.ignoreCaseEmpty, new CopyRuleIgnoreCaseEmpty());
@@ -37,6 +36,7 @@ public enum CopyRuleEnum {
      * <p>
      * 返回复制规则
      * </p>
+     *
      * @return 复制规则
      */
     public CopyRule getCopyRule() {

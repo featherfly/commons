@@ -14,7 +14,7 @@ import cn.featherfly.common.lang.Lang;
  * <p>
  * 匹配Method的返回类型的实现
  * </p>
- * 
+ *
  * @author zhongj
  */
 public class MethodParamTypeMatcher implements MethodMatcher {
@@ -26,8 +26,7 @@ public class MethodParamTypeMatcher implements MethodMatcher {
     private boolean matchSubType;
 
     /**
-     * @param parameterTypes
-     *            请求参数类型
+     * @param parameterTypes 请求参数类型
      */
     public MethodParamTypeMatcher(Class<?>... parameterTypes) {
         this.parameterTypes = parameterTypes;
@@ -37,7 +36,7 @@ public class MethodParamTypeMatcher implements MethodMatcher {
      * {@inheritDoc}
      */
     @Override
-    public boolean match(Method method) {
+    public boolean test(Method method) {
         if (Lang.isEmpty(parameterTypes) || method == null) {
             return false;
         }

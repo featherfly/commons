@@ -12,14 +12,15 @@ import cn.featherfly.common.lang.ClassUtils;
  * <p>
  * 匹配Field的类型的实现
  * </p>
+ *
  * @author zhongj
  */
-public class FieldTypeMatcher implements FieldMatcher{
-    
+public class FieldTypeMatcher implements FieldMatcher {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(FieldTypeMatcher.class);
 
     private Class<?> fieldType;
-    
+
     private boolean matchSubType;
 
     /**
@@ -28,20 +29,21 @@ public class FieldTypeMatcher implements FieldMatcher{
     public FieldTypeMatcher(Class<?> fieldType) {
         this.fieldType = fieldType;
     }
+
     /**
-     * @param fieldType 字段类型
+     * @param fieldType    字段类型
      * @param matchSubType 是否匹配子类型
      */
     public FieldTypeMatcher(Class<?> fieldType, boolean matchSubType) {
         this.fieldType = fieldType;
         this.matchSubType = matchSubType;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean match(Field field) {
+    public boolean test(Field field) {
         if (fieldType == null || field == null) {
             return false;
         }

@@ -372,7 +372,7 @@ public class BeanDescriptor<T> {
      */
     public BeanProperty<?> findBeanProperty(BeanPropertyMatcher condition) {
         for (BeanProperty<?> beanProperty : getBeanProperties()) {
-            if (condition.match(beanProperty)) {
+            if (condition.test(beanProperty)) {
                 return beanProperty;
             }
         }
@@ -390,7 +390,7 @@ public class BeanDescriptor<T> {
     public Collection<BeanProperty<?>> findBeanPropertys(BeanPropertyMatcher condition) {
         Collection<BeanProperty<?>> coll = new ArrayList<>();
         for (BeanProperty<?> beanProperty : getBeanProperties()) {
-            if (condition.match(beanProperty)) {
+            if (condition.test(beanProperty)) {
                 coll.add(beanProperty);
             }
         }

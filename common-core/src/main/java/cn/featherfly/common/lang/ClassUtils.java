@@ -39,10 +39,7 @@ import cn.featherfly.common.lang.matcher.FieldMatcher;
 import cn.featherfly.common.lang.matcher.MethodMatcher;
 
 /**
- * <p>
- * class处理的工具类
- * </p>
- * .
+ * class处理的工具类. .
  *
  * @author zhongj
  * @version 1.0
@@ -1861,7 +1858,7 @@ public final class ClassUtils {
     public static Field findField(Class<?> type, FieldMatcher matcher) {
         if (type != null) {
             for (Field field : type.getDeclaredFields()) {
-                if (matcher.match(field)) {
+                if (matcher.test(field)) {
                     return field;
                 }
             }
@@ -1882,7 +1879,7 @@ public final class ClassUtils {
         Collection<Field> fields = new ArrayList<>();
         if (type != null) {
             for (Field field : type.getDeclaredFields()) {
-                if (matcher.match(field)) {
+                if (matcher.test(field)) {
                     fields.add(field);
                 }
             }
@@ -1902,7 +1899,7 @@ public final class ClassUtils {
     public static Method findMethod(Class<?> type, MethodMatcher matcher) {
         if (type != null) {
             for (Method method : type.getDeclaredMethods()) {
-                if (matcher.match(method)) {
+                if (matcher.test(method)) {
                     return method;
                 }
             }
@@ -1923,7 +1920,7 @@ public final class ClassUtils {
         Collection<Method> methods = new ArrayList<>();
         if (type != null) {
             for (Method method : type.getDeclaredMethods()) {
-                if (matcher.match(method)) {
+                if (matcher.test(method)) {
                     methods.add(method);
                 }
             }

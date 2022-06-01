@@ -561,6 +561,9 @@ public final class Lang {
      * @return 转换后的枚举，如果是无法转换或不存在的枚举类型，则返回null
      */
     public static <T extends Enum<T>> T toEnum(Class<T> toClass, Object object) {
+        if (object == null) {
+            return null;
+        }
         T result = null;
         for (EnumConvertor enumConvertor : enumConvertors) {
             result = enumConvertor.toEnum(toClass, object);

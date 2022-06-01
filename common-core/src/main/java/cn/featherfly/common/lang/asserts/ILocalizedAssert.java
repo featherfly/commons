@@ -187,7 +187,7 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     void isNotInterface(Class<?> classType);
 
     /**
-     * if value is &lt; min or &gt; max, throw exception.
+     * if value is &lt;= min or &gt;= max, throw exception.
      *
      * @param <N>       the number type
      * @param value     value
@@ -198,7 +198,7 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     <N extends Number> void isInRange(N value, N min, N max, String arguDescp);
 
     /**
-     * if value is &lt; min or &gt; max, throw exception.
+     * if value is &lt;= min or &gt;= max, throw exception.
      *
      * @param <N>   the number type
      * @param value the value

@@ -2,13 +2,14 @@
 <suite name="Test-class Suite" parallel="tests" thread-count="2">
     <test name="Test common all">
         <packages>
-            <package name="cn.featherfly.common.lang.*" />
-            <package name="cn.featherfly.common.bean.*" />
-            <package name="cn.featherfly.common.exception.*" />
-            <package name="cn.featherfly.common.io.*" />
-            <package name="cn.featherfly.common.locale.*" />
-            <package name="cn.featherfly.common.strcture.*" />
-            <package name="cn.featherfly.common.validate.*" />
+            <package name="cn.featherfly.common.*" />
+<!--             <package name="cn.featherfly.common.lang.*" /> -->
+<!--             <package name="cn.featherfly.common.bean.*" /> -->
+<!--             <package name="cn.featherfly.common.exception.*" /> -->
+<!--             <package name="cn.featherfly.common.io.*" /> -->
+<!--             <package name="cn.featherfly.common.locale.*" /> -->
+<!--             <package name="cn.featherfly.common.strcture.*" /> -->
+<!--             <package name="cn.featherfly.common.validate.*" /> -->
         </packages>
     </test>
 <!--     <test name="Test common lang"> -->

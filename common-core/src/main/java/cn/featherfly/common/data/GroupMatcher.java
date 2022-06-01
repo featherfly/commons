@@ -50,7 +50,7 @@ public class GroupMatcher<M extends Matcher<O>, O> implements Matcher<O> {
      * {@inheritDoc}
      */
     @Override
-    public boolean match(O o) {
+    public boolean test(O o) {
         if (Lang.isEmpty(this.matchers)) {
             return false;
         }
@@ -91,7 +91,7 @@ public class GroupMatcher<M extends Matcher<O>, O> implements Matcher<O> {
     private boolean matchAnd(O o, Collection<M> matchers) {
         boolean matchResult = false;
         for (M matcher : matchers) {
-            matchResult = matcher.match(o);
+            matchResult = matcher.test(o);
             if (!matchResult) {
                 return false;
             }
@@ -102,7 +102,7 @@ public class GroupMatcher<M extends Matcher<O>, O> implements Matcher<O> {
     private boolean matchOr(O o, Collection<M> matchers) {
         boolean matchResult = false;
         for (M matcher : matchers) {
-            matchResult = matcher.match(o);
+            matchResult = matcher.test(o);
             if (matchResult) {
                 return true;
             }

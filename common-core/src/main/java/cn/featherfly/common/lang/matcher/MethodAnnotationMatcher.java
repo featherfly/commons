@@ -11,7 +11,7 @@ import cn.featherfly.common.lang.Lang;
  * <p>
  * 匹配Method的注解的实现
  * </p>
- * 
+ *
  * @author zhongj
  */
 public class MethodAnnotationMatcher implements MethodMatcher {
@@ -20,7 +20,7 @@ public class MethodAnnotationMatcher implements MethodMatcher {
 
     /**
      * 使用并集判断逻辑来匹配.
-     * 
+     *
      * @param annotationClasses 注解类型
      */
     public MethodAnnotationMatcher(Class<?>... annotationClasses) {
@@ -35,7 +35,7 @@ public class MethodAnnotationMatcher implements MethodMatcher {
 
     /**
      * 使用指定的判断逻辑来匹配. 并集，所有注解都要标注才算匹配；交集，只要有一个标注就算匹配。参见{@link Logic}
-     * 
+     *
      * @param logic             判断逻辑
      * @param annotationClasses 注解类型
      */
@@ -49,7 +49,7 @@ public class MethodAnnotationMatcher implements MethodMatcher {
      * {@inheritDoc}
      */
     @Override
-    public boolean match(Method field) {
+    public boolean test(Method field) {
         if (Lang.isEmpty(annotationClasses) || field == null) {
             return false;
         }

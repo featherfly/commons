@@ -1,3 +1,7 @@
+# 1.10.3 2022-06-01
+1. Matcher重构为继承自Predicate
+2. 修复isInRange逻辑错误问题
+
 # 1.10.2 2022-05-19
 1. JdkResourceBundleFactory使用ResourceBundleUtils.getLocale()获取默认locale
 

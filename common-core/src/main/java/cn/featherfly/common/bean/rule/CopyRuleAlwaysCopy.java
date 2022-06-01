@@ -2,19 +2,18 @@
 package cn.featherfly.common.bean.rule;
 
 /**
- * <p>
- * 始终复制
- * </p>
- * 
+ * 始终复制.
+ *
  * @author zhongj
  */
-public class CopyRuleAlwaysCopy implements CopyRule{
+public class CopyRuleAlwaysCopy implements CopyRule {
     /**
-     * 
+     *
      */
     public CopyRuleAlwaysCopy() {
-        
+
     }
+
     /**
      * {@inheritDoc}
      */

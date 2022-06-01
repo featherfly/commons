@@ -9,34 +9,34 @@ import cn.featherfly.common.lang.reflect.Modifier;
  * <p>
  * 匹配Member Modifier的实现
  * </p>
+ *
  * @param <T> Member泛型
  * @author zhongj
  */
-public class MemberModifierMatcher<T extends Member> extends AbstractMemberMatcher<T>{
-    
+public class MemberModifierMatcher<T extends Member> extends AbstractMemberMatcher<T> {
+
     private Modifier modifier = Modifier.PUBLIC;
-    
+
     /**
      */
     public MemberModifierMatcher() {
     }
-    
+
     /**
-     * 
      * @param modifier modifier
      */
-    public MemberModifierMatcher(Modifier modifier) {        
+    public MemberModifierMatcher(Modifier modifier) {
         this.modifier = modifier;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean match(T member) {
+    public boolean test(T member) {
         if (logger.isDebugEnabled()) {
-            logger.debug("目标成员 Modifiers {} 匹配 {}"
-                    , java.lang.reflect.Modifier.toString(member.getModifiers()), Modifier.PUBLIC);
+            logger.debug("目标成员 Modifiers {} 匹配 {}", java.lang.reflect.Modifier.toString(member.getModifiers()),
+                    Modifier.PUBLIC);
         }
         return this.modifier.isModifier(member.getModifiers());
     }

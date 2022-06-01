@@ -2,20 +2,18 @@
 package cn.featherfly.common.bean.rule;
 
 /**
- * <p>
- * 如果复制源属性值为null则不复制
- * </p>
- * 
+ * 如果复制源属性值为null则不复制.
+ *
  * @author zhongj
  */
-public class CopyRuleIgnoreCaseNull implements CopyRule{
-    
+public class CopyRuleIgnoreCaseNull implements CopyRule {
+
     /**
-     * 
+     *
      */
-    public CopyRuleIgnoreCaseNull() {        
+    public CopyRuleIgnoreCaseNull() {
     }
-    
+
     /**
      * {@inheritDoc}
      */

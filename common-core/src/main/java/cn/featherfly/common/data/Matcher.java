@@ -1,23 +1,15 @@
 
 package cn.featherfly.common.data;
 
+import java.util.function.Predicate;
+
 /**
- * <p>
- * 匹配器
- * </p>
+ * 匹配器.
  *
  * @param <O> 泛型
  * @author zhongj
  */
 @FunctionalInterface
-public interface Matcher<O> {
-    /**
-     * <p>
-     * 匹配
-     * </p>
-     *
-     * @param o 匹配的对象
-     * @return 对象是否匹配
-     */
-    boolean match(O o);
+public interface Matcher<O> extends Predicate<O> {
+
 }

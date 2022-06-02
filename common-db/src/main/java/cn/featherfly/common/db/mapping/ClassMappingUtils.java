@@ -600,9 +600,11 @@ public class ClassMappingUtils {
      * @param classMapping the class mapping
      * @param dialect      the dialect
      * @return the select by id sql
+     * @deprecated {@link #getSelectByPkSql(ClassMapping, Dialect)}
      */
+    @Deprecated
     public static String getSelectByIdSql(ClassMapping<?> classMapping, Dialect dialect) {
-        return getSelectByIdSql(classMapping, null, dialect);
+        return getSelectByPkSql(classMapping, null, dialect);
     }
 
     /**
@@ -612,8 +614,33 @@ public class ClassMappingUtils {
      * @param alias        the alias
      * @param dialect      the dialect
      * @return the select by id sql
+     * @deprecated {@link #getSelectByPkSql(ClassMapping, String, Dialect)}
      */
+    @Deprecated
     public static String getSelectByIdSql(ClassMapping<?> classMapping, String alias, Dialect dialect) {
+        return getSelectByPkSql(classMapping, alias, dialect);
+    }
+
+    /**
+     * Gets the select by primary key sql.
+     *
+     * @param classMapping the class mapping
+     * @param dialect      the dialect
+     * @return the select by id sql
+     */
+    public static String getSelectByPkSql(ClassMapping<?> classMapping, Dialect dialect) {
+        return getSelectByPkSql(classMapping, null, dialect);
+    }
+
+    /**
+     * Gets the select by primary key sql.
+     *
+     * @param classMapping the class mapping
+     * @param alias        the alias
+     * @param dialect      the dialect
+     * @return the select by id sql
+     */
+    public static String getSelectByPkSql(ClassMapping<?> classMapping, String alias, Dialect dialect) {
         StringBuilder getSql = new StringBuilder();
         LinkedHashMap<Integer, String> propertyPositions = new LinkedHashMap<>();
         getSql.append(getSelectSql(classMapping, alias, dialect));
@@ -628,6 +655,9 @@ public class ClassMappingUtils {
                     columnNum = setPk(condition, columnNum, subPropertyMapping, propertyPositions, pkPms, dialect);
                 }
             }
+        }
+        if (Lang.isEmpty(pkPms)) {
+            throw new JdbcMappingException("#table.pk.not.exists", new Object[] { classMapping.getRepositoryName() });
         }
         BuilderUtils.link(getSql, dialect.getKeywords().where(), condition.toString());
         //        getSql.append(Chars.SPACE).append(dialect.getKeywords().where()).append(Chars.SPACE).append(condition);

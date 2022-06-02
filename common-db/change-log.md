@@ -1,3 +1,6 @@
+# 0.5.2 2022-6-2
+1. ClassMappingUtils加入getSelectByPkSql，并且在没有主键时抛出异常
+
 # 0.5.1 2022-5-30
 1. 修复Sqlite的batch insert
 2. ClassMappingUtils加入getUpsertSqlAndParamPositions和getUpsertBatchSqlAndParamPositions

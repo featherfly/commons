@@ -315,7 +315,7 @@ public class ObjectToDbMappingFactory extends AbstractJdbcMappingFactory {
     private Table getMappingTable(String tableName) {
         Table tm = metadata.getTable(tableName);
         if (checkMapping && tm == null) {
-            throw new JdbcMappingException("#talbe.not.exists", new Object[] { tableName });
+            throw new JdbcMappingException("#table.not.exists", new Object[] { tableName });
         }
         return tm;
     }

@@ -133,7 +133,7 @@ public class ObjectDbMixedMappingFactory extends AbstractJdbcMappingFactory {
 
         Table tm = metadata.getTable(tableName);
         if (tm == null) {
-            throw new JdbcMappingException("#talbe.not.exists", new Object[] { tableName });
+            throw new JdbcMappingException("#table.not.exists", new Object[] { tableName });
         }
 
         Collection<BeanProperty<?>> bps = bd

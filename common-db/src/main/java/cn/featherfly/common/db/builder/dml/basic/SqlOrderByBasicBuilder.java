@@ -239,11 +239,11 @@ public class SqlOrderByBasicBuilder implements SqlBuilder {
         public String toString() {
             StringBuilder sb = new StringBuilder();
             for (ColumnElement column : params) {
-                sb.append(Chars.SPACE).append(column.toSql()).append(Chars.COMMA);
+                sb.append(Chars.SPACE).append(column.toSql()).append(Chars.SPACE)
+                        .append(dialect.getKeyword(sortOrerator)).append(Chars.COMMA);
             }
             if (params.size() > 0) {
                 sb.deleteCharAt(sb.length() - 1);
-                sb.append(Chars.SPACE).append(dialect.getKeyword(sortOrerator));
             }
             return sb.toString();
         }

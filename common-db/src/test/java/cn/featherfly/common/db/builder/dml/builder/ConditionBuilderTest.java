@@ -56,7 +56,7 @@ public class ConditionBuilderTest {
         System.out.println(builder.build());
         System.out.println(((SqlQueryBuilder) builder).getParams());
         assertEquals(
-                "SELECT u.`name`, u.`pwd`, u.`age`, u.`sex` FROM `user` u WHERE u.`name` = ? AND u.`pwd` = ? AND ( u.`sex` = ? OR u.`age` > ? ) ORDER BY u.`age`, u.`sex` ASC, u.`name` DESC",
+                "SELECT u.`name`, u.`pwd`, u.`age`, u.`sex` FROM `user` u WHERE u.`name` = ? AND u.`pwd` = ? AND ( u.`sex` = ? OR u.`age` > ? ) ORDER BY u.`age` ASC, u.`sex` ASC, u.`name` DESC",
                 builder.build());
         assertEquals(params, ((SqlQueryBuilder) builder).getParams());
     }
@@ -70,7 +70,7 @@ public class ConditionBuilderTest {
         System.out.println(builder2.build());
         System.out.println(builder2.getParams());
         assertEquals(
-                "SELECT u.* FROM `user` u WHERE u.`name` = ? AND u.`pwd` = ? AND ( u.`sex` = ? OR u.`age` > ? ) ORDER BY u.`age`, u.`sex` ASC, u.`name` DESC",
+                "SELECT u.* FROM `user` u WHERE u.`name` = ? AND u.`pwd` = ? AND ( u.`sex` = ? OR u.`age` > ? ) ORDER BY u.`age` ASC, u.`sex` ASC, u.`name` DESC",
                 builder2.build());
         assertEquals(params, builder2.getParams());
 
@@ -80,7 +80,7 @@ public class ConditionBuilderTest {
         System.out.println(builder2.build());
         System.out.println(builder2.getParams());
         assertEquals(
-                "SELECT u2.`name`, u2.`pwd`, u2.`age`, u2.`sex` FROM `user` u2 WHERE u2.`name` = ? AND u2.`pwd` = ? AND ( u2.`sex` = ? OR u2.`age` > ? ) ORDER BY u2.`age`, u2.`sex` ASC, u2.`name` DESC",
+                "SELECT u2.`name`, u2.`pwd`, u2.`age`, u2.`sex` FROM `user` u2 WHERE u2.`name` = ? AND u2.`pwd` = ? AND ( u2.`sex` = ? OR u2.`age` > ? ) ORDER BY u2.`age` ASC, u2.`sex` ASC, u2.`name` DESC",
                 builder2.build());
         assertEquals(params, builder2.getParams());
 
@@ -103,7 +103,7 @@ public class ConditionBuilderTest {
         SortBuilder sortBuilder = new SqlSortBuilder(Dialects.MYSQL);
         sortBuilder.desc("dddesc").asc("zzz", "xxx");
         System.out.println(sortBuilder.build());
-        assertEquals(" ORDER BY `dddesc` DESC, `zzz`, `xxx` ASC", sortBuilder.build());
+        assertEquals(" ORDER BY `dddesc` DESC, `zzz` ASC, `xxx` ASC", sortBuilder.build());
 
     }
 

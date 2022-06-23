@@ -117,17 +117,17 @@ public class BasicBuilderTest {
         SqlOrderByBasicBuilder builder = new SqlOrderByBasicBuilder(Dialects.MYSQL);
         builder.addAsc("name").addAsc("age").addDesc("sex");
         System.out.println(builder.build());
-        assertEquals(" ORDER BY `name`, `age` ASC, `sex` DESC", builder.build());
+        assertEquals(" ORDER BY `name` ASC, `age` ASC, `sex` DESC", builder.build());
 
         builder = new SqlOrderByBasicBuilder(Dialects.MYSQL);
         builder.addAsc("name").addAsc("age").addDesc("sex");
         System.out.println(builder.build());
-        assertEquals(" ORDER BY `name`, `age` ASC, `sex` DESC", builder.build());
+        assertEquals(" ORDER BY `name` ASC, `age` ASC, `sex` DESC", builder.build());
 
         builder = new SqlOrderByBasicBuilder(Dialects.MYSQL);
         builder.addAsc("name").addDesc("sex").addDesc("mobile").addAsc("age").addAsc("no");
         System.out.println(builder.build());
-        assertEquals(" ORDER BY `name` ASC, `sex`, `mobile` DESC, `age`, `no` ASC", builder.build());
+        assertEquals(" ORDER BY `name` ASC, `sex` DESC, `mobile` DESC, `age` ASC, `no` ASC", builder.build());
 
         String alias = "u";
         String alias2 = "p";
@@ -135,7 +135,7 @@ public class BasicBuilderTest {
         builder.addAsc("name", alias).addDesc("sex", alias).addDesc("mobile", alias2).addAsc("age", alias2).addAsc("no",
                 alias);
         System.out.println(builder.build());
-        assertEquals(" ORDER BY u.`name` ASC, u.`sex`, p.`mobile` DESC, p.`age`, u.`no` ASC", builder.build());
+        assertEquals(" ORDER BY u.`name` ASC, u.`sex` DESC, p.`mobile` DESC, p.`age` ASC, u.`no` ASC", builder.build());
     }
 
     @Test

@@ -1,3 +1,6 @@
+# 0.5.3 2022-6-3
+1. 修复SqlOrderByBasicBuilder多个相同条件时生成的sql没有为每一个排序项加入ASC(DESC)关键字的问题
+
 # 0.5.2 2022-6-2
 1. ClassMappingUtils加入getSelectByPkSql，并且在没有主键时抛出异常
 

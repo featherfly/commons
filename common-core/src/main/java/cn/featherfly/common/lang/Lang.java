@@ -838,7 +838,7 @@ public final class Lang {
      * @param consumer the consumer
      */
     public static <T> void each(T[] array, BiConsumer<T, Integer> consumer) {
-        ArrayUtils.each(array, consumer);
+        ArrayUtils.each(consumer, array);
     }
 
     /**

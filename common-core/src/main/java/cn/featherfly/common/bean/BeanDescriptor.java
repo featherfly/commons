@@ -5,6 +5,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -112,14 +113,17 @@ public class BeanDescriptor<T> {
         }
         Field[] fields = parent.getDeclaredFields();
         for (Field field : fields) {
-            Type genericType = typeGenericParams.get(field.getGenericType().toString());
-            Class<?> fieldType = null;
-            // 判断类型定义的泛型参数
-            if (genericType == null) {
-                fieldType = field.getType();
-            } else {
-                fieldType = (Class<?>) genericType;
-            }
+            //            Type genericType = typeGenericParams.get(field.getGenericType().toString());
+            //            Class<?> fieldType = null;
+            //            // 判断类型定义的泛型参数
+            //            if (genericType == null) {
+            //                fieldType = field.getType();
+            //            } else if (genericType instanceof TypeVariable) {
+            //                fieldType = ClassUtils.forName(((TypeVariable<?>) genericType).getBounds()[0].getTypeName());
+            //            } else {
+            //                fieldType = (Class<?>) genericType;
+            //            }
+            Class<?> fieldType = getGenericType(field.getGenericType(), field.getType());
             Method getter = ClassUtils.getGetter(field, this.type);
             Method setter = ClassUtils.getSetter(field, this.type);
             if (getter != null || setter != null) {
@@ -220,6 +224,8 @@ public class BeanDescriptor<T> {
         // 判断类型定义的泛型参数
         if (gt == null) {
             return genericType;
+        } else if (gt instanceof TypeVariable) {
+            return ClassUtils.forName(((TypeVariable<?>) gt).getBounds()[0].getTypeName());
         } else {
             return (Class<?>) gt;
         }

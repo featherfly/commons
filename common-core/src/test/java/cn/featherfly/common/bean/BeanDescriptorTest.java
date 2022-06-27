@@ -4,6 +4,7 @@ package cn.featherfly.common.bean;
 import static org.testng.Assert.assertEquals;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -13,6 +14,8 @@ import org.testng.annotations.Test;
 import cn.featherfly.common.bean.vo.Address;
 import cn.featherfly.common.bean.vo.ClassRoom;
 import cn.featherfly.common.bean.vo.Person;
+import cn.featherfly.common.bean.vo.Result;
+import cn.featherfly.common.bean.vo.Result2;
 import cn.featherfly.common.bean.vo.Student;
 import cn.featherfly.common.bean.vo.User;
 import cn.featherfly.common.bean.vo.Zipcode;
@@ -146,6 +149,25 @@ public class BeanDescriptorTest {
 
     @Test
     public void testGeneric() {
+        User user = new User();
+        user.setName("result.user.name");
+        Result<User> result = new Result<>();
+        result.setData(user);
+        BeanDescriptor<Result> bd = BeanDescriptor.getBeanDescriptor(Result.class);
+
+        System.out.println(bd.getBeanProperty("data").getType());
+        Assert.assertEquals(bd.getBeanProperty("data").getType(), Object.class);
+
+        Assert.assertEquals(BeanUtils.getProperty(result, "data.name"), user.getName());
+
+        BeanDescriptor<Result2> bd2 = BeanDescriptor.getBeanDescriptor(Result2.class);
+
+        System.out.println(bd2.getBeanProperty("data").getType());
+        Assert.assertEquals(bd2.getBeanProperty("data").getType(), Collection.class);
+    }
+
+    @Test
+    public void testGeneric1() {
         ClassRoom classRoom = new ClassRoom();
         BeanDescriptor<ClassRoom> bd = BeanDescriptor.getBeanDescriptor(ClassRoom.class);
 

@@ -10,10 +10,7 @@ import java.util.function.BiConsumer;
 import cn.featherfly.common.constant.Chars;
 
 /**
- * <p>
- * 数组的工具类
- * </p>
- * .
+ * 数组的工具类.
  *
  * @author zhongj
  * @version 1.0
@@ -138,10 +135,43 @@ public final class ArrayUtils {
      * @param array    the array
      * @param consumer the consumer
      */
-    public static <T> void each(T[] array, BiConsumer<T, Integer> consumer) {
+    public static <T> void each(BiConsumer<T, Integer> consumer, @SuppressWarnings("unchecked") T... array) {
         if (array != null) {
             for (int i = 0; i < array.length; i++) {
                 consumer.accept(array[i], i);
+            }
+        }
+    }
+
+    /**
+     * Each.
+     *
+     * @param <T>      the generic type
+     * @param array    the array
+     * @param consumer the consumer
+     */
+    public static <T> void each(T[] array, BiConsumer<Object, Integer> consumer) {
+        if (array != null) {
+            for (int i = 0; i < array.length; i++) {
+                consumer.accept(array[i], i);
+            }
+        }
+    }
+
+    /**
+     * Each.
+     *
+     * @param array    the array
+     * @param consumer the consumer
+     */
+    public static void each(Object array, BiConsumer<Object, Integer> consumer) {
+        if (array != null) {
+            if (array.getClass().isArray()) {
+                for (int i = 0; i < Array.getLength(array); i++) {
+                    consumer.accept(Array.get(array, i), i);
+                }
+            } else {
+                consumer.accept(array, 0);
             }
         }
     }
@@ -315,9 +345,9 @@ public final class ArrayUtils {
             len = array.length;
         }
         A[] as = create(type, len);
-        each(array, (a, i) -> {
+        each((a, i) -> {
             as[i] = NumberUtils.parse(a, type);
-        });
+        }, array);
         return as;
     }
 

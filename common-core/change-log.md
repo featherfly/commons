@@ -1,3 +1,8 @@
+# 1.10.4 2022-06-27
+
+1. ArrayUtils和Lang加入新的each方法
+2. 修复BeanDescriptor生成对象描述信息时定义的类的泛型没有具象化而报错的问题
+
 # 1.10.3 2022-06-01
 1. Matcher重构为继承自Predicate
 2. 修复isInRange逻辑错误问题

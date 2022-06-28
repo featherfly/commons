@@ -1,3 +1,7 @@
+# 
+
+1. 升级common依赖
+
 # 1.10.4 2022-06-27
 
 1. ArrayUtils和Lang加入新的each方法

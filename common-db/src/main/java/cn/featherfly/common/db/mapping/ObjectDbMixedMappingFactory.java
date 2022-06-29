@@ -30,17 +30,7 @@ import cn.featherfly.common.repository.mapping.PropertyMapping;
 import cn.featherfly.common.repository.mapping.PropertyNameConversion;
 
 /**
- * <p>
- * MapperFactory
- * </p>
- * .
- *
- * @author zhongj
- */
-/**
- * <p>
- * ObjectToDbMixedMappingFactory
- * </p>
+ * ObjectToDbMixedMappingFactory.
  *
  * @author zhongj
  */
@@ -164,6 +154,8 @@ public class ObjectDbMixedMappingFactory extends AbstractJdbcMappingFactory {
 
         classMapping.addPropertyMappings(tableMapping.values().stream()
                 .sorted((p1, p2) -> p1.getIndex() < p2.getIndex() ? -1 : 1).collect(Collectors.toList()));
+
+        logger.debug("class mapping {}", classMapping);
         return classMapping;
     }
 
@@ -172,6 +164,7 @@ public class ObjectDbMixedMappingFactory extends AbstractJdbcMappingFactory {
      *
      * @param beanProperty  the bean property
      * @param tableMapping  the table mapping
+     * @param mappedColumns the mapped columns
      * @param logInfo       the log info
      * @param tableMetadata the table metadata
      * @return true, if successful

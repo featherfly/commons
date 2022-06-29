@@ -5,10 +5,8 @@ import java.math.BigDecimal;
 import java.sql.SQLType;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -223,23 +221,30 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      * @param tableMapping tableMapping
      */
     protected void checkTableMapping(Map<String, PropertyMapping> tableMapping) {
-        Set<String> columns = new HashSet<>();
+        Map<String, PropertyMapping> columns = new HashMap<>();
         for (PropertyMapping pm : tableMapping.values()) {
             if (Lang.isEmpty(pm.getPropertyMappings())) {
                 if (pm.isInsertable()) {
-                    if (columns.contains(pm.getRepositoryFieldName())) {
-                        throw new JdbcMappingException("duplicate mapping column name " + pm.getRepositoryFieldName());
+                    //                    column.name.mapped = 列{0}已经映射{1},不能再映射{2}
+                    if (columns.containsKey(pm.getRepositoryFieldName())) {
+                        //                        throw new JdbcMappingException("duplicate mapping column name " + pm.getRepositoryFieldName());
+                        PropertyMapping _pm = columns.get(pm.getRepositoryFieldName());
+                        throw new JdbcMappingException("#column.name.mapped", new Object[] {
+                                pm.getRepositoryFieldName(), _pm.getPropertyName(), pm.getPropertyName() });
                     }
-                    columns.add(pm.getRepositoryFieldName());
+                    columns.put(pm.getRepositoryFieldName(), pm);
                 }
             } else {
                 for (PropertyMapping subPm : pm.getPropertyMappings()) {
                     if (pm.isInsertable()) {
-                        if (columns.contains(pm.getRepositoryFieldName())) {
-                            throw new JdbcMappingException(
-                                    "duplicate mapping column name " + pm.getRepositoryFieldName());
+                        if (columns.containsKey(subPm.getRepositoryFieldName())) {
+                            //                            throw new JdbcMappingException(
+                            //                                    "duplicate mapping column name " + pm.getRepositoryFieldName());
+                            PropertyMapping _pm = columns.get(subPm.getRepositoryFieldName());
+                            throw new JdbcMappingException("#column.name.mapped", new Object[] {
+                                    subPm.getRepositoryFieldName(), _pm.getPropertyName(), subPm.getPropertyName() });
                         }
-                        columns.add(subPm.getRepositoryFieldName());
+                        columns.put(subPm.getRepositoryFieldName(), subPm);
                     }
                 }
             }

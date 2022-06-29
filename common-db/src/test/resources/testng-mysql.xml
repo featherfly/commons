@@ -1,26 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 <suite name="mysql db Test Suite" parallel="tests"
-	thread-count="1">
-<!--     <groups> -->
-<!--         <run> -->
-<!--             <exclude name="postgresql,sqlite"/> -->
-<!--         </run> -->
-<!--     </groups> -->
-	<parameter name="dataBase" value="mysql" />
-	<test name="sql builder test">
-		<packages>
-			<package name="cn.featherfly.common.db.builder.*" />
-		</packages>
-	</test>
-	<test name="sql dialect test">
-		<packages>
-			<package name="cn.featherfly.common.db.dialect.*" />
-		</packages>
-	</test>
-	<test name="sql mapping test">
-		<packages>
-			<package name="cn.featherfly.common.db.mapping.*" />
-		</packages>
-	</test>
+    thread-count="1">
+    <parameter name="dataBase" value="mysql" />
+    <test name="sql builder test">
+        <packages>
+            <package name="cn.featherfly.common.db.builder.*" />
+        </packages>
+    </test>
+    <test name="sql data test">
+        <packages>
+            <package name="cn.featherfly.common.db.data.*" />
+        </packages>
+    </test>
+    <test name="sql dialect test">
+        <packages>
+            <package name="cn.featherfly.common.db.dialect.*" />
+        </packages>
+    </test>
+    <test name="sql mapping test">
+        <packages>
+            <package name="cn.featherfly.common.db.mapping.*" />
+        </packages>
+    </test>
+    <test name="sql meatadata test">
+        <packages>
+            <package name="cn.featherfly.common.db.metadata.*" />
+        </packages>
+    </test>
+    <test name="sql migration test">
+        <packages>
+            <package name="cn.featherfly.common.db.migration.*" />
+        </packages>
+    </test>
 </suite>

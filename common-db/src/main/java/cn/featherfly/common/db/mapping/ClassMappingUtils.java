@@ -110,10 +110,10 @@ public class ClassMappingUtils {
             SqlTypeMappingManager sqlTypeMappingManager, int index, Dialect dialect) {
         ColumnModel column = new ColumnModel();
         PropertyMapping pm = propertyMapping;
-        if (propertyMapping.getParent() != null
-                && Lang.isNotEmpty(propertyMapping.getParent().getRepositoryFieldName())) {
-            pm = propertyMapping.getParent();
-        }
+        //        if (propertyMapping.getParent() != null
+        //                && Lang.isNotEmpty(propertyMapping.getParent().getRepositoryFieldName())) {
+        //            pm = propertyMapping.getParent();
+        //        }
         column.setName(pm.getRepositoryFieldName());
         column.setPrimaryKey(pm.isPrimaryKey());
         column.setAutoincrement(pm.isAutoincrement());

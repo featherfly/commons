@@ -32,10 +32,7 @@ import cn.featherfly.common.repository.mapping.PropertyMapping;
 import cn.featherfly.common.repository.mapping.PropertyNameConversion;
 
 /**
- * <p>
- * ObjectMappingFactory
- * </p>
- * .
+ * ObjectToDbMappingFactory.
  *
  * @author zhongj
  */
@@ -174,6 +171,7 @@ public class ObjectToDbMappingFactory extends AbstractJdbcMappingFactory {
                 }
             });
         }
+        logger.debug("class mapping {}", classMapping.toString());
         return classMapping;
     }
 

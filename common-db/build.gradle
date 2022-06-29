@@ -3,10 +3,10 @@ ext {
 
 dependencies {
     api project(":common-core")
-    //api project(":common-model")
+    //api project(":common-model")    
     api project(":common-model-repository")
-    api group: 'com.speedment.common', name: 'tuple', version: '3.2.9'
-    api group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3'
+    api group: 'com.speedment.common', name: 'tuple', version: '3.2.10'
+    api group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.3'
         
     //api group: 'org.freemarker', name: 'freemarker', version: '2.3.28'
     testImplementation fileTree(dir:'libs',include:['*.jar'])

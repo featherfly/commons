@@ -194,25 +194,26 @@ public class LangTest {
 
     @Test
     public void testGetInvoker() {
-        assertEquals(Lang.getInvoker().getClassName(), this.getClass().getName());
-        assertEquals(Lang.getInvoker().getMethodName(), "testGetInvoker");
-
-        getInvoker2();
-
-        assertEquals(Lang.getInvoker().getClassName(), this.getClass().getName());
-        assertEquals(Lang.getInvoker().getMethodName(), "testGetInvoker");
+        assertInvoker1("testGetInvoker");
+        assertInvoker2("testGetInvoker");
     }
 
-    private void getInvoker1() {
+    private void assertInvoker1(final String invokeMethod) {
         assertEquals(Lang.getInvoker().getClassName(), this.getClass().getName());
-        assertEquals(Lang.getInvoker().getMethodName(), "getInvoker1");
+        //        assertEquals(Lang.getInvoker().getMethodName(), "getInvoker1");
+        assertEquals(Lang.getInvoker().getMethodName(), invokeMethod);
     }
 
-    private void getInvoker2() {
+    private void assertInvoker2(String invokeMethod) {
         assertEquals(Lang.getInvoker().getClassName(), this.getClass().getName());
-        assertEquals(Lang.getInvoker().getMethodName(), "getInvoker2");
-        new Thread(() -> {
-            getInvoker1();
-        }).run();
+        //        assertEquals(Lang.getInvoker().getMethodName(), "getInvoker2");
+        assertEquals(Lang.getInvoker().getMethodName(), invokeMethod);
+
+        assertInvoker1("assertInvoker2");
+
+        //        new Thread(() -> {
+        //            // 这里是lambd，lambd名称是动态生成的
+        //            assertInvoker1("getInvoker2");
+        //        }).run();
     }
 }

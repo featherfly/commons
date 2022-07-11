@@ -689,11 +689,12 @@ public final class Lang {
      */
     public static StackTraceElement getInvoker() {
         final String methodName = "getInvoker";
-        int i = 0;
-        for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()) {
+        int i = 2;
+        StackTraceElement[] ss = Thread.currentThread().getStackTrace();
+        for (StackTraceElement stackTraceElement : ss) {
             if (stackTraceElement.getClassName().equals(Lang.class.getName())
-                    && stackTraceElement.getMethodName().equals(methodName)) {
-                return Thread.currentThread().getStackTrace()[i + 2];
+                    && stackTraceElement.getMethodName().equals(methodName) && ss.length > i) {
+                return Thread.currentThread().getStackTrace()[i];
             }
             i++;
         }
@@ -838,6 +839,17 @@ public final class Lang {
      * @param consumer the consumer
      */
     public static <T> void each(T[] array, BiConsumer<T, Integer> consumer) {
+        ArrayUtils.each(consumer, array);
+    }
+
+    /**
+     * Each.
+     *
+     * @param <T>      the generic type
+     * @param consumer the consumer
+     * @param array    the array
+     */
+    public static <T> void each(BiConsumer<T, Integer> consumer, @SuppressWarnings("unchecked") T... array) {
         ArrayUtils.each(consumer, array);
     }
 

@@ -143,20 +143,20 @@ public final class ArrayUtils {
         }
     }
 
-    /**
-     * Each.
-     *
-     * @param <T>      the generic type
-     * @param array    the array
-     * @param consumer the consumer
-     */
-    public static <T> void each(T[] array, BiConsumer<Object, Integer> consumer) {
-        if (array != null) {
-            for (int i = 0; i < array.length; i++) {
-                consumer.accept(array[i], i);
-            }
-        }
-    }
+    //    /**
+    //     * Each.
+    //     *
+    //     * @param <T>      the generic type
+    //     * @param array    the array
+    //     * @param consumer the consumer
+    //     */
+    //    public static <T> void each(T[] array, BiConsumer<T, Integer> consumer) {
+    //        if (array != null) {
+    //            for (int i = 0; i < array.length; i++) {
+    //                consumer.accept(array[i], i);
+    //            }
+    //        }
+    //    }
 
     /**
      * Each.

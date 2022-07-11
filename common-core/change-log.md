@@ -1,6 +1,9 @@
-# 
+# 1.10.5 2022-07-11
 
-1. 升级common依赖
+1. 删除ArrayUtils.each(T[], BiConsumer<T, Integer>)方法
+2. Lang加入each(BiConsumer<T, Integer>, T...)
+3. 修复Lang.getInvoker没有调用者时数组越界的问题
+4. 升级apache-common依赖
 
 # 1.10.4 2022-06-27
 

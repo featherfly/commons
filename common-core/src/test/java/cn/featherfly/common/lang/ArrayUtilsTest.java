@@ -20,19 +20,18 @@ public class ArrayUtilsTest {
 
     @Test
     public void testEach() {
-        ArrayUtils.each(ss, (a, i) -> {
+        ArrayUtils.each((a, i) -> {
             System.out.println(i + " -> " + a);
             assertEquals(a, ss[i]);
-        });
+        }, ss);
     }
 
     @Test
     public void testNumbers() {
         Integer[] is = ArrayUtils.toNumbers(Integer.class, ns);
-        ArrayUtils.each(is, (a, i) -> {
+        ArrayUtils.each((a, i) -> {
             System.out.println(i + " -> " + a);
             assertEquals(a, is[i]);
-        });
-
+        }, is);
     }
 }

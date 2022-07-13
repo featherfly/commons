@@ -1,0 +1,184 @@
+apply from: rootDir.getAbsolutePath() + '/android_lib.gradle'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+configurations {
+    deployerJars
+}
+
+def isReleaseBuild() {
+    return version.contains("SNAPSHOT") == false
+}
+
+def sonatypeRepositoryUrl
+if (isReleaseBuild()) {
+    println 'RELEASE BUILD'
+    sonatypeRepositoryUrl = hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
+            : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+} else {
+    println 'SNAPSHOT BUILD'
+    sonatypeRepositoryUrl = hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL
+            : "https://oss.sonatype.org/content/repositories/snapshots/"
+
+}
+
+def getRepositoryUsername() {
+    return hasProperty('nexusUsername') ? nexusUsername : ""
+}
+
+def getRepositoryPassword() {
+    return hasProperty('nexusPassword') ? nexusPassword : ""
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+//task javadoc(type: Javadoc) {
+//    source = android.sourceSets.main.java.srcDirs
+//    classpath += project.android.libraryVariants.toList().first().javaCompile.classpath
+//    classpath += project.files(
+//            configurations.api.files,
+//            configurations.implementation.files,
+//            android.getBootClasspath().join(File.pathSeparator))
+//}
+
+//task javadocJar(type: Jar, dependsOn: javadoc) {
+//    classifier = 'javadoc'
+//    from javadoc.destinationDir
+//}
+
+project.afterEvaluate {
+//    task javadoc2(type: Javadoc) {
+//        source = android.sourceSets.main.java.srcDirs
+//        classpath += files(android.bootClasspath)
+//        classpath += files(project.getConfigurations().getByName('implementation').asList())
+//        include '**/*.java'
+//    }
+
+    android.libraryVariants.all { variant ->
+//        println variant.javaCompile.classpath.files
+        if (variant.name == 'release') { //我们只需 release 的 javadoc
+//            task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
+            task javadoc(type: Javadoc) {
+                // title = ''
+                // description = ''
+                source = variant.javaCompile.source
+                classpath = files(variant.javaCompile.classpath.files, project.android.getBootClasspath())
+                options {
+                    encoding "utf-8"
+                    links "http://docs.oracle.com/javase/7/docs/api/"
+//                    linksOffline "http://d.android.com/reference", "${android.sdkDirectory}/docs/reference"
+                }
+                exclude '**/BuildConfig.java'
+                exclude '**/R.java'
+            }
+//            task("javadoc${variant.name.capitalize()}Jar", type: Jar, dependsOn: "generate${variant.name.capitalize()}Javadoc") {
+            task javadocJar(type: Jar, dependsOn: javadoc) {
+                classifier = 'javadoc'
+                from javadoc.destinationDir
+            }
+//            artifacts {
+//                archives javadocJar
+//            }
+
+            publishing {
+                publications {
+                    aar(MavenPublication) {
+//                from components.release
+
+                        groupId = moduleGroup
+                        artifactId = archivesBaseName
+                        version = version
+
+                        artifact bundleReleaseAar
+                        artifact sourcesJar
+                        artifact javadocJar
+//                        artifact javadocJar
+//                afterEvaluate {
+//                    artifact bundleReleaseAar
+//                }
+
+                        pom {
+                            name = archivesBaseName
+                            packaging = POM_Packaging
+                            description = POM_DESCRIPTION
+                            url = POM_URL
+                            inceptionYear = POM_INCEPTION_YEAR
+                            scm {
+                                url = POM_SCM_URL
+                                connection = POM_SCM_CONNECTION
+                                developerConnection = POM_SCM_DEV_CONNECTION
+                            }
+                            licenses {
+                                license {
+                                    name = POM_LICENCE_NAME
+                                    url = POM_LICENCE_URL
+                                    distribution = POM_LICENCE_DIST
+                                }
+                            }
+                            developers {
+                                developer {
+                                    id = POM_DEVELOPER_ID
+                                    name = POM_DEVELOPER_NAME
+                                }
+                            }
+                            withXml {
+                                final dependenciesNode = asNode().appendNode('dependencies')
+                                ext.addDependency = { Dependency dep, String scope ->
+                                    if (dep.group == null || dep.version == null || dep.name == null || dep.name == "unspecified")
+                                        return // ignore invalid dependencies
+                                    final dependencyNode = dependenciesNode.appendNode('dependency')
+                                    dependencyNode.appendNode('groupId', dep.group)
+                                    dependencyNode.appendNode('artifactId', dep.name)
+                                    dependencyNode.appendNode('version', dep.version)
+                                    dependencyNode.appendNode('scope', scope)
+                                    if (!dep.transitive) {
+                                        // If this dependency is transitive, we should force exclude all its dependencies them from the POM
+                                        final exclusionNode = dependencyNode.appendNode('exclusions').appendNode('exclusion')
+                                        exclusionNode.appendNode('groupId', '*')
+                                        exclusionNode.appendNode('artifactId', '*')
+                                    } else if (!dep.properties.excludeRules.empty) {
+                                        // Otherwise add specified exclude rules
+                                        final exclusionNode = dependencyNode.appendNode('exclusions').appendNode('exclusion')
+                                        dep.properties.excludeRules.each { ExcludeRule rule ->
+                                            exclusionNode.appendNode('groupId', rule.group ?: '*')
+                                            exclusionNode.appendNode('artifactId', rule.module ?: '*')
+                                        }
+                                    }
+                                }
+                                // List all "compile" dependencies (for old Gradle)
+//                        configurations.compile.getAllDependencies().each { dep ->
+//                            addDependency(dep, "compile")
+//                        }
+                                // List all "api" dependencies (for new Gradle) as "compile" dependencies
+                                configurations.api.getAllDependencies().each { dep ->
+                                    addDependency(dep, "compile")
+                                }
+                                // List all "implementation" dependencies (for new Gradle) as "runtime" dependencies
+                                configurations.implementation.getAllDependencies().each { dep ->
+                                    addDependency(dep, "runtime")
+                                }
+                            }
+                        }
+                    }
+                }
+                repositories {
+                    maven {
+                        url sonatypeRepositoryUrl
+                        credentials {
+                            username getRepositoryUsername()
+                            password getRepositoryPassword()
+                        }
+                    }
+                }
+            }
+            signing {
+                sign publishing.publications.aar
+            }
+        }
+    }
+
+
+}

@@ -1,0 +1,42 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion $compileSdkVersion
+    buildToolsVersion $buildToolsVersion
+
+    compileOptions.encoding = "UTF-8"
+
+    libraryVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${archivesBaseName}-${version}.aar"
+        }
+    }
+}
+
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+    //options.compilerArgs << "-parameters"
+}
+
+tasks.withType(Javadoc) {
+    options.encoding = "UTF-8"
+//    options.charSet = 'GBK'
+}
+
+
+repositories {
+    mavenLocal()
+    maven {
+        url "https://maven.aliyun.com/nexus/content/groups/public/"
+    }
+    mavenCentral()
+}
+
+//jar {
+//    manifest.attributes 'Build-Name': archivesBaseName
+//    manifest.attributes 'Build-By': "zhong ji"
+//    manifest.attributes 'Build-Tool': "gradle " + gradle.gradleVersion
+//    manifest.attributes 'Build-Jdk': ant.properties['java.runtime.version']
+//    manifest.attributes 'Bundle-License': 'http://www.apache.org/licenses/LICENSE-2.0'
+//}

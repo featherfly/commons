@@ -306,4 +306,23 @@ public class WordUtilsTest {
 
     }
 
+    @Test
+    public void testUpperCaseFirst_LowerCaseFirst() {
+        String upper = "HelloWorld";
+        String lower = "helloWorld";
+
+        String u = "H";
+        String l = "h";
+
+        assertEquals(upper, WordUtils.upperCaseFirst(upper));
+        assertEquals(upper, WordUtils.upperCaseFirst(lower));
+        assertEquals(u, WordUtils.upperCaseFirst(u));
+        assertEquals(u, WordUtils.upperCaseFirst(l));
+
+        assertEquals(lower, WordUtils.lowerCaseFirst(upper));
+        assertEquals(lower, WordUtils.lowerCaseFirst(lower));
+        assertEquals(l, WordUtils.lowerCaseFirst(u));
+        assertEquals(l, WordUtils.lowerCaseFirst(l));
+    }
+
 }

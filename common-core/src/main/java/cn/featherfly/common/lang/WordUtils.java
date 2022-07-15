@@ -29,10 +29,38 @@ public final class WordUtils {
             return word;
         }
         word = word.trim();
-        if (word.length() == 1) {
-            return Character.toUpperCase(word.charAt(0)) + "";
+        char first = word.charAt(0);
+        if (Character.isUpperCase(first)) {
+            return word;
         } else {
-            return Character.toUpperCase(word.charAt(0)) + word.substring(1);
+            if (word.length() == 1) {
+                return Character.toUpperCase(first) + "";
+            } else {
+                return Character.toUpperCase(first) + word.substring(1);
+            }
+        }
+    }
+
+    /**
+     * 转换第一个字符为小写
+     *
+     * @param word 需要转换的字符串
+     * @return 转换完成的字符串
+     */
+    public static String lowerCaseFirst(String word) {
+        if (org.apache.commons.lang3.StringUtils.isBlank(word)) {
+            return word;
+        }
+        word = word.trim();
+        char first = word.charAt(0);
+        if (Character.isLowerCase(first)) {
+            return word;
+        } else {
+            if (word.length() == 1) {
+                return Character.toLowerCase(first) + "";
+            } else {
+                return Character.toLowerCase(first) + word.substring(1);
+            }
         }
     }
 

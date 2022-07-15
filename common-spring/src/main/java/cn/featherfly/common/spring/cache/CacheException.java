@@ -16,13 +16,6 @@ public class CacheException extends LocalizedException {
 
     /**
      * Instantiates a new cache exception.
-     */
-    public CacheException() {
-        super();
-    }
-
-    /**
-     * Instantiates a new cache exception.
      *
      * @param message the message
      * @param locale  the locale

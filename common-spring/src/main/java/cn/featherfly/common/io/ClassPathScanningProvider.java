@@ -12,17 +12,13 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.SystemPropertyUtils;
 
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 
 /**
- * <p>
- * 类路径扫描器
- * </p>
+ * 类路径扫描器.
  *
  * @author zhongj
  */
@@ -99,7 +95,8 @@ public class ClassPathScanningProvider {
 
     // 查找
     private String resolveBasePackage(String basePackage) {
-        return ClassUtils.convertClassNameToResourcePath(SystemPropertyUtils.resolvePlaceholders(basePackage));
+        return org.springframework.util.ClassUtils.convertClassNameToResourcePath(
+                org.springframework.util.SystemPropertyUtils.resolvePlaceholders(basePackage));
     }
 
     // ********************************************************************

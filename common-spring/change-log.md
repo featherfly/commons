@@ -1,3 +1,7 @@
+# 0.3.0 2022-07-15
+
+1. 加入RestartClassLoaderClassDefiner
+
 # 0.2.2 2021-12-20
 
 1. 修复MulitiCacheManager，MulitiUniqueKeyCacheManager decorateCache(Cache)把包装好的cache再包装的问题

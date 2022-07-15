@@ -41,11 +41,10 @@ public final class ClassLoaderUtils {
      * @param name             the name
      * @param code             the code
      * @param protectionDomain the protection domain
-     * @param supplier         the supplier
      * @return the class
      */
     public static Class<?> defineClass(ClassLoader classLoader, String name, byte[] code,
-            ProtectionDomain protectionDomain, Supplier<Class<?>> supplier) {
+            ProtectionDomain protectionDomain) {
         Class<?> res;
         for (ClassDefiner cd : classDefiners) {
             res = cd.defineClass(classLoader, name, code, protectionDomain);
@@ -53,7 +52,26 @@ public final class ClassLoaderUtils {
                 return res;
             }
         }
-        return supplier.get();
+        return null;
+    }
+
+    /**
+     * Define class.
+     *
+     * @param classLoader      the class loader
+     * @param name             the name
+     * @param code             the code
+     * @param protectionDomain the protection domain
+     * @param supplier         the supplier
+     * @return the class
+     */
+    public static Class<?> defineClass(ClassLoader classLoader, String name, byte[] code,
+            ProtectionDomain protectionDomain, Supplier<Class<?>> supplier) {
+        Class<?> res = defineClass(classLoader, name, code, protectionDomain);
+        if (res == null) {
+            res = supplier.get();
+        }
+        return res;
     }
 
     /**

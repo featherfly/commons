@@ -1,3 +1,7 @@
+# 1.10.7 2022-07-15
+
+1. ClassLoaderUtils加入defineClass方法
+
 # 1.10.6 2022-07-15
 
 1. ClassLoaderUtils加入defineClass方法

@@ -15,9 +15,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
- * <p>
- * 类加载器工具
- * </p>
+ * 类加载器工具.
  *
  * @author zhongj
  * @since 1.0

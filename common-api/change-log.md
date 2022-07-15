@@ -1,3 +1,6 @@
+# 0.4.1 2022-07-15
+1. 加入ClassDefiner
+
 # 0.4.0 2022-03-28
 1. 提炼出ExceptionCodeSupport
 2. 移动common-core的ExceptionCode、LocalizedExceptionCode到api包

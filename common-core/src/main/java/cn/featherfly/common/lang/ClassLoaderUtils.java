@@ -7,19 +7,22 @@ package cn.featherfly.common.lang;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.security.ProtectionDomain;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * 类加载器工具.
  *
  * @author zhongj
- * @since 1.0
  * @version 1.0
+ * @since 1.0
  */
 public final class ClassLoaderUtils {
 
@@ -28,6 +31,30 @@ public final class ClassLoaderUtils {
 
     private static final String ENTER = "\n";
     private static final String TAB = "\t";
+
+    private static List<ClassDefiner> classDefiners = ServiceLoaderUtils.loadAll(ClassDefiner.class);
+
+    /**
+     * Define class.
+     *
+     * @param classLoader      the class loader
+     * @param name             the name
+     * @param code             the code
+     * @param protectionDomain the protection domain
+     * @param supplier         the supplier
+     * @return the class
+     */
+    public static Class<?> defineClass(ClassLoader classLoader, String name, byte[] code,
+            ProtectionDomain protectionDomain, Supplier<Class<?>> supplier) {
+        Class<?> res;
+        for (ClassDefiner cd : classDefiners) {
+            res = cd.defineClass(classLoader, name, code, protectionDomain);
+            if (res != null) {
+                return res;
+            }
+        }
+        return supplier.get();
+    }
 
     /**
      * 加载给定名称的所有资源，将搜索类加载器或得的所有结果汇总.
@@ -40,8 +67,8 @@ public final class ClassLoaderUtils {
      *
      * @param resourceName 需要加载的资源名称
      * @param aggregate    aggregate
-     * @throws IOException IO异常
      * @return 资源路径的迭代器
+     * @throws IOException IO异常
      */
     public static Iterator<URL> getResources(String resourceName, boolean aggregate) throws IOException {
         AggregateIterator<URL> iterator = new AggregateIterator<>();
@@ -81,8 +108,8 @@ public final class ClassLoaderUtils {
      * @param resourceName 需要加载的资源名称
      * @param callingClass 调用对象的class
      * @param aggregate    aggregate
-     * @throws IOException IO异常
      * @return 资源路径的迭代器
+     * @throws IOException IO异常
      */
     public static Iterator<URL> getResources(String resourceName, Class<?> callingClass, boolean aggregate)
             throws IOException {
@@ -223,8 +250,8 @@ public final class ClassLoaderUtils {
      *
      * @param className    需要加载的类（class）名称
      * @param callingClass 调用类或对象的class属性
-     * @throws ClassNotFoundException 如果从以上提供的几个地方都未加载到，则抛出.
      * @return 加载的类
+     * @throws ClassNotFoundException 如果从以上提供的几个地方都未加载到，则抛出.
      */
     public static Class<?> loadClass(String className, Class<?> callingClass) throws ClassNotFoundException {
         try {
@@ -251,7 +278,7 @@ public final class ClassLoaderUtils {
     }
 
     /**
-     * 打印输出给定类加载器的层次结构 - 调试很有用
+     * 打印输出给定类加载器的层次结构 - 调试很有用.
      *
      * @param cl 给定的类加载器
      */
@@ -333,15 +360,31 @@ public final class ClassLoaderUtils {
     }
 
     /**
-     * 聚合成一个能进行重复迭代和过滤的枚举实例。 始终保持一领先的统计员，以防止重复返回。
+     * 聚合成一个能进行重复迭代和过滤的枚举实例。 始终保持一领先的统计员，以防止重复返回。.
+     *
+     * @author zhongj
+     * @param <E> the element type
      */
     protected static class AggregateIterator<E> implements Iterator<E> {
 
+        /** The enums. */
         LinkedList<Enumeration<E>> enums = new LinkedList<>();
+
+        /** The cur. */
         Enumeration<E> cur = null;
+
+        /** The next. */
         E next = null;
+
+        /** The loaded. */
         Set<E> loaded = new HashSet<>();
 
+        /**
+         * Adds the enumeration.
+         *
+         * @param e the e
+         * @return the aggregate iterator
+         */
         @SuppressWarnings("rawtypes")
         public AggregateIterator addEnumeration(Enumeration<E> e) {
             if (e.hasMoreElements()) {
@@ -356,11 +399,17 @@ public final class ClassLoaderUtils {
             return this;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean hasNext() {
             return next != null;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public E next() {
             if (next != null) {
@@ -401,6 +450,9 @@ public final class ClassLoaderUtils {
 
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public void remove() {
             throw new UnsupportedOperationException();

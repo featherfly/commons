@@ -26,7 +26,7 @@ public final class Lang {
     /** The Constant WRAPPER. */
     private static final ExceptionWrapper<RuntimeException> WRAPPER = new ExceptionWrapper<>(RuntimeException.class);
 
-    public static List<EnumConvertor> enumConvertors = ServiceLoaderUtils.loadAll(EnumConvertor.class);
+    private static List<EnumConvertor> enumConvertors = ServiceLoaderUtils.loadAll(EnumConvertor.class);
 
     /**
      * Instantiates a new lang utils.

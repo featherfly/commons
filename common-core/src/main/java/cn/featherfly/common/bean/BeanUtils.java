@@ -17,9 +17,7 @@ import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
 
 /**
- * <p>
  * JAVA BEAN 工具类.
- * </p>
  *
  * @author zhongj
  */

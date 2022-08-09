@@ -11,9 +11,7 @@ import java.lang.reflect.Type;
  */
 public interface GenericType<T> extends Type {
     /**
-     * <p>
-     * 返回type
-     * </p>
+     * 返回type.
      *
      * @return type
      */

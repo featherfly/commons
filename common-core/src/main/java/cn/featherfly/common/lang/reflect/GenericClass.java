@@ -5,10 +5,7 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.GenericType;
 
 /**
- * <p>
- * GenericClass
- * </p>
- * .
+ * GenericClass .
  *
  * @author zhongj
  * @param <T> 类型

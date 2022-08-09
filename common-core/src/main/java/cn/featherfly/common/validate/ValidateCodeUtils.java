@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.function.BiFunction;
 
 import javax.imageio.ImageIO;
 
@@ -43,7 +44,7 @@ public final class ValidateCodeUtils {
     }
 
     /**
-     * 使用系统默认字符源生成验证码
+     * 使用系统默认字符源生成验证码.
      *
      * @param verifySize 验证码长度
      * @return verifyCode
@@ -53,7 +54,7 @@ public final class ValidateCodeUtils {
     }
 
     /**
-     * 使用指定源生成验证码
+     * 使用指定源生成验证码.
      *
      * @param verifySize 验证码长度
      * @param sources    验证码字符源
@@ -73,7 +74,7 @@ public final class ValidateCodeUtils {
     }
 
     /**
-     * 生成随机验证码文件,并返回验证码值
+     * 生成随机验证码文件,并返回验证码值.
      *
      * @param w          width
      * @param h          height
@@ -89,9 +90,7 @@ public final class ValidateCodeUtils {
     }
 
     /**
-     * <p>
-     * 输出随机验证码图片流,并返回验证码值
-     * </p>
+     * 输出随机验证码图片流,并返回验证码值.
      *
      * @param w          width
      * @param h          height
@@ -107,9 +106,7 @@ public final class ValidateCodeUtils {
     }
 
     /**
-     * <p>
      * 生成指定验证码图像文件.
-     * </p>
      *
      * @param w          width
      * @param h          height
@@ -136,7 +133,7 @@ public final class ValidateCodeUtils {
     }
 
     /**
-     * 输出指定验证码图片流
+     * 输出指定验证码图片流.
      *
      * @param w    width
      * @param h    height
@@ -145,6 +142,24 @@ public final class ValidateCodeUtils {
      * @throws IOException IOException
      */
     public static void outputImage(int w, int h, OutputStream os, String code) throws IOException {
+        //        int fontSize = h - 4;
+        //        Font font = new Font("Algerian", Font.ITALIC, fontSize);
+        outputImage(code, w, h, os, "jpg", (width, height) -> new Font("Algerian", Font.ITALIC, height - 4));
+    }
+
+    /**
+     * 输出指定验证码图片流.
+     *
+     * @param w            width
+     * @param h            height
+     * @param os           OutputStream
+     * @param code         verifyCode
+     * @param imageFormat  the image format
+     * @param fontFunction the font function
+     * @throws IOException IOException
+     */
+    public static void outputImage(String code, int w, int h, OutputStream os, String imageFormat,
+            BiFunction<Integer, Integer, Font> fontFunction) throws IOException {
         int verifySize = code.length();
         BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
         Random rand = new Random();
@@ -196,8 +211,10 @@ public final class ValidateCodeUtils {
         shear(g2, w, h, c);
 
         g2.setColor(getRandColor(100, 160));
-        int fontSize = h - 4;
-        Font font = new Font("Algerian", Font.ITALIC, fontSize);
+        //        int fontSize = h - 4;
+        //        Font font = new Font("Algerian", Font.ITALIC, fontSize);
+        Font font = fontFunction.apply(w, h);
+        int fontSize = font.getSize();
         g2.setFont(font);
         char[] chars = code.toCharArray();
         for (int i = 0; i < verifySize; i++) {
@@ -209,7 +226,7 @@ public final class ValidateCodeUtils {
         }
 
         g2.dispose();
-        ImageIO.write(image, "jpg", os);
+        ImageIO.write(image, imageFormat, os);
     }
 
     private static Color getRandColor(int fc, int bc) {

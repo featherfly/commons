@@ -4,9 +4,7 @@ package cn.featherfly.common.log;
 import cn.featherfly.common.lang.function.ArraySupplier;
 
 /**
- * <p>
- * LoggerFunctionArgs
- * </p>
+ * LoggerFunctionArgs.
  *
  * @author zhongj
  */

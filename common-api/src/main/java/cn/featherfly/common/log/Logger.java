@@ -2,10 +2,7 @@
 package cn.featherfly.common.log;
 
 /**
- * <p>
- * Logger
- * </p>
- * .
+ * Logger.
  *
  * @author zhongj
  */

@@ -18,9 +18,7 @@ import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.GenericType;
 
 /**
- * <p>
- * java bean 的属性
- * </p>
+ * java bean 的属性.
  *
  * @param <T> 泛型
  * @author zhongj

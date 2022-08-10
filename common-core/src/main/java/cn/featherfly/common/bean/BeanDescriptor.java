@@ -29,10 +29,7 @@ import cn.featherfly.common.lang.function.SerializableFunction;
 import cn.featherfly.common.lang.function.SerializableSupplier;
 
 /**
- * <p>
- * java bean 的描述信息
- * </p>
- * .
+ * java bean 的描述信息.
  *
  * @author zhongj
  * @param <T> 描述的类型

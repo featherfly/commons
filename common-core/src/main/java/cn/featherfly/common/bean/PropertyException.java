@@ -6,9 +6,7 @@ import java.util.Locale;
 import cn.featherfly.common.exception.LocalizedException;
 
 /**
- * <p>
  * 属性异常.
- * </p>
  *
  * @author zhongj
  */
@@ -19,48 +17,34 @@ public abstract class PropertyException extends LocalizedException {
     private static final String baseName = "@" + PropertyException.class.getSimpleName() + "#";
 
     /**
-     *
-     * @param clazz
-     *            类型
-     * @param propertyName
-     *            属性名
-     * @param key
-     *            资源文件key
+     * @param clazz        类型
+     * @param propertyName 属性名
+     * @param key          资源文件key
      */
     public PropertyException(Class<?> clazz, String propertyName, String key) {
-        super(baseName + key, new Object[] {clazz.getName(), propertyName});
+        super(baseName + key, new Object[] { clazz.getName(), propertyName });
         this.propertyName = propertyName;
     }
 
     /**
-     *
-     * @param clazz
-     *            类型
-     * @param propertyName
-     *            属性名
-     * @param key
-     *            资源文件key
-     * @param locale
-     *            locale
+     * @param clazz        类型
+     * @param propertyName 属性名
+     * @param key          资源文件key
+     * @param locale       locale
      */
     public PropertyException(Class<?> clazz, String propertyName, String key, Locale locale) {
-        super(baseName + key, new Object[] {clazz.getName(), propertyName}, locale);
+        super(baseName + key, new Object[] { clazz.getName(), propertyName }, locale);
         this.propertyName = propertyName;
     }
 
     /**
-     *
-     * @param clazz
-     *            类型
-     * @param propertyName
-     *            属性名
-     * @param key
-     *            key
-     * @param cause
-     *            异常
+     * @param clazz        类型
+     * @param propertyName 属性名
+     * @param key          key
+     * @param cause        异常
      */
     public PropertyException(Class<?> clazz, String propertyName, String key, Throwable cause) {
-        super(baseName + key, new Object[] {clazz.getName(), propertyName}, cause);
+        super(baseName + key, new Object[] { clazz.getName(), propertyName }, cause);
         this.propertyName = propertyName;
     }
 
@@ -78,8 +62,7 @@ public abstract class PropertyException extends LocalizedException {
     }
 
     /**
-     * @param propertyName
-     *            设置propertyName
+     * @param propertyName 设置propertyName
      */
     public void setPropertyName(String propertyName) {
         this.propertyName = propertyName;

@@ -9,9 +9,7 @@ import org.slf4j.LoggerFactory;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 
 /**
- * <p>
- * map 的描述信息
- * </p>
+ * map 的描述信息.
  *
  * @author zhongj
  * @param <T> 描述的类型
@@ -32,8 +30,7 @@ public final class MapBeanDescriptor<T> extends BeanDescriptor<T> {
     }
 
     /**
-     * <p>
-     * 设置属性
+     * 设置属性.
      *
      * @param obj   目标对象
      * @param name  属性名称
@@ -69,9 +66,7 @@ public final class MapBeanDescriptor<T> extends BeanDescriptor<T> {
     }
 
     /**
-     * <p>
-     * 返回属性
-     * </p>
+     * 返回属性.
      *
      * @param obj  目标对象
      * @param name 属性名

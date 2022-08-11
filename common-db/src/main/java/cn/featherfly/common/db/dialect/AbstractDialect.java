@@ -18,6 +18,7 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.repository.Index;
+import cn.featherfly.common.repository.operate.QueryOperator.QueryPolicy;
 
 /**
  * <p>
@@ -38,10 +39,10 @@ public abstract class AbstractDialect implements Dialect {
     protected static final String UPDATE_STRING = " for update";
 
     /** The keywords uppercase. */
-    private boolean keywordsUppercase = true;
+    private StringCase keywordCase = StringCase.NONE;
 
     /** The table and column name uppercase. */
-    private StringConverter tableAndColumnNameConverter = StringConverter.NONE;
+    private StringCase tableAndColumnNameCase = StringCase.NONE;
 
     /**
      * Instantiates a new abstract dialect.
@@ -51,22 +52,29 @@ public abstract class AbstractDialect implements Dialect {
     }
 
     /**
-     * 返回keywordsUppercase.
-     *
-     * @return keywordsUppercase
+     * {@inheritDoc}
      */
     @Override
-    public boolean isKeywordsUppercase() {
-        return keywordsUppercase;
+    public StringCase keywordsCase() {
+        return keywordCase;
     }
 
     /**
-     * 设置keywordsUppercase.
+     * set keywordCase value
      *
-     * @param keywordsUppercase keywordsUppercase
+     * @param keywordCase keywordCase
      */
-    public void setKeywordsUppercase(boolean keywordsUppercase) {
-        this.keywordsUppercase = keywordsUppercase;
+    public void setKeywordCase(StringCase keywordCase) {
+        this.keywordCase = keywordCase;
+    }
+
+    /**
+     * set tableAndColumnNameCase value
+     *
+     * @param tableAndColumnNameCase tableAndColumnNameCase
+     */
+    public void setTableAndColumnNameCase(StringCase tableAndColumnNameCase) {
+        this.tableAndColumnNameCase = tableAndColumnNameCase;
     }
 
     /**
@@ -75,17 +83,8 @@ public abstract class AbstractDialect implements Dialect {
      * @return StringConverter
      */
     @Override
-    public StringConverter tableAndColumnNameConverter() {
-        return tableAndColumnNameConverter;
-    }
-
-    /**
-     * 设置tableAndColumnNameUppercase.
-     *
-     * @param tableAndColumnNameConverter tableAndColumnNameConverter
-     */
-    public void setTableAndColumnNameUppercase(StringConverter tableAndColumnNameConverter) {
-        this.tableAndColumnNameConverter = tableAndColumnNameConverter;
+    public StringCase tableAndColumnNameCase() {
+        return tableAndColumnNameCase;
     }
 
     /**
@@ -415,6 +414,84 @@ public abstract class AbstractDialect implements Dialect {
      * {@inheritDoc}
      */
     @Override
+    public String getKeywordLike(QueryPolicy queryPolicy) {
+        if (queryPolicy == null) {
+            queryPolicy = QueryPolicy.AUTO;
+        }
+        switch (queryPolicy) {
+            case CASE_INSENSITIVE:
+                return getKeywordLikeCaseInsensitive();
+            case CASE_SENSITIVE:
+                return getKeywordLikeCaseSensitive();
+            default:
+                return getKeyword(Keywords.LIKE);
+        }
+    }
+
+    /**
+     * Gets the keyword like case insensitive.
+     *
+     * @return the keyword like case insensitive
+     */
+    abstract String getKeywordLikeCaseInsensitive();
+
+    /**
+     * Gets the keyword like case sensitive.
+     *
+     * @return the keyword like case sensitive
+     */
+    abstract String getKeywordLikeCaseSensitive();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getKeywordEq(QueryPolicy queryPolicy) {
+        if (queryPolicy == null) {
+            queryPolicy = QueryPolicy.AUTO;
+        }
+        switch (queryPolicy) {
+            case CASE_INSENSITIVE:
+                return getKeywordEqCaseInsensitive();
+            case CASE_SENSITIVE:
+                return getKeywordEqCaseSensitive();
+            default:
+                return Chars.EQ;
+        }
+    }
+
+    /**
+     * Gets the keyword like case insensitive.
+     *
+     * @return the keyword like case insensitive
+     */
+    abstract String getKeywordEqCaseInsensitive();
+
+    /**
+     * Gets the keyword like case sensitive.
+     *
+     * @return the keyword like case sensitive
+     */
+    abstract String getKeywordEqCaseSensitive();
+
+    protected String getKeyword(String keyword) {
+        if (Lang.isEmpty(keyword)) {
+            return "";
+        }
+        switch (keywordsCase()) {
+            case LOWER_CASE:
+                return keyword.toLowerCase();
+            case UPPER_CASE:
+                return keyword.toUpperCase();
+            default:
+                return keyword;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Object[] getPaginationSqlParameter(Object[] params, int start, int limit) {
         Object[] pagingParams = null;
         if (start > 0) {
@@ -495,6 +572,9 @@ public abstract class AbstractDialect implements Dialect {
      */
     protected abstract String convertValueToSql(Object value, int sqlType);
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String buildUpsertBatchSql(String tableName, String[] columnNames, String[] uniqueColumns,
             int insertAmount) {

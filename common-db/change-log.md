@@ -1,3 +1,7 @@
+# 0.5.5 2022-
+1. Dialect加入getKeywordLike(QueryPolicy)、getKeywordEq(QueryPolicy)、keywordsCase()方法
+2. Dialect删除isKeywordUpcase()方法
+
 # 0.5.4 2022-6-29
 1. 修复多个属性重复映射同一个列没有抛出异常的问题（现在抛出异常）
 

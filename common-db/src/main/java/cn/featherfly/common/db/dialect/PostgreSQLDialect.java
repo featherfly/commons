@@ -17,9 +17,7 @@ import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
 
 /**
- * <p>
  * PostgreSQL Dialect.
- * </p>
  *
  * @author zhongj
  */
@@ -156,18 +154,7 @@ public class PostgreSQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public String wrapName(String name) {
-        if (Lang.isNotEmpty(name)) {
-            return getWrapSign() + name + getWrapSign();
-        }
-        return name;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getWrapSign() {
+    public String getWrapSymbol() {
         return "\"";
     }
 
@@ -315,6 +302,39 @@ public class PostgreSQLDialect extends AbstractDialect {
     public String getInitSqlFooter() {
         // FIXME 未实现
         throw new UnsupportedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordLikeCaseInsensitive() {
+        return getKeyword("ILIKE");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordLikeCaseSensitive() {
+        return getKeyword(Keywords.LIKE);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordEqCaseInsensitive() {
+        // FIXME 使用like有隐患，后续再来优化
+        return getKeyword("ILIKE");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordEqCaseSensitive() {
+        return Chars.EQ;
     }
 
 }

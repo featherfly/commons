@@ -14,6 +14,7 @@ import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.operate.AggregateFunction;
 import cn.featherfly.common.repository.operate.Function;
 import cn.featherfly.common.repository.operate.LogicOperator;
+import cn.featherfly.common.repository.operate.QueryOperator.QueryPolicy;
 import cn.featherfly.common.repository.operate.SortOperator;
 
 /**
@@ -45,7 +46,7 @@ public interface Dialect {
      *
      * @author zhongj
      */
-    public enum StringConverter {
+    public enum StringCase {
 
         /** The none. */
         NONE,
@@ -56,10 +57,7 @@ public interface Dialect {
     }
 
     /**
-     * <p>
-     * 转换普通sql为带分页的sql
-     * </p>
-     * .
+     * 转换普通sql为带分页的sql.
      *
      * @param sql   带转换的sql
      * @param start 起始数
@@ -136,15 +134,17 @@ public interface Dialect {
     String valueToSql(Object value, int sqlType);
 
     /**
-     * <p>
-     * 包装名称，避免关键字问题
-     * </p>
-     * .
+     * 包装名称，避免关键字问题 .
      *
      * @param name 名称（列明，表名等）
      * @return 包装后的名称
      */
-    String wrapName(String name);
+    default String wrapName(String name) {
+        if (Lang.isNotEmpty(name)) {
+            return getWrapSymbol() + name + getWrapSymbol();
+        }
+        return name;
+    }
 
     /**
      * Checks if is auto generate key batch.
@@ -196,6 +196,13 @@ public interface Dialect {
      */
     String getInitSqlFooter();
 
+    /**
+     * Builds the insert sql.
+     *
+     * @param tableName   the table name
+     * @param columnNames the column names
+     * @return the string
+     */
     default String buildInsertSql(String tableName, String[] columnNames) {
         String sql = BuilderUtils.link(getKeyword(Keywords.INSERT), getKeyword(Keywords.INTO), wrapName(tableName),
                 Chars.PAREN_L);
@@ -250,27 +257,62 @@ public interface Dialect {
         return sql;
     }
 
+    /**
+     * Builds the upsert sql.
+     *
+     * @param tableName    the table name
+     * @param columnNames  the column names
+     * @param uniqueColumn the unique column
+     * @return the string
+     */
     default String buildUpsertSql(String tableName, String[] columnNames, String uniqueColumn) {
         return buildUpsertSql(tableName, columnNames, new String[] { uniqueColumn });
     }
 
+    /**
+     * Builds the upsert sql.
+     *
+     * @param tableName     the table name
+     * @param columnNames   the column names
+     * @param uniqueColumns the unique columns
+     * @return the string
+     */
     default String buildUpsertSql(String tableName, String[] columnNames, String[] uniqueColumns) {
         return buildUpsertBatchSql(tableName, columnNames, uniqueColumns, 1);
     }
 
+    /**
+     * Builds the upsert batch sql.
+     *
+     * @param tableName    the table name
+     * @param columnNames  the column names
+     * @param uniqueColumn the unique column
+     * @param insertAmount the insert amount
+     * @return the string
+     */
     default String buildUpsertBatchSql(String tableName, String[] columnNames, String uniqueColumn, int insertAmount) {
         return buildUpsertBatchSql(tableName, columnNames, new String[] { uniqueColumn }, insertAmount);
     }
 
+    /**
+     * Builds the upsert batch sql.
+     *
+     * @param tableName     the table name
+     * @param columnNames   the column names
+     * @param uniqueColumns the unique columns
+     * @param insertAmount  the insert amount
+     * @return the string
+     */
     String buildUpsertBatchSql(String tableName, String[] columnNames, String[] uniqueColumns, int insertAmount);
 
     /**
-     * Checks if is keywords uppercase.
+     * Checks if is table and column name to uppercase or lowercase or do
+     * nothing.
      *
-     * @return true, if is keywords uppercase
+     * @return true, if is table and column name uppercase
      */
-    default boolean isKeywordsUppercase() {
-        return true;
+    default StringCase keywordsCase() {
+        return StringCase.NONE;
     }
 
     /**
@@ -279,8 +321,8 @@ public interface Dialect {
      *
      * @return true, if is table and column name uppercase
      */
-    default StringConverter tableAndColumnNameConverter() {
-        return StringConverter.NONE;
+    default StringCase tableAndColumnNameCase() {
+        return StringCase.NONE;
     }
 
     /**
@@ -288,9 +330,7 @@ public interface Dialect {
      *
      * @return sql key words
      */
-    default Keyworld getKeywords() {
-        return new Keyworld(this);
-    }
+    Keyworld getKeywords();
 
     /**
      * get converted keywords.
@@ -299,10 +339,13 @@ public interface Dialect {
      * @return sql key words
      */
     default String getKeyword(SortOperator keywords) {
-        if (isKeywordsUppercase()) {
-            return keywords.toString();
-        } else {
-            return keywords.toString().toLowerCase();
+        switch (keywordsCase()) {
+            case LOWER_CASE:
+                return keywords.toString().toLowerCase();
+            //            case UPPER_CASE:
+            //                return keywords.toString().toUpperCase();
+            default:
+                return keywords.toString();
         }
     }
 
@@ -313,10 +356,13 @@ public interface Dialect {
      * @return sql key words
      */
     default String getKeyword(LogicOperator keywords) {
-        if (isKeywordsUppercase()) {
-            return keywords.toString();
-        } else {
-            return keywords.toString().toLowerCase();
+        switch (keywordsCase()) {
+            case LOWER_CASE:
+                return keywords.toString().toLowerCase();
+            //            case UPPER_CASE:
+            //                return keywords.toString().toUpperCase();
+            default:
+                return keywords.toString();
         }
     }
 
@@ -327,12 +373,31 @@ public interface Dialect {
      * @return sql key words
      */
     default String getKeyword(Keywords keywords) {
-        if (isKeywordsUppercase()) {
-            return keywords.toString();
-        } else {
-            return keywords.toString().toLowerCase();
+        switch (keywordsCase()) {
+            case LOWER_CASE:
+                return keywords.toString().toLowerCase();
+            //            case UPPER_CASE:
+            //                return keywords.toString().toUpperCase();
+            default:
+                return keywords.toString();
         }
     }
+
+    /**
+     * Gets the keyword like.
+     *
+     * @param queryPolicy the like query policy
+     * @return the keyword like
+     */
+    String getKeywordLike(QueryPolicy queryPolicy);
+
+    /**
+     * Gets the keyword eq.
+     *
+     * @param queryPolicy the query policy
+     * @return the keyword eq
+     */
+    String getKeywordEq(QueryPolicy queryPolicy);
 
     /**
      * get converted aggregate function.
@@ -341,10 +406,13 @@ public interface Dialect {
      * @return sql aggregate function
      */
     default String getFunction(Function function) {
-        if (isKeywordsUppercase()) {
-            return function.toString().toUpperCase();
-        } else {
-            return function.toString().toLowerCase();
+        switch (keywordsCase()) {
+            case LOWER_CASE:
+                return function.toString().toLowerCase();
+            //            case UPPER_CASE:
+            //                return function.toString().toUpperCase();
+            default:
+                return function.toString();
         }
     }
 
@@ -476,7 +544,7 @@ public interface Dialect {
             return tableOrColumnName;
         }
         String result = tableOrColumnName;
-        switch (tableAndColumnNameConverter()) {
+        switch (tableAndColumnNameCase()) {
             case UPPER_CASE:
                 return result.toUpperCase();
             case LOWER_CASE:
@@ -1038,8 +1106,19 @@ public interface Dialect {
      * Gets the wrap sign.
      *
      * @return the wrap sign
+     * @deprecated {@link #getWrapSymbol()}
      */
-    String getWrapSign();
+    @Deprecated
+    default String getWrapSign() {
+        return getWrapSymbol();
+    }
+
+    /**
+     * Gets the wrap symbol.
+     *
+     * @return the wrap symbol
+     */
+    String getWrapSymbol();
 
     /**
      * The Class Keyworld.
@@ -1384,7 +1463,36 @@ public interface Dialect {
          * @return the string
          */
         public String like() {
-            return dialect.getKeyword(Keywords.LIKE);
+            return like(QueryPolicy.AUTO);
+        }
+
+        /**
+         * Like.
+         *
+         * @param queryPolicy the like query policy
+         * @return the string
+         */
+        public String like(QueryPolicy queryPolicy) {
+            return dialect.getKeywordLike(queryPolicy);
+        }
+
+        /**
+         * Eq.
+         *
+         * @return the string
+         */
+        public String eq() {
+            return eq(QueryPolicy.AUTO);
+        }
+
+        /**
+         * Eq.
+         *
+         * @param queryPolicy the query policy
+         * @return the string
+         */
+        public String eq(QueryPolicy queryPolicy) {
+            return dialect.getKeywordEq(queryPolicy);
         }
 
         /**
@@ -1646,6 +1754,15 @@ public interface Dialect {
          */
         public String cascade() {
             return dialect.getKeyword(Keywords.CASCADE);
+        }
+
+        /**
+         * Collate.
+         *
+         * @return the string
+         */
+        public String collate() {
+            return dialect.getKeyword(Keywords.COLLATE);
         }
     }
 }

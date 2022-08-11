@@ -198,6 +198,8 @@ public enum Keywords {
     SCHEMA,
 
     /** The unique. */
-    UNIQUE;
+    UNIQUE,
 
+    /** The collate. */
+    COLLATE;
 }

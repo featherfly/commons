@@ -17,17 +17,39 @@ import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
 
 /**
- * <p>
  * MySQL Dialect.
- * </p>
  *
  * @author zhongj
  */
 public class MySQLDialect extends AbstractDialect {
 
+    /** The Constant DEFAULT_COLLATE_CASE_INSENSITIVE. */
+    public static final String DEFAULT_COLLATE_CASE_INSENSITIVE = "UTF8_GENERAL_CI";
+
+    private String collateCaseInsensitive = DEFAULT_COLLATE_CASE_INSENSITIVE;
+
     /**
+     * Instantiates a new my SQL dialect.
      */
     public MySQLDialect() {
+    }
+
+    /**
+     * get collateCaseInsensitive value.
+     *
+     * @return collateCaseInsensitive
+     */
+    public String getCollateCaseInsensitive() {
+        return collateCaseInsensitive;
+    }
+
+    /**
+     * set collateCaseInsensitive value.
+     *
+     * @param collateCaseInsensitive collateCaseInsensitive
+     */
+    public void setCollateCaseInsensitive(String collateCaseInsensitive) {
+        this.collateCaseInsensitive = collateCaseInsensitive;
     }
 
     /**
@@ -131,28 +153,17 @@ public class MySQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public String wrapName(String name) {
-        if (Lang.isNotEmpty(name)) {
-            return getWrapSign() + name + getWrapSign();
-        }
-        return name;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getWrapSign() {
+    public String getWrapSymbol() {
         return "`";
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public String getFkCheck(boolean check) {
         return "SET FOREIGN_KEY_CHECKS=" + (check ? 1 : 0);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getAutoIncrement(Column column) {
         if (column.isAutoincrement()) {
@@ -162,6 +173,9 @@ public class MySQLDialect extends AbstractDialect {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getColumnTypeName(SQLType sqlType) {
         JDBCType type = JDBCType.valueOf(sqlType.getVendorTypeNumber());
@@ -239,5 +253,37 @@ public class MySQLDialect extends AbstractDialect {
             columnsSql.deleteCharAt(columnsSql.length() - 1);
         }
         return BuilderUtils.link(sql, columnsSql.toString());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordLikeCaseInsensitive() {
+        return getKeyword(Keywords.COLLATE) + " " + collateCaseInsensitive + " " + getKeyword(Keywords.LIKE);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordLikeCaseSensitive() {
+        return getKeyword(Keywords.LIKE) + " " + getKeyword("BINARY");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordEqCaseInsensitive() {
+        return getKeyword(Keywords.COLLATE) + " " + collateCaseInsensitive + " =";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordEqCaseSensitive() {
+        return "= " + getKeyword("BINARY");
     }
 }

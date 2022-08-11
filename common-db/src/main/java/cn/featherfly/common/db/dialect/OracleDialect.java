@@ -14,9 +14,7 @@ import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
 
 /**
- * <p>
  * Oracle Dialect.
- * </p>
  *
  * @author zhongj
  */
@@ -170,18 +168,7 @@ public class OracleDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public String wrapName(String name) {
-        if (Lang.isNotEmpty(name)) {
-            return getWrapSign() + name + getWrapSign();
-        }
-        return name;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getWrapSign() {
+    public String getWrapSymbol() {
         return "'";
     }
 
@@ -248,5 +235,39 @@ public class OracleDialect extends AbstractDialect {
             int insertAmount) {
         // FIXME 未实现
         throw new UnsupportedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordLikeCaseInsensitive() {
+        // FIXME 未实现，后续来实现
+        throw new UnsupportedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordLikeCaseSensitive() {
+        return getKeyword(Keywords.LIKE);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordEqCaseInsensitive() {
+        // FIXME 未实现，后续来实现
+        throw new UnsupportedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordEqCaseSensitive() {
+        return Chars.EQ;
     }
 }

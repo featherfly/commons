@@ -18,10 +18,7 @@ import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
 
 /**
- * <p>
- * SQLite Dialect
- * </p>
- * .
+ * SQLite Dialect .
  *
  * @author zhongj
  */
@@ -29,6 +26,9 @@ public class SQLiteDialect extends AbstractDialect {
 
     /** The Constant TEXT_TYPE. */
     public static final String TEXT_TYPE = "TEXT";
+
+    // sqlite 默认值
+    private boolean caseSensitiveLike = false;
 
     /**
      * Instantiates a new SQ lite dialect.
@@ -136,18 +136,7 @@ public class SQLiteDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public String wrapName(String name) {
-        if (Lang.isNotEmpty(name)) {
-            return getWrapSign() + name + getWrapSign();
-        }
-        return name;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getWrapSign() {
+    public String getWrapSymbol() {
         return "`";
     }
 
@@ -375,5 +364,45 @@ public class SQLiteDialect extends AbstractDialect {
     public String getInitSqlFooter() {
         // FIXME 未实现
         throw new UnsupportedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordLikeCaseInsensitive() {
+        if (!caseSensitiveLike) {
+            return getKeyword(Keywords.LIKE);
+        }
+        // sqlite 目前只能全局设置 caseSensitiveLike
+        throw new UnsupportedException("unsupported case insensitive like, case_sensitive_like = " + caseSensitiveLike);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordLikeCaseSensitive() {
+        if (caseSensitiveLike) {
+            return getKeyword(Keywords.LIKE);
+        }
+        // sqlite 目前只能全局设置 caseSensitiveLike
+        throw new UnsupportedException("unsupported case senstive like, case_sensitive_like = " + caseSensitiveLike);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordEqCaseInsensitive() {
+        return getKeyword("= COLLATE NOCASE");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordEqCaseSensitive() {
+        return getKeyword("= COLLATE BINARY");
     }
 }

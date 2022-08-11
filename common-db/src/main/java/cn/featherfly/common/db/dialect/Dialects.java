@@ -2,10 +2,7 @@
 package cn.featherfly.common.db.dialect;
 
 /**
- * <p>
- * Dialects
- * </p>
- * .
+ * Dialects.
  *
  * @author zhongj
  */

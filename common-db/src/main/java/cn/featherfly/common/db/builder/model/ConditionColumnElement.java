@@ -10,6 +10,7 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.operate.QueryOperator;
+import cn.featherfly.common.repository.operate.QueryOperator.QueryPolicy;
 
 /**
  * <p>
@@ -22,6 +23,8 @@ import cn.featherfly.common.repository.operate.QueryOperator;
 public class ConditionColumnElement extends ParamedColumnElement {
 
     private QueryOperator queryOperator;
+
+    private QueryPolicy queryPolicy;
 
     /**
      * Instantiates a new condition column element.
@@ -49,9 +52,29 @@ public class ConditionColumnElement extends ParamedColumnElement {
      */
     public ConditionColumnElement(Dialect dialect, String name, Object value, QueryOperator queryOperator,
             String tableAlias, Predicate<Object> ignorePolicy) {
+        this(dialect, name, value, queryOperator, QueryPolicy.AUTO, null, ignorePolicy);
+    }
+
+    /**
+     * Instantiates a new condition column element.
+     *
+     * @param dialect       dialect
+     * @param name          name
+     * @param value         param value
+     * @param queryOperator queryOperator
+     * @param queryPolicy   the query policy
+     * @param tableAlias    tableAlias
+     * @param ignorePolicy  the ignore policy
+     */
+    public ConditionColumnElement(Dialect dialect, String name, Object value, QueryOperator queryOperator,
+            QueryPolicy queryPolicy, String tableAlias, Predicate<Object> ignorePolicy) {
         super(dialect, name, value, tableAlias, ignorePolicy);
         AssertIllegalArgument.isNotNull(queryOperator, "queryOperator");
+        if (queryPolicy == null) {
+            queryPolicy = QueryPolicy.AUTO;
+        }
         this.queryOperator = queryOperator;
+        this.queryPolicy = queryPolicy;
 
         if (!ignorePolicy.test(value)) { // 不忽略
             Object paramValue = null;
@@ -164,7 +187,7 @@ public class ConditionColumnElement extends ParamedColumnElement {
             case NIN:
                 return dialect.getKeywords().notIn();
             case LK:
-                return dialect.getKeywords().like();
+                return dialect.getKeywords().like(queryPolicy);
             default:
                 return "=";
         }

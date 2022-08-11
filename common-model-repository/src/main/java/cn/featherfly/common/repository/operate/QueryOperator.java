@@ -5,66 +5,54 @@ package cn.featherfly.common.repository.operate;
  * <p>
  * query condition operator
  * </p>
+ * .
  *
  * @author zhongj
  */
 public enum QueryOperator implements Operator {
-    /**
-     * 小于
-     */
+
+    /** 小于. */
     LT,
-    /**
-     * 小于等于
-     */
+
+    /** 小于等于. */
     LE,
-    /**
-     * 等于
-     */
+
+    /** 等于. */
     EQ,
-    /**
-     * 不等于
-     */
+
+    /** 不等于. */
     NE,
-    /**
-     * 大于等于
-     */
+
+    /** 大于等于. */
     GE,
-    /**
-     * 大于
-     */
+
+    /** 大于. */
     GT,
-    /**
-     * 以XX开始
-     */
+
+    /** 以XX开始. */
     SW,
-    /**
-     * 包含
-     */
+
+    /** 包含. */
     CO,
-    /**
-     * 以XX结尾
-     */
+
+    /** 以XX结尾. */
     EW,
-    /**
-     * 为null
-     */
+
+    /** 为null. */
     ISN,
-    /**
-     * 不为null
-     */
+
+    /** 不为null. */
     INN,
-    /**
-     * in
-     */
+
+    /** in. */
     IN,
-    /**
-     * not in
-     */
+
+    /** not in. */
     NIN,
-    /**
-     * like
-     */
+
+    /** like. */
     LK
+
     // /**
     // * 按位与 ： &
     // */
@@ -88,10 +76,29 @@ public enum QueryOperator implements Operator {
     // /**
     // * 按位右移：>>
     // */
+    /**
+     * Instantiates a new query operator.
+     */
     // br(">>")
     ;
 
     QueryOperator() {
     }
 
+    /**
+     * The Enum LikeQueryPolicy.
+     *
+     * @author zhongj
+     */
+    public enum QueryPolicy {
+
+        /** 自动，由具体的存储（数据库）的默认值决定. */
+        AUTO,
+
+        /** 不区分大小写. */
+        CASE_INSENSITIVE,
+
+        /** 区分大小写. */
+        CASE_SENSITIVE;
+    }
 }

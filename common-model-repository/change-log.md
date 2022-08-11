@@ -1,3 +1,6 @@
+# 0.2.4 2022-08-11
+1. 加入LikeQueryPolicy
+
 # 0.2.3 2022-04-22
 1. PropertyMapping.getRepositoryFieldName()方法当repositoryFieldName为空并且子映射不为空时，返回子映射的repositoryFieldName的合集（xx,yy,zz）
 

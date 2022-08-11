@@ -405,4 +405,20 @@ public class SQLiteDialect extends AbstractDialect {
     String getKeywordEqCaseSensitive() {
         return getKeyword("= COLLATE BINARY");
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordNeCaseInsensitive() {
+        return getKeyword("!= COLLATE NOCASE");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordNeCaseSensitive() {
+        return getKeyword("!= COLLATE BINARY");
+    }
 }

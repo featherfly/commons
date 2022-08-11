@@ -474,6 +474,38 @@ public abstract class AbstractDialect implements Dialect {
      */
     abstract String getKeywordEqCaseSensitive();
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getKeywordNe(QueryPolicy queryPolicy) {
+        if (queryPolicy == null) {
+            queryPolicy = QueryPolicy.AUTO;
+        }
+        switch (queryPolicy) {
+            case CASE_INSENSITIVE:
+                return getKeywordNeCaseInsensitive();
+            case CASE_SENSITIVE:
+                return getKeywordNeCaseSensitive();
+            default:
+                return "!=";
+        }
+    }
+
+    /**
+     * Gets the keyword like case insensitive.
+     *
+     * @return the keyword like case insensitive
+     */
+    abstract String getKeywordNeCaseInsensitive();
+
+    /**
+     * Gets the keyword like case sensitive.
+     *
+     * @return the keyword like case sensitive
+     */
+    abstract String getKeywordNeCaseSensitive();
+
     protected String getKeyword(String keyword) {
         if (Lang.isEmpty(keyword)) {
             return "";

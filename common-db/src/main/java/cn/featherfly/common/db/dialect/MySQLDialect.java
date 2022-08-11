@@ -286,4 +286,20 @@ public class MySQLDialect extends AbstractDialect {
     String getKeywordEqCaseSensitive() {
         return "= " + getKeyword("BINARY");
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordNeCaseInsensitive() {
+        return getKeyword(Keywords.COLLATE) + " " + collateCaseInsensitive + " !=";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordNeCaseSensitive() {
+        return "!= " + getKeyword("BINARY");
+    }
 }

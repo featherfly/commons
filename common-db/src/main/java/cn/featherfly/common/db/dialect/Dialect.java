@@ -400,6 +400,14 @@ public interface Dialect {
     String getKeywordEq(QueryPolicy queryPolicy);
 
     /**
+     * Gets the keyword ne.
+     *
+     * @param queryPolicy the query policy
+     * @return the keyword eq
+     */
+    String getKeywordNe(QueryPolicy queryPolicy);
+
+    /**
      * get converted aggregate function.
      *
      * @param function aggregate function
@@ -1477,7 +1485,7 @@ public interface Dialect {
         }
 
         /**
-         * Eq.
+         * equals.
          *
          * @return the string
          */
@@ -1486,13 +1494,32 @@ public interface Dialect {
         }
 
         /**
-         * Eq.
+         * equals.
          *
          * @param queryPolicy the query policy
          * @return the string
          */
         public String eq(QueryPolicy queryPolicy) {
             return dialect.getKeywordEq(queryPolicy);
+        }
+
+        /**
+         * not equals.
+         *
+         * @return the string
+         */
+        public String ne() {
+            return ne(QueryPolicy.AUTO);
+        }
+
+        /**
+         * not equals.
+         *
+         * @param queryPolicy the query policy
+         * @return the string
+         */
+        public String ne(QueryPolicy queryPolicy) {
+            return dialect.getKeywordNe(queryPolicy);
         }
 
         /**

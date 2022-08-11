@@ -270,4 +270,21 @@ public class OracleDialect extends AbstractDialect {
     String getKeywordEqCaseSensitive() {
         return Chars.EQ;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordNeCaseInsensitive() {
+        // FIXME 未实现
+        throw new UnsupportedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getKeywordNeCaseSensitive() {
+        return "!=";
+    }
 }

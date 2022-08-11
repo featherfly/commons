@@ -13,10 +13,7 @@ import cn.featherfly.common.repository.operate.QueryOperator;
 import cn.featherfly.common.repository.operate.QueryOperator.QueryPolicy;
 
 /**
- * <p>
- * condition column element
- * </p>
- * .
+ * condition column element .
  *
  * @author zhongj
  */
@@ -52,7 +49,7 @@ public class ConditionColumnElement extends ParamedColumnElement {
      */
     public ConditionColumnElement(Dialect dialect, String name, Object value, QueryOperator queryOperator,
             String tableAlias, Predicate<Object> ignorePolicy) {
-        this(dialect, name, value, queryOperator, QueryPolicy.AUTO, null, ignorePolicy);
+        this(dialect, name, value, queryOperator, QueryPolicy.AUTO, tableAlias, ignorePolicy);
     }
 
     /**
@@ -169,15 +166,15 @@ public class ConditionColumnElement extends ParamedColumnElement {
             case GE:
                 return ">=";
             case EQ:
-                return "=";
+                return dialect.getKeywords().eq(queryPolicy);
             case NE:
                 return "!=";
             case SW:
-                return dialect.getKeywords().like();
+                return dialect.getKeywords().like(queryPolicy);
             case CO:
-                return dialect.getKeywords().like();
+                return dialect.getKeywords().like(queryPolicy);
             case EW:
-                return dialect.getKeywords().like();
+                return dialect.getKeywords().like(queryPolicy);
             case ISN:
                 return dialect.getKeywords().isNull();
             case INN:
@@ -189,7 +186,7 @@ public class ConditionColumnElement extends ParamedColumnElement {
             case LK:
                 return dialect.getKeywords().like(queryPolicy);
             default:
-                return "=";
+                return dialect.getKeywords().eq(queryPolicy);
         }
     }
 }

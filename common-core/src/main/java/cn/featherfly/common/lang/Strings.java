@@ -310,6 +310,109 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
+     * 去掉起始字符.
+     *
+     * @param str 源字符串
+     * @param ts  需要去除的字符
+     * @return 去掉起始字符后的字符串
+     */
+    public static String trimStart(String str, String ts) {
+        if (str == null) {
+            return "";
+        }
+        while (str.startsWith(ts)) {
+            str = str.substring(ts.length(), str.length());
+        }
+        return str;
+    }
+
+    /**
+     * 去掉尾部字符.
+     *
+     * @param str 源字符串
+     * @param ts  需要去除的字符
+     * @return 去掉尾部字符后的字符串
+     */
+    public static String trimEnd(String str, String ts) {
+        if (str == null) {
+            return "";
+        }
+        while (str.endsWith(ts)) {
+            str = str.substring(0, str.length() - ts.length());
+        }
+        return str;
+    }
+
+    /**
+     * 去掉首尾字符.
+     *
+     * @param str 源字符串
+     * @param ts  需要去除的字符
+     * @return 去掉首尾字符后的字符串
+     */
+    public static String trimStartEnd(String str, String ts) {
+        str = trimStart(str, ts);
+        str = trimEnd(str, ts);
+        return str;
+    }
+
+    /**
+     * 去掉首尾空格，包括全角，半角.
+     *
+     * @param str 源字符串
+     * @return 去掉首尾空格后的字符串
+     */
+    public static String trimStartEndBlank(String str) {
+        if (str == null) {
+            return "";
+        }
+        str = str.trim();
+        //        str = trimStartEnd(str, " ");
+        str = trimStartEnd(str, "　"); // 全角空格
+        return str;
+    }
+
+    /**
+     * 去掉首尾字符.
+     *
+     * @param str 源字符串
+     * @param ts  需要去除的字符
+     * @return 去掉首尾字符后的字符串
+     * @deprecated {@link #trimStartEnd(String, String)}
+     */
+    @Deprecated
+    public static String trimBeginEnd(String str, String ts) {
+        if (str == null) {
+            return "";
+        }
+        while (str.startsWith(ts)) {
+            str = str.substring(ts.length(), str.length());
+        }
+        while (str.endsWith(ts)) {
+            str = str.substring(0, str.length() - ts.length());
+        }
+        return str;
+    }
+
+    /**
+     * 去掉首尾空格，包括全角，半角.
+     *
+     * @param str 源字符串
+     * @return 去掉首尾空格后的字符串
+     * @deprecated {@link #trimStartEndBlank(String)}
+     */
+    @Deprecated
+    public static String trimBeginEndBlank(String str) {
+        if (str == null) {
+            return "";
+        }
+        str = str.trim();
+        str = trimBeginEnd(str, " ");
+        str = trimBeginEnd(str, "　");
+        return str;
+    }
+
+    /**
      * <p>
      * 判断传入的字符串是否为整数（使用10进制判断）
      * </p>
@@ -378,9 +481,13 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * format str. <code>
+     * format str. <blockquote>
+     *
+     * <pre>
      * Strings.format("my name is {0}", "yufei");
-     * </code>
+     * </pre>
+     *
+     * </blockquote>
      *
      * @param str  format string
      * @param argu format argu
@@ -391,9 +498,13 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * format str. <code>
-     * Strings.format("my name is {0}, i am {1} years old", new Object[]{"yufei", 18});
-     * </code>
+     * format str. <blockquote>
+     *
+     * <pre>
+     * Strings.format("my name is {0}, i am {1} years old", new Object[] { "yufei", 18 });
+     * </pre>
+     *
+     * </blockquote>
      *
      * @param str  format string
      * @param args format args
@@ -404,9 +515,13 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * format str. <code>
-     * Strings.format("my name is $0$, i am $1$ years old", '$', new Object[]{"yufei", 18});
-     * </code>
+     * format str. <blockquote>
+     *
+     * <pre>
+     * Strings.format("my name is $0$, i am $1$ years old", '$', new Object[] { "yufei", 18 });
+     * </pre>
+     *
+     * </blockquote>
      *
      * @param content the content
      * @param args    format args
@@ -418,9 +533,13 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * format str. <code>
-     * Strings.format("my name is {0}, i am {1} years old", '{', '}', new Object[]{"yufei", 18});
-     * </code>
+     * format str. <blockquote>
+     *
+     * <pre>
+     * Strings.format("my name is {0}, i am {1} years old", '{', '}', new Object[] { "yufei", 18 });
+     * </pre>
+     *
+     * </blockquote>
      *
      * @param content     the content
      * @param args        format args
@@ -433,11 +552,14 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * format str. <code>
-     * Strings.format("my name is：{name}, i am {age} years old", new
-     * HashChainMap&lt;String, String&gt;().putChain("name",
-     * "yufei").putChain("age", "18"));
-     * </code>
+     * format str. <blockquote>
+     *
+     * <pre>
+     * Strings.format("my name is：{name}, i am {age} years old",
+     *         new HashChainMap&lt;String, String&gt;().putChain("name", "yufei").putChain("age", "18"));
+     * </pre>
+     *
+     * </blockquote>
      *
      * @param content str content
      * @param args    arg map
@@ -448,11 +570,14 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * format str. <code>
-     * Strings.format("my name is：$name$, i am $age$ years old", new
-     * HashChainMap&lt;String, String&gt;().putChain("name",
-     * "yufei").putChain("age", "18"), '$');
-     * </code>
+     * format str. <blockquote>
+     *
+     * <pre>
+     * Strings.format("my name is：$name$, i am $age$ years old",
+     *         new HashChainMap&lt;String, String&gt;().putChain("name", "yufei").putChain("age", "18"), '$');
+     * </pre>
+     *
+     * </blockquote>
      *
      * @param content the content
      * @param args    the args
@@ -464,11 +589,14 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * format str. <code>
-     * Strings.format("my name is：{name}, i am {age} years old", new
-     * HashChainMap&lt;String, String&gt;().putChain("name",
-     * "yufei").putChain("age", "18"), '{', '}');
-     * </code>
+     * format str. <blockquote>
+     *
+     * <pre>
+     * Strings.format("my name is：{name}, i am {age} years old",
+     *         new HashChainMap&lt;String, String&gt;().putChain("name", "yufei").putChain("age", "18"), '{', '}');
+     * </pre>
+     *
+     * </blockquote>
      *
      * @param content     the content
      * @param args        the args
@@ -481,13 +609,17 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * format str. <code>
+     * format str. <blockquote>
+     *
+     * <pre>
      * User user = new User();
      * user.setName("yufei");
      * user.setAge(18);
      * StringFormatter formatter = new StringFormatter('{', '}');
-     * formatter.format("my name is {0}, i am {1} years old", user);
-     * </code>
+     * formatter.format("my name is {name}, i am {age} years old", user);
+     * </pre>
+     *
+     * </blockquote>
      *
      * @param content the content
      * @param args    format args
@@ -1096,42 +1228,6 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
             return str1;
         }
         return str1 + str2;
-    }
-
-    /**
-     * 去掉首尾字符.
-     *
-     * @param str 源字符串
-     * @param ts  需要去除的字符
-     * @return 去掉首尾字符后的字符串
-     */
-    public static String trimBeginEnd(String str, String ts) {
-        if (str == null) {
-            return "";
-        }
-        while (str.startsWith(ts)) {
-            str = str.substring(ts.length(), str.length());
-        }
-        while (str.endsWith(ts)) {
-            str = str.substring(0, str.length() - ts.length());
-        }
-        return str;
-    }
-
-    /**
-     * 去掉首尾空格，包括全角，半角.
-     *
-     * @param str 源字符串
-     * @return 去掉首尾空格后的字符串
-     */
-    public static String trimBeginEndBlank(String str) {
-        if (str == null) {
-            return "";
-        }
-        str = str.trim();
-        str = trimBeginEnd(str, " ");
-        str = trimBeginEnd(str, "　");
-        return str;
     }
 
     /**

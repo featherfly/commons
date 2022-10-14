@@ -352,6 +352,13 @@ public class LambdaUtilsTest {
         System.out.println(info5.getPropertyType());
     }
 
+    @Test
+    public void testL() {
+        testL(User::getAge);
+        System.out.println();
+        testL2(User::getAge);
+    }
+
     public static void main(String[] args) {
         //        SerializedLambda s;
         //        s = get(User::isLocked);
@@ -456,6 +463,30 @@ public class LambdaUtilsTest {
         System.out.println(ClassUtils.invokeMethod(user, method, new Object[0]));
 
         System.err.println(s);
+    }
+
+    private static <T, R> void testL(Function<T, R> t) {
+        System.out.println("testL");
+        System.out.println(t.getClass());
+        System.out.println(t.getClass().getFields().length);
+        System.out.println(t.getClass().getDeclaredFields().length);
+        System.out.println(t.getClass().getMethods().length);
+        System.out.println(t.getClass().getDeclaredMethods().length);
+        for (Method method : t.getClass().getDeclaredMethods()) {
+            System.out.println(method);
+        }
+    }
+
+    private static <T, R> void testL2(SerializableFunction<T, R> t) {
+        System.out.println("testL2");
+        System.out.println(t.getClass());
+        System.out.println(t.getClass().getFields().length);
+        System.out.println(t.getClass().getDeclaredFields().length);
+        System.out.println(t.getClass().getMethods().length);
+        System.out.println(t.getClass().getDeclaredMethods().length);
+        for (Method method : t.getClass().getDeclaredMethods()) {
+            System.out.println(method);
+        }
     }
 
     private static <T, R> void eq(SerializableFunction<T, R> f, SerializableFunction<T, R> f2) {

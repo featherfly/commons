@@ -1,6 +1,9 @@
 # 1.10
 
 1. WordUtils加入lowerCaseFirst方法
+2. 加入StringLinker类
+3. Strings加入trimStart(String,String),trimEnd(String,String),trimStartEnd(String,String),trimStartEndBlank(String)
+4. TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
 # 1.10.7 2022-07-15
 

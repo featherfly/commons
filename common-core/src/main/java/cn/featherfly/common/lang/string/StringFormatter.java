@@ -49,10 +49,14 @@ public class StringFormatter {
     }
 
     /**
-     * format str. <code>
+     * format str. <blockquote>
+     *
+     * <pre>
      * StringFormatter formatter = new StringFormatter('{', '}');
-     * formatter.format("my name is {0}, i am {1} years old", new Object[]{"yufei", 18});
-     * </code>
+     * formatter.format("my name is {0}, i am {1} years old", new Object[] { "yufei", 18 });
+     * </pre>
+     *
+     * </blockquote>
      *
      * @param str  format string
      * @param args format args
@@ -63,11 +67,15 @@ public class StringFormatter {
     }
 
     /**
-     * format str. <code>
+     * format str. <blockquote>
+     *
+     * <pre>
      * StringFormatter formatter = new StringFormatter('{', '}');
-     * formatter.format("my name is {0}, i am {1} years old", new HashChainMap&lt;String,
-     * Object&gt;().putChain("name", "yufei").putChain("age", 18));
-     * </code>
+     * formatter.format("my name is {name}, i am {age} years old",
+     *         new HashChainMap&lt;String, Object&gt;().putChain("name", "yufei").putChain("age", 18));
+     * </pre>
+     *
+     * </blockquote>
      *
      * @param str  format string
      * @param args format args
@@ -78,13 +86,17 @@ public class StringFormatter {
     }
 
     /**
-     * format str. <code>
+     * format str. <blockquote>
+     *
+     * <pre>
      * User user = new User();
      * user.setName("yufei");
      * user.setAge(18);
      * StringFormatter formatter = new StringFormatter('{', '}');
-     * formatter.format("my name is {0}, i am {1} years old", user);
-     * </code>
+     * formatter.format("my name is {name}, i am {age} years old", user);
+     * </pre>
+     *
+     * </blockquote>
      *
      * @param <O>  the generic type
      * @param str  format string

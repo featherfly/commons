@@ -47,6 +47,18 @@ public final class Lang {
     }
 
     /**
+     * 如果第一个参数为空(null），返回第二个参数，否则返回第一个参数 .
+     *
+     * @param <T>           泛型
+     * @param target        目标参数
+     * @param defaultTarget 默认值
+     * @return 第一个参数为空(null），返回第二个参数，否则返回第一个参数
+     */
+    public static <T> T pick(T target, Supplier<T> defaultTarget) {
+        return target == null ? defaultTarget.get() : target;
+    }
+
+    /**
      * 返回第一个非空的项，!=null .
      *
      * @param <T>         泛型

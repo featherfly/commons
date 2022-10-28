@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import cn.featherfly.common.algorithm.AlgorithmException;
+import cn.featherfly.common.algorithm.URL;
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.serialization.Serialization;
@@ -104,8 +106,16 @@ public class HttpUtils {
                         if (value != null) {
                             if (value instanceof UploadFile) {
                                 UploadFile uploadFile = (UploadFile) value;
-                                multiparBuilder.addFormDataPart(entry.getKey(), uploadFile.getFilename(), RequestBody
-                                        .create(MediaType.parse(uploadFile.getMediaType()), uploadFile.getContent()));
+                                try {
+                                    multiparBuilder.addFormDataPart(entry.getKey(),
+                                            URL.encodeURL(uploadFile.getFilename()),
+                                            RequestBody.create(MediaType.parse(uploadFile.getMediaType()),
+                                                    uploadFile.getContent()));
+                                } catch (AlgorithmException e) {
+                                    multiparBuilder.addFormDataPart(entry.getKey(), uploadFile.getFilename(),
+                                            RequestBody.create(MediaType.parse(uploadFile.getMediaType()),
+                                                    uploadFile.getContent()));
+                                }
                             } else {
                                 multiparBuilder.addFormDataPart(entry.getKey(), value.toString());
                             }

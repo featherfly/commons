@@ -23,8 +23,8 @@ public class TestUpload {
 
         String result = Http.post(uploadUrl,
                 new HashChainMap<String, Serializable>().putChain("key", "key2")
-                        .putChain("file1", new UploadFile("filename1", "text/plain", "abcde".getBytes()))
-                        .putChain("file2", new UploadFile("filename1", "text/plain", "12345".getBytes())));
+                        .putChain("file1", new UploadFile("filename1.txt", "text/plain", "abcde".getBytes()))
+                        .putChain("file2", new UploadFile("测试中文名.txt", "text/plain", "12345".getBytes())));
 
         assertEquals(result, "OK");
     }

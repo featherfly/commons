@@ -498,7 +498,7 @@ public class HttpClient extends AbstractHttpClient {
      */
     public String post(String url, Map<String, Serializable> params, Map<String, String> headers) {
         return request(new Request.Builder().url(url).headers(createHeaders(headers))
-                .post(HttpUtils.createFormBody(params)).build());
+                .post(HttpUtils.createRequestBody(params)).build());
     }
 
     /**
@@ -527,7 +527,7 @@ public class HttpClient extends AbstractHttpClient {
     public <R> R post(String url, Map<String, Serializable> params, Map<String, String> headers,
             Class<R> responseType) {
         return request(new Request.Builder().url(url).headers(createHeaders(headers))
-                .post(HttpUtils.createFormBody(params)).build(), responseType);
+                .post(HttpUtils.createRequestBody(params)).build(), responseType);
     }
 
     /**
@@ -1031,10 +1031,10 @@ public class HttpClient extends AbstractHttpClient {
                         .headers(createHeaders(headers)).get().build());
             case POST:
                 return stream(new Request.Builder().url(url).headers(createHeaders(headers))
-                        .post(HttpUtils.createFormBody(params)).build());
+                        .post(HttpUtils.createRequestBody(params)).build());
             case PUT:
                 return stream(new Request.Builder().url(url).headers(createHeaders(headers))
-                        .put(HttpUtils.createFormBody(params)).build());
+                        .put(HttpUtils.createRequestBody(params)).build());
             case DELETE:
                 return stream(new Request.Builder().url(url).headers(createHeaders(headers)).delete().build());
             case HEAD:

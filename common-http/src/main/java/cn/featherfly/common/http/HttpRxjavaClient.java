@@ -525,7 +525,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      */
     public Observable<String> post(String url, Map<String, Serializable> params, Map<String, String> headers) {
         return observation(new Request.Builder().url(url).headers(createHeaders(headers))
-                .post(HttpUtils.createFormBody(params)).build());
+                .post(HttpUtils.createRequestBody(params)).build());
     }
 
     /**
@@ -554,7 +554,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
     public <R> Observable<R> post(String url, Map<String, Serializable> params, Map<String, String> headers,
             Class<R> responseType) {
         return observation(new Request.Builder().url(url).headers(createHeaders(headers))
-                .post(HttpUtils.createFormBody(params)).build(), responseType);
+                .post(HttpUtils.createRequestBody(params)).build(), responseType);
     }
 
     /**

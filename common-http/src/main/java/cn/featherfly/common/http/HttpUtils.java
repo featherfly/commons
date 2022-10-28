@@ -12,6 +12,8 @@ import cn.featherfly.common.serialization.Serialization;
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
  * Http.
@@ -77,6 +79,64 @@ public class HttpUtils {
         }
         return formBodyBuilder.build();
     }
+
+    /**
+     * Creates the request body, support upload file.
+     *
+     * @param params the params
+     * @return the request body
+     */
+    public static RequestBody createRequestBody(Map<String, Serializable> params) {
+        boolean isMultipar = false;
+        if (Lang.isNotEmpty(params)) {
+            for (Serializable value : params.values()) {
+                if (value instanceof UploadFile) {
+                    isMultipar = true;
+                    break;
+                }
+            }
+
+            if (isMultipar) {
+                MultipartBody.Builder multiparBuilder = new MultipartBody.Builder();
+                if (Lang.isNotEmpty(params)) {
+                    for (Map.Entry<String, Serializable> entry : params.entrySet()) {
+                        Serializable value = entry.getValue();
+                        if (value != null) {
+                            if (value instanceof UploadFile) {
+                                UploadFile uploadFile = (UploadFile) value;
+                                multiparBuilder.addFormDataPart(entry.getKey(), uploadFile.getFilename(), RequestBody
+                                        .create(MediaType.parse(uploadFile.getMediaType()), uploadFile.getContent()));
+                            } else {
+                                multiparBuilder.addFormDataPart(entry.getKey(), value.toString());
+                            }
+                        }
+                    }
+                }
+                return multiparBuilder.build();
+            }
+        }
+        return createFormBody(params);
+    }
+
+    //    /**
+    //     * Creates the multipart body.
+    //     *
+    //     * @param params the params
+    //     * @return the form body
+    //     */
+    //    public static MultipartBody createMultipartBody(Map<String, UploadFile> uploadFiles) {
+    //        MultipartBody.Builder builder = new MultipartBody.Builder();
+    //        if (Lang.isNotEmpty(uploadFiles)) {
+    //            for (Map.Entry<String, UploadFile> entry : uploadFiles.entrySet()) {
+    //                if (entry.getValue() != null) {
+    //                    UploadFile uploadFile = entry.getValue();
+    //                    builder.addFormDataPart(entry.getKey(), uploadFile.getFilename(),
+    //                            RequestBody.create(MediaType.parse(uploadFile.getMediaType()), uploadFile.getContent()));
+    //                }
+    //            }
+    //        }
+    //        return builder.build();
+    //    }
 
     /**
      * Headers to map.

@@ -507,7 +507,7 @@ public class HttpAsyncClient extends AbstractHttpClient {
     public HttpRequestCompletion<String> post(String url, Map<String, Serializable> params,
             Map<String, String> headers) {
         return completetion(new Request.Builder().url(url).headers(createHeaders(headers))
-                .post(HttpUtils.createFormBody(params)).build());
+                .post(HttpUtils.createRequestBody(params)).build());
     }
 
     /**
@@ -536,7 +536,7 @@ public class HttpAsyncClient extends AbstractHttpClient {
     public <R> HttpRequestCompletion<R> post(String url, Map<String, Serializable> params, Map<String, String> headers,
             Class<R> responseType) {
         return completetion(new Request.Builder().url(url).headers(createHeaders(headers))
-                .post(HttpUtils.createFormBody(params)).build(), responseType);
+                .post(HttpUtils.createRequestBody(params)).build(), responseType);
     }
 
     /**

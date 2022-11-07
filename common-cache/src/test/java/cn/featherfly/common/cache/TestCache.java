@@ -75,19 +75,26 @@ public class TestCache {
         cacheConfigs.put("cache1", c);
 
         try (cn.featherfly.common.cache.CacheManager cm = new cn.featherfly.common.cache.CacheManager(cacheConfigs)) {
-            testExpire(cm.getCache("cache1"));
+            testExpire(cm.getCache("cache1"), 5, 1000);
         }
     }
 
     @Test
     public void testCacheManager1() throws InterruptedException {
         Map<String, CacheConfig> cacheConfigs = new HashMap<>();
-        CacheConfig c = new CacheConfig(2, 1);
+        CacheConfig c = new CacheConfig(0, 800, TimeUnit.MILLISECONDS);
         //        c.setMaxSize(2);
         cacheConfigs.put("cache1", c);
-
+        // 测试以缓存的最后读取时间为缓存计时时间
         try (cn.featherfly.common.cache.CacheManager cm = new cn.featherfly.common.cache.CacheManager(cacheConfigs)) {
-            testExpire(cm.getCache("cache1"));
+            javax.cache.Cache<Object, Object> cache1 = cm.getCache("cache1");
+            testExpire(cache1, 5, 500);
+            Thread.sleep(1000);
+            System.out.println("cache1.getIfPresent(key) " + cache1.get("key"));
+
+            cache1.put("key", "s2");
+            Thread.sleep(1000);
+            System.out.println("cache1.getIfPresent(key) " + cache1.get("key"));
         }
     }
 

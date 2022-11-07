@@ -11,8 +11,10 @@ public class CacheConfig {
 
     private TimeUnit timeUnit = TimeUnit.SECONDS;
 
+    // 缓存写入后的过期时间，如果大于0，则在写入后的指定时间后一定会过期
     private long ttl;
 
+    // 缓存读取后的过期时间，需要ttl为0才有效，不然在ttl过期后缓存就过期了，一般用于可续期缓存（如session）
     private long maxIdleTime;
 
     private int maxSize;
@@ -27,13 +29,15 @@ public class CacheConfig {
     /**
      * Creates config object.
      *
-     * @param ttl - time to live for key\value entry in milliseconds. If
-     *            <code>0</code> then time to live doesn't affect entry
-     *            expiration.
+     * @param maxIdleTime - max idle time for key\value entry in milliseconds.
+     *                    <p>
+     *                    if <code>maxIdleTime</code> and <code>ttl</code>
+     *                    params are equal to <code>0</code> then entry stores
+     *                    infinitely.
      */
-    public CacheConfig(long ttl) {
+    public CacheConfig(long maxIdleTime) {
         super();
-        this.ttl = ttl;
+        this.maxIdleTime = maxIdleTime;
     }
 
     /**

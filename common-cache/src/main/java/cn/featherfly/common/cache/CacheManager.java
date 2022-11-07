@@ -8,6 +8,7 @@ import java.util.OptionalLong;
 import java.util.Properties;
 
 import javax.cache.Cache;
+import javax.cache.CacheException;
 import javax.cache.Caching;
 import javax.cache.configuration.CompleteConfiguration;
 import javax.cache.configuration.Configuration;
@@ -61,7 +62,7 @@ public class CacheManager implements javax.cache.CacheManager {
                         | InvocationTargetException | NoSuchMethodException | SecurityException
                         | ClassNotFoundException e) {
                     // TODO 后续加入自定义异常
-                    throw new RuntimeException(e);
+                    throw new CacheException(e);
                 }
             } else {
                 Duration ttl = Duration.ETERNAL;

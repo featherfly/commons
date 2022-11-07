@@ -11,9 +11,7 @@ import io.protostuff.Schema;
 import io.protostuff.runtime.RuntimeSchema;
 
 /**
- * <p>
- * ProtostuffSerializer
- * </p>
+ * ProtostuffSerializer.
  *
  * @author zhongj
  */

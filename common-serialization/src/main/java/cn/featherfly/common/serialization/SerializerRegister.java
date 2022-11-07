@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>
- * SerializerRegister
- * </p>
+ * SerializerRegister.
  *
  * @author zhongj
  */

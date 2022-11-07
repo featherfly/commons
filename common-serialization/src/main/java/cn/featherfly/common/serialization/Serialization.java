@@ -1,6 +1,8 @@
 
 package cn.featherfly.common.serialization;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +23,8 @@ public class Serialization {
     private static final Logger LOG = LoggerFactory.getLogger(Serialization.class);
 
     private Map<String, Serializer> serializers = new HashMap<>();
+
+    private Charset charset = StandardCharsets.UTF_8;
 
     /** The Constant DEFAULT_SERIALIZER. */
     private static final Serializer JSON_SERIALIZER = new JacksonSerializer();
@@ -74,7 +78,7 @@ public class Serialization {
      * Instantiates a new serialization.
      */
     public Serialization() {
-
+        this(new HashMap<>(0));
     }
 
     /**
@@ -84,6 +88,14 @@ public class Serialization {
      */
     public Serialization(Map<String, Serializer> serializers) {
         this.serializers.putAll(serializers);
+        setCharset(StandardCharsets.UTF_8);
+    }
+
+    private void addSerializer(String mimeType, Serializer serializer) {
+        serializers.put(mimeType, serializer);
+        if (serializer instanceof AbstractSerializer) {
+            ((AbstractSerializer) serializer).setCharset(charset);
+        }
     }
 
     /**
@@ -93,27 +105,27 @@ public class Serialization {
      */
     public static Serialization getDefault() {
         if (DEFAULT.serializers.isEmpty()) {
-            DEFAULT.serializers.put(MIME_TYPE_JSON, JSON_SERIALIZER);
+            DEFAULT.addSerializer(MIME_TYPE_JSON, JSON_SERIALIZER);
             try {
                 Class.forName("com.fasterxml.jackson.dataformat.xml.XmlMapper");
-                //                        DEFAULT.serializers.put(MIME_TYPE_XML, new JacksonXmlSerializer());
-                DEFAULT.serializers.put(MIME_TYPE_XML, (Serializer) ClassUtils
+                //                        DEFAULT.addSerializer(MIME_TYPE_XML, new JacksonXmlSerializer());
+                DEFAULT.addSerializer(MIME_TYPE_XML, (Serializer) ClassUtils
                         .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.JacksonXmlSerializer")));
             } catch (Throwable e) {
                 LOG.warn(e.getMessage());
             }
             try {
                 Class.forName("io.protostuff.ProtostuffIOUtil");
-                //                                    DEFAULT.serializers.put(MIME_TYPE_PROTOBUFF, new ProtostuffSerializer());
-                DEFAULT.serializers.put(MIME_TYPE_PROTOBUFF, (Serializer) ClassUtils
+                //                                    DEFAULT.addSerializer(MIME_TYPE_PROTOBUFF, new ProtostuffSerializer());
+                DEFAULT.addSerializer(MIME_TYPE_PROTOBUFF, (Serializer) ClassUtils
                         .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.ProtostuffSerializer")));
             } catch (Throwable e) {
                 LOG.warn(e.getMessage());
             }
             try {
                 Class.forName("com.esotericsoftware.kryo.Kryo");
-                //                                    DEFAULT.serializers.put(MIME_TYPE_KRYO, new KryoSerializer());
-                DEFAULT.serializers.put(MIME_TYPE_KRYO, (Serializer) ClassUtils
+                //                                    DEFAULT.addSerializer(MIME_TYPE_KRYO, new KryoSerializer());
+                DEFAULT.addSerializer(MIME_TYPE_KRYO, (Serializer) ClassUtils
                         .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.KryoSerializer")));
             } catch (Throwable e) {
                 LOG.warn(e.getMessage());
@@ -151,6 +163,29 @@ public class Serialization {
     }
 
     /**
+     * get charset value
+     *
+     * @return charset
+     */
+    public Charset getCharset() {
+        return charset;
+    }
+
+    /**
+     * set charset value
+     *
+     * @param charset charset
+     */
+    public void setCharset(Charset charset) {
+        this.charset = charset;
+        for (Serializer serializer : serializers.values()) {
+            if (serializer instanceof AbstractSerializer) {
+                ((AbstractSerializer) serializer).setCharset(charset);
+            }
+        }
+    }
+
+    /**
      * Serialize.
      *
      * @param <O>      the generic type
@@ -171,7 +206,7 @@ public class Serialization {
      * @return the byte[]
      */
     public static <O> byte[] serialize(O obj, String mimeType) {
-        Serializer serializer = DEFAULT._getSerializer(mimeType);
+        Serializer serializer = getDefault()._getSerializer(mimeType);
         return serializer.serialize(obj);
     }
 
@@ -185,7 +220,7 @@ public class Serialization {
      * @return the o
      */
     public static <O> O deserialize(byte[] bytes, Class<O> type, String mimeType) {
-        Serializer serializer = DEFAULT._getSerializer(mimeType);
+        Serializer serializer = getDefault()._getSerializer(mimeType);
         return serializer.deserialize(bytes, type);
     }
 

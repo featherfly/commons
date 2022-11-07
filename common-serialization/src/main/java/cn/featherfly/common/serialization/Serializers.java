@@ -2,19 +2,17 @@
 package cn.featherfly.common.serialization;
 
 /**
- * <p>
- * SerializationType
- * </p>
+ * SerializationType.
  *
  * @author zhongj
  */
 public enum Serializers {
 
-    JSON(new JacksonSerializer(), (byte) 0), PROTOBUF(
-            new ProtostuffSerializer(),
-            (byte) 1), KRYO(new KryoSerializer(), (byte) 2);
+    JSON(new JacksonSerializer(), (byte) 0),
+    PROTOBUF(new ProtostuffSerializer(), (byte) 1),
+    KRYO(new KryoSerializer(), (byte) 2);
 
-    private Serializers(Serializer serializer, byte key) {
+    Serializers(Serializer serializer, byte key) {
         this.key = key;
         this.serializer = serializer;
     }
@@ -25,7 +23,7 @@ public enum Serializers {
 
     /**
      * 返回key
-     * 
+     *
      * @return key
      */
     public byte getKey() {
@@ -34,7 +32,7 @@ public enum Serializers {
 
     /**
      * 返回serializer
-     * 
+     *
      * @return serializer
      */
     public Serializer getSerializer() {

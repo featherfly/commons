@@ -2,10 +2,8 @@
 package cn.featherfly.common.serialization;
 
 /**
- * <p>
- * Serializer
- * </p>
- * 
+ * Serializer.
+ *
  * @author zhongj
  */
 public interface Serializer {
@@ -13,5 +11,4 @@ public interface Serializer {
     <O> byte[] serialize(O obj);
 
     <O> O deserialize(byte[] bytes, Class<O> type);
-
 }

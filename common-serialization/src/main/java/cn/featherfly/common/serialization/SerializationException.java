@@ -2,17 +2,14 @@
 package cn.featherfly.common.serialization;
 
 /**
- * <p>
- * SerializationException
- * </p>
- * 
+ * SerializationException.
+ *
  * @author zhongj
  */
-public class SerializationException extends cn.featherfly.common.exception.LocalizedCodeException{
+public class SerializationException extends cn.featherfly.common.exception.LocalizedCodeException {
 
     private static final long serialVersionUID = -1;
 
-    
     /**
      * @param exceptionCode exceptionCode
      */
@@ -22,7 +19,7 @@ public class SerializationException extends cn.featherfly.common.exception.Local
 
     /**
      * @param exceptionCode exceptionCode
-     * @param ex ex
+     * @param ex            ex
      */
     public SerializationException(SerializationExceptionCode exceptionCode, Throwable ex) {
         super(exceptionCode, ex);

@@ -1,19 +1,19 @@
 
 package cn.featherfly.common.serialization;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * <p>
- * JacksonSerializer
- * </p>
- * .
+ * JacksonSerializer .
  *
  * @author zhongj
  */
-public class JacksonSerializer implements Serializer {
+public class JacksonSerializer extends AbstractSerializer {
 
     /** The Constant DEFAULT_MAPPER. */
     public static final ObjectMapper DEFAULT_MAPPER;
@@ -49,7 +49,11 @@ public class JacksonSerializer implements Serializer {
     @Override
     public <O> byte[] serialize(O obj) {
         try {
-            return mapper.writerFor(obj.getClass()).writeValueAsBytes(obj);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            OutputStreamWriter writer = new OutputStreamWriter(os, charset);
+            mapper.writerFor(obj.getClass()).writeValue(writer, obj);
+            return os.toByteArray();
+            //            return mapper.writerFor(obj.getClass()).writeValueAsBytes(obj);
         } catch (Exception e) {
             throw new SerializationException(SerializationExceptionCode
                     .createSerializeErrorCode(obj.getClass().getName(), e.getLocalizedMessage()));

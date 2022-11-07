@@ -9,9 +9,7 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 /**
- * <p>
- * KryoSerializer
- * </p>
+ * KryoSerializer.
  *
  * @author zhongj
  */
@@ -23,6 +21,7 @@ public class KryoSerializer implements Serializer {
      */
     public KryoSerializer() {
         kryo = new Kryo();
+        kryo.setRegistrationRequired(false);
     }
 
     /**

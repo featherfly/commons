@@ -82,7 +82,7 @@ public class TestCache {
     @Test
     public void testCacheManager1() throws InterruptedException {
         Map<String, CacheConfig> cacheConfigs = new HashMap<>();
-        CacheConfig c = new CacheConfig(0, 800, TimeUnit.MILLISECONDS);
+        CacheConfig c = new CacheConfig(800, TimeUnit.MILLISECONDS);
         //        c.setMaxSize(2);
         cacheConfigs.put("cache1", c);
         // 测试以缓存的最后读取时间为缓存计时时间
@@ -115,8 +115,8 @@ public class TestCache {
         CacheConfig c = new CacheConfig(2);
         c.setMaxSize(10);
         cacheConfigs.put("cache1", c);
-        cacheConfigs.put("cache2", new CacheConfig(0, 1));
-        cacheConfigs.put("cache3", new CacheConfig(2, 1));
+        cacheConfigs.put("cache2", new CacheConfig(1));
+        cacheConfigs.put("cache3", new CacheConfig(1));
 
         try (cn.featherfly.common.cache.CacheManager cm = new cn.featherfly.common.cache.CacheManager(cacheConfigs)) {
             testExpire(cm.getCache("cache1"), cm.getCache("cache2"), cm.getCache("cache3"));

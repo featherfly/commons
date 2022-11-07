@@ -3,15 +3,9 @@ package cn.featherfly.common.cache;
 
 import static org.junit.Assert.assertNull;
 
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-import javax.cache.CacheManager;
-import javax.cache.Caching;
-import javax.cache.configuration.MutableConfiguration;
-import javax.cache.spi.CachingProvider;
 
 import org.testng.annotations.Test;
 
@@ -27,47 +21,47 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  */
 public class TestCache {
 
-    @Test
-    public void jsr107() throws InterruptedException {
-        MutableConfiguration<Object, Object> mutableConfiguration = new MutableConfiguration<>();
-
-        mutableConfiguration.setExpiryPolicyFactory(ExpiryPolicyImpl.factoryOf(Duration.ofSeconds(2)));
-        //        ExpiryPolicy expiryPolicy = mutableConfiguration.getExpiryPolicyFactory().create();
-        //        System.out.println(expiryPolicy.getClass());
-        //        System.out.println(expiryPolicy.getExpiryForAccess());
-        //        System.out.println(expiryPolicy.getExpiryForCreation());
-        //        System.out.println(expiryPolicy.getExpiryForUpdate());
-        CachingProvider cachingProvider = Caching.getCachingProvider();
-
-        System.out.println(cachingProvider);
-
-        CacheManager cacheManager = cachingProvider.getCacheManager();
-
-        javax.cache.Cache<Object, Object> cache1 = cacheManager.createCache("cache1", mutableConfiguration);
-        mutableConfiguration
-                .setExpiryPolicyFactory(ExpiryPolicyImpl.factoryOf(Duration.ofSeconds(2), Duration.ofSeconds(1)));
-        javax.cache.Cache<Object, Object> cache2 = cacheManager.createCache("cache2", mutableConfiguration);
-        mutableConfiguration.setExpiryPolicyFactory(ExpiryPolicyImpl.factoryOf(null, Duration.ofSeconds(1)));
-        javax.cache.Cache<Object, Object> cache3 = cacheManager.createCache("cache3", mutableConfiguration);
-
-        testExpire(cache1, cache2, cache3);
-
-        //
-        //        cacheManager.createCache("a", mutableConfiguration);
-        //
-        System.out.println(cacheManager);
-
-        //        MutableConfiguration<String, String> config = new MutableConfiguration();
-        //        Cache<String, String> cache = cacheManager.createCache("JDKCodeNames", config);
-        //
-        //        cache.put("JDK1.5", "Tiger");
-        //
-        //        cache.put("JDK1.6", "Mustang");
-        //
-        //        cache.put("JDK1.7", "Dolphin");
-        //
-        //        String jdk7CodeName = cache.get("JDK1.7");
-    }
+    //    @Test
+    //    public void jsr107() throws InterruptedException {
+    //        MutableConfiguration<Object, Object> mutableConfiguration = new MutableConfiguration<>();
+    //
+    //        mutableConfiguration.setExpiryPolicyFactory(ExpiryPolicyImpl.factoryOf(Duration.ofSeconds(2)));
+    //        //        ExpiryPolicy expiryPolicy = mutableConfiguration.getExpiryPolicyFactory().create();
+    //        //        System.out.println(expiryPolicy.getClass());
+    //        //        System.out.println(expiryPolicy.getExpiryForAccess());
+    //        //        System.out.println(expiryPolicy.getExpiryForCreation());
+    //        //        System.out.println(expiryPolicy.getExpiryForUpdate());
+    //        CachingProvider cachingProvider = Caching.getCachingProvider();
+    //
+    //        System.out.println(cachingProvider);
+    //
+    //        CacheManager cacheManager = cachingProvider.getCacheManager();
+    //
+    //        javax.cache.Cache<Object, Object> cache1 = cacheManager.createCache("cache1", mutableConfiguration);
+    //        mutableConfiguration
+    //                .setExpiryPolicyFactory(ExpiryPolicyImpl.factoryOf(Duration.ofSeconds(2), Duration.ofSeconds(1)));
+    //        javax.cache.Cache<Object, Object> cache2 = cacheManager.createCache("cache2", mutableConfiguration);
+    //        mutableConfiguration.setExpiryPolicyFactory(ExpiryPolicyImpl.factoryOf(null, Duration.ofSeconds(1)));
+    //        javax.cache.Cache<Object, Object> cache3 = cacheManager.createCache("cache3", mutableConfiguration);
+    //
+    //        testExpire(cache1, cache2, cache3);
+    //
+    //        //
+    //        //        cacheManager.createCache("a", mutableConfiguration);
+    //        //
+    //        System.out.println(cacheManager);
+    //
+    //        //        MutableConfiguration<String, String> config = new MutableConfiguration();
+    //        //        Cache<String, String> cache = cacheManager.createCache("JDKCodeNames", config);
+    //        //
+    //        //        cache.put("JDK1.5", "Tiger");
+    //        //
+    //        //        cache.put("JDK1.6", "Mustang");
+    //        //
+    //        //        cache.put("JDK1.7", "Dolphin");
+    //        //
+    //        //        String jdk7CodeName = cache.get("JDK1.7");
+    //    }
 
     @Test
     public void testCacheManager() throws InterruptedException {

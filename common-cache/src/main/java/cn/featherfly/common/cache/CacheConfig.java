@@ -11,13 +11,17 @@ public class CacheConfig {
 
     private TimeUnit timeUnit = TimeUnit.SECONDS;
 
-    // 缓存写入后的过期时间，如果大于0，则在写入后的指定时间后一定会过期
-    private long ttl;
-
-    // 缓存读取后的过期时间，需要ttl为0才有效，不然在ttl过期后缓存就过期了，一般用于可续期缓存（如session）
-    private long maxIdleTime;
+    //    // 缓存写入后的过期时间，如果大于0，则在写入后的指定时间后一定会过期
+    //    private long ttl;
+    //
+    //    // 缓存读取后的过期时间，需要ttl为0才有效，不然在ttl过期后缓存就过期了，一般用于可续期缓存（如session）
+    //    private long maxIdleTime;
 
     private int maxSize;
+
+    private long expiry;
+
+    private ExpiryPolicys expiryPolicy = ExpiryPolicys.ETERNAL;
 
     /**
      * Creates config object with <code>ttl = 0</code> and
@@ -29,93 +33,42 @@ public class CacheConfig {
     /**
      * Creates config object.
      *
-     * @param maxIdleTime - max idle time for key\value entry in milliseconds.
-     *                    <p>
-     *                    if <code>maxIdleTime</code> and <code>ttl</code>
-     *                    params are equal to <code>0</code> then entry stores
-     *                    infinitely.
+     * @param expiryPolicy the expiry policy
+     * @param expiry       the expiry
      */
-    public CacheConfig(long maxIdleTime) {
+    public CacheConfig(ExpiryPolicys expiryPolicy, long expiry) {
         super();
-        this.maxIdleTime = maxIdleTime;
+        this.expiry = expiry;
     }
 
     /**
-     * Creates config object.
+     * Instantiates a new cache config.
      *
-     * @param maxIdleTime - max idle time for key\value entry in milliseconds.
-     *                    <p>
-     *                    if <code>maxIdleTime</code> and <code>ttl</code>
-     *                    params are equal to <code>0</code> then entry stores
-     *                    infinitely.
-     * @param timeUnit    the time unit
+     * @param expiryPolicy the expiry policy
+     * @param expiry       the expiry
+     * @param timeUnit     the time unit
      */
-    public CacheConfig(long maxIdleTime, TimeUnit timeUnit) {
+    public CacheConfig(ExpiryPolicys expiryPolicy, long expiry, TimeUnit timeUnit) {
         super();
-        this.maxIdleTime = maxIdleTime;
+        this.expiryPolicy = expiryPolicy;
+        this.expiry = expiry;
         this.timeUnit = timeUnit;
     }
 
     /**
-     * Creates config object.
+     * Instantiates a new cache config.
      *
-     * @param ttl         - time to live for key\value entry in milliseconds. If
-     *                    <code>0</code> then time to live doesn't affect entry
-     *                    expiration.
-     * @param maxIdleTime - max idle time for key\value entry in milliseconds.
-     *                    <p>
-     *                    if <code>maxIdleTime</code> and <code>ttl</code>
-     *                    params are equal to <code>0</code> then entry stores
-     *                    infinitely.
-     * @param maxSize     the max size
+     * @param expiryPolicy the expiry policy
+     * @param expiry       the expiry
+     * @param timeUnit     the time unit
+     * @param maxSize      the max size
      */
-    public CacheConfig(long ttl, long maxIdleTime, int maxSize) {
+    public CacheConfig(ExpiryPolicys expiryPolicy, long expiry, TimeUnit timeUnit, int maxSize) {
         super();
-        this.ttl = ttl;
-        this.maxIdleTime = maxIdleTime;
-        this.maxSize = maxSize;
-    }
-
-    /**
-     * Creates config object.
-     *
-     * @param ttl         - time to live for key\value entry in milliseconds. If
-     *                    <code>0</code> then time to live doesn't affect entry
-     *                    expiration.
-     * @param maxIdleTime - max idle time for key\value entry in milliseconds.
-     *                    <p>
-     *                    if <code>maxIdleTime</code> and <code>ttl</code>
-     *                    params are equal to <code>0</code> then entry stores
-     *                    infinitely.
-     * @param timeUnit    the time unit
-     * @param maxSize     the max size
-     */
-    public CacheConfig(long ttl, long maxIdleTime, TimeUnit timeUnit, int maxSize) {
-        super();
-        this.ttl = ttl;
-        this.maxIdleTime = maxIdleTime;
+        this.expiryPolicy = expiryPolicy;
         this.timeUnit = timeUnit;
+        this.expiry = expiry;
         this.maxSize = maxSize;
-    }
-
-    /**
-     * Gets the ttl.
-     *
-     * @return the ttl
-     */
-    public long getTTL() {
-        return ttl;
-    }
-
-    /**
-     * Set time to live for key\value entry in milliseconds.
-     *
-     * @param ttl - time to live for key\value entry in milliseconds. If
-     *            <code>0</code> then time to live doesn't affect entry
-     *            expiration.
-     */
-    public void setTTL(long ttl) {
-        this.ttl = ttl;
     }
 
     /**
@@ -139,26 +92,6 @@ public class CacheConfig {
     }
 
     /**
-     * Gets the max idle time.
-     *
-     * @return the max idle time
-     */
-    public long getMaxIdleTime() {
-        return maxIdleTime;
-    }
-
-    /**
-     * Set max idle time for key\value entry in milliseconds.
-     *
-     * @param maxIdleTime - max idle time for key\value entry in milliseconds.
-     *                    If <code>0</code> then max idle time doesn't affect
-     *                    entry expiration.
-     */
-    public void setMaxIdleTime(long maxIdleTime) {
-        this.maxIdleTime = maxIdleTime;
-    }
-
-    /**
      * Gets the time unit.
      *
      * @return timeUnit
@@ -174,5 +107,41 @@ public class CacheConfig {
      */
     public void setTimeUnit(TimeUnit timeUnit) {
         this.timeUnit = timeUnit;
+    }
+
+    /**
+     * get expiry value.
+     *
+     * @return expiry
+     */
+    public long getExpiry() {
+        return expiry;
+    }
+
+    /**
+     * set expiry value.
+     *
+     * @param expiry expiry
+     */
+    public void setExpiry(long expiry) {
+        this.expiry = expiry;
+    }
+
+    /**
+     * get expiryPolicy value.
+     *
+     * @return expiryPolicy
+     */
+    public ExpiryPolicys getExpiryPolicy() {
+        return expiryPolicy;
+    }
+
+    /**
+     * set expiryPolicy value.
+     *
+     * @param expiryPolicy expiryPolicy
+     */
+    public void setExpiryPolicy(ExpiryPolicys expiryPolicy) {
+        this.expiryPolicy = expiryPolicy;
     }
 }

@@ -18,6 +18,7 @@ public class KryoSerializer implements Serializer {
     private Kryo kryo;
 
     /**
+     * Instantiates a new kryo serializer.
      */
     public KryoSerializer() {
         kryo = new Kryo();
@@ -25,7 +26,9 @@ public class KryoSerializer implements Serializer {
     }
 
     /**
-     * @param kryo
+     * Instantiates a new kryo serializer.
+     *
+     * @param kryo the kryo
      */
     protected KryoSerializer(Kryo kryo) {
         super();
@@ -33,7 +36,7 @@ public class KryoSerializer implements Serializer {
     }
 
     /**
-     * 返回kryo
+     * 返回kryo.
      *
      * @return kryo
      */
@@ -42,7 +45,7 @@ public class KryoSerializer implements Serializer {
     }
 
     /**
-     * 设置kryo
+     * 设置kryo.
      *
      * @param kryo kryo
      */

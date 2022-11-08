@@ -301,6 +301,12 @@ public class User {
         setAge(age);
     }
 
+    public User set2(String name, Integer age) {
+        setName(name);
+        setAge(age);
+        return this;
+    }
+
     public String get() {
         return "name = " + name + " age = " + age;
     }
@@ -311,6 +317,12 @@ public class User {
     }
 
     public String getDescp(String name) {
+        this.name = name;
+        return "name = " + name + " age = " + age;
+    }
+
+    public String getDescp2(int age) {
+        this.age = age;
         return "name = " + name + " age = " + age;
     }
 

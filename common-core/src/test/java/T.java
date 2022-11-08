@@ -12,6 +12,9 @@
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
+
+import org.testng.annotations.Test;
 
 import cn.featherfly.common.lang.NumberUtils;
 import cn.featherfly.common.lang.Randoms;
@@ -30,6 +33,26 @@ public class T {
     static String s2() {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmssSSS"))
                 + String.format("%04d", Randoms.getInt(10000));
+    }
+
+    @Test
+    void test() {
+        String input = "1 fish 2 fish red fish blue fish";
+        Scanner s = new Scanner(input).useDelimiter(" ");
+        while (s.hasNext()) {
+            System.out.println("s.hasNext() = " + s.hasNext());
+            System.out.println("s.hasNextInt() = " + s.hasNextInt());
+            System.out.println("s.hasNextLong() = " + s.hasNextLong());
+            System.out.println(s.next());
+        }
+        s.close();
+
+        s = new Scanner(input).useDelimiter("\\s*fish\\s*");
+        while (s.hasNext()) {
+            System.out.println(s.next());
+        }
+        s.close();
+
     }
 
     public static void main(String[] args) {

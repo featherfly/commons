@@ -36,20 +36,26 @@ public abstract class AbstractHttpClient {
     /** The logger. */
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /** The client. */
     protected OkHttpClient client;
 
+    /** The deserialize with content type. */
     protected boolean deserializeWithContentType;
 
+    /** The serialization. */
     protected Serialization serialization;
 
     private Serializer serializer;
 
     private MediaType mediaType;
 
+    /** The text plain. */
     protected MediaType textPlain;
 
+    /** The headers. */
     protected Headers headers;
 
+    /** The headers map. */
     protected Map<String, String> headersMap = new HashMap<>();
 
     private Set<Integer> codeSameAsSuccess = new HashSet<>();
@@ -229,7 +235,7 @@ public abstract class AbstractHttpClient {
     }
 
     /**
-     * get codeSameAsSuccess value
+     * get codeSameAsSuccess value.
      *
      * @return codeSameAsSuccess
      */
@@ -238,7 +244,7 @@ public abstract class AbstractHttpClient {
     }
 
     /**
-     * set codeSameAsSuccess value
+     * set codeSameAsSuccess value.
      *
      * @param codeSameAsSuccess codeSameAsSuccess
      */
@@ -337,7 +343,8 @@ public abstract class AbstractHttpClient {
     /**
      * Creates the headers.
      *
-     * @param headers the headers
+     * @param headers       the headers
+     * @param requestObject the request object
      * @return the headers
      */
     protected Headers createHeaders(Map<String, String> headers, Object requestObject) {
@@ -354,6 +361,13 @@ public abstract class AbstractHttpClient {
         return createHeaders(headers);
     }
 
+    /**
+     * Gets the media type.
+     *
+     * @param requestObject the request object
+     * @param headers       the headers
+     * @return the media type
+     */
     protected MediaType getMediaType(Object requestObject, Map<String, String> headers) {
         if (requestObject instanceof String) {
             if (headers.containsKey("content-type")) {
@@ -378,14 +392,32 @@ public abstract class AbstractHttpClient {
         }
     }
 
+    /**
+     * Checks if is success.
+     *
+     * @param response the response
+     * @return true, if is success
+     */
     protected boolean isSuccess(Response response) {
         return response.code() == HttpCode.OK || isCodeSameAsSuccess(response);
     }
 
+    /**
+     * Checks if is code same as success.
+     *
+     * @param response the response
+     * @return true, if is code same as success
+     */
     protected boolean isCodeSameAsSuccess(Response response) {
         return codeSameAsSuccess.contains(response.code());
     }
 
+    /**
+     * Gets the success response.
+     *
+     * @param request the request
+     * @return the success response
+     */
     protected Response getSuccessResponse(final Request request) {
         try {
             Response response = client.newCall(request).execute();

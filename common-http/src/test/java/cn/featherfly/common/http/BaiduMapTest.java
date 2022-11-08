@@ -107,7 +107,7 @@ public class BaiduMapTest {
 
     @Test
     public void testServerWithHttpClient() {
-        HttpClient client = new HttpClient();
+        HttpSyncClient client = new HttpSyncClient();
 
         String url = "http://api.map.baidu.com/reverse_geocoding/v3/?ak=0Zj0WEeN8dTr8XMMAFal5LPE8k5D53tR&output=json&coordtype=wgs84ll&location=31.225696563611,121.49884033194";
 

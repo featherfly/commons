@@ -14,7 +14,7 @@ import okhttp3.OkHttpClient;
  *
  * @author zhongj
  */
-public class BrowerHttpClient extends HttpClient {
+public class BrowerHttpClient extends HttpSyncClient {
 
     /**
      */

@@ -1,9 +1,41 @@
+buildscript {
+   //定义
+    ext {
+        springBootVersion = "2.7.4"
+    }
+    repositories {
+        mavenLocal()
+        maven {
+            url  "https://maven.aliyun.com/repository/public"
+        }
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java-library'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
 sourceSets {
     main {
         java {
             //srcDirs = ["src-http", "src/main/java"]
         }
     }
+}
+
+configurations {
+    compile.transitive = true
+    testImplementation.exclude module: 'log4j'
+    testImplementation.exclude module: 'slf4j-log4j12'
+    testImplementation.exclude module: 'pull-parser'
+    testImplementation.exclude module: 'logback-core'
+    testImplementation.exclude module: 'logback-classic'
+    testImplementation.exclude module: 'spring-boot-starter-logging'
 }
   
 dependencies {
@@ -13,6 +45,14 @@ dependencies {
     api 'com.squareup.okhttp3:okhttp:3.14.9'
     
     //api group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.20'
-    api group: 'io.reactivex.rxjava3', name: 'rxjava', version: '3.1.3'
+    api group: 'io.reactivex.rxjava3', name: 'rxjava', version: '3.1.5'
     
+    
+    testImplementation "org.springframework.boot:spring-boot-starter"
+    testImplementation "org.springframework.boot:spring-boot-starter-web"
+    testImplementation "io.springfox:springfox-swagger2:2.6.1"
+    testImplementation "io.springfox:springfox-swagger-ui:2.6.1"
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
 }
+
+

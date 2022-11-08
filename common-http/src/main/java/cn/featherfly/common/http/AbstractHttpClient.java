@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.serialization.Serialization;
 import cn.featherfly.common.serialization.SerializationException;
 import cn.featherfly.common.serialization.SerializationExceptionCode;
@@ -22,6 +23,7 @@ import okhttp3.Dispatcher;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.Response;
 
 /**
@@ -30,9 +32,6 @@ import okhttp3.Response;
  * @author zhongj
  */
 public abstract class AbstractHttpClient {
-
-    /** The Constant EMPTY. */
-    protected static final Map<String, String> EMPTY = new HashMap<>();
 
     /** The logger. */
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -43,9 +42,11 @@ public abstract class AbstractHttpClient {
 
     protected Serialization serialization;
 
-    protected Serializer serializer;
+    private Serializer serializer;
 
-    protected MediaType mediaType;
+    private MediaType mediaType;
+
+    protected MediaType textPlain;
 
     protected Headers headers;
 
@@ -195,13 +196,19 @@ public abstract class AbstractHttpClient {
         } else {
             this.mediaType = mediaType;
         }
+        if (this.mediaType.charset() != null) {
+            textPlain = MediaType.parse("text/plain; charset=" + this.mediaType.charset());
+            this.serialization.setCharset(this.mediaType.charset());
+        } else {
+            textPlain = MediaType.parse("text/plain;");
+        }
+
         serializer = getSerializer(this.mediaType, true);
 
         if (headers != null) {
             headersMap.putAll(headers);
         }
         this.headers = HttpUtils.createHeaders(headersMap);
-
         //        Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdown()));
     }
 
@@ -249,12 +256,28 @@ public abstract class AbstractHttpClient {
     }
 
     /**
+     * serialize.
+     *
+     * @param requestBody the request body
+     * @return the serialized byte[]
+     */
+    protected byte[] serialize(Object requestBody) {
+        if (requestBody instanceof String) {
+            return ((String) requestBody).getBytes(mediaType.charset());
+        } else if (requestBody instanceof byte[]) {
+            return (byte[]) requestBody;
+        } else {
+            return serializer.serialize(requestBody);
+        }
+    }
+
+    /**
      * Deserialize.
      *
      * @param <T>          the generic type
      * @param response     the response
      * @param responseType the response type
-     * @return the t
+     * @return the deserialized object
      * @throws IOException Signals that an I/O exception has occurred.
      */
     protected <T> T deserialize(Response response, final Class<T> responseType) throws IOException {
@@ -311,7 +334,73 @@ public abstract class AbstractHttpClient {
         }
     }
 
+    /**
+     * Creates the headers.
+     *
+     * @param headers the headers
+     * @return the headers
+     */
+    protected Headers createHeaders(Map<String, String> headers, Object requestObject) {
+        if (Lang.isEmpty(headers)) {
+            headers = new HashMap<>();
+        }
+        if (requestObject instanceof String) {
+            addContentType(headers, textPlain.toString(), false);
+        } else if (requestObject instanceof byte[]) {
+            addContentType(headers, HttpUtils.STREAM_CONTENT_TYPE, true);
+        } else {
+            addContentType(headers, mediaType.toString(), true);
+        }
+        return createHeaders(headers);
+    }
+
+    protected MediaType getMediaType(Object requestObject, Map<String, String> headers) {
+        if (requestObject instanceof String) {
+            if (headers.containsKey("content-type")) {
+                return mediaType;
+            } else {
+                return textPlain;
+            }
+        } else if (requestObject instanceof byte[]) {
+            return HttpUtils.STREAM_MEDIA_TYPE;
+        } else {
+            return mediaType;
+        }
+    }
+
+    private void addContentType(Map<String, String> headers, String value, boolean replace) {
+        if (replace) {
+            headers.put("content-type", value);
+        } else {
+            if (!headers.containsKey("content-type")) {
+                headers.put("content-type", value);
+            }
+        }
+    }
+
+    protected boolean isSuccess(Response response) {
+        return response.code() == HttpCode.OK || isCodeSameAsSuccess(response);
+    }
+
     protected boolean isCodeSameAsSuccess(Response response) {
         return codeSameAsSuccess.contains(response.code());
+    }
+
+    protected Response getSuccessResponse(final Request request) {
+        try {
+            Response response = client.newCall(request).execute();
+            if (isSuccess(response)) {
+                return response;
+            } else {
+                throw new HttpErrorResponseException(
+                        Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
+                                response.message()),
+                        new HttpResponse(response.code(), response.body().bytes(),
+                                HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
+                                response.receivedResponseAtMillis() - response.sentRequestAtMillis()));
+            }
+        } catch (IOException e) {
+            throw new HttpException(e);
+        }
     }
 }

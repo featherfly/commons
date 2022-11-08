@@ -1,16 +1,11 @@
 package cn.featherfly.common.http;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.featherfly.common.io.FileUtils;
-import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.serialization.Serialization;
 import io.reactivex.rxjava3.core.Observable;
@@ -28,7 +23,8 @@ import okhttp3.Response;
  *
  * @author zhongj
  */
-public class HttpRxjavaClient extends AbstractHttpClient {
+public class HttpRxjavaClient extends AbstractHttpClient
+        implements HttpClient<Observable<String>>, HttpDownloadClient<Observable<Integer>> {
 
     private boolean autoSubscribeOnIo = true;
 
@@ -144,58 +140,6 @@ public class HttpRxjavaClient extends AbstractHttpClient {
     }
 
     /**
-     * Request.
-     *
-     * @param httpMethod the http method
-     * @param url        the url
-     * @return the observable
-     */
-    public Observable<String> request(HttpMethod httpMethod, String url) {
-        return request(httpMethod, url, new HashMap<>());
-    }
-
-    /**
-     * Request.
-     *
-     * @param httpMethod the http method
-     * @param url        the url
-     * @param params     the params
-     * @return the observable
-     */
-    public Observable<String> request(HttpMethod httpMethod, String url, Map<String, Serializable> params) {
-        return request(httpMethod, url, params, EMPTY);
-    }
-
-    /**
-     * Request.
-     *
-     * @param httpMethod the http method
-     * @param url        the url
-     * @param params     the params
-     * @param headers    the headers
-     * @return the observable
-     */
-    public Observable<String> request(HttpMethod httpMethod, String url, Map<String, Serializable> params,
-            Map<String, String> headers) {
-        switch (httpMethod) {
-            case GET:
-                return get(url, params, headers);
-            case POST:
-                return post(url, params, headers);
-            case PUT:
-                return put(url, params, headers);
-            case DELETE:
-                return delete(url, headers);
-            case HEAD:
-                return head(url, params, headers);
-            case PATCH:
-                return patch(url, params, headers);
-            default:
-                throw new HttpException("unsupport http method " + httpMethod.toString());
-        }
-    }
-
-    /**
      * request with params and deserialize response .
      *
      * @param <R>          the generic type
@@ -220,7 +164,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      */
     public <R> Observable<R> request(HttpMethod httpMethod, String url, Map<String, Serializable> params,
             Class<R> responseType) {
-        return request(httpMethod, url, params, EMPTY, responseType);
+        return request(httpMethod, url, params, new HashMap<>(), responseType);
     }
 
     /**
@@ -255,49 +199,6 @@ public class HttpRxjavaClient extends AbstractHttpClient {
     }
 
     /**
-     * request body with medieType format.
-     *
-     * @param httpMethod  the http method
-     * @param url         the url
-     * @param requestBody the request body
-     * @return the observable
-     */
-    public Observable<String> request(HttpMethod httpMethod, String url, Object requestBody) {
-        return request(httpMethod, url, requestBody, EMPTY);
-    }
-
-    /**
-     * Post requestBody with medieType format.
-     *
-     * @param httpMethod  the http method
-     * @param url         the url
-     * @param requestBody the request body
-     * @param headers     the headers
-     * @return the observable
-     */
-    public Observable<String> request(HttpMethod httpMethod, String url, Object requestBody,
-            Map<String, String> headers) {
-        switch (httpMethod) {
-            case GET:
-                throw new HttpException("http get method can not send request body");
-            //                return get(url, new HashMap<>(), headers);
-            case POST:
-                return post(url, requestBody, headers);
-            case PUT:
-                return put(url, requestBody, headers);
-            case DELETE:
-                return delete(url, requestBody, headers);
-            case HEAD:
-                throw new HttpException("http head method can not send request body");
-            //                return head(url, new HashMap<>(), headers);
-            case PATCH:
-                return patch(url, requestBody, headers);
-            default:
-                throw new HttpException("unsupport http method " + httpMethod.toString());
-        }
-    }
-
-    /**
      * Post requestBody with medieType format and deserialize response.
      *
      * @param <R>          the generic type
@@ -308,7 +209,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @return responseType instance
      */
     public <R> Observable<R> request(HttpMethod httpMethod, String url, Object requestBody, Class<R> responseType) {
-        return request(httpMethod, url, requestBody, EMPTY, responseType);
+        return request(httpMethod, url, requestBody, new HashMap<>(), responseType);
     }
 
     /**
@@ -347,32 +248,12 @@ public class HttpRxjavaClient extends AbstractHttpClient {
     /**
      * get request.
      *
-     * @param url the url
-     * @return the observable
-     */
-    public Observable<String> get(String url) {
-        return get(url, new HashMap<>());
-    }
-
-    /**
-     * get request.
-     *
-     * @param url    the url
-     * @param params the params
-     * @return the observable
-     */
-    public Observable<String> get(String url, Map<String, Serializable> params) {
-        return get(url, params, EMPTY);
-    }
-
-    /**
-     * get request.
-     *
      * @param url     the url
      * @param params  the params
      * @param headers the headers
      * @return the observable
      */
+    @Override
     public Observable<String> get(String url, Map<String, Serializable> params, Map<String, String> headers) {
         return observation(new Request.Builder().url(HttpUtils.appendParams(url, params))
                 .headers(createHeaders(headers)).get().build());
@@ -400,7 +281,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @return the observable
      */
     public <R> Observable<R> get(String url, Map<String, Serializable> params, Class<R> responseType) {
-        return get(url, params, EMPTY, responseType);
+        return get(url, params, new HashMap<>(), responseType);
     }
 
     /**
@@ -422,32 +303,12 @@ public class HttpRxjavaClient extends AbstractHttpClient {
     /**
      * head request.
      *
-     * @param url the url
-     * @return the observable
-     */
-    public Observable<String> head(String url) {
-        return head(url, new HashMap<>());
-    }
-
-    /**
-     * head request.
-     *
-     * @param url    the url
-     * @param params the params
-     * @return the observable
-     */
-    public Observable<String> head(String url, Map<String, Serializable> params) {
-        return head(url, params, EMPTY);
-    }
-
-    /**
-     * head request.
-     *
      * @param url     the url
      * @param params  the params
      * @param headers the headers
      * @return the observable
      */
+    @Override
     public Observable<String> head(String url, Map<String, Serializable> params, Map<String, String> headers) {
         return observation(new Request.Builder().url(HttpUtils.appendParams(url, params))
                 .headers(createHeaders(headers)).head().build());
@@ -475,7 +336,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @return the observable
      */
     public <R> Observable<R> head(String url, Map<String, Serializable> params, Class<R> responseType) {
-        return head(url, params, EMPTY, responseType);
+        return head(url, params, new HashMap<>(), responseType);
     }
 
     /**
@@ -495,27 +356,6 @@ public class HttpRxjavaClient extends AbstractHttpClient {
     }
 
     /**
-     * post request.
-     *
-     * @param url the url
-     * @return the observable
-     */
-    public Observable<String> post(String url) {
-        return post(url, new HashMap<>());
-    }
-
-    /**
-     * Post params with FormBody.
-     *
-     * @param url    the url
-     * @param params the params
-     * @return the observable
-     */
-    public Observable<String> post(String url, Map<String, Serializable> params) {
-        return post(url, params, EMPTY);
-    }
-
-    /**
      * Post params with FormBody.
      *
      * @param url     the url
@@ -523,6 +363,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @param headers the headers
      * @return the observable
      */
+    @Override
     public Observable<String> post(String url, Map<String, Serializable> params, Map<String, String> headers) {
         return observation(new Request.Builder().url(url).headers(createHeaders(headers))
                 .post(HttpUtils.createRequestBody(params)).build());
@@ -538,7 +379,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @return the observable
      */
     public <R> Observable<R> post(String url, Map<String, Serializable> params, Class<R> responseType) {
-        return post(url, params, EMPTY, responseType);
+        return post(url, params, new HashMap<>(), responseType);
     }
 
     /**
@@ -562,23 +403,13 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      *
      * @param url         the url
      * @param requestBody the request body
-     * @return the observable
-     */
-    public Observable<String> post(String url, Object requestBody) {
-        return post(url, requestBody, EMPTY);
-    }
-
-    /**
-     * Post requestBody with medieType format.
-     *
-     * @param url         the url
-     * @param requestBody the request body
      * @param headers     the headers
      * @return the observable
      */
+    @Override
     public Observable<String> post(String url, Object requestBody, Map<String, String> headers) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers))
-                .post(RequestBody.create(mediaType, serializer.serialize(requestBody))).build());
+        return observation(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
+                .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
     }
 
     /**
@@ -591,7 +422,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @return the observable
      */
     public <R> Observable<R> post(String url, Object requestBody, Class<R> responseType) {
-        return post(url, requestBody, EMPTY, responseType);
+        return post(url, requestBody, new HashMap<>(), responseType);
     }
 
     /**
@@ -605,29 +436,10 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @return the observable
      */
     public <R> Observable<R> post(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers))
-                .post(RequestBody.create(mediaType, serializer.serialize(requestBody))).build(), responseType);
-    }
-
-    /**
-     * Put.
-     *
-     * @param url the url
-     * @return the observable
-     */
-    public Observable<String> put(String url) {
-        return put(url, new HashMap<>());
-    }
-
-    /**
-     * Put params with FormBody.
-     *
-     * @param url    the url
-     * @param params the params
-     * @return the observable
-     */
-    public Observable<String> put(String url, Map<String, Serializable> params) {
-        return put(url, params, EMPTY);
+        return observation(
+                new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
+                        .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+                responseType);
     }
 
     /**
@@ -638,6 +450,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @param headers the headers
      * @return the observable
      */
+    @Override
     public Observable<String> put(String url, Map<String, Serializable> params, Map<String, String> headers) {
         return observation(new Request.Builder().url(url).headers(createHeaders(headers))
                 .put(HttpUtils.createFormBody(params)).build());
@@ -653,7 +466,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @return the observable
      */
     public <R> Observable<R> put(String url, Map<String, Serializable> params, Class<R> responseType) {
-        return put(url, params, EMPTY, responseType);
+        return put(url, params, new HashMap<>(), responseType);
     }
 
     /**
@@ -677,23 +490,13 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      *
      * @param url         the url
      * @param requestBody the request body
-     * @return the observable
-     */
-    public Observable<String> put(String url, Object requestBody) {
-        return put(url, requestBody, EMPTY);
-    }
-
-    /**
-     * Put requestBody with medieType format.
-     *
-     * @param url         the url
-     * @param requestBody the request body
      * @param headers     the headers
      * @return the observable
      */
+    @Override
     public Observable<String> put(String url, Object requestBody, Map<String, String> headers) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers))
-                .put(RequestBody.create(mediaType, serializer.serialize(requestBody))).build());
+        return observation(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
+                .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
     }
 
     /**
@@ -706,7 +509,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @return the observable
      */
     public <R> Observable<R> put(String url, Object requestBody, Class<R> responseType) {
-        return put(url, requestBody, EMPTY, responseType);
+        return put(url, requestBody, new HashMap<>(), responseType);
     }
 
     /**
@@ -720,29 +523,10 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @return the observable
      */
     public <R> Observable<R> put(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers))
-                .put(RequestBody.create(mediaType, serializer.serialize(requestBody))).build(), responseType);
-    }
-
-    /**
-     * patch request.
-     *
-     * @param url the url
-     * @return the observable
-     */
-    public Observable<String> patch(String url) {
-        return patch(url, new HashMap<>());
-    }
-
-    /**
-     * patch request params with FormBody.
-     *
-     * @param url    the url
-     * @param params the params
-     * @return the observable
-     */
-    public Observable<String> patch(String url, Map<String, Serializable> params) {
-        return patch(url, params, EMPTY);
+        return observation(
+                new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
+                        .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+                responseType);
     }
 
     /**
@@ -753,6 +537,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @param headers the headers
      * @return the observable
      */
+    @Override
     public Observable<String> patch(String url, Map<String, Serializable> params, Map<String, String> headers) {
         return observation(new Request.Builder().url(url).headers(createHeaders(headers))
                 .patch(HttpUtils.createFormBody(params)).build());
@@ -768,7 +553,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @return the observable
      */
     public <R> Observable<R> patch(String url, Map<String, Serializable> params, Class<R> responseType) {
-        return patch(url, params, EMPTY, responseType);
+        return patch(url, params, new HashMap<>(), responseType);
     }
 
     /**
@@ -792,23 +577,13 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      *
      * @param url         the url
      * @param requestBody the request body
-     * @return the observable
-     */
-    public Observable<String> patch(String url, Object requestBody) {
-        return patch(url, requestBody, EMPTY);
-    }
-
-    /**
-     * patch request requestBody with medieType format.
-     *
-     * @param url         the url
-     * @param requestBody the request body
      * @param headers     the headers
      * @return the observable
      */
+    @Override
     public Observable<String> patch(String url, Object requestBody, Map<String, String> headers) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers))
-                .patch(RequestBody.create(mediaType, serializer.serialize(requestBody))).build());
+        return observation(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
+                .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
     }
 
     /**
@@ -821,7 +596,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @return the observable
      */
     public <R> Observable<R> patch(String url, Object requestBody, Class<R> responseType) {
-        return patch(url, requestBody, EMPTY, responseType);
+        return patch(url, requestBody, new HashMap<>(), responseType);
     }
 
     /**
@@ -835,18 +610,10 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @return the observable
      */
     public <R> Observable<R> patch(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers))
-                .patch(RequestBody.create(mediaType, serializer.serialize(requestBody))).build(), responseType);
-    }
-
-    /**
-     * Delete.
-     *
-     * @param url the url
-     * @return the observable
-     */
-    public Observable<String> delete(String url) {
-        return delete(url, EMPTY);
+        return observation(
+                new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
+                        .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+                responseType);
     }
 
     /**
@@ -856,6 +623,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @param headers the headers
      * @return the observable
      */
+    @Override
     public Observable<String> delete(String url, Map<String, String> headers) {
         return observation(new Request.Builder().url(url).headers(createHeaders(headers)).delete().build());
     }
@@ -869,7 +637,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @return the observable
      */
     public <R> Observable<R> delete(String url, Class<R> responseType) {
-        return delete(url, EMPTY, responseType);
+        return delete(url, new HashMap<>(), responseType);
     }
 
     /**
@@ -891,23 +659,13 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      *
      * @param url         the url
      * @param requestBody the request body
-     * @return the observable
-     */
-    public Observable<String> delete(String url, Object requestBody) {
-        return delete(url, requestBody, EMPTY);
-    }
-
-    /**
-     * Delete requestBody with medieType format.
-     *
-     * @param url         the url
-     * @param requestBody the request body
      * @param headers     the headers
      * @return the observable
      */
+    @Override
     public Observable<String> delete(String url, Object requestBody, Map<String, String> headers) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers))
-                .delete(RequestBody.create(mediaType, serializer.serialize(requestBody))).build());
+        return observation(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
+                .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
     }
 
     /**
@@ -920,7 +678,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @return the observable
      */
     public <R> Observable<R> delete(String url, Object requestBody, Class<R> responseType) {
-        return delete(url, requestBody, EMPTY, responseType);
+        return delete(url, requestBody, new HashMap<>(), responseType);
     }
 
     /**
@@ -936,75 +694,9 @@ public class HttpRxjavaClient extends AbstractHttpClient {
     public <R> Observable<R> delete(String url, Object requestBody, Map<String, String> headers,
             Class<R> responseType) {
         return observation(
-                new Request.Builder().url(url).headers(createHeaders(headers))
-                        .delete(RequestBody.create(mediaType, serializer.serialize(requestBody))).build(),
+                new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
+                        .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
                 responseType);
-    }
-
-    /**
-     * Download.
-     *
-     * @param url    the url
-     * @param output the output
-     * @return the http request completion
-     */
-    public Observable<Integer> download(String url, OutputStream output) {
-        return download(url, new HashMap<>(), output);
-    }
-
-    /**
-     * Download.
-     *
-     * @param url       the url
-     * @param localFile the local file
-     * @return the http request completion
-     */
-    public Observable<Integer> download(String url, File localFile) {
-        return download(url, new HashMap<>(), localFile);
-    }
-
-    /**
-     * Download.
-     *
-     * @param url    the url
-     * @param params the params
-     * @param output the output
-     * @return the http request completion
-     */
-    public Observable<Integer> download(String url, Map<String, Serializable> params, OutputStream output) {
-        return download(url, params, EMPTY, output);
-    }
-
-    /**
-     * Download.
-     *
-     * @param url       the url
-     * @param params    the params
-     * @param localFile the local file
-     * @return the http request completion
-     */
-    public Observable<Integer> download(String url, Map<String, Serializable> params, File localFile) {
-        return download(url, params, EMPTY, localFile);
-    }
-
-    /**
-     * Download.
-     *
-     * @param url       the url
-     * @param params    the params
-     * @param headers   the headers
-     * @param localFile the local file
-     * @return the http request completion
-     */
-    public Observable<Integer> download(String url, Map<String, Serializable> params, Map<String, String> headers,
-            File localFile) {
-        AssertIllegalArgument.isNotNull(localFile, "localFile");
-        FileUtils.makeDirectory(localFile);
-        try {
-            return download(url, params, headers, new FileOutputStream(localFile));
-        } catch (FileNotFoundException e) {
-            throw new HttpException(e);
-        }
     }
 
     /**
@@ -1016,6 +708,7 @@ public class HttpRxjavaClient extends AbstractHttpClient {
      * @param output  the output
      * @return the http request completion
      */
+    @Override
     public Observable<Integer> download(String url, Map<String, Serializable> params, Map<String, String> headers,
             OutputStream output) {
         Request request = new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
@@ -1025,18 +718,22 @@ public class HttpRxjavaClient extends AbstractHttpClient {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     logger.error("error at url: {}", request.url());
-                    emitter.onError(e);
+                    emitter.onError(new HttpException(e));
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    if (response.code() == HttpCode.SUCCESS) {
+                    if (response.isSuccessful()) {
                         byte[] bs = response.body().bytes();
                         output.write(bs);
                         emitter.onNext(bs.length);
                     } else {
-                        emitter.onError(new HttpException(Strings.format("{0} error, code {1}, message {2}",
-                                request.url(), response.code(), response.message())));
+                        emitter.onError(new HttpErrorResponseException(
+                                Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
+                                        response.message()),
+                                new HttpResponse(response.code(), response.body().bytes(),
+                                        HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
+                                        response.receivedResponseAtMillis() - response.sentRequestAtMillis())));
                     }
                 }
             });
@@ -1053,16 +750,20 @@ public class HttpRxjavaClient extends AbstractHttpClient {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     logger.error("error at url: {}", request.url());
-                    emitter.onError(e);
+                    emitter.onError(new HttpException(e));
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    if (response.code() == HttpCode.SUCCESS || isCodeSameAsSuccess(response)) {
+                    if (isSuccess(response)) {
                         emitter.onNext(response.body().string());
                     } else {
-                        emitter.onError(new HttpException(Strings.format("{0} error, code {1}, message {2}",
-                                request.url(), response.code(), response.message())));
+                        emitter.onError(new HttpErrorResponseException(
+                                Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
+                                        response.message()),
+                                new HttpResponse(response.code(), response.body().bytes(),
+                                        HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
+                                        response.receivedResponseAtMillis() - response.sentRequestAtMillis())));
                     }
                 }
             });
@@ -1079,16 +780,20 @@ public class HttpRxjavaClient extends AbstractHttpClient {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     logger.error("error at url: {}", request.url());
-                    emitter.onError(e);
+                    emitter.onError(new HttpException(e));
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    if (response.code() == HttpCode.SUCCESS || isCodeSameAsSuccess(response)) {
+                    if (isSuccess(response)) {
                         emitter.onNext(deserialize(response, responseType));
                     } else {
-                        emitter.onError(new HttpException(Strings.format("{0} error, code {1}, message {2}",
-                                request.url(), response.code(), response.message())));
+                        emitter.onError(new HttpErrorResponseException(
+                                Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
+                                        response.message()),
+                                new HttpResponse(response.code(), response.body().bytes(),
+                                        HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
+                                        response.receivedResponseAtMillis() - response.sentRequestAtMillis())));
                     }
                 }
             });

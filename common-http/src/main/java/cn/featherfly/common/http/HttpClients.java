@@ -25,9 +25,9 @@ import okhttp3.OkHttpClient;
  *
  * @author zhongj
  */
-public class HttpClients extends AbstractHttpClient {
+public class HttpClients extends AbstractHttpClient implements HttpClient<String>, HttpDownloadClient<Integer> {
 
-    private HttpClient client;
+    private HttpSyncClient client;
 
     private HttpAsyncClient asyncClient;
 
@@ -133,7 +133,7 @@ public class HttpClients extends AbstractHttpClient {
     protected void init(OkHttpClient okhttpClient, Map<String, String> headers, Serialization serialization,
             MediaType mediaType) {
         super.init(okhttpClient, headers, serialization, mediaType);
-        client = new HttpClient(okhttpClient, headers, serialization, mediaType);
+        client = new HttpSyncClient(okhttpClient, headers, serialization, mediaType);
         asyncClient = new HttpAsyncClient(okhttpClient, headers, serialization, mediaType);
         rxjavaClient = new HttpRxjavaClient(okhttpClient, headers, serialization, mediaType);
     }
@@ -154,141 +154,6 @@ public class HttpClients extends AbstractHttpClient {
      */
     public void setAutoSubscribeOnIo(boolean autoSubscribeOnIo) {
         rxjavaClient.setAutoSubscribeOnIo(autoSubscribeOnIo);
-    }
-
-    /**
-     * Request.
-     *
-     * @param httpMethod the http method
-     * @param url        the url
-     * @return response string
-     */
-    public String request(HttpMethod httpMethod, String url) {
-        return client.request(httpMethod, url);
-    }
-
-    /**
-     * Request.
-     *
-     * @param httpMethod the http method
-     * @param url        the url
-     * @param params     the params
-     * @return response string
-     */
-    public String request(HttpMethod httpMethod, String url, Map<String, Serializable> params) {
-        return client.request(httpMethod, url, params);
-    }
-
-    /**
-     * Request.
-     *
-     * @param httpMethod the http method
-     * @param url        the url
-     * @param params     the params
-     * @param headers    the headers
-     * @return response string
-     */
-    public String request(HttpMethod httpMethod, String url, Map<String, Serializable> params,
-            Map<String, String> headers) {
-        return client.request(httpMethod, url, params, headers);
-    }
-
-    /**
-     * request with params and deserialize response .
-     *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param responseType the response type
-     * @return responseType instance
-     */
-    public <R> R request(HttpMethod httpMethod, String url, Class<R> responseType) {
-        return client.request(httpMethod, url, responseType);
-    }
-
-    /**
-     * request with params and deserialize response .
-     *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param params       the params
-     * @param responseType the response type
-     * @return responseType instance
-     */
-    public <R> R request(HttpMethod httpMethod, String url, Map<String, Serializable> params, Class<R> responseType) {
-        return client.request(httpMethod, url, params, responseType);
-    }
-
-    /**
-     * request with params and deserialize response .
-     *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
-     * @param responseType the response type
-     * @return responseType instance
-     */
-    public <R> R request(HttpMethod httpMethod, String url, Map<String, Serializable> params,
-            Map<String, String> headers, Class<R> responseType) {
-        return client.request(httpMethod, url, params, headers, responseType);
-    }
-
-    /**
-     * request body with medieType format.
-     *
-     * @param httpMethod  the http method
-     * @param url         the url
-     * @param requestBody the request body
-     * @return response string
-     */
-    public String request(HttpMethod httpMethod, String url, Object requestBody) {
-        return client.request(httpMethod, url, requestBody);
-    }
-
-    /**
-     * Post requestBody with medieType format.
-     *
-     * @param httpMethod  the http method
-     * @param url         the url
-     * @param requestBody the request body
-     * @param headers     the headers
-     * @return response string
-     */
-    public String request(HttpMethod httpMethod, String url, Object requestBody, Map<String, String> headers) {
-        return client.request(httpMethod, url, requestBody, headers);
-    }
-
-    /**
-     * Post requestBody with medieType format and deserialize response.
-     *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param responseType the response type
-     * @return responseType instance
-     */
-    public <R> R request(HttpMethod httpMethod, String url, Object requestBody, Class<R> responseType) {
-        return client.request(httpMethod, url, requestBody, responseType);
-    }
-
-    /**
-     * Post requestBody with medieType format and deserialize response.
-     *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
-     * @param responseType the response type
-     * @return responseType instance
-     */
-    public <R> R request(HttpMethod httpMethod, String url, Object requestBody, Map<String, String> headers,
-            Class<R> responseType) {
-        return client.request(httpMethod, url, requestBody, headers, responseType);
     }
 
     /**
@@ -574,6 +439,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param url the url
      * @return response string
      */
+    @Override
     public String get(String url) {
         return client.get(url);
     }
@@ -585,6 +451,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param params the params
      * @return response string
      */
+    @Override
     public String get(String url, Map<String, Serializable> params) {
         return client.get(url, params);
     }
@@ -597,6 +464,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param headers the headers
      * @return response string
      */
+    @Override
     public String get(String url, Map<String, Serializable> params, Map<String, String> headers) {
         return client.get(url, params, headers);
     }
@@ -794,6 +662,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param url the url
      * @return response string
      */
+    @Override
     public String head(String url) {
         return client.head(url);
     }
@@ -805,6 +674,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param params the params
      * @return response string
      */
+    @Override
     public String head(String url, Map<String, Serializable> params) {
         return client.head(url, params);
     }
@@ -817,6 +687,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param headers the headers
      * @return response string
      */
+    @Override
     public String head(String url, Map<String, Serializable> params, Map<String, String> headers) {
         return client.head(url, params, headers);
     }
@@ -1016,6 +887,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param url the url
      * @return response string
      */
+    @Override
     public String post(String url) {
         return client.post(url);
     }
@@ -1027,6 +899,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param params the params
      * @return response string
      */
+    @Override
     public String post(String url, Map<String, Serializable> params) {
         return client.post(url, params);
     }
@@ -1039,6 +912,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param headers the headers
      * @return response string
      */
+    @Override
     public String post(String url, Map<String, Serializable> params, Map<String, String> headers) {
         return client.post(url, params, headers);
     }
@@ -1078,6 +952,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param requestBody the request body
      * @return response string
      */
+    @Override
     public String post(String url, Object requestBody) {
         return client.post(url, requestBody);
     }
@@ -1090,6 +965,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param headers     the headers
      * @return response string
      */
+    @Override
     public String post(String url, Object requestBody, Map<String, String> headers) {
         return client.post(url, requestBody, headers);
     }
@@ -1354,6 +1230,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param url the url
      * @return response string
      */
+    @Override
     public String put(String url) {
         return client.put(url);
     }
@@ -1365,6 +1242,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param params the params
      * @return response string
      */
+    @Override
     public String put(String url, Map<String, Serializable> params) {
         return client.put(url, params);
     }
@@ -1377,6 +1255,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param headers the headers
      * @return response string
      */
+    @Override
     public String put(String url, Map<String, Serializable> params, Map<String, String> headers) {
         return client.put(url, params, headers);
     }
@@ -1415,6 +1294,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param requestBody the request body
      * @return response string
      */
+    @Override
     public String put(String url, Object requestBody) {
         return client.put(url, requestBody);
     }
@@ -1427,6 +1307,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param headers     the headers
      * @return response string
      */
+    @Override
     public String put(String url, Object requestBody, Map<String, String> headers) {
         return client.put(url, requestBody, headers);
     }
@@ -1690,6 +1571,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param url the url
      * @return response string
      */
+    @Override
     public String patch(String url) {
         return client.patch(url);
     }
@@ -1701,6 +1583,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param params the params
      * @return response string
      */
+    @Override
     public String patch(String url, Map<String, Serializable> params) {
         return client.patch(url, params);
     }
@@ -1713,6 +1596,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param headers the headers
      * @return response string
      */
+    @Override
     public String patch(String url, Map<String, Serializable> params, Map<String, String> headers) {
         return client.patch(url, params, headers);
     }
@@ -1752,6 +1636,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param requestBody the request body
      * @return response string
      */
+    @Override
     public String patch(String url, Object requestBody) {
         return client.patch(url, requestBody);
     }
@@ -1764,6 +1649,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param headers     the headers
      * @return response string
      */
+    @Override
     public String patch(String url, Object requestBody, Map<String, String> headers) {
         return client.patch(url, requestBody, headers);
     }
@@ -2028,6 +1914,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param url the url
      * @return response string
      */
+    @Override
     public String delete(String url) {
         return client.delete(url);
     }
@@ -2039,6 +1926,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param headers the headers
      * @return response string
      */
+    @Override
     public String delete(String url, Map<String, String> headers) {
         return client.delete(url, headers);
     }
@@ -2075,6 +1963,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param requestBody the request body
      * @return response string
      */
+    @Override
     public String delete(String url, Object requestBody) {
         return client.delete(url, requestBody);
     }
@@ -2087,6 +1976,7 @@ public class HttpClients extends AbstractHttpClient {
      * @param headers     the headers
      * @return response string
      */
+    @Override
     public String delete(String url, Object requestBody, Map<String, String> headers) {
         return client.delete(url, requestBody, headers);
     }
@@ -2316,68 +2206,15 @@ public class HttpClients extends AbstractHttpClient {
     /**
      * Download.
      *
-     * @param url    the url
-     * @param output the output
-     */
-    public void download(String url, OutputStream output) {
-        client.download(url, output);
-    }
-
-    /**
-     * Download.
-     *
-     * @param url       the url
-     * @param localFile the local file
-     */
-    public void download(String url, File localFile) {
-        client.download(url, localFile);
-    }
-
-    /**
-     * Download.
-     *
-     * @param url    the url
-     * @param params the params
-     * @param output the output
-     */
-    public void download(String url, Map<String, Serializable> params, OutputStream output) {
-        client.download(url, params, output);
-    }
-
-    /**
-     * Download.
-     *
-     * @param url       the url
-     * @param params    the params
-     * @param localFile the local file
-     */
-    public void download(String url, Map<String, Serializable> params, File localFile) {
-        client.download(url, params, localFile);
-    }
-
-    /**
-     * Download.
-     *
-     * @param url       the url
-     * @param params    the params
-     * @param headers   the headers
-     * @param localFile the local file
-     */
-    public void download(String url, Map<String, Serializable> params, Map<String, String> headers, File localFile) {
-        client.download(url, params, headers, localFile);
-    }
-
-    /**
-     * Download.
-     *
      * @param url     the url
      * @param params  the params
      * @param headers the headers
      * @param output  the output
      */
-    public void download(String url, Map<String, Serializable> params, Map<String, String> headers,
+    @Override
+    public Integer download(String url, Map<String, Serializable> params, Map<String, String> headers,
             OutputStream output) {
-        client.download(url, params, headers, output);
+        return client.download(url, params, headers, output);
     }
 
     /**

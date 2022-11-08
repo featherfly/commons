@@ -13,7 +13,7 @@ import okhttp3.MediaType;
  *
  * @author zhongj
  */
-public class Test {
+public class Test2 {
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     @org.testng.annotations.Test

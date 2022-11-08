@@ -1,3 +1,14 @@
+# 0.7.0 2022-11-08
+1. 各种支持请求体参数objectBody的方法加入String和byte[]支持
+   如果是String，在没有设置content-type头时，会自动设置content-type为text/plain
+   如果是byte[]，不管有没有设置content-type头，都会自动设置content-type为application/octet-stream
+2. HttpClient重构为HttpSyncClient
+3. HttpSyncClient加入response状态判断，不是成功状态则抛出HttpErroResponseException
+4. HttpRxJavaClient返回response不是成功状态时异常更改为HttpErrorResponseException
+5. 抽取HttpClient,HttpDownloadClient,HttpStreamClient接口
+6. 加入HttpClientImpl实现
+7. HttpCode加入各种code
+
 # 0.6.1 2022-10-28
 1. 上传文件的文件名进行转码处理（解决中文文件名出错的问题）
 

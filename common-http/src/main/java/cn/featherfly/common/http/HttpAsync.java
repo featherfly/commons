@@ -33,7 +33,7 @@ public final class HttpAsync {
      * Checks if is deserialize with content type.
      *
      * @return true, if is deserialize with content type
-     * @see cn.featherfly.common.http.HttpClient#isDeserializeWithContentType()
+     * @see cn.featherfly.common.http.HttpSyncClient#isDeserializeWithContentType()
      */
     public static boolean isDeserializeWithContentType() {
         return CLIENT.isDeserializeWithContentType();
@@ -43,7 +43,7 @@ public final class HttpAsync {
      * Sets the deserialize with content type.
      *
      * @param deserializeWithContentType the new deserialize with content type
-     * @see cn.featherfly.common.http.HttpClient#setDeserializeWithContentType(boolean)
+     * @see cn.featherfly.common.http.HttpSyncClient#setDeserializeWithContentType(boolean)
      */
     public static void setDeserializeWithContentType(boolean deserializeWithContentType) {
         CLIENT.setDeserializeWithContentType(deserializeWithContentType);
@@ -54,7 +54,7 @@ public final class HttpAsync {
      *
      * @param url the url
      * @return the completion
-     * @see cn.featherfly.common.http.HttpClient#get(java.lang.String)
+     * @see cn.featherfly.common.http.HttpSyncClient#get(java.lang.String)
      */
     public static HttpRequestCompletion<String> get(String url) {
         return CLIENT.get(url);
@@ -66,7 +66,7 @@ public final class HttpAsync {
      * @param url    the url
      * @param params the params
      * @return the completion
-     * @see cn.featherfly.common.http.HttpClient#get(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#get(java.lang.String,
      *      java.util.Map)
      */
     public static HttpRequestCompletion<String> get(String url, Map<String, Serializable> params) {
@@ -80,7 +80,7 @@ public final class HttpAsync {
      * @param params  the params
      * @param headers the headers
      * @return the completion
-     * @see cn.featherfly.common.http.HttpClient#get(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#get(java.lang.String,
      *      java.util.Map, java.util.Map)
      */
     public static HttpRequestCompletion<String> get(String url, Map<String, Serializable> params,
@@ -95,7 +95,7 @@ public final class HttpAsync {
      * @param url          the url
      * @param responseType the response type
      * @return the completion
-     * @see cn.featherfly.common.http.HttpClient#get(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#get(java.lang.String,
      *      java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> get(String url, Class<R> responseType) {
@@ -110,7 +110,7 @@ public final class HttpAsync {
      * @param params       the params
      * @param responseType the response type
      * @return the completion
-     * @see cn.featherfly.common.http.HttpClient#get(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#get(java.lang.String,
      *      java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> get(String url, Map<String, Serializable> params,
@@ -127,7 +127,7 @@ public final class HttpAsync {
      * @param headers      the headers
      * @param responseType the response type
      * @return the completion
-     * @see cn.featherfly.common.http.HttpClient#get(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#get(java.lang.String,
      *      java.util.Map, java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> get(String url, Map<String, Serializable> params,
@@ -140,7 +140,7 @@ public final class HttpAsync {
      *
      * @param url the url
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#head(java.lang.String)
+     * @see cn.featherfly.common.http.HttpSyncClient#head(java.lang.String)
      */
     public static HttpRequestCompletion<String> head(String url) {
         return CLIENT.head(url);
@@ -152,7 +152,7 @@ public final class HttpAsync {
      * @param url    the url
      * @param params the params
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#head(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#head(java.lang.String,
      *      java.util.Map)
      */
     public static HttpRequestCompletion<String> head(String url, Map<String, Serializable> params) {
@@ -166,7 +166,7 @@ public final class HttpAsync {
      * @param params  the params
      * @param headers the headers
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#head(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#head(java.lang.String,
      *      java.util.Map, java.util.Map)
      */
     public static HttpRequestCompletion<String> head(String url, Map<String, Serializable> params,
@@ -181,7 +181,7 @@ public final class HttpAsync {
      * @param url          the url
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#head(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#head(java.lang.String,
      *      java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> head(String url, Class<R> responseType) {
@@ -196,7 +196,7 @@ public final class HttpAsync {
      * @param params       the params
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#head(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#head(java.lang.String,
      *      java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> head(String url, Map<String, Serializable> params,
@@ -213,7 +213,7 @@ public final class HttpAsync {
      * @param headers      the headers
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#head(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#head(java.lang.String,
      *      java.util.Map, java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> head(String url, Map<String, Serializable> params,
@@ -226,7 +226,7 @@ public final class HttpAsync {
      *
      * @param url the url
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#post(java.lang.String)
+     * @see cn.featherfly.common.http.HttpSyncClient#post(java.lang.String)
      */
     public static HttpRequestCompletion<String> post(String url) {
         return CLIENT.post(url);
@@ -238,7 +238,7 @@ public final class HttpAsync {
      * @param url    the url
      * @param params the params
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#post(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#post(java.lang.String,
      *      java.util.Map)
      */
     public static HttpRequestCompletion<String> post(String url, Map<String, Serializable> params) {
@@ -252,7 +252,7 @@ public final class HttpAsync {
      * @param params  the params
      * @param headers the headers
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#post(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#post(java.lang.String,
      *      java.util.Map, java.util.Map)
      */
     public static HttpRequestCompletion<String> post(String url, Map<String, Serializable> params,
@@ -268,7 +268,7 @@ public final class HttpAsync {
      * @param params       the params
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#post(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#post(java.lang.String,
      *      java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> post(String url, Map<String, Serializable> params,
@@ -285,7 +285,7 @@ public final class HttpAsync {
      * @param headers      the headers
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#post(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#post(java.lang.String,
      *      java.util.Map, java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> post(String url, Map<String, Serializable> params,
@@ -299,7 +299,7 @@ public final class HttpAsync {
      * @param url         the url
      * @param requestBody the request body
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#post(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#post(java.lang.String,
      *      java.lang.Object)
      */
     public static HttpRequestCompletion<String> post(String url, Object requestBody) {
@@ -313,7 +313,7 @@ public final class HttpAsync {
      * @param requestBody the request body
      * @param headers     the headers
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#post(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#post(java.lang.String,
      *      java.lang.Object, java.util.Map)
      */
     public static HttpRequestCompletion<String> post(String url, Object requestBody, Map<String, String> headers) {
@@ -328,7 +328,7 @@ public final class HttpAsync {
      * @param requestBody  the request body
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#post(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#post(java.lang.String,
      *      java.lang.Object, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> post(String url, Object requestBody, Class<R> responseType) {
@@ -344,7 +344,7 @@ public final class HttpAsync {
      * @param headers      the headers
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#post(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#post(java.lang.String,
      *      java.lang.Object, java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> post(String url, Object requestBody, Map<String, String> headers,
@@ -357,7 +357,7 @@ public final class HttpAsync {
      *
      * @param url the url
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#put(java.lang.String)
+     * @see cn.featherfly.common.http.HttpSyncClient#put(java.lang.String)
      */
     public static HttpRequestCompletion<String> put(String url) {
         return CLIENT.put(url);
@@ -369,7 +369,7 @@ public final class HttpAsync {
      * @param url    the url
      * @param params the params
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#put(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#put(java.lang.String,
      *      java.util.Map)
      */
     public static HttpRequestCompletion<String> put(String url, Map<String, Serializable> params) {
@@ -383,7 +383,7 @@ public final class HttpAsync {
      * @param params  the params
      * @param headers the headers
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#put(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#put(java.lang.String,
      *      java.util.Map, java.util.Map)
      */
     public static HttpRequestCompletion<String> put(String url, Map<String, Serializable> params,
@@ -399,7 +399,7 @@ public final class HttpAsync {
      * @param params       the params
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#put(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#put(java.lang.String,
      *      java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> put(String url, Map<String, Serializable> params,
@@ -416,7 +416,7 @@ public final class HttpAsync {
      * @param headers      the headers
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#put(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#put(java.lang.String,
      *      java.util.Map, java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> put(String url, Map<String, Serializable> params,
@@ -430,7 +430,7 @@ public final class HttpAsync {
      * @param url         the url
      * @param requestBody the request body
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#put(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#put(java.lang.String,
      *      java.lang.Object)
      */
     public static HttpRequestCompletion<String> put(String url, Object requestBody) {
@@ -444,7 +444,7 @@ public final class HttpAsync {
      * @param requestBody the request body
      * @param headers     the headers
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#put(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#put(java.lang.String,
      *      java.lang.Object, java.util.Map)
      */
     public static HttpRequestCompletion<String> put(String url, Object requestBody, Map<String, String> headers) {
@@ -459,7 +459,7 @@ public final class HttpAsync {
      * @param requestBody  the request body
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#put(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#put(java.lang.String,
      *      java.lang.Object, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> put(String url, Object requestBody, Class<R> responseType) {
@@ -475,7 +475,7 @@ public final class HttpAsync {
      * @param headers      the headers
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#put(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#put(java.lang.String,
      *      java.lang.Object, java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> put(String url, Object requestBody, Map<String, String> headers,
@@ -488,7 +488,7 @@ public final class HttpAsync {
      *
      * @param url the url
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#patch(java.lang.String)
+     * @see cn.featherfly.common.http.HttpSyncClient#patch(java.lang.String)
      */
     public static HttpRequestCompletion<String> patch(String url) {
         return CLIENT.patch(url);
@@ -500,7 +500,7 @@ public final class HttpAsync {
      * @param url    the url
      * @param params the params
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#patch(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#patch(java.lang.String,
      *      java.util.Map)
      */
     public static HttpRequestCompletion<String> patch(String url, Map<String, Serializable> params) {
@@ -514,7 +514,7 @@ public final class HttpAsync {
      * @param params  the params
      * @param headers the headers
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#patch(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#patch(java.lang.String,
      *      java.util.Map, java.util.Map)
      */
     public static HttpRequestCompletion<String> patch(String url, Map<String, Serializable> params,
@@ -530,7 +530,7 @@ public final class HttpAsync {
      * @param params       the params
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#patch(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#patch(java.lang.String,
      *      java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> patch(String url, Map<String, Serializable> params,
@@ -547,7 +547,7 @@ public final class HttpAsync {
      * @param headers      the headers
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#patch(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#patch(java.lang.String,
      *      java.util.Map, java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> patch(String url, Map<String, Serializable> params,
@@ -561,7 +561,7 @@ public final class HttpAsync {
      * @param url         the url
      * @param requestBody the request body
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#patch(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#patch(java.lang.String,
      *      java.lang.Object)
      */
     public static HttpRequestCompletion<String> patch(String url, Object requestBody) {
@@ -575,7 +575,7 @@ public final class HttpAsync {
      * @param requestBody the request body
      * @param headers     the headers
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#patch(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#patch(java.lang.String,
      *      java.lang.Object, java.util.Map)
      */
     public static HttpRequestCompletion<String> patch(String url, Object requestBody, Map<String, String> headers) {
@@ -590,7 +590,7 @@ public final class HttpAsync {
      * @param requestBody  the request body
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#patch(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#patch(java.lang.String,
      *      java.lang.Object, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> patch(String url, Object requestBody, Class<R> responseType) {
@@ -606,7 +606,7 @@ public final class HttpAsync {
      * @param headers      the headers
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#patch(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#patch(java.lang.String,
      *      java.lang.Object, java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> patch(String url, Object requestBody, Map<String, String> headers,
@@ -619,7 +619,7 @@ public final class HttpAsync {
      *
      * @param url the url
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#delete(java.lang.String)
+     * @see cn.featherfly.common.http.HttpSyncClient#delete(java.lang.String)
      */
     public static HttpRequestCompletion<String> delete(String url) {
         return CLIENT.delete(url);
@@ -631,7 +631,7 @@ public final class HttpAsync {
      * @param url     the url
      * @param headers the headers
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#delete(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#delete(java.lang.String,
      *      java.util.Map)
      */
     public static HttpRequestCompletion<String> delete(String url, Map<String, String> headers) {
@@ -645,7 +645,7 @@ public final class HttpAsync {
      * @param url          the url
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#delete(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#delete(java.lang.String,
      *      java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> delete(String url, Class<R> responseType) {
@@ -660,7 +660,7 @@ public final class HttpAsync {
      * @param headers      the headers
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#delete(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#delete(java.lang.String,
      *      java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> delete(String url, Map<String, String> headers, Class<R> responseType) {
@@ -673,7 +673,7 @@ public final class HttpAsync {
      * @param url         the url
      * @param requestBody the request body
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#delete(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#delete(java.lang.String,
      *      java.lang.Object)
      */
     public static HttpRequestCompletion<String> delete(String url, Object requestBody) {
@@ -687,7 +687,7 @@ public final class HttpAsync {
      * @param requestBody the request body
      * @param headers     the headers
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#delete(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#delete(java.lang.String,
      *      java.lang.Object, java.util.Map)
      */
     public static HttpRequestCompletion<String> delete(String url, Object requestBody, Map<String, String> headers) {
@@ -702,7 +702,7 @@ public final class HttpAsync {
      * @param requestBody  the request body
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#delete(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#delete(java.lang.String,
      *      java.lang.Object, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> delete(String url, Object requestBody, Class<R> responseType) {
@@ -718,7 +718,7 @@ public final class HttpAsync {
      * @param headers      the headers
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#delete(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#delete(java.lang.String,
      *      java.lang.Object, java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> delete(String url, Object requestBody, Map<String, String> headers,
@@ -732,7 +732,7 @@ public final class HttpAsync {
      * @param url    the url
      * @param output the output
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#download(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#download(java.lang.String,
      *      java.io.OutputStream)
      */
     public static HttpRequestCompletion<Integer> download(String url, OutputStream output) {
@@ -745,7 +745,7 @@ public final class HttpAsync {
      * @param url       the url
      * @param localFile the local file
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#download(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#download(java.lang.String,
      *      java.io.File)
      */
     public static HttpRequestCompletion<Integer> download(String url, File localFile) {
@@ -759,7 +759,7 @@ public final class HttpAsync {
      * @param params the params
      * @param output the output
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#download(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#download(java.lang.String,
      *      java.util.Map, java.io.OutputStream)
      */
     public static HttpRequestCompletion<Integer> download(String url, Map<String, Serializable> params,
@@ -774,7 +774,7 @@ public final class HttpAsync {
      * @param params    the params
      * @param localFile the local file
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#download(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#download(java.lang.String,
      *      java.util.Map, java.io.File)
      */
     public static HttpRequestCompletion<Integer> download(String url, Map<String, Serializable> params,
@@ -790,7 +790,7 @@ public final class HttpAsync {
      * @param headers   the headers
      * @param localFile the local file
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#download(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#download(java.lang.String,
      *      java.util.Map, java.util.Map, java.io.File)
      */
     public static HttpRequestCompletion<Integer> download(String url, Map<String, Serializable> params,
@@ -806,7 +806,7 @@ public final class HttpAsync {
      * @param headers the headers
      * @param output  the output
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#download(java.lang.String,
+     * @see cn.featherfly.common.http.HttpSyncClient#download(java.lang.String,
      *      java.util.Map, java.util.Map, java.io.OutputStream)
      */
     public static HttpRequestCompletion<Integer> download(String url, Map<String, Serializable> params,
@@ -820,7 +820,7 @@ public final class HttpAsync {
      * @param httpMethod the http method
      * @param url        the url
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#request(cn.featherfly.common.http.HttpMethod,
+     * @see cn.featherfly.common.http.HttpSyncClient#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String)
      */
     public static HttpRequestCompletion<String> request(HttpMethod httpMethod, String url) {
@@ -834,7 +834,7 @@ public final class HttpAsync {
      * @param url        the url
      * @param params     the params
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#request(cn.featherfly.common.http.HttpMethod,
+     * @see cn.featherfly.common.http.HttpSyncClient#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.util.Map)
      */
     public static HttpRequestCompletion<String> request(HttpMethod httpMethod, String url,
@@ -850,7 +850,7 @@ public final class HttpAsync {
      * @param params     the params
      * @param headers    the headers
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#request(cn.featherfly.common.http.HttpMethod,
+     * @see cn.featherfly.common.http.HttpSyncClient#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.util.Map, java.util.Map)
      */
     public static HttpRequestCompletion<String> request(HttpMethod httpMethod, String url,
@@ -866,7 +866,7 @@ public final class HttpAsync {
      * @param url          the url
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#request(cn.featherfly.common.http.HttpMethod,
+     * @see cn.featherfly.common.http.HttpSyncClient#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> request(HttpMethod httpMethod, String url, Class<R> responseType) {
@@ -882,7 +882,7 @@ public final class HttpAsync {
      * @param params       the params
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#request(cn.featherfly.common.http.HttpMethod,
+     * @see cn.featherfly.common.http.HttpSyncClient#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> request(HttpMethod httpMethod, String url,
@@ -900,7 +900,7 @@ public final class HttpAsync {
      * @param headers      the headers
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#request(cn.featherfly.common.http.HttpMethod,
+     * @see cn.featherfly.common.http.HttpSyncClient#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.util.Map, java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> request(HttpMethod httpMethod, String url,
@@ -915,7 +915,7 @@ public final class HttpAsync {
      * @param url         the url
      * @param requestBody the request body
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#request(cn.featherfly.common.http.HttpMethod,
+     * @see cn.featherfly.common.http.HttpSyncClient#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.lang.Object)
      */
     public static HttpRequestCompletion<String> request(HttpMethod httpMethod, String url, Object requestBody) {
@@ -930,7 +930,7 @@ public final class HttpAsync {
      * @param requestBody the request body
      * @param headers     the headers
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#request(cn.featherfly.common.http.HttpMethod,
+     * @see cn.featherfly.common.http.HttpSyncClient#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.lang.Object, java.util.Map)
      */
     public static HttpRequestCompletion<String> request(HttpMethod httpMethod, String url, Object requestBody,
@@ -947,7 +947,7 @@ public final class HttpAsync {
      * @param requestBody  the request body
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#request(cn.featherfly.common.http.HttpMethod,
+     * @see cn.featherfly.common.http.HttpSyncClient#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.lang.Object, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> request(HttpMethod httpMethod, String url, Object requestBody,
@@ -965,7 +965,7 @@ public final class HttpAsync {
      * @param headers      the headers
      * @param responseType the response type
      * @return the http request completion
-     * @see cn.featherfly.common.http.HttpClient#request(cn.featherfly.common.http.HttpMethod,
+     * @see cn.featherfly.common.http.HttpSyncClient#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.lang.Object, java.util.Map, java.lang.Class)
      */
     public static <R> HttpRequestCompletion<R> request(HttpMethod httpMethod, String url, Object requestBody,

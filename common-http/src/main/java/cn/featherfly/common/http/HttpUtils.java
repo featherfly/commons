@@ -24,6 +24,12 @@ import okhttp3.RequestBody;
  */
 public class HttpUtils {
 
+    /** The Constant STREAM_CONTENT_TYPE. */
+    public static final String STREAM_CONTENT_TYPE = "application/octet-stream";
+
+    /** The Constant STREAM_MEDIA_TYPE. */
+    public static final MediaType STREAM_MEDIA_TYPE = MediaType.parse(STREAM_CONTENT_TYPE);
+
     /** The Constant DEFAULT_CONTENT_TYPE. */
     public static final String HTML_CONTENT_TYPE = "text/html; charset=utf-8";
 

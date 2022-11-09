@@ -14,9 +14,9 @@ package cn.featherfly.common.validate;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.featherfly.common.enums.CalculationOperator;
 import cn.featherfly.common.lang.CollectionUtils;
 import cn.featherfly.common.lang.Randoms;
+import cn.featherfly.common.operator.CalculationOperator;
 
 /**
  * <p>

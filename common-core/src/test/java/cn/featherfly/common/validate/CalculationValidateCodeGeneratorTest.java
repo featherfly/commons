@@ -1,7 +1,7 @@
 
 package cn.featherfly.common.validate;
 
-import cn.featherfly.common.enums.CalculationOperator;
+import cn.featherfly.common.operator.CalculationOperator;
 
 /**
  * <p>

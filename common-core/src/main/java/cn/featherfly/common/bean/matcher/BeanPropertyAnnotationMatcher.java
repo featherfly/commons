@@ -2,7 +2,7 @@
 package cn.featherfly.common.bean.matcher;
 
 import cn.featherfly.common.bean.BeanProperty;
-import cn.featherfly.common.enums.LogicOperator;
+import cn.featherfly.common.operator.LogicOperator;
 
 /**
  * 注解匹配的属性查找条件类.

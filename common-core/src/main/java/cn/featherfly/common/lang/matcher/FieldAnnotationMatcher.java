@@ -3,9 +3,9 @@ package cn.featherfly.common.lang.matcher;
 
 import java.lang.reflect.Field;
 
-import cn.featherfly.common.enums.LogicOperator;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.operator.LogicOperator;
 
 /**
  * <p>

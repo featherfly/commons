@@ -3,7 +3,7 @@ package cn.featherfly.common.lang.matcher;
 
 import java.lang.reflect.Method;
 
-import cn.featherfly.common.enums.LogicOperator;
+import cn.featherfly.common.operator.LogicOperator;
 
 /**
  * <p>

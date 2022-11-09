@@ -1,4 +1,4 @@
-package cn.featherfly.common.enums;
+package cn.featherfly.common.operator;
 
 /**
  * Calculation Operator.

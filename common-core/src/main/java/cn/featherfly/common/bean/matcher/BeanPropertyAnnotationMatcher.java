@@ -2,7 +2,7 @@
 package cn.featherfly.common.bean.matcher;
 
 import cn.featherfly.common.bean.BeanProperty;
-import cn.featherfly.common.enums.Logic;
+import cn.featherfly.common.enums.LogicOperator;
 
 /**
  * 注解匹配的属性查找条件类.
@@ -29,12 +29,12 @@ public class BeanPropertyAnnotationMatcher implements BeanPropertyMatcher {
     }
 
     /**
-     * 使用指定的判断逻辑来匹配. 并集，所有注解都要标注才算匹配；交集，只要有一个标注就算匹配。参见{@link Logic}
+     * 使用指定的判断逻辑来匹配. 并集，所有注解都要标注才算匹配；交集，只要有一个标注就算匹配。参见{@link LogicOperator}
      *
      * @param logic             判断逻辑
      * @param annotationClasses 注解类型
      */
-    public BeanPropertyAnnotationMatcher(Logic logic, Class<?>... annotationClasses) {
+    public BeanPropertyAnnotationMatcher(LogicOperator logic, Class<?>... annotationClasses) {
         this(annotationClasses);
         this.logic = logic;
     }
@@ -46,7 +46,7 @@ public class BeanPropertyAnnotationMatcher implements BeanPropertyMatcher {
     @SuppressWarnings("unchecked")
     public boolean test(BeanProperty<?> beanProperty) {
         boolean result = false;
-        if (logic == Logic.AND) {
+        if (logic == LogicOperator.AND) {
             //并集，所有注解都要标注
             for (@SuppressWarnings("rawtypes")
             Class annotationClass : annotationClasses) {
@@ -68,5 +68,5 @@ public class BeanPropertyAnnotationMatcher implements BeanPropertyMatcher {
         return result;
     }
 
-    private Logic logic = Logic.AND;
+    private LogicOperator logic = LogicOperator.AND;
 }

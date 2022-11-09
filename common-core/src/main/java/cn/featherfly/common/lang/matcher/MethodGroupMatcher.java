@@ -3,7 +3,7 @@ package cn.featherfly.common.lang.matcher;
 
 import java.lang.reflect.Method;
 
-import cn.featherfly.common.enums.Logic;
+import cn.featherfly.common.enums.LogicOperator;
 
 /**
  * <p>
@@ -26,7 +26,7 @@ public class MethodGroupMatcher extends MemberGroupMatcher<Method>
      * @param logic logic
      * @param matchers matchers
      */
-    public MethodGroupMatcher(Logic logic, MethodMatcher... matchers) {
+    public MethodGroupMatcher(LogicOperator logic, MethodMatcher... matchers) {
         super(logic, matchers);
     }
 

@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import cn.featherfly.common.enums.Logic;
+import cn.featherfly.common.enums.LogicOperator;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.CollectionUtils;
 import cn.featherfly.common.lang.Lang;
@@ -21,7 +21,7 @@ import cn.featherfly.common.lang.Lang;
  */
 public class GroupMatcher<M extends Matcher<O>, O> implements Matcher<O> {
 
-    private Logic logic = Logic.AND;
+    private LogicOperator logic = LogicOperator.AND;
 
     private Set<M> matchers = new HashSet<>();
 
@@ -41,7 +41,7 @@ public class GroupMatcher<M extends Matcher<O>, O> implements Matcher<O> {
      * @param logic    match logic
      * @param matchers matchers
      */
-    public GroupMatcher(Logic logic, @SuppressWarnings("unchecked") M... matchers) {
+    public GroupMatcher(LogicOperator logic, @SuppressWarnings("unchecked") M... matchers) {
         setLogic(logic);
         CollectionUtils.addAll(this.matchers, matchers);
     }
@@ -54,7 +54,7 @@ public class GroupMatcher<M extends Matcher<O>, O> implements Matcher<O> {
         if (Lang.isEmpty(this.matchers)) {
             return false;
         }
-        if (logic == Logic.AND) {
+        if (logic == LogicOperator.AND) {
             return matchAnd(o, this.matchers);
         } else {
             return matchOr(o, this.matchers);
@@ -119,7 +119,7 @@ public class GroupMatcher<M extends Matcher<O>, O> implements Matcher<O> {
      *
      * @return logic
      */
-    public Logic getLogic() {
+    public LogicOperator getLogic() {
         return logic;
     }
 
@@ -128,7 +128,7 @@ public class GroupMatcher<M extends Matcher<O>, O> implements Matcher<O> {
      *
      * @param logic logic
      */
-    public void setLogic(Logic logic) {
+    public void setLogic(LogicOperator logic) {
         AssertIllegalArgument.isNotNull(logic, "Logic logic");
         this.logic = logic;
     }

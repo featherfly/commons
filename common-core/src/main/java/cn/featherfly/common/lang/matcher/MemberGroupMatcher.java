@@ -4,7 +4,7 @@ package cn.featherfly.common.lang.matcher;
 import java.lang.reflect.Member;
 
 import cn.featherfly.common.data.GroupMatcher;
-import cn.featherfly.common.enums.Logic;
+import cn.featherfly.common.enums.LogicOperator;
 
 /**
  * <p>
@@ -27,7 +27,7 @@ public class MemberGroupMatcher<T extends Member> extends GroupMatcher<MemberMat
      * @param logic logic
      * @param matchers matchers
      */
-    public MemberGroupMatcher(Logic logic, @SuppressWarnings("unchecked") MemberMatcher<T>... matchers) {
+    public MemberGroupMatcher(LogicOperator logic, @SuppressWarnings("unchecked") MemberMatcher<T>... matchers) {
         super(logic, matchers);
     }
 

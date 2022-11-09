@@ -3,7 +3,7 @@ package cn.featherfly.common.lang.matcher;
 
 import java.lang.reflect.Method;
 
-import cn.featherfly.common.enums.Logic;
+import cn.featherfly.common.enums.LogicOperator;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 
@@ -34,12 +34,12 @@ public class MethodAnnotationMatcher implements MethodMatcher {
     }
 
     /**
-     * 使用指定的判断逻辑来匹配. 并集，所有注解都要标注才算匹配；交集，只要有一个标注就算匹配。参见{@link Logic}
+     * 使用指定的判断逻辑来匹配. 并集，所有注解都要标注才算匹配；交集，只要有一个标注就算匹配。参见{@link LogicOperator}
      *
      * @param logic             判断逻辑
      * @param annotationClasses 注解类型
      */
-    public MethodAnnotationMatcher(Logic logic, Class<?>... annotationClasses) {
+    public MethodAnnotationMatcher(LogicOperator logic, Class<?>... annotationClasses) {
         this(annotationClasses);
         AssertIllegalArgument.isNotNull(logic, "Logic logic");
         this.logic = logic;
@@ -53,7 +53,7 @@ public class MethodAnnotationMatcher implements MethodMatcher {
         if (Lang.isEmpty(annotationClasses) || field == null) {
             return false;
         }
-        if (logic == Logic.AND) {
+        if (logic == LogicOperator.AND) {
             //并集，所有注解都要标注
             return matchAnd(field);
         } else {
@@ -84,6 +84,6 @@ public class MethodAnnotationMatcher implements MethodMatcher {
         return false;
     }
 
-    private Logic logic = Logic.AND;
+    private LogicOperator logic = LogicOperator.AND;
 
 }

@@ -4,18 +4,20 @@ import java.util.function.Predicate;
 
 import cn.featherfly.common.lang.Lang;
 
+/**
+ * The Enum IgnorePolicy.
+ *
+ * @author zhongj
+ */
 public enum IgnorePolicy implements Predicate<Object> {
-    /**
-     * not ignore
-     */
+
+    /** not ignore. */
     NONE,
-    /**
-     * ignore null
-     */
+
+    /** ignore null. */
     NULL,
-    /**
-     * ignore null and empty (String Array Collection Map size = 0)
-     */
+
+    /** ignore null and empty (String Array Collection Map size = 0). */
     EMPTY;
 
     /**

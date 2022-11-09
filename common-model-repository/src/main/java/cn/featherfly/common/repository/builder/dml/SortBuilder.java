@@ -3,9 +3,7 @@ package cn.featherfly.common.repository.builder.dml;
 import cn.featherfly.common.repository.builder.Builder;
 
 /**
- * <p>
- * 排序构建接口
- * </p>
+ * 排序构建接口.
  *
  * @author zhongj
  */

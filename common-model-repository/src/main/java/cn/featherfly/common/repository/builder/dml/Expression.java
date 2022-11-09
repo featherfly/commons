@@ -1,19 +1,16 @@
 
 package cn.featherfly.common.repository.builder.dml;
 
-
 /**
- * <p>
- * 表达式
- * </p>
+ * 表达式.
+ *
  * @author zhongj
  */
 public interface Expression {
-	/**
-	 * <p>
-	 * create Expression string
-	 * </p>
-	 * @return Expression string
-	 */
-	String build();
+    /**
+     * create Expression string.
+     *
+     * @return Expression string
+     */
+    String build();
 }

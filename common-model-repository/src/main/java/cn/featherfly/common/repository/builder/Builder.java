@@ -2,18 +2,14 @@
 package cn.featherfly.common.repository.builder;
 
 /**
- * <p>
- * dml构造器
- * </p>
- * 
+ * dml builder.
+ *
  * @author zhongj
  */
 public interface Builder {
     /**
-     * <p>
-     * 构建dml字符串
-     * </p>
-     * 
+     * 构建dml字符串.
+     *
      * @return dml字符串
      */
     String build();

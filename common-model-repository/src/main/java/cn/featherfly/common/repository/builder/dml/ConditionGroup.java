@@ -4,17 +4,14 @@ package cn.featherfly.common.repository.builder.dml;
 import java.util.List;
 
 /**
- * <p>
- * ConditionGroup
- * </p>
- * 
+ * ConditionGroup.
+ *
  * @author zhongj
  */
-public interface ConditionGroup extends ConditionBuilder, LogicBuilder , ParamedExpression {
+public interface ConditionGroup extends ConditionBuilder, LogicBuilder, ParamedExpression {
     /**
-     * <p>
-     * 返回参数值
-     * </p>
+     * 返回参数值.
+     *
      * @return 参数
      */
     List<Object> getParamValues();

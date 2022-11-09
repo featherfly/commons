@@ -8,10 +8,7 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 
 /**
- * <p>
- * Index
- * </p>
- * .
+ * Index.
  *
  * @author zhongj
  */

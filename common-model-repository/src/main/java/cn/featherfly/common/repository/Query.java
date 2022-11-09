@@ -2,9 +2,7 @@
 package cn.featherfly.common.repository;
 
 /**
- * <p>
- * Query
- * </p>
+ * Query.
  *
  * @author zhongj
  */

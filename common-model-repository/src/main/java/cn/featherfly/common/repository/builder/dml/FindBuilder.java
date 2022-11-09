@@ -6,9 +6,7 @@ import java.util.Collection;
 import cn.featherfly.common.repository.builder.Builder;
 
 /**
- * <p>
- * find target builder 查找目标构造器
- * </p>
+ * find target builder 查找目标构造器.
  *
  * @author zhongj
  */

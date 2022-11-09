@@ -4,17 +4,13 @@ package cn.featherfly.common.repository.builder.dml;
 import cn.featherfly.common.repository.builder.Builder;
 
 /**
- * <p>
- * sql query builder
- * </p>
+ * sql query builder.
  *
  * @author zhongj
  */
 public interface QueryBuilder extends Builder {
     /**
-     * <p>
-     * 进入条件表达式
-     * </p>
+     * 进入条件表达式.
      *
      * @param target target
      * @return ExpressionBuilder
@@ -22,9 +18,7 @@ public interface QueryBuilder extends Builder {
     FindBuilder find(String target);
 
     /**
-     * <p>
-     * 进入条件表达式
-     * </p>
+     * 进入条件表达式.
      *
      * @param target target
      * @param alias  alias

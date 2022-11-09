@@ -1,3 +1,8 @@
+# 0.3.0 2022-11-09
+1. 修复AliasManager.getAlias(int index)越界检查BUG
+2. 加入Repository AliasRepository
+3. 使用common-api的operator包，删除内部operator包
+
 # 0.2.4 2022-08-11
 1. 加入LikeQueryPolicy
 

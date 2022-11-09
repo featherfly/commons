@@ -9,7 +9,7 @@ dependencies {
     implementation 'log4j:log4j:1.2.17'
 }
 
-task genCode(type: JavaExec, dependsOn: 'classes') {
+task genCode(type: JavaExec, dependsOn: 'classes', group: 'generate-code') {
     classpath = sourceSets.main.runtimeClasspath
     main = "cn.featherfly.common.gentool.exception.GeneratorRunner"
     args = ['src/gen/BuilderException.yaml']

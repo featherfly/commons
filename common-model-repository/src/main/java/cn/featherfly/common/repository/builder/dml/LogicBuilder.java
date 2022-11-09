@@ -2,9 +2,7 @@
 package cn.featherfly.common.repository.builder.dml;
 
 /**
- * <p>
- * 逻辑构造器
- * </p>
+ * 逻辑构造器.
  *
  * @author zhongj
  */

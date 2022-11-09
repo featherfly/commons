@@ -4,9 +4,7 @@ package cn.featherfly.common.repository;
 import java.util.Arrays;
 
 /**
- * <p>
- * simple sql execution
- * </p>
+ * simple execution.
  *
  * @author zhongj
  */

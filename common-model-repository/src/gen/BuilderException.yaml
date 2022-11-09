@@ -37,13 +37,22 @@ code:
     - type: "java.lang.String"
       name: "conditionTypeName"
   - num: 10004
-    key: "index_gt_name_alias_size"
-    name: "IndexGtNameAliasSize"
+    key: "index_out_off_bounds_name_alias_size"
+    name: "IndexOutOffBoundsNameAliasSize"
     messages:
-      zh: "索引{0}大于名称别名数量{1}, index {0} > name alias size {1}"
-      en: "index {0} > name alias size {1}"
+      zh: "索引{0}越界（名称别名数量{1}）"
+      en: "index {0} out off bounds (name alias size {1})"
     argus:
     - type: "java.lang.Integer"
       name: "index"
     - type: "java.lang.Integer"
       name: "size"
+  - num: 10005
+    key: "mulitiple_name"
+    name: "MulitipleName"
+    messages:
+      zh: "多个相同名称{0}拥有不同别名"
+      en: "mulitiple name {0} has different alias"
+    argus:
+    - type: "java.lang.String"
+      name: "name"

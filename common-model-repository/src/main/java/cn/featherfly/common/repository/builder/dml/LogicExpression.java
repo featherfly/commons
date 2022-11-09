@@ -1,12 +1,10 @@
 
 package cn.featherfly.common.repository.builder.dml;
 
-import cn.featherfly.common.repository.operate.LogicOperator;
+import cn.featherfly.common.operator.LogicOperator;
 
 /**
- * <p>
- * logic expression
- * </p>
+ * logic expression.
  *
  * @author zhongj
  */

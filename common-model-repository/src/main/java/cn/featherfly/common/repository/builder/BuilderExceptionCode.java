@@ -54,7 +54,8 @@ public class BuilderExceptionCode extends cn.featherfly.common.exception.SimpleL
         BUILDER10000("query_operator_null", 10000),
         BUILDER10001("no_condition_behind", 10001),
         BUILDER10003("next_to_same_condition", 10003),
-        BUILDER10004("index_gt_name_alias_size", 10004);
+        BUILDER10004("index_out_off_bounds_name_alias_size", 10004),
+        BUILDER10005("mulitiple_name", 10005);
                 
         private String key;
         
@@ -130,18 +131,33 @@ public class BuilderExceptionCode extends cn.featherfly.common.exception.SimpleL
     
     /**
      * <p>
-     * create IndexGtNameAliasSizeCode
+     * create IndexOutOffBoundsNameAliasSizeCode
      * </p>
      * @param index index
      * @param size size
      * 
-     * @return IndexGtNameAliasSizeCode
+     * @return IndexOutOffBoundsNameAliasSizeCode
      */
-    public static BuilderExceptionCode createIndexGtNameAliasSizeCode(
+    public static BuilderExceptionCode createIndexOutOffBoundsNameAliasSizeCode(
         java.lang.Integer index, java.lang.Integer size) {
         return new BuilderExceptionCode(BuilderExceptionCodes.BUILDER10004.num
                 , BuilderExceptionCodes.BUILDER10004.key
                 , new Object[] {index, size});
+    }
+    
+    /**
+     * <p>
+     * create MulitipleNameCode
+     * </p>
+     * @param name name
+     * 
+     * @return MulitipleNameCode
+     */
+    public static BuilderExceptionCode createMulitipleNameCode(
+        java.lang.String name) {
+        return new BuilderExceptionCode(BuilderExceptionCodes.BUILDER10005.num
+                , BuilderExceptionCodes.BUILDER10005.key
+                , new Object[] {name});
     }
     
 }

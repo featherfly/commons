@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import cn.featherfly.common.exception.ReflectException;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.ClassUtils;
-import cn.featherfly.common.lang.GenericType;
+import cn.featherfly.common.lang.reflect.Type;
 
 /**
  * java bean 的属性.
@@ -25,7 +25,7 @@ import cn.featherfly.common.lang.GenericType;
  * @since 1.0
  * @version 1.0
  */
-public class BeanProperty<T> implements GenericType<T> {
+public class BeanProperty<T> implements Type<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BeanProperty.class);
 

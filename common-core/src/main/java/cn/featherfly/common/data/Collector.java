@@ -1,22 +1,16 @@
 
 package cn.featherfly.common.data;
 
+import java.util.function.Function;
+
 /**
  * Collector.
  *
- * @param <D> 泛型
- * @param <P> 泛型
  * @author zhongj
+ * @param <T> the generic type
+ * @param <R> the generic type
  */
 @FunctionalInterface
-public interface Collector<D, P> {
-    /**
-     * <p>
-     * 返回数据
-     * </p>
-     *
-     * @param param 参数
-     * @return 数据
-     */
-    D getData(P param);
+public interface Collector<T, R> extends Function<T, R> {
+
 }

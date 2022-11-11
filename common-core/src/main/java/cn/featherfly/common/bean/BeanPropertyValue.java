@@ -10,13 +10,15 @@
  */
 package cn.featherfly.common.bean;
 
+import cn.featherfly.common.lang.vt.ValueType;
+
 /**
  * BeanPropertyValue.
  *
  * @author zhongj
  * @param <T> the generic type
  */
-public class BeanPropertyValue<T> {
+public class BeanPropertyValue<T> implements ValueType<T> {
 
     private BeanProperty<T> beanProperty;
 
@@ -48,6 +50,7 @@ public class BeanPropertyValue<T> {
      *
      * @return value
      */
+    @Override
     public T getValue() {
         return value;
     }
@@ -58,6 +61,14 @@ public class BeanPropertyValue<T> {
     @Override
     public String toString() {
         return "[beanProperty=" + beanProperty + ", value=" + value + "]";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Class<T> getType() {
+        return beanProperty.getType();
     }
 
 }

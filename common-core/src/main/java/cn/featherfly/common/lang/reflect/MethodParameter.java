@@ -5,31 +5,32 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
- * <p>
- * MethodParameter
- * </p>
- * 
+ * MethodParameter.
+ *
  * @author zhongj
+ * @deprecated
  */
+@Deprecated
 public class MethodParameter {
 
     /**
-     * 
+     *
      */
     public MethodParameter() {
         super();
     }
 
     private Method method;
-    
+
     private String name;
-    
+
     private Class<?> type;
-    
+
     private Annotation[] annotations;
 
     /**
      * 返回name
+     *
      * @return name
      */
     public String getName() {
@@ -38,6 +39,7 @@ public class MethodParameter {
 
     /**
      * 设置name
+     *
      * @param name name
      */
     public void setName(String name) {
@@ -46,6 +48,7 @@ public class MethodParameter {
 
     /**
      * 返回type
+     *
      * @return type
      */
     public Class<?> getType() {
@@ -54,6 +57,7 @@ public class MethodParameter {
 
     /**
      * 设置type
+     *
      * @param type type
      */
     public void setType(Class<?> type) {
@@ -62,6 +66,7 @@ public class MethodParameter {
 
     /**
      * 返回annotations
+     *
      * @return annotations
      */
     public Annotation[] getAnnotations() {
@@ -70,6 +75,7 @@ public class MethodParameter {
 
     /**
      * 设置annotations
+     *
      * @param annotations annotations
      */
     public void setAnnotations(Annotation[] annotations) {
@@ -78,6 +84,7 @@ public class MethodParameter {
 
     /**
      * 返回method
+     *
      * @return method
      */
     public Method getMethod() {
@@ -86,6 +93,7 @@ public class MethodParameter {
 
     /**
      * 设置method
+     *
      * @param method method
      */
     public void setMethod(Method method) {

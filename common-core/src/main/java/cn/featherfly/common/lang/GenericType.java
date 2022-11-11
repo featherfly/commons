@@ -8,10 +8,12 @@ import java.lang.reflect.Type;
  *
  * @param <T> 类型的泛型定义
  * @author zhongj
+ * @deprecated 后续删除，请使用 {@link cn.featherfly.common.lang.reflect.Type}
  */
+@Deprecated
 public interface GenericType<T> extends Type {
     /**
-     * 返回type.
+     * get type.
      *
      * @return type
      */

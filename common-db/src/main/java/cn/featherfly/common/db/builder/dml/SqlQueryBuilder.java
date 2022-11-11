@@ -13,13 +13,10 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.repository.builder.dml.FindBuilder;
 import cn.featherfly.common.repository.builder.dml.QueryBuilder;
-import cn.featherfly.common.repository.operate.AggregateFunction;
+import cn.featherfly.common.operator.AggregateFunction;
 
 /**
- * <p>
- * sql query builder
- * </p>
- * .
+ * sql query builder.
  *
  * @author zhongj
  */
@@ -66,10 +63,7 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
     }
 
     /**
-     * <p>
-     * 获取查询参数
-     * </p>
-     * .
+     * 获取查询参数 .
      *
      * @return 查询参数
      */
@@ -130,8 +124,8 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
      * {@inheritDoc}
      */
     @Override
-    public SelectBuilder select(String columnName, AggregateFunction aggregateFunction) {
-        return selectBuilder().select(columnName, aggregateFunction);
+    public SelectBuilder select(AggregateFunction aggregateFunction, String columnName) {
+        return selectBuilder().select(aggregateFunction, columnName);
     }
 
     /**
@@ -154,8 +148,8 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
      * {@inheritDoc}
      */
     @Override
-    public SelectBuilder select(String columnName, AggregateFunction aggregateFunction, String asName) {
-        return selectBuilder().select(columnName, aggregateFunction, asName);
+    public SelectBuilder select(AggregateFunction aggregateFunction, String columnName, String asName) {
+        return selectBuilder().select(aggregateFunction, columnName, asName);
     }
 
     /**
@@ -198,6 +192,33 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
         conditionGroup.setQueryAlias(alias);
         sortBuilder.setTableAlias(alias);
         return selectBuilder().from(tableName, alias);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SqlConditionBuilder from(String[] tableNames) {
+        // YUFEI_TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SqlConditionBuilder from(Collection<String> tableNames) {
+        // YUFEI_TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SqlConditionBuilder from(Map<String, String> tableNames) {
+        // YUFEI_TODO Auto-generated method stub
+        return null;
     }
 
     // ********************************************************************

@@ -23,14 +23,14 @@ import cn.featherfly.common.repository.mapping.MappingException;
 @Test(groups = "postgresql")
 public class ObjectToDbMappingFactoryPostgresqlTest extends JdbcTestBase {
 
-    private ObjectToDbMappingFactory factory;
+    private StrictJdbcMappingFactory factory;
 
     private SqlTypeMappingManager sqlTypeMappingManager = new SqlTypeMappingManager();
 
     @BeforeClass
     public void init() {
         DatabaseMetadata metadata = DatabaseMetadataManager.getDefaultManager().create(dataSource);
-        factory = new ObjectToDbMappingFactory(metadata, dialect, sqlTypeMappingManager);
+        factory = new StrictJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager);
     }
 
     @Test

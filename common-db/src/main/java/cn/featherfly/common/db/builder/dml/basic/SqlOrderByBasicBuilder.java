@@ -7,7 +7,7 @@ import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.builder.SqlBuilder;
 import cn.featherfly.common.db.builder.model.ColumnElement;
 import cn.featherfly.common.db.dialect.Dialect;
-import cn.featherfly.common.repository.operate.SortOperator;
+import cn.featherfly.common.operator.SortOperator;
 
 /**
  * <p>

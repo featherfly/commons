@@ -9,8 +9,8 @@ import java.util.List;
 
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.AbstractGenericJavaSqlTypeMapper;
-import cn.featherfly.common.lang.GenericType;
 import cn.featherfly.common.lang.NumberUtils;
+import cn.featherfly.common.lang.reflect.Type;
 
 /**
  * The Class NumberArrayJavaSqlTypeMapper.
@@ -45,8 +45,8 @@ public class NumberListJavaSqlTypeMapper<N extends Number> extends AbstractGener
      * {@inheritDoc}
      */
     @Override
-    public boolean support(GenericType<List<N>> type) {
-        return getGenericType().getType().equals(type.getType());
+    public boolean support(Type<List<N>> type) {
+        return getType().getType().equals(type.getType());
     }
 
     /**
@@ -64,7 +64,7 @@ public class NumberListJavaSqlTypeMapper<N extends Number> extends AbstractGener
             }
             JdbcUtils.setParameter(prep, parameterIndex, result.toString());
         } else {
-            JdbcUtils.setParameter(prep, parameterIndex, null);
+            JdbcUtils.setParameterNull(prep, parameterIndex);
         }
     }
 
@@ -73,7 +73,7 @@ public class NumberListJavaSqlTypeMapper<N extends Number> extends AbstractGener
      */
     @Override
     public List<N> get(ResultSet rs, int columnIndex) {
-        String value = (String) JdbcUtils.getResultSetValue(rs, columnIndex, String.class);
+        String value = JdbcUtils.getResultSetValue(rs, columnIndex, String.class);
         if (value != null) {
             String[] values = value.split(",");
             List<N> numbers = new ArrayList<>(values.length);

@@ -9,7 +9,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.db.JdbcTestBase;
-import cn.featherfly.common.db.mapping.ObjectToDbMappingFactory;
+import cn.featherfly.common.db.mapping.StrictJdbcMappingFactory;
 import cn.featherfly.common.db.mapping.SqlTypeMappingManager;
 import cn.featherfly.common.db.mapping.pojo.Entity;
 import cn.featherfly.common.db.mapping.pojo.User;
@@ -29,7 +29,7 @@ public class VersionManagerTest extends JdbcTestBase {
 
     private Migrator migrator;
 
-    private ObjectToDbMappingFactory factory;
+    private StrictJdbcMappingFactory factory;
 
     private SqlTypeMappingManager sqlTypeMappingManager;
 
@@ -39,7 +39,7 @@ public class VersionManagerTest extends JdbcTestBase {
     public void init() {
         sqlTypeMappingManager = new SqlTypeMappingManager();
         DatabaseMetadata metadata = DatabaseMetadataManager.getDefaultManager().create(dataSource);
-        factory = new ObjectToDbMappingFactory(metadata, dialect, sqlTypeMappingManager);
+        factory = new StrictJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager);
         migrator = new Migrator(dataSource, dialect, sqlTypeMappingManager, true);
         factory.setCheckMapping(false);
         sqlTypeMappingManager.setEnumWithOrdinal(true);

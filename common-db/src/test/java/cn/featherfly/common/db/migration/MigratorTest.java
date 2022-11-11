@@ -8,7 +8,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.db.JdbcTestBase;
-import cn.featherfly.common.db.mapping.ObjectToDbMappingFactory;
+import cn.featherfly.common.db.mapping.StrictJdbcMappingFactory;
 import cn.featherfly.common.db.mapping.SqlTypeMappingManager;
 import cn.featherfly.common.db.mapping.pojo.Article3;
 import cn.featherfly.common.db.mapping.pojo.Entity;
@@ -31,7 +31,7 @@ public class MigratorTest extends JdbcTestBase {
 
     private Migrator migrator;
 
-    private ObjectToDbMappingFactory factory;
+    private StrictJdbcMappingFactory factory;
 
     private SqlTypeMappingManager sqlTypeMappingManager;
 
@@ -39,7 +39,7 @@ public class MigratorTest extends JdbcTestBase {
     public void init() {
         sqlTypeMappingManager = new SqlTypeMappingManager();
         DatabaseMetadata metadata = DatabaseMetadataManager.getDefaultManager().create(dataSource);
-        factory = new ObjectToDbMappingFactory(metadata, dialect, sqlTypeMappingManager);
+        factory = new StrictJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager);
         migrator = new Migrator(dataSource, dialect, sqlTypeMappingManager);
         factory.setCheckMapping(false);
         sqlTypeMappingManager.setEnumWithOrdinal(true);
@@ -49,7 +49,7 @@ public class MigratorTest extends JdbcTestBase {
     public void testInitSql2() {
         Set<ClassMapping<?>> mappings = new HashSet<>();
         mappings.add(factory.getClassMapping(Entity3.class));
-        System.out.println(migrator.initSql(mappings));
+        System.err.println(migrator.initSql(mappings));
     }
 
     @Test

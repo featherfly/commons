@@ -4,10 +4,7 @@ package cn.featherfly.common.db;
 import java.sql.SQLType;
 
 /**
- * <p>
- * Column
- * </p>
- * .
+ * Column.
  *
  * @author zhongj
  */

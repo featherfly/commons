@@ -3,7 +3,7 @@ package cn.featherfly.common.db.builder.dml;
 
 import cn.featherfly.common.db.builder.SqlBuilder;
 import cn.featherfly.common.repository.builder.dml.LogicExpression;
-import cn.featherfly.common.repository.operate.LogicOperator;
+import cn.featherfly.common.operator.LogicOperator;
 
 /**
  * <p>

@@ -5,13 +5,10 @@ import java.util.Map;
 import cn.featherfly.common.db.builder.SqlBuilder;
 import cn.featherfly.common.db.builder.dml.basic.SqlSelectBasicBuilder;
 import cn.featherfly.common.db.dialect.Dialect;
-import cn.featherfly.common.repository.operate.AggregateFunction;
+import cn.featherfly.common.operator.AggregateFunction;
 
 /**
- * <p>
- * abstract sql Select builder
- * </p>
- * .
+ * abstract sql Select builder.
  *
  * @author zhongj
  */
@@ -60,11 +57,20 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     /**
      * addSelectColumn.
      *
-     * @param columnName columnName
      * @param function   function
+     * @param columnName columnName
      */
-    protected void addSelectColumn(String columnName, AggregateFunction function) {
-        selectBuilder.addSelectColumn(columnName, function);
+    protected void addSelectColumn(AggregateFunction function, String columnName) {
+        selectBuilder.addColumn(function, columnName);
+    }
+
+    /**
+     * addSelectColumn.
+     *
+     * @param columnName columnName
+     */
+    protected void addSelectColumn(String columnName) {
+        selectBuilder.addColumn(columnName);
     }
 
     /**
@@ -74,18 +80,18 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
      * @param asName     asName
      */
     protected void addSelectColumn(String columnName, String asName) {
-        selectBuilder.addSelectColumn(columnName, asName);
+        selectBuilder.addColumn(columnName, asName);
     }
 
     /**
      * addSelectColumn.
      *
-     * @param columnNames columnNames
      * @param function    function
+     * @param columnNames columnNames
      * @param asName      asName
      */
-    protected void addSelectColumn(String columnNames, AggregateFunction function, String asName) {
-        selectBuilder.addSelectColumn(columnNames, function, asName);
+    protected void addSelectColumn(AggregateFunction function, String columnNames, String asName) {
+        selectBuilder.addColumn(function, columnNames, asName);
     }
 
     /**
@@ -95,45 +101,45 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
      */
     protected void addSelectColumn(Map<String, String> columnNames) {
         columnNames.forEach((columnName, asName) -> {
-            selectBuilder.addSelectColumn(columnName, asName);
+            selectBuilder.addColumn(columnName, asName);
         });
     }
 
-    /**
-     * 返回tableAlias.
-     *
-     * @return tableAlias
-     */
-    public String getTableAlias() {
-        return selectBuilder.getTableAlias();
-    }
-
-    /**
-     * 设置alias.
-     *
-     * @param tableAlias tableAlias
-     */
-    public void setTableAlias(String tableAlias) {
-        selectBuilder.setTableAlias(tableAlias);
-    }
-
-    /**
-     * 返回tableName.
-     *
-     * @return tableName
-     */
-    public String getTableName() {
-        return selectBuilder.getTableName();
-    }
-
-    /**
-     * 设置tableName.
-     *
-     * @param tableName tableName
-     */
-    public void setTableName(String tableName) {
-        selectBuilder.setTableName(tableName);
-    }
+    //    /**
+    //     * 返回tableAlias.
+    //     *
+    //     * @return tableAlias
+    //     */
+    //    public String getTableAlias() {
+    //        return selectBuilder.getTableAlias();
+    //    }
+    //
+    //    /**
+    //     * 设置alias.
+    //     *
+    //     * @param tableAlias tableAlias
+    //     */
+    //    public void setTableAlias(String tableAlias) {
+    //        selectBuilder.setTableAlias(tableAlias);
+    //    }
+    //
+    //    /**
+    //     * 返回tableName.
+    //     *
+    //     * @return tableName
+    //     */
+    //    public String getTableName() {
+    //        return selectBuilder.getTableName();
+    //    }
+    //
+    //    /**
+    //     * 设置tableName.
+    //     *
+    //     * @param tableName tableName
+    //     */
+    //    public void setTableName(String tableName) {
+    //        selectBuilder.setTableName(tableName);
+    //    }
 
     /**
      * 返回buildWithFrom.

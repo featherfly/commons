@@ -8,8 +8,8 @@ import java.sql.SQLType;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.AbstractGenericJavaSqlTypeMapper;
 import cn.featherfly.common.lang.ArrayUtils;
-import cn.featherfly.common.lang.GenericType;
 import cn.featherfly.common.lang.NumberUtils;
+import cn.featherfly.common.lang.reflect.Type;
 
 /**
  * The Class NumberArrayJavaSqlTypeMapper.
@@ -44,8 +44,8 @@ public class NumberArrayJavaSqlTypeMapper<N extends Number> extends AbstractGene
      * {@inheritDoc}
      */
     @Override
-    public boolean support(GenericType<N[]> type) {
-        return getGenericType().getType().equals(type.getType());
+    public boolean support(Type<N[]> type) {
+        return getType().getType().equals(type.getType());
     }
 
     /**
@@ -63,7 +63,7 @@ public class NumberArrayJavaSqlTypeMapper<N extends Number> extends AbstractGene
             }
             JdbcUtils.setParameter(prep, parameterIndex, result.toString());
         } else {
-            JdbcUtils.setParameter(prep, parameterIndex, null);
+            JdbcUtils.setParameterNull(prep, parameterIndex);
         }
     }
 
@@ -72,7 +72,7 @@ public class NumberArrayJavaSqlTypeMapper<N extends Number> extends AbstractGene
      */
     @Override
     public N[] get(ResultSet rs, int columnIndex) {
-        String value = (String) JdbcUtils.getResultSetValue(rs, columnIndex, String.class);
+        String value = JdbcUtils.getResultSetValue(rs, columnIndex, String.class);
         if (value != null) {
             String[] values = value.split(",");
             N[] numbers = ArrayUtils.create(numberType, values.length);

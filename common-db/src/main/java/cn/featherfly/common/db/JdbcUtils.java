@@ -46,14 +46,11 @@ import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.LogUtils;
 import cn.featherfly.common.lang.WordUtils;
-import cn.featherfly.common.lang.reflect.GenericClass;
+import cn.featherfly.common.lang.reflect.ClassType;
 import cn.featherfly.common.repository.mapping.RowMapper;
 
 /**
- * <p>
- * JDBC操作的工具类
- * </p>
- * .
+ * JDBC操作的工具类 .
  *
  * @author zhongj
  */
@@ -504,10 +501,7 @@ public final class JdbcUtils {
     }
 
     /**
-     * <p>
-     * 设置参数
-     * </p>
-     * .
+     * 设置参数.
      *
      * @param prep     PreparedStatement
      * @param position 占位符位置
@@ -515,6 +509,547 @@ public final class JdbcUtils {
      */
     public static void setParameter(PreparedStatement prep, int position, Object value) {
         setParameter(prep, position, value, true);
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     */
+    public static <E> void setParameterNull(PreparedStatement prep, int position) {
+        try {
+            prep.setObject(position, null);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, String value) {
+        try {
+            prep.setString(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, boolean value) {
+        try {
+            prep.setBoolean(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, Boolean value) {
+        if (value != null) {
+            setParameter(prep, position, value.booleanValue());
+        } else {
+            setParameterNull(prep, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, char value) {
+        setParameter(prep, position, new Character(value));
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, Character value) {
+        try {
+            prep.setString(position, value.toString());
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, byte value) {
+        try {
+            prep.setByte(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, Byte value) {
+        if (value != null) {
+            setParameter(prep, position, value.byteValue());
+        } else {
+            setParameterNull(prep, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, short value) {
+        try {
+            prep.setShort(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, Short value) {
+        if (value != null) {
+            setParameter(prep, position, value.shortValue());
+        } else {
+            setParameterNull(prep, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, int value) {
+        try {
+            prep.setInt(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, Integer value) {
+        if (value != null) {
+            setParameter(prep, position, value.intValue());
+        } else {
+            setParameterNull(prep, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, long value) {
+        try {
+            prep.setLong(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, Long value) {
+        if (value != null) {
+            setParameter(prep, position, value.longValue());
+        } else {
+            setParameterNull(prep, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, BigInteger value) {
+        if (value != null) {
+            setParameter(prep, position, value.longValue());
+        } else {
+            setParameterNull(prep, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, float value) {
+        try {
+            prep.setFloat(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, Float value) {
+        if (value != null) {
+            setParameter(prep, position, value.floatValue());
+        } else {
+            setParameterNull(prep, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, double value) {
+        try {
+            prep.setDouble(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, Double value) {
+        if (value != null) {
+            setParameter(prep, position, value.doubleValue());
+        } else {
+            setParameterNull(prep, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, BigDecimal value) {
+        try {
+            prep.setBigDecimal(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, AtomicBoolean value) {
+        if (value == null) {
+            setParameterNull(prep, position);
+        } else {
+            setParameter(prep, position, value.get());
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, AtomicInteger value) {
+        if (value == null) {
+            setParameterNull(prep, position);
+        } else {
+            setParameter(prep, position, value.intValue());
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, AtomicLong value) {
+        if (value == null) {
+            setParameterNull(prep, position);
+        } else {
+            setParameter(prep, position, value.longValue());
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, java.sql.Date value) {
+        try {
+            prep.setDate(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, Time value) {
+        try {
+            prep.setTime(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, Timestamp value) {
+        try {
+            prep.setTimestamp(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, Date value) {
+        if (value != null) {
+            setParameter(prep, position, new Timestamp(value.getTime()));
+        } else {
+            setParameterNull(prep, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, LocalDate value) {
+        if (value != null) {
+            setParameter(prep, position, java.sql.Date.valueOf(value));
+        } else {
+            setParameterNull(prep, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, LocalDateTime value) {
+        if (value != null) {
+            setParameter(prep, position, Timestamp.valueOf(value));
+        } else {
+            setParameterNull(prep, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, LocalTime value) {
+        if (value != null) {
+            setParameter(prep, position, Time.valueOf(value));
+        } else {
+            setParameterNull(prep, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, FieldValue<E> value) {
+        if (value == null) {
+            setParameterNull(prep, position);
+        } else {
+            value.set(prep, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E extends Enum<?>> void setParameter(PreparedStatement prep, int position, E value) {
+        setParameter(prep, position, value, true);
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>              the element type
+     * @param prep             PreparedStatement
+     * @param position         占位符位置
+     * @param value            参数
+     * @param enumWithOridinal the enum with oridinal
+     */
+    public static <E extends Enum<?>> void setParameter(PreparedStatement prep, int position, E value,
+            boolean enumWithOridinal) {
+        if (value == null) {
+            setParameterNull(prep, position);
+        } else {
+            try {
+                if (enumWithOridinal) {
+                    prep.setInt(position, value.ordinal());
+                } else {
+                    prep.setString(position, value.name());
+                }
+            } catch (SQLException e) {
+                throw new JdbcException(e);
+            }
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param prep     PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(PreparedStatement prep, int position, Optional<E> value) {
+        setParameter(prep, position, value.orElse(null));
     }
 
     /**
@@ -577,6 +1112,9 @@ public final class JdbcUtils {
                 } else {
                     prep.setString(position, ((Enum<?>) value).name());
                 }
+            } else if (value instanceof FieldValue) { // TODO 后续FieldValue再考虑名称
+                //                ((FieldValue<?>) value).set(prep, position);
+                setParameter(prep, position, (FieldValue<?>) value);
             } else if (value instanceof Optional) {
                 setParameter(prep, position, ((Optional<?>) value).orElse(null));
             } else if (value instanceof AtomicInteger) {
@@ -726,15 +1264,16 @@ public final class JdbcUtils {
      * required type, in case of an unknown type. Calling code needs to deal
      * with this case appropriately, e.g. throwing a corresponding exception.
      *
+     * @param <E>          the element type
      * @param rs           is the ResultSet holding the data
      * @param index        is the column index
      * @param requiredType the required value type (may be <code>null</code>)
      * @return the value object
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public static Object getResultSetValue(ResultSet rs, int index, Class<?> requiredType) {
+    public static <E> E getResultSetValue(ResultSet rs, int index, Class<E> requiredType) {
         if (requiredType == null) {
-            return getResultSetValue(rs, index);
+            return (E) getResultSetValue(rs, index);
         }
         try {
             Object value = null;
@@ -815,7 +1354,7 @@ public final class JdbcUtils {
             if (wasNullCheck && value != null && rs.wasNull()) {
                 value = null;
             }
-            return value;
+            return (E) value;
         } catch (SQLException e) {
             throw new JdbcException(e);
         }
@@ -910,7 +1449,7 @@ public final class JdbcUtils {
                 Class<?> type = manager.getJavaType(JDBCType.valueOf(metaData.getColumnType(i)));
                 Object value = null;
                 if (type != null) {
-                    value = manager.get(rs, i, new GenericClass<>(type));
+                    value = manager.get(rs, i, new ClassType<>(type));
                 } else {
                     value = JdbcUtils.getResultSetValue(rs, i);
                 }

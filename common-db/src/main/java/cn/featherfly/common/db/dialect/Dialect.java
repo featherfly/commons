@@ -11,11 +11,11 @@ import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.builder.model.TableElement;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.repository.operate.AggregateFunction;
-import cn.featherfly.common.repository.operate.Function;
-import cn.featherfly.common.repository.operate.LogicOperator;
-import cn.featherfly.common.repository.operate.QueryOperator.QueryPolicy;
-import cn.featherfly.common.repository.operate.SortOperator;
+import cn.featherfly.common.operator.AggregateFunction;
+import cn.featherfly.common.operator.Function;
+import cn.featherfly.common.operator.LogicOperator;
+import cn.featherfly.common.operator.QueryOperator.QueryPolicy;
+import cn.featherfly.common.operator.SortOperator;
 
 /**
  * <p>

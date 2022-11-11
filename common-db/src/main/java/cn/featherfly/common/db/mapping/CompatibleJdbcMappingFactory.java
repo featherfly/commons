@@ -20,10 +20,10 @@ import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.enums.Logic;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.SystemPropertyUtils;
 import cn.featherfly.common.lang.WordUtils;
+import cn.featherfly.common.operator.LogicOperator;
 import cn.featherfly.common.repository.mapping.ClassMapping;
 import cn.featherfly.common.repository.mapping.ClassNameConversion;
 import cn.featherfly.common.repository.mapping.PropertyMapping;
@@ -34,7 +34,7 @@ import cn.featherfly.common.repository.mapping.PropertyNameConversion;
  *
  * @author zhongj
  */
-public class ObjectDbMixedMappingFactory extends AbstractJdbcMappingFactory {
+public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
 
     /**
      * Instantiates a new object db mixed mapping factory.
@@ -42,7 +42,7 @@ public class ObjectDbMixedMappingFactory extends AbstractJdbcMappingFactory {
      * @param metadata DatabaseMetadata
      * @param dialect  dialect
      */
-    public ObjectDbMixedMappingFactory(DatabaseMetadata metadata, Dialect dialect) {
+    public CompatibleJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect) {
         super(metadata, dialect);
     }
 
@@ -53,7 +53,7 @@ public class ObjectDbMixedMappingFactory extends AbstractJdbcMappingFactory {
      * @param dialect               dialect
      * @param sqlTypeMappingManager the sql type mapping manager
      */
-    public ObjectDbMixedMappingFactory(DatabaseMetadata metadata, Dialect dialect,
+    public CompatibleJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
             SqlTypeMappingManager sqlTypeMappingManager) {
         super(metadata, dialect, sqlTypeMappingManager);
     }
@@ -66,7 +66,7 @@ public class ObjectDbMixedMappingFactory extends AbstractJdbcMappingFactory {
      * @param classNameConversions    classNameConversions
      * @param propertyNameConversions propertyNameConversions
      */
-    public ObjectDbMixedMappingFactory(DatabaseMetadata metadata, Dialect dialect,
+    public CompatibleJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
             List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions) {
         super(metadata, dialect, classNameConversions, propertyNameConversions);
     }
@@ -80,7 +80,7 @@ public class ObjectDbMixedMappingFactory extends AbstractJdbcMappingFactory {
      * @param classNameConversions    classNameConversions
      * @param propertyNameConversions propertyNameConversions
      */
-    public ObjectDbMixedMappingFactory(DatabaseMetadata metadata, Dialect dialect,
+    public CompatibleJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
             SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
             List<PropertyNameConversion> propertyNameConversions) {
         super(metadata, dialect, sqlTypeMappingManager, classNameConversions, propertyNameConversions);
@@ -127,7 +127,7 @@ public class ObjectDbMixedMappingFactory extends AbstractJdbcMappingFactory {
         }
 
         Collection<BeanProperty<?>> bps = bd
-                .findBeanPropertys(new BeanPropertyAnnotationMatcher(Logic.OR, Id.class, Column.class, Embedded.class));
+                .findBeanPropertys(new BeanPropertyAnnotationMatcher(LogicOperator.OR, Id.class, Column.class, Embedded.class));
 
         boolean findPk = false;
         for (BeanProperty<?> beanProperty : bps) {

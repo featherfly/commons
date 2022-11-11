@@ -7,13 +7,10 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.builder.dml.ConditionBuilder;
 import cn.featherfly.common.repository.builder.dml.FindBuilder;
-import cn.featherfly.common.repository.operate.AggregateFunction;
+import cn.featherfly.common.operator.AggregateFunction;
 
 /**
- * <p>
- * sql find builder
- * </p>
- * .
+ * sql find builder .
  *
  * @author zhongj
  */
@@ -66,14 +63,14 @@ public class SqlFindBuilder extends AbstractSqlSelectBuilder implements FindBuil
     }
 
     /**
-     * With.
+     * aggregate.
      *
-     * @param propertyName      the property name
      * @param aggregateFunction the aggregate function
+     * @param propertyName      the property name
      * @return the find builder
      */
-    public FindBuilder with(String propertyName, AggregateFunction aggregateFunction) {
-        addSelectColumn(propertyName, aggregateFunction);
+    public FindBuilder aggregate(AggregateFunction aggregateFunction, String propertyName) {
+        addSelectColumn(aggregateFunction, propertyName);
         return this;
     }
 
@@ -82,7 +79,8 @@ public class SqlFindBuilder extends AbstractSqlSelectBuilder implements FindBuil
      */
     @Override
     public FindBuilder property(String propertyName) {
-        return with(propertyName, null);
+        addSelectColumn(propertyName);
+        return this;
     }
 
     /**

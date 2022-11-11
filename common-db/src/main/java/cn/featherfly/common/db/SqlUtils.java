@@ -16,10 +16,7 @@ import cn.featherfly.common.repository.Execution;
 import cn.featherfly.common.repository.SimpleExecution;
 
 /**
- * <p>
- * Sql的相关工具类
- * </p>
- * .
+ * Sql的相关工具类.
  *
  * @author zhongj
  */
@@ -43,10 +40,7 @@ public final class SqlUtils {
     }
 
     /**
-     * <p>
-     * 转换查询sql为统计sql
-     * </p>
-     * .
+     * 转换查询sql为统计sql.
      *
      * @param sql sql
      * @return 统计sql
@@ -73,9 +67,7 @@ public final class SqlUtils {
     }
 
     /**
-     * <p>
-     * 将字符串转义.会将\ ' "转义为\\ \' \"
-     * </p>
+     * 将字符串转义.会将\ ' "转义为\\ \' \".
      *
      * @param str str
      * @return 转义后的字符串
@@ -221,8 +213,9 @@ public final class SqlUtils {
     }
 
     private static boolean isSqlWordSplitChar(char c) {
-        return c == Chars.SPACE_CHAR || c == Chars.NEW_LINE_CHAR || c == Chars.COMMA_CHAR || c == ')'
+        return c == Chars.SPACE_CHAR || c == Chars.NEW_LINE_CHAR || c == Chars.COMMA_CHAR || c == Chars.PAREN_R_CHAR
                 || c == Chars.TAB_CHAR;
+        //                || c == ')'
     }
 
     /**

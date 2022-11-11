@@ -1,22 +1,17 @@
 
 package cn.featherfly.common.db.mapping;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLType;
 
-import cn.featherfly.common.lang.GenericType;
+import cn.featherfly.common.lang.reflect.Type;
 
 /**
- * <p>
- * SqlTypeToJavaRegister
- * </p>
- * .
+ * java type and sql type mapper.
  *
  * @author zhongj
  * @param <E> to regist java type
  */
-public interface JavaSqlTypeMapper<E extends Object> {
+public interface JavaSqlTypeMapper<E extends Object> extends JavaTypeSqlTypeOperator<E> {
 
     /**
      * Support.
@@ -34,23 +29,5 @@ public interface JavaSqlTypeMapper<E extends Object> {
      * @param type the type
      * @return true, if successful
      */
-    boolean support(GenericType<E> type);
-
-    /**
-     * Sets the value.
-     *
-     * @param prep           the prep
-     * @param parameterIndex the parameter index
-     * @param value          the value
-     */
-    void set(PreparedStatement prep, int parameterIndex, E value);
-
-    /**
-     * Gets the.
-     *
-     * @param rs          the rs
-     * @param columnIndex the column index
-     * @return the e
-     */
-    E get(ResultSet rs, int columnIndex);
+    boolean support(Type<E> type);
 }

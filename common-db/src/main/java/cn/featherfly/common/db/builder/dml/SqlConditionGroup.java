@@ -20,18 +20,30 @@ import cn.featherfly.common.repository.builder.dml.ExpressionBuilder;
 import cn.featherfly.common.repository.builder.dml.LogicBuilder;
 import cn.featherfly.common.repository.builder.dml.ParamedExpression;
 import cn.featherfly.common.repository.builder.dml.SortBuilder;
-import cn.featherfly.common.repository.operate.LogicOperator;
-import cn.featherfly.common.repository.operate.QueryOperator;
+import cn.featherfly.common.operator.LogicOperator;
+import cn.featherfly.common.operator.QueryOperator;
 
 /**
- * <p>
- * sql condition group builder sql条件逻辑组构造器
- * </p>
- * .
+ * sql condition group builder sql条件逻辑组构造器. .
  *
  * @author zhongj
  */
 public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
+
+    private List<Expression> conditions = new ArrayList<>();
+
+    private Dialect dialect;
+
+    private SqlConditionGroup parent;
+
+    private SqlSortBuilder sort;
+
+    private Expression previousCondition;
+
+    private String queryAlias;
+
+    // 忽略空值
+    private Predicate<Object> ignorePolicy;
 
     /**
      * Instantiates a new sql condition group.
@@ -329,6 +341,14 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
         return params;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ConditionBuilder where() {
+        return this;
+    }
+
     // ********************************************************************
     // private method
     // ********************************************************************
@@ -347,23 +367,6 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
     // ********************************************************************
     // property
     // ********************************************************************
-
-    private List<Expression> conditions = new ArrayList<>();
-
-    private Dialect dialect;
-
-    private SqlConditionGroup parent;
-
-    private SqlSortBuilder sort;
-
-    private Expression previousCondition;
-
-    private String queryAlias;
-
-    /*
-     * 忽略空值
-     */
-    private Predicate<Object> ignorePolicy;
 
     /**
      * get ignorePolicy value.
@@ -410,13 +413,5 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
     public void setQueryAlias(String queryAlias) {
         this.queryAlias = queryAlias;
         sort.setTableAlias(queryAlias);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ConditionBuilder where() {
-        return this;
     }
 }

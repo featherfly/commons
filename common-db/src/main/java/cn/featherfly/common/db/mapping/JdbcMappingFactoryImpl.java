@@ -68,7 +68,7 @@ public class JdbcMappingFactoryImpl implements JdbcMappingFactory {
     public JdbcMappingFactoryImpl(DatabaseMetadata metadata, Dialect dialect,
             SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
             List<PropertyNameConversion> propertyNameConversions) {
-        this(MappingMode.OBJ_DB_COMPATIBLE_MODE, metadata, dialect, sqlTypeMappingManager, classNameConversions,
+        this(MappingMode.COMPATIBLE_MODE, metadata, dialect, sqlTypeMappingManager, classNameConversions,
                 propertyNameConversions);
     }
 
@@ -125,11 +125,11 @@ public class JdbcMappingFactoryImpl implements JdbcMappingFactory {
             SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
             List<PropertyNameConversion> propertyNameConversions) {
         super();
-        if (mappingMode == MappingMode.OBJ_DB_STRICT_MODE) {
-            factory = new ObjectToDbMappingFactory(metadata, dialect, sqlTypeMappingManager, classNameConversions,
+        if (mappingMode == MappingMode.STRICT_MODE) {
+            factory = new StrictJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager, classNameConversions,
                     propertyNameConversions);
         } else {
-            factory = new ObjectDbMixedMappingFactory(metadata, dialect, sqlTypeMappingManager, classNameConversions,
+            factory = new CompatibleJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager, classNameConversions,
                     propertyNameConversions);
         }
     }

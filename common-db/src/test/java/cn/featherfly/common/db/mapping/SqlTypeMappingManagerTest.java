@@ -35,9 +35,9 @@ import cn.featherfly.common.db.wrapper.ConnectionWrapper;
 import cn.featherfly.common.db.wrapper.PreparedStatementWrapper;
 import cn.featherfly.common.db.wrapper.ResultSetWrapper;
 import cn.featherfly.common.lang.ArrayUtils;
-import cn.featherfly.common.lang.GenericType;
 import cn.featherfly.common.lang.Randoms;
-import cn.featherfly.common.lang.reflect.GenericClass;
+import cn.featherfly.common.lang.reflect.ClassType;
+import cn.featherfly.common.lang.reflect.Type;
 import cn.featherfly.common.structure.ChainMapImpl;
 
 /**
@@ -169,7 +169,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
             }
 
             @Override
-            public boolean support(GenericType<Long[]> type) {
+            public boolean support(Type<Long[]> type) {
                 return type.getType().equals(Long[].class);
             }
 
@@ -184,7 +184,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
             //            }
             //
             //            @Override
-            //            public SQLType getSqlType(GenericType<Long[]> javaType) {
+            //            public SQLType getSqlType(Type<Long[]> javaType) {
             //                return JDBCType.VARCHAR;
             //                //                if (javaType.getType().equals(Long[].class)) {
             //                //                    return JDBCType.VARCHAR;
@@ -228,8 +228,8 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
                 PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
-            GenericType<Long[]> gc = new GenericClass<>(Long[].class);
-            GenericType<String> gts = new GenericClass<>(String.class);
+            Type<Long[]> gc = new ClassType<>(Long[].class);
+            Type<String> gts = new ClassType<>(String.class);
             while (rs.next()) {
                 String title = manager.get(rs.getResultSet(), 2, gts);
                 Long[] content = manager.get(rs.getResultSet(), 3, gc);
@@ -272,7 +272,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
                 PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
-            GenericType<String> gts = new GenericClass<>(String.class);
+            Type<String> gts = new ClassType<>(String.class);
             while (rs.next()) {
                 String title = manager.get(rs.getResultSet(), 2, gts);
                 Content contentResult = manager.get(rs.getResultSet(), 4, contentProperty);
@@ -315,7 +315,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
                 PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
-            GenericType<String> gts = new GenericClass<>(String.class);
+            Type<String> gts = new ClassType<>(String.class);
             while (rs.next()) {
                 String title = manager.get(rs.getResultSet(), 2, gts);
                 Content contentResult = manager.get(rs.getResultSet(), 5, contentProperty);
@@ -333,7 +333,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
         sqlExecutor.execute("delete from cms_article");
 
-        GenericType<Content> type = new GenericClass<>(Content.class);
+        Type<Content> type = new ClassType<>(Content.class);
 
         manager.regist(
                 new ObjectToJsonMapper<>(type).addAllow("cms_article", "content2").addAllow("cms_article", "content3"));
@@ -360,7 +360,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
                 PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
-            GenericType<String> gts = new GenericClass<>(String.class);
+            Type<String> gts = new ClassType<>(String.class);
             while (rs.next()) {
                 String title = manager.get(rs.getResultSet(), 2, gts);
 
@@ -383,7 +383,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
         sqlExecutor.execute("delete from cms_article");
 
-        GenericType<Content> type = new GenericClass<>(Content.class);
+        Type<Content> type = new ClassType<>(Content.class);
 
         manager.regist(new ObjectToJsonMapper<>(type).addAllow("cms_article", "content3"));
         // 因为添加了许可条件，则会进行表名，列名的筛选
@@ -411,7 +411,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
                 PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
-            GenericType<String> gts = new GenericClass<>(String.class);
+            Type<String> gts = new ClassType<>(String.class);
             while (rs.next()) {
                 String title = manager.get(rs.getResultSet(), 2, gts);
 
@@ -435,7 +435,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
         sqlExecutor.execute("delete from cms_article");
 
-        GenericType<Content> type = new GenericClass<>(Content.class);
+        Type<Content> type = new ClassType<>(Content.class);
 
         manager.regist(Article.class, new ObjectToJsonMapper<>(type));
 
@@ -463,7 +463,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
                 PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
-            GenericType<String> gts = new GenericClass<>(String.class);
+            Type<String> gts = new ClassType<>(String.class);
             while (rs.next()) {
                 String title = manager.get(rs.getResultSet(), 2, gts);
 
@@ -531,7 +531,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
                 PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
-            GenericType<String> gts = new GenericClass<>(String.class);
+            Type<String> gts = new ClassType<>(String.class);
             while (rs.next()) {
                 String title = manager.get(rs.getResultSet(), 2, gts);
                 System.out.println("title -> " + title);

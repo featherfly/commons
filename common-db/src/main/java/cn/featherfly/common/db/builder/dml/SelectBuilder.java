@@ -5,21 +5,17 @@ import java.util.Collection;
 import java.util.Map;
 
 import cn.featherfly.common.db.builder.SqlBuilder;
-import cn.featherfly.common.repository.operate.AggregateFunction;
+import cn.featherfly.common.operator.AggregateFunction;
 
 /**
- * <p>
- * SelectBuilder
- * </p>
+ * SelectBuilder.
  *
  * @author zhongj
  */
 public interface SelectBuilder extends SqlBuilder {
 
     /**
-     * <p>
-     * 添加select的列
-     * </p>
+     * 添加select的列.
      *
      * @param columnName columnName
      * @return SelectBuilder
@@ -27,9 +23,7 @@ public interface SelectBuilder extends SqlBuilder {
     SelectBuilder select(String columnName);
 
     /**
-     * <p>
-     * 添加select的列
-     * </p>
+     * 添加select的列.
      *
      * @param columnName columnName
      * @param asName     asName
@@ -38,32 +32,26 @@ public interface SelectBuilder extends SqlBuilder {
     SelectBuilder select(String columnName, String asName);
 
     /**
-     * <p>
-     * 添加select的列
-     * </p>
+     * 添加select的列.
      *
-     * @param columnName        columnName
      * @param aggregateFunction aggregateFunction
+     * @param columnName        columnName
      * @param asName            asName
      * @return SelectBuilder
      */
-    SelectBuilder select(String columnName, AggregateFunction aggregateFunction, String asName);
+    SelectBuilder select(AggregateFunction aggregateFunction, String columnName, String asName);
 
     /**
-     * <p>
-     * 添加select的列
-     * </p>
+     * 添加select的列.
      *
-     * @param columnName        columnName
      * @param aggregateFunction aggregateFunction
+     * @param columnName        columnName
      * @return SelectBuilder
      */
-    SelectBuilder select(String columnName, AggregateFunction aggregateFunction);
+    SelectBuilder select(AggregateFunction aggregateFunction, String columnName);
 
     /**
-     * <p>
-     * 批量添加select的列
-     * </p>
+     * 批量添加select的列.
      *
      * @param columnNames columnNames
      * @return SelectBuilder
@@ -71,9 +59,7 @@ public interface SelectBuilder extends SqlBuilder {
     SelectBuilder select(String[] columnNames);
 
     /**
-     * <p>
-     * 批量添加select的列
-     * </p>
+     * 批量添加select的列.
      *
      * @param columnNames columnNames
      * @return SelectBuilder
@@ -81,9 +67,7 @@ public interface SelectBuilder extends SqlBuilder {
     SelectBuilder select(Collection<String> columnNames);
 
     /**
-     * <p>
-     * 批量添加select的列
-     * </p>
+     * 批量添加select的列.
      *
      * @param columnNames columnNames map, key is columnName , value is asName
      * @return SelectBuilder
@@ -91,23 +75,43 @@ public interface SelectBuilder extends SqlBuilder {
     SelectBuilder select(Map<String, String> columnNames);
 
     /**
-     * <p>
-     * 进入条件表达式
-     * </p>
+     * 添加from的表.
      *
      * @param tableName tableName
-     * @return ConditionBuilder
+     * @return SqlConditionBuilder
      */
     SqlConditionBuilder from(String tableName);
 
     /**
-     * <p>
-     * 进入条件表达式
-     * </p>
+     * 添加from的表.
      *
      * @param tableName  tableName
      * @param tableAlias tableAlias
-     * @return ConditionBuilder
+     * @return SqlConditionBuilder
      */
     SqlConditionBuilder from(String tableName, String tableAlias);
+
+    /**
+     * 批量添加select的列.
+     *
+     * @param tableNames the table names
+     * @return SqlConditionBuilder
+     */
+    SqlConditionBuilder from(String[] tableNames);
+
+    /**
+     * 批量添加select的列.
+     *
+     * @param tableNames the table names
+     * @return SqlConditionBuilder
+     */
+    SqlConditionBuilder from(Collection<String> tableNames);
+
+    /**
+     * 添加from的表.
+     *
+     * @param tableNames tableNames map, key is tableName , value is tableAlias
+     * @return SqlConditionBuilder
+     */
+    SqlConditionBuilder from(Map<String, String> tableNames);
 }

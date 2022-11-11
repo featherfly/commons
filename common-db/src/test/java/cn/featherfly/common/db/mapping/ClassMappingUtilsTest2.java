@@ -30,9 +30,9 @@ public class ClassMappingUtilsTest2 extends JdbcTestBase {
 
     @BeforeClass
     public void setup() {
-        factory = new ObjectDbMixedMappingFactory(DatabaseMetadataManager.getDefaultManager().create(dataSource),
+        factory = new CompatibleJdbcMappingFactory(DatabaseMetadataManager.getDefaultManager().create(dataSource),
                 dialect);
-        factory2 = new ObjectToDbMappingFactory(DatabaseMetadataManager.getDefaultManager().create(dataSource),
+        factory2 = new StrictJdbcMappingFactory(DatabaseMetadataManager.getDefaultManager().create(dataSource),
                 dialect);
     }
 

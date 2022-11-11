@@ -11,7 +11,7 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.Dialects;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.repository.IgnorePolicy;
-import cn.featherfly.common.repository.operate.QueryOperator;
+import cn.featherfly.common.operator.QueryOperator;
 
 /**
  * <p>

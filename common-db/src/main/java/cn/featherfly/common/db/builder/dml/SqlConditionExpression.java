@@ -9,7 +9,7 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.repository.builder.BuilderException;
 import cn.featherfly.common.repository.builder.BuilderExceptionCode;
 import cn.featherfly.common.repository.builder.dml.ParamedExpression;
-import cn.featherfly.common.repository.operate.QueryOperator;
+import cn.featherfly.common.operator.QueryOperator;
 
 /**
  * <p>

@@ -5,12 +5,10 @@ import java.util.Map;
 
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.repository.operate.AggregateFunction;
+import cn.featherfly.common.operator.AggregateFunction;
 
 /**
- * <p>
- * sql find builder
- * </p>
+ * sql select builder .
  *
  * @author zhongj
  */
@@ -47,8 +45,8 @@ public class SqlSelectBuilder extends AbstractSqlSelectBuilder implements Select
      * {@inheritDoc}
      */
     @Override
-    public SelectBuilder select(String columnName, AggregateFunction aggregateFunction) {
-        addSelectColumn(columnName, aggregateFunction);
+    public SelectBuilder select(AggregateFunction aggregateFunction, String columnName) {
+        addSelectColumn(aggregateFunction, columnName);
         return this;
     }
 
@@ -56,8 +54,8 @@ public class SqlSelectBuilder extends AbstractSqlSelectBuilder implements Select
      * {@inheritDoc}
      */
     @Override
-    public SelectBuilder select(String columnName, AggregateFunction aggregateFunction, String asName) {
-        addSelectColumn(columnName, aggregateFunction, asName);
+    public SelectBuilder select(AggregateFunction aggregateFunction, String columnName, String asName) {
+        addSelectColumn(aggregateFunction, columnName, asName);
         return this;
     }
 
@@ -75,7 +73,7 @@ public class SqlSelectBuilder extends AbstractSqlSelectBuilder implements Select
      */
     @Override
     public SelectBuilder select(String columnName) {
-        addSelectColumn(columnName, null, null);
+        addSelectColumn(columnName);
         return this;
     }
 
@@ -127,9 +125,37 @@ public class SqlSelectBuilder extends AbstractSqlSelectBuilder implements Select
      */
     @Override
     public SqlConditionBuilder from(String tableName, String alias) {
-        setTableName(tableName);
-        setTableAlias(alias);
+        //        setTableName(tableName);
+        //        setTableAlias(alias);
+        // TODO 这里需要设置table alias
         conditionBuilder.setQueryAlias(alias);
         return conditionBuilder;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SqlConditionBuilder from(String[] tableNames) {
+        // TODO 需要从底层开始加入多tableName tableAlias的Builder
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SqlConditionBuilder from(Collection<String> tableNames) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SqlConditionBuilder from(Map<String, String> tableNames) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

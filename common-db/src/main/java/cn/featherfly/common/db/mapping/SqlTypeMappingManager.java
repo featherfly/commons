@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,14 +16,12 @@ import org.slf4j.LoggerFactory;
 import cn.featherfly.common.bean.BeanProperty;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.GenericType;
-import cn.featherfly.common.lang.reflect.GenericClass;
+import cn.featherfly.common.lang.reflect.ClassType;
+import cn.featherfly.common.lang.reflect.Type;
+import cn.featherfly.common.lang.vt.ValueType;
 
 /**
- * <p>
- * SqlTypeMapping
- * </p>
- * .
+ * SqlTypeMappingManager.
  *
  * @author zhongj
  */
@@ -38,7 +37,7 @@ public class SqlTypeMappingManager {
     private Store globalStore = new Store();
 
     /** The type store map. */
-    private Map<GenericType<?>, Store> typeStoreMap = new HashMap<>();
+    private Map<Type<?>, Store> typeStoreMap = new HashMap<>();
 
     /**
      * Instantiates a new sql type mapping manager.
@@ -125,24 +124,23 @@ public class SqlTypeMappingManager {
     /**
      * Regist javaSqlTypeMapper for entityType.
      *
-     * @param entityType        the java type
+     * @param entityType        the java entity type
      * @param javaSqlTypeMapper the java sql type mapper
      * @return SqlTypeMappingManager
      */
     public SqlTypeMappingManager regist(Class<?> entityType, JavaSqlTypeMapper<? extends Object> javaSqlTypeMapper) {
         AssertIllegalArgument.isNotNull(entityType, "entityType");
-        return regist(new GenericClass<>(entityType), javaSqlTypeMapper);
+        return regist(new ClassType<>(entityType), javaSqlTypeMapper);
     }
 
     /**
      * Regist javaSqlTypeMapper for entityType.
      *
-     * @param entityType        the java type
+     * @param entityType        the java entity type
      * @param javaSqlTypeMapper the java sql type mapper
      * @return SqlTypeMappingManager
      */
-    public SqlTypeMappingManager regist(GenericType<?> entityType,
-            JavaSqlTypeMapper<? extends Object> javaSqlTypeMapper) {
+    public SqlTypeMappingManager regist(Type<?> entityType, JavaSqlTypeMapper<? extends Object> javaSqlTypeMapper) {
         AssertIllegalArgument.isNotNull(entityType, "entityType");
         AssertIllegalArgument.isNotNull(javaSqlTypeMapper, "mapper");
         Store store = getStoreForRegist(entityType);
@@ -163,7 +161,7 @@ public class SqlTypeMappingManager {
         if (sqlType == null) {
             sqlType = defaultSqlTypeMapping.getSqlType(javaType);
         }
-        // TODO 这里可以加入javaType SqlType map用于缓存结果 Map<Class<T>, SQLType>
+        // ENHANCE 这里可以加入javaType SqlType map用于缓存结果 Map<Class<T>, SQLType>
         return sqlType;
     }
 
@@ -180,14 +178,14 @@ public class SqlTypeMappingManager {
         AssertIllegalArgument.isNotNull(entityType, "entityType");
         AssertIllegalArgument.isNotNull(javaType, "javaType");
         SQLType sqlType = null;
-        Store store = getStore(new GenericClass<>(entityType));
+        Store store = getStore(new ClassType<>(entityType));
         if (store != null) {
             sqlType = store.getSqlType(javaType);
         }
         if (sqlType == null) {
             sqlType = getSqlType(javaType);
         }
-        // TODO 这里可以加入entityType  javaType SqlType map用于缓存结果 Map<Class<E>, Map<Class<T>, SQLType>>
+        // ENHANCE 这里可以加入entityType  javaType SqlType map用于缓存结果 Map<Class<E>, Map<Class<T>, SQLType>>
         return sqlType;
     }
 
@@ -215,7 +213,7 @@ public class SqlTypeMappingManager {
         if (javaType == null) {
             javaType = defaultSqlTypeMapping.getJavaType(sqlType);
         }
-        // TODO 这里可以加入javaType SqlType map用于缓存结果 Map<SQLType, Class<T>>
+        // ENHANCE 这里可以加入javaType SqlType map用于缓存结果 Map<SQLType, Class<T>>
         return javaType;
     }
 
@@ -231,14 +229,14 @@ public class SqlTypeMappingManager {
         AssertIllegalArgument.isNotNull(entityType, "entityType");
         AssertIllegalArgument.isNotNull(sqlType, "sqlType");
         Class<E> javaType = null;
-        Store store = getStore(new GenericClass<>(entityType));
+        Store store = getStore(new ClassType<>(entityType));
         if (store != null) {
             javaType = store.getJavaType(sqlType);
         }
         if (javaType == null) {
             javaType = getJavaType(sqlType);
         }
-        // TODO 这里可以加入entityType  SqlType javaType map用于缓存结果 Map<Class<E>, Map<SQLType, Class<T>>>
+        // ENHANCE 这里可以加入entityType  SqlType javaType map用于缓存结果 Map<Class<E>, Map<SQLType, Class<T>>>
         return javaType;
     }
 
@@ -260,10 +258,30 @@ public class SqlTypeMappingManager {
         //                return;
         //            }
         //        }
-        if (globalStore.set(prep, columnIndex, columnValue)) {
+        Object value = null;
+        if (columnValue instanceof Optional) {
+            value = ((Optional<?>) columnValue).orElse(null);
+        } else {
+            value = columnValue;
+        }
+
+        if (value != null && globalStore.set(prep, columnIndex, value)) {
             return;
         }
-        JdbcUtils.setParameter(prep, columnIndex, columnValue);
+
+        JdbcUtils.setParameter(prep, columnIndex, value);
+    }
+
+    /**
+     * Sets the.
+     *
+     * @param <E>         the element type
+     * @param prep        the prep
+     * @param columnIndex the column index
+     * @param columnValue the column value
+     */
+    public <E> void set(PreparedStatement prep, int columnIndex, ValueType<E> columnValue) {
+
     }
 
     /**
@@ -275,7 +293,7 @@ public class SqlTypeMappingManager {
      * @param columnValue the column value
      * @param javaType    the java type
      */
-    public <E> void set(PreparedStatement prep, int columnIndex, E columnValue, GenericType<E> javaType) {
+    public <E> void set(PreparedStatement prep, int columnIndex, E columnValue, Type<E> javaType) {
         AssertIllegalArgument.isNotNull(javaType, "javaType");
         AssertIllegalArgument.isNotNull(prep, "PreparedStatement");
         Store store = getStore(javaType);
@@ -284,7 +302,7 @@ public class SqlTypeMappingManager {
         }
         // 如果是对象属性，再次查找属性所属类型的空间
         if (javaType instanceof BeanProperty) {
-            store = getStore(new GenericClass<>(((BeanProperty<E>) javaType).getOwnerType()));
+            store = getStore(new ClassType<>(((BeanProperty<E>) javaType).getOwnerType()));
             if (store != null && store.set(prep, columnIndex, columnValue, javaType)) {
                 return;
             }
@@ -304,8 +322,7 @@ public class SqlTypeMappingManager {
      * @param javaType    the java type
      * @return the e
      */
-    @SuppressWarnings("unchecked")
-    public <E> E get(ResultSet rs, int columnIndex, GenericType<E> javaType) {
+    public <E> E get(ResultSet rs, int columnIndex, Type<E> javaType) {
         AssertIllegalArgument.isNotNull(javaType, "javaType");
         AssertIllegalArgument.isNotNull(rs, "ResultSet");
         Store store = getStore(javaType);
@@ -315,7 +332,7 @@ public class SqlTypeMappingManager {
         }
         // 如果是对象属性，再次查找属性所属类型的空间
         if (javaType instanceof BeanProperty) {
-            store = getStore(new GenericClass<>(((BeanProperty<E>) javaType).getOwnerType()));
+            store = getStore(new ClassType<>(((BeanProperty<E>) javaType).getOwnerType()));
             if (store != null && (e = store.get(rs, columnIndex, javaType)) != null) {
                 return e;
             }
@@ -323,7 +340,7 @@ public class SqlTypeMappingManager {
         if ((e = globalStore.get(rs, columnIndex, javaType)) != null) {
             return e;
         }
-        return (E) JdbcUtils.getResultSetValue(rs, columnIndex, javaType.getType());
+        return JdbcUtils.getResultSetValue(rs, columnIndex, javaType.getType());
     }
 
     /**
@@ -335,7 +352,7 @@ public class SqlTypeMappingManager {
      * @param javaType   the java type
      * @return the e
      */
-    public <E> E get(ResultSet rs, String columnName, GenericType<E> javaType) {
+    public <E> E get(ResultSet rs, String columnName, Type<E> javaType) {
         AssertIllegalArgument.isNotEmpty(columnName, "name");
         int index = JdbcUtils.getColumnIndex(rs, columnName);
         return get(rs, index, javaType);
@@ -357,7 +374,7 @@ public class SqlTypeMappingManager {
      * @param entityType the entity type
      * @return the store for regist
      */
-    private <E> Store getStoreForRegist(GenericType<E> entityType) {
+    private <E> Store getStoreForRegist(Type<E> entityType) {
         Store store = getStore(entityType);
         if (store == null) {
             store = new Store();
@@ -373,12 +390,12 @@ public class SqlTypeMappingManager {
      * @param entityType the entity type
      * @return the store
      */
-    private <E> Store getStore(GenericType<E> entityType) {
+    private <E> Store getStore(Type<E> entityType) {
         return typeStoreMap.get(entityType);
     }
 
     /** The java to sql type map. */
-    private Map<GenericType<? extends Object>, JavaToSqlTypeRegister<? extends Object>> javaToSqlTypeRegisterMap = new HashMap<>();
+    private Map<Type<? extends Object>, JavaToSqlTypeRegister<? extends Object>> javaToSqlTypeRegisterMap = new HashMap<>();
 
     /** The sql type to java map. */
     private Map<SQLType, SqlTypeToJavaRegister<? extends Object>> sqlTypeToJavaRegisterMap = new HashMap<>();
@@ -413,7 +430,7 @@ public class SqlTypeMappingManager {
          * @param register the register
          */
         private void put(JavaToSqlTypeRegister<? extends Object> register) {
-            GenericClass<? extends Object> type = new GenericClass<>(register.getJavaType());
+            ClassType<? extends Object> type = new ClassType<>(register.getJavaType());
             JavaToSqlTypeRegister<? extends Object> oldRegister = javaToSqlTypeRegisterMap.get(type);
             if (oldRegister != null) {
                 throw new JdbcMappingException("#java.type.registed",
@@ -450,7 +467,7 @@ public class SqlTypeMappingManager {
          * @return the sql type
          */
         private <E> SQLType getSqlType(Class<E> javaType) {
-            return getSqlType(new GenericClass<>(javaType));
+            return getSqlType(new ClassType<>(javaType));
         }
 
         /**
@@ -460,7 +477,7 @@ public class SqlTypeMappingManager {
          * @param javaType the java type
          * @return the sql type
          */
-        private <E> SQLType getSqlType(GenericType<E> javaType) {
+        private <E> SQLType getSqlType(Type<E> javaType) {
             //            for (JavaSqlTypeMapper<? extends Object> javaSqlTypeMapper : javaSqlTypeMappers) {
             //                JavaSqlTypeMapper<Object> mapper = (JavaSqlTypeMapper<Object>) javaSqlTypeMapper;
             //                if (mapper.support((GenericType<Object>) javaType)) {
@@ -518,7 +535,7 @@ public class SqlTypeMappingManager {
                 JdbcUtils.setParameter(prep, columnIndex, columnValue);
                 return true;
             } else {
-                return set(prep, columnIndex, columnValue, new GenericClass<>((Class<E>) columnValue.getClass()));
+                return set(prep, columnIndex, columnValue, new ClassType<>((Class<E>) columnValue.getClass()));
             }
         }
 
@@ -533,13 +550,13 @@ public class SqlTypeMappingManager {
          * @return true, if successful
          */
         @SuppressWarnings({ "unchecked", "rawtypes" })
-        public <E> boolean set(PreparedStatement prep, int columnIndex, E columnValue, GenericType<E> javaType) {
+        public <E> boolean set(PreparedStatement prep, int columnIndex, E columnValue, Type<E> javaType) {
             if (columnValue == null) {
                 JdbcUtils.setParameter(prep, columnIndex, columnValue);
                 return true;
             }
             for (JavaSqlTypeMapper<? extends Object> javaSqlTypeMapper : javaSqlTypeMappers) {
-                if (javaSqlTypeMapper.support((GenericType) javaType)) {
+                if (javaSqlTypeMapper.support((Type) javaType)) {
                     logger.debug("set value javatype {}[{}] with mapper {}", javaType.getClass().getSimpleName(),
                             javaType.getType().getName(), javaSqlTypeMapper.getClass().getName());
                     ((JavaSqlTypeMapper<Object>) javaSqlTypeMapper).set(prep, columnIndex, columnValue);
@@ -559,13 +576,13 @@ public class SqlTypeMappingManager {
          * @return the e
          */
         @SuppressWarnings("unchecked")
-        public <E> E get(ResultSet rs, int columnIndex, GenericType<E> javaType) {
+        public <E> E get(ResultSet rs, int columnIndex, Type<E> javaType) {
             SQLType sqlType = JdbcUtils.getResultSQLType(rs, columnIndex);
             for (JavaSqlTypeMapper<? extends Object> sqlTypeToJavaMapper : javaSqlTypeMappers) {
                 JavaSqlTypeMapper<Object> mapper = (JavaSqlTypeMapper<Object>) sqlTypeToJavaMapper;
                 String tableName = JdbcUtils.getTableName(rs, columnIndex);
                 String columnName = JdbcUtils.getColumnName(rs, columnIndex);
-                if (mapper.support(sqlType, tableName, columnName) && mapper.support((GenericType<Object>) javaType)) {
+                if (mapper.support(sqlType, tableName, columnName) && mapper.support((Type<Object>) javaType)) {
                     logger.debug("get value from {}.{} [{}] with mapper {}", tableName, columnName, sqlType.toString(),
                             mapper.getClass().getName());
                     return (E) mapper.get(rs, columnIndex);

@@ -36,7 +36,7 @@ import cn.featherfly.common.repository.mapping.PropertyNameConversion;
  *
  * @author zhongj
  */
-public class ObjectToDbMappingFactory extends AbstractJdbcMappingFactory {
+public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
 
     private boolean checkMapping = true;
 
@@ -44,7 +44,7 @@ public class ObjectToDbMappingFactory extends AbstractJdbcMappingFactory {
      * @param metadata the metadata
      * @param dialect  the dialect
      */
-    public ObjectToDbMappingFactory(DatabaseMetadata metadata, Dialect dialect) {
+    public StrictJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect) {
         super(metadata, dialect);
     }
 
@@ -53,7 +53,7 @@ public class ObjectToDbMappingFactory extends AbstractJdbcMappingFactory {
      * @param dialect               the dialect
      * @param sqlTypeMappingManager the sql type mapping manager
      */
-    public ObjectToDbMappingFactory(DatabaseMetadata metadata, Dialect dialect,
+    public StrictJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
             SqlTypeMappingManager sqlTypeMappingManager) {
         super(metadata, dialect, sqlTypeMappingManager);
     }
@@ -64,7 +64,7 @@ public class ObjectToDbMappingFactory extends AbstractJdbcMappingFactory {
      * @param classNameConversions    classNameConversions
      * @param propertyNameConversions propertyNameConversions
      */
-    public ObjectToDbMappingFactory(DatabaseMetadata metadata, Dialect dialect,
+    public StrictJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
             List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions) {
         super(metadata, dialect, classNameConversions, propertyNameConversions);
     }
@@ -76,7 +76,7 @@ public class ObjectToDbMappingFactory extends AbstractJdbcMappingFactory {
      * @param classNameConversions    classNameConversions
      * @param propertyNameConversions propertyNameConversions
      */
-    public ObjectToDbMappingFactory(DatabaseMetadata metadata, Dialect dialect,
+    public StrictJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
             SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
             List<PropertyNameConversion> propertyNameConversions) {
         super(metadata, dialect, sqlTypeMappingManager, classNameConversions, propertyNameConversions);

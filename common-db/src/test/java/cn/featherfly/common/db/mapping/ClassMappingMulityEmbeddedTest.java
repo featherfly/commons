@@ -17,14 +17,14 @@ import cn.featherfly.common.repository.mapping.ClassMapping;
  */
 public class ClassMappingMulityEmbeddedTest extends JdbcTestBase {
 
-    private ObjectDbMixedMappingFactory factory;
+    private CompatibleJdbcMappingFactory factory;
 
     private SqlTypeMappingManager sqlTypeMappingManager = new SqlTypeMappingManager();
 
     @BeforeClass
     public void init() {
         DatabaseMetadata metadata = DatabaseMetadataManager.getDefaultManager().create(dataSource);
-        factory = new ObjectDbMixedMappingFactory(metadata, dialect, sqlTypeMappingManager);
+        factory = new CompatibleJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager);
     }
 
     @Test(expectedExceptions = JdbcMappingException.class)

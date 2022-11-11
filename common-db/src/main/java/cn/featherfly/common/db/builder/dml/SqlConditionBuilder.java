@@ -5,17 +5,13 @@ import cn.featherfly.common.db.builder.SqlBuilder;
 import cn.featherfly.common.repository.builder.dml.ConditionBuilder;
 
 /**
- * <p>
- * SqlConditoinBuilder
- * </p>
+ * SqlConditoinBuilder.
  *
  * @author zhongj
  */
 public interface SqlConditionBuilder extends ConditionBuilder, SqlBuilder {
     /**
-     * <p>
-     * 进入条件表达式
-     * </p>
+     * 进入条件表达式.
      *
      * @return ConditionBuilder
      */

@@ -4,9 +4,7 @@ package cn.featherfly.common.db.builder;
 import cn.featherfly.common.repository.builder.Builder;
 
 /**
- * <p>
- * SqlBuilder
- * </p>
+ * SqlBuilder.
  *
  * @author zhongj
  */

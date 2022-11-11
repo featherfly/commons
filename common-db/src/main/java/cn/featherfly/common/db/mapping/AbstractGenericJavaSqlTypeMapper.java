@@ -2,7 +2,7 @@
 package cn.featherfly.common.db.mapping;
 
 import cn.featherfly.common.lang.ClassUtils;
-import cn.featherfly.common.lang.reflect.GenericClass;
+import cn.featherfly.common.lang.reflect.ClassType;
 
 /**
  * <p>
@@ -18,6 +18,6 @@ public abstract class AbstractGenericJavaSqlTypeMapper<E extends Object> extends
     public AbstractGenericJavaSqlTypeMapper() {
         super();
         Class<E> javaType = ClassUtils.getSuperClassGenericType(this.getClass());
-        setGenericType(new GenericClass<>(javaType));
+        setType(new ClassType<>(javaType));
     }
 }

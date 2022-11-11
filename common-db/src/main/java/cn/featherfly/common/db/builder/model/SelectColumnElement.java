@@ -2,7 +2,7 @@
 package cn.featherfly.common.db.builder.model;
 
 import cn.featherfly.common.db.dialect.Dialect;
-import cn.featherfly.common.repository.operate.AggregateFunction;
+import cn.featherfly.common.operator.AggregateFunction;
 
 /**
  * <p>

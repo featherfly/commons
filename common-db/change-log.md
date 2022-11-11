@@ -1,3 +1,7 @@
+# 0.
+1. 修复cn.featherfly.common.repository.operate包移动到cn.featherfly.common.operator的问题
+2. 
+
 # 0.5.5 2022-8-11
 1. Dialect加入getKeywordLike(QueryPolicy)、getKeywordEq(QueryPolicy)、keywordsCase()方法
 2. Dialect删除isKeywordUpcase()方法

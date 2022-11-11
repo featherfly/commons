@@ -23,9 +23,9 @@ import cn.featherfly.common.bean.BeanProperty;
 import cn.featherfly.common.db.JdbcException;
 import cn.featherfly.common.db.mapping.AbstractJavaSqlTypeMapper;
 import cn.featherfly.common.lang.ClassUtils;
-import cn.featherfly.common.lang.GenericType;
 import cn.featherfly.common.lang.Strings;
-import cn.featherfly.common.lang.reflect.GenericClass;
+import cn.featherfly.common.lang.reflect.ClassType;
+import cn.featherfly.common.lang.reflect.Type;
 
 /**
  * The Class ObjectToJsonMapper.
@@ -70,7 +70,7 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
      * @param storeAsString the store as string
      */
     public ObjectToJsonMapper(Class<E> type, ObjectMapper objectMapper, boolean storeAsString) {
-        this(new GenericClass<>(type), objectMapper, storeAsString);
+        this(new ClassType<>(type), objectMapper, storeAsString);
     }
 
     /**
@@ -78,7 +78,7 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
      *
      * @param type the type
      */
-    public ObjectToJsonMapper(GenericType<E> type) {
+    public ObjectToJsonMapper(Type<E> type) {
         this(type, MAPPER);
     }
 
@@ -88,7 +88,7 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
      * @param type         the type
      * @param objectMapper the object mapper
      */
-    public ObjectToJsonMapper(GenericType<E> type, ObjectMapper objectMapper) {
+    public ObjectToJsonMapper(Type<E> type, ObjectMapper objectMapper) {
         this(type, objectMapper, true);
     }
 
@@ -99,7 +99,7 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
      * @param objectMapper  the object mapper
      * @param storeAsString the store as string
      */
-    public ObjectToJsonMapper(GenericType<E> genericType, ObjectMapper objectMapper, boolean storeAsString) {
+    public ObjectToJsonMapper(Type<E> genericType, ObjectMapper objectMapper, boolean storeAsString) {
         this(genericType, objectMapper, null, storeAsString);
     }
 
@@ -112,7 +112,7 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
      * @param storeAsString the store as string
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private ObjectToJsonMapper(GenericType<E> genericType, ObjectMapper objectMapper, JavaType javaType,
+    private ObjectToJsonMapper(Type<E> genericType, ObjectMapper objectMapper, JavaType javaType,
             boolean storeAsString) {
         super(genericType);
         this.objectMapper = objectMapper;
@@ -175,7 +175,7 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
                 prep.setString(columnIndex, json);
             } else {
                 ByteArrayInputStream is = new ByteArrayInputStream(
-                        objectMapper.writerFor(getGenericType().getType()).writeValueAsBytes(value));
+                        objectMapper.writerFor(getType().getType()).writeValueAsBytes(value));
                 prep.setBlob(columnIndex, is);
             }
         } catch (JsonProcessingException | SQLException e) {
@@ -201,7 +201,7 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
                 if (blob == null) {
                     return null;
                 }
-                return objectMapper.readerFor(getGenericType().getType()).readValue(blob.getBinaryStream());
+                return objectMapper.readerFor(getType().getType()).readValue(blob.getBinaryStream());
             }
         } catch (IOException | SQLException e) {
             // TODO 优化错误信息

@@ -5,10 +5,7 @@ import java.util.Locale;
 import cn.featherfly.common.exception.LocalizedException;
 
 /**
- * <p>
- * JDBC操作包装异常
- * </p>
- * .
+ * JDBC操作包装异常.
  *
  * @author zhongj
  */

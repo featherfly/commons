@@ -4,22 +4,19 @@ package cn.featherfly.common.db.mapping;
 import java.sql.SQLType;
 
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.GenericType;
 import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.lang.reflect.Type;
 import cn.featherfly.common.policy.WhiteBlackListPolicy;
 
 /**
- * <p>
- * AbstractGenericSqlTypeToJavaRegister
- * </p>
- * .
+ * AbstractGenericSqlTypeToJavaRegister.
  *
  * @author zhongj
  * @param <E> the element type
  */
 public abstract class AbstractJavaSqlTypeMapper<E extends Object> implements JavaSqlTypeMapper<E> {
 
-    private GenericType<E> genericType;
+    private Type<E> type;
 
     private WhiteBlackListPolicy<String> columnAllowPolicy = new WhiteBlackListPolicy<String>() {
 
@@ -48,29 +45,29 @@ public abstract class AbstractJavaSqlTypeMapper<E extends Object> implements Jav
     /**
      * Instantiates a new abstract java sql type mapper.
      *
-     * @param genericType the generic type
+     * @param type the type
      */
-    protected AbstractJavaSqlTypeMapper(GenericType<E> genericType) {
-        AssertIllegalArgument.isNotNull(genericType, "genericType");
-        this.genericType = genericType;
+    protected AbstractJavaSqlTypeMapper(Type<E> type) {
+        AssertIllegalArgument.isNotNull(type, "type");
+        this.type = type;
     }
 
     /**
-     * 设置genericType.
+     * set type
      *
-     * @param genericType genericType
+     * @param type Type
      */
-    protected void setGenericType(GenericType<E> genericType) {
-        this.genericType = genericType;
+    protected void setType(Type<E> type) {
+        this.type = type;
     }
 
     /**
-     * 返回genericType.
+     * get type.
      *
      * @return genericType
      */
-    public GenericType<E> getGenericType() {
-        return genericType;
+    public Type<E> getType() {
+        return type;
     }
 
     /**
@@ -79,15 +76,15 @@ public abstract class AbstractJavaSqlTypeMapper<E extends Object> implements Jav
      * @return the java type
      */
     public Class<E> getJavaType() {
-        return genericType.getType();
+        return type.getType();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean support(GenericType<E> type) {
-        return this.genericType.equals(type) || this.genericType.getType().equals(type.getType());
+    public boolean support(Type<E> type) {
+        return this.type.equals(type) || this.type.getType().equals(type.getType());
     }
 
     /**

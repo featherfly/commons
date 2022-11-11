@@ -10,12 +10,11 @@ import org.testng.annotations.Test;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.Tuple3;
 
+import cn.featherfly.common.db.ClassMappingSupport;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.Dialects;
 import cn.featherfly.common.db.mapping.pojo.User;
 import cn.featherfly.common.db.mapping.pojo.UserRole;
-import cn.featherfly.common.repository.mapping.ClassMapping;
-import cn.featherfly.common.repository.mapping.PropertyMapping;
 
 /**
  * <p>
@@ -24,7 +23,7 @@ import cn.featherfly.common.repository.mapping.PropertyMapping;
  *
  * @author zhongj
  */
-public class ClassMappingUtilsTest {
+public class ClassMappingUtilsTest implements ClassMappingSupport {
 
     Dialect dialect = Dialects.MYSQL;
 
@@ -40,12 +39,12 @@ public class ClassMappingUtilsTest {
 
     @Test
     void testSelectByIdSql() {
-        String sql = ClassMappingUtils.getSelectByIdSql(getUserClassMapping(), dialect);
+        String sql = ClassMappingUtils.getSelectByPkSql(getUserClassMapping(), dialect);
 
         System.out.println(sql);
         assertEquals(sql, "SELECT `id` `id`, `name` `name`, `descp` `descp` FROM `user` WHERE `id` = ?");
 
-        sql = ClassMappingUtils.getSelectByIdSql(getUserRoleClassMapping(), dialect);
+        sql = ClassMappingUtils.getSelectByPkSql(getUserRoleClassMapping(), dialect);
 
         System.out.println(sql);
         assertEquals(sql,
@@ -314,66 +313,4 @@ public class ClassMappingUtilsTest {
         assertEquals(t.get1().get(2), "name");
         assertEquals(t.get1().get(3), "descp");
     }
-
-    ClassMapping<User> getUserClassMapping() {
-        ClassMapping<User> mapping = new ClassMapping<>(User.class, "user");
-        PropertyMapping pm = new PropertyMapping();
-        pm.setPrimaryKey(true);
-        pm.setRepositoryFieldName("id");
-        pm.setPropertyName("id");
-        pm.setPropertyType(Long.class);
-
-        PropertyMapping pm2 = new PropertyMapping();
-        pm2.setPrimaryKey(false);
-        pm2.setRepositoryFieldName("name");
-        pm2.setPropertyName("name");
-        pm2.setPropertyType(String.class);
-
-        PropertyMapping pm3 = new PropertyMapping();
-        pm3.setPrimaryKey(false);
-        pm3.setRepositoryFieldName("descp");
-        pm3.setPropertyName("descp");
-        pm3.setPropertyType(String.class);
-
-        mapping.addPropertyMapping(pm);
-        mapping.addPropertyMapping(pm2);
-        mapping.addPropertyMapping(pm3);
-
-        return mapping;
-    }
-
-    ClassMapping<UserRole> getUserRoleClassMapping() {
-        ClassMapping<UserRole> mapping = new ClassMapping<>(UserRole.class, "user_role");
-        PropertyMapping pm = new PropertyMapping();
-        pm.setPrimaryKey(true);
-        pm.setRepositoryFieldName("user_id");
-        pm.setPropertyName("userId");
-        pm.setPropertyType(Long.class);
-
-        PropertyMapping pm2 = new PropertyMapping();
-        pm2.setPrimaryKey(true);
-        pm2.setRepositoryFieldName("role_id");
-        pm2.setPropertyName("roleId");
-        pm2.setPropertyType(Long.class);
-
-        PropertyMapping pm3 = new PropertyMapping();
-        pm3.setPrimaryKey(false);
-        pm3.setRepositoryFieldName("descp");
-        pm3.setPropertyName("descp");
-        pm3.setPropertyType(String.class);
-
-        PropertyMapping pm4 = new PropertyMapping();
-        pm4.setPrimaryKey(false);
-        pm4.setRepositoryFieldName("descp2");
-        pm4.setPropertyName("descp2");
-        pm4.setPropertyType(String.class);
-
-        mapping.addPropertyMapping(pm);
-        mapping.addPropertyMapping(pm2);
-        mapping.addPropertyMapping(pm3);
-        mapping.addPropertyMapping(pm4);
-
-        return mapping;
-    }
-
 }

@@ -1,6 +1,7 @@
 # 0.
 1. 修复cn.featherfly.common.repository.operate包移动到cn.featherfly.common.operator的问题
-2. 
+2. 重构SqlSelectBasicBuilder逻辑，抽离出SqlSelectColumnsBuilder接口以及对应的实现
+3. 重构distinct相关逻辑
 
 # 0.5.5 2022-8-11
 1. Dialect加入getKeywordLike(QueryPolicy)、getKeywordEq(QueryPolicy)、keywordsCase()方法

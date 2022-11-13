@@ -438,71 +438,118 @@ public interface Dialect {
     /**
      * build sql for column with aggregate function.
      *
-     * @param columnName columnName
      * @param function   function
+     * @param columnName columnName
      * @return sql
      */
-    default String buildColumnSql(String columnName, Function function) {
-        return buildColumnSql(columnName, null, function);
+    default String buildColumnSql(Function function, String columnName) {
+        return buildColumnSql(function, false, null, columnName, null);
     }
 
     /**
      * build sql for column with aggregate function.
      *
-     * @param columnName        columnName
      * @param aggregateFunction aggregateFunction
+     * @param columnName        columnName
      * @return sql
      */
-    default String buildColumnSql(String columnName, AggregateFunction aggregateFunction) {
-        return buildColumnSql(columnName, null, aggregateFunction);
+    default String buildColumnSql(AggregateFunction aggregateFunction, String columnName) {
+        return buildColumnSql(aggregateFunction, false, null, columnName, null);
     }
 
     /**
      * build sql for column with aggregate function.
      *
-     * @param columnName columnName
      * @param tableAlias tableAlias
+     * @param columnName columnName
      * @return sql
      */
-    default String buildColumnSql(String columnName, String tableAlias) {
-        return buildColumnSql(columnName, tableAlias, null, null);
+    default String buildColumnSql(String tableAlias, String columnName) {
+        return buildColumnSql(false, tableAlias, columnName, null);
     }
 
     /**
      * build sql for column with aggregate function.
      *
-     * @param columnName columnName
-     * @param tableAlias tableAlias
-     * @param asName     asName
+     * @param tableAlias  tableAlias
+     * @param columnName  the column name
+     * @param columnAlias the column alias
      * @return sql
      */
-    default String buildColumnSql(String columnName, String tableAlias, String asName) {
-        return buildColumnSql(columnName, tableAlias, null, asName);
+    default String buildColumnSql(String tableAlias, String columnName, String columnAlias) {
+        return buildColumnSql(null, false, tableAlias, columnName, columnAlias);
+    }
+
+    //    /**
+    //     * build sql for column with tableAlias and aggregate function.
+    //     *
+    //     * @param columnName        columnName
+    //     * @param tableAlias        tableAlias
+    //     * @param aggregateFunction aggregateFunction
+    //     * @return sql
+    //     */
+    //    default String buildColumnSql(AggregateFunction aggregateFunction, String columnName, String tableAlias) {
+    //        return buildColumnSql(aggregateFunction, false, tableAlias, columnName, null);
+    //    }
+
+    /**
+     * build sql for column with tableAlias and aggregate function.
+     *
+     * @param function    the function
+     * @param distinct    the distinct
+     * @param tableAlias  tableAlias
+     * @param columnName  columnName
+     * @param columnAlias the column alias
+     * @return sql
+     */
+    default String buildColumnSql(Function function, boolean distinct, String tableAlias, String columnName,
+            String columnAlias) {
+        if (function instanceof AggregateFunction) {
+            return buildColumnSql(function, distinct, tableAlias, columnName, columnAlias);
+        }
+        // YUFEI_TODO 后续添加其他实现
+        throw new DialectException("只实现了 AggregateFunction，未实现的 function" + function.getClass().getName());
     }
 
     /**
      * build sql for column with tableAlias and aggregate function.
      *
-     * @param columnName        columnName
-     * @param tableAlias        tableAlias
-     * @param aggregateFunction aggregateFunction
+     * @param distinct    the distinct
+     * @param tableAlias  tableAlias
+     * @param columnName  columnName
+     * @param columnAlias the column alias
      * @return sql
      */
-    default String buildColumnSql(String columnName, String tableAlias, AggregateFunction aggregateFunction) {
-        return buildColumnSql(columnName, tableAlias, aggregateFunction, null);
+    default String buildColumnSql(boolean distinct, String tableAlias, String columnName, String columnAlias) {
+        return buildColumnSql(null, distinct, tableAlias, columnName, columnAlias);
     }
 
     /**
      * build sql for column with tableAlias and aggregate function.
      *
-     * @param columnName        columnName
-     * @param tableAlias        tableAlias
      * @param aggregateFunction aggregateFunction
-     * @param asName            asName
+     * @param tableAlias        tableAlias
+     * @param columnName        columnName
+     * @param columnAlias       the column alias
      * @return sql
      */
-    default String buildColumnSql(String columnName, String tableAlias, AggregateFunction aggregateFunction,
-            String asName) {
+    default String buildColumnSql(AggregateFunction aggregateFunction, String tableAlias, String columnName,
+            String columnAlias) {
+        return buildColumnSql(aggregateFunction, false, tableAlias, columnName, columnAlias);
+    }
+
+    /**
+     * build sql for column with tableAlias and aggregate function.
+     *
+     * @param aggregateFunction aggregateFunction
+     * @param distinct          the distinct
+     * @param tableAlias        tableAlias
+     * @param columnName        columnName
+     * @param columnAlias       the column alias
+     * @return sql
+     */
+    default String buildColumnSql(AggregateFunction aggregateFunction, boolean distinct, String tableAlias,
+            String columnName, String columnAlias) {
         String column = columnName;
         if (!Chars.STAR.equals(columnName)) {
             column = wrapName(convertTableOrColumnName(columnName));
@@ -510,36 +557,33 @@ public interface Dialect {
         if (Lang.isNotEmpty(tableAlias) && !Chars.STAR.equals(columnName)) {
             column = tableAlias + Chars.DOT + column;
         }
-        if (aggregateFunction != null) {
-            switch (aggregateFunction) {
-                case DISTINCT:
-                    column = getFunction(aggregateFunction) + Chars.SPACE + column;
-                    break;
-                default:
-                    column = getFunction(aggregateFunction) + Chars.PAREN_L + column + Chars.PAREN_R;
-            }
+        if (distinct) {
+            column = getKeywords().distinct() + Chars.SPACE + column;
         }
-        if (Lang.isNotEmpty(asName)) {
-            column = column + Chars.SPACE + wrapName(asName);
+        if (aggregateFunction != null) {
+            column = getFunction(aggregateFunction) + Chars.PAREN_L + column + Chars.PAREN_R;
+        }
+        if (Lang.isNotEmpty(columnAlias)) {
+            column = column + Chars.SPACE + wrapName(columnAlias);
         }
         return column;
     }
 
-    /**
-     * build sql for column with tableAlias and aggregate function.
-     *
-     * @param columnName columnName
-     * @param tableAlias tableAlias
-     * @param function   function
-     * @return sql
-     */
-    default String buildColumnSql(String columnName, String tableAlias, Function function) {
-        if (function instanceof AggregateFunction) {
-            return buildColumnSql(columnName, tableAlias, (AggregateFunction) function);
-        }
-        // TODO 后续添加其他实现
-        throw new DialectException("只实现了 AggregateFunction，未实现的 function" + function.getClass().getName());
-    }
+    //    /**
+    //     * build sql for column with tableAlias and aggregate function.
+    //     *
+    //     * @param columnName columnName
+    //     * @param tableAlias tableAlias
+    //     * @param function   function
+    //     * @return sql
+    //     */
+    //    default String buildColumnSql(Function function, String columnName, String tableAlias) {
+    //        if (function instanceof AggregateFunction) {
+    //            return buildColumnSql(function, columnName, tableAlias);
+    //        }
+    //        // TODO 后续添加其他实现
+    //        throw new DialectException("只实现了 AggregateFunction，未实现的 function" + function.getClass().getName());
+    //    }
 
     /**
      * convert column or table name if necessary.

@@ -11,15 +11,16 @@ import java.util.function.Predicate;
 import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.operator.AggregateFunction;
 import cn.featherfly.common.repository.builder.dml.FindBuilder;
 import cn.featherfly.common.repository.builder.dml.QueryBuilder;
-import cn.featherfly.common.operator.AggregateFunction;
 
 /**
  * sql query builder.
  *
  * @author zhongj
  */
+// FIXME 这个类在报错，问题出在select()创建SelectBuilder时没有tableName,导致AliasManager出现空指针
 public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
 
     private SqlConditionGroup conditionGroup;

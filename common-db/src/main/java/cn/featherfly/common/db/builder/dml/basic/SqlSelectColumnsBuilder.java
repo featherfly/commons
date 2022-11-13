@@ -36,10 +36,10 @@ public interface SqlSelectColumnsBuilder<B extends SqlSelectColumnsBuilder<B>> e
      *
      * @param aggregateFunction aggregateFunction
      * @param column            column
-     * @param asName            alias name
+     * @param alias             alias name
      * @return this
      */
-    B addColumn(AggregateFunction aggregateFunction, String column, String asName);
+    B addColumn(AggregateFunction aggregateFunction, String column, String alias);
 
     /**
      * add column.
@@ -53,10 +53,10 @@ public interface SqlSelectColumnsBuilder<B extends SqlSelectColumnsBuilder<B>> e
      * add column.
      *
      * @param column column
-     * @param asName asName
+     * @param alias  alias name
      * @return this
      */
-    B addColumn(String column, String asName);
+    B addColumn(String column, String alias);
 
     /**
      * addColumns.

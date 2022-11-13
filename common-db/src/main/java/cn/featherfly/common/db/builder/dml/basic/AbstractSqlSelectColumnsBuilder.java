@@ -76,7 +76,7 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
     @SuppressWarnings("unchecked")
     @Override
     public B addColumn(AggregateFunction aggregateFunction, String column) {
-        columns.add(new SelectColumnElement(dialect, column, tableAlias, aggregateFunction));
+        columns.add(new SelectColumnElement(dialect, aggregateFunction, tableAlias, column, null));
         return (B) this;
     }
 
@@ -85,13 +85,13 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
      *
      * @param aggregateFunction aggregateFunction
      * @param column            column
-     * @param asName            alias name
+     * @param alias             alias name
      * @return this
      */
     @SuppressWarnings("unchecked")
     @Override
-    public B addColumn(AggregateFunction aggregateFunction, String column, String asName) {
-        columns.add(new SelectColumnElement(dialect, column, tableAlias, aggregateFunction, asName));
+    public B addColumn(AggregateFunction aggregateFunction, String column, String alias) {
+        columns.add(new SelectColumnElement(dialect, aggregateFunction, tableAlias, column, alias));
         return (B) this;
     }
 
@@ -104,7 +104,7 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
     @SuppressWarnings("unchecked")
     @Override
     public B addColumn(String column) {
-        columns.add(new SelectColumnElement(dialect, column, tableAlias));
+        columns.add(new SelectColumnElement(dialect, tableAlias, column, null));
         return (B) this;
     }
 
@@ -118,7 +118,7 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
     @SuppressWarnings("unchecked")
     @Override
     public B addColumn(String column, String asName) {
-        columns.add(new SelectColumnElement(dialect, column, tableAlias, asName));
+        columns.add(new SelectColumnElement(dialect, tableAlias, column, asName));
         return (B) this;
     }
 

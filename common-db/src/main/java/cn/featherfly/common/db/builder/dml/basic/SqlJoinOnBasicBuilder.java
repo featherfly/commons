@@ -147,8 +147,8 @@ public class SqlJoinOnBasicBuilder implements SqlBuilder {
         joinSql.append(dialect.getKeywords().join(join)).append(Chars.SPACE)
                 .append(dialect.buildTableSql(tableName, tableAlias)).append(Chars.SPACE)
                 .append(dialect.getKeywords().on()).append(Chars.SPACE)
-                .append(dialect.buildColumnSql(columnName, tableAlias)).append(Chars.SPACE).append(Chars.EQ)
-                .append(Chars.SPACE).append(dialect.buildColumnSql(conditionColumn, conditionTableAlias));
+                .append(dialect.buildColumnSql(tableAlias, columnName)).append(Chars.SPACE).append(Chars.EQ)
+                .append(Chars.SPACE).append(dialect.buildColumnSql(conditionTableAlias, conditionColumn));
         return joinSql.toString();
     }
 }

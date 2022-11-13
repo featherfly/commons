@@ -114,7 +114,7 @@ public class ConditionColumnElement extends ParamedColumnElement {
         }
         StringBuilder condition = new StringBuilder();
         Object value = param;
-        String name = dialect.buildColumnSql(this.name, tableAlias);
+        String name = dialect.buildColumnSql(tableAlias, this.name);
         if (ignorePolicy.test(value)) { // 忽略
             return "";
         } else {

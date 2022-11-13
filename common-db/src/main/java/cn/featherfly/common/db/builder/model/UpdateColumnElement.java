@@ -72,7 +72,7 @@ public class UpdateColumnElement extends ParamedColumnElement {
         if (ignorePolicy.test(param)) { // 忽略
             return "";
         }
-        String columnName = dialect.buildColumnSql(getName(), getTableAlias());
+        String columnName = dialect.buildColumnSql(getTableAlias(), getName());
         if (setType == SetType.SET) {
             return columnName + " = ?";
         } else {

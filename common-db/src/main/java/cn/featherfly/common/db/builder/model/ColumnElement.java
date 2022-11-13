@@ -52,15 +52,6 @@ public class ColumnElement extends AbstractSqlElement {
     }
 
     /**
-     * 设置name.
-     *
-     * @param name name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
      * 返回tableAlias.
      *
      * @return tableAlias
@@ -70,7 +61,16 @@ public class ColumnElement extends AbstractSqlElement {
     }
 
     /**
-     * 设置tableAlias.
+     * 设置name
+     *
+     * @param name name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * 设置tableAlias
      *
      * @param tableAlias tableAlias
      */
@@ -83,6 +83,6 @@ public class ColumnElement extends AbstractSqlElement {
      */
     @Override
     public String toSql() {
-        return dialect.buildColumnSql(getName(), getTableAlias());
+        return dialect.buildColumnSql(getTableAlias(), getName());
     }
 }

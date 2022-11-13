@@ -19,7 +19,7 @@ public class SqlSelectBuilder extends AbstractSqlSelectBuilder implements Select
      * @param conditionBuilder conditionBuilder
      */
     public SqlSelectBuilder(Dialect dialect, SqlConditionGroup conditionBuilder) {
-        this(dialect, null, null, conditionBuilder);
+        this(dialect, null, conditionBuilder);
     }
 
     /**

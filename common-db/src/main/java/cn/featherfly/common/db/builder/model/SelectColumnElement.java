@@ -15,10 +15,13 @@ import cn.featherfly.common.operator.AggregateFunction;
 public class SelectColumnElement extends ColumnElement {
 
     /** The aggregate functions. */
-    protected AggregateFunction aggregateFunctions;
+    protected AggregateFunction aggregateFunction;
 
-    /** The as name. */
-    protected String asName;
+    /** The alias. */
+    protected String alias;
+
+    /** The distinct. */
+    protected boolean distinct;
 
     /**
      * Instantiates a new select column element.
@@ -27,76 +30,137 @@ public class SelectColumnElement extends ColumnElement {
      * @param name    name
      */
     public SelectColumnElement(Dialect dialect, String name) {
-        this(dialect, name, null);
+        this(dialect, false, name);
     }
+
+    /**
+     * Instantiates a new select column element.
+     *
+     * @param dialect  dialect
+     * @param distinct the distinct
+     * @param name     name
+     */
+    public SelectColumnElement(Dialect dialect, boolean distinct, String name) {
+        this(dialect, null, false, name);
+    }
+
+    /**
+     * Instantiates a new select column element.
+     *
+     * @param dialect           dialect
+     * @param aggregateFunction the aggregate function
+     * @param distinct          the distinct
+     * @param name              name
+     */
+    public SelectColumnElement(Dialect dialect, AggregateFunction aggregateFunction, boolean distinct, String name) {
+        this(dialect, aggregateFunction, distinct, null, name, null);
+    }
+
+    //    /**
+    //     * Instantiates a new select column element.
+    //     *
+    //     * @param dialect dialect
+    //     * @param name    name
+    //     * @param alias   the alias
+    //     */
+    //    public SelectColumnElement(Dialect dialect, String name, String alias) {
+    //        this(dialect, null, null, name, alias);
+    //    }
 
     /**
      * Instantiates a new select column element.
      *
      * @param dialect    dialect
-     * @param name       name
-     * @param tableAlias table alias name
+     * @param tableAlias table alias
+     * @param name       column name
+     * @param alias      the column alias
      */
-    public SelectColumnElement(Dialect dialect, String name, String tableAlias) {
-        this(dialect, name, tableAlias, null, null);
+    public SelectColumnElement(Dialect dialect, String tableAlias, String name, String alias) {
+        this(dialect, null, tableAlias, name, alias);
     }
+
+    //    /**
+    //     * Instantiates a new select column element.
+    //     *
+    //     * @param dialect           dialect
+    //     * @param aggregateFunction the aggregate function
+    //     * @param name              name
+    //     * @param alias             the alias
+    //     */
+    //    public SelectColumnElement(Dialect dialect, AggregateFunction aggregateFunction, String name, String alias) {
+    //        this(dialect, aggregateFunction, null, name, alias);
+    //    }
 
     /**
      * Instantiates a new select column element.
      *
-     * @param dialect            dialect
-     * @param name               name
-     * @param tableAlias         tableAlias
-     * @param aggregateFunctions aggregateFunctions
+     * @param dialect           dialect
+     * @param aggregateFunction the aggregate function
+     * @param tableAlias        table alias
+     * @param name              column name
+     * @param alias             the column alias
      */
-    public SelectColumnElement(Dialect dialect, String name, String tableAlias, AggregateFunction aggregateFunctions) {
-        this(dialect, name, tableAlias, aggregateFunctions, null);
+    public SelectColumnElement(Dialect dialect, AggregateFunction aggregateFunction, String tableAlias, String name,
+            String alias) {
+        this(dialect, aggregateFunction, false, tableAlias, name, alias);
     }
+
+    //    /**
+    //     * Instantiates a new select column element.
+    //     *
+    //     * @param dialect           dialect
+    //     * @param aggregateFunction the aggregate function
+    //     * @param distinct          the distinct
+    //     * @param tableAlias        table alias
+    //     * @param name              column name
+    //     */
+    //    public SelectColumnElement(Dialect dialect, AggregateFunction aggregateFunction, boolean distinct,
+    //            String tableAlias, String name) {
+    //        this(dialect, aggregateFunction, distinct, tableAlias, name, null);
+    //    }
 
     /**
      * Instantiates a new select column element.
      *
-     * @param dialect    dialect
-     * @param name       name
-     * @param tableAlias tableAlias
-     * @param asName     asName
+     * @param dialect           dialect
+     * @param aggregateFunction the aggregate function
+     * @param distinct          the distinct
+     * @param tableAlias        table alias
+     * @param name              column name
+     * @param alias             column alias
      */
-    public SelectColumnElement(Dialect dialect, String name, String tableAlias, String asName) {
-        this(dialect, name, tableAlias, null, asName);
-    }
-
-    /**
-     * Instantiates a new select column element.
-     *
-     * @param dialect            dialect
-     * @param name               name
-     * @param tableAlias         tableAlias
-     * @param aggregateFunctions aggregateFunctions
-     * @param asName             asName
-     */
-    public SelectColumnElement(Dialect dialect, String name, String tableAlias, AggregateFunction aggregateFunctions,
-            String asName) {
+    public SelectColumnElement(Dialect dialect, AggregateFunction aggregateFunction, boolean distinct,
+            String tableAlias, String name, String alias) {
         super(dialect, name, tableAlias);
-        this.aggregateFunctions = aggregateFunctions;
-        this.asName = asName;
+        this.aggregateFunction = aggregateFunction;
+        this.alias = alias;
     }
 
     /**
-     * 返回aggregateFunctions.
+     * 返回aggregateFunction.
      *
-     * @return aggregateFunctions
+     * @return aggregateFunction
      */
-    public AggregateFunction getAggregateFunctions() {
-        return aggregateFunctions;
+    public AggregateFunction getAggregateFunction() {
+        return aggregateFunction;
     }
 
     /**
-     * 设置aggregateFunctions.
+     * 返回alias.
      *
-     * @param aggregateFunctions aggregateFunctions
+     * @return alias
      */
-    public void setAggregateFunctions(AggregateFunction aggregateFunctions) {
-        this.aggregateFunctions = aggregateFunctions;
+    public String getAlias() {
+        return alias;
+    }
+
+    /**
+     * 返回distinct.
+     *
+     * @return distinct
+     */
+    public boolean isDistinct() {
+        return distinct;
     }
 
     /**
@@ -104,6 +168,6 @@ public class SelectColumnElement extends ColumnElement {
      */
     @Override
     public String toSql() {
-        return dialect.buildColumnSql(getName(), getTableAlias(), aggregateFunctions, asName);
+        return dialect.buildColumnSql(aggregateFunction, distinct, tableAlias, name, alias);
     }
 }

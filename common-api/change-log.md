@@ -1,3 +1,6 @@
+# 0.5.1 2022
+1. AggregateFunction删除DISTINCT
+   
 # 0.5.0 2022-11-09
 1. 加入operator包
 

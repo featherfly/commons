@@ -13,6 +13,5 @@ public enum AggregateFunction implements Function {
     SUM,
     MAX,
     MIN,
-    AVG,
-    DISTINCT;
+    AVG;
 }

@@ -1,3 +1,6 @@
+# 0.4.0 2022-11-23
+1. 加入MulitiCacheEntryListenerConfiguration,MulitiCacheEntryListener,MulitiCacheEntryEventFilter
+
 # 0.3.0 2022-11-07
 1. 加入ExpiryPolicys
 2. CacheConfig参数ttl,maxIdleTime变更为expiry,expiryPolicy

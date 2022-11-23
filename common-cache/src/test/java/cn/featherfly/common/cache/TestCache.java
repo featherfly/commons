@@ -1,11 +1,18 @@
 
 package cn.featherfly.common.cache;
 
-import static org.junit.Assert.assertNull;
+import static org.testng.AssertJUnit.assertNull;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import javax.cache.CacheException;
+import javax.cache.configuration.MutableCacheEntryListenerConfiguration;
+import javax.cache.event.CacheEntryCreatedListener;
+import javax.cache.event.CacheEntryEvent;
+import javax.cache.event.CacheEntryEventFilter;
 
 import org.testng.annotations.Test;
 
@@ -126,6 +133,7 @@ public class TestCache {
         }
     }
 
+    @Test
     void testExpire(javax.cache.Cache<Object, Object> cache1, int times, int delay) throws InterruptedException {
         String key = "key";
         String s1 = "s1";
@@ -137,10 +145,12 @@ public class TestCache {
         }
     }
 
+    @Test
     void testExpire(javax.cache.Cache<Object, Object> cache1) throws InterruptedException {
         testExpire(cache1, 4, 800);
     }
 
+    @Test
     void testExpire(javax.cache.Cache<Object, Object> cache1, javax.cache.Cache<Object, Object> cache2,
             javax.cache.Cache<Object, Object> cache3) throws InterruptedException {
 
@@ -219,6 +229,115 @@ public class TestCache {
             Thread.sleep(1000);
             System.out.println("cache4.getIfPresent(key) " + cache4.getIfPresent(key));
         }
+    }
+
+    @Test
+    void testListener() throws InterruptedException {
+        Map<String, CacheConfig> cacheConfigs = new HashMap<>();
+        CacheConfig c = new CacheConfig(ExpiryPolicys.ACCESSED, 800, TimeUnit.MILLISECONDS);
+        //        c.setMaxSize(2);
+        String cacheName = "cache1";
+        cacheConfigs.put(cacheName, c);
+        try (cn.featherfly.common.cache.CacheManager cm = new cn.featherfly.common.cache.CacheManager(cacheConfigs)) {
+            javax.cache.Cache<String, String> cache = cm.getCache(cacheName);
+            // YUFEI_TODO 优化cache entry event type
+            // 加入一个Configuration，默认加入一个CacheEntryListener实现, 可以动态添加各种事件监听add(EventType, Listener)
+            MutableCacheEntryListenerConfiguration<String, String> listener = new MutableCacheEntryListenerConfiguration<>(
+                    () -> {
+                        return new CacheEntryListener<>();
+                    }, () -> event -> {
+                        System.out.println("event = " + event.getEventType());
+                        System.out.println("  key = " + event.getKey());
+                        System.out.println("  value = " + event.getValue());
+                        System.out.println("  old value = " + event.getOldValue());
+                        return true;
+                    }, false, false);
+            cache.registerCacheEntryListener(listener);
+
+            cache.put("key1", "value1");
+            cache.put("key2", "value2");
+            cache.put("key3", "value3");
+            cache.put("key1", "value11");
+
+            cache.remove("key2");
+
+            Thread.sleep(800);
+
+            cache.put("key1", "value1");
+            cache.put("key2", "value2");
+            cache.put("key3", "value3");
+
+            Thread.sleep(1000);
+
+        }
+    }
+
+    @Test
+    void testListener2() throws InterruptedException {
+        Map<String, CacheConfig> cacheConfigs = new HashMap<>();
+        CacheConfig c = new CacheConfig(ExpiryPolicys.ACCESSED, 800, TimeUnit.MILLISECONDS);
+        //        c.setMaxSize(2);
+        String cacheName = "cache1";
+        cacheConfigs.put(cacheName, c);
+        try (cn.featherfly.common.cache.CacheManager cm = new cn.featherfly.common.cache.CacheManager(cacheConfigs)) {
+            javax.cache.Cache<String, String> cache = cm.getCache(cacheName);
+            MulitiCacheEntryListenerConfiguration<String, String> listener = new MulitiCacheEntryListenerConfiguration<>(
+                    true);
+            listener.addListener((CacheEntryCreatedListener<String, String>) events -> {
+                //                try {
+                //                    Thread.sleep(10);
+                //                } catch (InterruptedException e) {
+                //                }
+                System.out.println("CacheEntryCreatedListener");
+                Iterator<CacheEntryEvent<? extends String, ? extends String>> it = events.iterator();
+                while (it.hasNext()) {
+                    CacheEntryEvent<? extends String, ? extends String> event = it.next();
+                    System.out.println("  event = " + event.getEventType());
+                    System.out.println("    key = " + event.getKey());
+                    System.out.println("    value = " + event.getValue());
+                    System.out.println("    old value = " + event.getOldValue());
+                }
+                System.out.println();
+                //                System.out.println(.getEventType());
+            }).addFilter((CacheEntryEventFilter<String, String>) event -> {
+                System.out.println("CacheEntryEventFilter");
+                System.out.println("  event = " + event.getEventType());
+                System.out.println("    key = " + event.getKey());
+                System.out.println("    value = " + event.getValue());
+                System.out.println("    old value = " + event.getOldValue());
+                System.out.println();
+                return true;
+            });
+            cache.registerCacheEntryListener(listener);
+
+            cache.put("key1", "value1");
+            cache.put("key2", "value2");
+            cache.put("key3", "value3");
+            cache.put("key1", "value11");
+
+            cache.remove("key2");
+
+            Thread.sleep(800);
+
+            cache.put("key1", "value1");
+            cache.put("key2", "value2");
+            cache.put("key3", "value3");
+
+            Thread.sleep(1000);
+
+        }
+    }
+
+    @Test(expectedExceptions = CacheException.class)
+    void testListenerException() {
+        MulitiCacheEntryListenerConfiguration<String, String> listener = new MulitiCacheEntryListenerConfiguration<>();
+        listener.setCacheEntryEventFilterFactory(() -> event -> false);
+    }
+
+    @Test(expectedExceptions = CacheException.class)
+    void testListenerException2() {
+        MulitiCacheEntryListenerConfiguration<String, String> listener = new MulitiCacheEntryListenerConfiguration<>();
+        listener.setCacheEntryListenerFactory(() -> null);
     }
 
     //    static void testNoExpire() throws InterruptedException {

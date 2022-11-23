@@ -1,0 +1,8 @@
+ext {
+}
+
+dependencies {
+    api project(":common-core")
+
+    testImplementation 'log4j:log4j:1.2.17'
+}

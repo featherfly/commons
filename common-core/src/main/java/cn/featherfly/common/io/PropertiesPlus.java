@@ -16,9 +16,7 @@ import org.slf4j.LoggerFactory;
 import cn.featherfly.common.exception.UnsupportedException;
 
 /**
- * <p>
- * java.util.Properties Plus
- * </p>
+ * java.util.Properties Plus.
  *
  * @author zhongj
  */

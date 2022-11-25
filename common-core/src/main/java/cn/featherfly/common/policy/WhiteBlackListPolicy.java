@@ -7,12 +7,9 @@ import java.util.HashSet;
 import cn.featherfly.common.lang.CollectionUtils;
 
 /**
- * <p>
- * 白黑名单策略，黑名单优先级更高
- * </p>
- * 
- * @param <T>
- *            需要判断的类型
+ * 白黑名单策略，黑名单优先级更高.
+ *
+ * @param <T> 需要判断的类型
  * @author zhongj
  */
 public abstract class WhiteBlackListPolicy<T>
@@ -23,9 +20,9 @@ public abstract class WhiteBlackListPolicy<T>
     public WhiteBlackListPolicy() {
     }
 
-    private Collection<T> blackList = new HashSet<T>();
+    private Collection<T> blackList = new HashSet<>();
 
-    private Collection<T> whiteList = new HashSet<T>();
+    private Collection<T> whiteList = new HashSet<>();
 
     private boolean enableBlackList = true;
 
@@ -107,7 +104,7 @@ public abstract class WhiteBlackListPolicy<T>
      * <p>
      * 清除黑名单和白名单
      * </p>
-     * 
+     *
      * @return this
      */
     public WhiteBlackListPolicy<T> clear() {
@@ -118,7 +115,7 @@ public abstract class WhiteBlackListPolicy<T>
 
     /**
      * 返回blackList
-     * 
+     *
      * @return blackList
      */
     @Override
@@ -128,9 +125,8 @@ public abstract class WhiteBlackListPolicy<T>
 
     /**
      * 设置blackList
-     * 
-     * @param blackList
-     *            blackList
+     *
+     * @param blackList blackList
      */
     @Override
     public WhiteBlackListPolicy<T> setBlackList(Collection<T> blackList) {
@@ -156,7 +152,7 @@ public abstract class WhiteBlackListPolicy<T>
 
     /**
      * 返回enableBlackList
-     * 
+     *
      * @return enableBlackList
      */
     public boolean isEnableBlackList() {
@@ -165,9 +161,8 @@ public abstract class WhiteBlackListPolicy<T>
 
     /**
      * 设置enableBlackList
-     * 
-     * @param enableBlackList
-     *            enableBlackList
+     *
+     * @param enableBlackList enableBlackList
      * @return this
      */
     public WhiteBlackListPolicy<T> setEnableBlackList(boolean enableBlackList) {
@@ -177,7 +172,7 @@ public abstract class WhiteBlackListPolicy<T>
 
     /**
      * 返回enableWhiteList
-     * 
+     *
      * @return enableWhiteList
      */
     public boolean isEnableWhiteList() {
@@ -186,9 +181,8 @@ public abstract class WhiteBlackListPolicy<T>
 
     /**
      * 设置enableWhiteList
-     * 
-     * @param enableWhiteList
-     *            enableWhiteList
+     *
+     * @param enableWhiteList enableWhiteList
      * @return this
      */
     public WhiteBlackListPolicy<T> setEnableWhiteList(boolean enableWhiteList) {
@@ -214,11 +208,9 @@ public abstract class WhiteBlackListPolicy<T>
      * <p>
      * 判断传入目标是否一致
      * </p>
-     * 
-     * @param target1
-     *            target1
-     * @param target2
-     *            target2
+     *
+     * @param target1 target1
+     * @param target2 target2
      * @return 传入目标是否一致
      */
     protected abstract boolean isEquals(T target1, T target2);
@@ -227,9 +219,8 @@ public abstract class WhiteBlackListPolicy<T>
      * <p>
      * 判断传入目标是否在黑名单中
      * </p>
-     * 
-     * @param target
-     *            target
+     *
+     * @param target target
      * @return 是否在黑名单
      */
     protected boolean isInBlackList(T target) {
@@ -245,9 +236,8 @@ public abstract class WhiteBlackListPolicy<T>
      * <p>
      * 判断传入目标是否在白名单中
      * </p>
-     * 
-     * @param target
-     *            target
+     *
+     * @param target target
      * @return 是否在白名单
      */
     protected boolean isInWhiteList(T target) {

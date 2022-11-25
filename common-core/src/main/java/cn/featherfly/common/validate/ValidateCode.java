@@ -1,5 +1,10 @@
 package cn.featherfly.common.validate;
 
+/**
+ * The Class ValidateCode.
+ *
+ * @author zhongj
+ */
 public class ValidateCode {
 
     private String show;
@@ -7,11 +12,14 @@ public class ValidateCode {
     private String valid;
 
     /**
-    	 */
+     * Instantiates a new validate code.
+     */
     public ValidateCode() {
     }
 
     /**
+     * Instantiates a new validate code.
+     *
      * @param show  str to show
      * @param valid str to valid
      */
@@ -22,7 +30,7 @@ public class ValidateCode {
     }
 
     /**
-     * 返回show
+     * 返回show.
      *
      * @return show
      */
@@ -31,7 +39,7 @@ public class ValidateCode {
     }
 
     /**
-     * 设置show
+     * 设置show.
      *
      * @param show show
      */
@@ -40,7 +48,7 @@ public class ValidateCode {
     }
 
     /**
-     * 返回valid
+     * 返回valid.
      *
      * @return valid
      */
@@ -49,7 +57,7 @@ public class ValidateCode {
     }
 
     /**
-     * 设置valid
+     * 设置valid.
      *
      * @param valid valid
      */

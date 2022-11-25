@@ -5,10 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.WatchEvent;
 
 /**
- * <p>
- * FileListener
- * </p>
-
+ * FileListener.
  *
  * @author zhongj
  */

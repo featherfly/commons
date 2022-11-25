@@ -10,7 +10,10 @@ import java.util.Map;
  * @author zhongj
  * @param <K> 键的类型
  * @param <V> 值的类型
+ * @deprecated use {@link ChainMapImpl} instead. example:
+ *             <code>new ChainMapImp(HashMap)</code>
  */
+@Deprecated
 public class HashChainMap<K, V> extends HashMap<K, V> implements ChainMap<K, V> {
 
     private static final long serialVersionUID = 7403898439744127401L;

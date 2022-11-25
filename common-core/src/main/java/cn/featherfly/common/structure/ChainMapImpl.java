@@ -65,21 +65,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Size.
-     *
-     * @return the int
-     * @see java.util.Map#size()
-     */
-    @Override
-    public int size() {
-        return map.size();
-    }
-
-    /**
-     * Checks if is empty.
-     *
-     * @return true, if is empty
-     * @see java.util.Map#isEmpty()
+     * {@inheritDoc}
      */
     @Override
     public boolean isEmpty() {
@@ -87,11 +73,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Contains key.
-     *
-     * @param key the key
-     * @return true, if successful
-     * @see java.util.Map#containsKey(java.lang.Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean containsKey(Object key) {
@@ -99,23 +81,15 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Contains value.
-     *
-     * @param value the value
-     * @return true, if successful
-     * @see java.util.Map#containsValue(java.lang.Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean containsValue(Object value) {
-        return map.containsValue(value);
+        return map.containsKey(value);
     }
 
     /**
-     * Gets the.
-     *
-     * @param key the key
-     * @return the v
-     * @see java.util.Map#get(java.lang.Object)
+     * {@inheritDoc}
      */
     @Override
     public V get(Object key) {
@@ -123,12 +97,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Put.
-     *
-     * @param key   the key
-     * @param value the value
-     * @return the v
-     * @see java.util.Map#put(java.lang.Object, java.lang.Object)
+     * {@inheritDoc}
      */
     @Override
     public V put(K key, V value) {
@@ -136,11 +105,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Removes the.
-     *
-     * @param key the key
-     * @return the v
-     * @see java.util.Map#remove(java.lang.Object)
+     * {@inheritDoc}
      */
     @Override
     public V remove(Object key) {
@@ -148,10 +113,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Put all.
-     *
-     * @param m the m
-     * @see java.util.Map#putAll(java.util.Map)
+     * {@inheritDoc}
      */
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
@@ -159,9 +121,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Clear.
-     *
-     * @see java.util.Map#clear()
+     * {@inheritDoc}
      */
     @Override
     public void clear() {
@@ -169,10 +129,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Key set.
-     *
-     * @return the sets the
-     * @see java.util.Map#keySet()
+     * {@inheritDoc}
      */
     @Override
     public Set<K> keySet() {
@@ -180,10 +137,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Values.
-     *
-     * @return the collection
-     * @see java.util.Map#values()
+     * {@inheritDoc}
      */
     @Override
     public Collection<V> values() {
@@ -191,10 +145,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Entry set.
-     *
-     * @return the sets the
-     * @see java.util.Map#entrySet()
+     * {@inheritDoc}
      */
     @Override
     public Set<Entry<K, V>> entrySet() {
@@ -202,11 +153,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Equals.
-     *
-     * @param o the o
-     * @return true, if successful
-     * @see java.util.Map#equals(java.lang.Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean equals(Object o) {
@@ -214,10 +161,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Hash code.
-     *
-     * @return the int
-     * @see java.util.Map#hashCode()
+     * {@inheritDoc}
      */
     @Override
     public int hashCode() {
@@ -225,12 +169,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Gets the or default.
-     *
-     * @param key          the key
-     * @param defaultValue the default value
-     * @return the or default
-     * @see java.util.Map#getOrDefault(java.lang.Object, java.lang.Object)
+     * {@inheritDoc}
      */
     @Override
     public V getOrDefault(Object key, V defaultValue) {
@@ -238,10 +177,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * For each.
-     *
-     * @param action the action
-     * @see java.util.Map#forEach(java.util.function.BiConsumer)
+     * {@inheritDoc}
      */
     @Override
     public void forEach(BiConsumer<? super K, ? super V> action) {
@@ -249,10 +185,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Replace all.
-     *
-     * @param function the function
-     * @see java.util.Map#replaceAll(java.util.function.BiFunction)
+     * {@inheritDoc}
      */
     @Override
     public void replaceAll(BiFunction<? super K, ? super V, ? extends V> function) {
@@ -260,12 +193,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Put if absent.
-     *
-     * @param key   the key
-     * @param value the value
-     * @return the v
-     * @see java.util.Map#putIfAbsent(java.lang.Object, java.lang.Object)
+     * {@inheritDoc}
      */
     @Override
     public V putIfAbsent(K key, V value) {
@@ -273,12 +201,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Removes the.
-     *
-     * @param key   the key
-     * @param value the value
-     * @return true, if successful
-     * @see java.util.Map#remove(java.lang.Object, java.lang.Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean remove(Object key, Object value) {
@@ -286,14 +209,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Replace.
-     *
-     * @param key      the key
-     * @param oldValue the old value
-     * @param newValue the new value
-     * @return true, if successful
-     * @see java.util.Map#replace(java.lang.Object, java.lang.Object,
-     *      java.lang.Object)
+     * {@inheritDoc}
      */
     @Override
     public boolean replace(K key, V oldValue, V newValue) {
@@ -301,12 +217,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Replace.
-     *
-     * @param key   the key
-     * @param value the value
-     * @return the v
-     * @see java.util.Map#replace(java.lang.Object, java.lang.Object)
+     * {@inheritDoc}
      */
     @Override
     public V replace(K key, V value) {
@@ -314,13 +225,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Compute if absent.
-     *
-     * @param key             the key
-     * @param mappingFunction the mapping function
-     * @return the v
-     * @see java.util.Map#computeIfAbsent(java.lang.Object,
-     *      java.util.function.Function)
+     * {@inheritDoc}
      */
     @Override
     public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
@@ -328,13 +233,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Compute if present.
-     *
-     * @param key               the key
-     * @param remappingFunction the remapping function
-     * @return the v
-     * @see java.util.Map#computeIfPresent(java.lang.Object,
-     *      java.util.function.BiFunction)
+     * {@inheritDoc}
      */
     @Override
     public V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
@@ -342,13 +241,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Compute.
-     *
-     * @param key               the key
-     * @param remappingFunction the remapping function
-     * @return the v
-     * @see java.util.Map#compute(java.lang.Object,
-     *      java.util.function.BiFunction)
+     * {@inheritDoc}
      */
     @Override
     public V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
@@ -356,18 +249,19 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V> {
     }
 
     /**
-     * Merge.
-     *
-     * @param key               the key
-     * @param value             the value
-     * @param remappingFunction the remapping function
-     * @return the v
-     * @see java.util.Map#merge(java.lang.Object, java.lang.Object,
-     *      java.util.function.BiFunction)
+     * {@inheritDoc}
      */
     @Override
     public V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
         return map.merge(key, value, remappingFunction);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int size() {
+        return map.size();
     }
 
     /**

@@ -21,9 +21,7 @@ import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
 
 /**
- * <p>
- * PropertiesImpl
- * </p>
+ * PropertiesImpl.
  *
  * @author zhongj
  */

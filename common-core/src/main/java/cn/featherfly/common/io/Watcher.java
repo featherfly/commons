@@ -15,10 +15,7 @@ import org.slf4j.LoggerFactory;
 import cn.featherfly.common.lang.LogUtils;
 
 /**
- * <p>
- * Watcher
- * </p>
- * .
+ * Watcher.
  *
  * @author zhongj
  */

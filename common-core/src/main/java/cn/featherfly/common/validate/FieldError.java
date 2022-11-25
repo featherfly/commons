@@ -1,6 +1,8 @@
 package cn.featherfly.common.validate;
 
 /**
+ * The Class FieldError.
+ *
  * @author Zhong Ji
  */
 public class FieldError {
@@ -8,11 +10,12 @@ public class FieldError {
     private String name;
 
     private String message;
-    
+
     private String value;
 
     /**
-     * 返回name
+     * 返回name.
+     *
      * @return name
      */
     public String getName() {
@@ -20,7 +23,8 @@ public class FieldError {
     }
 
     /**
-     * 设置name
+     * 设置name.
+     *
      * @param name name
      */
     public void setName(String name) {
@@ -28,7 +32,8 @@ public class FieldError {
     }
 
     /**
-     * 返回message
+     * 返回message.
+     *
      * @return message
      */
     public String getMessage() {
@@ -36,7 +41,8 @@ public class FieldError {
     }
 
     /**
-     * 设置message
+     * 设置message.
+     *
      * @param message message
      */
     public void setMessage(String message) {
@@ -44,7 +50,8 @@ public class FieldError {
     }
 
     /**
-     * 返回value
+     * 返回value.
+     *
      * @return value
      */
     public String getValue() {
@@ -52,7 +59,8 @@ public class FieldError {
     }
 
     /**
-     * 设置value
+     * 设置value.
+     *
      * @param value value
      */
     public void setValue(String value) {

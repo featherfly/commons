@@ -19,10 +19,7 @@ import cn.featherfly.common.lang.Randoms;
 import cn.featherfly.common.operator.CalculationOperator;
 
 /**
- * <p>
- * VerifyCodeGenerator
- * </p>
- * .
+ * VerifyCodeGenerator .
  *
  * @author zhongj
  */

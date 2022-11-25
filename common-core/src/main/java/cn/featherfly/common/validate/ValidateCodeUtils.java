@@ -18,20 +18,16 @@ import java.util.function.BiFunction;
 import javax.imageio.ImageIO;
 
 /**
- * <p>
- * ValidateCodeUtils
- * </p>
+ * ValidateCodeUtils.
  *
  * @author zhongj
- * @since 1.6
  * @version 1.0
+ * @since 1.6
  */
 public final class ValidateCodeUtils {
 
     // 使用到Algerian字体，系统里没有的话需要安装字体，字体只显示大写，去掉了1,0,i,o几个容易混淆的字符
-    /**
-     * VERIFY_CODES
-     */
+    /** VERIFY_CODES. */
     public static final String VERIFY_CODES = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
 
     private static Random random = new Random();
@@ -150,10 +146,10 @@ public final class ValidateCodeUtils {
     /**
      * 输出指定验证码图片流.
      *
+     * @param code         verifyCode
      * @param w            width
      * @param h            height
      * @param os           OutputStream
-     * @param code         verifyCode
      * @param imageFormat  the image format
      * @param fontFunction the font function
      * @throws IOException IOException

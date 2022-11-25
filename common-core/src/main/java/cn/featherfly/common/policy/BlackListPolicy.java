@@ -4,14 +4,10 @@ package cn.featherfly.common.policy;
 import java.util.Collection;
 
 /**
- * <p>
- * 黑名单策略
- * </p>
+ * 黑名单策略.
  *
- * @param <T>
- *            需要判断的类型
- * @param <P>
- *            黑名单类型
+ * @param <T> 需要判断的类型
+ * @param <P> 黑名单类型
  * @author zhongj
  */
 public interface BlackListPolicy<T, P extends BlackListPolicy<T, P>> extends AllowPolicy<T> {
@@ -19,9 +15,8 @@ public interface BlackListPolicy<T, P extends BlackListPolicy<T, P>> extends All
      * <p>
      * 添加项到黑名单
      * </p>
-     * 
-     * @param t
-     *            项
+     *
+     * @param t 项
      * @return this
      */
     P addBlack(T t);
@@ -30,9 +25,8 @@ public interface BlackListPolicy<T, P extends BlackListPolicy<T, P>> extends All
      * <p>
      * 添加多个项到黑名单
      * </p>
-     * 
-     * @param t
-     *            项数组
+     *
+     * @param t 项数组
      * @return this
      */
     P addBlack(@SuppressWarnings("unchecked") T... t);
@@ -41,9 +35,8 @@ public interface BlackListPolicy<T, P extends BlackListPolicy<T, P>> extends All
      * <p>
      * 从黑名单移除项
      * </p>
-     * 
-     * @param t
-     *            项
+     *
+     * @param t 项
      * @return this
      */
     P removeBlack(T t);
@@ -52,7 +45,7 @@ public interface BlackListPolicy<T, P extends BlackListPolicy<T, P>> extends All
      * <p>
      * 清除黑名单
      * </p>
-     * 
+     *
      * @return this
      */
     P clearBlackList();
@@ -61,7 +54,7 @@ public interface BlackListPolicy<T, P extends BlackListPolicy<T, P>> extends All
      * <p>
      * 获取黑名单集合
      * </p>
-     * 
+     *
      * @return 黑名单集合
      */
     Collection<T> getBlackList();
@@ -70,9 +63,8 @@ public interface BlackListPolicy<T, P extends BlackListPolicy<T, P>> extends All
      * <p>
      * 设置策略
      * </p>
-     * 
-     * @param blackList
-     *            策略
+     *
+     * @param blackList 策略
      * @return this;
      */
     P setBlackList(Collection<T> blackList);

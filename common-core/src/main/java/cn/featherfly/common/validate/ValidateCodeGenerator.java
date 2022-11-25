@@ -2,9 +2,7 @@
 package cn.featherfly.common.validate;
 
 /**
- * <p>
- * ValidateCodeGenerator
- * </p>
+ * ValidateCodeGenerator.
  *
  * @author zhongj
  */

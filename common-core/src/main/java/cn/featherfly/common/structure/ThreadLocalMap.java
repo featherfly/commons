@@ -5,10 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>
- * ThreadLocalMap
- * </p>
- * .
+ * ThreadLocalMap.
  *
  * @author zhongj
  * @param <K> the key type

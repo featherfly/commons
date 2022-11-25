@@ -4,10 +4,7 @@ package cn.featherfly.common.validate;
 import java.util.Random;
 
 /**
- * <p>
- * VerifyCodeGenerator
- * </p>
- * .
+ * VerifyCodeGenerator .
  *
  * @author zhongj
  */

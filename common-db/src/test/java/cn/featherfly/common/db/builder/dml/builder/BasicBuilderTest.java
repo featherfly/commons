@@ -21,11 +21,11 @@ import cn.featherfly.common.db.builder.dml.basic.SqlSelectJoinOnBasicBuilder;
 import cn.featherfly.common.db.builder.dml.basic.SqlUpdateSetBasicBuilder;
 import cn.featherfly.common.db.dialect.Dialects;
 import cn.featherfly.common.db.dialect.Join;
+import cn.featherfly.common.db.mapping.JdbcClassMapping;
 import cn.featherfly.common.db.mapping.pojo.User;
 import cn.featherfly.common.db.mapping.pojo.UserRole;
 import cn.featherfly.common.operator.AggregateFunction;
 import cn.featherfly.common.repository.IgnorePolicy;
-import cn.featherfly.common.repository.mapping.ClassMapping;
 import cn.featherfly.common.structure.ChainMapImpl;
 
 /**
@@ -42,8 +42,8 @@ public class BasicBuilderTest implements ClassMappingSupport {
     Integer age = 18;
 
     String sql = null;
-    ClassMapping<User> cm = getUserClassMapping();
-    ClassMapping<UserRole> urm = getUserRoleClassMapping();
+    JdbcClassMapping<User> cm = getUserClassMapping();
+    JdbcClassMapping<UserRole> urm = getUserRoleClassMapping();
     String userAlias = "u";
     String userRoleAlias = "ur";
     String userRoleAlias2 = "ur2";
@@ -63,7 +63,7 @@ public class BasicBuilderTest implements ClassMappingSupport {
 
     @Test
     void testSqlSelectColumnsClassMappingBuilder() {
-        ClassMapping<User> cm = getUserClassMapping();
+        JdbcClassMapping<User> cm = getUserClassMapping();
         String sql = null;
 
         SqlSelectColumnsClassMappingBuilder builder = new SqlSelectColumnsClassMappingBuilder(Dialects.MYSQL, cm);

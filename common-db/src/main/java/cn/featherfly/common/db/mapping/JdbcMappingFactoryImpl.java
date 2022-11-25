@@ -4,7 +4,6 @@ import java.util.List;
 
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.repository.mapping.ClassMapping;
 import cn.featherfly.common.repository.mapping.ClassNameConversion;
 import cn.featherfly.common.repository.mapping.PropertyNameConversion;
 
@@ -138,7 +137,7 @@ public class JdbcMappingFactoryImpl implements JdbcMappingFactory {
      * {@inheritDoc}
      */
     @Override
-    public <T> ClassMapping<T> getClassMapping(Class<T> type) {
+    public <T> JdbcClassMapping<T> getClassMapping(Class<T> type) {
         return factory.getClassMapping(type);
     }
 

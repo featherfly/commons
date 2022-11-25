@@ -4,8 +4,8 @@ import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.builder.model.SelectColumnElement;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.mapping.ClassMappingUtils;
+import cn.featherfly.common.db.mapping.JdbcClassMapping;
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.repository.mapping.ClassMapping;
 
 /**
  * sql select basic builder. columns with given table.
@@ -16,7 +16,7 @@ public class SqlSelectColumnsClassMappingBuilder
         extends AbstractSqlSelectColumnsBuilder<SqlSelectColumnsClassMappingBuilder> {
 
     /** The class mapping. */
-    protected cn.featherfly.common.repository.mapping.ClassMapping<?> classMapping;
+    protected JdbcClassMapping<?> classMapping;
 
     /**
      * Instantiates a new sql select columns basic builder.
@@ -24,7 +24,7 @@ public class SqlSelectColumnsClassMappingBuilder
      * @param dialect      dialect
      * @param classMapping classMapping
      */
-    public SqlSelectColumnsClassMappingBuilder(Dialect dialect, ClassMapping<?> classMapping) {
+    public SqlSelectColumnsClassMappingBuilder(Dialect dialect, JdbcClassMapping<?> classMapping) {
         this(dialect, classMapping, null);
     }
 
@@ -35,7 +35,7 @@ public class SqlSelectColumnsClassMappingBuilder
      * @param classMapping classMapping
      * @param tableAlias   table name alias
      */
-    public SqlSelectColumnsClassMappingBuilder(Dialect dialect, ClassMapping<?> classMapping, String tableAlias) {
+    public SqlSelectColumnsClassMappingBuilder(Dialect dialect, JdbcClassMapping<?> classMapping, String tableAlias) {
         super(dialect, tableAlias);
         AssertIllegalArgument.isNotNull(classMapping, "classMapping");
         this.classMapping = classMapping;

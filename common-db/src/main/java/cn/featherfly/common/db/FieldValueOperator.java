@@ -22,8 +22,8 @@ public class FieldValueOperator<T> implements FieldOperator<T> {
     /**
      * Instantiates a new field value.
      *
-     * @param operator the operator
-     * @param value    the value
+     * @param operator  the operator
+     * @param valueType the value type
      */
     public FieldValueOperator(JavaTypeSqlTypeOperator<T> operator, ValueType<T> valueType) {
         super();

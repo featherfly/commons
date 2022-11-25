@@ -10,10 +10,10 @@
  */
 package cn.featherfly.common.db;
 
+import cn.featherfly.common.db.mapping.JdbcClassMapping;
+import cn.featherfly.common.db.mapping.JdbcPropertyMapping;
 import cn.featherfly.common.db.mapping.pojo.User;
 import cn.featherfly.common.db.mapping.pojo.UserRole;
-import cn.featherfly.common.repository.mapping.ClassMapping;
-import cn.featherfly.common.repository.mapping.PropertyMapping;
 
 /**
  * ClassMappingSupport.
@@ -22,27 +22,27 @@ import cn.featherfly.common.repository.mapping.PropertyMapping;
  */
 public interface ClassMappingSupport {
 
-    default ClassMapping<User> getUserClassMapping() {
-        ClassMapping<User> mapping = new ClassMapping<>(User.class, "user");
-        PropertyMapping pm = new PropertyMapping();
+    default JdbcClassMapping<User> getUserClassMapping() {
+        JdbcClassMapping<User> mapping = new JdbcClassMapping<>(User.class, "user");
+        JdbcPropertyMapping pm = new JdbcPropertyMapping();
         pm.setPrimaryKey(true);
         pm.setRepositoryFieldName("id");
         pm.setPropertyName("id");
         pm.setPropertyType(Long.class);
 
-        PropertyMapping pm2 = new PropertyMapping();
+        JdbcPropertyMapping pm2 = new JdbcPropertyMapping();
         pm2.setPrimaryKey(false);
         pm2.setRepositoryFieldName("name");
         pm2.setPropertyName("name");
         pm2.setPropertyType(String.class);
 
-        PropertyMapping pm3 = new PropertyMapping();
+        JdbcPropertyMapping pm3 = new JdbcPropertyMapping();
         pm3.setPrimaryKey(false);
         pm3.setRepositoryFieldName("descp");
         pm3.setPropertyName("descp");
         pm3.setPropertyType(String.class);
 
-        PropertyMapping pm4 = new PropertyMapping();
+        JdbcPropertyMapping pm4 = new JdbcPropertyMapping();
         pm4.setPrimaryKey(false);
         pm4.setRepositoryFieldName("password");
         pm4.setPropertyName("pwd");
@@ -56,27 +56,27 @@ public interface ClassMappingSupport {
         return mapping;
     }
 
-    default ClassMapping<UserRole> getUserRoleClassMapping() {
-        ClassMapping<UserRole> mapping = new ClassMapping<>(UserRole.class, "user_role");
-        PropertyMapping pm = new PropertyMapping();
+    default JdbcClassMapping<UserRole> getUserRoleClassMapping() {
+        JdbcClassMapping<UserRole> mapping = new JdbcClassMapping<>(UserRole.class, "user_role");
+        JdbcPropertyMapping pm = new JdbcPropertyMapping();
         pm.setPrimaryKey(true);
         pm.setRepositoryFieldName("user_id");
         pm.setPropertyName("userId");
         pm.setPropertyType(Long.class);
 
-        PropertyMapping pm2 = new PropertyMapping();
+        JdbcPropertyMapping pm2 = new JdbcPropertyMapping();
         pm2.setPrimaryKey(true);
         pm2.setRepositoryFieldName("role_id");
         pm2.setPropertyName("roleId");
         pm2.setPropertyType(Long.class);
 
-        PropertyMapping pm3 = new PropertyMapping();
+        JdbcPropertyMapping pm3 = new JdbcPropertyMapping();
         pm3.setPrimaryKey(false);
         pm3.setRepositoryFieldName("descp");
         pm3.setPropertyName("descp");
         pm3.setPropertyType(String.class);
 
-        PropertyMapping pm4 = new PropertyMapping();
+        JdbcPropertyMapping pm4 = new JdbcPropertyMapping();
         pm4.setPrimaryKey(false);
         pm4.setRepositoryFieldName("descp2");
         pm4.setPropertyName("descp2");

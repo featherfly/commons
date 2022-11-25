@@ -12,11 +12,11 @@ import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.Dialect.Keyworld;
 import cn.featherfly.common.db.dialect.Join;
+import cn.featherfly.common.db.mapping.JdbcClassMapping;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.operator.AggregateFunction;
 import cn.featherfly.common.repository.builder.AliasManager;
-import cn.featherfly.common.repository.mapping.ClassMapping;
 
 /**
  * sql select basic builder. columns with given table.
@@ -38,7 +38,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     protected Dialect dialect;
 
     /** The class mapping. */
-    protected ClassMapping<?> classMapping;
+    protected JdbcClassMapping<?> classMapping;
 
     private AliasManager aliasManager = new AliasManager();
 
@@ -109,7 +109,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      * @param classMapping classMapping
      * @param tableAlias   alias
      */
-    public SqlSelectBasicBuilder(Dialect dialect, ClassMapping<?> classMapping, String tableAlias) {
+    public SqlSelectBasicBuilder(Dialect dialect, JdbcClassMapping<?> classMapping, String tableAlias) {
         AssertIllegalArgument.isNotNull(dialect, "dialect");
         AssertIllegalArgument.isNotNull(classMapping, "classMapping");
 
@@ -388,7 +388,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      * @param joinTableColumnName the join table column name
      * @return the sql select join on basic builder
      */
-    public SqlSelectJoinOnBasicBuilder join(ClassMapping<?> joinClassMapping, String joinTableAlias,
+    public SqlSelectJoinOnBasicBuilder join(JdbcClassMapping<?> joinClassMapping, String joinTableAlias,
             String joinTableColumnName) {
         return join(Join.INNER_JOIN, joinClassMapping, joinTableAlias, joinTableColumnName);
     }
@@ -402,7 +402,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      * @param joinTableColumnName the join table column name
      * @return the sql select join on basic builder
      */
-    public SqlSelectJoinOnBasicBuilder join(String conditionColumn, ClassMapping<?> joinClassMapping,
+    public SqlSelectJoinOnBasicBuilder join(String conditionColumn, JdbcClassMapping<?> joinClassMapping,
             String joinTableAlias, String joinTableColumnName) {
         return join(Join.INNER_JOIN, conditionColumn, joinClassMapping, joinTableAlias, joinTableColumnName);
     }
@@ -418,7 +418,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(String conditionTableAlias, String conditionColumn,
-            ClassMapping<?> joinClassMapping, String joinTableAlias, String joinTableColumnName) {
+            JdbcClassMapping<?> joinClassMapping, String joinTableAlias, String joinTableColumnName) {
         return join(Join.INNER_JOIN, conditionTableAlias, conditionColumn, joinClassMapping, joinTableAlias,
                 joinTableColumnName);
     }
@@ -448,7 +448,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      * @param joinTableColumnName the join table column name
      * @return the sql select join on basic builder
      */
-    public SqlSelectJoinOnBasicBuilder join(Join join, ClassMapping<?> joinClassMapping, String joinTableAlias,
+    public SqlSelectJoinOnBasicBuilder join(Join join, JdbcClassMapping<?> joinClassMapping, String joinTableAlias,
             String joinTableColumnName) {
         return join(join, classMapping.getPrivaryKeyPropertyMappings().get(0).getRepositoryFieldName(),
                 joinTableColumnName, joinTableAlias, joinTableColumnName);
@@ -464,7 +464,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      * @param joinTableColumnName the join table column name
      * @return the sql select join on basic builder
      */
-    public SqlSelectJoinOnBasicBuilder join(Join join, String conditionColumn, ClassMapping<?> joinClassMapping,
+    public SqlSelectJoinOnBasicBuilder join(Join join, String conditionColumn, JdbcClassMapping<?> joinClassMapping,
             String joinTableAlias, String joinTableColumnName) {
         return join(join, getDefaultTableAlias(), conditionColumn, joinTableColumnName, joinTableAlias,
                 joinTableColumnName);
@@ -482,7 +482,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(Join join, String conditionTableAlias, String conditionColumn,
-            ClassMapping<?> joinClassMapping, String joinTableAlias, String joinTableColumnName) {
+            JdbcClassMapping<?> joinClassMapping, String joinTableAlias, String joinTableColumnName) {
 
         SqlJoinOnBasicBuilder joinOnBuilder = new SqlJoinOnBasicBuilder(dialect, join,
                 joinClassMapping.getRepositoryName(), joinTableAlias, joinTableColumnName, conditionTableAlias,

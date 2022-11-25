@@ -26,11 +26,9 @@ import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.SystemPropertyUtils;
-import cn.featherfly.common.repository.mapping.ClassMapping;
 import cn.featherfly.common.repository.mapping.ClassNameConversion;
 import cn.featherfly.common.repository.mapping.ClassNameJpaConversion;
 import cn.featherfly.common.repository.mapping.ClassNameUnderlineConversion;
-import cn.featherfly.common.repository.mapping.PropertyMapping;
 import cn.featherfly.common.repository.mapping.PropertyNameConversion;
 import cn.featherfly.common.repository.mapping.PropertyNameJpaConversion;
 import cn.featherfly.common.repository.mapping.PropertyNameUnderlineConversion;
@@ -49,7 +47,7 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /** The mapped types. */
-    protected final Map<Class<?>, ClassMapping<?>> mappedTypes = new HashMap<>();
+    protected final Map<Class<?>, JdbcClassMapping<?>> mappedTypes = new HashMap<>();
 
     /** The metadata. */
     protected DatabaseMetadata metadata;
@@ -235,27 +233,27 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      *
      * @param tableMapping tableMapping
      */
-    protected void checkTableMapping(Map<String, PropertyMapping> tableMapping) {
-        Map<String, PropertyMapping> columns = new HashMap<>();
-        for (PropertyMapping pm : tableMapping.values()) {
+    protected void checkTableMapping(Map<String, JdbcPropertyMapping> tableMapping) {
+        Map<String, JdbcPropertyMapping> columns = new HashMap<>();
+        for (JdbcPropertyMapping pm : tableMapping.values()) {
             if (Lang.isEmpty(pm.getPropertyMappings())) {
                 if (pm.isInsertable()) {
                     //                    column.name.mapped = 列{0}已经映射{1},不能再映射{2}
                     if (columns.containsKey(pm.getRepositoryFieldName())) {
                         //                        throw new JdbcMappingException("duplicate mapping column name " + pm.getRepositoryFieldName());
-                        PropertyMapping _pm = columns.get(pm.getRepositoryFieldName());
+                        JdbcPropertyMapping _pm = columns.get(pm.getRepositoryFieldName());
                         throw new JdbcMappingException("#column.name.mapped", new Object[] {
                                 pm.getRepositoryFieldName(), _pm.getPropertyName(), pm.getPropertyName() });
                     }
                     columns.put(pm.getRepositoryFieldName(), pm);
                 }
             } else {
-                for (PropertyMapping subPm : pm.getPropertyMappings()) {
+                for (JdbcPropertyMapping subPm : pm.getPropertyMappings()) {
                     if (pm.isInsertable()) {
                         if (columns.containsKey(subPm.getRepositoryFieldName())) {
                             //                            throw new JdbcMappingException(
                             //                                    "duplicate mapping column name " + pm.getRepositoryFieldName());
-                            PropertyMapping _pm = columns.get(subPm.getRepositoryFieldName());
+                            JdbcPropertyMapping _pm = columns.get(subPm.getRepositoryFieldName());
                             throw new JdbcMappingException("#column.name.mapped", new Object[] {
                                     subPm.getRepositoryFieldName(), _pm.getPropertyName(), subPm.getPropertyName() });
                         }

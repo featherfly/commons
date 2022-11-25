@@ -3,9 +3,9 @@ package cn.featherfly.common.db.builder.dml.basic;
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.builder.model.SelectColumnElement;
 import cn.featherfly.common.db.dialect.Dialect;
+import cn.featherfly.common.db.mapping.JdbcClassMapping;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.builder.AliasManager;
-import cn.featherfly.common.repository.mapping.ClassMapping;
 
 /**
  * sql select basic builder. columns with given table.
@@ -39,7 +39,7 @@ public class SqlSelectColumnsBasicBuilder extends AbstractSqlSelectColumnsBuilde
      * @param dialect      dialect
      * @param classMapping classMapping
      */
-    public SqlSelectColumnsBasicBuilder(Dialect dialect, ClassMapping<?> classMapping) {
+    public SqlSelectColumnsBasicBuilder(Dialect dialect, JdbcClassMapping<?> classMapping) {
         this(dialect, AliasManager.generateAlias(classMapping.getRepositoryName()));
     }
 

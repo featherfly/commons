@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.featherfly.common.bean.BeanUtils;
-import cn.featherfly.common.structure.HashChainMap;
+import cn.featherfly.common.structure.ChainMapImpl;
 
 /**
  * <p>
@@ -100,7 +100,7 @@ public class RecordModel {
      */
     @Override
     public String toString() {
-        return new HashChainMap<String, Object>().putChain("tableName", tableName).putChain("values", getValueModes())
+        return new ChainMapImpl<String, Object>().putChain("tableName", tableName).putChain("values", getValueModes())
                 .toString();
     }
 

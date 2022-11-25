@@ -7,7 +7,7 @@ import cn.featherfly.common.repository.mapping.PropertyMapping;
  *
  * @author zhongj
  */
-public class JdbcPropertyMapping extends PropertyMapping {
+public class JdbcPropertyMapping extends PropertyMapping<JdbcPropertyMapping> {
 
     private JavaTypeSqlTypeOperator<?> javaTypeSqlTypeOperator;
 

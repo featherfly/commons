@@ -8,8 +8,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.db.JdbcTestBase;
-import cn.featherfly.common.db.mapping.StrictJdbcMappingFactory;
+import cn.featherfly.common.db.mapping.JdbcClassMapping;
 import cn.featherfly.common.db.mapping.SqlTypeMappingManager;
+import cn.featherfly.common.db.mapping.StrictJdbcMappingFactory;
 import cn.featherfly.common.db.mapping.pojo.Article3;
 import cn.featherfly.common.db.mapping.pojo.Entity;
 import cn.featherfly.common.db.mapping.pojo.Entity2;
@@ -18,7 +19,6 @@ import cn.featherfly.common.db.mapping.pojo.UserRole2;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
 import cn.featherfly.common.db.migration.Migrator.ModifyType;
-import cn.featherfly.common.repository.mapping.ClassMapping;
 
 /**
  * <p>
@@ -47,7 +47,7 @@ public class MigratorTest extends JdbcTestBase {
 
     @Test
     public void testInitSql2() {
-        Set<ClassMapping<?>> mappings = new HashSet<>();
+        Set<JdbcClassMapping<?>> mappings = new HashSet<>();
         mappings.add(factory.getClassMapping(Entity3.class));
         System.err.println(migrator.initSql(mappings));
     }
@@ -79,7 +79,7 @@ public class MigratorTest extends JdbcTestBase {
 
     @Test
     public void testUpdateSql2() {
-        Set<ClassMapping<?>> mappings = classMappings2();
+        Set<JdbcClassMapping<?>> mappings = classMappings2();
         sqlTypeMappingManager.setEnumWithOrdinal(false);
         System.out.println("migrator.updateSql(classMappings(), ModifyType.MODIFY, true, ModifyType.MODIFY, true)");
         System.err.println(migrator.updateSql(mappings, ModifyType.MODIFY, true, ModifyType.MODIFY, true, true));
@@ -103,41 +103,41 @@ public class MigratorTest extends JdbcTestBase {
 
     @Test
     public void testUpdateSqlIndex() {
-        Set<ClassMapping<?>> mappings = classMappings2();
+        Set<JdbcClassMapping<?>> mappings = classMappings2();
         sqlTypeMappingManager.setEnumWithOrdinal(false);
         System.out.println("migrator.updateSql(classMappings(), ModifyType.MODIFY, true, ModifyType.MODIFY, true)");
         System.err.println(migrator.updateSql(mappings, ModifyType.MODIFY, true, ModifyType.MODIFY, true, true));
 
     }
 
-    private Set<ClassMapping<?>> classMappingsArticle2() {
-        Set<ClassMapping<?>> set = new HashSet<>();
+    private Set<JdbcClassMapping<?>> classMappingsArticle2() {
+        Set<JdbcClassMapping<?>> set = new HashSet<>();
         set.add(factory.getClassMapping(Article3.class));
         return set;
     }
 
-    private Set<ClassMapping<?>> classMappingsArticle3() {
-        Set<ClassMapping<?>> set = new HashSet<>();
+    private Set<JdbcClassMapping<?>> classMappingsArticle3() {
+        Set<JdbcClassMapping<?>> set = new HashSet<>();
         set.add(factory.getClassMapping(Article3.class));
         return set;
     }
 
-    private Set<ClassMapping<?>> classMappingsUserRole() {
-        Set<ClassMapping<?>> set = new HashSet<>();
+    private Set<JdbcClassMapping<?>> classMappingsUserRole() {
+        Set<JdbcClassMapping<?>> set = new HashSet<>();
         set.add(factory.getClassMapping(UserRole2.class));
         return set;
     }
 
-    private Set<ClassMapping<?>> classMappings() {
-        Set<ClassMapping<?>> set = new HashSet<>();
+    private Set<JdbcClassMapping<?>> classMappings() {
+        Set<JdbcClassMapping<?>> set = new HashSet<>();
         set.add(factory.getClassMapping(Entity.class));
         //        set.add(factory.getClassMapping(User.class));
         //        set.add(factory.getClassMapping(UserRole.class));
         return set;
     }
 
-    private Set<ClassMapping<?>> classMappings2() {
-        Set<ClassMapping<?>> set = new HashSet<>();
+    private Set<JdbcClassMapping<?>> classMappings2() {
+        Set<JdbcClassMapping<?>> set = new HashSet<>();
         set.add(factory.getClassMapping(Entity2.class));
         set.add(factory.getClassMapping(Entity3.class));
         return set;

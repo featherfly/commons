@@ -8,7 +8,6 @@ import cn.featherfly.common.db.dialect.Dialects;
 import cn.featherfly.common.db.mapping.pojo.order.Order;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
-import cn.featherfly.common.repository.mapping.ClassMapping;
 
 /**
  * ClassMappingMulityEmbeddedTest.
@@ -29,7 +28,7 @@ public class ClassMappingMulityEmbeddedTest extends JdbcTestBase {
 
     @Test(expectedExceptions = JdbcMappingException.class)
     public void testMulityEmbedded() {
-        ClassMapping<Order> mapping = factory.getClassMapping(Order.class);
+        JdbcClassMapping<Order> mapping = factory.getClassMapping(Order.class);
 
         //        String insertSql = "INSERT INTO `order` (`wx_package`,`wx_package_expire_time`,`app_id`,`alipay_trade_no`,`id`,`no`,`app_key`) VALUES (?,?,?,?,?,?,?)";
 

@@ -24,9 +24,7 @@ import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.SystemPropertyUtils;
 import cn.featherfly.common.lang.WordUtils;
 import cn.featherfly.common.operator.LogicOperator;
-import cn.featherfly.common.repository.mapping.ClassMapping;
 import cn.featherfly.common.repository.mapping.ClassNameConversion;
-import cn.featherfly.common.repository.mapping.PropertyMapping;
 import cn.featherfly.common.repository.mapping.PropertyNameConversion;
 
 /**
@@ -90,9 +88,9 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * {@inheritDoc}
      */
     @Override
-    public <T> ClassMapping<T> getClassMapping(Class<T> type) {
+    public <T> JdbcClassMapping<T> getClassMapping(Class<T> type) {
         @SuppressWarnings("unchecked")
-        ClassMapping<T> classMapping = (ClassMapping<T>) mappedTypes.get(type);
+        JdbcClassMapping<T> classMapping = (JdbcClassMapping<T>) mappedTypes.get(type);
         if (classMapping == null) {
             classMapping = createClassMapping(type);
             mappedTypes.put(type, classMapping);
@@ -107,8 +105,8 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param type the type
      * @return the class mapping< t>
      */
-    private <T> ClassMapping<T> createClassMapping(Class<T> type) {
-        Map<String, PropertyMapping> tableMapping = new HashMap<>();
+    private <T> JdbcClassMapping<T> createClassMapping(Class<T> type) {
+        Map<String, JdbcPropertyMapping> tableMapping = new HashMap<>();
 
         StringBuilder logInfo = new StringBuilder();
         // // 从对象中读取有Column的列，找到显示映射，使用scan扫描
@@ -150,7 +148,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
         checkTableMapping(tableMapping);
 
         // 形成映射对象
-        ClassMapping<T> classMapping = new ClassMapping<>(type, tableName, tm.getRemark());
+        JdbcClassMapping<T> classMapping = new JdbcClassMapping<>(type, tableName, tm.getRemark());
 
         classMapping.addPropertyMappings(tableMapping.values().stream()
                 .sorted((p1, p2) -> p1.getIndex() < p2.getIndex() ? -1 : 1).collect(Collectors.toList()));
@@ -169,7 +167,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param tableMetadata the table metadata
      * @return true, if successful
      */
-    private boolean mappingWithJpa(BeanProperty<?> beanProperty, Map<String, PropertyMapping> tableMapping,
+    private boolean mappingWithJpa(BeanProperty<?> beanProperty, Map<String, JdbcPropertyMapping> tableMapping,
             StringBuilder logInfo, Table tableMetadata) {
         if (isTransient(beanProperty, logInfo)) {
             return false;
@@ -266,7 +264,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param hasPk        the has pk
      * @param logInfo      the log info
      */
-    private void mappingFk(PropertyMapping mapping, BeanProperty<?> beanProperty, String columnName, boolean hasPk,
+    private void mappingFk(JdbcPropertyMapping mapping, BeanProperty<?> beanProperty, String columnName, boolean hasPk,
             StringBuilder logInfo) {
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
         Collection<BeanProperty<?>> bps = bd.findBeanPropertys(new BeanPropertyAnnotationMatcher(Id.class));
@@ -302,9 +300,9 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param cmd          the cmd
      * @param logInfo      the log info
      */
-    private <T> void mappingFromColumnMetadata(BeanDescriptor<T> bd, Map<String, PropertyMapping> tableMapping,
+    private <T> void mappingFromColumnMetadata(BeanDescriptor<T> bd, Map<String, JdbcPropertyMapping> tableMapping,
             cn.featherfly.common.db.Column cmd, StringBuilder logInfo) {
-        Map<String, PropertyMapping> nameSet = new HashMap<>();
+        Map<String, JdbcPropertyMapping> nameSet = new HashMap<>();
         tableMapping.forEach((column, propertyMapping) -> {
             if (Lang.isNotEmpty(column)) {
                 // 名称转换为小写
@@ -342,7 +340,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
                 }
             }
         } else {
-            PropertyMapping mapping = nameSet.get(columnNameLowerCase);
+            JdbcPropertyMapping mapping = nameSet.get(columnNameLowerCase);
             setMappingColumnValue(mapping, cmd, false);
             if (mapping.getPropertyMappings().size() == 1) {
                 setMappingColumnValue(mapping.getPropertyMappings().get(0), cmd, false);
@@ -350,7 +348,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
         }
     }
 
-    private void setMappingColumnValue(PropertyMapping mapping, cn.featherfly.common.db.Column cmd,
+    private void setMappingColumnValue(JdbcPropertyMapping mapping, cn.featherfly.common.db.Column cmd,
             boolean convertColumnName) {
         mapping.setRemark(cmd.getRemark());
         mapping.setNullable(cmd.isNullable());

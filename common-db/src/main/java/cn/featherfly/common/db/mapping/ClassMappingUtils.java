@@ -28,13 +28,9 @@ import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.repository.Index;
 import cn.featherfly.common.repository.mapping.ClassMapping;
 import cn.featherfly.common.repository.mapping.MappingFactory;
-import cn.featherfly.common.repository.mapping.PropertyMapping;
 
 /**
- * <p>
- * ClassMappingUtils
- * </p>
- * .
+ * JdbcClassMappingUtils.
  *
  * @author zhongj
  */
@@ -48,7 +44,7 @@ public class ClassMappingUtils {
      * @param sqlTypeMappingManager the sql type mapping manager
      * @return the table model
      */
-    public static Table createTable(ClassMapping<?> classMapping, Dialect dialect,
+    public static Table createTable(JdbcClassMapping<?> classMapping, Dialect dialect,
             SqlTypeMappingManager sqlTypeMappingManager) {
         // table
         TableModel table = new TableModel();
@@ -57,12 +53,12 @@ public class ClassMappingUtils {
         table.setSchema(classMapping.getSchema());
         int i = 1;
         // columns
-        for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
+        for (JdbcPropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
             if (Lang.isEmpty(propertyMapping.getPropertyMappings())) {
                 table.addColumn(createColumn(propertyMapping, sqlTypeMappingManager, i, dialect));
                 i++;
             } else {
-                for (PropertyMapping pm : propertyMapping.getPropertyMappings()) {
+                for (JdbcPropertyMapping pm : propertyMapping.getPropertyMappings()) {
                     table.addColumn(createColumn(pm, sqlTypeMappingManager, i, dialect));
                     i++;
                 }
@@ -72,9 +68,9 @@ public class ClassMappingUtils {
             table.addIndex(index);
         }
 
-        //        if (classMapping.getPrivaryKeyPropertyMappings().size() > 0) {
+        //        if (classMapping.getPrivaryKeyJdbcPropertyMappings().size() > 0) {
         //            List<String> pkColumns = new ArrayList<>();
-        //            for (PropertyMapping pm : classMapping.getPrivaryKeyPropertyMappings()) {
+        //            for (JdbcPropertyMapping pm : classMapping.getPrivaryKeyJdbcPropertyMappings()) {
         //                pkColumns.add(pm.getRepositoryFieldName());
         //            }
         //            Index pkIndex = new Index(dialect.getPrimaryKeyIndexName(),
@@ -93,7 +89,7 @@ public class ClassMappingUtils {
      * @param sqlTypeMappingManager the sql type mapping manager
      * @return the creates the table sql
      */
-    public static String getCreateTableSql(ClassMapping<?> classMapping, Dialect dialect,
+    public static String getCreateTableSql(JdbcClassMapping<?> classMapping, Dialect dialect,
             SqlTypeMappingManager sqlTypeMappingManager) {
         return dialect.buildCreateTableDDL(createTable(classMapping, dialect, sqlTypeMappingManager));
     }
@@ -106,10 +102,10 @@ public class ClassMappingUtils {
      * @param index                 the index
      * @return the column model
      */
-    private static ColumnModel createColumn(PropertyMapping propertyMapping,
+    private static ColumnModel createColumn(JdbcPropertyMapping propertyMapping,
             SqlTypeMappingManager sqlTypeMappingManager, int index, Dialect dialect) {
         ColumnModel column = new ColumnModel();
-        PropertyMapping pm = propertyMapping;
+        JdbcPropertyMapping pm = propertyMapping;
         //        if (propertyMapping.getParent() != null
         //                && Lang.isNotEmpty(propertyMapping.getParent().getRepositoryFieldName())) {
         //            pm = propertyMapping.getParent();
@@ -142,7 +138,7 @@ public class ClassMappingUtils {
      * @return the insert batch sql and param positions
      */
     public static Tuple2<String, Map<Integer, String>> getInsertBatchSqlAndParamPositions(int insertAmount,
-            ClassMapping<?> classMapping, Dialect dialect) {
+            JdbcClassMapping<?> classMapping, Dialect dialect) {
         Tuple2<String, Map<Integer, String>> tuple = getInsertSqlAndParamPositions(classMapping, dialect);
         String sql = dialect.buildInsertBatchSql(classMapping.getRepositoryName(),
                 tuple.get1().values().stream().map(pn -> {
@@ -159,21 +155,21 @@ public class ClassMappingUtils {
      * @param dialect      the dialect
      * @return the insert sql and param positions
      */
-    public static Tuple2<String, Map<Integer, String>> getInsertSqlAndParamPositions(ClassMapping<?> classMapping,
+    public static Tuple2<String, Map<Integer, String>> getInsertSqlAndParamPositions(JdbcClassMapping<?> classMapping,
             Dialect dialect) {
         Map<Integer, String> propertyPositions = new LinkedHashMap<>();
         StringBuilder insertSql = new StringBuilder();
         insertSql.append(dialect.getKeywords().insert()).append(Chars.SPACE).append(dialect.getKeywords().into())
                 .append(Chars.SPACE).append(dialect.wrapName(classMapping.getRepositoryName())).append(" (");
-        List<PropertyMapping> pms = new ArrayList<>();
-        for (PropertyMapping pm : classMapping.getPropertyMappings()) {
+        List<JdbcPropertyMapping> pms = new ArrayList<>();
+        for (JdbcPropertyMapping pm : classMapping.getPropertyMappings()) {
             if (Lang.isEmpty(pm.getPropertyMappings())) {
                 if (pm.isInsertable()) {
                     insertSql.append(dialect.wrapName(pm.getRepositoryFieldName())).append(",");
                     pms.add(pm);
                 }
             } else {
-                for (PropertyMapping subPm : pm.getPropertyMappings()) {
+                for (JdbcPropertyMapping subPm : pm.getPropertyMappings()) {
                     if (subPm.isInsertable()) {
                         insertSql.append(dialect.wrapName(subPm.getRepositoryFieldName())).append(",");
                         pms.add(subPm);
@@ -198,7 +194,7 @@ public class ClassMappingUtils {
      * @return the insert batch sql and param positions
      */
     public static Tuple2<String, Map<Integer, String>> getUpsertBatchSqlAndParamPositions(int upsertAmount,
-            ClassMapping<?> classMapping, Dialect dialect) {
+            JdbcClassMapping<?> classMapping, Dialect dialect) {
         Tuple4<String, Map<Integer, String>, String[], String[]> tuple = getUpsertSqlAndParamPositionsColumnsAndIdsAnd(
                 classMapping, dialect);
         String sql = dialect.buildUpsertBatchSql(classMapping.getRepositoryName(), tuple.get2(), tuple.get3(),
@@ -213,7 +209,7 @@ public class ClassMappingUtils {
      * @param dialect      the dialect
      * @return the insert sql and param positions
      */
-    public static Tuple2<String, Map<Integer, String>> getUpsertSqlAndParamPositions(ClassMapping<?> classMapping,
+    public static Tuple2<String, Map<Integer, String>> getUpsertSqlAndParamPositions(JdbcClassMapping<?> classMapping,
             Dialect dialect) {
         Tuple4<String, Map<Integer, String>, String[], String[]> t = getUpsertSqlAndParamPositionsColumnsAndIdsAnd(
                 classMapping, dialect);
@@ -221,12 +217,12 @@ public class ClassMappingUtils {
     }
 
     private static Tuple4<String, Map<Integer, String>, String[], String[]> getUpsertSqlAndParamPositionsColumnsAndIdsAnd(
-            ClassMapping<?> classMapping, Dialect dialect) {
-        List<PropertyMapping> pkms = new ArrayList<>();
-        List<PropertyMapping> pms = new ArrayList<>();
+            JdbcClassMapping<?> classMapping, Dialect dialect) {
+        List<JdbcPropertyMapping> pkms = new ArrayList<>();
+        List<JdbcPropertyMapping> pms = new ArrayList<>();
         List<String> columns = new ArrayList<>();
         List<String> ids = new ArrayList<>();
-        for (PropertyMapping pm : classMapping.getPropertyMappings()) {
+        for (JdbcPropertyMapping pm : classMapping.getPropertyMappings()) {
             if (Lang.isEmpty(pm.getPropertyMappings())) {
                 if (pm.isInsertable()) {
                     columns.add(pm.getRepositoryFieldName());
@@ -237,7 +233,7 @@ public class ClassMappingUtils {
                     pkms.add(pm);
                 }
             } else {
-                for (PropertyMapping subPm : pm.getPropertyMappings()) {
+                for (JdbcPropertyMapping subPm : pm.getPropertyMappings()) {
                     if (subPm.isInsertable()) {
                         columns.add(pm.getRepositoryFieldName());
                         pms.add(subPm);
@@ -255,11 +251,11 @@ public class ClassMappingUtils {
         return Tuples.of(upsert, propertyPositions(pms), cnArray, idArray);
     }
 
-    private static Map<Integer, String> propertyPositions(List<PropertyMapping> pms) {
+    private static Map<Integer, String> propertyPositions(List<JdbcPropertyMapping> pms) {
         Map<Integer, String> propertyPositions = new LinkedHashMap<>();
         int paramNum = 0;
         for (int i = 0; i < pms.size(); i++) {
-            PropertyMapping pm = pms.get(i);
+            JdbcPropertyMapping pm = pms.get(i);
             if (pm.isPrimaryKey() && pm.getDefaultValue() != null && !"null".equalsIgnoreCase(pm.getDefaultValue())) {
             } else {
                 paramNum++;
@@ -281,11 +277,12 @@ public class ClassMappingUtils {
      * @param propertyPositions the property positions
      * @return the insert values sql part
      */
-    private static String getInsertValuesSqlPart(List<PropertyMapping> pms, Map<Integer, String> propertyPositions) {
+    private static String getInsertValuesSqlPart(List<JdbcPropertyMapping> pms,
+            Map<Integer, String> propertyPositions) {
         StringBuilder insertSqlPart = new StringBuilder(" (");
         int paramNum = 0;
         for (int i = 0; i < pms.size(); i++) {
-            PropertyMapping pm = pms.get(i);
+            JdbcPropertyMapping pm = pms.get(i);
             if (pm.isPrimaryKey() && pm.getDefaultValue() != null && !"null".equalsIgnoreCase(pm.getDefaultValue())) {
                 insertSqlPart.append(pm.getDefaultValue()).append(Chars.COMMA);
             } else {
@@ -313,7 +310,7 @@ public class ClassMappingUtils {
      * @param dialect      the dialect
      * @return the update sql and param positions
      */
-    public static Tuple2<String, Map<Integer, String>> getUpdateSqlAndParamPositions(ClassMapping<?> classMapping,
+    public static Tuple2<String, Map<Integer, String>> getUpdateSqlAndParamPositions(JdbcClassMapping<?> classMapping,
             Dialect dialect) {
         Map<Integer, String> propertyPositions = new LinkedHashMap<>();
         StringBuilder updateSql = new StringBuilder();
@@ -322,8 +319,8 @@ public class ClassMappingUtils {
                 .append(dialect.getKeywords().set()).append(Chars.SPACE);
         int columnNum = 0;
 
-        List<PropertyMapping> pms = new ArrayList<>();
-        for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
+        List<JdbcPropertyMapping> pms = new ArrayList<>();
+        for (JdbcPropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
             if (Lang.isEmpty(propertyMapping.getPropertyMappings())) {
                 if (propertyMapping.isPrimaryKey()) {
                     pms.add(propertyMapping);
@@ -333,15 +330,15 @@ public class ClassMappingUtils {
                     propertyPositions.put(columnNum, propertyMapping.getPropertyName());
                 }
             } else {
-                for (PropertyMapping subPropertyMapping : propertyMapping.getPropertyMappings()) {
-                    if (subPropertyMapping.isPrimaryKey()) {
-                        pms.add(subPropertyMapping);
+                for (JdbcPropertyMapping subJdbcPropertyMapping : propertyMapping.getPropertyMappings()) {
+                    if (subJdbcPropertyMapping.isPrimaryKey()) {
+                        pms.add(subJdbcPropertyMapping);
                     } else if (propertyMapping.isUpdatable()) {
-                        updateSql.append(dialect.wrapName(subPropertyMapping.getRepositoryFieldName()))
+                        updateSql.append(dialect.wrapName(subJdbcPropertyMapping.getRepositoryFieldName()))
                                 .append(" = ?, ");
                         columnNum++;
-                        propertyPositions.put(columnNum,
-                                propertyMapping.getPropertyName() + Chars.DOT + subPropertyMapping.getPropertyName());
+                        propertyPositions.put(columnNum, propertyMapping.getPropertyName() + Chars.DOT
+                                + subJdbcPropertyMapping.getPropertyName());
                     }
                 }
             }
@@ -351,7 +348,7 @@ public class ClassMappingUtils {
         }
         int pkNum = 0;
         updateSql.append(Chars.SPACE).append(dialect.getKeywords().where()).append(Chars.SPACE);
-        for (PropertyMapping pm : pms) {
+        for (JdbcPropertyMapping pm : pms) {
             if (pkNum > 0) {
                 updateSql.append(dialect.getKeywords().and()).append(Chars.SPACE);
             }
@@ -374,7 +371,7 @@ public class ClassMappingUtils {
      * @param dialect      the dialect
      * @return the delete sql and param positions
      */
-    public static Tuple2<String, Map<Integer, String>> getDeleteSqlAndParamPositions(ClassMapping<?> classMapping,
+    public static Tuple2<String, Map<Integer, String>> getDeleteSqlAndParamPositions(JdbcClassMapping<?> classMapping,
             Dialect dialect) {
         //        Map<Integer, String> propertyPositions = new LinkedHashMap<>();
         //        StringBuilder deleteSql = new StringBuilder();
@@ -382,7 +379,7 @@ public class ClassMappingUtils {
         //                .append(Chars.SPACE).append(dialect.wrapName(classMapping.getRepositoryName())).append(Chars.SPACE)
         //                .append(dialect.getKeywords().where()).append(Chars.SPACE);
         //        int columnNum = 0;
-        //        for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
+        //        for (JdbcPropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
         //            if (Lang.isEmpty(propertyMapping.getPropertyMappings())) {
         //                if (propertyMapping.isPrimaryKey()) {
         //                    if (columnNum > 0) {
@@ -393,15 +390,15 @@ public class ClassMappingUtils {
         //                    propertyPositions.put(columnNum, propertyMapping.getPropertyName());
         //                }
         //            } else {
-        //                for (PropertyMapping subPropertyMapping : propertyMapping.getPropertyMappings()) {
-        //                    if (subPropertyMapping.isPrimaryKey()) {
+        //                for (JdbcPropertyMapping subJdbcPropertyMapping : propertyMapping.getPropertyMappings()) {
+        //                    if (subJdbcPropertyMapping.isPrimaryKey()) {
         //                        if (columnNum > 0) {
         //                            deleteSql.append(dialect.getKeywords().and()).append(Chars.SPACE);
         //                        }
-        //                        deleteSql.append(dialect.wrapName(subPropertyMapping.getRepositoryFieldName())).append(" = ? ");
+        //                        deleteSql.append(dialect.wrapName(subJdbcPropertyMapping.getRepositoryFieldName())).append(" = ? ");
         //                        columnNum++;
         //                        propertyPositions.put(columnNum,
-        //                                propertyMapping.getPropertyName() + "." + subPropertyMapping.getPropertyName());
+        //                                propertyMapping.getPropertyName() + "." + subJdbcPropertyMapping.getPropertyName());
         //                    }
         //                }
         //            }
@@ -419,7 +416,7 @@ public class ClassMappingUtils {
      * @return the delete sql and param positions
      */
     public static Tuple2<String, Map<Integer, String>> getDeleteSqlAndParamPositions(int batchSize,
-            ClassMapping<?> classMapping, Dialect dialect) {
+            JdbcClassMapping<?> classMapping, Dialect dialect) {
         if (batchSize < 1) {
             batchSize = 1;
         }
@@ -433,10 +430,10 @@ public class ClassMappingUtils {
     }
 
     private static String deleteCondition(int batchSize, Dialect dialect, Map<Integer, String> propertyPositions,
-            List<PropertyMapping> pkPropertyMappings) {
+            List<JdbcPropertyMapping> pkJdbcPropertyMappings) {
         StringBuilder deleteSqlCondition = new StringBuilder();
-        if (pkPropertyMappings.size() == 1) {
-            PropertyMapping propertyMapping = pkPropertyMappings.get(0);
+        if (pkJdbcPropertyMappings.size() == 1) {
+            JdbcPropertyMapping propertyMapping = pkJdbcPropertyMappings.get(0);
             String fieldName = propertyMapping.getRepositoryFieldName();
             String propertyName = propertyMapping.getParent() != null
                     ? propertyMapping.getParent().getPropertyName() + "." + propertyMapping.getPropertyName()
@@ -458,7 +455,7 @@ public class ClassMappingUtils {
             if (batchSize > 1) {
                 deleteSqlCondition.append(Chars.SPACE).append(Chars.PAREN_L);
             }
-            for (PropertyMapping propertyMapping : pkPropertyMappings) {
+            for (JdbcPropertyMapping propertyMapping : pkJdbcPropertyMappings) {
                 String fieldName = propertyMapping.getRepositoryFieldName();
                 String propertyName = propertyMapping.getParent() != null
                         ? propertyMapping.getParent().getPropertyName() + "." + propertyMapping.getPropertyName()
@@ -499,14 +496,14 @@ public class ClassMappingUtils {
      * @return the merge sql and param positions and set value number
      */
     public static <T> Tuple3<String, Map<Integer, String>, Integer> getMergeSqlAndParamPositions(T entity,
-            ClassMapping<?> classMapping, boolean onlyNull, Dialect dialect) {
+            JdbcClassMapping<?> classMapping, boolean onlyNull, Dialect dialect) {
         LinkedHashMap<Integer, String> propertyPositions = new LinkedHashMap<>();
         int columnNum = 0;
-        List<PropertyMapping> pkms = new ArrayList<>();
-        List<PropertyMapping> setms = new ArrayList<>();
+        List<JdbcPropertyMapping> pkms = new ArrayList<>();
+        List<JdbcPropertyMapping> setms = new ArrayList<>();
 
         StringBuilder setSql = new StringBuilder();
-        for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
+        for (JdbcPropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
             if (propertyMapping.getPropertyMappings().isEmpty()) {
                 // 如果为空忽略 ignore when null
                 if (checkNullOrEmpty(entity, propertyMapping, onlyNull)) {
@@ -519,15 +516,15 @@ public class ClassMappingUtils {
                     columnNum = set(entity, propertyMapping, setSql, propertyPositions, columnNum, dialect);
                 }
             } else {
-                for (PropertyMapping subPropertyMapping : propertyMapping.getPropertyMappings()) {
-                    if (checkNullOrEmpty(entity, subPropertyMapping, onlyNull)) {
+                for (JdbcPropertyMapping subJdbcPropertyMapping : propertyMapping.getPropertyMappings()) {
+                    if (checkNullOrEmpty(entity, subJdbcPropertyMapping, onlyNull)) {
                         continue;
                     }
-                    if (subPropertyMapping.isPrimaryKey()) {
-                        pkms.add(subPropertyMapping);
+                    if (subJdbcPropertyMapping.isPrimaryKey()) {
+                        pkms.add(subJdbcPropertyMapping);
                     } else if (propertyMapping.isUpdatable()) {
                         setms.add(propertyMapping);
-                        columnNum = set(entity, subPropertyMapping, setSql, propertyPositions, columnNum, dialect);
+                        columnNum = set(entity, subJdbcPropertyMapping, setSql, propertyPositions, columnNum, dialect);
                     }
                 }
             }
@@ -544,13 +541,13 @@ public class ClassMappingUtils {
         if (!pkms.isEmpty()) {
             int pkNum = 0;
             updateSql.append(Chars.SPACE).append(dialect.getKeywords().where()).append(Chars.SPACE);
-            for (PropertyMapping pm : pkms) {
+            for (JdbcPropertyMapping pm : pkms) {
                 if (pkNum > 0) {
                     updateSql.append(dialect.getKeywords().and()).append(Chars.SPACE);
                 }
                 updateSql.append(dialect.wrapName(pm.getRepositoryFieldName())).append(" = ? ");
                 pkNum++;
-                propertyPositions.put(columnNum + pkNum, ClassMappingUtils.getPropertyAliasName(pm));
+                propertyPositions.put(columnNum + pkNum, getPropertyAliasName(pm));
             }
         }
         return Tuples.of(updateSql.toString().trim(), propertyPositions, columnNum);
@@ -565,8 +562,8 @@ public class ClassMappingUtils {
      * @param onlyNull        the only null
      * @return true, if successful
      */
-    private static <T> boolean checkNullOrEmpty(T entity, PropertyMapping propertyMapping, boolean onlyNull) {
-        String pn = ClassMappingUtils.getPropertyAliasName(propertyMapping);
+    private static <T> boolean checkNullOrEmpty(T entity, JdbcPropertyMapping propertyMapping, boolean onlyNull) {
+        String pn = getPropertyAliasName(propertyMapping);
         if (onlyNull) {
             return BeanUtils.getProperty(entity, pn) == null;
         } else {
@@ -586,11 +583,11 @@ public class ClassMappingUtils {
      * @param dialect           the dialect
      * @return the int
      */
-    private static <T> int set(T entity, PropertyMapping propertyMapping, StringBuilder updateSql,
+    private static <T> int set(T entity, JdbcPropertyMapping propertyMapping, StringBuilder updateSql,
             LinkedHashMap<Integer, String> propertyPositions, int columnNum, Dialect dialect) {
         BuilderUtils.link(updateSql, dialect.wrapName(propertyMapping.getRepositoryFieldName()), " = ?,");
         columnNum++;
-        propertyPositions.put(columnNum, ClassMappingUtils.getPropertyAliasName(propertyMapping));
+        propertyPositions.put(columnNum, getPropertyAliasName(propertyMapping));
         return columnNum;
     }
 
@@ -600,10 +597,10 @@ public class ClassMappingUtils {
      * @param classMapping the class mapping
      * @param dialect      the dialect
      * @return the select by id sql
-     * @deprecated {@link #getSelectByPkSql(ClassMapping, Dialect)}
+     * @deprecated {@link #getSelectByPkSql(JdbcClassMapping, Dialect)}
      */
     @Deprecated
-    public static String getSelectByIdSql(ClassMapping<?> classMapping, Dialect dialect) {
+    public static String getSelectByIdSql(JdbcClassMapping<?> classMapping, Dialect dialect) {
         return getSelectByPkSql(classMapping, null, dialect);
     }
 
@@ -614,10 +611,10 @@ public class ClassMappingUtils {
      * @param alias        the alias
      * @param dialect      the dialect
      * @return the select by id sql
-     * @deprecated {@link #getSelectByPkSql(ClassMapping, String, Dialect)}
+     * @deprecated {@link #getSelectByPkSql(JdbcClassMapping, String, Dialect)}
      */
     @Deprecated
-    public static String getSelectByIdSql(ClassMapping<?> classMapping, String alias, Dialect dialect) {
+    public static String getSelectByIdSql(JdbcClassMapping<?> classMapping, String alias, Dialect dialect) {
         return getSelectByPkSql(classMapping, alias, dialect);
     }
 
@@ -628,7 +625,7 @@ public class ClassMappingUtils {
      * @param dialect      the dialect
      * @return the select by id sql
      */
-    public static String getSelectByPkSql(ClassMapping<?> classMapping, Dialect dialect) {
+    public static String getSelectByPkSql(JdbcClassMapping<?> classMapping, Dialect dialect) {
         return getSelectByPkSql(classMapping, null, dialect);
     }
 
@@ -640,19 +637,19 @@ public class ClassMappingUtils {
      * @param dialect      the dialect
      * @return the select by id sql
      */
-    public static String getSelectByPkSql(ClassMapping<?> classMapping, String alias, Dialect dialect) {
+    public static String getSelectByPkSql(JdbcClassMapping<?> classMapping, String alias, Dialect dialect) {
         StringBuilder getSql = new StringBuilder();
         LinkedHashMap<Integer, String> propertyPositions = new LinkedHashMap<>();
         getSql.append(getSelectSql(classMapping, alias, dialect));
-        List<PropertyMapping> pkPms = new ArrayList<>();
+        List<JdbcPropertyMapping> pkPms = new ArrayList<>();
         StringBuilder condition = new StringBuilder();
         int columnNum = 0;
-        for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
+        for (JdbcPropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
             if (propertyMapping.getPropertyMappings().isEmpty()) {
                 columnNum = setPk(condition, columnNum, propertyMapping, propertyPositions, pkPms, dialect);
             } else {
-                for (PropertyMapping subPropertyMapping : propertyMapping.getPropertyMappings()) {
-                    columnNum = setPk(condition, columnNum, subPropertyMapping, propertyPositions, pkPms, dialect);
+                for (JdbcPropertyMapping subJdbcPropertyMapping : propertyMapping.getPropertyMappings()) {
+                    columnNum = setPk(condition, columnNum, subJdbcPropertyMapping, propertyPositions, pkPms, dialect);
                 }
             }
         }
@@ -675,15 +672,15 @@ public class ClassMappingUtils {
      * @param dialect           the dialect
      * @return the int
      */
-    private static int setPk(StringBuilder condition, int columnNum, PropertyMapping pm,
-            Map<Integer, String> propertyPositions, List<PropertyMapping> pkPms, Dialect dialect) {
+    private static int setPk(StringBuilder condition, int columnNum, JdbcPropertyMapping pm,
+            Map<Integer, String> propertyPositions, List<JdbcPropertyMapping> pkPms, Dialect dialect) {
         if (pm.isPrimaryKey()) {
             if (columnNum > 0) {
                 condition.append(dialect.getKeywords().and()).append(Chars.SPACE);
             }
             condition.append(dialect.wrapName(pm.getRepositoryFieldName())).append(" = ? ");
             columnNum++;
-            propertyPositions.put(columnNum, ClassMappingUtils.getPropertyAliasName(pm));
+            propertyPositions.put(columnNum, getPropertyAliasName(pm));
             // 设置主键值
             pkPms.add(pm);
         }
@@ -697,7 +694,7 @@ public class ClassMappingUtils {
      * @param dialect      the dialect
      * @return the select sql
      */
-    public static String getSelectSql(ClassMapping<?> classMapping, Dialect dialect) {
+    public static String getSelectSql(JdbcClassMapping<?> classMapping, Dialect dialect) {
         return getSelectSql(classMapping, null, dialect);
     }
 
@@ -709,7 +706,7 @@ public class ClassMappingUtils {
      * @param dialect      the dialect
      * @return the select sql
      */
-    public static String getSelectSql(ClassMapping<?> classMapping, String alias, Dialect dialect) {
+    public static String getSelectSql(JdbcClassMapping<?> classMapping, String alias, Dialect dialect) {
         StringBuilder selectSql = new StringBuilder();
         BuilderUtils.link(selectSql, dialect.getKeywords().select(), getSelectColumnsSql(classMapping, alias, dialect),
                 dialect.getKeywords().from(), dialect.wrapName(classMapping.getRepositoryName()));
@@ -724,7 +721,7 @@ public class ClassMappingUtils {
      * @param dialect      the dialect
      * @return the select columns sql
      */
-    public static String getSelectColumnsSql(ClassMapping<?> classMapping, String tableAlias, Dialect dialect) {
+    public static String getSelectColumnsSql(JdbcClassMapping<?> classMapping, String tableAlias, Dialect dialect) {
         return getSelectColumnsSql(classMapping, tableAlias, "", dialect);
     }
 
@@ -737,8 +734,8 @@ public class ClassMappingUtils {
      * @param dialect            the dialect
      * @return the select columns sql
      */
-    public static String getSelectColumnsSql(ClassMapping<?> classMapping, String tableAlias, String prefixPropertyName,
-            Dialect dialect) {
+    public static String getSelectColumnsSql(JdbcClassMapping<?> classMapping, String tableAlias,
+            String prefixPropertyName, Dialect dialect) {
         return getSelectColumnsSql(classMapping, tableAlias, prefixPropertyName, dialect, null, new HashMap<>(0));
     }
 
@@ -752,8 +749,8 @@ public class ClassMappingUtils {
      * @param fetchProperties the fetch properties
      * @return the select columns sql
      */
-    public static String getSelectColumnsSql(ClassMapping<?> classMapping, String tableAlias, Dialect dialect,
-            MappingFactory mappingFactory, Map<String, String> fetchProperties) {
+    public static String getSelectColumnsSql(JdbcClassMapping<?> classMapping, String tableAlias, Dialect dialect,
+            MappingFactory<JdbcPropertyMapping> mappingFactory, Map<String, String> fetchProperties) {
         return getSelectColumnsSql(classMapping, tableAlias, null, dialect, mappingFactory, fetchProperties);
     }
 
@@ -768,12 +765,12 @@ public class ClassMappingUtils {
      * @param fetchProperties    the fetch properties
      * @return the select columns sql
      */
-    private static String getSelectColumnsSql(ClassMapping<?> classMapping, String tableAlias,
-            String prefixPropertyName, Dialect dialect, MappingFactory mappingFactory,
+    private static String getSelectColumnsSql(JdbcClassMapping<?> classMapping, String tableAlias,
+            String prefixPropertyName, Dialect dialect, MappingFactory<JdbcPropertyMapping> mappingFactory,
             Map<String, String> fetchProperties) {
         StringBuilder selectSql = new StringBuilder();
         int columnNum = 0;
-        for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
+        for (JdbcPropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
             if (Lang.isEmpty(propertyMapping.getPropertyMappings())) {
                 selectSql.append(
                         getSelectColumnsSql(classMapping, tableAlias, propertyMapping, prefixPropertyName, dialect));
@@ -791,15 +788,16 @@ public class ClassMappingUtils {
                     }
                 }
                 if (fetchAble) {
-                    ClassMapping<?> pcm = mappingFactory.getClassMapping(propertyMapping.getPropertyType());
-                    for (PropertyMapping pm : pcm.getPropertyMappings()) {
+                    ClassMapping<?, JdbcPropertyMapping> pcm = mappingFactory
+                            .getClassMapping(propertyMapping.getPropertyType());
+                    for (JdbcPropertyMapping pm : pcm.getPropertyMappings()) {
                         selectSql.append(getSelectColumnsSql(classMapping, fetchPropertyTableAlia, pm, propertyMapping,
                                 dialect));
                         columnNum++;
                     }
 
                 } else {
-                    for (PropertyMapping pm : propertyMapping.getPropertyMappings()) {
+                    for (JdbcPropertyMapping pm : propertyMapping.getPropertyMappings()) {
                         selectSql
                                 .append(getSelectColumnsSql(classMapping, tableAlias, pm, prefixPropertyName, dialect));
                         columnNum++;
@@ -824,8 +822,8 @@ public class ClassMappingUtils {
      * @param dialect            the dialect
      * @return the select columns sql
      */
-    private static String getSelectColumnsSql(ClassMapping<?> classMapping, String tableAlias,
-            PropertyMapping propertyMapping, String prefixPropertyName, Dialect dialect) {
+    private static String getSelectColumnsSql(JdbcClassMapping<?> classMapping, String tableAlias,
+            JdbcPropertyMapping propertyMapping, String prefixPropertyName, Dialect dialect) {
         StringBuilder selectSql = new StringBuilder();
         if (Strings.isNotBlank(tableAlias)) {
             selectSql.append(tableAlias).append(Chars.DOT);
@@ -839,22 +837,22 @@ public class ClassMappingUtils {
     /**
      * Gets the select columns sql.
      *
-     * @param classMapping          the class mapping
-     * @param tableAlias            the table alias
-     * @param propertyMapping       the property mapping
-     * @param nestedPropertyMapping the nested property mapping
-     * @param dialect               the dialect
+     * @param classMapping              the class mapping
+     * @param tableAlias                the table alias
+     * @param propertyMapping           the property mapping
+     * @param nestedJdbcPropertyMapping the nested property mapping
+     * @param dialect                   the dialect
      * @return the select columns sql
      */
-    private static String getSelectColumnsSql(ClassMapping<?> classMapping, String tableAlias,
-            PropertyMapping propertyMapping, PropertyMapping nestedPropertyMapping, Dialect dialect) {
+    private static String getSelectColumnsSql(JdbcClassMapping<?> classMapping, String tableAlias,
+            JdbcPropertyMapping propertyMapping, JdbcPropertyMapping nestedJdbcPropertyMapping, Dialect dialect) {
         StringBuilder selectSql = new StringBuilder();
         if (Strings.isNotBlank(tableAlias)) {
             selectSql.append(tableAlias).append(Chars.DOT);
         }
         selectSql.append(dialect.wrapName(propertyMapping.getRepositoryFieldName())).append(Chars.SPACE)
-                .append(getNestedPropertyAliasName(propertyMapping, nestedPropertyMapping, dialect)).append(Chars.COMMA)
-                .append(Chars.SPACE);
+                .append(getNestedPropertyAliasName(propertyMapping, nestedJdbcPropertyMapping, dialect))
+                .append(Chars.COMMA).append(Chars.SPACE);
         return selectSql.toString();
     }
 
@@ -864,22 +862,22 @@ public class ClassMappingUtils {
      * @param propertyMapping the property mapping
      * @return the property alias name
      */
-    public static String getPropertyAliasName(PropertyMapping propertyMapping) {
+    public static String getPropertyAliasName(JdbcPropertyMapping propertyMapping) {
         return getNestedPropertyAliasName(propertyMapping, "");
     }
 
     /**
      * Gets the nested property alias name.
      *
-     * @param propertyMapping       the property mapping
-     * @param nestedPropertyMapping the nested property mapping
+     * @param propertyMapping           the property mapping
+     * @param nestedJdbcPropertyMapping the nested property mapping
      * @return the nested property alias name
      */
-    private static String getNestedPropertyAliasName(PropertyMapping propertyMapping,
-            PropertyMapping nestedPropertyMapping) {
+    private static String getNestedPropertyAliasName(JdbcPropertyMapping propertyMapping,
+            JdbcPropertyMapping nestedJdbcPropertyMapping) {
         String prefixPropertyName = null;
-        if (nestedPropertyMapping != null) {
-            prefixPropertyName = nestedPropertyMapping.getPropertyName();
+        if (nestedJdbcPropertyMapping != null) {
+            prefixPropertyName = nestedJdbcPropertyMapping.getPropertyName();
         }
         return getNestedPropertyAliasName(propertyMapping, prefixPropertyName);
     }
@@ -891,8 +889,8 @@ public class ClassMappingUtils {
      * @param prefixPropertyName the prefix property name
      * @return the nested property alias name
      */
-    private static String getNestedPropertyAliasName(PropertyMapping pm, String prefixPropertyName) {
-        PropertyMapping propertyMapping = pm;
+    private static String getNestedPropertyAliasName(JdbcPropertyMapping pm, String prefixPropertyName) {
+        JdbcPropertyMapping propertyMapping = pm;
         if (!propertyMapping.getPropertyMappings().isEmpty()) {
             propertyMapping = propertyMapping.getPropertyMappings().get(0);
         }
@@ -914,7 +912,7 @@ public class ClassMappingUtils {
      * @param dialect         the dialect
      * @return the property alias name
      */
-    public static String getPropertyAliasName(PropertyMapping propertyMapping, Dialect dialect) {
+    public static String getPropertyAliasName(JdbcPropertyMapping propertyMapping, Dialect dialect) {
         return dialect.wrapName(getPropertyAliasName(propertyMapping));
     }
 
@@ -926,7 +924,7 @@ public class ClassMappingUtils {
      * @param dialect            the dialect
      * @return the nested property alias name
      */
-    private static String getNestedPropertyAliasName(PropertyMapping propertyMapping, String prefixPropertyName,
+    private static String getNestedPropertyAliasName(JdbcPropertyMapping propertyMapping, String prefixPropertyName,
             Dialect dialect) {
         return dialect.wrapName(getNestedPropertyAliasName(propertyMapping, prefixPropertyName));
     }
@@ -934,14 +932,14 @@ public class ClassMappingUtils {
     /**
      * Gets the nested property alias name.
      *
-     * @param propertyMapping       the property mapping
-     * @param nestedPropertyMapping the nested property mapping
-     * @param dialect               the dialect
+     * @param propertyMapping           the property mapping
+     * @param nestedJdbcPropertyMapping the nested property mapping
+     * @param dialect                   the dialect
      * @return the nested property alias name
      */
-    private static String getNestedPropertyAliasName(PropertyMapping propertyMapping,
-            PropertyMapping nestedPropertyMapping, Dialect dialect) {
-        return dialect.wrapName(getNestedPropertyAliasName(propertyMapping, nestedPropertyMapping));
+    private static String getNestedPropertyAliasName(JdbcPropertyMapping propertyMapping,
+            JdbcPropertyMapping nestedJdbcPropertyMapping, Dialect dialect) {
+        return dialect.wrapName(getNestedPropertyAliasName(propertyMapping, nestedJdbcPropertyMapping));
     }
 
     /**
@@ -950,13 +948,13 @@ public class ClassMappingUtils {
      * @param classMapping the class mapping
      * @return the select columns
      */
-    public static Map<String, String> getSelectColumns(ClassMapping<?> classMapping) {
+    public static Map<String, String> getSelectColumns(JdbcClassMapping<?> classMapping) {
         Map<String, String> columns = new HashMap<>();
-        for (PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
+        for (JdbcPropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
             if (Lang.isEmpty(propertyMapping.getPropertyMappings())) {
                 columns.put(propertyMapping.getRepositoryFieldName(), propertyMapping.getPropertyName());
             } else {
-                for (PropertyMapping pm : propertyMapping.getPropertyMappings()) {
+                for (JdbcPropertyMapping pm : propertyMapping.getPropertyMappings()) {
                     columns.put(pm.getRepositoryFieldName(),
                             propertyMapping.getPropertyName() + Chars.DOT + pm.getPropertyName());
                 }
@@ -972,8 +970,8 @@ public class ClassMappingUtils {
      * @param classMapping classMapping
      * @return Tuple&lt;columnName, propertyName&gt;
      */
-    public static Tuple2<String, String> getColumnAndPropertyName(String name, ClassMapping<?> classMapping) {
-        PropertyMapping propertyMapping = null;
+    public static Tuple2<String, String> getColumnAndPropertyName(String name, JdbcClassMapping<?> classMapping) {
+        JdbcPropertyMapping propertyMapping = null;
         if (classMapping != null && Lang.isNotEmpty(name)) {
             if (name.contains(Chars.DOT)) {
                 String[] names = name.split("\\.");
@@ -996,7 +994,7 @@ public class ClassMappingUtils {
      * @param classMapping classMapping
      * @return columnName
      */
-    public static String getColumnName(String name, ClassMapping<?> classMapping) {
+    public static String getColumnName(String name, JdbcClassMapping<?> classMapping) {
         if (classMapping != null && Lang.isNotEmpty(name)) {
             if (name.contains(Chars.DOT)) {
                 String[] names = name.split("\\.");
@@ -1015,8 +1013,8 @@ public class ClassMappingUtils {
      * @param classMapping the class mapping
      * @return the simple mapping
      */
-    private static PropertyMapping getSimpleMapping(String name, ClassMapping<?> classMapping) {
-        PropertyMapping pm = classMapping.getPropertyMapping(name);
+    private static JdbcPropertyMapping getSimpleMapping(String name, JdbcClassMapping<?> classMapping) {
+        JdbcPropertyMapping pm = classMapping.getPropertyMapping(name);
         return pm;
     }
 
@@ -1027,8 +1025,8 @@ public class ClassMappingUtils {
      * @param classMapping the class mapping
      * @return the simple column name
      */
-    private static String getSimpleColumnName(String name, ClassMapping<?> classMapping) {
-        PropertyMapping pm = getSimpleMapping(name, classMapping);
+    private static String getSimpleColumnName(String name, JdbcClassMapping<?> classMapping) {
+        JdbcPropertyMapping pm = getSimpleMapping(name, classMapping);
         if (pm != null) {
             return pm.getRepositoryFieldName();
         }
@@ -1042,8 +1040,8 @@ public class ClassMappingUtils {
      * @param classMapping the class mapping
      * @return the nested mapping
      */
-    private static PropertyMapping getNestedMapping(String[] names, ClassMapping<?> classMapping) {
-        PropertyMapping pm = null;
+    private static JdbcPropertyMapping getNestedMapping(String[] names, JdbcClassMapping<?> classMapping) {
+        JdbcPropertyMapping pm = null;
         for (String n : names) {
             if (pm == null) {
                 pm = classMapping.getPropertyMapping(n);
@@ -1061,8 +1059,8 @@ public class ClassMappingUtils {
      * @param classMapping the class mapping
      * @return the nested column name
      */
-    private static String getNestedColumnName(String[] names, ClassMapping<?> classMapping) {
-        PropertyMapping pm = getNestedMapping(names, classMapping);
+    private static String getNestedColumnName(String[] names, JdbcClassMapping<?> classMapping) {
+        JdbcPropertyMapping pm = getNestedMapping(names, classMapping);
         if (pm != null) {
             return pm.getRepositoryFieldName();
         } else {
@@ -1077,7 +1075,7 @@ public class ClassMappingUtils {
      * @param names        property name or column name array
      * @return columnNames
      */
-    public static String[] getColumnNames(ClassMapping<?> classMapping, String... names) {
+    public static String[] getColumnNames(JdbcClassMapping<?> classMapping, String... names) {
         if (classMapping != null) {
             List<String> newNames = new ArrayList<>();
             for (String name : names) {
@@ -1096,7 +1094,7 @@ public class ClassMappingUtils {
      * @param names        property name or column name collection
      * @return columnNames
      */
-    public static String[] getColumnNames(ClassMapping<?> classMapping, Collection<String> names) {
+    public static String[] getColumnNames(JdbcClassMapping<?> classMapping, Collection<String> names) {
         if (names == null) {
             names = new ArrayList<>();
         }

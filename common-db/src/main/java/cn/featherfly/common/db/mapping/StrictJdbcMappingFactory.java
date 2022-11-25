@@ -26,9 +26,7 @@ import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.SystemPropertyUtils;
 import cn.featherfly.common.repository.Index;
-import cn.featherfly.common.repository.mapping.ClassMapping;
 import cn.featherfly.common.repository.mapping.ClassNameConversion;
-import cn.featherfly.common.repository.mapping.PropertyMapping;
 import cn.featherfly.common.repository.mapping.PropertyNameConversion;
 
 /**
@@ -86,9 +84,9 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * {@inheritDoc}
      */
     @Override
-    public <T> ClassMapping<T> getClassMapping(Class<T> type) {
+    public <T> JdbcClassMapping<T> getClassMapping(Class<T> type) {
         @SuppressWarnings("unchecked")
-        ClassMapping<T> classMapping = (ClassMapping<T>) mappedTypes.get(type);
+        JdbcClassMapping<T> classMapping = (JdbcClassMapping<T>) mappedTypes.get(type);
         if (classMapping == null) {
             classMapping = createClassMapping(type);
             mappedTypes.put(type, classMapping);
@@ -109,8 +107,8 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         return indexs;
     }
 
-    private <T> ClassMapping<T> createClassMapping(Class<T> type) {
-        Map<String, PropertyMapping> tableMapping = new LinkedHashMap<>();
+    private <T> JdbcClassMapping<T> createClassMapping(Class<T> type) {
+        Map<String, JdbcPropertyMapping> tableMapping = new LinkedHashMap<>();
         StringBuilder logInfo = new StringBuilder();
         // 从对象中读取有Column的列，找到显示映射，使用scan扫描
         BeanDescriptor<T> bd = BeanDescriptor.getBeanDescriptor(type);
@@ -159,7 +157,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         checkTableMapping(tableMapping);
 
         // 形成映射对象
-        ClassMapping<T> classMapping = new ClassMapping<>(type, tableName, schema, remark);
+        JdbcClassMapping<T> classMapping = new JdbcClassMapping<>(type, tableName, schema, remark);
         classMapping.addIndexs(createIndexs(table));
 
         classMapping.addPropertyMappings(tableMapping.values().stream()
@@ -175,7 +173,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         return classMapping;
     }
 
-    private boolean mappingWithJpa(BeanProperty<?> beanProperty, Map<String, PropertyMapping> tableMapping,
+    private boolean mappingWithJpa(BeanProperty<?> beanProperty, Map<String, JdbcPropertyMapping> tableMapping,
             StringBuilder logInfo) {
         if (isTransient(beanProperty, logInfo)) {
             return false;
@@ -214,7 +212,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         return isPk;
     }
 
-    private void mappinEmbedded(PropertyMapping mapping, BeanProperty<?> beanProperty, StringBuilder logInfo) {
+    private void mappinEmbedded(JdbcPropertyMapping mapping, BeanProperty<?> beanProperty, StringBuilder logInfo) {
         mapping.setPropertyName(beanProperty.getName());
         mapping.setPropertyType(beanProperty.getType());
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
@@ -239,7 +237,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         }
     }
 
-    private void mappingFk(PropertyMapping mapping, BeanProperty<?> beanProperty, String columnName, boolean hasPk,
+    private void mappingFk(JdbcPropertyMapping mapping, BeanProperty<?> beanProperty, String columnName, boolean hasPk,
             StringBuilder logInfo) {
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
         Collection<BeanProperty<?>> bps = bd.findBeanPropertys(new BeanPropertyAnnotationMatcher(Id.class));
@@ -262,8 +260,8 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         }
     }
 
-    private <T> void checkMapping(BeanDescriptor<T> bd, Map<String, PropertyMapping> tableMapping, Table table) {
-        Map<String, PropertyMapping> fieldPropertyMap = getFieldProperyMap(tableMapping);
+    private <T> void checkMapping(BeanDescriptor<T> bd, Map<String, JdbcPropertyMapping> tableMapping, Table table) {
+        Map<String, JdbcPropertyMapping> fieldPropertyMap = getFieldProperyMap(tableMapping);
         fieldPropertyMap.forEach((fieldName, property) -> {
             if (!table.hasColumn(fieldName)) {
                 throw new JdbcMappingException("#field.not.exists",
@@ -272,8 +270,8 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         });
     }
 
-    private Map<String, PropertyMapping> getFieldProperyMap(Map<String, PropertyMapping> tableMapping) {
-        Map<String, PropertyMapping> nameSet = new HashMap<>();
+    private Map<String, JdbcPropertyMapping> getFieldProperyMap(Map<String, JdbcPropertyMapping> tableMapping) {
+        Map<String, JdbcPropertyMapping> nameSet = new HashMap<>();
         tableMapping.forEach((k, v) -> {
             if (Lang.isNotEmpty(k)) {
                 nameSet.put(k, v);

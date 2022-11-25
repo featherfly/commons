@@ -150,7 +150,7 @@ public class SqlTypeMappingManager {
     /**
      * Regist javaSqlTypeMapper for entityType.
      *
-     * @param entityType        the java entity type
+     * @param beanProperty      the bean property
      * @param javaSqlTypeMapper the java sql type mapper
      * @return SqlTypeMappingManager
      */
@@ -163,6 +163,12 @@ public class SqlTypeMappingManager {
         return this;
     }
 
+    /**
+     * Gets the java sql type mapper.
+     *
+     * @param property the property
+     * @return the java sql type mapper
+     */
     public JavaSqlTypeMapper<?> getJavaSqlTypeMapper(BeanProperty<?> property) {
         TypeStore store = getStore(property);
         if (store == null) {
@@ -300,6 +306,16 @@ public class SqlTypeMappingManager {
         JdbcUtils.setParameter(prep, columnIndex, value);
     }
 
+    /**
+     * Sets the.
+     *
+     * @param <V>         the value type
+     * @param <E>         the element type
+     * @param prep        the prep
+     * @param columnIndex the column index
+     * @param columnValue the column value
+     * @param entityType  the entity type
+     */
     public <V, E> void set(PreparedStatement prep, int columnIndex, V columnValue, Class<E> entityType) {
         if (entityType == null) {
             set(prep, columnIndex, columnValue);

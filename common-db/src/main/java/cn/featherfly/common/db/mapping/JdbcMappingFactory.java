@@ -6,14 +6,11 @@ import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.repository.mapping.MappingFactory;
 
 /**
- * <p>
- * JdbcMappingFactory
- * </p>
- * .
+ * JdbcMappingFactory .
  *
  * @author zhongj
  */
-public interface JdbcMappingFactory extends MappingFactory {
+public interface JdbcMappingFactory extends MappingFactory<JdbcPropertyMapping> {
 
     /**
      * The Enum MappingMode.
@@ -51,4 +48,10 @@ public interface JdbcMappingFactory extends MappingFactory {
      * @return the manager
      */
     SqlTypeMappingManager getSqlTypeMappingManager();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    <T> JdbcClassMapping<T> getClassMapping(Class<T> type);
 }

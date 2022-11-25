@@ -19,6 +19,7 @@ import cn.featherfly.common.db.SqlExecutor;
 import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.mapping.ClassMappingUtils;
+import cn.featherfly.common.db.mapping.JdbcClassMapping;
 import cn.featherfly.common.db.mapping.JdbcMappingException;
 import cn.featherfly.common.db.mapping.SqlTypeMappingManager;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
@@ -26,7 +27,6 @@ import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
 import cn.featherfly.common.lang.CollectionUtils;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.Index;
-import cn.featherfly.common.repository.mapping.ClassMapping;
 
 /**
  * <p>
@@ -116,11 +116,11 @@ public class Migrator {
      * @param classMappings the class mappings
      * @return the inits the sql
      */
-    public String initSql(Set<ClassMapping<?>> classMappings) {
+    public String initSql(Set<JdbcClassMapping<?>> classMappings) {
         StringBuilder sql = new StringBuilder();
         //        sql.append(dialect.getInitSqlHeader()).append(Chars.SEMI).append(Chars.NEW_LINE);
         appendSqlWithEnd(sql, dialect.getInitSqlHeader());
-        for (ClassMapping<?> classMapping : classMappings) {
+        for (JdbcClassMapping<?> classMapping : classMappings) {
             //            sql.append(createSql(classMapping, true)).append(Chars.SEMI).append(Chars.NEW_LINE);
             appendSqlWithEnd(sql, createSql(classMapping, true));
         }
@@ -142,7 +142,7 @@ public class Migrator {
      * @param classMapping the class mapping
      * @return the string
      */
-    public String createSql(ClassMapping<?> classMapping) {
+    public String createSql(JdbcClassMapping<?> classMapping) {
         return createSql(classMapping, false);
     }
 
@@ -153,7 +153,7 @@ public class Migrator {
      * @param dropIfExists the drop if exists
      * @return the string
      */
-    public String createSql(ClassMapping<?> classMapping, boolean dropIfExists) {
+    public String createSql(JdbcClassMapping<?> classMapping, boolean dropIfExists) {
         return createSql(ClassMappingUtils.createTable(classMapping, dialect, sqlTypeMappingManager), dropIfExists,
                 classMapping.getType());
     }
@@ -197,7 +197,7 @@ public class Migrator {
      *
      * @param classMappings the class mappings
      */
-    public void create(Set<ClassMapping<?>> classMappings) {
+    public void create(Set<JdbcClassMapping<?>> classMappings) {
         sqlExecutor.execute(initSql(classMappings));
     }
 
@@ -314,7 +314,7 @@ public class Migrator {
      * @param classMappings the class mappings
      * @return the inits the sql
      */
-    public String updateSql(Set<ClassMapping<?>> classMappings) {
+    public String updateSql(Set<JdbcClassMapping<?>> classMappings) {
         return updateSql(classMappings, ModifyType.MODIFY, true);
     }
 
@@ -326,7 +326,7 @@ public class Migrator {
      * @param dropNoMapping the drop no mapping for table, column, index
      * @return the string
      */
-    public String updateSql(Set<ClassMapping<?>> classMappings, ModifyType modifyType, boolean dropNoMapping) {
+    public String updateSql(Set<JdbcClassMapping<?>> classMappings, ModifyType modifyType, boolean dropNoMapping) {
         return updateSql(classMappings, modifyType, dropNoMapping, modifyType, dropNoMapping, dropNoMapping);
     }
 
@@ -345,8 +345,9 @@ public class Migrator {
      *                            object; if false, do nothing.
      * @return the inits the sql
      */
-    public String updateSql(Set<ClassMapping<?>> classMappings, ModifyType tableModifyType, boolean dropNoMappingTable,
-            ModifyType columnModifyType, boolean dropNoMappingColumn, boolean dropNoMappingIndex) {
+    public String updateSql(Set<JdbcClassMapping<?>> classMappings, ModifyType tableModifyType,
+            boolean dropNoMappingTable, ModifyType columnModifyType, boolean dropNoMappingColumn,
+            boolean dropNoMappingIndex) {
         return updateSql(classMappings, tableModifyType, dropNoMappingTable, columnModifyType, dropNoMappingColumn,
                 dropNoMappingIndex, DatabaseMetadataManager.getDefaultManager().reCreate(sqlExecutor.getDataSource()));
     }
@@ -366,13 +367,13 @@ public class Migrator {
      * @param databaseMetadata    database metadata
      * @return the inits the sql
      */
-    public String updateSql(Set<ClassMapping<?>> classMappings, ModifyType tableModifyType, boolean dropNoMappingTable,
-            ModifyType columnModifyType, boolean dropNoMappingColumn, boolean dropNoMappingIndex,
-            DatabaseMetadata databaseMetadata) {
+    public String updateSql(Set<JdbcClassMapping<?>> classMappings, ModifyType tableModifyType,
+            boolean dropNoMappingTable, ModifyType columnModifyType, boolean dropNoMappingColumn,
+            boolean dropNoMappingIndex, DatabaseMetadata databaseMetadata) {
         //        UpdateMapping updateMapping = new UpdateMapping();
         Diff diff = new Diff();
         Set<String> tableNameSet = new HashSet<>();
-        for (ClassMapping<?> classMapping : classMappings) {
+        for (JdbcClassMapping<?> classMapping : classMappings) {
             Table tableMetadata = databaseMetadata.getTable(classMapping.getRepositoryName());
             Table table = ClassMappingUtils.createTable(classMapping, dialect, sqlTypeMappingManager);
             tableNameSet.add(diff(tableMetadata, table, classMapping, diff));
@@ -392,7 +393,7 @@ public class Migrator {
      *
      * @param classMappings the class mappings
      */
-    public void update(Set<ClassMapping<?>> classMappings) {
+    public void update(Set<JdbcClassMapping<?>> classMappings) {
         sqlExecutor.execute(updateSql(classMappings));
     }
 
@@ -406,13 +407,13 @@ public class Migrator {
      * @param dropColumnNotMapping the drop column not mapping
      * @param dropIndexNotMapping  the drop index not mapping
      */
-    public void update(Set<ClassMapping<?>> classMappings, ModifyType tableModifyType, boolean dropTableNotMapping,
+    public void update(Set<JdbcClassMapping<?>> classMappings, ModifyType tableModifyType, boolean dropTableNotMapping,
             ModifyType columnModifyType, boolean dropColumnNotMapping, boolean dropIndexNotMapping) {
         sqlExecutor.execute(updateSql(classMappings, tableModifyType, dropTableNotMapping, columnModifyType,
                 dropColumnNotMapping, dropIndexNotMapping));
     }
 
-    private String diff(Table previous, Table current, ClassMapping<?> classMapping, Diff diff) {
+    private String diff(Table previous, Table current, JdbcClassMapping<?> classMapping, Diff diff) {
         if (previous == null) {
             // 数据库没有该表，添加新表
             diff.newTables.add(new TableMapping(current, classMapping));

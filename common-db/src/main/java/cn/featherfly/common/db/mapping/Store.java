@@ -32,6 +32,7 @@ public interface Store {
      * @param <E>         the element type
      * @param prep        the prep
      * @param columnIndex the column index
+     * @param columnValue the column value
      * @param valueType   the value type
      * @return true, if successful
      */
@@ -54,7 +55,7 @@ public interface Store {
      * @param <E>         the element type
      * @param rs          the rs
      * @param columnIndex the column index
-     * @param javaType    the java type
+     * @param valueType   the value type
      * @return the e
      */
     <E> Optional<E> get(ResultSet rs, int columnIndex, BeanProperty<E> valueType);

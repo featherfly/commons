@@ -10,9 +10,9 @@ import java.util.Set;
 
 import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.Table;
+import cn.featherfly.common.db.mapping.JdbcClassMapping;
+import cn.featherfly.common.db.mapping.JdbcPropertyMapping;
 import cn.featherfly.common.repository.Index;
-import cn.featherfly.common.repository.mapping.ClassMapping;
-import cn.featherfly.common.repository.mapping.PropertyMapping;
 
 /**
  * <p>
@@ -48,14 +48,14 @@ class TableMapping {
      * @param table        the table
      * @param classMapping the class mapping
      */
-    TableMapping(Table table, ClassMapping<?> classMapping) {
+    TableMapping(Table table, JdbcClassMapping<?> classMapping) {
         this.table = table;
         this.classMapping = classMapping;
     }
 
     Table table;
 
-    ClassMapping<?> classMapping;
+    JdbcClassMapping<?> classMapping;
 }
 
 class ModifyTables {
@@ -89,18 +89,18 @@ class ModifyTable {
      * @param table        the table
      * @param classMapping the class mapping
      */
-    public ModifyTable(Table table, ClassMapping<?> classMapping) {
+    public ModifyTable(Table table, JdbcClassMapping<?> classMapping) {
         this.table = table;
         this.classMapping = classMapping;
     }
 
     Table table;
 
-    ClassMapping<?> classMapping;
+    JdbcClassMapping<?> classMapping;
 
-    Map<PropertyMapping, Column> newColumns = new LinkedHashMap<>();
+    Map<JdbcPropertyMapping, Column> newColumns = new LinkedHashMap<>();
 
-    Map<PropertyMapping, Column> modifyColumns = new LinkedHashMap<>();
+    Map<JdbcPropertyMapping, Column> modifyColumns = new LinkedHashMap<>();
 
     Set<Column> noMappingColumns = new LinkedHashSet<>();
 

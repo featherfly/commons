@@ -10,13 +10,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Set;
 
+import cn.featherfly.common.db.mapping.JdbcClassMapping;
 import cn.featherfly.common.db.migration.Migrator.ModifyType;
 import cn.featherfly.common.io.FileUtils;
 import cn.featherfly.common.io.Properties;
 import cn.featherfly.common.io.PropertiesImpl;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.repository.mapping.ClassMapping;
 
 /**
  * <p>
@@ -130,7 +130,7 @@ public class VersionManager {
      * @param classMappings the class mappings
      * @return the file
      */
-    public File next(Set<ClassMapping<?>> classMappings) {
+    public File next(Set<JdbcClassMapping<?>> classMappings) {
         String version = null;
         File f = null;
         if (current == null) {
@@ -153,7 +153,7 @@ public class VersionManager {
      * @param next          the next
      * @return the file
      */
-    public File next(Set<ClassMapping<?>> classMappings, Version next) {
+    public File next(Set<JdbcClassMapping<?>> classMappings, Version next) {
         String version = null;
         File f = null;
         if (current == null) {
@@ -184,7 +184,7 @@ public class VersionManager {
      * @param classMappings the class mappings
      * @return the file
      */
-    public File createInitSqlFile(String version, Set<ClassMapping<?>> classMappings) {
+    public File createInitSqlFile(String version, Set<JdbcClassMapping<?>> classMappings) {
         File file = new File(dir.getPath() + "/" + name(version, "init"));
         try {
             org.apache.commons.io.FileUtils.write(file, migrator.initSql(classMappings), StandardCharsets.UTF_8);
@@ -201,7 +201,7 @@ public class VersionManager {
      * @param classMappings the class mappings
      * @return the file
      */
-    public File createUpdateSqlFile(String version, Set<ClassMapping<?>> classMappings) {
+    public File createUpdateSqlFile(String version, Set<JdbcClassMapping<?>> classMappings) {
         File file = new File(dir.getPath() + "/" + name(version, "update"));
         try {
             org.apache.commons.io.FileUtils.write(file, migrator.updateSql(classMappings, modifyType, dropNotExist),

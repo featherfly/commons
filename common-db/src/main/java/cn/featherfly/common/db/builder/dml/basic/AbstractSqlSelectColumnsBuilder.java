@@ -75,8 +75,8 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
      */
     @SuppressWarnings("unchecked")
     @Override
-    public B addColumn(AggregateFunction aggregateFunction, String column) {
-        columns.add(new SelectColumnElement(dialect, aggregateFunction, tableAlias, column, null));
+    public B addColumn(AggregateFunction aggregateFunction, boolean distinct, String column) {
+        columns.add(new SelectColumnElement(dialect, aggregateFunction, distinct, tableAlias, column, null));
         return (B) this;
     }
 
@@ -90,8 +90,8 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
      */
     @SuppressWarnings("unchecked")
     @Override
-    public B addColumn(AggregateFunction aggregateFunction, String column, String alias) {
-        columns.add(new SelectColumnElement(dialect, aggregateFunction, tableAlias, column, alias));
+    public B addColumn(AggregateFunction aggregateFunction, boolean distinct, String column, String alias) {
+        columns.add(new SelectColumnElement(dialect, aggregateFunction, distinct, tableAlias, column, alias));
         return (B) this;
     }
 
@@ -103,8 +103,8 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
      */
     @SuppressWarnings("unchecked")
     @Override
-    public B addColumn(String column) {
-        columns.add(new SelectColumnElement(dialect, tableAlias, column, null));
+    public B addColumn(boolean distinct, String column) {
+        columns.add(new SelectColumnElement(dialect, distinct, tableAlias, column, null));
         return (B) this;
     }
 
@@ -112,13 +112,13 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
      * add column.
      *
      * @param column column
-     * @param asName asName
+     * @param alias  column alias
      * @return this
      */
     @SuppressWarnings("unchecked")
     @Override
-    public B addColumn(String column, String asName) {
-        columns.add(new SelectColumnElement(dialect, tableAlias, column, asName));
+    public B addColumn(boolean distinct, String column, String alias) {
+        columns.add(new SelectColumnElement(dialect, distinct, tableAlias, column, alias));
         return (B) this;
     }
 

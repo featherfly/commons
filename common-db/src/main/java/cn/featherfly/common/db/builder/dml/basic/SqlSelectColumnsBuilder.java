@@ -19,6 +19,7 @@ import cn.featherfly.common.operator.AggregateFunction;
  * SqlSelectColumnsBuilder.
  *
  * @author zhongj
+ * @param <B> the generic type
  */
 public interface SqlSelectColumnsBuilder<B extends SqlSelectColumnsBuilder<B>> extends SqlBuilder {
 
@@ -29,7 +30,19 @@ public interface SqlSelectColumnsBuilder<B extends SqlSelectColumnsBuilder<B>> e
      * @param column            column
      * @return this
      */
-    B addColumn(AggregateFunction aggregateFunction, String column);
+    default B addColumn(AggregateFunction aggregateFunction, String column) {
+        return addColumn(aggregateFunction, false, column);
+    }
+
+    /**
+     * add column.
+     *
+     * @param aggregateFunction aggregateFunction
+     * @param distinct          the distinct
+     * @param column            column
+     * @return this
+     */
+    B addColumn(AggregateFunction aggregateFunction, boolean distinct, String column);
 
     /**
      * add column.
@@ -39,7 +52,20 @@ public interface SqlSelectColumnsBuilder<B extends SqlSelectColumnsBuilder<B>> e
      * @param alias             alias name
      * @return this
      */
-    B addColumn(AggregateFunction aggregateFunction, String column, String alias);
+    default B addColumn(AggregateFunction aggregateFunction, String column, String alias) {
+        return addColumn(aggregateFunction, false, column, alias);
+    }
+
+    /**
+     * add column.
+     *
+     * @param aggregateFunction aggregateFunction
+     * @param distinct          the distinct
+     * @param column            column
+     * @param alias             alias name
+     * @return this
+     */
+    B addColumn(AggregateFunction aggregateFunction, boolean distinct, String column, String alias);
 
     /**
      * add column.
@@ -47,7 +73,18 @@ public interface SqlSelectColumnsBuilder<B extends SqlSelectColumnsBuilder<B>> e
      * @param column column
      * @return this
      */
-    B addColumn(String column);
+    default B addColumn(String column) {
+        return addColumn(false, column);
+    }
+
+    /**
+     * add column.
+     *
+     * @param distinct the distinct
+     * @param column   column
+     * @return this
+     */
+    B addColumn(boolean distinct, String column);
 
     /**
      * add column.
@@ -56,7 +93,19 @@ public interface SqlSelectColumnsBuilder<B extends SqlSelectColumnsBuilder<B>> e
      * @param alias  alias name
      * @return this
      */
-    B addColumn(String column, String alias);
+    default B addColumn(String column, String alias) {
+        return addColumn(false, column, alias);
+    }
+
+    /**
+     * add column.
+     *
+     * @param distinct the distinct
+     * @param column   column
+     * @param alias    alias name
+     * @return this
+     */
+    B addColumn(boolean distinct, String column, String alias);
 
     /**
      * addColumns.

@@ -222,29 +222,11 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     }
 
     /**
-     * add column.
-     *
-     * @param aggregateFunction aggregateFunction
-     * @param column            column
-     * @return this
+     * {@inheritDoc}
      */
     @Override
-    public SqlSelectBasicBuilder addColumn(AggregateFunction aggregateFunction, String column) {
-        getDefaultBuilder().addColumn(aggregateFunction, column);
-        return this;
-    }
-
-    /**
-     * add column.
-     *
-     * @param aggregateFunction aggregateFunction
-     * @param column            column
-     * @param asName            alias name
-     * @return this
-     */
-    @Override
-    public SqlSelectBasicBuilder addColumn(AggregateFunction aggregateFunction, String column, String asName) {
-        getDefaultBuilder().addColumn(aggregateFunction, column, asName);
+    public SqlSelectBasicBuilder addColumn(AggregateFunction aggregateFunction, boolean distinct, String column) {
+        getDefaultBuilder().addColumn(aggregateFunction, distinct, column);
         return this;
     }
 
@@ -252,8 +234,9 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      * {@inheritDoc}
      */
     @Override
-    public SqlSelectBasicBuilder addColumn(String column) {
-        getDefaultBuilder().addColumn(column);
+    public SqlSelectBasicBuilder addColumn(AggregateFunction aggregateFunction, boolean distinct, String column,
+            String alias) {
+        getDefaultBuilder().addColumn(aggregateFunction, distinct, column, alias);
         return this;
     }
 
@@ -261,8 +244,17 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      * {@inheritDoc}
      */
     @Override
-    public SqlSelectBasicBuilder addColumn(String column, String asName) {
-        getDefaultBuilder().addColumn(column, asName);
+    public SqlSelectBasicBuilder addColumn(boolean distinct, String column) {
+        getDefaultBuilder().addColumn(distinct, column);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SqlSelectBasicBuilder addColumn(boolean distinct, String column, String alias) {
+        getDefaultBuilder().addColumn(distinct, column, alias);
         return this;
     }
 
@@ -592,5 +584,4 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     private String getDefaultTableAlias() {
         return aliasManager.getAlias(0);
     }
-
 }

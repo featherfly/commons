@@ -5,10 +5,7 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.operator.AggregateFunction;
 
 /**
- * <p>
- * Column
- * </p>
- * .
+ * select column element .
  *
  * @author zhongj
  */
@@ -118,6 +115,19 @@ public class SelectColumnElement extends ColumnElement {
     //            String tableAlias, String name) {
     //        this(dialect, aggregateFunction, distinct, tableAlias, name, null);
     //    }
+
+    /**
+     * Instantiates a new select column element.
+     *
+     * @param dialect    dialect
+     * @param distinct   the distinct
+     * @param tableAlias table alias
+     * @param name       column name
+     * @param alias      column alias
+     */
+    public SelectColumnElement(Dialect dialect, boolean distinct, String tableAlias, String name, String alias) {
+        this(dialect, null, distinct, tableAlias, name, alias);
+    }
 
     /**
      * Instantiates a new select column element.

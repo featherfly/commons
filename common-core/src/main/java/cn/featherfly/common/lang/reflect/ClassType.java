@@ -1,26 +1,34 @@
 
 package cn.featherfly.common.lang.reflect;
 
+import cn.featherfly.common.lang.AssertIllegalArgument;
+
 /**
- * GenericClass .
+ * The Class ClassType.
  *
  * @author zhongj
  * @param <T> 类型
  */
-//YUFEI_TODO 先使用这个兼容模式，后续删除GenericClass
-public class ClassType<T> extends GenericClass<T> implements Type<T> {
+public class ClassType<T> implements Type<T> {
 
-    //    private Class<T> c;
+    private Class<T> type;
 
     /**
-     * Instantiates a new generic class.
+     * Instantiates a new class type.
      *
-     * @param c classType
+     * @param type classType
      */
-    public ClassType(Class<T> c) {
-        super(c);
-        //        AssertIllegalArgument.isNotNull(c, "Class<T> c");
-        //        this.c = c;
+    public ClassType(Class<T> type) {
+        AssertIllegalArgument.isNotNull(type, "Class<T> type");
+        this.type = type;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Class<T> getType() {
+        return type;
     }
 
     /**
@@ -28,7 +36,7 @@ public class ClassType<T> extends GenericClass<T> implements Type<T> {
      */
     @Override
     public int hashCode() {
-        return getType().hashCode();
+        return type.hashCode();
     }
 
     /**
@@ -42,44 +50,22 @@ public class ClassType<T> extends GenericClass<T> implements Type<T> {
         if (obj.getClass() != ClassType.class) {
             return false;
         }
-        return getType().equals(((ClassType<?>) obj).getType());
+        return type.equals(((ClassType<?>) obj).type);
     }
 
-    //    /**
-    //     * {@inheritDoc}
-    //     */
-    //    @Override
-    //    public Class<T> getType() {
-    //        return c;
-    //    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTypeName() {
+        return type.getName();
+    }
 
-    //    /**
-    //     * {@inheritDoc}
-    //     */
-    //    @Override
-    //    public int hashCode() {
-    //        return c.hashCode();
-    //    }
-    //
-    //    /**
-    //     * {@inheritDoc}
-    //     */
-    //    @Override
-    //    public boolean equals(Object obj) {
-    //        if (obj == null) {
-    //            return false;
-    //        }
-    //        if (obj.getClass() != ClassType.class) {
-    //            return false;
-    //        }
-    //        return c.equals(((ClassType<?>) obj).c);
-    //    }
-
-    //    /**
-    //     * {@inheritDoc}
-    //     */
-    //    @Override
-    //    public String getTypeName() {
-    //        return c.getName();
-    //    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " [type =" + getTypeName() + "]";
+    }
 }

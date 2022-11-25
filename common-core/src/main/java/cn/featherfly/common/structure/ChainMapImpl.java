@@ -10,6 +10,7 @@
  */
 package cn.featherfly.common.structure;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +26,9 @@ import java.util.function.Function;
  * @param <K> the key type
  * @param <V> the value type
  */
-public class ChainMapImpl<K, V> implements ChainMap<K, V> {
+public class ChainMapImpl<K, V> implements ChainMap<K, V>, Serializable {
+
+    private static final long serialVersionUID = -202220931792105889L;
 
     private final Map<K, V> map;
 

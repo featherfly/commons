@@ -25,23 +25,10 @@ public class VariableValue<T> implements ValueType<T> {
     /**
      * Instantiates a new variable value.
      *
-     * @param value the value
-     */
-    @SuppressWarnings("unchecked")
-    public VariableValue(T value) {
-        super();
-        this.value = value;
-        this.type = (Class<T>) value.getClass();
-    }
-
-    /**
-     * Instantiates a new variable value.
-     *
      * @param type  the type
      * @param value the value
      */
     public VariableValue(Class<T> type, T value) {
-        super();
         this.type = type;
         this.value = value;
     }
@@ -60,6 +47,51 @@ public class VariableValue<T> implements ValueType<T> {
     @Override
     public T getValue() {
         return value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTypeName() {
+        return type.getName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        if (value != null) {
+            return value.hashCode();
+        } else {
+            return getClass().hashCode();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj.getClass() != VariableValue.class) {
+            return false;
+        }
+        if (value == null) {
+            return false;
+        }
+        return value.equals(((VariableValue<?>) obj).value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " [type =" + getTypeName() + "]";
     }
 
 }

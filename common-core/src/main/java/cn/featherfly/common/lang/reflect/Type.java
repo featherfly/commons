@@ -10,21 +10,16 @@
  */
 package cn.featherfly.common.lang.reflect;
 
-import cn.featherfly.common.lang.GenericType;
-
 /**
  * Type.
  *
  * @author zhongj
  */
-//public interface Type<T> extends java.lang.reflect.Type {
-// YUFEI_TODO 先使用这个兼容模式，后续删除GenericType后就直接继承Type
-public interface Type<T> extends GenericType<T> {
+public interface Type<T> extends java.lang.reflect.Type {
     /**
      * get type.
      *
      * @return type
      */
-    @Override
     Class<T> getType();
 }

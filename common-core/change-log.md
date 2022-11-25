@@ -10,6 +10,7 @@
 6. storage移动到common-storage模块
 7. 修复Lang.getInvoker返回不正确问题,加入Lang.getInvoker(int)
 8. Page删除标注为废弃的方法getPageNumber()、getPageSize()
+9. 删除ConcurrentHashChainMap,LinkedHashChainMap,TreeChianMap
 
 # 1.10.7 2022-07-15
 

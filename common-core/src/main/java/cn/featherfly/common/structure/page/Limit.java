@@ -4,9 +4,7 @@ package cn.featherfly.common.structure.page;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 
 /**
- * <p>
- * Limit
- * </p>
+ * Limit.
  *
  * @author zhongj
  */

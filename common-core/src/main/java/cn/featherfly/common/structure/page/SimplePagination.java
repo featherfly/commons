@@ -1,10 +1,7 @@
 package cn.featherfly.common.structure.page;
 
 /**
- * <p>
- * 简单分页模型实现
- * </p>
- * .
+ * 简单分页模型实现 .
  *
  * @author zhongj
  */
@@ -43,10 +40,7 @@ public class SimplePagination implements Pagination {
     private Integer number;
 
     /**
-     * <p>
-     * 设置总数
-     * </p>
-     * .
+     * 设置总数 .
      *
      * @param total 总数
      * @return the simple pagination
@@ -73,10 +67,7 @@ public class SimplePagination implements Pagination {
     }
 
     /**
-     * <p>
-     * 设置每页数量
-     * </p>
-     * .
+     * 设置每页数量 .
      *
      * @param size 每页数量
      * @return the simple pagination
@@ -87,10 +78,7 @@ public class SimplePagination implements Pagination {
     }
 
     /**
-     * <p>
-     * 设置当前页数（第几页）
-     * </p>
-     * .
+     * 设置当前页数（第几页） .
      *
      * @param number 当前页数（第几页）
      * @return the simple pagination
@@ -113,52 +101,6 @@ public class SimplePagination implements Pagination {
      */
     @Override
     public Integer getNumber() {
-        return number;
-    }
-
-    /**
-     * <p>
-     * 设置每页数量
-     * </p>
-     * .
-     *
-     * @param pageSize 每页数量
-     * @deprecated {@link #setSize(Integer)}
-     */
-    @Deprecated
-    public void setPageSize(Integer pageSize) {
-        size = pageSize;
-    }
-
-    /**
-     * <p>
-     * 设置页数
-     * </p>
-     * .
-     *
-     * @param pageNumber 页数
-     * @deprecated {@link #setNumber(Integer)}
-     */
-    @Deprecated
-    public void setPageNumber(Integer pageNumber) {
-        number = pageNumber;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Deprecated
-    public Integer getPageSize() {
-        return size;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Deprecated
-    public Integer getPageNumber() {
         return number;
     }
 }

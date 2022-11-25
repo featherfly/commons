@@ -2,10 +2,7 @@
 package cn.featherfly.common.structure.page;
 
 /**
- * <p>
- * SimplePage
- * </p>
- * .
+ * SimplePage .
  *
  * @author zhongj
  */
@@ -70,23 +67,5 @@ public class SimplePage implements Page {
     @Override
     public Integer getNumber() {
         return number;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Deprecated
-    public Integer getPageSize() {
-        return getSize();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Deprecated
-    public Integer getPageNumber() {
-        return getNumber();
     }
 }

@@ -12,27 +12,21 @@ import java.util.List;
  */
 public interface PaginationResults<E> extends Pagination {
     /**
-     * <p>
-     * 获取结果集
-     * </p>
+     * 获取结果集.
      *
      * @return 结果集
      */
     List<E> getPageResults();
 
     /**
-     * <p>
-     * 设置结果集
-     * </p>
+     * 设置结果集.
      *
      * @param pageReults 结果集
      */
     void setPageResults(List<E> pageReults);
 
     /**
-     * <p>
-     * 获取结果集数量
-     * </p>
+     * 获取结果集数量.
      *
      * @return 结果数量
      */

@@ -3,9 +3,7 @@ package cn.featherfly.common.structure.page;
 import java.util.List;
 
 /**
- * <p>
- * 带结果集的简单分页模型实现
- * </p>
+ * 带结果集的简单分页模型实现.
  *
  * @param <E> 存放的对象类型
  * @author zhongj
@@ -52,7 +50,7 @@ public class SimplePaginationResults<E> extends SimplePagination implements Pagi
         if (pageResults != null) {
             return pageResults.size();
         } else {
-            return null;
+            return 0;
         }
     }
 

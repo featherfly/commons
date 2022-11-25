@@ -1,27 +1,21 @@
 package cn.featherfly.common.structure.page;
 
 /**
- * <p>
- * 分页模型
- * </p>
+ * 分页模型.
  *
  * @author zhongj
  */
 public interface Pagination extends Page {
 
     /**
-     * <p>
-     * 获取总页数
-     * </p>
+     * 获取总页数.
      *
      * @return 总页数
      */
     Integer getTotalPage();
 
     /**
-     * <p>
-     * 获取总数
-     * </p>
+     * 获取总数.
      *
      * @return 总数
      */

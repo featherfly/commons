@@ -700,13 +700,25 @@ public final class Lang {
      * @return StackTraceElement
      */
     public static StackTraceElement getInvoker() {
-        final String methodName = "getInvoker";
-        int i = 2;
+        return getInvoker(2);
+    }
+
+    /**
+     * 获取调用getInvoker方法所在的方法被调用的信息（即调用方法、类等） .
+     *
+     * @param depth the depth
+     * @return StackTraceElement
+     */
+    public static StackTraceElement getInvoker(int depth) {
+        AssertIllegalArgument.isGt(depth, 0, "depth");
         StackTraceElement[] ss = Thread.currentThread().getStackTrace();
+        AssertIllegalArgument.isLt(depth, ss.length, "depth");
+        final String methodName = "getInvoker";
+        int i = depth;
         for (StackTraceElement stackTraceElement : ss) {
             if (stackTraceElement.getClassName().equals(Lang.class.getName())
                     && stackTraceElement.getMethodName().equals(methodName) && ss.length > i) {
-                return Thread.currentThread().getStackTrace()[i];
+                return ss[i];
             }
             i++;
         }
@@ -721,13 +733,13 @@ public final class Lang {
     public static List<StackTraceElement> getInvokers() {
         final String methodName = "getInvokers";
         List<StackTraceElement> invokers = new ArrayList<>();
-        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        StackTraceElement[] ss = Thread.currentThread().getStackTrace();
         int i = 0;
-        for (StackTraceElement stackTraceElement : stackTraceElements) {
+        for (StackTraceElement stackTraceElement : ss) {
             if (stackTraceElement.getClassName().equals(Lang.class.getName())
                     && stackTraceElement.getMethodName().equals(methodName)) {
-                for (int j = i + 2; j < stackTraceElements.length; j++) {
-                    invokers.add(stackTraceElements[j]);
+                for (int j = i + 1; j < ss.length; j++) {
+                    invokers.add(ss[j]);
                 }
                 return invokers;
             }

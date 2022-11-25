@@ -194,20 +194,51 @@ public class LangTest {
 
     @Test
     public void testGetInvoker() {
+        StackTraceElement e = Lang.getInvoker();
+        System.out.println(Strings.format("e.getClassName = {0}     e.getMethodName() = {1}", e.getClassName(),
+                e.getMethodName()));
+        assertEquals(e.getMethodName(), "testGetInvoker");
+
         assertInvoker1("testGetInvoker");
         assertInvoker2("testGetInvoker");
+
+        System.out.println();
+        List<StackTraceElement> ss = Lang.getInvokers();
+        assertEquals(ss.get(0).getMethodName(), "testGetInvoker");
+        for (StackTraceElement s : ss) {
+            System.out.println(s.getClassName() + " " + s.getMethodName());
+
+            assertEquals(Lang.getInvoker().getMethodName(), "testGetInvoker");
+        }
+
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testGetInvokerException() {
+        Lang.getInvoker(0);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testGetInvokerException2() {
+        Lang.getInvoker(Integer.MAX_VALUE);
     }
 
     private void assertInvoker1(final String invokeMethod) {
-        assertEquals(Lang.getInvoker().getClassName(), this.getClass().getName());
+        System.out.println("** assertInvoker1");
+        StackTraceElement e = Lang.getInvoker(2);
+        assertEquals(e.getClassName(), this.getClass().getName());
+        System.out.println(Strings.format("assertEquals(e.getMethodName(), invokeMethod) = assertEquals({0}, {1})",
+                e.getMethodName(), invokeMethod));
         //        assertEquals(Lang.getInvoker().getMethodName(), "getInvoker1");
-        assertEquals(Lang.getInvoker().getMethodName(), invokeMethod);
+        assertEquals(e.getMethodName(), invokeMethod);
     }
 
     private void assertInvoker2(String invokeMethod) {
-        assertEquals(Lang.getInvoker().getClassName(), this.getClass().getName());
+        System.out.println("** assertInvoker2");
+        StackTraceElement e = Lang.getInvoker(2);
+        assertEquals(e.getClassName(), this.getClass().getName());
         //        assertEquals(Lang.getInvoker().getMethodName(), "getInvoker2");
-        assertEquals(Lang.getInvoker().getMethodName(), invokeMethod);
+        assertEquals(e.getMethodName(), invokeMethod);
 
         assertInvoker1("assertInvoker2");
 

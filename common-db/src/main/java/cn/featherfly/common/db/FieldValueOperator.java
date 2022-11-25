@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import cn.featherfly.common.db.mapping.JavaTypeSqlTypeOperator;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.vt.ValueType;
-import cn.featherfly.common.repository.mapping.FieldOperator;
 
 /**
  * field value operator.

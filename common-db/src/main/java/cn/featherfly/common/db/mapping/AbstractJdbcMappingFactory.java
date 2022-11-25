@@ -20,6 +20,8 @@ import cn.featherfly.common.bean.BeanProperty;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.jpa.ColumnDefault;
 import cn.featherfly.common.db.jpa.Comment;
+import cn.featherfly.common.db.mapping.operator.DefaultTypesSqlTypeOperator;
+import cn.featherfly.common.db.mapping.operator.EnumTypeSqlTypeOperator;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
@@ -141,7 +143,7 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      * @param mapping      the mapping
      * @param beanProperty the bean property
      */
-    protected void setColumnMapping(PropertyMapping mapping, BeanProperty<?> beanProperty) {
+    protected void setColumnMapping(JdbcPropertyMapping mapping, BeanProperty<?> beanProperty) {
         boolean isPk = beanProperty.hasAnnotation(Id.class);
         Column column = beanProperty.getAnnotation(Column.class);
         if (column != null) {
@@ -194,6 +196,19 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
                 }
             } else {
                 mapping.setAutoincrement(true);
+            }
+        }
+
+        JavaSqlTypeMapper<?> mapper = sqlTypeMappingManager.getJavaSqlTypeMapper(beanProperty);
+        if (mapper != null) {
+            mapping.setJavaTypeSqlTypeOperator(mapper);
+        } else {
+            if (beanProperty.getClass().isEnum()) {
+                @SuppressWarnings({ "rawtypes", "unchecked" })
+                Class<? extends Enum<?>> t = (Class) beanProperty.getClass();
+                mapping.setJavaTypeSqlTypeOperator(new EnumTypeSqlTypeOperator<>(t));
+            } else {
+                mapping.setJavaTypeSqlTypeOperator(new DefaultTypesSqlTypeOperator<>(beanProperty.getClass()));
             }
         }
     }

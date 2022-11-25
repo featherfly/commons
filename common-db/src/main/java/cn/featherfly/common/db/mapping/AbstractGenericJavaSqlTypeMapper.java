@@ -5,13 +5,11 @@ import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.reflect.ClassType;
 
 /**
- * <p>
- * AbstractGenericSqlTypeToJavaRegister
- * </p>
+ * AbstractGenericSqlTypeToJavaRegister.
  *
  * @author zhongj
  */
-public abstract class AbstractGenericJavaSqlTypeMapper<E extends Object> extends AbstractJavaSqlTypeMapper<E> {
+public abstract class AbstractGenericJavaSqlTypeMapper<E> extends AbstractJavaSqlTypeMapper<E> {
 
     /**
      */

@@ -63,7 +63,7 @@ public class ConditionBuilderTest {
 
     @Test
     void testtestSqlQueryBuilderSelect() {
-        //
+        // FIXME 这个测试未通过SelectBuilder有BUG
         SqlQueryBuilder builder2 = new SqlQueryBuilder(Dialects.MYSQL, IgnorePolicy.EMPTY);
         builder2.from("user", "u").where().eq("name", name).and().eq("pwd", pwd).and().group().eq("sex", sex).or()
                 .gt("age", 18).sort().asc("age", "sex").desc("name");

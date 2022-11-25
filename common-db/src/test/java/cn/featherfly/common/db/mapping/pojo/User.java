@@ -1,6 +1,7 @@
 
 package cn.featherfly.common.db.mapping.pojo;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -22,6 +23,9 @@ public class User {
     private String name;
 
     private String descp;
+
+    @Column(name = "password")
+    private String pwd;
 
     /**
      * 返回id
@@ -75,6 +79,24 @@ public class User {
      */
     public void setDescp(String descp) {
         this.descp = descp;
+    }
+
+    /**
+     * get pwd value
+     *
+     * @return pwd
+     */
+    public String getPwd() {
+        return pwd;
+    }
+
+    /**
+     * set pwd value
+     *
+     * @param pwd pwd
+     */
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
 
 }

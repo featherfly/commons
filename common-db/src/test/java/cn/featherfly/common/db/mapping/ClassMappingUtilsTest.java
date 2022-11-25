@@ -34,7 +34,7 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
 
         System.out.println(sql);
 
-        assertEquals(sql, "SELECT `id` `id`, `name` `name`, `descp` `descp` FROM `user`");
+        assertEquals(sql, "SELECT `id` `id`, `name` `name`, `descp` `descp`, `password` `pwd` FROM `user`");
     }
 
     @Test
@@ -42,7 +42,8 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
         String sql = ClassMappingUtils.getSelectByPkSql(getUserClassMapping(), dialect);
 
         System.out.println(sql);
-        assertEquals(sql, "SELECT `id` `id`, `name` `name`, `descp` `descp` FROM `user` WHERE `id` = ?");
+        assertEquals(sql,
+                "SELECT `id` `id`, `name` `name`, `descp` `descp`, `password` `pwd` FROM `user` WHERE `id` = ?");
 
         sql = ClassMappingUtils.getSelectByPkSql(getUserRoleClassMapping(), dialect);
 
@@ -59,7 +60,7 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
         System.out.println(t.get0());
         System.out.println(t.get1());
 
-        assertEquals(t.get0(), "INSERT INTO `user` (`id`,`name`,`descp`) VALUES (?,?,?)");
+        assertEquals(t.get0(), "INSERT INTO `user` (`id`,`name`,`descp`,`password`) VALUES (?,?,?,?)");
     }
 
     @Test
@@ -69,7 +70,7 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
         System.out.println(t.get0());
         System.out.println(t.get1());
 
-        assertEquals(t.get0(), "UPDATE `user` SET `name` = ?, `descp` = ? WHERE `id` = ?");
+        assertEquals(t.get0(), "UPDATE `user` SET `name` = ?, `descp` = ?, `password` = ? WHERE `id` = ?");
 
         t = ClassMappingUtils.getUpdateSqlAndParamPositions(getUserRoleClassMapping(), dialect);
         System.out.println(t.get0());
@@ -190,7 +191,7 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
         //        }
 
         assertEquals(t.get0(),
-                "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?)");
+                "INSERT INTO `user` (`id`, `name`, `descp`, `password`) VALUES (?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?)");
         assertEquals(t.get1().get(1), "id");
         assertEquals(t.get1().get(2), "name");
         assertEquals(t.get1().get(3), "descp");
@@ -242,7 +243,7 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
         //        }
 
         assertEquals(t.get0(),
-                "INSERT INTO `user` VALUES (`id`,`name`,`descp`) SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
+                "INSERT INTO `user` VALUES (`id`,`name`,`descp`,`password`) SELECT ?, ?, ?, ? UNION SELECT ?, ?, ?, ? UNION SELECT ?, ?, ?, ? UNION SELECT ?, ?, ?, ? UNION SELECT ?, ?, ?, ?");
         assertEquals(t.get1().get(1), "id");
         assertEquals(t.get1().get(2), "name");
         assertEquals(t.get1().get(3), "descp");
@@ -256,7 +257,7 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
         System.out.println(t.get1());
 
         assertEquals(t.get0(),
-                "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `name`=values(`name`), `descp`=values(`descp`)");
+                "INSERT INTO `user` (`id`, `name`, `descp`, `password`) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE `name`=values(`name`), `descp`=values(`descp`), `password`=values(`password`)");
     }
 
     @Test
@@ -267,7 +268,7 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
         System.out.println(t.get1());
 
         assertEquals(t.get0(),
-                "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"descp\"=EXCLUDED.\"descp\"");
+                "INSERT INTO \"user\" (\"id\", \"name\", \"descp\", \"password\") VALUES (?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"descp\"=EXCLUDED.\"descp\", \"password\"=EXCLUDED.\"password\"");
     }
 
     @Test
@@ -278,7 +279,7 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
         System.out.println(t.get1());
 
         assertEquals(t.get0(),
-                "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET `name`=EXCLUDED.`name`, `descp`=EXCLUDED.`descp`");
+                "INSERT INTO `user` (`id`, `name`, `descp`, `password`) VALUES (?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET `name`=EXCLUDED.`name`, `descp`=EXCLUDED.`descp`, `password`=EXCLUDED.`password`");
     }
 
     @Test
@@ -286,7 +287,7 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
         Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getUpsertBatchSqlAndParamPositions(5,
                 getUserClassMapping(), dialect);
         assertEquals(t.get0(),
-                "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?) ON DUPLICATE KEY UPDATE `name`=values(`name`), `descp`=values(`descp`)");
+                "INSERT INTO `user` (`id`, `name`, `descp`, `password`) VALUES (?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?) ON DUPLICATE KEY UPDATE `name`=values(`name`), `descp`=values(`descp`), `password`=values(`password`)");
         assertEquals(t.get1().get(1), "id");
         assertEquals(t.get1().get(2), "name");
         assertEquals(t.get1().get(3), "descp");
@@ -297,7 +298,7 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
         Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getUpsertBatchSqlAndParamPositions(5,
                 getUserClassMapping(), Dialects.POSTGRESQL);
         assertEquals(t.get0(),
-                "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"descp\"=EXCLUDED.\"descp\"");
+                "INSERT INTO \"user\" (\"id\", \"name\", \"descp\", \"password\") VALUES (?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"descp\"=EXCLUDED.\"descp\", \"password\"=EXCLUDED.\"password\"");
         assertEquals(t.get1().get(1), "id");
         assertEquals(t.get1().get(2), "name");
         assertEquals(t.get1().get(3), "descp");
@@ -308,7 +309,7 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
         Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getUpsertBatchSqlAndParamPositions(5,
                 getUserClassMapping(), Dialects.SQLITE);
         assertEquals(t.get0(),
-                "INSERT INTO `user` VALUES (`id`,`name`,`descp`) SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? ON CONFLICT (id) DO UPDATE SET `name`=EXCLUDED.`name`, `descp`=EXCLUDED.`descp`");
+                "INSERT INTO `user` VALUES (`id`,`name`,`descp`,`password`) SELECT ?, ?, ?, ? UNION SELECT ?, ?, ?, ? UNION SELECT ?, ?, ?, ? UNION SELECT ?, ?, ?, ? UNION SELECT ?, ?, ?, ? ON CONFLICT (id) DO UPDATE SET `name`=EXCLUDED.`name`, `descp`=EXCLUDED.`descp`, `password`=EXCLUDED.`password`");
         assertEquals(t.get1().get(1), "id");
         assertEquals(t.get1().get(2), "name");
         assertEquals(t.get1().get(3), "descp");

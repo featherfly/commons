@@ -127,7 +127,7 @@ public class SqlSelectBuilder extends AbstractSqlSelectBuilder implements Select
     public SqlConditionBuilder from(String tableName, String alias) {
         //        setTableName(tableName);
         //        setTableAlias(alias);
-        // TODO 这里需要设置table alias
+        // FIXME 这里需要设置table alias
         conditionBuilder.setQueryAlias(alias);
         return conditionBuilder;
     }

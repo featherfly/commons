@@ -11,7 +11,7 @@ import cn.featherfly.common.lang.reflect.Type;
  * @author zhongj
  * @param <E> to regist java type
  */
-public interface JavaSqlTypeMapper<E extends Object> extends JavaTypeSqlTypeOperator<E> {
+public interface JavaSqlTypeMapper<E> extends JavaTypeSqlTypeOperator<E> {
 
     /**
      * Support.

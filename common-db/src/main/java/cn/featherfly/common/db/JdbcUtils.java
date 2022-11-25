@@ -46,7 +46,6 @@ import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.LogUtils;
 import cn.featherfly.common.lang.WordUtils;
-import cn.featherfly.common.lang.reflect.ClassType;
 import cn.featherfly.common.repository.mapping.RowMapper;
 
 /**
@@ -994,7 +993,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, FieldValue<E> value) {
+    public static <E> void setParameter(PreparedStatement prep, int position, FieldValueOperator<E> value) {
         if (value == null) {
             setParameterNull(prep, position);
         } else {
@@ -1112,9 +1111,9 @@ public final class JdbcUtils {
                 } else {
                     prep.setString(position, ((Enum<?>) value).name());
                 }
-            } else if (value instanceof FieldValue) { // TODO 后续FieldValue再考虑名称
+            } else if (value instanceof FieldValueOperator) { // TODO 后续FieldValue再考虑名称
                 //                ((FieldValue<?>) value).set(prep, position);
-                setParameter(prep, position, (FieldValue<?>) value);
+                setParameter(prep, position, (FieldValueOperator<?>) value);
             } else if (value instanceof Optional) {
                 setParameter(prep, position, ((Optional<?>) value).orElse(null));
             } else if (value instanceof AtomicInteger) {
@@ -1449,7 +1448,7 @@ public final class JdbcUtils {
                 Class<?> type = manager.getJavaType(JDBCType.valueOf(metaData.getColumnType(i)));
                 Object value = null;
                 if (type != null) {
-                    value = manager.get(rs, i, new ClassType<>(type));
+                    value = manager.get(rs, i, type);
                 } else {
                     value = JdbcUtils.getResultSetValue(rs, i);
                 }

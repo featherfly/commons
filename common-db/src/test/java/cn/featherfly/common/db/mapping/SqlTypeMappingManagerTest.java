@@ -228,8 +228,8 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
                 PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
-            Type<Long[]> gc = new ClassType<>(Long[].class);
-            Type<String> gts = new ClassType<>(String.class);
+            Class<Long[]> gc = Long[].class;
+            Class<String> gts = String.class;
             while (rs.next()) {
                 String title = manager.get(rs.getResultSet(), 2, gts);
                 Long[] content = manager.get(rs.getResultSet(), 3, gc);
@@ -272,9 +272,8 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
                 PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
-            Type<String> gts = new ClassType<>(String.class);
             while (rs.next()) {
-                String title = manager.get(rs.getResultSet(), 2, gts);
+                String title = manager.get(rs.getResultSet(), 2, String.class);
                 Content contentResult = manager.get(rs.getResultSet(), 4, contentProperty);
                 System.out.println(title + " -> " + contentResult);
                 assertEquals(content, contentResult);
@@ -315,9 +314,8 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
                 PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
-            Type<String> gts = new ClassType<>(String.class);
             while (rs.next()) {
-                String title = manager.get(rs.getResultSet(), 2, gts);
+                String title = manager.get(rs.getResultSet(), 2, String.class);
                 Content contentResult = manager.get(rs.getResultSet(), 5, contentProperty);
                 System.out.println(title + " -> " + contentResult);
                 assertEquals(content, contentResult);
@@ -333,7 +331,8 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
         sqlExecutor.execute("delete from cms_article");
 
-        Type<Content> type = new ClassType<>(Content.class);
+        //        ClassType<Content> type = new ClassType<>(Content.class);
+        Class<Content> type = Content.class;
 
         manager.regist(
                 new ObjectToJsonMapper<>(type).addAllow("cms_article", "content2").addAllow("cms_article", "content3"));
@@ -360,7 +359,8 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
                 PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
-            Type<String> gts = new ClassType<>(String.class);
+            //            ClassType<String> gts = new ClassType<>(String.class);
+            Class<String> gts = String.class;
             while (rs.next()) {
                 String title = manager.get(rs.getResultSet(), 2, gts);
 
@@ -383,7 +383,8 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
         sqlExecutor.execute("delete from cms_article");
 
-        Type<Content> type = new ClassType<>(Content.class);
+        //        ClassType<Content> type = new ClassType<>(Content.class);
+        Class<Content> type = Content.class;
 
         manager.regist(new ObjectToJsonMapper<>(type).addAllow("cms_article", "content3"));
         // 因为添加了许可条件，则会进行表名，列名的筛选
@@ -411,7 +412,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
                 PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
-            Type<String> gts = new ClassType<>(String.class);
+            Class<String> gts = String.class;
             while (rs.next()) {
                 String title = manager.get(rs.getResultSet(), 2, gts);
 
@@ -463,7 +464,8 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
                 PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
-            Type<String> gts = new ClassType<>(String.class);
+            //            ClassType<String> gts = new ClassType<>(String.class);
+            Class<String> gts = String.class;
             while (rs.next()) {
                 String title = manager.get(rs.getResultSet(), 2, gts);
 
@@ -531,7 +533,8 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
                 PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
-            Type<String> gts = new ClassType<>(String.class);
+            //            ClassType<String> gts = new ClassType<>(String.class);
+            Class<String> gts = String.class;
             while (rs.next()) {
                 String title = manager.get(rs.getResultSet(), 2, gts);
                 System.out.println("title -> " + title);

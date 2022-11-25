@@ -10,7 +10,7 @@ import java.sql.ResultSet;
  * @author zhongj
  * @param <E> to regist java type
  */
-public interface JavaTypeSqlTypeOperator<E extends Object> {
+public interface JavaTypeSqlTypeOperator<E> {
 
     /**
      * Sets the value.

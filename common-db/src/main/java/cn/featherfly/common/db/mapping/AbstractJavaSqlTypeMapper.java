@@ -14,7 +14,7 @@ import cn.featherfly.common.policy.WhiteBlackListPolicy;
  * @author zhongj
  * @param <E> the element type
  */
-public abstract class AbstractJavaSqlTypeMapper<E extends Object> implements JavaSqlTypeMapper<E> {
+public abstract class AbstractJavaSqlTypeMapper<E> implements JavaSqlTypeMapper<E> {
 
     private Type<E> type;
 
@@ -101,6 +101,7 @@ public abstract class AbstractJavaSqlTypeMapper<E extends Object> implements Jav
     @Override
     public boolean support(SQLType sqlType, String tableName, String columnName) {
         if (sqlType != null && support(sqlType)) {
+            // ENHANCE 后续修改为两个允许策略
             return columnAllowPolicy.isAllow(toKey(tableName, columnName));
         }
         return false;

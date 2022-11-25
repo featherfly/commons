@@ -32,7 +32,7 @@ import cn.featherfly.common.repository.mapping.PropertyMapping;
 import cn.featherfly.common.repository.mapping.PropertyNameConversion;
 
 /**
- * ObjectToDbMappingFactory.
+ * StrictJdbcMappingFactory.
  *
  * @author zhongj
  */
@@ -181,7 +181,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
             return false;
         }
         boolean isPk = beanProperty.hasAnnotation(Id.class);
-        PropertyMapping mapping = new PropertyMapping();
+        JdbcPropertyMapping mapping = new JdbcPropertyMapping();
 
         Embedded embedded = beanProperty.getAnnotation(Embedded.class);
         if (embedded != null) {
@@ -225,7 +225,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
             }
             String columnName = getMappingColumnName(bp);
             columnName = dialect.convertTableOrColumnName(columnName);
-            PropertyMapping columnMpping = new PropertyMapping();
+            JdbcPropertyMapping columnMpping = new JdbcPropertyMapping();
             columnMpping.setRepositoryFieldName(columnName);
             columnMpping.setPropertyType(bp.getType());
             columnMpping.setPropertyName(bp.getName());
@@ -247,7 +247,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
             throw new JdbcMappingException("#no.id.property", new Object[] { beanProperty.getType().getName() });
         }
         for (BeanProperty<?> bp : bps) {
-            PropertyMapping columnMpping = new PropertyMapping();
+            JdbcPropertyMapping columnMpping = new JdbcPropertyMapping();
             columnMpping.setRepositoryFieldName(columnName);
             columnMpping.setPropertyType(bp.getType());
             columnMpping.setPropertyName(bp.getName());

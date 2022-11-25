@@ -8,12 +8,7 @@ import org.testng.annotations.Test;
 import cn.featherfly.common.lang.LogUtils;
 
 /**
- * <p>
- * LogTest
- * </p>
- * <p>
- * 2019-08-29
- * </p>
+ * LogTest.
  *
  * @author zhongj
  */

@@ -4,12 +4,7 @@ package cn.featherfly.common.log;
 import org.testng.annotations.Test;
 
 /**
- * <p>
- * LogTest
- * </p>
- * <p>
- * 2019-08-29
- * </p>
+ * LogTest.
  *
  * @author zhongj
  */

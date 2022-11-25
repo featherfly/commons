@@ -174,6 +174,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
         }
         boolean isPk = beanProperty.hasAnnotation(Id.class);
         JdbcPropertyMapping mapping = new JdbcPropertyMapping();
+        setJavaSqlTypeMapper(mapping, beanProperty);
 
         Embedded embedded = beanProperty.getAnnotation(Embedded.class);
         if (embedded != null) {
@@ -225,6 +226,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
             String columnName = getMappingColumnName(bp);
             columnName = dialect.convertTableOrColumnName(columnName);
             JdbcPropertyMapping columnMpping = new JdbcPropertyMapping();
+            setJavaSqlTypeMapper(columnMpping, bp);
             columnMpping.setRepositoryFieldName(columnName);
             columnMpping.setPropertyType(bp.getType());
             columnMpping.setPropertyName(bp.getName());
@@ -276,6 +278,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
                 continue;
             }
             JdbcPropertyMapping columnMpping = new JdbcPropertyMapping();
+            setJavaSqlTypeMapper(columnMpping, bp);
             columnMpping.setRepositoryFieldName(columnName);
             columnMpping.setPropertyType(bp.getType());
             columnMpping.setPropertyName(bp.getName());
@@ -323,6 +326,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
             BeanProperty<?> beanProperty = bd.findBeanProperty(new BeanPropertyNameRegexMatcher(propertyName));
             if (beanProperty != null && !isTransient(beanProperty, logInfo)) {
                 JdbcPropertyMapping mapping = new JdbcPropertyMapping();
+                setJavaSqlTypeMapper(mapping, beanProperty);
                 mapping.setPropertyType(beanProperty.getType());
                 mapping.setPropertyName(propertyName);
 

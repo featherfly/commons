@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 
 import cn.featherfly.common.db.mapping.JavaTypeSqlTypeOperator;
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.vt.ValueType;
+import cn.featherfly.common.lang.vt.Value;
 
 /**
  * field value operator.
@@ -13,23 +13,26 @@ import cn.featherfly.common.lang.vt.ValueType;
  * @author zhongj
  * @param <T> the value type
  */
-public class FieldValueOperator<T> implements FieldOperator<T> {
+public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
 
+    /** The operator. */
     private JavaTypeSqlTypeOperator<T> operator;
 
+    /** The value. */
     private T value;
 
     /**
      * Instantiates a new field value.
      *
-     * @param operator  the operator
-     * @param valueType the value type
+     * @param operator the operator
+     * @param value    the value
      */
-    public FieldValueOperator(JavaTypeSqlTypeOperator<T> operator, ValueType<T> valueType) {
+    public FieldValueOperator(JavaTypeSqlTypeOperator<T> operator, T value) {
         super();
         AssertIllegalArgument.isNotNull(operator, "operator");
-        AssertIllegalArgument.isNotNull(valueType, "valueType");
+        AssertIllegalArgument.isNotNull(value, "value");
         this.operator = operator;
+        this.value = value;
     }
 
     /**
@@ -57,4 +60,30 @@ public class FieldValueOperator<T> implements FieldOperator<T> {
         value = operator.get(rs, parameterIndex);
         return value;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public T getValue() {
+        return value;
+    }
+
+    /**
+     * 设置value
+     *
+     * @param value value
+     */
+    public void setValue(T value) {
+        this.value = value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "FieldValueOperator [value=" + value + ", operator=" + operator.getClass().getName() + "]";
+    }
+
 }

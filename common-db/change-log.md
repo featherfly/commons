@@ -4,6 +4,7 @@
 3. 重构distinct相关逻辑
 4. 优化SqlTypeMappingManager关于JavaSqlTypeMapper的逻辑
 5. 加入JdbcPropertyMapping
+6. 加入FieldValueOperator，用于优化Entity的数据设置与解析不走SqlTypeMappingManager
 
 # 0.5.5 2022-8-11
 1. Dialect加入getKeywordLike(QueryPolicy)、getKeywordEq(QueryPolicy)、keywordsCase()方法

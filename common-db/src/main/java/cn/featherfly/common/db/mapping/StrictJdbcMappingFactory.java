@@ -180,6 +180,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         }
         boolean isPk = beanProperty.hasAnnotation(Id.class);
         JdbcPropertyMapping mapping = new JdbcPropertyMapping();
+        setJavaSqlTypeMapper(mapping, beanProperty);
 
         Embedded embedded = beanProperty.getAnnotation(Embedded.class);
         if (embedded != null) {
@@ -224,6 +225,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
             String columnName = getMappingColumnName(bp);
             columnName = dialect.convertTableOrColumnName(columnName);
             JdbcPropertyMapping columnMpping = new JdbcPropertyMapping();
+            setJavaSqlTypeMapper(columnMpping, bp);
             columnMpping.setRepositoryFieldName(columnName);
             columnMpping.setPropertyType(bp.getType());
             columnMpping.setPropertyName(bp.getName());
@@ -246,6 +248,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         }
         for (BeanProperty<?> bp : bps) {
             JdbcPropertyMapping columnMpping = new JdbcPropertyMapping();
+            setJavaSqlTypeMapper(columnMpping, bp);
             columnMpping.setRepositoryFieldName(columnName);
             columnMpping.setPropertyType(bp.getType());
             columnMpping.setPropertyName(bp.getName());

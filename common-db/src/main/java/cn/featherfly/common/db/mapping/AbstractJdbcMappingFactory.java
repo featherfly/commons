@@ -196,7 +196,9 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
                 mapping.setAutoincrement(true);
             }
         }
+    }
 
+    protected void setJavaSqlTypeMapper(JdbcPropertyMapping mapping, BeanProperty<?> beanProperty) {
         JavaSqlTypeMapper<?> mapper = sqlTypeMappingManager.getJavaSqlTypeMapper(beanProperty);
         if (mapper != null) {
             mapping.setJavaTypeSqlTypeOperator(mapper);
@@ -206,7 +208,9 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
                 Class<? extends Enum<?>> t = (Class) beanProperty.getClass();
                 mapping.setJavaTypeSqlTypeOperator(new EnumTypeSqlTypeOperator<>(t));
             } else {
-                mapping.setJavaTypeSqlTypeOperator(new DefaultTypesSqlTypeOperator<>(beanProperty.getClass()));
+                // YUFEI_TODO 后续来优化打开检查，主要是现在父JdbcPropertyMapping（非具体映射）也调用了此方法，造成检查不通过
+                //                mapping.setJavaTypeSqlTypeOperator(new DefaultTypesSqlTypeOperator<>(beanProperty.getType(), true));
+                mapping.setJavaTypeSqlTypeOperator(new DefaultTypesSqlTypeOperator<>(beanProperty.getType()));
             }
         }
     }

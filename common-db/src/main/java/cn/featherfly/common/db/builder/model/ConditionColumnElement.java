@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.function.Predicate;
 
 import cn.featherfly.common.constant.Chars;
+import cn.featherfly.common.db.FieldValueOperator;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
@@ -63,6 +64,7 @@ public class ConditionColumnElement extends ParamedColumnElement {
      * @param tableAlias    tableAlias
      * @param ignorePolicy  the ignore policy
      */
+    @SuppressWarnings("unchecked")
     public ConditionColumnElement(Dialect dialect, String name, Object value, QueryOperator queryOperator,
             QueryPolicy queryPolicy, String tableAlias, Predicate<Object> ignorePolicy) {
         super(dialect, name, value, tableAlias, ignorePolicy);
@@ -74,21 +76,39 @@ public class ConditionColumnElement extends ParamedColumnElement {
         this.queryPolicy = queryPolicy;
 
         if (!ignorePolicy.test(value)) { // 不忽略
-            Object paramValue = null;
-            switch (queryOperator) {
-                case SW:
-                    paramValue = value + "%";
-                    break;
-                case CO:
-                    paramValue = "%" + value + "%";
-                    break;
-                case EW:
-                    paramValue = "%" + value;
-                    break;
-                default:
-                    paramValue = value;
-            }
-            setParam(paramValue);
+            setParam(processParam(value, queryOperator));
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private Object processParam(Object value, QueryOperator queryOperator) {
+        switch (queryOperator) {
+            case SW:
+                if (value instanceof FieldValueOperator) {
+                    FieldValueOperator<String> o = (FieldValueOperator<String>) value;
+                    o.setValue(o.getValue() + "%");
+                    return o;
+                } else {
+                    return value + "%";
+                }
+            case CO:
+                if (value instanceof FieldValueOperator) {
+                    FieldValueOperator<String> o = (FieldValueOperator<String>) value;
+                    o.setValue("%" + o.getValue() + "%");
+                    return o;
+                } else {
+                    return "%" + value + "%";
+                }
+            case EW:
+                if (value instanceof FieldValueOperator) {
+                    FieldValueOperator<String> o = (FieldValueOperator<String>) value;
+                    o.setValue("%" + o.getValue());
+                    return o;
+                } else {
+                    return "%" + value;
+                }
+            default:
+                return value;
         }
     }
 

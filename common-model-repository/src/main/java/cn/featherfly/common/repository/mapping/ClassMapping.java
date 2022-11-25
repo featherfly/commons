@@ -19,7 +19,7 @@ import cn.featherfly.common.repository.Index;
  * @author zhongj
  * @param <T> 类型
  */
-public class ClassMapping<T> {
+public class ClassMapping<T, P extends PropertyMapping<P>> {
 
     /**
      * Instantiates a new class mapping.
@@ -65,7 +65,7 @@ public class ClassMapping<T> {
      * @param propertyName 属性名称
      * @return 属性映射对象
      */
-    public PropertyMapping getPropertyMapping(String propertyName) {
+    public P getPropertyMapping(String propertyName) {
         return propertyMappings.get(propertyName);
     }
 
@@ -77,8 +77,8 @@ public class ClassMapping<T> {
      * @param persitField 持久化字段（数据库字段）
      * @return 属性映射对象
      */
-    public PropertyMapping getPropertyMappingByPersitField(String persitField) {
-        for (PropertyMapping pm : getPropertyMappingLeafNodes()) {
+    public P getPropertyMappingByPersitField(String persitField) {
+        for (P pm : getPropertyMappingLeafNodes()) {
             if (pm.getRepositoryFieldName().equals(persitField)) {
                 return pm;
             }
@@ -94,7 +94,7 @@ public class ClassMapping<T> {
      *
      * @return 所有属性映射
      */
-    public Collection<PropertyMapping> getPropertyMappings() {
+    public Collection<P> getPropertyMappings() {
         return new ArrayList<>(propertyMappings.values());
     }
 
@@ -103,11 +103,11 @@ public class ClassMapping<T> {
      *
      * @return the property mapping leaf nodes
      */
-    public Collection<PropertyMapping> getPropertyMappingLeafNodes() {
-        List<PropertyMapping> leafNodes = new ArrayList<>();
-        for (PropertyMapping propertyMapping : getPropertyMappings()) {
+    public Collection<P> getPropertyMappingLeafNodes() {
+        List<P> leafNodes = new ArrayList<>();
+        for (P propertyMapping : getPropertyMappings()) {
             if (propertyMapping.getPropertyMappings().size() > 0) {
-                for (PropertyMapping pm : propertyMapping.getPropertyMappings()) {
+                for (P pm : propertyMapping.getPropertyMappings()) {
                     leafNodes.add(pm);
                 }
             } else {
@@ -125,14 +125,13 @@ public class ClassMapping<T> {
      *
      * @return 所有属性映射
      */
-    public List<PropertyMapping> getPrivaryKeyPropertyMappings() {
-        List<PropertyMapping> pks = new ArrayList<>();
-        for (PropertyMapping pk : propertyMappings.values().stream().filter(p -> p.isPrimaryKey())
-                .collect(Collectors.toList())) {
+    public List<P> getPrivaryKeyPropertyMappings() {
+        List<P> pks = new ArrayList<>();
+        for (P pk : propertyMappings.values().stream().filter(p -> p.isPrimaryKey()).collect(Collectors.toList())) {
             if (Lang.isEmpty(pk.getPropertyMappings())) {
                 pks.add(pk);
             } else {
-                for (PropertyMapping spk : pk.getPropertyMappings()) {
+                for (P spk : pk.getPropertyMappings()) {
                     if (spk.isPrimaryKey()) {
                         pks.add(spk);
                     }
@@ -147,7 +146,7 @@ public class ClassMapping<T> {
      *
      * @param propertyMapping the property mapping
      */
-    public void addPropertyMapping(PropertyMapping propertyMapping) {
+    public void addPropertyMapping(P propertyMapping) {
         propertyMappings.put(propertyMapping.getPropertyName(), propertyMapping);
     }
 
@@ -156,8 +155,8 @@ public class ClassMapping<T> {
      *
      * @param propertyMappings the property mappings
      */
-    public void addPropertyMappings(Collection<PropertyMapping> propertyMappings) {
-        for (PropertyMapping propertyMapping : propertyMappings) {
+    public void addPropertyMappings(Collection<P> propertyMappings) {
+        for (P propertyMapping : propertyMappings) {
             addPropertyMapping(propertyMapping);
         }
     }
@@ -215,7 +214,7 @@ public class ClassMapping<T> {
     // ********************************************************************
 
     /** The property mappings. */
-    private Map<String, PropertyMapping> propertyMappings = new LinkedHashMap<>(0);
+    private Map<String, P> propertyMappings = new LinkedHashMap<>(0);
 
     /** The indexs. */
     private Map<String, Index> indexs = new LinkedHashMap<>(0);

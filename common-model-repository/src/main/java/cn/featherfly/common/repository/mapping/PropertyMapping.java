@@ -22,7 +22,7 @@ import java.util.Map;
  *
  * @author zhongj
  */
-public class PropertyMapping {
+public class PropertyMapping<P extends PropertyMapping<P>> {
 
     /**
      * Instantiates a new property mapping.
@@ -41,9 +41,9 @@ public class PropertyMapping {
 
     private String defaultValue;
 
-    private Map<String, PropertyMapping> propertyMappings = new HashMap<>(0);
+    private Map<String, P> propertyMappings = new HashMap<>(0);
 
-    private PropertyMapping parent;
+    protected P parent;
 
     private int size;
 
@@ -303,7 +303,7 @@ public class PropertyMapping {
     public String getRepositoryFieldName() {
         if (repositoryFieldName == null) {
             StringBuilder name = new StringBuilder();
-            for (Map.Entry<String, PropertyMapping> entry : propertyMappings.entrySet()) {
+            for (Map.Entry<String, P> entry : propertyMappings.entrySet()) {
                 name.append(entry.getKey()).append(",");
             }
             if (name.length() > 0) {
@@ -347,7 +347,7 @@ public class PropertyMapping {
      *
      * @return parent
      */
-    public PropertyMapping getParent() {
+    public P getParent() {
         return parent;
     }
 
@@ -356,7 +356,7 @@ public class PropertyMapping {
      *
      * @return PropertyMappings
      */
-    public List<PropertyMapping> getPropertyMappings() {
+    public List<P> getPropertyMappings() {
         return new ArrayList<>(propertyMappings.values());
     }
 
@@ -368,8 +368,8 @@ public class PropertyMapping {
      * @param propertyName 属性名称
      * @return 属性映射对象
      */
-    public PropertyMapping getPropertyMapping(String propertyName) {
-        for (PropertyMapping pm : propertyMappings.values()) {
+    public P getPropertyMapping(String propertyName) {
+        for (P pm : propertyMappings.values()) {
             if (pm.getPropertyName().equals(propertyName)) {
                 return pm;
             }
@@ -385,7 +385,7 @@ public class PropertyMapping {
      * @param repositoryFiledName 持久化字段（数据库字段）
      * @return PropertyMapping
      */
-    public PropertyMapping getPropertyMappingByPersitField(String repositoryFiledName) {
+    public P getPropertyMappingByPersitField(String repositoryFiledName) {
         return propertyMappings.get(repositoryFiledName);
     }
 
@@ -395,10 +395,11 @@ public class PropertyMapping {
      * @param propertyMapping propertyMapping
      * @return this
      */
-    public PropertyMapping add(PropertyMapping propertyMapping) {
-        propertyMapping.parent = this;
+    @SuppressWarnings("unchecked")
+    public P add(P propertyMapping) {
+        propertyMapping.parent = (P) this;
         propertyMappings.put(propertyMapping.getRepositoryFieldName(), propertyMapping);
-        return this;
+        return (P) this;
     }
 
     /**

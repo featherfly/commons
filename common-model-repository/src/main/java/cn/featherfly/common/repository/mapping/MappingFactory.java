@@ -10,7 +10,7 @@ package cn.featherfly.common.repository.mapping;
  * @since 0.1.0
  * @version 0.1.0
  */
-public interface MappingFactory {
+public interface MappingFactory<P extends PropertyMapping<P>> {
 
     /**
      * getClassMapping
@@ -19,5 +19,6 @@ public interface MappingFactory {
      * @param type type
      * @return ClassMapping
      */
-    <T> ClassMapping<T> getClassMapping(Class<T> type);
+    //    <T, P extends PropertyMapping<P>> ClassMapping<T, P> getClassMapping(Class<T> type);
+    <T> ClassMapping<T, P> getClassMapping(Class<T> type);
 }

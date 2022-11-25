@@ -1,3 +1,6 @@
+# 0.3.1
+1. ClassMapping, PropertyMapping, MappingFactory加入泛型
+
 # 0.3.0 2022-11-09
 1. 修复AliasManager.getAlias(int index)越界检查BUG
 2. 加入Repository AliasRepository

@@ -225,4 +225,6 @@ public abstract class DialectTest {
 
     abstract void testUpsertBatch();
 
+    abstract void testDeleteFrom();
+
 }

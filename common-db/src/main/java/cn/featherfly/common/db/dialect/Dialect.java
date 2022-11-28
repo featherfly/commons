@@ -199,6 +199,28 @@ public interface Dialect {
     /**
      * Builds the insert sql.
      *
+     * @param tableName the table name
+     * @return the delete from sql
+     */
+    default String buildDeleteFromSql(String tableName) {
+        return buildDeleteFromSql(tableName, null);
+    }
+
+    /**
+     * Builds the insert sql.
+     *
+     * @param tableName  the table name
+     * @param tableAlias the table alias
+     * @return the delete from sql
+     */
+    default String buildDeleteFromSql(String tableName, String tableAlias) {
+        return BuilderUtils.link(getKeyword(Keywords.DELETE), getKeyword(Keywords.FROM), wrapName(tableName),
+                Lang.isEmpty(tableAlias) ? null : wrapName(tableAlias));
+    }
+
+    /**
+     * Builds the insert sql.
+     *
      * @param tableName   the table name
      * @param columnNames the column names
      * @return the string

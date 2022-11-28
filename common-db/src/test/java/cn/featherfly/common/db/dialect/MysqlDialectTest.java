@@ -209,11 +209,26 @@ public class MysqlDialectTest extends DialectTest {
     /**
      * {@inheritDoc}
      */
-    @Test
     @Override
+    @Test
     void testInsertBatch() {
         String sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "age" }, 2);
         System.out.println(sql);
         assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?),(?, ?, ?)");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Test
+    void testDeleteFrom() {
+        String sql = dialect.buildDeleteFromSql("user");
+        System.out.println(sql);
+        assertEquals(sql, "DELETE FROM `user`");
+
+        sql = dialect.buildDeleteFromSql("user", "u");
+        System.out.println(sql);
+        assertEquals(sql, "DELETE `u` FROM `user` `u`");
     }
 }

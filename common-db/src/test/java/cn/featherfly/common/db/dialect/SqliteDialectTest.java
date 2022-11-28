@@ -210,4 +210,19 @@ public class SqliteDialectTest extends DialectTest {
         System.out.println(sql);
         assertEquals(sql, "INSERT INTO `user` VALUES (`id`,`name`,`age`) SELECT ?, ?, ? UNION SELECT ?, ?, ?");
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Test
+    void testDeleteFrom() {
+        String sql = dialect.buildDeleteFromSql("user");
+        System.out.println(sql);
+        assertEquals(sql, "DELETE FROM `user`");
+
+        sql = dialect.buildDeleteFromSql("user", "u");
+        System.out.println(sql);
+        assertEquals(sql, "DELETE FROM `user` `u`");
+    }
 }

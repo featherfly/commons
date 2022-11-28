@@ -1,21 +1,19 @@
 
 package cn.featherfly.common.db.builder.dml.basic;
 
-import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.builder.SqlBuilder;
 import cn.featherfly.common.db.dialect.Dialect;
 
 /**
- * <p>
- * SqlUpdateSetBasicBuilder
- * </p>
- * .
+ * SqlUpdateSetBasicBuilder. .
  *
  * @author zhongj
  */
 public class SqlDeleteFromBasicBuilder implements SqlBuilder {
 
     private String tableName;
+
+    private String tableAlias;
 
     private Dialect dialect;
 
@@ -35,8 +33,20 @@ public class SqlDeleteFromBasicBuilder implements SqlBuilder {
      * @param tableName the table name
      */
     public SqlDeleteFromBasicBuilder(Dialect dialect, String tableName) {
+        this(dialect, tableName, null);
+    }
+
+    /**
+     * Instantiates a new sql delete from basic builder.
+     *
+     * @param dialect    the dialect
+     * @param tableName  the table name
+     * @param tableAlias the table alias
+     */
+    public SqlDeleteFromBasicBuilder(Dialect dialect, String tableName, String tableAlias) {
         this.tableName = tableName;
         this.dialect = dialect;
+        this.tableAlias = tableAlias;
     }
 
     /**
@@ -58,13 +68,29 @@ public class SqlDeleteFromBasicBuilder implements SqlBuilder {
     }
 
     /**
+     * get tableAlias value
+     *
+     * @return tableAlias
+     */
+    public String getTableAlias() {
+        return tableAlias;
+    }
+
+    /**
+     * set tableAlias value
+     *
+     * @param tableAlias tableAlias
+     */
+    public void setTableAlias(String tableAlias) {
+        this.tableAlias = tableAlias;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public String build() {
-        StringBuilder deleteSql = new StringBuilder();
-        return deleteSql.append(dialect.getKeywords().deleteFrom()).append(Chars.SPACE)
-                .append(dialect.buildTableSql(tableName)).toString();
+        return dialect.buildDeleteFromSql(tableName, tableAlias);
     }
 
 }

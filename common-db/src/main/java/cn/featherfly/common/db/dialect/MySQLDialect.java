@@ -215,6 +215,16 @@ public class MySQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
+    public String buildDeleteFromSql(String tableName, String tableAlias) {
+        String alias = Lang.isEmpty(tableAlias) ? null : wrapName(tableAlias);
+        return BuilderUtils.link(getKeyword(Keywords.DELETE), alias, getKeyword(Keywords.FROM), wrapName(tableName),
+                alias);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String buildDropIndexDDL(String schema, String tableName, String indexName, boolean ifExists) {
         AssertIllegalArgument.isNotEmpty(tableName, "tableName");
         AssertIllegalArgument.isNotEmpty(indexName, "indexName");

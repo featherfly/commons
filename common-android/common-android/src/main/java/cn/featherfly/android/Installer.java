@@ -35,6 +35,7 @@ public class Installer {
      * Install.
      *
      * @param file the file
+     * @return the result
      */
     public static Result install(File file) {
         // 适配android9.0之前的安装方法
@@ -46,6 +47,7 @@ public class Installer {
      *
      * @param file        the file
      * @param packageName the package name
+     * @return the result
      */
     public static Result install(File file, String packageName) {
         // 适配android9.0之前的安装方法
@@ -90,6 +92,12 @@ public class Installer {
         }
     }
 
+    /**
+     * Uninstall result.
+     *
+     * @param packageName the package name
+     * @return the result
+     */
     public static Result uninstall(String packageName) {
         Process process = null;
         StringBuilder successMsg = new StringBuilder();
@@ -128,6 +136,9 @@ public class Installer {
         return new Result(successMsg.toString(), errorMsg.toString());
     }
 
+    /**
+     * The type Result.
+     */
     public static class Result {
 
         private String result;
@@ -136,20 +147,41 @@ public class Installer {
 
         private boolean success;
 
+        /**
+         * Instantiates a new Result.
+         *
+         * @param result the result
+         * @param error  the error
+         */
         public Result(String result, String error) {
             this.result = result;
             this.error = error;
             success = "success".equalsIgnoreCase(result);
         }
 
+        /**
+         * Is success boolean.
+         *
+         * @return the boolean
+         */
         public boolean isSuccess() {
             return success;
         }
 
+        /**
+         * Gets error.
+         *
+         * @return the error
+         */
         public String getError() {
             return error;
         }
 
+        /**
+         * Gets result.
+         *
+         * @return the result
+         */
         public String getResult() {
             return result;
         }

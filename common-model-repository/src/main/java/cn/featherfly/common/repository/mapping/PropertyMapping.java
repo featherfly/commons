@@ -15,14 +15,11 @@ import java.util.Map;
  * @version 0.1.0
  * @since 0.1.0
  */
-/**
- * <p>
- * PropertyMapping
- * </p>
- *
- * @author zhongj
- */
 public class PropertyMapping<P extends PropertyMapping<P>> {
+
+    public enum Mode {
+        SINGLE, EMBEDDED, MANY_TO_ONE, ONE_TO_MANY
+    }
 
     /**
      * Instantiates a new property mapping.
@@ -56,6 +53,8 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
     private boolean updatable = true;
 
     private boolean unique;
+
+    private Mode mode = Mode.SINGLE;
 
     /**
      * 小数位数
@@ -325,6 +324,24 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
     }
 
     /**
+     * get mode value
+     *
+     * @return mode
+     */
+    public Mode getMode() {
+        return mode;
+    }
+
+    /**
+     * set mode value
+     *
+     * @param mode mode
+     */
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
+
+    /**
      * 返回defaultValue.
      *
      * @return defaultValue
@@ -409,7 +426,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
     public String toString() {
         return "PropertyMapping [propertyName=" + propertyName + ", repositoryFieldName=" + repositoryFieldName
                 + ", propertyType=" + propertyType + ", primaryKey=" + primaryKey + ", defaultValue=" + defaultValue
-                + ", propertyMappings=" + propertyMappings + ", parent="
+                + ", mode=" + mode + ", propertyMappings=" + propertyMappings + ", parent="
                 + (parent == null ? "" : parent.getPropertyName()) + "]";
     }
 }

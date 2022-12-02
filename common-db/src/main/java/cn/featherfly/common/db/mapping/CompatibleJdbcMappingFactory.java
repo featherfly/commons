@@ -25,6 +25,7 @@ import cn.featherfly.common.lang.SystemPropertyUtils;
 import cn.featherfly.common.lang.WordUtils;
 import cn.featherfly.common.operator.LogicOperator;
 import cn.featherfly.common.repository.mapping.ClassNameConversion;
+import cn.featherfly.common.repository.mapping.PropertyMapping.Mode;
 import cn.featherfly.common.repository.mapping.PropertyNameConversion;
 
 /**
@@ -216,6 +217,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      */
     private void mappinEmbedded(JdbcPropertyMapping mapping, BeanProperty<?> beanProperty, StringBuilder logInfo,
             Table tableMetadata) {
+        mapping.setMode(Mode.EMBEDDED);
         mapping.setPropertyName(beanProperty.getName());
         mapping.setPropertyType(beanProperty.getType());
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
@@ -268,6 +270,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      */
     private void mappingFk(JdbcPropertyMapping mapping, BeanProperty<?> beanProperty, String columnName, boolean hasPk,
             StringBuilder logInfo) {
+        mapping.setMode(Mode.MANY_TO_ONE);
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
         Collection<BeanProperty<?>> bps = bd.findBeanPropertys(new BeanPropertyAnnotationMatcher(Id.class));
         if (Lang.isEmpty(bps)) {

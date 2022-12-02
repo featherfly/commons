@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
 import cn.featherfly.common.constant.Chars;
@@ -40,7 +41,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /** The class mapping. */
     protected JdbcClassMapping<?> classMapping;
 
-    private AliasManager aliasManager = new AliasManager();
+    private AliasManager aliasManager;
 
     /** The default select columns basic builder. */
     protected Map<String, SqlSelectColumnsBuilder<?>> selectColumnsBasicBuilders = new LinkedHashMap<>(1);
@@ -61,7 +62,18 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      * @param tableName tableName
      */
     public SqlSelectBasicBuilder(Dialect dialect, String tableName) {
-        this(dialect, tableName, null);
+        this(dialect, tableName, new AliasManager());
+    }
+
+    /**
+     * Instantiates a new sql select basic builder.
+     *
+     * @param dialect      dialect
+     * @param tableName    tableName
+     * @param aliasManager the alias manager
+     */
+    public SqlSelectBasicBuilder(Dialect dialect, String tableName, AliasManager aliasManager) {
+        this(dialect, tableName, null, aliasManager);
     }
 
     /**
@@ -72,11 +84,25 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      * @param tableAlias alias
      */
     public SqlSelectBasicBuilder(Dialect dialect, String tableName, String tableAlias) {
+        this(dialect, tableName, tableAlias, new AliasManager());
+    }
+
+    /**
+     * Instantiates a new sql select basic builder.
+     *
+     * @param dialect      dialect
+     * @param tableName    tableName
+     * @param tableAlias   alias
+     * @param aliasManager the alias manager
+     */
+    public SqlSelectBasicBuilder(Dialect dialect, String tableName, String tableAlias, AliasManager aliasManager) {
         this.dialect = dialect;
-        //        this.tableAlias = tableAlias;
-        //        this.tableName = tableName;
-        //        defaultTable = tableName;
-        aliasManager.put(tableName, tableAlias);
+        this.aliasManager = aliasManager;
+        if (Lang.isEmpty(tableAlias)) {
+            tableAlias = aliasManager.put(tableName);
+        } else {
+            aliasManager.put(tableName, tableAlias);
+        }
         selectColumnsBasicBuilders.put(tableAlias, new SqlSelectColumnsBasicBuilder(dialect, tableAlias));
     }
 
@@ -87,16 +113,21 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      * @param tableNames the table names, alias is key, value is name
      */
     public SqlSelectBasicBuilder(Dialect dialect, Map<String, String> tableNames) {
-        this.dialect = dialect;
-        //        this.tableAlias = tableAlias;
-        //        this.tableName = tableName;
+        this(dialect, tableNames, new AliasManager());
+    }
+
+    /**
+     * Instantiates a new sql select basic builder.
+     *
+     * @param dialect      the dialect
+     * @param tableNames   the table names, alias is key, value is name
+     * @param aliasManager the alias manager
+     */
+    public SqlSelectBasicBuilder(Dialect dialect, Map<String, String> tableNames, AliasManager aliasManager) {
         AssertIllegalArgument.isNotEmpty(tableNames, "tableNames");
-        //        boolean first = true;
+        this.dialect = dialect;
+        this.aliasManager = aliasManager;
         for (Entry<String, String> e : tableNames.entrySet()) {
-            //            if (first) {
-            //                defaultTable = e.getValue();
-            //                first = false;
-            //            }
             selectColumnsBasicBuilders.put(e.getKey(), new SqlSelectColumnsBasicBuilder(dialect, e.getKey()));
             aliasManager.put(e.getValue(), e.getKey());
         }
@@ -105,16 +136,30 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Instantiates a new sql select basic builder.
      *
+     * @param dialect      the dialect
+     * @param classMapping the class mapping
+     * @param tableAlias   the table alias
+     */
+    public SqlSelectBasicBuilder(Dialect dialect, JdbcClassMapping<?> classMapping, String tableAlias) {
+        this(dialect, classMapping, tableAlias, new AliasManager());
+    }
+
+    /**
+     * Instantiates a new sql select basic builder.
+     *
      * @param dialect      dialect
      * @param classMapping classMapping
      * @param tableAlias   alias
+     * @param aliasManager the alias manager
      */
-    public SqlSelectBasicBuilder(Dialect dialect, JdbcClassMapping<?> classMapping, String tableAlias) {
+    public SqlSelectBasicBuilder(Dialect dialect, JdbcClassMapping<?> classMapping, String tableAlias,
+            AliasManager aliasManager) {
         AssertIllegalArgument.isNotNull(dialect, "dialect");
         AssertIllegalArgument.isNotNull(classMapping, "classMapping");
 
         this.dialect = dialect;
         this.classMapping = classMapping;
+        this.aliasManager = aliasManager;
 
         if (Lang.isEmpty(tableAlias)) {
             tableAlias = aliasManager.put(classMapping.getRepositoryName());
@@ -164,43 +209,6 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     //        //        defaultTable = classMapping.getRepositoryName();
     //        //        tableNames.put(classMapping.getRepositoryName(), tableAlias);
     //        selectColumnsBasicBuilders.put(tableAlias, new SqlSelectColumnsBasicBuilder(dialect, tableAlias));
-    //    }
-
-    //    /**
-    //     * 返回alias.
-    //     *
-    //     * @return alias
-    //     */
-    //    public String getTableAlias() {
-    //        return tableAlias;
-    //    }
-    //
-    //    /**
-    //     * 设置alias.
-    //     *
-    //     * @param tableAlias tableAlias
-    //     */
-    //    public void setTableAlias(String tableAlias) {
-    //        this.tableAlias = tableAlias;
-    //        defaultSelectColumnsBasicBuilder.setTableAlias(tableAlias);
-    //    }
-
-    //    /**
-    //     * 返回tableName.
-    //     *
-    //     * @return tableName
-    //     */
-    //    public String getTableName() {
-    //        return tableName;
-    //    }
-    //
-    //    /**
-    //     * 设置tableName.
-    //     *
-    //     * @param tableName tableName
-    //     */
-    //    public void setTableName(String tableName) {
-    //        this.tableName = tableName;
     //    }
 
     /**
@@ -522,11 +530,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
         joinSelectColumnsBasicBuilders.add(joinSelectColumnsBuilder);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String build() {
+    public String build(BiPredicate<String, String> filter) {
         StringBuilder select = new StringBuilder();
         Keyworld keyworld = dialect.getKeywords();
         select.append(keyworld.select());
@@ -565,8 +569,9 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
             for (Entry<String, String> entry : aliasManager.getNameAlias().entrySet()) {
                 String tableAlias = entry.getKey();
                 String tableName = entry.getValue();
-
-                select.append(Chars.SPACE).append(dialect.buildTableSql(tableName, tableAlias)).append(Chars.COMMA);
+                if (filter.test(tableName, tableAlias)) {
+                    select.append(Chars.SPACE).append(dialect.buildTableSql(tableName, tableAlias)).append(Chars.COMMA);
+                }
             }
             select.deleteCharAt(select.length() - 1);
 
@@ -577,11 +582,33 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
         return select.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String build() {
+        return build((name, alias) -> true);
+    }
+
     private SqlSelectColumnsBuilder<?> getDefaultBuilder() {
         return selectColumnsBasicBuilders.get(getDefaultTableAlias());
     }
 
-    private String getDefaultTableAlias() {
+    /**
+     * Gets the default table alias.
+     *
+     * @return the default table alias
+     */
+    public String getDefaultTableAlias() {
         return aliasManager.getAlias(0);
+    }
+
+    /**
+     * set aliasManager value.
+     *
+     * @return the alias manager
+     */
+    public AliasManager getAliasManager() {
+        return aliasManager;
     }
 }

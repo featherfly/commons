@@ -6,6 +6,7 @@ import cn.featherfly.common.db.builder.SqlBuilder;
 import cn.featherfly.common.db.builder.dml.basic.SqlSelectBasicBuilder;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.operator.AggregateFunction;
+import cn.featherfly.common.repository.builder.AliasManager;
 
 /**
  * abstract sql Select builder.
@@ -51,7 +52,7 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     public AbstractSqlSelectBuilder(Dialect dialect, String tableName, String alias,
             SqlConditionGroup conditionBuilder) {
         this.conditionBuilder = conditionBuilder;
-        selectBuilder = new SqlSelectBasicBuilder(dialect, tableName, alias);
+        selectBuilder = new SqlSelectBasicBuilder(dialect, tableName, alias, new AliasManager());
     }
 
     /**

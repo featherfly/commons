@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import cn.featherfly.common.db.mapping.JavaTypeSqlTypeOperator;
+import cn.featherfly.common.db.mapping.JdbcPropertyMapping;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.vt.Value;
 
@@ -84,6 +85,12 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
     @Override
     public String toString() {
         return "FieldValueOperator [value=" + value + ", operator=" + operator.getClass().getName() + "]";
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <E> FieldValueOperator<E> craete(JdbcPropertyMapping pm, E value) {
+        return value == null ? null
+                : new FieldValueOperator<>((JavaTypeSqlTypeOperator<E>) pm.getJavaTypeSqlTypeOperator(), value);
     }
 
 }

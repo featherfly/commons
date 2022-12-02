@@ -23,9 +23,9 @@ public class HttpClientRequest implements HttpRequest {
     /** The logger. */
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private HttpSyncClient client;
-    private HttpAsyncClient asyncClient;
-    private HttpRxjavaClient rxjavaClient;
+    private HttpSyncClientImpl client;
+    private HttpAsyncClientImpl asyncClient;
+    private HttpRxjavaClientImpl rxjavaClient;
 
     /**
      * Instantiates a new ok http request.
@@ -102,9 +102,9 @@ public class HttpClientRequest implements HttpRequest {
      */
     public HttpClientRequest(OkHttpClient okHttpClient, Map<String, String> headers, Serialization serialization,
             MediaType mediaType) {
-        client = new HttpSyncClient(okHttpClient, headers, serialization, mediaType);
-        asyncClient = new HttpAsyncClient(okHttpClient, headers, serialization, mediaType);
-        rxjavaClient = new HttpRxjavaClient(okHttpClient, headers, serialization, mediaType);
+        client = new HttpSyncClientImpl(okHttpClient, headers, serialization, mediaType);
+        asyncClient = new HttpAsyncClientImpl(okHttpClient, headers, serialization, mediaType);
+        rxjavaClient = new HttpRxjavaClientImpl(okHttpClient, headers, serialization, mediaType);
     }
 
     /**
@@ -277,7 +277,7 @@ public class HttpClientRequest implements HttpRequest {
      *
      * @return the http client
      */
-    public HttpSyncClient getHttpClient() {
+    public HttpSyncClientImpl getHttpClient() {
         return client;
     }
 }

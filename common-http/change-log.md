@@ -1,3 +1,7 @@
+# 0.7.1 2022-12-02
+1. 加入HttpClients缺少的方法
+2. 抽取HttpSyncClient,HttpAsyncClient,HttpRxjavaClient接口
+
 # 0.7.0 2022-11-08
 1. 各种支持请求体参数objectBody的方法加入String和byte[]支持
    如果是String，在没有设置content-type头时，会自动设置content-type为text/plain

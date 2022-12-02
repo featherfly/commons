@@ -69,7 +69,7 @@ public class TestHttp {
         System.out.println(result);
         assertEquals(result, OK);
 
-        HttpSyncClient xmlClient = new HttpSyncClient(new HttpRequestConfig(), Serialization.getDefault(),
+        HttpSyncClientImpl xmlClient = new HttpSyncClientImpl(new HttpRequestConfig(), Serialization.getDefault(),
                 HttpUtils.XML_MEDIA_TYPE);
 
         result = xmlClient.post(url, user);

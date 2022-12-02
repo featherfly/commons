@@ -11,6 +11,7 @@
 package cn.featherfly.common.http;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Map;
@@ -25,7 +26,7 @@ import okhttp3.OkHttpClient;
  *
  * @author zhongj
  */
-public class HttpClients extends AbstractHttpClient implements HttpClient<String>, HttpDownloadClient<Integer> {
+public class HttpClients extends AbstractHttpClient implements HttpSyncClient, HttpDownloadClient<Integer> {
 
     private HttpSyncClient client;
 
@@ -133,9 +134,9 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
     protected void init(OkHttpClient okhttpClient, Map<String, String> headers, Serialization serialization,
             MediaType mediaType) {
         super.init(okhttpClient, headers, serialization, mediaType);
-        client = new HttpSyncClient(okhttpClient, headers, serialization, mediaType);
-        asyncClient = new HttpAsyncClient(okhttpClient, headers, serialization, mediaType);
-        rxjavaClient = new HttpRxjavaClient(okhttpClient, headers, serialization, mediaType);
+        client = new HttpSyncClientImpl(okhttpClient, headers, serialization, mediaType);
+        asyncClient = new HttpAsyncClientImpl(okhttpClient, headers, serialization, mediaType);
+        rxjavaClient = new HttpRxjavaClientImpl(okhttpClient, headers, serialization, mediaType);
     }
 
     /**
@@ -477,6 +478,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return responseType instance
      */
+    @Override
     public <R> R get(String url, Class<R> responseType) {
         return client.get(url, responseType);
     }
@@ -490,6 +492,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return responseType instance
      */
+    @Override
     public <R> R get(String url, Map<String, Serializable> params, Class<R> responseType) {
         return client.get(url, params, responseType);
     }
@@ -504,6 +507,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return responseType instance
      */
+    @Override
     public <R> R get(String url, Map<String, Serializable> params, Map<String, String> headers, Class<R> responseType) {
         return client.get(url, params, headers, responseType);
     }
@@ -700,6 +704,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return responseType instance
      */
+    @Override
     public <R> R head(String url, Class<R> responseType) {
         return client.head(url, responseType);
     }
@@ -713,6 +718,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return responseType instance
      */
+    @Override
     public <R> R head(String url, Map<String, Serializable> params, Class<R> responseType) {
         return client.head(url, params, responseType);
     }
@@ -727,6 +733,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return responseType instance
      */
+    @Override
     public <R> R head(String url, Map<String, Serializable> params, Map<String, String> headers,
             Class<R> responseType) {
         return client.head(url, params, headers, responseType);
@@ -926,6 +933,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return response string
      */
+    @Override
     public <R> R post(String url, Map<String, Serializable> params, Class<R> responseType) {
         return client.post(url, params, responseType);
     }
@@ -940,6 +948,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return response string
      */
+    @Override
     public <R> R post(String url, Map<String, Serializable> params, Map<String, String> headers,
             Class<R> responseType) {
         return client.post(url, params, headers, responseType);
@@ -979,6 +988,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return responseType instance
      */
+    @Override
     public <R> R post(String url, Object requestBody, Class<R> responseType) {
         return client.post(url, requestBody, responseType);
     }
@@ -993,6 +1003,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return responseType instance
      */
+    @Override
     public <R> R post(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
         return client.post(url, requestBody, headers, responseType);
     }
@@ -1269,6 +1280,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return responseType instance
      */
+    @Override
     public <R> R put(String url, Map<String, Serializable> params, Class<R> responseType) {
         return client.put(url, params, responseType);
     }
@@ -1283,6 +1295,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return responseType instance
      */
+    @Override
     public <R> R put(String url, Map<String, Serializable> params, Map<String, String> headers, Class<R> responseType) {
         return client.put(url, params, headers, responseType);
     }
@@ -1321,6 +1334,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the responset type
      * @return responseType instance
      */
+    @Override
     public <R> R put(String url, Object requestBody, Class<R> responseType) {
         return client.put(url, requestBody, responseType);
     }
@@ -1335,6 +1349,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the responset type
      * @return responseType instance
      */
+    @Override
     public <R> R put(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
         return client.put(url, requestBody, headers, responseType);
     }
@@ -1610,6 +1625,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return responseType instance
      */
+    @Override
     public <R> R patch(String url, Map<String, Serializable> params, Class<R> responseType) {
         return client.patch(url, params, responseType);
     }
@@ -1624,6 +1640,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return responseType instance
      */
+    @Override
     public <R> R patch(String url, Map<String, Serializable> params, Map<String, String> headers,
             Class<R> responseType) {
         return client.patch(url, params, headers, responseType);
@@ -1663,6 +1680,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the responset type
      * @return responseType instance
      */
+    @Override
     public <R> R patch(String url, Object requestBody, Class<R> responseType) {
         return client.patch(url, requestBody, responseType);
     }
@@ -1677,6 +1695,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the responset type
      * @return responseType instance
      */
+    @Override
     public <R> R patch(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
         return client.patch(url, requestBody, headers, responseType);
     }
@@ -1939,6 +1958,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return response string
      */
+    @Override
     public <R> R delete(String url, Class<R> responseType) {
         return client.delete(url, responseType);
     }
@@ -1952,6 +1972,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return response string
      */
+    @Override
     public <R> R delete(String url, Map<String, String> headers, Class<R> responseType) {
         return client.delete(url, headers, responseType);
     }
@@ -1990,6 +2011,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return responseType instance
      */
+    @Override
     public <R> R delete(String url, Object requestBody, Class<R> responseType) {
         return client.delete(url, requestBody, responseType);
     }
@@ -2004,6 +2026,7 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
      * @param responseType the response type
      * @return responseType instance
      */
+    @Override
     public <R> R delete(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
         return client.delete(url, requestBody, headers, responseType);
     }
@@ -2218,6 +2241,23 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public InputStream stream(HttpMethod httpMethod, String url, Map<String, Serializable> params,
+            Map<String, String> headers) {
+        return client.stream(httpMethod, url, params, headers);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public InputStream stream(HttpMethod httpMethod, String url, Object requestBody, Map<String, String> headers) {
+        return client.stream(httpMethod, url, requestBody, headers);
+    }
+
+    /**
      * Download completion.
      *
      * @param url    the url
@@ -2366,5 +2406,4 @@ public class HttpClients extends AbstractHttpClient implements HttpClient<String
             Map<String, String> headers, OutputStream output) {
         return rxjavaClient.download(url, params, headers, output);
     }
-
 }

@@ -107,7 +107,7 @@ public class BaiduMapTest {
 
     @Test
     public void testServerWithHttpClient() {
-        HttpSyncClient client = new HttpSyncClient();
+        HttpSyncClientImpl client = new HttpSyncClientImpl();
 
         String url = "http://api.map.baidu.com/reverse_geocoding/v3/?ak=0Zj0WEeN8dTr8XMMAFal5LPE8k5D53tR&output=json&coordtype=wgs84ll&location=31.225696563611,121.49884033194";
 
@@ -117,7 +117,7 @@ public class BaiduMapTest {
 
         AtomicBoolean executed = new AtomicBoolean(false);
 
-        HttpAsyncClient asyncClient = new HttpAsyncClient();
+        HttpAsyncClientImpl asyncClient = new HttpAsyncClientImpl();
 
         asyncClient.get(url, ReverseGeocoding.class).completion(r -> {
             System.out.println(r);
@@ -137,7 +137,7 @@ public class BaiduMapTest {
             executed.set(true);
         });
 
-        HttpRxjavaClient rxjavaClient = new HttpRxjavaClient();
+        HttpRxjavaClientImpl rxjavaClient = new HttpRxjavaClientImpl();
         rxjavaClient.get(url, ReverseGeocoding.class).subscribe(r -> {
             System.out.println("Observable");
             System.out.println(r);

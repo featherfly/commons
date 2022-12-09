@@ -242,7 +242,7 @@ public final class ClassUtils {
      * @return method return value
      */
     public static Object invokeMethod(Class<?> type, String methodName, Object... args) {
-        return invokeMethod(type, match(args, type, true), args);
+        return invokeMethod(type, matchMethod(type, methodName, args), args);
     }
 
     /**
@@ -281,7 +281,7 @@ public final class ClassUtils {
      * @return method return value
      */
     public static Object invokeMethod(Object object, String methodName, Object... args) {
-        return invokeMethod(object, match(args, object.getClass(), true), args);
+        return invokeMethod(object, matchMethod(object.getClass(), methodName, args), args);
     }
 
     /**
@@ -1744,55 +1744,47 @@ public final class ClassUtils {
     public static <T> T newInstance(Class<T> clazz, Object... args) {
         AssertIllegalArgument.isNotNull(clazz, "Class<T> clazz");
         if (Lang.isNotEmpty(args)) {
-            Constructor<T> matchConstructor = match(args, clazz, false);
+            Constructor<T> matchConstructor = matchConstructor(clazz, args);
             return newInstance(matchConstructor, args);
         } else {
             return newInstance(clazz);
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private static <E extends Executable> E match(Object[] args, Class<?> type, boolean isMethod) {
+    private static <E extends Executable> E matchMethod(Class<?> type, String name, Object[] args) {
         List<Executable> matchs = new ArrayList<>();
-        if (isMethod) {
-            for (Method method : type.getMethods()) {
-                if (method.getParameterCount() == args.length) {
-                    matchs.add(method);
-                }
-            }
-        } else {
-            for (Constructor<?> constructor : type.getConstructors()) {
-                if (constructor.getParameterCount() == args.length) {
-                    matchs.add(constructor);
-                }
+        for (Method method : type.getMethods()) {
+            if (method.getName().equals(name) && method.getParameterCount() == args.length) {
+                matchs.add(method);
             }
         }
+        return match(matchs, type, args, true);
+    }
 
-        Class<?>[] arguTypes = new Class<?>[args.length];
-        for (int i = 0; i < args.length; i++) {
-            arguTypes[i] = args[i].getClass();
+    private static <E extends Executable> E matchConstructor(Class<?> type, Object[] args) {
+        List<Executable> matchs = new ArrayList<>();
+        for (Constructor<?> constructor : type.getConstructors()) {
+            if (constructor.getParameterCount() == args.length) {
+                matchs.add(constructor);
+            }
         }
+        return match(matchs, type, args, false);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <E extends Executable> E match(List<Executable> matchs, Class<?> type, Object[] args,
+            boolean isMethod) {
         Executable matchExecutable = null;
-        for (Executable executable : matchs) {
-            boolean matchAllParamType = true;
-            Class<?>[] paramTypes = executable.getParameterTypes();
-            for (int i = 0; i < arguTypes.length; i++) {
-                if (paramTypes[i] != arguTypes[i]) {
-                    matchAllParamType = false;
-                    break;
-                }
+        if (!matchs.isEmpty()) {
+            Class<?>[] arguTypes = new Class<?>[args.length];
+            for (int i = 0; i < args.length; i++) {
+                arguTypes[i] = args[i].getClass();
             }
-            if (matchAllParamType) {
-                matchExecutable = executable;
-                break;
-            }
-        }
-        if (matchExecutable == null) {
             for (Executable executable : matchs) {
                 boolean matchAllParamType = true;
                 Class<?>[] paramTypes = executable.getParameterTypes();
                 for (int i = 0; i < arguTypes.length; i++) {
-                    if (!ClassUtils.isParent(paramTypes[i], arguTypes[i])) {
+                    if (paramTypes[i] != arguTypes[i]) {
                         matchAllParamType = false;
                         break;
                     }
@@ -1802,10 +1794,26 @@ public final class ClassUtils {
                     break;
                 }
             }
+            if (matchExecutable == null) {
+                for (Executable executable : matchs) {
+                    boolean matchAllParamType = true;
+                    Class<?>[] paramTypes = executable.getParameterTypes();
+                    for (int i = 0; i < arguTypes.length; i++) {
+                        if (!ClassUtils.isParent(paramTypes[i], arguTypes[i])) {
+                            matchAllParamType = false;
+                            break;
+                        }
+                    }
+                    if (matchAllParamType) {
+                        matchExecutable = executable;
+                        break;
+                    }
+                }
+            }
         }
         if (matchExecutable == null) {
             throw new ReflectException(Strings.format("{0}({1}) 此{2}不存在",
-                    new Object[] { type.getName(), Arrays.asList(arguTypes).toString(), isMethod ? "方法" : "构造器" }));
+                    new Object[] { type.getName(), Arrays.asList(args).toString(), isMethod ? "方法" : "构造器" }));
         }
         return (E) matchExecutable;
     }

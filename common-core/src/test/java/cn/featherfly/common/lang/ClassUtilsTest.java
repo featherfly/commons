@@ -76,11 +76,43 @@ public class ClassUtilsTest {
         user = ClassUtils.newInstance(User.class, list);
         System.out.println(user);
         assertEquals(user.construct, "LinkedList");
+
+        String name = "yufei";
+        Integer age = 18;
+        user = ClassUtils.newInstance(User.class, name, age);
+        System.out.println(user);
+        assertEquals(user.name, name);
+        assertEquals(user.age, age);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testNewInstance2() {
         ClassUtils.newInstance(null);
+    }
+
+    @Test
+    public void testInvokeMethod() {
+        String name = "yufei";
+        Integer age = 18;
+        User user = new User();
+
+        assertNull(user.name);
+
+        ClassUtils.invokeMethod(user, "setName", name);
+        assertEquals(user.name, name);
+
+        ClassUtils.invokeMethod(user, "setAge", age);
+        assertEquals(user.age, age);
+
+        user = new User();
+
+        assertNull(user.name);
+        assertNull(user.age);
+
+        ClassUtils.invokeMethod(user, "set", name, age);
+        assertEquals(user.name, name);
+        assertEquals(user.age, age);
+
     }
 
     @Test

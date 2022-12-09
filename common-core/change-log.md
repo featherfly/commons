@@ -1,6 +1,6 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
-# 1.10.8 
+# 1.11.0
 
 1. WordUtils加入lowerCaseFirst方法
 2. 加入StringLinker类
@@ -12,6 +12,7 @@
 8. Page删除标注为废弃的方法getPageNumber()、getPageSize()
 9. 删除ConcurrentHashChainMap,LinkedHashChainMap,TreeChianMap
 10. 删除GenericType,GenericClass
+11. 修复ClassUtils.invokeMethod和ClassUtils.newInstance参数匹配出错的问题
 
 # 1.10.7 2022-07-15
 

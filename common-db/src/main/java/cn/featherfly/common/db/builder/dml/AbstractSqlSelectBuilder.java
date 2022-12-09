@@ -167,4 +167,13 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     public String build() {
         return selectBuilder.build();
     }
+
+    public String getAlias() {
+        return selectBuilder.getDefaultTableAlias();
+    }
+
+    public String getTableName() {
+        return selectBuilder.getAliasManager().getName(getAlias());
+    }
+
 }

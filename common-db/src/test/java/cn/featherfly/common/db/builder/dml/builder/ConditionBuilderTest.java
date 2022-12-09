@@ -62,7 +62,7 @@ public class ConditionBuilderTest {
     }
 
     @Test
-    void testtestSqlQueryBuilderSelect() {
+    void testSqlQueryBuilderSelect() {
         // FIXME 这个测试未通过SelectBuilder有BUG
         SqlQueryBuilder builder2 = new SqlQueryBuilder(Dialects.MYSQL, IgnorePolicy.EMPTY);
         builder2.from("user", "u").where().eq("name", name).and().eq("pwd", pwd).and().group().eq("sex", sex).or()
@@ -111,7 +111,8 @@ public class ConditionBuilderTest {
     void testSqlFindBuilder() {
         SqlFindBuilder findBuilder = new SqlFindBuilder(Dialects.MYSQL, "user", null);
         System.out.println(findBuilder.build());
-        assertEquals("SELECT * FROM `user`", findBuilder.build());
+        //        assertEquals(findBuilder.build(), "SELECT * FROM `user`");
+        assertEquals(findBuilder.build(), "SELECT _user0.* FROM `user` _user0");
 
         findBuilder = new SqlFindBuilder(Dialects.MYSQL, "user", "u3", null);
         System.out.println(findBuilder.build());

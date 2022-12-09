@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 
 import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.dialect.Dialect;
+import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.operator.AggregateFunction;
 import cn.featherfly.common.repository.builder.dml.FindBuilder;
@@ -192,7 +193,7 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
     public SqlConditionBuilder from(String tableName, String alias) {
         conditionGroup.setQueryAlias(alias);
         sortBuilder.setTableAlias(alias);
-        return selectBuilder().from(tableName, alias);
+        return selectBuilder(tableName, alias).from(tableName, alias);
     }
 
     /**
@@ -201,7 +202,7 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
     @Override
     public SqlConditionBuilder from(String[] tableNames) {
         // YUFEI_TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedException();
     }
 
     /**
@@ -210,7 +211,7 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
     @Override
     public SqlConditionBuilder from(Collection<String> tableNames) {
         // YUFEI_TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedException();
     }
 
     /**
@@ -219,7 +220,7 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
     @Override
     public SqlConditionBuilder from(Map<String, String> tableNames) {
         // YUFEI_TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedException();
     }
 
     // ********************************************************************
@@ -248,14 +249,22 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
         this.dialect = dialect;
     }
 
+    private SqlSelectBuilder selectBuilder() {
+        return selectBuilder(null);
+    }
+
+    private SqlSelectBuilder selectBuilder(String tableName) {
+        return selectBuilder(tableName, null);
+    }
+
     /**
      * 返回selectBuilder
      *
      * @return selectBuilder
      */
-    private SqlSelectBuilder selectBuilder() {
+    private SqlSelectBuilder selectBuilder(String tableName, String alias) {
         if (selectBuilder == null) {
-            selectBuilder = new SqlSelectBuilder(dialect, conditionGroup);
+            selectBuilder = new SqlSelectBuilder(dialect, tableName, alias, conditionGroup);
         }
         return selectBuilder;
     }

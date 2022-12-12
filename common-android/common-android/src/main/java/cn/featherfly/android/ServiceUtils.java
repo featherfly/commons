@@ -6,12 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
+
 import java.util.ArrayList;
 
 /**
  * The type Service utils.
  */
-public class ServiceUtils {
+public final class ServiceUtils {
 
     private Context context;
 
@@ -89,7 +90,24 @@ public class ServiceUtils {
      * @param serviceType the service type
      */
     public static void startService(String action, Uri uri, Context context, Class<? extends Service> serviceType) {
-        if (!isServiceRunning(context, serviceType)) {
+        startService(action, uri, context, serviceType, false);
+    }
+
+    /**
+     * Start service if the service is not running.
+     *
+     * @param action       the action
+     * @param uri          the uri
+     * @param context      the context
+     * @param serviceType  the service type
+     * @param checkRunning the check running
+     */
+    public static void startService(String action, Uri uri, Context context, Class<? extends Service> serviceType, boolean checkRunning) {
+        if (checkRunning) {
+            if (!isServiceRunning(context, serviceType)) {
+                context.startService(new Intent(action, uri, context, serviceType));
+            }
+        } else {
             context.startService(new Intent(action, uri, context, serviceType));
         }
     }
@@ -101,7 +119,22 @@ public class ServiceUtils {
      * @param serviceType the service type
      */
     public static void startService(Context context, Class<? extends Service> serviceType) {
-        if (!isServiceRunning(context, serviceType)) {
+        startService(context, serviceType, false);
+    }
+
+    /**
+     * Start service if the service is not running.
+     *
+     * @param context      the context
+     * @param serviceType  the service type
+     * @param checkRunning the check running
+     */
+    public static void startService(Context context, Class<? extends Service> serviceType, boolean checkRunning) {
+        if (checkRunning) {
+            if (!isServiceRunning(context, serviceType)) {
+                context.startService(new Intent(context, serviceType));
+            }
+        } else {
             context.startService(new Intent(context, serviceType));
         }
     }
@@ -115,9 +148,26 @@ public class ServiceUtils {
      * @param serviceType the service type
      */
     public static void stopService(String action, Uri uri, Context context, Class<? extends Service> serviceType) {
-//        if (isServiceRunning(context, serviceType)) {
+        stopService(action, uri, context, serviceType, false);
+    }
+
+    /**
+     * Stop service.
+     *
+     * @param action       the action
+     * @param uri          the uri
+     * @param context      the context
+     * @param serviceType  the service type
+     * @param checkRunning the check running
+     */
+    public static void stopService(String action, Uri uri, Context context, Class<? extends Service> serviceType, boolean checkRunning) {
+        if (checkRunning) {
+            if (!isServiceRunning(context, serviceType)) {
+                context.stopService(new Intent(action, uri, context, serviceType));
+            }
+        } else {
             context.stopService(new Intent(action, uri, context, serviceType));
-//        }
+        }
     }
 
     /**
@@ -127,9 +177,24 @@ public class ServiceUtils {
      * @param serviceType the service type
      */
     public static void stopService(Context context, Class<? extends Service> serviceType) {
-//        if (!isServiceRunning(context, serviceType)) {
+        stopService(context, serviceType, false);
+    }
+
+    /**
+     * Stop service.
+     *
+     * @param context      the context
+     * @param serviceType  the service type
+     * @param checkRunning the check running
+     */
+    public static void stopService(Context context, Class<? extends Service> serviceType, boolean checkRunning) {
+        if (checkRunning) {
+            if (!isServiceRunning(context, serviceType)) {
+                context.stopService(new Intent(context, serviceType));
+            }
+        } else {
             context.stopService(new Intent(context, serviceType));
-//        }
+        }
     }
 
     /**

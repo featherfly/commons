@@ -1,18 +1,17 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
-# 1.11.0
+# 1.11.0 2022-12-12
 
 1. WordUtils加入lowerCaseFirst方法
 2. 加入StringLinker类
 3. Strings加入trimStart(String,String),trimEnd(String,String),trimStartEnd(String,String),trimStartEndBlank(String)
 4. cn.featherfly.common.enums包重构为cn.featherfly.common.operator并移动到common-api
-5. 加入Type<T>替代GenericType<T>,ClassType<T>替代GenericClass<T>
+5. 加入Type<T>替代GenericType<T>,ClassType<T>替代GenericClass<T>,删除GenericType,GenericClass
 6. storage移动到common-storage模块
 7. 修复Lang.getInvoker返回不正确问题,加入Lang.getInvoker(int)
 8. Page删除标注为废弃的方法getPageNumber()、getPageSize()
 9. 删除ConcurrentHashChainMap,LinkedHashChainMap,TreeChianMap
-10. 删除GenericType,GenericClass
-11. 修复ClassUtils.invokeMethod和ClassUtils.newInstance参数匹配出错的问题
+10. 修复ClassUtils.invokeMethod和ClassUtils.newInstance参数匹配出错的问题
 
 # 1.10.7 2022-07-15
 

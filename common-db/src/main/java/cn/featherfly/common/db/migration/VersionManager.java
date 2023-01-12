@@ -19,9 +19,7 @@ import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
 
 /**
- * <p>
- * VersionManager
- * </p>
+ * VersionManager.
  *
  * @author zhongj
  */

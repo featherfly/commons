@@ -137,7 +137,7 @@ public class SqlSelectBuilder extends AbstractSqlSelectBuilder implements Select
      */
     @Override
     public SqlConditionBuilder from(String[] tableNames) {
-        // TODO 需要从底层开始加入多tableName tableAlias的Builder
+        // NOIMPL 需要从底层开始加入多tableName tableAlias的Builder
         return null;
     }
 
@@ -146,7 +146,7 @@ public class SqlSelectBuilder extends AbstractSqlSelectBuilder implements Select
      */
     @Override
     public SqlConditionBuilder from(Collection<String> tableNames) {
-        // TODO Auto-generated method stub
+        // NOIMPL 需要从底层开始加入多tableName tableAlias的Builder
         return null;
     }
 
@@ -155,7 +155,7 @@ public class SqlSelectBuilder extends AbstractSqlSelectBuilder implements Select
      */
     @Override
     public SqlConditionBuilder from(Map<String, String> tableNames) {
-        // TODO Auto-generated method stub
+        // NOIMPL 需要从底层开始加入多tableName tableAlias的Builder
         return null;
     }
 }

@@ -177,7 +177,7 @@ public class OracleDialect extends AbstractDialect {
      */
     @Override
     protected String getPrimaryKeyDDL(Table table) {
-        // FIXME 未实现
+        // NOIMPL 未实现
         throw new UnsupportedException();
     }
 
@@ -186,7 +186,7 @@ public class OracleDialect extends AbstractDialect {
      */
     @Override
     public String buildInsertBatchSql(String tableName, String[] columnNames, int insertAmount) {
-        // FIXME 未实现
+        // NOIMPL 未实现
         throw new UnsupportedException();
     }
 
@@ -195,7 +195,7 @@ public class OracleDialect extends AbstractDialect {
      */
     @Override
     protected String getAutoIncrement(Column column) {
-        // FIXME 未实现
+        // NOIMPL 未实现
         throw new UnsupportedException();
     }
 
@@ -204,7 +204,7 @@ public class OracleDialect extends AbstractDialect {
      */
     @Override
     public String getInitSqlHeader() {
-        // FIXME 未实现
+        // NOIMPL 未实现
         throw new UnsupportedException();
     }
 
@@ -213,7 +213,7 @@ public class OracleDialect extends AbstractDialect {
      */
     @Override
     public String getInitSqlFooter() {
-        // FIXME 未实现
+        // NOIMPL 未实现
         throw new UnsupportedException();
     }
 
@@ -233,7 +233,7 @@ public class OracleDialect extends AbstractDialect {
     @Override
     public String buildUpsertBatchSql(String tableName, String[] columnNames, String[] uniqueColumns,
             int insertAmount) {
-        // FIXME 未实现
+        // NOIMPL 未实现
         throw new UnsupportedException();
     }
 
@@ -242,7 +242,7 @@ public class OracleDialect extends AbstractDialect {
      */
     @Override
     String getKeywordLikeCaseInsensitive() {
-        // FIXME 未实现，后续来实现
+        // NOIMPL 未实现，后续来实现
         throw new UnsupportedException();
     }
 
@@ -276,7 +276,7 @@ public class OracleDialect extends AbstractDialect {
      */
     @Override
     String getKeywordNeCaseInsensitive() {
-        // FIXME 未实现
+        // NOIMPL 未实现
         throw new UnsupportedException();
     }
 

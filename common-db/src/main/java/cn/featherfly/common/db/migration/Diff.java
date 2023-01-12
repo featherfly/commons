@@ -15,10 +15,7 @@ import cn.featherfly.common.db.mapping.JdbcPropertyMapping;
 import cn.featherfly.common.repository.Index;
 
 /**
- * <p>
- * UpdateMapping
- * </p>
- * .
+ * Diff.
  *
  * @author zhongj
  */

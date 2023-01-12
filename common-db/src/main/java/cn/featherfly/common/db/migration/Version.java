@@ -4,10 +4,7 @@ package cn.featherfly.common.db.migration;
 import cn.featherfly.common.constant.Chars;
 
 /**
- * <p>
- * Version
- * </p>
- * .
+ * Version .
  *
  * @author zhongj
  */

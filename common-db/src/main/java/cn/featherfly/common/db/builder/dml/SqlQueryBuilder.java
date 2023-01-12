@@ -201,7 +201,7 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
      */
     @Override
     public SqlConditionBuilder from(String[] tableNames) {
-        // YUFEI_TODO Auto-generated method stub
+        // NOIMPL Auto-generated method stub
         throw new UnsupportedException();
     }
 
@@ -210,7 +210,7 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
      */
     @Override
     public SqlConditionBuilder from(Collection<String> tableNames) {
-        // YUFEI_TODO Auto-generated method stub
+        // NOIMPL Auto-generated method stub
         throw new UnsupportedException();
     }
 
@@ -219,7 +219,7 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
      */
     @Override
     public SqlConditionBuilder from(Map<String, String> tableNames) {
-        // YUFEI_TODO Auto-generated method stub
+        // NOIMPL Auto-generated method stub
         throw new UnsupportedException();
     }
 

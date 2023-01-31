@@ -6,6 +6,8 @@
 5. 加入JdbcPropertyMapping
 6. 加入FieldValueOperator，用于优化Entity的数据设置与解析不走SqlTypeMappingManager
 7. Dialect加入buildDeleteFromSql方法,SqlDeleteFromBasicBuilder加入tableAlias支持
+8. 修复SqliteDialect的buildInsertBatchSql方法返回sql不正确的问题
+9. 优化ClassMappingUtils的getInsertBatchSqlAndParamPositions,getInsertSqlAndParamPositions方法
 
 # 0.5.5 2022-8-11
 1. Dialect加入getKeywordLike(QueryPolicy)、getKeywordEq(QueryPolicy)、keywordsCase()方法

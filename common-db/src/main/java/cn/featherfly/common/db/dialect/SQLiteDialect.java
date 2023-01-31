@@ -278,20 +278,10 @@ public class SQLiteDialect extends AbstractDialect {
         }
         StringBuilder sql = new StringBuilder();
         BuilderUtils.link(sql, getKeyword(Keywords.INSERT), getKeyword(Keywords.INTO), wrapName(tableName),
-                getKeyword(Keywords.VALUES));
-
-        StringBuilder columnNamesSql = new StringBuilder(Chars.PAREN_L);
-        for (String column : columnNames) {
-            columnNamesSql.append(wrapName(column)).append(Chars.COMMA);
-        }
-        if (columnNamesSql.length() > 0) {
-            columnNamesSql.deleteCharAt(columnNamesSql.length() - 1);
-        }
-        columnNamesSql.append(Chars.PAREN_R);
-        BuilderUtils.link(sql, columnNamesSql.toString(), getKeyword(Keywords.SELECT));
+                getKeyword(Keywords.SELECT));
 
         for (int i = 0; i < columnNames.length; i++) {
-            BuilderUtils.link(sql, Chars.QUESTION + Chars.COMMA);
+            BuilderUtils.link(sql, Chars.QUESTION, getKeyword(Keywords.AS), wrapName(columnNames[i]) + Chars.COMMA);
         }
         sql.deleteCharAt(sql.length() - 1);
         for (int index = 1; index < insertAmount; index++) {
@@ -308,7 +298,12 @@ public class SQLiteDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public boolean isAutoGenerateKeyBatch() {
+    public boolean supportAutoGenerateKeyBatch() {
+        return false;
+    }
+
+    @Override
+    public boolean supportSelectForUpdate() {
         return false;
     }
 

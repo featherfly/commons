@@ -94,14 +94,6 @@ public class ClassMappingUtils {
         return dialect.buildCreateTableDDL(createTable(classMapping, dialect, sqlTypeMappingManager));
     }
 
-    /**
-     * Creates the column.
-     *
-     * @param propertyMapping       the property mapping
-     * @param sqlTypeMappingManager the sql type mapping manager
-     * @param index                 the index
-     * @return the column model
-     */
     private static ColumnModel createColumn(JdbcPropertyMapping propertyMapping,
             SqlTypeMappingManager sqlTypeMappingManager, int index, Dialect dialect) {
         ColumnModel column = new ColumnModel();
@@ -139,13 +131,40 @@ public class ClassMappingUtils {
      */
     public static Tuple2<String, Map<Integer, String>> getInsertBatchSqlAndParamPositions(int insertAmount,
             JdbcClassMapping<?> classMapping, Dialect dialect) {
-        Tuple2<String, Map<Integer, String>> tuple = getInsertSqlAndParamPositions(classMapping, dialect);
-        String sql = dialect.buildInsertBatchSql(classMapping.getRepositoryName(),
-                tuple.get1().values().stream().map(pn -> {
-                    return getColumnName(pn, classMapping);
-                }).toArray(String[]::new), insertAmount);
-        //        tuple.get1().values().toArray(new String[] {}), insertAmount);
-        return Tuples.of(sql, tuple.get1());
+        if (insertAmount == 1) {
+            Tuple2<Map<Integer, String>, String[]> tuple = getInsertParamPositionsAndColumns(classMapping, dialect);
+            String sql = dialect.buildInsertSql(classMapping.getRepositoryName(), tuple.get1());
+            return Tuples.of(sql, tuple.get0());
+        } else if (insertAmount > 1) {
+            Tuple2<Map<Integer, String>, String[]> tuple = getInsertParamPositionsAndColumns(classMapping, dialect);
+            String sql = dialect.buildInsertBatchSql(classMapping.getRepositoryName(), tuple.get1(), insertAmount);
+            return Tuples.of(sql, tuple.get0());
+        } else {
+            throw new JdbcMappingException("insertAmount can not < 1, current value is " + insertAmount);
+        }
+    }
+
+    private static Tuple2<Map<Integer, String>, String[]> getInsertParamPositionsAndColumns(
+            JdbcClassMapping<?> classMapping, Dialect dialect) {
+        Map<Integer, String> propertyPositions = new LinkedHashMap<>();
+        int paramNum = 0;
+        List<String> columns = new ArrayList<>();
+        for (JdbcPropertyMapping pm : classMapping.getPropertyMappings()) {
+            if (Lang.isEmpty(pm.getPropertyMappings())) {
+                if (pm.isInsertable()) {
+                    columns.add(pm.getRepositoryFieldName());
+                    propertyPositions.put(paramNum++, pm.getPropertyName());
+                }
+            } else {
+                for (JdbcPropertyMapping subPm : pm.getPropertyMappings()) {
+                    if (subPm.isInsertable()) {
+                        columns.add(subPm.getRepositoryFieldName());
+                        propertyPositions.put(paramNum++, pm.getPropertyName() + Chars.DOT + subPm.getPropertyName());
+                    }
+                }
+            }
+        }
+        return Tuples.of(propertyPositions, CollectionUtils.toArray(columns, String.class));
     }
 
     /**
@@ -157,32 +176,9 @@ public class ClassMappingUtils {
      */
     public static Tuple2<String, Map<Integer, String>> getInsertSqlAndParamPositions(JdbcClassMapping<?> classMapping,
             Dialect dialect) {
-        Map<Integer, String> propertyPositions = new LinkedHashMap<>();
-        StringBuilder insertSql = new StringBuilder();
-        insertSql.append(dialect.getKeywords().insert()).append(Chars.SPACE).append(dialect.getKeywords().into())
-                .append(Chars.SPACE).append(dialect.wrapName(classMapping.getRepositoryName())).append(" (");
-        List<JdbcPropertyMapping> pms = new ArrayList<>();
-        for (JdbcPropertyMapping pm : classMapping.getPropertyMappings()) {
-            if (Lang.isEmpty(pm.getPropertyMappings())) {
-                if (pm.isInsertable()) {
-                    insertSql.append(dialect.wrapName(pm.getRepositoryFieldName())).append(",");
-                    pms.add(pm);
-                }
-            } else {
-                for (JdbcPropertyMapping subPm : pm.getPropertyMappings()) {
-                    if (subPm.isInsertable()) {
-                        insertSql.append(dialect.wrapName(subPm.getRepositoryFieldName())).append(",");
-                        pms.add(subPm);
-                    }
-                }
-            }
-        }
-        if (pms.size() > 0) {
-            insertSql.deleteCharAt(insertSql.length() - 1);
-        }
-        insertSql.append(") ").append(dialect.getKeywords().values())
-                .append(getInsertValuesSqlPart(pms, propertyPositions));
-        return Tuples.of(insertSql.toString(), propertyPositions);
+        Tuple2<Map<Integer, String>, String[]> tuple = getInsertParamPositionsAndColumns(classMapping, dialect);
+        String sql = dialect.buildInsertSql(classMapping.getRepositoryName(), tuple.get1());
+        return Tuples.of(sql, tuple.get0());
     }
 
     /**
@@ -270,38 +266,31 @@ public class ClassMappingUtils {
         return propertyPositions;
     }
 
-    /**
-     * Gets the insert values sql part.
-     *
-     * @param pms               the pms
-     * @param propertyPositions the property positions
-     * @return the insert values sql part
-     */
-    private static String getInsertValuesSqlPart(List<JdbcPropertyMapping> pms,
-            Map<Integer, String> propertyPositions) {
-        StringBuilder insertSqlPart = new StringBuilder(" (");
-        int paramNum = 0;
-        for (int i = 0; i < pms.size(); i++) {
-            JdbcPropertyMapping pm = pms.get(i);
-            if (pm.isPrimaryKey() && pm.getDefaultValue() != null && !"null".equalsIgnoreCase(pm.getDefaultValue())) {
-                insertSqlPart.append(pm.getDefaultValue()).append(Chars.COMMA);
-            } else {
-                paramNum++;
-                insertSqlPart.append(Chars.QUESTION).append(Chars.COMMA);
-                if (pm.getParent() == null) {
-                    propertyPositions.put(paramNum, pm.getPropertyName());
-                } else {
-                    propertyPositions.put(paramNum,
-                            pm.getParent().getPropertyName() + Chars.DOT + pm.getPropertyName());
-                }
-            }
-        }
-        if (pms.size() > 0) {
-            insertSqlPart.deleteCharAt(insertSqlPart.length() - 1);
-        }
-        insertSqlPart.append(")");
-        return insertSqlPart.toString();
-    }
+    //    private static String getInsertValuesSqlPart(List<JdbcPropertyMapping> pms,
+    //            Map<Integer, String> propertyPositions) {
+    //        StringBuilder insertSqlPart = new StringBuilder(" (");
+    //        int paramNum = 0;
+    //        for (int i = 0; i < pms.size(); i++) {
+    //            JdbcPropertyMapping pm = pms.get(i);
+    //            if (pm.isPrimaryKey() && pm.getDefaultValue() != null && !"null".equalsIgnoreCase(pm.getDefaultValue())) {
+    //                insertSqlPart.append(pm.getDefaultValue()).append(Chars.COMMA);
+    //            } else {
+    //                paramNum++;
+    //                insertSqlPart.append(Chars.QUESTION).append(Chars.COMMA);
+    //                if (pm.getParent() == null) {
+    //                    propertyPositions.put(paramNum, pm.getPropertyName());
+    //                } else {
+    //                    propertyPositions.put(paramNum,
+    //                            pm.getParent().getPropertyName() + Chars.DOT + pm.getPropertyName());
+    //                }
+    //            }
+    //        }
+    //        if (pms.size() > 0) {
+    //            insertSqlPart.deleteCharAt(insertSqlPart.length() - 1);
+    //        }
+    //        insertSqlPart.append(")");
+    //        return insertSqlPart.toString();
+    //    }
 
     /**
      * Gets the update sql and param positions.

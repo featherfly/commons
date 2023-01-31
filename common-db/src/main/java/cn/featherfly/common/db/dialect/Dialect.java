@@ -147,38 +147,47 @@ public interface Dialect {
     }
 
     /**
-     * Checks if is auto generate key batch.
+     * Support select for update.
      *
-     * @return true, if is auto generate key batch
+     * @return true, if successful
      */
-    default boolean isAutoGenerateKeyBatch() {
+    default boolean supportSelectForUpdate() {
         return true;
     }
 
     /**
-     * Checks if is insert batch.
+     * Support auto generate key batch.
+     *
+     * @return true, if successful
+     */
+    default boolean supportAutoGenerateKeyBatch() {
+        return true;
+    }
+
+    /**
+     * Support insert batch.
      *
      * @return true, if is insert batch
      */
-    default boolean isInsertBatch() {
+    default boolean supportInsertBatch() {
         return true;
     }
 
     /**
-     * Checks if is upsert.
+     * Support upsert.
      *
      * @return true, if is upsert
      */
-    default boolean isUpsert() {
+    default boolean supportUpsert() {
         return true;
     }
 
     /**
-     * Checks if is upsert batch.
+     * Support upsert batch.
      *
      * @return true, if is upsert batch
      */
-    default boolean isUpsertBatch() {
+    default boolean supportUpsertBatch() {
         return true;
     }
 

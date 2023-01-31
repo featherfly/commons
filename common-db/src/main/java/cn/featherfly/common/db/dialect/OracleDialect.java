@@ -218,12 +218,12 @@ public class OracleDialect extends AbstractDialect {
     }
 
     @Override
-    public boolean isUpsert() {
+    public boolean supportUpsert() {
         return false;
     }
 
     @Override
-    public boolean isUpsertBatch() {
+    public boolean supportUpsertBatch() {
         return false;
     }
 

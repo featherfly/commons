@@ -130,14 +130,14 @@ public class SqliteDialectTest extends DialectTest {
         assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?)");
 
         sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 2);
-        assertEquals(sql, "INSERT INTO `user` VALUES (`id`,`name`,`descp`) SELECT ?, ?, ? UNION SELECT ?, ?, ?");
+        assertEquals(sql, "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp` UNION SELECT ?, ?, ?");
         sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 3);
         assertEquals(sql,
-                "INSERT INTO `user` VALUES (`id`,`name`,`descp`) SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
+                "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp` UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
 
         sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 5);
         assertEquals(sql,
-                "INSERT INTO `user` VALUES (`id`,`name`,`descp`) SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
+                "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp` UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
 
     }
 

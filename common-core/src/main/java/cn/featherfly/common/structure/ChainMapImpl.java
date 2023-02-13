@@ -33,14 +33,14 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V>, Serializable {
     private final Map<K, V> map;
 
     /**
-     * Instantiates a new chain map impl.
+     * Instantiates a new chain map impl, work same as HashMap.
      */
     public ChainMapImpl() {
         this(new HashMap<>(0));
     }
 
     /**
-     * Instantiates a new chain map impl.
+     * Instantiates a new chain map impl with map argu.
      *
      * @param map the map
      */

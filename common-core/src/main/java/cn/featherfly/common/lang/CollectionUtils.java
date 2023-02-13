@@ -7,14 +7,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 /**
- * <p>
- * 集合类工具
- * </p>
- * .
+ * 集合类工具.
  *
  * @author zhongj
  */
@@ -280,5 +279,33 @@ public final class CollectionUtils {
                 i++;
             }
         }
+    }
+
+    /**
+     * List.
+     *
+     * @param <T>  the generic type
+     * @param args the args
+     * @return the list
+     */
+    public static <T> List<T> list(@SuppressWarnings("unchecked") T... args) {
+        return ArrayUtils.toList(args);
+    }
+
+    /**
+     * Sets the.
+     *
+     * @param <T>  the generic type
+     * @param args the args
+     * @return the sets the
+     */
+    public static <T> Set<T> set(@SuppressWarnings("unchecked") T... args) {
+        Set<T> set = new HashSet<>();
+        if (args != null) {
+            for (T t : args) {
+                set.add(t);
+            }
+        }
+        return set;
     }
 }

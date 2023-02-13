@@ -1,5 +1,9 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
+# 1.12.0 
+
+1. 优化BeanProperty的setValue,getValue报错时的输出信息
+
 # 1.11.0 2022-12-12
 
 1. WordUtils加入lowerCaseFirst方法
@@ -55,7 +59,7 @@
 1. ChainMapImpl实现自定义toString()
 2. ExceptionCode、LocalizedExceptionCode迁移到common-api包
 3. ExceptionCodeException、LocalizedCodeException实现ExceptionCodeSupport接口
-    
+   
 # 1.8.33 2022-03-17
 1. storage加入boolean exists(ID id)方法
 2. BeanPropertyValue实现自定义toString()方法
@@ -276,7 +280,7 @@
 4.SimplePagination加入 SimplePagination(Limit limit),SimplePagination(int offset, int limit)构造函数
 
 
-​
+
 # 1.7.1 2019-7-19
 1.加入limit
 2.LangUtils.toEnum(Class<T> toClass, Object object)加入byte支持
@@ -353,7 +357,7 @@ AssertStandardApp,AssertStandardConfig,AssertStandardSys
 2.加入BeanUtils.mergeProperties方法，用于对象属性合并，不需要继承关系
 
 
-​
+
 # 1.2.6 2015-05-13
 1.加入DateUtils.getAge方法
 

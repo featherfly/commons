@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import cn.featherfly.common.exception.ReflectException;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.ClassUtils;
+import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.lang.reflect.Type;
 
 /**
@@ -137,7 +138,7 @@ public class BeanProperty<T> implements Type<T> {
                     setter.invoke(obj, value);
                 }
             } catch (Exception e) {
-                throw new ReflectException(e);
+                throw new ReflectException(Strings.format("set {0}.{1} error", ownerType.getName(), name), e);
             }
         } else {
             // throw new
@@ -168,7 +169,7 @@ public class BeanProperty<T> implements Type<T> {
                     field.set(obj, value);
                 }
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new ReflectException(Strings.format("set {0}.{1} force error", ownerType.getName(), name), e);
             }
         }
     }
@@ -187,7 +188,7 @@ public class BeanProperty<T> implements Type<T> {
             try {
                 return getter.invoke(obj);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new ReflectException(Strings.format("get {0}.{1} error", ownerType.getName(), name), e);
             }
         } else {
             // YUFEI_TODO 如果不可读，返回NULL，和可读正常返回NULL会有混淆，具体处理策略再斟酌
@@ -218,7 +219,7 @@ public class BeanProperty<T> implements Type<T> {
             field.setAccessible(true);
             return field.get(obj);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ReflectException(Strings.format("get {0}.{1} force error", ownerType.getName(), name), e);
         }
     }
 

@@ -64,7 +64,6 @@ public class ConditionColumnElement extends ParamedColumnElement {
      * @param tableAlias    tableAlias
      * @param ignorePolicy  the ignore policy
      */
-    @SuppressWarnings("unchecked")
     public ConditionColumnElement(Dialect dialect, String name, Object value, QueryOperator queryOperator,
             QueryPolicy queryPolicy, String tableAlias, Predicate<Object> ignorePolicy) {
         super(dialect, name, value, tableAlias, ignorePolicy);
@@ -75,8 +74,16 @@ public class ConditionColumnElement extends ParamedColumnElement {
         this.queryOperator = queryOperator;
         this.queryPolicy = queryPolicy;
 
-        if (!ignorePolicy.test(value)) { // 不忽略
+        if (!ignore(value)) { // 不忽略
             setParam(processParam(value, queryOperator));
+        }
+    }
+
+    private boolean ignore(Object value) {
+        if (value instanceof FieldValueOperator) {
+            return ignorePolicy.test(((FieldValueOperator<?>) value).getValue());
+        } else {
+            return ignorePolicy.test(value);
         }
     }
 
@@ -120,7 +127,11 @@ public class ConditionColumnElement extends ParamedColumnElement {
         if (QueryOperator.ISN == queryOperator || QueryOperator.INN == queryOperator) {
             return null;
         } else {
-            return param;
+            if (ignore(param)) {
+                return null;
+            } else {
+                return param;
+            }
         }
     }
 
@@ -135,7 +146,7 @@ public class ConditionColumnElement extends ParamedColumnElement {
         StringBuilder condition = new StringBuilder();
         Object value = param;
         String name = dialect.buildColumnSql(tableAlias, this.name);
-        if (ignorePolicy.test(value)) { // 忽略
+        if (ignore(value)) { // 忽略
             return "";
         } else {
             if (QueryOperator.IN == queryOperator || QueryOperator.NIN == queryOperator) {

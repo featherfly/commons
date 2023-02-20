@@ -117,7 +117,7 @@ public final class SqlUtils {
      */
     public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol,
             Character endSymbol) {
-        AssertIllegalArgument.isNotEmpty(namedParamSql, "namedParamSql");
+        AssertIllegalArgument.isNotNull(namedParamSql, "namedParamSql");
         AssertIllegalArgument.isNotEmpty(startSymbol, "startSymbol");
 
         StringBuilder sql = new StringBuilder();
@@ -149,7 +149,10 @@ public final class SqlUtils {
                     String name = namedParamSql.substring(nameStartIndex + 1, nameEndIndex);
                     Object param = getNamedParam(params, name);
 
-                    if (param instanceof Collection) {
+                    if (param == null) {
+                        paramList.add(param);
+                        sql.append(Chars.QUESTION_CHAR);
+                    } else if (param instanceof Collection) {
                         paramList.addAll((Collection<?>) param);
                         setParams(sql, ((Collection<?>) param).size(), namedParamSql, nameStartIndex);
                     } else if (param.getClass().isArray()) {
@@ -226,10 +229,10 @@ public final class SqlUtils {
      * @return the named param
      */
     private static Object getNamedParam(Map<String, Object> params, String name) {
-        Object param = params.get(name);
-        if (param == null) {
+        if (params.containsKey(name)) {
+            return params.get(name);
+        } else {
             throw new JdbcException("no param found for name -> " + name);
         }
-        return param;
     }
 }

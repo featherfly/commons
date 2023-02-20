@@ -34,8 +34,7 @@ public class StringLinker {
      * @param separator the separator
      */
     public StringLinker(String separator) {
-        super();
-        this.separator = separator;
+        this(separator, true, true);
     }
 
     /**
@@ -45,26 +44,39 @@ public class StringLinker {
      * @param ignoreDuplicate the ignore duplicate
      */
     public StringLinker(String separator, boolean ignoreDuplicate) {
+        this(separator, ignoreDuplicate, true);
+    }
+
+    /**
+     * Instantiates a new string linker.
+     *
+     * @param separator       the separator
+     * @param ignoreDuplicate the ignore duplicate
+     * @param ignoreCaseEmpty the ignore case empty
+     */
+    public StringLinker(String separator, boolean ignoreDuplicate, boolean ignoreCaseEmpty) {
         super();
-        this.ignoreDuplicate = ignoreDuplicate;
         this.separator = separator;
+        this.ignoreDuplicate = ignoreDuplicate;
+        this.ignoreCaseEmpty = ignoreCaseEmpty;
     }
 
     public StringLinker link(String... values) {
         if (values.length == 1) {
             value.append(values[0]);
         } else {
-            value.append(trimEndSeparator(values[0]));
+            value.append(ignoreDuplicate ? trimEndSeparator(values[0]) : values[0]);
             for (int i = 1; i < values.length - 1; i++) {
                 if (ignoreCaseEmpty && Lang.isEmpty(values[i])) {
                     continue;
                 }
-                value.append(separator).append(trimStartAndEndSeparator(values[i]));
+                value.append(separator).append(ignoreDuplicate ? trimStartAndEndSeparator(values[i]) : values[i]);
             }
             if (ignoreCaseEmpty && Lang.isEmpty(values[values.length - 1])) {
                 return this;
             }
-            value.append(separator).append(trimStartSeparator(values[values.length - 1]));
+            value.append(separator).append(
+                    ignoreDuplicate ? trimStartSeparator(values[values.length - 1]) : values[values.length - 1]);
         }
         return this;
     }

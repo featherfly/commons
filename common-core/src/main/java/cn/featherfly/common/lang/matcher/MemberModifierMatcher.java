@@ -34,10 +34,11 @@ public class MemberModifierMatcher<T extends Member> extends AbstractMemberMatch
      */
     @Override
     public boolean test(T member) {
+        boolean result = this.modifier.isModifier(member.getModifiers());
         if (logger.isDebugEnabled()) {
-            logger.debug("目标成员 Modifiers {} 匹配 {}", java.lang.reflect.Modifier.toString(member.getModifiers()),
-                    Modifier.PUBLIC);
+            logger.debug("目标成员 Modifiers {} 匹配 {} 结果 {}", java.lang.reflect.Modifier.toString(member.getModifiers()),
+                    Modifier.PUBLIC, result);
         }
-        return this.modifier.isModifier(member.getModifiers());
+        return result;
     }
 }

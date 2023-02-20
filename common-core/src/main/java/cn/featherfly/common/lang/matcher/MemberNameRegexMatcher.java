@@ -6,9 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * <p>
- * 正则匹配Member名称的实现
- * </p>
+ * 正则匹配Member名称的实现.
  *
  * @param <T> Member泛型
  * @author zhongj
@@ -41,8 +39,11 @@ public class MemberNameRegexMatcher<T extends Member> extends AbstractMemberMatc
      */
     @Override
     public boolean test(Member member) {
-        logger.debug("属性{}匹配正则{}", member.getName(), nameRegex);
         Matcher m = namePattern.matcher(member.getName());
-        return m.matches();
+        boolean result = m.matches();
+        if (logger.isDebugEnabled()) {
+            logger.debug("目标成员 {} 匹配正则 {} 结果 {}", member.getName(), nameRegex, result);
+        }
+        return result;
     }
 }

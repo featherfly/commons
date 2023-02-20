@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.bean.rule.CopyRule;
 import cn.featherfly.common.bean.rule.CopyRuleAlwaysCopy;
-import cn.featherfly.common.bean.rule.CopyRuleEnum;
+import cn.featherfly.common.bean.rule.CopyRules;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
@@ -45,8 +45,8 @@ public final class BeanUtils {
     public static <E> void setProperty(E bean, String name, Object value) {
         AssertIllegalArgument.isNotNull(bean, "E bean");
         AssertIllegalArgument.isNotEmpty(name, "String name");
-        BeanDescriptor<E> beanDescriptor = BeanDescriptor
-                .getBeanDescriptor(ClassUtils.castGenericType(bean.getClass(), bean));
+        BeanDescriptor<
+                E> beanDescriptor = BeanDescriptor.getBeanDescriptor(ClassUtils.castGenericType(bean.getClass(), bean));
         beanDescriptor.setProperty(bean, name, value);
     }
 
@@ -63,8 +63,8 @@ public final class BeanUtils {
     public static <E> void addProperty(E bean, String name, Object value) {
         AssertIllegalArgument.isNotNull(bean, "E bean");
         AssertIllegalArgument.isNotEmpty(name, "String name");
-        BeanDescriptor<E> beanDescriptor = BeanDescriptor
-                .getBeanDescriptor(ClassUtils.castGenericType(bean.getClass(), bean));
+        BeanDescriptor<
+                E> beanDescriptor = BeanDescriptor.getBeanDescriptor(ClassUtils.castGenericType(bean.getClass(), bean));
         beanDescriptor.getChildBeanProperty(name);
         beanDescriptor.addProperty(bean, name, value);
     }
@@ -82,8 +82,8 @@ public final class BeanUtils {
     public static <E> void setField(E bean, String name, Object value) {
         AssertIllegalArgument.isNotNull(bean, "E bean");
         AssertIllegalArgument.isNotEmpty(name, "String name");
-        BeanDescriptor<E> beanDescriptor = BeanDescriptor
-                .getBeanDescriptor(ClassUtils.castGenericType(bean.getClass(), bean));
+        BeanDescriptor<
+                E> beanDescriptor = BeanDescriptor.getBeanDescriptor(ClassUtils.castGenericType(bean.getClass(), bean));
         beanDescriptor.getBeanProperty(name).setValueForce(bean, value);
     }
 
@@ -100,8 +100,8 @@ public final class BeanUtils {
     public static <E> Object getProperty(E bean, String name) {
         AssertIllegalArgument.isNotNull(bean, "E bean");
         AssertIllegalArgument.isNotEmpty(name, "String name");
-        BeanDescriptor<E> beanDescriptor = BeanDescriptor
-                .getBeanDescriptor(ClassUtils.castGenericType(bean.getClass(), bean));
+        BeanDescriptor<
+                E> beanDescriptor = BeanDescriptor.getBeanDescriptor(ClassUtils.castGenericType(bean.getClass(), bean));
         return beanDescriptor.getProperty(bean, name);
     }
 
@@ -118,8 +118,8 @@ public final class BeanUtils {
     public static <E> Object getField(E bean, String name) {
         AssertIllegalArgument.isNotNull(bean, "E bean");
         AssertIllegalArgument.isNotEmpty(name, "String name");
-        BeanDescriptor<E> beanDescriptor = BeanDescriptor
-                .getBeanDescriptor(ClassUtils.castGenericType(bean.getClass(), bean));
+        BeanDescriptor<
+                E> beanDescriptor = BeanDescriptor.getBeanDescriptor(ClassUtils.castGenericType(bean.getClass(), bean));
         return beanDescriptor.getBeanProperty(name).getValueForce(bean);
     }
 
@@ -137,8 +137,8 @@ public final class BeanUtils {
         if (bean == null) {
             return map;
         }
-        BeanDescriptor<E> beanDescriptor = BeanDescriptor
-                .getBeanDescriptor(ClassUtils.castGenericType(bean.getClass(), bean));
+        BeanDescriptor<
+                E> beanDescriptor = BeanDescriptor.getBeanDescriptor(ClassUtils.castGenericType(bean.getClass(), bean));
         for (BeanProperty<?> beanProperty : beanDescriptor.getBeanProperties()) {
             if (beanProperty.isReadable()) {
                 map.put(beanProperty.getName(), beanProperty.getValue(bean));
@@ -207,8 +207,8 @@ public final class BeanUtils {
         if (Lang.isEmpty(map)) {
             return;
         }
-        BeanDescriptor<E> beanDescriptor = BeanDescriptor
-                .getBeanDescriptor(ClassUtils.castGenericType(bean.getClass(), bean));
+        BeanDescriptor<
+                E> beanDescriptor = BeanDescriptor.getBeanDescriptor(ClassUtils.castGenericType(bean.getClass(), bean));
         for (BeanProperty<?> beanProperty : beanDescriptor.getBeanProperties()) {
             String name = beanProperty.getName();
             if (beanProperty.isWritable() && map.containsKey(name)) {
@@ -244,7 +244,7 @@ public final class BeanUtils {
      * @param from         源对象
      * @param copyRuleEnum 已有的复制规则枚举对象
      */
-    public static <E> void mergeProperties(E target, E from, CopyRuleEnum copyRuleEnum) {
+    public static <E> void mergeProperties(E target, E from, CopyRules copyRuleEnum) {
         mergeProperties(target, from, copyRuleEnum.getCopyRule());
     }
 
@@ -302,7 +302,7 @@ public final class BeanUtils {
      * @param from         源对象
      * @param copyRuleEnum 已有的复制规则枚举对象
      */
-    public static <E> void copyProperties(E target, E from, CopyRuleEnum copyRuleEnum) {
+    public static <E> void copyProperties(E target, E from, CopyRules copyRuleEnum) {
         copyProperties(target, from, copyRuleEnum.getCopyRule());
     }
 
@@ -395,7 +395,7 @@ public final class BeanUtils {
      * @param name         属性名称
      * @param copyRuleEnum 已有的复制规则枚举对象
      */
-    public static <E> void copyProperty(E target, E from, String name, CopyRuleEnum copyRuleEnum) {
+    public static <E> void copyProperty(E target, E from, String name, CopyRules copyRuleEnum) {
         copyProperty(target, from, name, copyRuleEnum.getCopyRule());
     }
 

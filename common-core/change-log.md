@@ -2,7 +2,9 @@
 
 # 1.12.0 
 
-1. 优化BeanProperty的setValue,getValue报错时的输出信息
+1. 加入ChainCollection,ChainSetImpl,ChainListImpl
+2. CollectionUtils加入set,list方法
+3. 优化BeanProperty的setValue,getValue报错时的输出信息
 
 # 1.11.0 2022-12-12
 

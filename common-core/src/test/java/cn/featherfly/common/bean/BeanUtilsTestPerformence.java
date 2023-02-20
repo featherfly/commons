@@ -6,7 +6,7 @@ import java.util.Date;
 
 import org.testng.annotations.Test;
 
-import cn.featherfly.common.bean.rule.CopyRuleEnum;
+import cn.featherfly.common.bean.rule.CopyRules;
 import cn.featherfly.common.bean.vo.Address;
 import cn.featherfly.common.bean.vo.User;
 import cn.featherfly.common.bean.vo.Zipcode;
@@ -142,7 +142,7 @@ public class BeanUtilsTestPerformence {
 
         start = new Date();
         for (int i = 0; i < max; i++) {
-            BeanUtils.copyProperties(u, user, CopyRuleEnum.ignoreCaseNull);
+            BeanUtils.copyProperties(u, user, CopyRules.IGNORE_NULL);
         }
         end = new Date();
         System.out.println("BeanUtils.copyProperties CopyRuleEnum.ignoreCaseNull:" + (end.getTime() - start.getTime()));

@@ -16,7 +16,8 @@ public class ${tableTypeName}Table extends ReadonlyTable{
     /**
      * ${column.name} column
      */
-     public final Column ${column.name?lower_case} = new SimpleColumn().setName("${column.name}").setPrimaryKey(${column.primaryKey?string("true","false")}).setAutoincrement(${column.autoincrement?string("true","false")})
+     <#assign propertyName=column.name?lower_case?replace("_"," ")?capitalize?replace(" ","")?uncap_first>
+     public final Column ${propertyName} = new SimpleColumn().setName("${column.name}").setPrimaryKey(${column.primaryKey?string("true","false")}).setAutoincrement(${column.autoincrement?string("true","false")})
         .setNullable(${column.nullable?string("true","false")}).setType(${column.type}).setColumnIndex(${column.columnIndex?string.computer}).setDecimalDigits(${column.decimalDigits?string.computer}).setSize(${column.size?string.computer})<#if column.typeName??>.setTypeName("${column.typeName}")</#if><#if column.remark??>.setRemark("${column.remark}")</#if><#if column.defaultValue??>.setDefaultValue("${column.defaultValue}")</#if>
         .setTable(Tables.${table.name?upper_case});
     </#list>
@@ -24,7 +25,7 @@ public class ${tableTypeName}Table extends ReadonlyTable{
     ${tableTypeName}Table(String type, String name, String remark, String catalog, String schema) {
         super(type, name, remark, catalog, schema);
     <#list table.columns as column>
-        add(this.${column.name?lower_case});
+        add(this.${propertyName});
     </#list>
     }
 }

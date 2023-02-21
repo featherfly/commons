@@ -2,6 +2,7 @@ package ${packageName};
 
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Entity;
 
 <#assign entityName=table.name?replace("_"," ")?capitalize?replace(" ","")>
 /**
@@ -10,7 +11,7 @@ import javax.persistence.Table;
  * <#if author??>@author ${author}</#if>
  * create by cn.featherlfy.common:common-db generate tool at ${createTime?string('yyyy-MM-dd')}
  */
-@javax.persistence.Entity
+@Entity
 @Table(name = "${table.name}")
 public class ${entityName}{
 
@@ -19,7 +20,8 @@ public class ${entityName}{
      * property for ${column.name} 
      */
      <#if column.primaryKey>@Id</#if>
-     private ${sql_java(column.sqlType)} ${column.name?lower_case?replace("_"," ")?cap_first?replace(" ","")?uncap_first};
+     <#assign propertyName=column.name?lower_case?replace("_"," ")?capitalize?replace(" ","")?uncap_first>
+     private ${sql_java(column.sqlType)} ${propertyName};
     </#list>
 
     public ${entityName}(){
@@ -33,18 +35,19 @@ public class ${entityName}{
     }
     
     <#list table.columns as column>
-    <#assign propertyName=column.name?lower_case?replace("_"," ")?cap_first?replace(" ","")?uncap_first>
+    <#assign propertyName=column.name?lower_case?replace("_"," ")?capitalize?replace(" ","")?uncap_first>
     /**
+     * column ${column.name}
      * set ${propertyName} 
      */
-     public ${entityName} set${column.name?lower_case?replace("_"," ")?cap_first?replace(" ","")}(${sql_java(column.sqlType)} ${propertyName}){
+     public ${entityName} set${propertyName?cap_first}(${sql_java(column.sqlType)} ${propertyName}){
         this.${propertyName} = ${propertyName};
         return this;
      }
      /**
      * get ${propertyName} 
      */
-     public ${sql_java(column.sqlType)} get${column.name?lower_case?replace("_"," ")?cap_first?replace(" ","")}(){
+     public ${sql_java(column.sqlType)} get${propertyName?cap_first}(){
         return ${propertyName};
      }
     </#list>

@@ -3,12 +3,22 @@ package cn.featherfly.common.db;
 
 import java.sql.SQLType;
 
+import cn.featherfly.common.repository.Field;
+
 /**
  * Column.
  *
  * @author zhongj
  */
-public interface Column {
+public interface Column extends Field {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String name() {
+        return getName();
+    }
 
     /**
      * Gets the name.

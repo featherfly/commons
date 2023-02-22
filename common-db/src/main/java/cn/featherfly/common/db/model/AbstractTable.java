@@ -13,13 +13,10 @@ import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.Index;
 
 /**
- * <p>
- * AbstractTable
- * </p>
- * .
+ * AbstractTable .
  *
  * @author zhongj
- * @param <C> the generic type
+ * @param <C> the generic type of column
  */
 public abstract class AbstractTable<C extends Column> implements Table {
     /** The type. */
@@ -174,9 +171,7 @@ public abstract class AbstractTable<C extends Column> implements Table {
     }
 
     /**
-     * 返回catalog.
-     *
-     * @return catalog
+     * {@inheritDoc}
      */
     @Override
     public String getCatalog() {

@@ -8,10 +8,7 @@ import cn.featherfly.common.db.Table;
 import cn.featherfly.common.lang.Lang;
 
 /**
- * <p>
- * AbstractColumn
- * </p>
- * .
+ * AbstractColumn.
  *
  * @author zhongj
  */
@@ -155,9 +152,7 @@ public abstract class AbstractColumn implements Column {
     }
 
     /**
-     * 返回name.
-     *
-     * @return name
+     * {@inheritDoc}
      */
     @Override
     public String getName() {
@@ -165,9 +160,7 @@ public abstract class AbstractColumn implements Column {
     }
 
     /**
-     * 返回type.
-     *
-     * @return type
+     * {@inheritDoc}
      */
     @Override
     public int getType() {
@@ -175,9 +168,7 @@ public abstract class AbstractColumn implements Column {
     }
 
     /**
-     * 返回typeName.
-     *
-     * @return typeName
+     * {@inheritDoc}
      */
     @Override
     public String getTypeName() {
@@ -185,9 +176,7 @@ public abstract class AbstractColumn implements Column {
     }
 
     /**
-     * 返回size.
-     *
-     * @return size
+     * {@inheritDoc}
      */
     @Override
     public int getSize() {
@@ -195,9 +184,7 @@ public abstract class AbstractColumn implements Column {
     }
 
     /**
-     * 返回remark.
-     *
-     * @return remark
+     * {@inheritDoc}
      */
     @Override
     public String getRemark() {
@@ -205,9 +192,7 @@ public abstract class AbstractColumn implements Column {
     }
 
     /**
-     * 返回defaultValue.
-     *
-     * @return defaultValue
+     * {@inheritDoc}
      */
     @Override
     public String getDefaultValue() {
@@ -215,9 +200,7 @@ public abstract class AbstractColumn implements Column {
     }
 
     /**
-     * 返回nullable.
-     *
-     * @return nullable
+     * {@inheritDoc}
      */
     @Override
     public boolean isNullable() {
@@ -225,9 +208,7 @@ public abstract class AbstractColumn implements Column {
     }
 
     /**
-     * 返回columnIndex.
-     *
-     * @return columnIndex
+     * {@inheritDoc}
      */
     @Override
     public int getColumnIndex() {
@@ -235,9 +216,7 @@ public abstract class AbstractColumn implements Column {
     }
 
     /**
-     * 返回primaryKey.
-     *
-     * @return primaryKey
+     * {@inheritDoc}
      */
     @Override
     public boolean isPrimaryKey() {
@@ -245,9 +224,7 @@ public abstract class AbstractColumn implements Column {
     }
 
     /**
-     * 返回decimalDigits.
-     *
-     * @return decimalDigits
+     * {@inheritDoc}
      */
     @Override
     public int getDecimalDigits() {
@@ -255,9 +232,7 @@ public abstract class AbstractColumn implements Column {
     }
 
     /**
-     * 返回autoincrement.
-     *
-     * @return autoincrement
+     * {@inheritDoc}
      */
     @Override
     public boolean isAutoincrement() {
@@ -265,9 +240,7 @@ public abstract class AbstractColumn implements Column {
     }
 
     /**
-     * 返回sqlType.
-     *
-     * @return sqlType
+     * {@inheritDoc}
      */
     @Override
     public SQLType getSqlType() {
@@ -275,9 +248,7 @@ public abstract class AbstractColumn implements Column {
     }
 
     /**
-     * 返回table.
-     *
-     * @return table
+     * {@inheritDoc}
      */
     @Override
     public Table getTable() {

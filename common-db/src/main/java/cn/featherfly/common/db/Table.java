@@ -6,16 +6,22 @@ import java.util.List;
 import java.util.Map;
 
 import cn.featherfly.common.repository.Index;
+import cn.featherfly.common.repository.Repository;
 
 /**
- * <p>
- * Table
- * </p>
- * .
+ * The Interface Table.
  *
  * @author zhongj
  */
-public interface Table {
+public interface Table extends Repository {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String name() {
+        return getName();
+    }
 
     /**
      * Gets the name.

@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -77,22 +76,22 @@ public class SqlExecutor {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public void execute(File sqlFile) throws IOException {
-        execute(sqlFile, StandardCharsets.UTF_8);
+        execute(SqlFile.read(sqlFile));
     }
 
-    /**
-     * read sql from file with assgin encoding and execute.
-     *
-     * @param sqlFile  the sql file
-     * @param encoding the encoding
-     * @throws IOException Signals that an I/O exception has occurred.
-     */
-    public void execute(File sqlFile, String encoding) throws IOException {
-        AssertIllegalArgument.isExists(sqlFile, "sqlFile");
-        String content = org.apache.commons.io.FileUtils.readFileToString(sqlFile, encoding);
-        String[] sqls = content.split(END_SQL_SIGN);
-        execute(sqls);
-    }
+    //    /**
+    //     * read sql from file with assgin encoding and execute.
+    //     *
+    //     * @param sqlFile  the sql file
+    //     * @param encoding the encoding
+    //     * @throws IOException Signals that an I/O exception has occurred.
+    //     */
+    //    public void execute(File sqlFile, String encoding) throws IOException {
+    //        AssertIllegalArgument.isExists(sqlFile, "sqlFile");
+    //        String content = org.apache.commons.io.FileUtils.readFileToString(sqlFile, encoding);
+    //        String[] sqls = content.split(END_SQL_SIGN);
+    //        execute(sqls);
+    //    }
 
     /**
      * read sql from file with assgin encoding and execute.
@@ -103,9 +102,7 @@ public class SqlExecutor {
      */
     public void execute(File sqlFile, Charset charset) throws IOException {
         AssertIllegalArgument.isExists(sqlFile, "sqlFile");
-        String content = org.apache.commons.io.FileUtils.readFileToString(sqlFile, charset);
-        String[] sqls = content.split(END_SQL_SIGN);
-        execute(sqls);
+        execute(SqlFile.read(sqlFile, charset));
     }
 
     /**

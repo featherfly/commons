@@ -1422,7 +1422,7 @@ public final class JdbcUtils {
         try {
             Map<String, Object> resultMap = new HashMap<>();
             ResultSetMetaData metaData = rs.getMetaData();
-            for (int i = 0; i < metaData.getColumnCount(); i++) {
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 Object value = JdbcUtils.getResultSetValue(rs, i);
                 String name = JdbcUtils.lookupColumnName(metaData, i);
                 resultMap.put(name, value);
@@ -1558,7 +1558,7 @@ public final class JdbcUtils {
             ResultSetMetaData metaData = rs.getMetaData();
             Object[] result = new Object[metaData.getColumnCount()];
             for (int i = 0; i < metaData.getColumnCount(); i++) {
-                result[i] = JdbcUtils.getResultSetValue(rs, i);
+                result[i] = JdbcUtils.getResultSetValue(rs, i + 1);
             }
             return result;
         } catch (SQLException e) {

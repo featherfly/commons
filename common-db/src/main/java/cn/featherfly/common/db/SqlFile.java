@@ -424,6 +424,9 @@ public class SqlFile {
     private static void initSqlFile(String sql, final SqlFile sqlFile, final URL resource, final Charset charset,
             final Map<String, Object> params) throws IOException {
         sql = sql.trim();
+        if (sql.isEmpty()) {
+            return;
+        }
         Matcher matcher = INCLUDE_SYMBOL_PATTERN.matcher(sql);
         if (matcher.matches()) {
             //            if (sql.startsWith(INCLUDE_SYMBOL)) {

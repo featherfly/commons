@@ -10,6 +10,7 @@
 9. 优化ClassMappingUtils的getInsertBatchSqlAndParamPositions,getInsertSqlAndParamPositions方法
 10. 修复SqlUtils.convertNamedParamSql参数Map内的key存在而value为null时报错的问题
 11. SqlFile加入存储过程支持
+12. 修复getResultSetMap(ResultSet rs),getResultSetArray(ResultSet rs)参数越界的问题
 
 # 0.5.5 2022-8-11
 1. Dialect加入getKeywordLike(QueryPolicy)、getKeywordEq(QueryPolicy)、keywordsCase()方法

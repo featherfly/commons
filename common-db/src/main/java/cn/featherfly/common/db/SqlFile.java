@@ -22,9 +22,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.lang.ClassLoaderUtils;
@@ -56,10 +58,17 @@ public class SqlFile {
     }
 
     /** The Constant INCLUDE_SYMBOL. */
-    public static final String INCLUDE_SYMBOL = "--@include";
+    //    public static final String INCLUDE_SYMBOL = "--@include";
 
+    /** The Constant INCLUDE_SYMBOL_PATTERN. */
+    public static final Pattern INCLUDE_SYMBOL_PATTERN = Pattern.compile("(--[ ]*@include) (.+)");
     /** The Constant END_SQL_SIGN. */
     public static final String END_SQL_SIGN = ";";
+
+    private static final Pattern CREATE_PROCEDURE_PATTERN = Pattern
+            .compile("CREATE[\\s\\r\\n]+(.+[\\s\\r\\n]+)?PROCEDURE[\\s\\r\\n]+([\\w\\W]+)", Pattern.CASE_INSENSITIVE);
+
+    private static final Pattern END_PATTERN = Pattern.compile("[\\w\\W]+END[\\s\\r\\n]*", Pattern.CASE_INSENSITIVE);
 
     private String file;
 
@@ -70,6 +79,18 @@ public class SqlFile {
     private List<String> sqlList = new ArrayList<>(0);
 
     private IncludeExistPolicy includeExistPolicy = IncludeExistPolicy.IGNORE;
+
+    /**
+     * Instantiates a new sql file.
+     *
+     * @param file    the file
+     * @param charset the charset
+     */
+    private SqlFile(String file, Charset charset) {
+        super();
+        this.file = file;
+        this.charset = charset;
+    }
 
     /**
      * get charset value.
@@ -87,28 +108,6 @@ public class SqlFile {
      */
     public IncludeExistPolicy getIncludeExistPolicy() {
         return includeExistPolicy;
-    }
-
-    /**
-     * * @param file.
-     *
-     * @param file the file
-     */
-    public SqlFile(String file) {
-        super();
-        this.file = file;
-    }
-
-    /**
-     * Instantiates a new sql file.
-     *
-     * @param file    the file
-     * @param charset the charset
-     */
-    public SqlFile(String file, Charset charset) {
-        super();
-        this.file = file;
-        this.charset = charset;
     }
 
     /**
@@ -236,6 +235,17 @@ public class SqlFile {
     /**
      * Read.
      *
+     * @param resource the resource
+     * @return the sql file
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public static SqlFile read(URL resource) throws IOException {
+        return read(resource, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Read.
+     *
      * @param file    the file
      * @param charset the charset
      * @return the sql file
@@ -248,6 +258,18 @@ public class SqlFile {
     /**
      * Read.
      *
+     * @param resource the resource
+     * @param charset  the charset
+     * @return the sql file
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public static SqlFile read(URL resource, Charset charset) throws IOException {
+        return read(resource, charset, IncludeExistPolicy.IGNORE);
+    }
+
+    /**
+     * Read.
+     *
      * @param file               the file
      * @param charset            the charset
      * @param includeExistPolicy the include exist policy
@@ -255,12 +277,21 @@ public class SqlFile {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public static SqlFile read(File file, Charset charset, IncludeExistPolicy includeExistPolicy) throws IOException {
-        SqlFile sqlFile = new SqlFile(file.getAbsolutePath(), charset);
-        if (includeExistPolicy != null) {
-            sqlFile.includeExistPolicy = includeExistPolicy;
-        }
-        read(file, charset, sqlFile);
-        return sqlFile;
+        return read(file, charset, includeExistPolicy, null);
+    }
+
+    /**
+     * Read.
+     *
+     * @param resource           the resource
+     * @param charset            the charset
+     * @param includeExistPolicy the include exist policy
+     * @return the sql file
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public static SqlFile read(URL resource, Charset charset, IncludeExistPolicy includeExistPolicy)
+            throws IOException {
+        return read(resource, charset, includeExistPolicy, null);
     }
 
     /**
@@ -273,6 +304,18 @@ public class SqlFile {
      */
     public static SqlFile read(File file, Map<String, Object> params) throws IOException {
         return read(file, StandardCharsets.UTF_8, params);
+    }
+
+    /**
+     * Read.
+     *
+     * @param resource the resource
+     * @param params   the params
+     * @return the sql file
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public static SqlFile read(URL resource, Map<String, Object> params) throws IOException {
+        return read(resource, StandardCharsets.UTF_8, params);
     }
 
     /**
@@ -291,6 +334,19 @@ public class SqlFile {
     /**
      * Read.
      *
+     * @param resource the resource
+     * @param charset  the charset
+     * @param params   the params
+     * @return the sql file
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public static SqlFile read(URL resource, Charset charset, Map<String, Object> params) throws IOException {
+        return read(resource, charset, IncludeExistPolicy.IGNORE, params);
+    }
+
+    /**
+     * Read.
+     *
      * @param file               the file
      * @param charset            the charset
      * @param includeExistPolicy the include exist policy
@@ -300,66 +356,155 @@ public class SqlFile {
      */
     public static SqlFile read(File file, Charset charset, IncludeExistPolicy includeExistPolicy,
             Map<String, Object> params) throws IOException {
-        SqlFile sqlFile = new SqlFile(file.getAbsolutePath(), charset);
+        return read(file.toURI().toURL(), charset, includeExistPolicy, params);
+    }
+
+    /**
+     * Read.
+     *
+     * @param resource           the resource
+     * @param charset            the charset
+     * @param includeExistPolicy the include exist policy
+     * @param params             the params
+     * @return the sql file
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public static SqlFile read(URL resource, Charset charset, IncludeExistPolicy includeExistPolicy,
+            Map<String, Object> params) throws IOException {
+        SqlFile sqlFile = new SqlFile(resource.getPath(), charset);
         if (includeExistPolicy != null) {
             sqlFile.includeExistPolicy = includeExistPolicy;
         }
-        read(file, charset, sqlFile, params);
+        read(resource, charset, sqlFile, params);
         return sqlFile;
     }
 
-    private static void read(File file, Charset charset, final SqlFile sqlFile) throws IOException {
-        read(file.toURI().toURL(), charset, sqlFile);
+    public static void main(String[] args) {
+        System.out.println(CREATE_PROCEDURE_PATTERN
+                .matcher("create DEFINER=`root`@`localhost` PROCEDURE `call_query_user`").matches());
+        System.out.println(END_PATTERN.matcher("end").matches());
+        System.out.println(END_PATTERN.matcher("end    ").matches());
+        System.out.println(END_PATTERN.matcher("end\n\n").matches());
     }
 
-    private static void read(File file, Charset charset, final SqlFile sqlFile, Map<String, Object> params)
-            throws IOException {
-        read(file.toURI().toURL(), charset, sqlFile, params);
+    private static String readSql(String content, int start, AtomicInteger end) {
+        StringBuilder sql = new StringBuilder();
+        boolean isProcedure = false;
+        for (int i = start; i < content.length(); i++) {
+            char c = content.charAt(i);
+            // 忽略sql开头的空白字符
+            if (sql.length() == 0 && Character.isWhitespace(c)) {
+                continue;
+            }
+            if (isProcedure) {
+                if (c == ';' && END_PATTERN.matcher(sql).matches()) {
+                    end.set(i + 1);
+                    return sql.toString();
+                } else {
+                    sql.append(c);
+                }
+            } else {
+                if (c == ';') {
+                    if (CREATE_PROCEDURE_PATTERN.matcher(sql).matches()) {
+                        isProcedure = true;
+                        sql.append(c);
+                    } else {
+                        end.set(i + 1);
+                        return sql.toString();
+                    }
+                } else {
+                    sql.append(c);
+                }
+            }
+        }
+        end.set(content.length());
+        return sql.toString();
     }
 
-    private static void read(URL resource, Charset charset, final SqlFile sqlFile) throws IOException {
-        read(resource, charset, sqlFile, null);
+    private static void initSqlFile(String sql, final SqlFile sqlFile, final URL resource, final Charset charset,
+            final Map<String, Object> params) throws IOException {
+        sql = sql.trim();
+        Matcher matcher = INCLUDE_SYMBOL_PATTERN.matcher(sql);
+        if (matcher.matches()) {
+            //            if (sql.startsWith(INCLUDE_SYMBOL)) {
+            //                String includePath = StringUtils.substringAfter(sql, INCLUDE_SYMBOL).trim();
+            String includePath = matcher.group(2).trim();
+
+            URL includeResource = null;
+            if (!includePath.startsWith("/")) {
+                File file = new File(resource.getPath());
+                String path = file.getParent() + "/" + includePath;
+                File includeFile = new File(path);
+                if (includeFile.exists()) {
+                    includeResource = includeFile.toURI().toURL();
+                }
+            }
+            if (includeResource == null) {
+                includeResource = ClassLoaderUtils.getResource(includePath);
+            }
+
+            if (includeResource == null) {
+                throw new IllegalArgumentException(
+                        Strings.format("can not found {0} in filepath and classpath ", includePath));
+            }
+
+            sqlFile.getSqlList().add("\n-- include  " + includePath + " start");
+            if (sqlFile.addInclude(resource.getFile(), includeResource.getFile())) {
+                read(includeResource, charset, sqlFile, params);
+            }
+            sqlFile.getSqlList().add("\n-- include  " + includePath + " end");
+        } else {
+            sqlFile.getSqlList().add(sql);
+        }
     }
 
-    private static void read(URL resource, Charset charset, final SqlFile sqlFile, Map<String, Object> params)
-            throws IOException {
+    private static void read(final URL resource, Charset charset, final SqlFile sqlFile,
+            final Map<String, Object> params) throws IOException {
         String content = IOUtils.toString(resource, charset);
         if (Lang.isNotEmpty(params)) {
             content = Strings.format(content, params);
         }
-        String[] sqls = content.split(";");
-        for (String sql : sqls) {
-            sql = sql.trim();
-            if (sql.startsWith(INCLUDE_SYMBOL)) {
-                //                System.out.println(sql);
-                String includePath = StringUtils.substringAfter(sql, INCLUDE_SYMBOL).trim();
-                //                System.out.println(includeFile);
-                URL includeResource = null;
-                if (!includePath.startsWith("/")) {
-                    File file = new File(resource.getPath());
-                    String path = file.getParent() + "/" + includePath;
-                    File includeFile = new File(path);
-                    if (includeFile.exists()) {
-                        includeResource = includeFile.toURI().toURL();
-                    }
-                }
-                if (includeResource == null) {
-                    includeResource = ClassLoaderUtils.getResource(includePath);
-                }
 
-                if (includeResource == null) {
-                    throw new IllegalArgumentException(
-                            Strings.format("can not found {0} in filepath and classpath ", includePath));
-                }
+        AtomicInteger index = new AtomicInteger(0);
+        do {
+            initSqlFile(readSql(content, index.get(), index), sqlFile, resource, charset, params);
+        } while (index.get() < content.length());
 
-                sqlFile.getSqlList().add("\n-- include  " + includePath + " start");
-                if (sqlFile.addInclude(resource.getFile(), includeResource.getFile())) {
-                    read(includeResource, charset, sqlFile, params);
-                }
-                sqlFile.getSqlList().add("\n-- include  " + includePath + " end");
-            } else {
-                sqlFile.getSqlList().add(sql);
-            }
-        }
+        //        String[] sqls = content.split(";");
+        //        for (String sql : sqls) {
+        //            sql = sql.trim();
+        //            Matcher matcher = INCLUDE_SYMBOL_PATTERN.matcher(sql);
+        //            if (matcher.matches()) {
+        //                //            if (sql.startsWith(INCLUDE_SYMBOL)) {
+        //                //                String includePath = StringUtils.substringAfter(sql, INCLUDE_SYMBOL).trim();
+        //                String includePath = matcher.group(2).trim();
+        //
+        //                URL includeResource = null;
+        //                if (!includePath.startsWith("/")) {
+        //                    File file = new File(resource.getPath());
+        //                    String path = file.getParent() + "/" + includePath;
+        //                    File includeFile = new File(path);
+        //                    if (includeFile.exists()) {
+        //                        includeResource = includeFile.toURI().toURL();
+        //                    }
+        //                }
+        //                if (includeResource == null) {
+        //                    includeResource = ClassLoaderUtils.getResource(includePath);
+        //                }
+        //
+        //                if (includeResource == null) {
+        //                    throw new IllegalArgumentException(
+        //                            Strings.format("can not found {0} in filepath and classpath ", includePath));
+        //                }
+        //
+        //                sqlFile.getSqlList().add("\n-- include  " + includePath + " start");
+        //                if (sqlFile.addInclude(resource.getFile(), includeResource.getFile())) {
+        //                    read(includeResource, charset, sqlFile, params);
+        //                }
+        //                sqlFile.getSqlList().add("\n-- include  " + includePath + " end");
+        //            } else {
+        //                sqlFile.getSqlList().add(sql);
+        //            }
+        //        }
     }
 }

@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 import cn.featherfly.common.db.SqlFile.IncludeExistPolicy;
 import cn.featherfly.common.lang.ClassLoaderUtils;
 import cn.featherfly.common.lang.Dates;
-import cn.featherfly.common.structure.HashChainMap;
+import cn.featherfly.common.structure.ChainMapImpl;
 
 /**
  * SqlFileTest.
@@ -112,7 +112,7 @@ public class SqlFileTest {
     @Test
     public void testIncludeParams() throws IOException {
         SqlFile sqlFile = SqlFile.read(new File(ClassLoaderUtils.getResource("executor_include_params.sql").getFile()),
-                StandardCharsets.UTF_8, new HashChainMap<String, Object>().putChain("name", "yufei").putChain("time",
+                StandardCharsets.UTF_8, new ChainMapImpl<String, Object>().putChain("name", "yufei").putChain("time",
                         Dates.formatTime(new Date())));
         System.out.println("\nsqlList:\n");
         for (String sql : sqlFile.getSqlList()) {
@@ -123,18 +123,29 @@ public class SqlFileTest {
     }
 
     @Test
-    public void testIncludeEndSqlSign() throws IOException {
-        SqlFile sqlFile = SqlFile.read(
-                new File(ClassLoaderUtils.getResource("sql/mysql/xxl-web-admin-0.1.0-init.sql").getFile()),
-                StandardCharsets.UTF_8, new HashChainMap<String, Object>().putChain("name", "yufei").putChain("time",
-                        Dates.formatTime(new Date())));
+    public void testIncludeProcedure() throws IOException {
+        SqlFile sqlFile = SqlFile.read(ClassLoaderUtils.getResource("executor_include_procedure.sql"),
+                StandardCharsets.UTF_8);
         System.out.println("\nsqlList:\n");
         for (String sql : sqlFile.getSqlList()) {
             System.out.println(sql);
         }
-
-        sqlFile.write(new File("xxl-web-admin-0.1.0-init.sql"));
+        sqlFile.write(new File("executor_include_procedure_merged.sql"));
     }
+
+    //    @Test
+    //    public void testIncludeEndSqlSign() throws IOException {
+    //        SqlFile sqlFile = SqlFile.read(
+    //                new File(ClassLoaderUtils.getResource("sql/mysql/xxl-web-admin-0.1.0-init.sql").getFile()),
+    //                StandardCharsets.UTF_8, new ChainMapImpl<String, Object>().putChain("name", "yufei").putChain("time",
+    //                        Dates.formatTime(new Date())));
+    //        System.out.println("\nsqlList:\n");
+    //        for (String sql : sqlFile.getSqlList()) {
+    //            System.out.println(sql);
+    //        }
+    //
+    //        sqlFile.write(new File("xxl-web-admin-0.1.0-init.sql"));
+    //    }
 
     public static void main(String[] args) throws IOException {
         //        Iterator<URL> iter = ClassLoaderUtils.getResources("META-INF/MANIFEST.MF", false);

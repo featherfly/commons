@@ -1,6 +1,7 @@
 
 package cn.featherfly.common.db.mapping;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLType;
@@ -361,6 +362,29 @@ public class SqlTypeMappingManager {
             return;
         }
         JdbcUtils.setParameter(prep, columnIndex, columnValue);
+    }
+
+    /**
+     * Gets the produce param.
+     *
+     * @param <E>        the element type
+     * @param call       the call
+     * @param paramIndex the param index
+     * @param javaType   the java type
+     * @return the e
+     */
+    public <E> E getParam(CallableStatement call, int paramIndex, Class<E> javaType) {
+        AssertIllegalArgument.isNotNull(javaType, "javaType");
+        AssertIllegalArgument.isNotNull(call, "ResultSet");
+        Store store = getStore(javaType);
+        Optional<E> e = null;
+        if (store != null && (e = store.get(call, paramIndex, javaType)) != null) {
+            return e.orElse(null);
+        }
+        if ((e = globalStore.get(call, paramIndex, javaType)) != null) {
+            return e.orElse(null);
+        }
+        return JdbcUtils.getCallableParam(call, paramIndex, javaType);
     }
 
     /**

@@ -1,5 +1,6 @@
 package cn.featherfly.common.db.mapping;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLType;
@@ -48,6 +49,17 @@ public interface Store {
      * @return the e
      */
     <E> Optional<E> get(ResultSet rs, int columnIndex, Class<E> javaType);
+
+    /**
+     * Gets the.
+     *
+     * @param <E>         the element type
+     * @param call        the call
+     * @param columnIndex the column index
+     * @param javaType    the java type
+     * @return the e
+     */
+    <E> Optional<E> get(CallableStatement call, int columnIndex, Class<E> javaType);
 
     /**
      * Gets the.

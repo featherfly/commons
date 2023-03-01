@@ -1,5 +1,6 @@
 package cn.featherfly.common.db.mapping;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLType;
@@ -192,8 +193,28 @@ public abstract class AbstractStore implements Store {
      * {@inheritDoc}
      */
     @Override
+    public <E> Optional<E> get(CallableStatement call, int paramIndex, Class<E> javaType) {
+        return _get(call, paramIndex, new ClassType<>(javaType));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public <E> Optional<E> get(ResultSet rs, int columnIndex, BeanProperty<E> javaType) {
         return _get(rs, columnIndex, javaType);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private <E> Optional<E> _get(CallableStatement call, int paramIndex, Type<E> javaType) {
+        SQLType sqlType = JdbcUtils.getCallableSQLType(call, paramIndex);
+        for (JavaSqlTypeMapper<?> sqlTypeToJavaMapper : getJavaSqlTypeMappers()) {
+            if (sqlTypeToJavaMapper.support((Type) javaType)) {
+                logger.debug("get value from [{}] with mapper {}", sqlType, sqlTypeToJavaMapper.getClass().getName());
+                return Optional.ofNullable((E) sqlTypeToJavaMapper.get(call, paramIndex));
+            }
+        }
+        return null;
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })

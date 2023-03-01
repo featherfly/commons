@@ -10,6 +10,7 @@
  */
 package cn.featherfly.common.db.mapping.operator;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
@@ -80,4 +81,11 @@ public class DefaultTypesSqlTypeOperator<E> implements JavaTypeSqlTypeOperator<E
         return JdbcUtils.getResultSetValue(rs, columnIndex, type);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public E get(CallableStatement call, int paramIndex) {
+        return JdbcUtils.getCallableParam(call, paramIndex, type);
+    }
 }

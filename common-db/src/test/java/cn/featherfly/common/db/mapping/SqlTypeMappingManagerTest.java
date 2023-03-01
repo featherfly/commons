@@ -6,6 +6,7 @@ import static org.testng.Assert.assertNull;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.CallableStatement;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -211,6 +212,15 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
             @Override
             public boolean support(SQLType sqlType, String tableName, String columnName) {
                 return support(sqlType);
+            }
+
+            @Override
+            public Long[] get(CallableStatement call, int paramIndex) {
+                try {
+                    return ArrayUtils.toNumbers(Long.class, call.getString(paramIndex).split(","));
+                } catch (SQLException e) {
+                    throw new JdbcException(e);
+                }
             }
         });
 

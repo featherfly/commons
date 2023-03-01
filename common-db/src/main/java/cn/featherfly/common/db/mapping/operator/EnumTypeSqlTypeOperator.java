@@ -10,6 +10,7 @@
  */
 package cn.featherfly.common.db.mapping.operator;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -95,4 +96,11 @@ public class EnumTypeSqlTypeOperator<E extends Enum<?>> implements JavaTypeSqlTy
         return JdbcUtils.getResultSetValue(rs, columnIndex, type);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public E get(CallableStatement call, int paramIndex) {
+        return JdbcUtils.getCallableParam(call, paramIndex, type);
+    }
 }

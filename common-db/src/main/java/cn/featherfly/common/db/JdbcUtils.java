@@ -4,10 +4,12 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Blob;
+import java.sql.CallableStatement;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.JDBCType;
+import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -25,6 +27,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -37,6 +40,9 @@ import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.db.mapping.SqlResultSet;
 import cn.featherfly.common.db.mapping.SqlTypeMappingManager;
+import cn.featherfly.common.db.procedure.ProcedureInOutParameter;
+import cn.featherfly.common.db.procedure.ProcedureOutParameter;
+import cn.featherfly.common.db.wrapper.CallableStatementWrapper;
 import cn.featherfly.common.db.wrapper.ConnectionWrapper;
 import cn.featherfly.common.db.wrapper.DataSourceWrapper;
 import cn.featherfly.common.db.wrapper.PreparedStatementWrapper;
@@ -436,44 +442,57 @@ public final class JdbcUtils {
     }
 
     /**
-     * <p>
-     * 设置参数
-     * </p>
-     * .
+     * 设置参数 .
      *
      * @param prep   PreparedStatementWrapper
      * @param values 参数
      */
     public static void setParameters(PreparedStatementWrapper prep, Object... values) {
+        setParameters(prep, true, values);
+    }
+
+    /**
+     * 设置参数 .
+     *
+     * @param prep             PreparedStatementWrapper
+     * @param enumWithOridinal the enum with oridinal
+     * @param values           参数
+     */
+    public static void setParameters(PreparedStatementWrapper prep, boolean enumWithOridinal, Object... values) {
         if (Lang.isNotEmpty(values)) {
             for (int i = 0; i < values.length; i++) {
-                setParameter(prep, i + 1, values[i]);
+                setParameter(prep, i + 1, values[i], enumWithOridinal);
             }
         }
     }
 
     /**
-     * <p>
-     * 设置参数
-     * </p>
-     * .
+     * 设置参数.
      *
      * @param prep   PreparedStatement
      * @param values 参数
      */
     public static void setParameters(PreparedStatement prep, Object... values) {
+        setParameters(prep, true, values);
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param prep             PreparedStatement
+     * @param enumWithOridinal the enum with oridinal
+     * @param values           参数
+     */
+    public static void setParameters(PreparedStatement prep, boolean enumWithOridinal, Object... values) {
         if (Lang.isNotEmpty(values)) {
             for (int i = 0; i < values.length; i++) {
-                setParameter(prep, i + 1, values[i]);
+                setParameter(prep, i + 1, values[i], enumWithOridinal);
             }
         }
     }
 
     /**
-     * <p>
-     * 设置参数
-     * </p>
-     * .
+     * 设置参数.
      *
      * @param prep     PreparedStatementWrapper
      * @param position 占位符位置
@@ -484,10 +503,7 @@ public final class JdbcUtils {
     }
 
     /**
-     * <p>
-     * 设置参数
-     * </p>
-     * .
+     * 设置参数 .
      *
      * @param prep             PreparedStatementWrapper
      * @param position         占位符位置
@@ -1052,10 +1068,7 @@ public final class JdbcUtils {
     }
 
     /**
-     * <p>
-     * 设置参数
-     * </p>
-     * .
+     * 设置参数.
      *
      * @param prep             PreparedStatement
      * @param position         占位符位置
@@ -1115,7 +1128,7 @@ public final class JdbcUtils {
                 //                ((FieldValue<?>) value).set(prep, position);
                 setParameter(prep, position, (FieldValueOperator<?>) value);
             } else if (value instanceof Optional) {
-                setParameter(prep, position, ((Optional<?>) value).orElse(null));
+                setParameter(prep, position, ((Optional<?>) value).orElse(null), enumWithOridinal);
             } else if (value instanceof AtomicInteger) {
                 prep.setInt(position, ((AtomicInteger) value).get());
             } else if (value instanceof AtomicLong) {
@@ -1128,6 +1141,165 @@ public final class JdbcUtils {
         } catch (SQLException e) {
             throw new JdbcException(e);
         }
+    }
+
+    /**
+     * set proceduce param.
+     *
+     * @param call  CallableStatement
+     * @param name  param name
+     * @param value param value
+     */
+    public static void setParameter(CallableStatement call, String name, Object value) {
+        setParameter(call, name, value, true);
+    }
+
+    /**
+     * set proceduce param.
+     *
+     * @param call             CallableStatement
+     * @param name             param name
+     * @param value            param value
+     * @param enumWithOridinal enum with oridinal
+     */
+    public static void setParameter(CallableStatement call, String name, Object value, boolean enumWithOridinal) {
+        try {
+            if (value == null) {
+                call.setObject(name, value);
+            } else if (value instanceof Boolean) {
+                call.setBoolean(name, ((Boolean) value).booleanValue());
+            } else if (value instanceof String) {
+                call.setString(name, (String) value);
+            } else if (value instanceof Integer) {
+                call.setInt(name, ((Integer) value).intValue());
+            } else if (value instanceof Long) {
+                call.setLong(name, ((Long) value).longValue());
+            } else if (value instanceof Float) {
+                call.setFloat(name, ((Float) value).floatValue());
+            } else if (value instanceof Double) {
+                call.setDouble(name, ((Double) value).doubleValue());
+            } else if (value instanceof BigDecimal) {
+                call.setBigDecimal(name, (BigDecimal) value);
+            } else if (value instanceof BigInteger) {
+                call.setLong(name, ((BigInteger) value).longValue());
+            } else if (value instanceof Byte) {
+                call.setByte(name, ((Byte) value).byteValue());
+            } else if (value instanceof Character) {
+                call.setString(name, ((Character) value).toString());
+            } else if (value instanceof Short) {
+                call.setShort(name, ((Short) value).shortValue());
+            } else if (value instanceof java.sql.Date) {
+                call.setDate(name, (java.sql.Date) value);
+            } else if (value instanceof Time) {
+                call.setTime(name, (Time) value);
+            } else if (value instanceof LocalTime) {
+                call.setTime(name, Time.valueOf((LocalTime) value));
+            } else if (value instanceof LocalDate) {
+                call.setDate(name, java.sql.Date.valueOf((LocalDate) value));
+                //                prep.setDate(position, new java.sql.Date(Dates.toDate((LocalDate) value).getTime()));
+            } else if (value instanceof LocalDateTime) {
+                call.setTimestamp(name, Timestamp.valueOf((LocalDateTime) value));
+                //                prep.setTimestamp(position, new Timestamp(Dates.getTime((LocalDateTime) value)));
+                //                prep.setTimestamp(position, Timestamp.from(((LocalDateTime) value).atZone(ZoneId.systemDefault()).toInstant()));
+            } else if (value instanceof Date) {
+                call.setTimestamp(name, new Timestamp(((Date) value).getTime()));
+            } else if (value instanceof Timestamp) {
+                call.setTimestamp(name, (Timestamp) value);
+            } else if (value.getClass().isEnum()) {
+                if (enumWithOridinal) {
+                    call.setInt(name, ((Enum<?>) value).ordinal());
+                } else {
+                    call.setString(name, ((Enum<?>) value).name());
+                }
+            }
+            //            else if (value instanceof FieldValueOperator) { // TODO 后续FieldValue再考虑名称
+            //                //                ((FieldValue<?>) value).set(prep, position);
+            //                setParameter(call, name, (FieldValueOperator<?>) value);
+            //            }
+            else if (value instanceof Optional) {
+                setParameter(call, name, ((Optional<?>) value).orElse(null), enumWithOridinal);
+            } else if (value instanceof AtomicInteger) {
+                call.setInt(name, ((AtomicInteger) value).get());
+            } else if (value instanceof AtomicLong) {
+                call.setLong(name, ((AtomicLong) value).get());
+            } else if (value instanceof AtomicBoolean) {
+                call.setBoolean(name, ((AtomicBoolean) value).get());
+            } else {
+                call.setObject(name, value);
+            }
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * set proceduce params.
+     *
+     * @param call   CallableStatement
+     * @param params params map
+     * @return the out parameter map
+     */
+    @SuppressWarnings("rawtypes")
+    public static Map<String, ProcedureOutParameter> setParameters(CallableStatement call, Map<String, Object> params) {
+        return setParameters(call, params, true);
+    }
+
+    /**
+     * set proceduce param.
+     *
+     * @param call             CallableStatement
+     * @param params           the params
+     * @param enumWithOridinal enum with oridinal
+     * @return the out parameter map
+     */
+    @SuppressWarnings("rawtypes")
+    public static Map<String, ProcedureOutParameter> setParameters(CallableStatement call, Map<String, Object> params,
+            boolean enumWithOridinal) {
+        Map<String, ProcedureOutParameter> outParamMap = new HashMap<>(0);
+        for (Entry<String, Object> entry : params.entrySet()) {
+            Object arg = entry.getValue();
+            if (arg instanceof ProcedureOutParameter || arg instanceof ProcedureInOutParameter) {
+                outParamMap.put(entry.getKey(), (ProcedureOutParameter) arg);
+            } else {
+                setParameter(call, entry.getKey(), arg, enumWithOridinal);
+            }
+        }
+        return outParamMap;
+    }
+
+    /**
+     * set proceduce param.
+     *
+     * @param call   CallableStatement
+     * @param params the params
+     * @return the out parameter map
+     */
+    @SuppressWarnings("rawtypes")
+    public static Map<Integer, ProcedureOutParameter> setParameters(CallableStatement call, Object... params) {
+        return setParameters(call, true, params);
+    }
+
+    /**
+     * set proceduce param.
+     *
+     * @param call             CallableStatement
+     * @param enumWithOridinal enum with oridinal
+     * @param params           the params
+     * @return the out parameter map
+     */
+    @SuppressWarnings("rawtypes")
+    public static Map<Integer, ProcedureOutParameter> setParameters(CallableStatement call, boolean enumWithOridinal,
+            Object... params) {
+        Map<Integer, ProcedureOutParameter> outParamMap = new HashMap<>(0);
+        for (int i = 0; i < params.length; i++) {
+            Object arg = params[i];
+            if (arg instanceof ProcedureOutParameter || arg instanceof ProcedureInOutParameter) {
+                outParamMap.put(i + 1, (ProcedureOutParameter) arg);
+            } else {
+                setParameter(call, i + 1, arg);
+            }
+        }
+        return outParamMap;
     }
 
     /**
@@ -1589,6 +1761,342 @@ public final class JdbcUtils {
                 list.add(getResultSetArray(rs));
             }
             return list;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * Gets the result SQL type.
+     *
+     * @param call  the CallableStatementWrapper
+     * @param index the index
+     * @return the result SQL type
+     */
+    public static SQLType getCallableSQLType(CallableStatementWrapper call, int index) {
+        return getCallableSQLType(call.getCallableStatement(), index);
+    }
+
+    /**
+     * Gets the result SQL type.
+     *
+     * @param call  the CallableStatement
+     * @param index the index
+     * @return the result SQL type
+     */
+    public static SQLType getCallableSQLType(CallableStatement call, int index) {
+        try {
+            return JDBCType.valueOf(call.getParameterMetaData().getParameterType(index));
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * Retrieve a JDBC column value from a CallableStatement, using the
+     * specified value type.
+     *
+     * @param <E>          the element type
+     * @param call         is the CallableStatement holding the param
+     * @param name         is the param name
+     * @param requiredType the required value type (may be <code>null</code>)
+     * @return the value object
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public static <E> E getCallableParam(CallableStatement call, String name, Class<E> requiredType) {
+        if (requiredType == null) {
+            return (E) getCallableParam(call, name);
+        }
+        try {
+            Object value = null;
+            boolean wasNullCheck = false;
+            // Explicitly extract typed value, as far as possible.
+            if (String.class.equals(requiredType)) {
+                value = call.getString(name);
+            } else if (boolean.class.equals(requiredType) || Boolean.class.equals(requiredType)) {
+                value = Boolean.valueOf(call.getBoolean(name));
+                wasNullCheck = true;
+            } else if (byte.class.equals(requiredType) || Byte.class.equals(requiredType)) {
+                value = new Byte(call.getByte(name));
+                wasNullCheck = true;
+            } else if (short.class.equals(requiredType) || Short.class.equals(requiredType)) {
+                value = new Short(call.getShort(name));
+                wasNullCheck = true;
+            } else if (int.class.equals(requiredType) || Integer.class.equals(requiredType)) {
+                value = new Integer(call.getInt(name));
+                wasNullCheck = true;
+            } else if (long.class.equals(requiredType) || Long.class.equals(requiredType)) {
+                value = new Long(call.getLong(name));
+                wasNullCheck = true;
+            } else if (float.class.equals(requiredType) || Float.class.equals(requiredType)) {
+                value = new Float(call.getFloat(name));
+                wasNullCheck = true;
+            } else if (double.class.equals(requiredType) || Double.class.equals(requiredType)
+                    || Number.class.equals(requiredType)) {
+                value = new Double(call.getDouble(name));
+                wasNullCheck = true;
+            } else if (byte[].class.equals(requiredType)) {
+                value = call.getBytes(name);
+            } else if (java.sql.Date.class.equals(requiredType)) {
+                value = call.getDate(name);
+            } else if (java.sql.Time.class.equals(requiredType)) {
+                value = call.getTime(name);
+            } else if (java.sql.Timestamp.class.equals(requiredType) || java.util.Date.class.equals(requiredType)) {
+                value = call.getTimestamp(name);
+            } else if (LocalDate.class.equals(requiredType)) {
+                value = call.getDate(name);
+                if (value != null) {
+                    value = Dates.toLocalDate(new Date(((java.sql.Date) value).getTime()));
+                }
+            } else if (LocalTime.class.equals(requiredType)) {
+                value = call.getTime(name);
+                if (value != null) {
+                    value = Dates.toLocalTime(new Date(((java.sql.Time) value).getTime()));
+                }
+            } else if (LocalDateTime.class.equals(requiredType)) {
+                value = call.getTimestamp(name);
+                if (value != null) {
+                    value = Dates.toLocalDateTime(new Date(((java.sql.Timestamp) value).getTime()));
+                }
+            } else if (BigDecimal.class.equals(requiredType)) {
+                value = call.getBigDecimal(name);
+            } else if (Blob.class.equals(requiredType)) {
+                value = call.getBlob(name);
+            } else if (Clob.class.equals(requiredType)) {
+                value = call.getClob(name);
+            } else if (requiredType.isEnum()) {
+                value = Lang.toEnum((Class<Enum>) requiredType, call.getObject(name));
+                //                ParameterMetaData meta = call.getParameterMetaData();
+                //                switch (meta.getParameterType(name)) {
+                //                    case Types.TINYINT:
+                //                    case Types.SMALLINT:
+                //                    case Types.INTEGER:
+                //                    case Types.BIGINT:
+                //                        value = Lang.toEnum((Class<Enum>) requiredType, call.getInt(name));
+                //                        break;
+                //                    default:
+                //                        value = Lang.toEnum((Class<Enum>) requiredType, call.getString(name));
+                //                        break;
+                //                }
+            } else {
+                // Some unknown type desired -> rely on getObject.
+                value = getCallableParam(call, name);
+            }
+            // Perform was-null check if demanded (for results that the
+            // JDBC driver returns as primitives).
+            if (wasNullCheck && value != null && call.wasNull()) {
+                value = null;
+            }
+            return (E) value;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * Retrieve a JDBC column value from a CallableStatement, using the most
+     * appropriate value type. The returned value should be a detached value
+     * object, not having any ties to the active ResultSet: in particular, it
+     * should not be a Blob or Clob object but rather a byte array respectively
+     * String representation.
+     * <p>
+     * Uses the <code>getObject(index)</code> method, but includes additional
+     * "hacks" to get around Oracle 10g returning a non-standard object for its
+     * TIMESTAMP datatype and a <code>java.sql.Date</code> for DATE columns
+     * leaving out the time portion: These columns will explicitly be extracted
+     * as standard <code>java.sql.Timestamp</code> object.
+     *
+     * @param call is the CallableStatement holding the param
+     * @param name is the param name
+     * @return the value object
+     * @see java.sql.Blob
+     * @see java.sql.Clob
+     * @see java.sql.Timestamp
+     */
+    public static Object getCallableParam(CallableStatement call, String name) {
+        try {
+            Object obj = call.getObject(name);
+            String className = null;
+            if (obj != null) {
+                className = obj.getClass().getName();
+            }
+            if (obj instanceof Blob) {
+                obj = call.getBytes(name);
+            } else if (obj instanceof Clob) {
+                obj = call.getString(name);
+            } else if (className != null
+                    && ("oracle.sql.TIMESTAMP".equals(className) || "oracle.sql.TIMESTAMPTZ".equals(className))) {
+                obj = call.getTimestamp(name);
+            }
+            // FIXME 后续看看能不能实现
+            //            else if (className != null && className.startsWith("oracle.sql.DATE")) {
+            //                String metaDataClassName = call.getParameterMetaData().getParameterClassName(name);
+            //                if ("java.sql.Timestamp".equals(metaDataClassName)
+            //                        || "oracle.sql.TIMESTAMP".equals(metaDataClassName)) {
+            //                    obj = call.getTimestamp(name);
+            //                } else {
+            //                    obj = call.getDate(name);
+            //                }
+            //            } else if (obj != null && obj instanceof java.sql.Date) {
+            //                ParameterMetaData meta = call.getParameterMetaData();
+            //                if ("java.sql.Timestamp".equals(call.getParameterMetaData().getParameterClassName(name))) {
+            //                    obj = call.getTimestamp(name);
+            //                }
+            //            }
+            return obj;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * Retrieve a JDBC column value from a CallableStatement, using the
+     * specified value type.
+     *
+     * @param <E>          the element type
+     * @param call         is the CallableStatement holding the param
+     * @param index        is the param index
+     * @param requiredType the required value type (may be <code>null</code>)
+     * @return the value object
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public static <E> E getCallableParam(CallableStatement call, int index, Class<E> requiredType) {
+        if (requiredType == null) {
+            return (E) getCallableParam(call, index);
+        }
+        try {
+            Object value = null;
+            boolean wasNullCheck = false;
+            // Explicitly extract typed value, as far as possible.
+            if (String.class.equals(requiredType)) {
+                value = call.getString(index);
+            } else if (boolean.class.equals(requiredType) || Boolean.class.equals(requiredType)) {
+                value = Boolean.valueOf(call.getBoolean(index));
+                wasNullCheck = true;
+            } else if (byte.class.equals(requiredType) || Byte.class.equals(requiredType)) {
+                value = new Byte(call.getByte(index));
+                wasNullCheck = true;
+            } else if (short.class.equals(requiredType) || Short.class.equals(requiredType)) {
+                value = new Short(call.getShort(index));
+                wasNullCheck = true;
+            } else if (int.class.equals(requiredType) || Integer.class.equals(requiredType)) {
+                value = new Integer(call.getInt(index));
+                wasNullCheck = true;
+            } else if (long.class.equals(requiredType) || Long.class.equals(requiredType)) {
+                value = new Long(call.getLong(index));
+                wasNullCheck = true;
+            } else if (float.class.equals(requiredType) || Float.class.equals(requiredType)) {
+                value = new Float(call.getFloat(index));
+                wasNullCheck = true;
+            } else if (double.class.equals(requiredType) || Double.class.equals(requiredType)
+                    || Number.class.equals(requiredType)) {
+                value = new Double(call.getDouble(index));
+                wasNullCheck = true;
+            } else if (byte[].class.equals(requiredType)) {
+                value = call.getBytes(index);
+            } else if (java.sql.Date.class.equals(requiredType)) {
+                value = call.getDate(index);
+            } else if (java.sql.Time.class.equals(requiredType)) {
+                value = call.getTime(index);
+            } else if (java.sql.Timestamp.class.equals(requiredType) || java.util.Date.class.equals(requiredType)) {
+                value = call.getTimestamp(index);
+            } else if (LocalDate.class.equals(requiredType)) {
+                value = call.getDate(index);
+                if (value != null) {
+                    value = Dates.toLocalDate(new Date(((java.sql.Date) value).getTime()));
+                }
+            } else if (LocalTime.class.equals(requiredType)) {
+                value = call.getTime(index);
+                if (value != null) {
+                    value = Dates.toLocalTime(new Date(((java.sql.Time) value).getTime()));
+                }
+            } else if (LocalDateTime.class.equals(requiredType)) {
+                value = call.getTimestamp(index);
+                if (value != null) {
+                    value = Dates.toLocalDateTime(new Date(((java.sql.Timestamp) value).getTime()));
+                }
+            } else if (BigDecimal.class.equals(requiredType)) {
+                value = call.getBigDecimal(index);
+            } else if (Blob.class.equals(requiredType)) {
+                value = call.getBlob(index);
+            } else if (Clob.class.equals(requiredType)) {
+                value = call.getClob(index);
+            } else if (requiredType.isEnum()) {
+                ParameterMetaData meta = call.getParameterMetaData();
+                switch (meta.getParameterType(index)) {
+                    case Types.TINYINT:
+                    case Types.SMALLINT:
+                    case Types.INTEGER:
+                    case Types.BIGINT:
+                        value = Lang.toEnum((Class<Enum>) requiredType, call.getInt(index));
+                        break;
+                    default:
+                        value = Lang.toEnum((Class<Enum>) requiredType, call.getString(index));
+                        break;
+                }
+            } else {
+                // Some unknown type desired -> rely on getObject.
+                value = getCallableParam(call, index);
+            }
+            // Perform was-null check if demanded (for results that the
+            // JDBC driver returns as primitives).
+            if (wasNullCheck && value != null && call.wasNull()) {
+                value = null;
+            }
+            return (E) value;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * Retrieve a JDBC column value from a CallableStatement, using the most
+     * appropriate value type. The returned value should be a detached value
+     * object, not having any ties to the active ResultSet: in particular, it
+     * should not be a Blob or Clob object but rather a byte array respectively
+     * String representation.
+     * <p>
+     * Uses the <code>getObject(index)</code> method, but includes additional
+     * "hacks" to get around Oracle 10g returning a non-standard object for its
+     * TIMESTAMP datatype and a <code>java.sql.Date</code> for DATE columns
+     * leaving out the time portion: These columns will explicitly be extracted
+     * as standard <code>java.sql.Timestamp</code> object.
+     *
+     * @param call  is the CallableStatement holding the param
+     * @param index is the param index
+     * @return the value object
+     * @see java.sql.Blob
+     * @see java.sql.Clob
+     * @see java.sql.Timestamp
+     */
+    public static Object getCallableParam(CallableStatement call, int index) {
+        try {
+            Object obj = call.getObject(index);
+            String className = null;
+            if (obj != null) {
+                className = obj.getClass().getName();
+            }
+            if (obj instanceof Blob) {
+                obj = call.getBytes(index);
+            } else if (obj instanceof Clob) {
+                obj = call.getString(index);
+            } else if (className != null
+                    && ("oracle.sql.TIMESTAMP".equals(className) || "oracle.sql.TIMESTAMPTZ".equals(className))) {
+                obj = call.getTimestamp(index);
+            } else if (className != null && className.startsWith("oracle.sql.DATE")) {
+                String metaDataClassName = call.getParameterMetaData().getParameterClassName(index);
+                if ("java.sql.Timestamp".equals(metaDataClassName)
+                        || "oracle.sql.TIMESTAMP".equals(metaDataClassName)) {
+                    obj = call.getTimestamp(index);
+                } else {
+                    obj = call.getDate(index);
+                }
+            } else if (obj != null && obj instanceof java.sql.Date) {
+                if ("java.sql.Timestamp".equals(call.getParameterMetaData().getParameterClassName(index))) {
+                    obj = call.getTimestamp(index);
+                }
+            }
+            return obj;
         } catch (SQLException e) {
             throw new JdbcException(e);
         }

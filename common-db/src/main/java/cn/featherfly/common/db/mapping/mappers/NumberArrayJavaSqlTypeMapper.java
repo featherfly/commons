@@ -1,5 +1,6 @@
 package cn.featherfly.common.db.mapping.mappers;
 
+import java.sql.CallableStatement;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -71,8 +72,45 @@ public class NumberArrayJavaSqlTypeMapper<N extends Number> extends AbstractGene
      * {@inheritDoc}
      */
     @Override
+    public void set(CallableStatement call, String parameterName, N[] values) {
+        if (values != null) {
+            StringBuilder result = new StringBuilder();
+            for (N value : values) {
+                result.append(value).append(",");
+            }
+            if (result.length() > 0) {
+                result.deleteCharAt(result.length() - 1);
+            }
+            JdbcUtils.setParameter(call, parameterName, result.toString());
+        } else {
+            JdbcUtils.setParameterNull(call, parameterName);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public N[] get(ResultSet rs, int columnIndex) {
         String value = JdbcUtils.getResultSetValue(rs, columnIndex, String.class);
+        if (value != null) {
+            String[] values = value.split(",");
+            N[] numbers = ArrayUtils.create(numberType, values.length);
+            for (int i = 0; i < values.length; i++) {
+                numbers[i] = NumberUtils.parse(values[i], numberType);
+            }
+            return numbers;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public N[] get(CallableStatement call, int paramIndex) {
+        String value = JdbcUtils.getCallableParam(call, paramIndex, String.class);
         if (value != null) {
             String[] values = value.split(",");
             N[] numbers = ArrayUtils.create(numberType, values.length);

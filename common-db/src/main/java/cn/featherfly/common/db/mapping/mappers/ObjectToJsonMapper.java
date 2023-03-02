@@ -4,6 +4,7 @@ package cn.featherfly.common.db.mapping.mappers;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.Blob;
+import java.sql.CallableStatement;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -179,7 +180,30 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
                 prep.setBlob(columnIndex, is);
             }
         } catch (JsonProcessingException | SQLException e) {
-            // TODO 优化错误信息
+            // ENHANCE 优化错误信息
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void set(CallableStatement call, String parameterName, E value) {
+        try {
+            if (value == null) {
+                call.setObject(parameterName, null);
+            }
+            if (storeAsString) {
+                String json = objectMapper.writerFor(javaType).writeValueAsString(value);
+                call.setString(parameterName, json);
+            } else {
+                ByteArrayInputStream is = new ByteArrayInputStream(
+                        objectMapper.writerFor(getType().getType()).writeValueAsBytes(value));
+                call.setBlob(parameterName, is);
+            }
+        } catch (JsonProcessingException | SQLException e) {
+            // ENHANCE 优化错误信息
             throw new JdbcException(e);
         }
     }
@@ -204,9 +228,33 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
                 return objectMapper.readerFor(getType().getType()).readValue(blob.getBinaryStream());
             }
         } catch (IOException | SQLException e) {
-            // TODO 优化错误信息
+            // ENHANCE 优化错误信息
             throw new JdbcException(e);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public E get(CallableStatement call, int paramIndex) {
+        try {
+            if (storeAsString) {
+                String json = call.getString(paramIndex);
+                if (StringUtils.isBlank(json)) {
+                    return null;
+                }
+                return objectMapper.readerFor(javaType).readValue(json);
+            } else {
+                Blob blob = call.getBlob(paramIndex);
+                if (blob == null) {
+                    return null;
+                }
+                return objectMapper.readerFor(getType().getType()).readValue(blob.getBinaryStream());
+            }
+        } catch (IOException | SQLException e) {
+            // ENHANCE 优化错误信息
+            throw new JdbcException(e);
+        }
+    }
 }

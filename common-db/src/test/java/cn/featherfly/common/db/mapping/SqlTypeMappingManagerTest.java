@@ -222,6 +222,12 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
                     throw new JdbcException(e);
                 }
             }
+
+            @Override
+            public void set(CallableStatement call, String parameterName, Long[] value) {
+                System.out.println(ArrayUtils.toString(value, ','));
+                JdbcUtils.setParameter(call, parameterName, ArrayUtils.toString(value, ','));
+            }
         });
 
         String insert = "INSERT INTO `db_test`.`cms_article` (`ID`, `title`, `content`) VALUES (null, ?, ?)";

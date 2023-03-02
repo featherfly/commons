@@ -1,5 +1,6 @@
 package cn.featherfly.common.db;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -57,6 +58,14 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
      * {@inheritDoc}
      */
     @Override
+    public void set(CallableStatement prep, String parameterName) {
+        operator.set(prep, parameterName, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public T get(ResultSet rs, int parameterIndex) {
         value = operator.get(rs, parameterIndex);
         return value;
@@ -92,5 +101,4 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
         return value == null ? null
                 : new FieldValueOperator<>((JavaTypeSqlTypeOperator<E>) pm.getJavaTypeSqlTypeOperator(), value);
     }
-
 }

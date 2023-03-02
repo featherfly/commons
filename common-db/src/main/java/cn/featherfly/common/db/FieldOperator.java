@@ -1,5 +1,6 @@
 package cn.featherfly.common.db;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -18,6 +19,14 @@ public interface FieldOperator<T> {
      * @param parameterIndex the parameter index
      */
     void set(PreparedStatement prep, int parameterIndex);
+
+    /**
+     * set the field value.
+     *
+     * @param prep          the prep
+     * @param parameterName the parameter name
+     */
+    void set(CallableStatement prep, String parameterName);
 
     /**
      * get the field value.

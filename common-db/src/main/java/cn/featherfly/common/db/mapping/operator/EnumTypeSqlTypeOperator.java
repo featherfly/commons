@@ -92,6 +92,14 @@ public class EnumTypeSqlTypeOperator<E extends Enum<?>> implements JavaTypeSqlTy
      * {@inheritDoc}
      */
     @Override
+    public void set(CallableStatement call, String parameterName, E value) {
+        JdbcUtils.setParameter(call, parameterName, value, enumUseOrdinal);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public E get(ResultSet rs, int columnIndex) {
         return JdbcUtils.getResultSetValue(rs, columnIndex, type);
     }
@@ -103,4 +111,5 @@ public class EnumTypeSqlTypeOperator<E extends Enum<?>> implements JavaTypeSqlTy
     public E get(CallableStatement call, int paramIndex) {
         return JdbcUtils.getCallableParam(call, paramIndex, type);
     }
+
 }

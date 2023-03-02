@@ -1,10 +1,8 @@
 
 package cn.featherfly.common.db.mapping;
 
-import java.sql.CallableStatement;
 import java.sql.SQLType;
 
-import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.reflect.Type;
@@ -135,13 +133,5 @@ public abstract class AbstractJavaSqlTypeMapper<E> implements JavaSqlTypeMapper<
     public AbstractJavaSqlTypeMapper<E> addDeny(String tableName, String columnName) {
         columnAllowPolicy.addBlack(toKey(tableName, columnName));
         return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public E get(CallableStatement call, int paramIndex) {
-        return JdbcUtils.getCallableParam(call, paramIndex, type.getType());
     }
 }

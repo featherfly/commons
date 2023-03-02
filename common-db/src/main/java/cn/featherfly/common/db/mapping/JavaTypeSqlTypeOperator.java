@@ -16,27 +16,36 @@ public interface JavaTypeSqlTypeOperator<E> {
     /**
      * Sets the value.
      *
-     * @param prep           the prep
+     * @param prep           the PreparedStatement
      * @param parameterIndex the parameter index
-     * @param value          the value
+     * @param value          the parameter value
      */
     void set(PreparedStatement prep, int parameterIndex, E value);
 
     /**
-     * Gets the call param.
+     * Sets the value.
      *
-     * @param call       the call
-     * @param paramIndex the param index
-     * @return the e
+     * @param call          the CallableStatement
+     * @param parameterName the parameter name
+     * @param value         the parameter value
      */
-    E get(CallableStatement call, int paramIndex);
+    void set(CallableStatement call, String parameterName, E value);
 
     /**
      * Gets the result value.
      *
-     * @param rs          the rs
+     * @param rs          the ResultSet
      * @param columnIndex the column index
-     * @return the e
+     * @return the value
      */
     E get(ResultSet rs, int columnIndex);
+
+    /**
+     * Gets the call param.
+     *
+     * @param call       the CallableStatement
+     * @param paramIndex the param index
+     * @return the value
+     */
+    E get(CallableStatement call, int paramIndex);
 }

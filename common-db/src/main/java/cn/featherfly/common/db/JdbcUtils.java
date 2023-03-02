@@ -27,7 +27,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -40,8 +39,6 @@ import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.db.mapping.SqlResultSet;
 import cn.featherfly.common.db.mapping.SqlTypeMappingManager;
-import cn.featherfly.common.db.procedure.ProcedureInOutParameter;
-import cn.featherfly.common.db.procedure.ProcedureOutParameter;
 import cn.featherfly.common.db.wrapper.CallableStatementWrapper;
 import cn.featherfly.common.db.wrapper.ConnectionWrapper;
 import cn.featherfly.common.db.wrapper.DataSourceWrapper;
@@ -51,6 +48,7 @@ import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.LogUtils;
+import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.lang.WordUtils;
 import cn.featherfly.common.repository.mapping.RowMapper;
 
@@ -1144,6 +1142,21 @@ public final class JdbcUtils {
     }
 
     /**
+     * 设置参数.
+     *
+     * @param <E>  the element type
+     * @param call the CallableStatement
+     * @param name the parameter name
+     */
+    public static <E> void setParameterNull(CallableStatement call, String name) {
+        try {
+            call.setObject(name, null);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
      * set proceduce param.
      *
      * @param call  CallableStatement
@@ -1231,51 +1244,67 @@ public final class JdbcUtils {
             throw new JdbcException(e);
         }
     }
-
-    /**
-     * set proceduce params.
-     *
-     * @param call   CallableStatement
-     * @param params params map
-     * @return the out parameter map
-     */
-    @SuppressWarnings("rawtypes")
-    public static Map<String, ProcedureOutParameter> setParameters(CallableStatement call, Map<String, Object> params) {
-        return setParameters(call, params, true);
-    }
+    //
+    //    /**
+    //     * set proceduce params.
+    //     *
+    //     * @param call   CallableStatement
+    //     * @param values the parameter values map
+    //     * @return the out parameter index and class map
+    //     */
+    //    public static Map<String, Class<?>> setParameters(CallableStatement call, Map<String, Object> values) {
+    //        return setParameters(call, values, true);
+    //    }
+    //
+    //    /**
+    //     * set proceduce param.
+    //     *
+    //     * @param call             CallableStatement
+    //     * @param values           the parameter values map
+    //     * @param enumWithOridinal enum with oridinal
+    //     * @return the out parameter index and class map
+    //     */
+    //    public static Map<String, Class<?>> setParameters(CallableStatement call, Map<String, Object> values,
+    //            boolean enumWithOridinal) {
+    //        Map<String, Class<?>> outParamMap = new HashMap<>(0);
+    //        ParameterMetaData meta = call.getParameterMetaData();
+    //        if (meta.getParameterCount() != values.size()) {
+    //            // ENHANCE 后续来优化异常信息
+    //            throw new JdbcException(
+    //                    Strings.format("procedure parameter count[{0}] not equals parameter values map size[{1}]",
+    //                            meta.getParameterCount(), values.size()));
+    //        }
+    //        for (Entry<String, Object> entry : values.entrySet()) {
+    //            Object arg = entry.getValue();
+    //            int mode = meta.getParameterMode(i);
+    //            if (mode == ParameterMetaData.parameterModeOut) {
+    //                if (arg == null) {
+    //                    throw new JdbcException("out parameter can not be null with ")
+    //                } else {
+    //                    outParamMap.put(entry.getKey(), arg.getClass());
+    //                }
+    //            } else if (mode == ParameterMetaData.parameterModeInOut) {
+    //                if (arg == null) {
+    //                    outParamMap.put(entry.getKey(), ClassUtils.forName(meta.getParameterClassName(i)));
+    //                } else {
+    //                    outParamMap.put(entry.getKey(), arg.getClass());
+    //                }
+    //                setParameter(call, entry.getKey(), arg);
+    //            } else {
+    //                setParameter(call, entry.getKey(), arg);
+    //            }
+    //        }
+    //        return outParamMap;
+    //    }
 
     /**
      * set proceduce param.
      *
-     * @param call             CallableStatement
-     * @param params           the params
-     * @param enumWithOridinal enum with oridinal
-     * @return the out parameter map
-     */
-    @SuppressWarnings("rawtypes")
-    public static Map<String, ProcedureOutParameter> setParameters(CallableStatement call, Map<String, Object> params,
-            boolean enumWithOridinal) {
-        Map<String, ProcedureOutParameter> outParamMap = new HashMap<>(0);
-        for (Entry<String, Object> entry : params.entrySet()) {
-            Object arg = entry.getValue();
-            if (arg instanceof ProcedureOutParameter || arg instanceof ProcedureInOutParameter) {
-                outParamMap.put(entry.getKey(), (ProcedureOutParameter) arg);
-            } else {
-                setParameter(call, entry.getKey(), arg, enumWithOridinal);
-            }
-        }
-        return outParamMap;
-    }
-
-    /**
-     * set proceduce param.
-     *
      * @param call   CallableStatement
-     * @param params the params
-     * @return the out parameter map
+     * @param values the parameter values
+     * @return the out parameter index and class map
      */
-    @SuppressWarnings("rawtypes")
-    public static Map<Integer, ProcedureOutParameter> setParameters(CallableStatement call, Object... params) {
+    public static Map<Integer, Class<?>> setParameters(CallableStatement call, Object... params) {
         return setParameters(call, true, params);
     }
 
@@ -1284,22 +1313,45 @@ public final class JdbcUtils {
      *
      * @param call             CallableStatement
      * @param enumWithOridinal enum with oridinal
-     * @param params           the params
-     * @return the out parameter map
+     * @param values           the parameter values
+     * @return the out parameter index and class map
      */
-    @SuppressWarnings("rawtypes")
-    public static Map<Integer, ProcedureOutParameter> setParameters(CallableStatement call, boolean enumWithOridinal,
-            Object... params) {
-        Map<Integer, ProcedureOutParameter> outParamMap = new HashMap<>(0);
-        for (int i = 0; i < params.length; i++) {
-            Object arg = params[i];
-            if (arg instanceof ProcedureOutParameter || arg instanceof ProcedureInOutParameter) {
-                outParamMap.put(i + 1, (ProcedureOutParameter) arg);
-            } else {
-                setParameter(call, i + 1, arg);
+    public static Map<Integer, Class<?>> setParameters(CallableStatement call, boolean enumWithOridinal,
+            Object... values) {
+        Map<Integer, Class<?>> outParamMap = new HashMap<>(0);
+        try {
+            ParameterMetaData meta = call.getParameterMetaData();
+            if (meta.getParameterCount() != values.length) {
+                // ENHANCE 后续来优化异常信息
+                throw new JdbcException(
+                        Strings.format("procedure parameter count[{0}] not equals parameter values length[{1}]",
+                                meta.getParameterCount(), values.length));
             }
+            for (int i = 1; i <= values.length; i++) {
+                Object arg = values[i - 1];
+                int mode = meta.getParameterMode(i);
+                if (mode == ParameterMetaData.parameterModeOut) {
+                    setOutParamMap(outParamMap, i, arg, meta);
+                } else if (mode == ParameterMetaData.parameterModeInOut) {
+                    setOutParamMap(outParamMap, i, arg, meta);
+                    setParameter(call, i, arg);
+                } else {
+                    setParameter(call, i, arg);
+                }
+            }
+        } catch (SQLException e) {
+            throw new JdbcException(e);
         }
         return outParamMap;
+    }
+
+    private static void setOutParamMap(Map<Integer, Class<?>> outParamMap, int index, Object arg,
+            ParameterMetaData meta) throws SQLException {
+        if (arg == null) {
+            outParamMap.put(index, ClassUtils.forName(meta.getParameterClassName(index)));
+        } else {
+            outParamMap.put(index, arg.getClass());
+        }
     }
 
     /**

@@ -278,6 +278,7 @@ public class DatabaseMetadataManager {
             databaseMetadata.setProductVersion(metaData.getDatabaseProductVersion());
             databaseMetadata.setMajorVersion(metaData.getDatabaseMajorVersion());
             databaseMetadata.setMinorVersion(metaData.getDatabaseMinorVersion());
+            databaseMetadata.setSupportsBatchUpdate(metaData.supportsBatchUpdates());
             return databaseMetadata;
         } catch (SQLException e) {
             throw new JdbcException(e);

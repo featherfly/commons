@@ -11,6 +11,7 @@ import cn.featherfly.common.db.Table;
  * <p>
  * 库元数据
  * </p>
+ * .
  *
  * @author zhongj
  */
@@ -18,6 +19,7 @@ public class DatabaseMetadata {
     // FIXME 多个schema内有相同名称表的会出错
     // TODO 后续加入多个schema管理，当前的方法都不该，只是代理到default schema去获取
     /**
+     * Instantiates a new database metadata.
      */
     DatabaseMetadata() {
     }
@@ -109,8 +111,28 @@ public class DatabaseMetadata {
 
     private Integer minorVersion;
 
+    private boolean supportsBatchUpdates;
+
     /**
-     * 返回name
+     * Sets the supports batch update.
+     *
+     * @param supportsBatchUpdates the new supports batch update
+     */
+    void setSupportsBatchUpdate(boolean supportsBatchUpdates) {
+        this.supportsBatchUpdates = supportsBatchUpdates;
+    }
+
+    /**
+     * Supports batch updates.
+     *
+     * @return true, if successful
+     */
+    public boolean supportsBatchUpdates() {
+        return supportsBatchUpdates;
+    }
+
+    /**
+     * 返回name.
      *
      * @return name
      */
@@ -119,7 +141,7 @@ public class DatabaseMetadata {
     }
 
     /**
-     * 设置name
+     * 设置name.
      *
      * @param name name
      */
@@ -128,7 +150,7 @@ public class DatabaseMetadata {
     }
 
     /**
-     * 返回productName
+     * 返回productName.
      *
      * @return productName
      */
@@ -137,7 +159,7 @@ public class DatabaseMetadata {
     }
 
     /**
-     * 返回productVersion
+     * 返回productVersion.
      *
      * @return productVersion
      */
@@ -146,7 +168,7 @@ public class DatabaseMetadata {
     }
 
     /**
-     * 设置productName
+     * 设置productName.
      *
      * @param productName productName
      */
@@ -155,7 +177,7 @@ public class DatabaseMetadata {
     }
 
     /**
-     * 设置productVersion
+     * 设置productVersion.
      *
      * @param productVersion productVersion
      */
@@ -164,7 +186,7 @@ public class DatabaseMetadata {
     }
 
     /**
-     * 返回majorVersion
+     * 返回majorVersion.
      *
      * @return majorVersion
      */
@@ -173,7 +195,7 @@ public class DatabaseMetadata {
     }
 
     /**
-     * 设置majorVersion
+     * 设置majorVersion.
      *
      * @param majorVersion majorVersion
      */
@@ -182,7 +204,7 @@ public class DatabaseMetadata {
     }
 
     /**
-     * 返回minorVersion
+     * 返回minorVersion.
      *
      * @return minorVersion
      */
@@ -191,7 +213,7 @@ public class DatabaseMetadata {
     }
 
     /**
-     * 设置minorVersion
+     * 设置minorVersion.
      *
      * @param minorVersion minorVersion
      */

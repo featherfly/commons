@@ -97,7 +97,7 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public static <E> FieldValueOperator<E> craete(JdbcPropertyMapping pm, E value) {
+    public static <E> FieldValueOperator<E> create(JdbcPropertyMapping pm, E value) {
         return value == null ? null
                 : new FieldValueOperator<>((JavaTypeSqlTypeOperator<E>) pm.getJavaTypeSqlTypeOperator(), value);
     }

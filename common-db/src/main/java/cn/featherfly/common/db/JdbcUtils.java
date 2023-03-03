@@ -1304,8 +1304,8 @@ public final class JdbcUtils {
      * @param values the parameter values
      * @return the out parameter index and class map
      */
-    public static Map<Integer, Class<?>> setParameters(CallableStatement call, Object... params) {
-        return setParameters(call, true, params);
+    public static Map<Integer, Class<?>> setParameters(CallableStatement call, Object... values) {
+        return setParameters(call, true, values);
     }
 
     /**

@@ -12,7 +12,6 @@ import java.util.Map.Entry;
 
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.Tuple3;
-import com.speedment.common.tuple.Tuple4;
 import com.speedment.common.tuple.Tuples;
 
 import cn.featherfly.common.bean.BeanUtils;
@@ -240,11 +239,11 @@ public class ClassMappingUtils {
      */
     public static Tuple2<String, Map<Integer, JdbcPropertyMapping>> getUpsertBatchSqlAndParamPositions(int upsertAmount,
             JdbcClassMapping<?> classMapping, Dialect dialect) {
-        Tuple4<String, Map<Integer, JdbcPropertyMapping>, String[],
+        Tuple3<Map<Integer, JdbcPropertyMapping>, String[],
                 String[]> tuple = getUpsertSqlAndParamPositionsColumnsAndIdsAnd(classMapping, dialect);
-        String sql = dialect.buildUpsertBatchSql(classMapping.getRepositoryName(), tuple.get2(), tuple.get3(),
+        String sql = dialect.buildUpsertBatchSql(classMapping.getRepositoryName(), tuple.get1(), tuple.get2(),
                 upsertAmount);
-        return Tuples.of(sql, tuple.get1());
+        return Tuples.of(sql, tuple.get0());
     }
 
     /**
@@ -256,17 +255,18 @@ public class ClassMappingUtils {
      */
     public static Tuple2<String, Map<Integer, JdbcPropertyMapping>> getUpsertSqlAndParamPositions(
             JdbcClassMapping<?> classMapping, Dialect dialect) {
-        Tuple4<String, Map<Integer, JdbcPropertyMapping>, String[],
-                String[]> t = getUpsertSqlAndParamPositionsColumnsAndIdsAnd(classMapping, dialect);
-        return Tuples.of(t.get0(), t.get1());
+        Tuple3<Map<Integer, JdbcPropertyMapping>, String[],
+                String[]> tuple = getUpsertSqlAndParamPositionsColumnsAndIdsAnd(classMapping, dialect);
+        String upsert = dialect.buildUpsertBatchSql(classMapping.getRepositoryName(), tuple.get1(), tuple.get2(), 1);
+        return Tuples.of(upsert, tuple.get0());
     }
 
-    private static Tuple4<String, Map<Integer, JdbcPropertyMapping>, String[],
+    private static Tuple3<Map<Integer, JdbcPropertyMapping>, String[],
             String[]> getUpsertSqlAndParamPositionsColumnsAndIdsAnd(JdbcClassMapping<?> classMapping, Dialect dialect) {
         List<JdbcPropertyMapping> pkms = new ArrayList<>();
         List<JdbcPropertyMapping> pms = new ArrayList<>();
         List<String> columns = new ArrayList<>();
-        List<String> ids = new ArrayList<>();
+        List<String> uniques = new ArrayList<>();
         for (JdbcPropertyMapping pm : classMapping.getPropertyMappings()) {
             if (Lang.isEmpty(pm.getPropertyMappings())) {
                 if (pm.isInsertable()) {
@@ -274,8 +274,10 @@ public class ClassMappingUtils {
                     pms.add(pm);
                 }
                 if (pm.isPrimaryKey()) {
-                    ids.add(pm.getRepositoryFieldName());
+                    uniques.add(pm.getRepositoryFieldName());
                     pkms.add(pm);
+                } else if (pm.isUnique()) {
+                    uniques.add(pm.getRepositoryFieldName());
                 }
             } else {
                 for (JdbcPropertyMapping subPm : pm.getPropertyMappings()) {
@@ -284,16 +286,18 @@ public class ClassMappingUtils {
                         pms.add(subPm);
                     }
                     if (subPm.isPrimaryKey()) {
-                        ids.add(pm.getRepositoryFieldName());
+                        uniques.add(pm.getRepositoryFieldName());
                         pkms.add(subPm);
+                    } else if (pm.isUnique()) {
+                        uniques.add(pm.getRepositoryFieldName());
                     }
                 }
             }
         }
-        String[] cnArray = CollectionUtils.toArray(columns);
-        String[] idArray = CollectionUtils.toArray(ids);
-        String upsert = dialect.buildUpsertBatchSql(classMapping.getRepositoryName(), cnArray, idArray, 1);
-        return Tuples.of(upsert, propertyPositions(pms), cnArray, idArray);
+        String[] columnNames = CollectionUtils.toArray(columns);
+        String[] uniqueColumns = CollectionUtils.toArray(uniques);
+        //        String upsert = dialect.buildUpsertBatchSql(classMapping.getRepositoryName(), columnNames, uniqueColumns, 1);
+        return Tuples.of(propertyPositions(pms), columnNames, uniqueColumns);
     }
 
     private static Map<Integer, JdbcPropertyMapping> propertyPositions(List<JdbcPropertyMapping> pms) {

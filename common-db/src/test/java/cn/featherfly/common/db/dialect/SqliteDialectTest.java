@@ -186,7 +186,7 @@ public class SqliteDialectTest extends DialectTest {
         String sql = dialect.buildUpsertBatchSql("user", new String[] { "id", "name", "age" }, "id", 2);
         System.out.println(sql);
         assertEquals(sql,
-                "INSERT INTO `user` VALUES (`id`,`name`,`age`) SELECT ?, ?, ? UNION SELECT ?, ?, ? ON CONFLICT (id) DO UPDATE SET `name`=EXCLUDED.`name`, `age`=EXCLUDED.`age`");
+                "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `age` UNION SELECT ?, ?, ? ON CONFLICT (id) DO UPDATE SET `name`=EXCLUDED.`name`, `age`=EXCLUDED.`age`");
     }
 
     /**
@@ -208,7 +208,7 @@ public class SqliteDialectTest extends DialectTest {
     void testInsertBatch() {
         String sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "age" }, 2);
         System.out.println(sql);
-        assertEquals(sql, "INSERT INTO `user` VALUES (`id`,`name`,`age`) SELECT ?, ?, ? UNION SELECT ?, ?, ?");
+        assertEquals(sql, "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `age` UNION SELECT ?, ?, ?");
     }
 
     /**

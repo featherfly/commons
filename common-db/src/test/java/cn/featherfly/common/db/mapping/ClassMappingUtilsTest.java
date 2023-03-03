@@ -65,8 +65,8 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
 
     @Test
     void testUpdate() {
-        Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getUpdateSqlAndParamPositions(getUserClassMapping(),
-                dialect);
+        Tuple2<String, Map<Integer, JdbcPropertyMapping>> t = ClassMappingUtils
+                .getUpdateSqlAndParamPositions(getUserClassMapping(), dialect);
         System.out.println(t.get0());
         System.out.println(t.get1());
 
@@ -81,25 +81,25 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
 
     @Test
     void testDelete() {
-        Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getDeleteSqlAndParamPositions(getUserClassMapping(),
-                dialect);
+        Tuple2<String, Map<Integer, JdbcPropertyMapping>> t = ClassMappingUtils
+                .getDeleteSqlAndParamPositions(getUserClassMapping(), dialect);
         System.out.println(t.get0());
         System.out.println(t.get1());
 
         assertEquals(t.get0(), "DELETE FROM `user` WHERE `id` = ?");
-        assertEquals(t.get1().get(1), "id");
+        assertEquals(t.get1().get(1).getPropertyFullName(), "id");
 
         t = ClassMappingUtils.getDeleteSqlAndParamPositions(getUserRoleClassMapping(), dialect);
         System.out.println(t.get0());
         System.out.println(t.get1());
         assertEquals(t.get0(), "DELETE FROM `user_role` WHERE `user_id` = ? AND `role_id` = ?");
-        assertEquals(t.get1().get(1), "userId");
-        assertEquals(t.get1().get(2), "roleId");
+        assertEquals(t.get1().get(1).getPropertyFullName(), "userId");
+        assertEquals(t.get1().get(2).getPropertyFullName(), "roleId");
     }
 
     @Test
     void testDeleteBatch() {
-        Tuple2<String, Map<Integer, String>> t = null;
+        Tuple2<String, Map<Integer, JdbcPropertyMapping>> t = null;
         t = ClassMappingUtils.getDeleteSqlAndParamPositions(3, getUserClassMapping(), dialect);
         System.out.println(t.get0());
         System.out.println(t.get1());
@@ -118,8 +118,8 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
         User user = new User();
         user.setId(12L);
         user.setName("yufei");
-        Tuple3<String, Map<Integer, String>, Integer> t = ClassMappingUtils.getMergeSqlAndParamPositions(user,
-                getUserClassMapping(), false, dialect);
+        Tuple3<String, Map<Integer, JdbcPropertyMapping>, Integer> t = ClassMappingUtils
+                .getMergeSqlAndParamPositions(user, getUserClassMapping(), false, dialect);
         System.out.println(t.get0());
         System.out.println(t.get1());
 
@@ -163,8 +163,8 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
     void testMergeNoColumnChange() {
         User user = new User();
         user.setId(12L);
-        Tuple3<String, Map<Integer, String>, Integer> t = ClassMappingUtils.getMergeSqlAndParamPositions(user,
-                getUserClassMapping(), false, dialect);
+        Tuple3<String, Map<Integer, JdbcPropertyMapping>, Integer> t = ClassMappingUtils
+                .getMergeSqlAndParamPositions(user, getUserClassMapping(), false, dialect);
         System.out.println(t.get0());
         System.out.println(t.get1());
 
@@ -252,8 +252,8 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
 
     @Test
     void testUpsertMysql() {
-        Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getUpsertSqlAndParamPositions(getUserClassMapping(),
-                Dialects.MYSQL);
+        Tuple2<String, Map<Integer, JdbcPropertyMapping>> t = ClassMappingUtils
+                .getUpsertSqlAndParamPositions(getUserClassMapping(), Dialects.MYSQL);
         System.out.println(t.get0());
         System.out.println(t.get1());
 
@@ -263,8 +263,8 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
 
     @Test
     void testUpsertPostgresql() {
-        Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getUpsertSqlAndParamPositions(getUserClassMapping(),
-                Dialects.POSTGRESQL);
+        Tuple2<String, Map<Integer, JdbcPropertyMapping>> t = ClassMappingUtils
+                .getUpsertSqlAndParamPositions(getUserClassMapping(), Dialects.POSTGRESQL);
         System.out.println(t.get0());
         System.out.println(t.get1());
 
@@ -274,8 +274,8 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
 
     @Test
     void testUpsertSqlite() {
-        Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getUpsertSqlAndParamPositions(getUserClassMapping(),
-                Dialects.SQLITE);
+        Tuple2<String, Map<Integer, JdbcPropertyMapping>> t = ClassMappingUtils
+                .getUpsertSqlAndParamPositions(getUserClassMapping(), Dialects.SQLITE);
         System.out.println(t.get0());
         System.out.println(t.get1());
 
@@ -285,36 +285,36 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
 
     @Test
     void testUpsertBatchMysql() {
-        Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getUpsertBatchSqlAndParamPositions(5,
+        Tuple2<String, Map<Integer, JdbcPropertyMapping>> t = ClassMappingUtils.getUpsertBatchSqlAndParamPositions(5,
                 getUserClassMapping(), dialect);
         assertEquals(t.get0(),
                 "INSERT INTO `user` (`id`, `name`, `descp`, `password`) VALUES (?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?) ON DUPLICATE KEY UPDATE `name`=values(`name`), `descp`=values(`descp`), `password`=values(`password`)");
-        assertEquals(t.get1().get(1), "id");
-        assertEquals(t.get1().get(2), "name");
-        assertEquals(t.get1().get(3), "descp");
+        assertEquals(t.get1().get(1).getPropertyFullName(), "id");
+        assertEquals(t.get1().get(2).getPropertyFullName(), "name");
+        assertEquals(t.get1().get(3).getPropertyFullName(), "descp");
     }
 
     @Test
     void testUpsertBatchPostgresql() {
-        Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getUpsertBatchSqlAndParamPositions(5,
+        Tuple2<String, Map<Integer, JdbcPropertyMapping>> t = ClassMappingUtils.getUpsertBatchSqlAndParamPositions(5,
                 getUserClassMapping(), Dialects.POSTGRESQL);
         assertEquals(t.get0(),
                 "INSERT INTO \"user\" (\"id\", \"name\", \"descp\", \"password\") VALUES (?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"descp\"=EXCLUDED.\"descp\", \"password\"=EXCLUDED.\"password\"");
-        assertEquals(t.get1().get(1), "id");
-        assertEquals(t.get1().get(2), "name");
-        assertEquals(t.get1().get(3), "descp");
+        assertEquals(t.get1().get(1).getPropertyFullName(), "id");
+        assertEquals(t.get1().get(2).getPropertyFullName(), "name");
+        assertEquals(t.get1().get(3).getPropertyFullName(), "descp");
     }
 
     @Test
     void testUpsertBatchSqlite() {
-        Tuple2<String, Map<Integer, String>> t = ClassMappingUtils.getUpsertBatchSqlAndParamPositions(5,
+        Tuple2<String, Map<Integer, JdbcPropertyMapping>> t = ClassMappingUtils.getUpsertBatchSqlAndParamPositions(5,
                 getUserClassMapping(), Dialects.SQLITE);
         //        assertEquals(t.get0(),
         //                "INSERT INTO `user` VALUES (`id`, `name`, `descp`, `password`) SELECT ?, ?, ?, ? UNION SELECT ?, ?, ?, ? UNION SELECT ?, ?, ?, ? UNION SELECT ?, ?, ?, ? UNION SELECT ?, ?, ?, ? ON CONFLICT (id) DO UPDATE SET `name`=EXCLUDED.`name`, `descp`=EXCLUDED.`descp`, `password`=EXCLUDED.`password`");
         assertEquals(t.get0(),
                 "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp`, ? AS `password` UNION SELECT ?, ?, ?, ? UNION SELECT ?, ?, ?, ? UNION SELECT ?, ?, ?, ? UNION SELECT ?, ?, ?, ? ON CONFLICT (id) DO UPDATE SET `name`=EXCLUDED.`name`, `descp`=EXCLUDED.`descp`, `password`=EXCLUDED.`password`");
-        assertEquals(t.get1().get(1), "id");
-        assertEquals(t.get1().get(2), "name");
-        assertEquals(t.get1().get(3), "descp");
+        assertEquals(t.get1().get(1).getPropertyFullName(), "id");
+        assertEquals(t.get1().get(2).getPropertyFullName(), "name");
+        assertEquals(t.get1().get(3).getPropertyFullName(), "descp");
     }
 }

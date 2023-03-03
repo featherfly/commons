@@ -20,6 +20,9 @@ import java.lang.reflect.WildcardType;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -37,6 +40,7 @@ import org.slf4j.LoggerFactory;
 import cn.featherfly.common.exception.ReflectException;
 import cn.featherfly.common.lang.matcher.FieldMatcher;
 import cn.featherfly.common.lang.matcher.MethodMatcher;
+import cn.featherfly.common.structure.ChainMapImpl;
 
 /**
  * class处理的工具类. .
@@ -52,6 +56,12 @@ public final class ClassUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassUtils.class);
 
+    private static final Map<String,
+            Class<?>> PRIMITIVE_CLASSES = new ChainMapImpl<String, Class<?>>().putChain("boolean", Boolean.TYPE)
+                    .putChain("char", Character.TYPE).putChain("byte", Byte.TYPE).putChain("short", Short.TYPE)
+                    .putChain("int", Integer.TYPE).putChain("long", Long.TYPE).putChain("float", Float.TYPE)
+                    .putChain("double", Double.TYPE);
+
     private static final String DOT = ".";
 
     private static final String SET = "set";
@@ -59,20 +69,96 @@ public final class ClassUtils {
     private static final String IS = "is";
 
     /**
-     * <p>
-     * 查找指定类型
-     * </p>
-     * .
+     * 查找指定类型 .
      *
      * @param className 类名
      * @return 指定类型
      */
     public static Class<?> forName(String className) {
         try {
-            return Class.forName(className);
+            Class<?> type = getPrimitiveClass(className);
+            return type == null ? Class.forName(className) : type;
         } catch (ClassNotFoundException e) {
             throw new IllegalArgumentException(e);
         }
+    }
+
+    /**
+     * Checks if is primitive class.
+     *
+     * @param className the class name
+     * @return true, if is primitive class
+     */
+    public static boolean isPrimitiveClass(String className) {
+        return PRIMITIVE_CLASSES.containsKey(className);
+    }
+
+    /**
+     * Gets the primitive class.
+     *
+     * @param className the class name
+     * @return true, if is primitive class
+     */
+    public static Class<?> getPrimitiveClass(String className) {
+        return PRIMITIVE_CLASSES.get(className);
+    }
+
+    /**
+     * Gets the primitive wrapped.
+     *
+     * @param type the type
+     * @return the primitive wrapped
+     */
+    public static Class<?> getPrimitiveWrapped(Class<?> type) {
+        if (type.isPrimitive()) {
+            if (type == Boolean.TYPE) {
+                return Boolean.class;
+            } else if (type == Byte.TYPE) {
+                return Byte.class;
+            } else if (type == Integer.TYPE) {
+                return Integer.class;
+            } else if (type == Long.TYPE) {
+                return Long.class;
+            } else if (type == Float.TYPE) {
+                return Float.class;
+            } else if (type == Double.TYPE) {
+                return Double.class;
+            } else if (type == Character.TYPE) {
+                return Character.class;
+            } else if (type == Short.TYPE) {
+                return Short.class;
+            } else if (type == Void.TYPE) {
+                return Void.class;
+            }
+        }
+        return type;
+    }
+
+    /**
+     * Gets the primitive wrapped.
+     *
+     * @param type the type
+     * @return the primitive wrapped
+     */
+    public static String getPrimitiveClassValueMethodName(Class<?> type) {
+        if (type == Boolean.TYPE || type == Boolean.class) {
+            return "booleanValue";
+        } else if (type == Byte.TYPE || type == Byte.class) {
+            return "byteValue";
+        } else if (type == Integer.TYPE || type == Integer.class) {
+            return "intValue";
+        } else if (type == Long.TYPE || type == Long.class) {
+            return "longValue";
+        } else if (type == Float.TYPE || type == Float.class) {
+            return "floatValue";
+        } else if (type == Double.TYPE || type == Double.class) {
+            return "doubleValue";
+        } else if (type == Character.TYPE || type == Character.class) {
+            return "charValue";
+        } else if (type == Short.TYPE || type == Short.class) {
+            return "shortValue";
+        }
+        return null;
     }
 
     /**
@@ -90,10 +176,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
-     * 返回传入类型的共同父类
-     * </p>
-     * .
+     * 返回传入类型的共同父类 .
      *
      * @param c1 类型1
      * @param c2 类型2
@@ -599,13 +682,9 @@ public final class ClassUtils {
             isBasic = true;
         } else if (type == String.class) {
             isBasic = true;
-        } else if (type == StringBuffer.class) {
-            isBasic = true;
         } else if (type == StringBuilder.class) {
             isBasic = true;
-        } else if (type == AtomicInteger.class) {
-            isBasic = true;
-        } else if (type == AtomicLong.class) {
+        } else if (type == StringBuffer.class) {
             isBasic = true;
         } else if (type == BigDecimal.class) {
             isBasic = true;
@@ -613,11 +692,21 @@ public final class ClassUtils {
             isBasic = true;
         } else if (type == Date.class) {
             isBasic = true;
+        } else if (type == LocalDate.class) {
+            isBasic = true;
+        } else if (type == LocalDateTime.class) {
+            isBasic = true;
+        } else if (type == LocalTime.class) {
+            isBasic = true;
         } else if (type == java.sql.Date.class) {
             isBasic = true;
         } else if (type == java.sql.Time.class) {
             isBasic = true;
         } else if (type == java.sql.Timestamp.class) {
+            isBasic = true;
+        } else if (type == AtomicInteger.class) {
+            isBasic = true;
+        } else if (type == AtomicLong.class) {
             isBasic = true;
         }
         return isBasic;
@@ -644,10 +733,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
-     * 判断传入类型是否是抽象类
-     * </p>
-     * .
+     * 判断传入类型是否是抽象类 .
      *
      * @param type type
      * @return 是否是抽象类
@@ -657,10 +743,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
-     * 判断传入类型是否是可实例化的类
-     * </p>
-     * .
+     * 判断传入类型是否是可实例化的类 .
      *
      * @param type type
      * @return 是否是可实例化的类
@@ -670,10 +753,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
-     * Class泛型参数强制转型
-     * </p>
-     * .
+     * Class泛型参数强制转型 .
      *
      * @param <T>        泛型
      * @param type       type
@@ -686,9 +766,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
      * 获取指定类所在的JAR包的JAR文件.如果不是JAR文件中的返回null
-     * </p>
      *
      * @param type 类型
      * @return JAR文件或null
@@ -698,9 +776,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
      * 获取指定类所在的JAR包的JAR文件.如果不是JAR文件中的返回null
-     * </p>
      *
      * @param className className
      * @return JAR文件或null
@@ -733,9 +809,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
-     * 转换包模式为目录模式.xx.yy.Ttt -&gt; xx/yy/Ttt
-     * </p>
+     * 转换包模式为目录模式.xx.yy.Ttt -&gt; xx/yy/Ttt.
      *
      * @param type 类型
      * @return 目录模式表示的type文件
@@ -748,9 +822,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
-     * 转换包模式为目录模式.xx.yy.Ttt -&gt; xx/yy/Ttt
-     * </p>
+     * 转换包模式为目录模式.xx.yy.Ttt -&gt; xx/yy/Ttt.
      *
      * @param type       类型
      * @param containExt 包含扩展名
@@ -768,9 +840,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
-     * 转换包模式为目录模式.xx.yy.Ttt -&gt; xx/yy/Ttt
-     * </p>
+     * 转换包模式为目录模式.xx.yy.Ttt -&gt; xx/yy/Ttt.
      *
      * @param type 类型
      * @return 目录模式字符串
@@ -783,9 +853,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
-     * 转换包模式为目录模式.xx.yy.Ttt -&gt; xx/yy/Ttt
-     * </p>
+     * 转换包模式为目录模式.xx.yy.Ttt -&gt; xx/yy/Ttt.
      *
      * @param pack 包
      * @return 目录模式字符串
@@ -798,9 +866,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
-     * 转换包模式为目录模式.xx.yy.Ttt -&gt; xx/yy/Ttt
-     * </p>
+     * 转换包模式为目录模式.xx.yy.Ttt -&gt; xx/yy/Ttt.
      *
      * @param packageString 包模式字符串
      * @return 目录模式字符串
@@ -1855,9 +1921,7 @@ public final class ClassUtils {
     // ********************************************************************
 
     /**
-     * <p>
      * 查找并返回第一个符合条件的Field. 如果没有则返回null.
-     * </p>
      *
      * @param type    匹配条件
      * @param matcher 匹配条件
@@ -1875,9 +1939,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
      * 查找并返回所有符合条件Field的集合. 如果没有则返回一个长度为0的集合.
-     * </p>
      *
      * @param type    类型
      * @param matcher 匹配条件
@@ -1896,9 +1958,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
      * 查找并返回第一个符合条件的Method. 如果没有则返回null.
-     * </p>
      *
      * @param type    类型
      * @param matcher 匹配条件
@@ -1916,9 +1976,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
      * 查找并返回所有符合条件Method的集合. 如果没有则返回一个长度为0的集合.
-     * </p>
      *
      * @param type    类型
      * @param matcher 匹配条件
@@ -1934,64 +1992,6 @@ public final class ClassUtils {
             }
         }
         return methods;
-    }
-
-    /**
-     * Gets the primitive wrapped.
-     *
-     * @param type the type
-     * @return the primitive wrapped
-     */
-    public static Class<?> getPrimitiveWrapped(Class<?> type) {
-        if (type.isPrimitive()) {
-            if (type == Boolean.TYPE) {
-                return Boolean.class;
-            } else if (type == Byte.TYPE) {
-                return Byte.class;
-            } else if (type == Integer.TYPE) {
-                return Integer.class;
-            } else if (type == Long.TYPE) {
-                return Long.class;
-            } else if (type == Float.TYPE) {
-                return Float.class;
-            } else if (type == Double.TYPE) {
-                return Double.class;
-            } else if (type == Character.TYPE) {
-                return Character.class;
-            } else if (type == Short.TYPE) {
-                return Short.class;
-            } else if (type == Void.TYPE) {
-                return Void.class;
-            }
-        }
-        return type;
-    }
-
-    /**
-     * Gets the primitive wrapped.
-     *
-     * @param type the type
-     * @return the primitive wrapped
-     */
-    public static String getPrimitiveClassValueMethodName(Class<?> type) {
-        if (type == Boolean.TYPE || type == Boolean.class) {
-            return "booleanValue";
-        } else if (type == Byte.TYPE || type == Byte.class) {
-            return "byteValue";
-        } else if (type == Integer.TYPE || type == Integer.class) {
-            return "intValue";
-        } else if (type == Long.TYPE || type == Long.class) {
-            return "longValue";
-        } else if (type == Float.TYPE || type == Float.class) {
-            return "floatValue";
-        } else if (type == Double.TYPE || type == Double.class) {
-            return "doubleValue";
-        } else if (type == Character.TYPE || type == Character.class) {
-            return "charValue";
-        } else if (type == Short.TYPE || type == Short.class) {
-            return "shortValue";
-        }
-        return null;
     }
 
     /**

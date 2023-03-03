@@ -5,6 +5,9 @@
 1. 加入ChainCollection,ChainSetImpl,ChainListImpl
 2. CollectionUtils加入set,list方法
 3. 优化BeanProperty的setValue,getValue报错时的输出信息
+4. 重命名CopyRuleEnum为CopyRules
+5. ClassUtils加入boolean isPrimitiveClass(String), Class<?> getPrimitiveClass(String)方法
+6. ClassUtils.forName支持primitiveClass，即ClassUtils.forName("int")会返回int.class
 
 # 1.11.0 2022-12-12
 
@@ -47,7 +50,7 @@
 # 1.10.2 2022-05-19
 1. JdkResourceBundleFactory使用ResourceBundleUtils.getLocale()获取默认locale
 
-# 1.11.1 2022-04-14
+# 1.10.1 2022-04-14
 1. 修复没有设置Locale导致的空指针异常
 2. 修复处理locale空的逻辑错误
 

@@ -10,14 +10,14 @@ public interface ${moduleName!}Tables {
 
     <#list tables as table>
     /**
-     * ${table.name} table
+     * ${table.name()} table
      */
-     <#assign tableTypeName=table.name?replace("_"," ")?capitalize?replace(" ","")>
+     <#assign tableTypeName=table.name()?replace("_"," ")?capitalize?replace(" ","")>
     <#-- 
-    ${tableTypeName}Table ${table.name?upper_case} = (${tableTypeName}Table) new ${tableTypeName}Table()
-        .setName("${table.name}")<#if table.remark??>.setRemark("${table.remark}")</#if><#if table.type??>.setType("${table.type}")</#if><#if table.catalog??>.setCatalog("${table.catalog}")</#if>;
+    ${tableTypeName}Table ${table.name()?upper_case} = (${tableTypeName}Table) new ${tableTypeName}Table()
+        .setName("${table.name()}")<#if table.remark??>.setRemark("${table.remark}")</#if><#if table.type??>.setType("${table.type}")</#if><#if table.catalog??>.setCatalog("${table.catalog}")</#if>;
      -->
-     ${tableTypeName}Table ${table.name?upper_case} = new ${tableTypeName}Table("${table.type!}", "${table.name!}", "${table.remark!}", "${table.catalog!}", "${table.schema!}");
+     ${tableTypeName}Table ${table.name()?upper_case} = new ${tableTypeName}Table("${table.type!}", "${table.name()!}", "${table.remark!}", "${table.catalog!}", "${table.schema!}");
     </#list>
 
 }

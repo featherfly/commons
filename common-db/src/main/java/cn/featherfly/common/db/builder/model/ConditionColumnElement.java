@@ -12,6 +12,7 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.operator.QueryOperator;
 import cn.featherfly.common.operator.QueryOperator.QueryPolicy;
+import cn.featherfly.common.repository.Params;
 
 /**
  * condition column element .
@@ -125,10 +126,10 @@ public class ConditionColumnElement extends ParamedColumnElement {
     @Override
     public Object getParam() {
         if (QueryOperator.ISN == queryOperator || QueryOperator.INN == queryOperator) {
-            return null;
+            return Params.NONE;
         } else {
             if (ignore(param)) {
-                return null;
+                return Params.NONE;
             } else {
                 return param;
             }

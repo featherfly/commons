@@ -208,12 +208,144 @@ public class DatabaseMetadataManager {
     // ********************************************************************
 
     private String getDatabase(Connection connection) {
+        return getCatalog(connection);
+    }
+
+    private String getCatalog(Connection connection) {
         String catalog = JdbcUtils.getCatalog(connection);
         if (Strings.isEmpty(catalog)) {
             throw new DatabaseMetadataException("#driver.not.support.catalog");
-            //			throw new DatabaseMetadataException("数据库驱动不支持从连接对象获取当前连接的具体库，请使用带具体库名称的方法显示创建！");
         }
         return catalog;
+    }
+
+    private synchronized DatabaseMetadata createMetadata(Connection connection) {
+        DatabaseMetadata dm = createMetadata(connection, new DatabaseMetadata());
+        try {
+            connection.close();
+            return dm;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    private synchronized DatabaseMetadata createMetadata(Connection connection, DatabaseMetadata databaseMetadata) {
+        if (databaseMetadata == null) {
+            databaseMetadata = new DatabaseMetadata();
+        }
+
+        // TODO 先用sql.DatabaseMetaData 把catalog和schema的树形结构弄好，再通过已经设置好关系的对象去填充metadata信息
+
+        try {
+            DatabaseMetaData metaData = connection.getMetaData();
+            boolean hasSchema = false;
+            ResultSet rs = metaData.getSchemas();
+            while (rs.next()) {
+                hasSchema = true;
+                String schema = rs.getString("TABLE_SCHEM");
+                String catalog = rs.getString("TABLE_CATALOG");
+                System.out.println("schema = " + schema);
+                System.out.println("catalog = " + catalog);
+                // TODO 这里进行多schema处理
+            }
+            rs.close();
+
+            if (!hasSchema) {
+                String catalog = connection.getCatalog();
+                createCatalog(connection, databaseMetadata, catalog);
+            }
+
+            return databaseMetadata;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    private synchronized void createCatalog(Connection connection, DatabaseMetadata databaseMetadata, String catalog) {
+        if (databaseMetadata == null) {
+            return;
+        }
+
+        CatalogMetadata catalogMetadata = new CatalogMetadata(databaseMetadata);
+        catalogMetadata.setName(catalog);
+
+        try {
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet rs = metaData.getSchemas();
+            boolean hasSchema = false;
+            while (rs.next()) {
+                hasSchema = true;
+                createSchema(connection, catalogMetadata, catalog);
+            }
+            rs.close();
+
+            if (!hasSchema) {
+                createSchema(connection, catalogMetadata, catalog);
+            }
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    private synchronized void createSchema(Connection connection, CatalogMetadata catalogMetadata, String schema) {
+        if (catalogMetadata == null) {
+            return;
+        }
+        try {
+            SchemaMetadata schemaMetadata = new SchemaMetadata(catalogMetadata);
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet rs = null;
+            // 得到表信息
+            rs = metaData.getTables(catalogMetadata.getName(), schema, null,
+                    new String[] { TableType.TABLE.toString() });
+
+            boolean hasSchema = false;
+            while (rs.next()) {
+                hasSchema = true;
+                TableMetadata tableMetadata = new TableMetadata(schemaMetadata);
+                // 表名
+                String tableName = rs.getString("TABLE_NAME");
+                tableMetadata.setName(tableName);
+                // 不符合标准 TODO 需要后续来测试这个逻辑
+                if (!TABLE_NAME_PATTERN.matcher(tableName).matches()) {
+                    LOGGER.debug("{} 不是用户表, 忽略！", tableName);
+                    continue;
+                }
+                // 表类型
+                tableMetadata.setType(rs.getString("TABLE_TYPE"));
+                ////                 库（表空间）
+                //                tableMetadata.setCatalog(catalogMetadata.getName());
+                //                String tableCat = rs.getString("TABLE_CAT");
+                //                if (Lang.isNotEmpty(tableCat)) {
+                //                    tableMetadata.setCatalog(tableCat);
+                //                } else {
+                //                    tableMetadata.setCatalog(catalogMetadata.getName());
+                //                }
+                //                // schema
+                //                String tableSchema = rs.getString("TABLE_SCHEM");
+                //                if (Lang.isNotEmpty(tableSchema)) {
+                //                    tableMetadata.setSchema(tableSchema);
+                //                } else {
+                //                    tableMetadata.setSchema(schema);
+                //                }
+                tableMetadata.setRemark(rs.getString(REMARKS));
+                tableMetadata.addIndex(
+                        createIndexs(metaData, tableName, tableMetadata.getCatalog(), tableMetadata.getSchema()));
+                addColumns(metaData, tableMetadata);
+                schemaMetadata.addTable(tableMetadata);
+
+            }
+            rs.close();
+
+            if (!hasSchema) {
+                throw new DatabaseMetadataException("#driver.not.find.schema",
+                        new Object[] { schema, catalogMetadata.getName() });
+            }
+
+            catalogMetadata.addSchema(schemaMetadata);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
     }
 
     private synchronized DatabaseMetadata create(Connection connection, String dataBase, String schema,
@@ -235,37 +367,37 @@ public class DatabaseMetadataManager {
             boolean hasDatabase = false;
             while (rs.next()) {
                 hasDatabase = true;
-                TableMetadata tableMetadata = new TableMetadata(databaseMetadata);
-                // 表名
-                String tableName = rs.getString("TABLE_NAME");
-                tableMetadata.setName(tableName);
-                // 不符合标准
-                if (!TABLE_NAME_PATTERN.matcher(tableName).matches()) {
-                    LOGGER.debug("{} 不是用户表, 忽略！", tableName);
-                    continue;
-                }
-                // 表类型
-                tableMetadata.setType(rs.getString("TABLE_TYPE"));
-                // 库（表空间）
-                String tableCat = rs.getString("TABLE_CAT");
-                if (Lang.isNotEmpty(tableCat)) {
-                    tableMetadata.setCatalog(tableCat);
-                } else {
-                    tableMetadata.setCatalog(dataBase);
-                }
-                // schema
-                String tableSchema = rs.getString("TABLE_SCHEM");
-                if (Lang.isNotEmpty(tableSchema)) {
-                    tableMetadata.setSchema(tableSchema);
-                } else {
-                    // TODO 这里是否需要
-                    tableMetadata.setSchema(tableMetadata.getCatalog());
-                }
-                tableMetadata.setRemark(rs.getString(REMARKS));
-                tableMetadata.addIndex(
-                        createIndexs(metaData, tableName, tableMetadata.getCatalog(), tableMetadata.getSchema()));
-                addColumns(metaData, tableMetadata);
-                databaseMetadata.addTable(tableMetadata);
+                //                TableMetadata tableMetadata = new TableMetadata(databaseMetadata);
+                //                // 表名
+                //                String tableName = rs.getString("TABLE_NAME");
+                //                tableMetadata.setName(tableName);
+                //                // 不符合标准
+                //                if (!TABLE_NAME_PATTERN.matcher(tableName).matches()) {
+                //                    LOGGER.debug("{} 不是用户表, 忽略！", tableName);
+                //                    continue;
+                //                }
+                //                // 表类型
+                //                tableMetadata.setType(rs.getString("TABLE_TYPE"));
+                //                // 库（表空间）
+                //                String tableCat = rs.getString("TABLE_CAT");
+                //                if (Lang.isNotEmpty(tableCat)) {
+                //                    tableMetadata.setCatalog(tableCat);
+                //                } else {
+                //                    tableMetadata.setCatalog(dataBase);
+                //                }
+                //                // schema
+                //                String tableSchema = rs.getString("TABLE_SCHEM");
+                //                if (Lang.isNotEmpty(tableSchema)) {
+                //                    tableMetadata.setSchema(tableSchema);
+                //                } else {
+                //                    // TODO 这里是否需要
+                //                    tableMetadata.setSchema(tableMetadata.getCatalog());
+                //                }
+                //                tableMetadata.setRemark(rs.getString(REMARKS));
+                //                tableMetadata.addIndex(
+                //                        createIndexs(metaData, tableName, tableMetadata.getCatalog(), tableMetadata.getSchema()));
+                //                addColumns(metaData, tableMetadata);
+                //                databaseMetadata.addTable(tableMetadata);
 
             }
             rs.close();

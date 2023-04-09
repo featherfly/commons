@@ -18,10 +18,7 @@ import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.lang.Dates;
 
 /**
- * <p>
- * JsonDataFormat
- * </p>
- * .
+ * SqlDataFormat .
  *
  * @author zhongj
  */
@@ -124,8 +121,8 @@ public class SqlDataFormat implements DataFormat {
             String columnName = rsmd.getColumnName(i);
             Object value = res.getObject(columnName);
             int type = rsmd.getColumnType(i);
-            // 列名大写
-            columns.append(getDialect().wrapName(columnName.toUpperCase())).append(",");
+            // 列名大小写由dialect配置决定
+            columns.append(getDialect().wrapName(getDialect().convertTableOrColumnName(columnName))).append(",");
             values.append(getDialect().valueToSql(value, type)).append(",");
             column.put("name", columnName);
             column.put("value", value);
@@ -142,9 +139,9 @@ public class SqlDataFormat implements DataFormat {
         }
         values.append(" )");
         columns.append(values.toString());
-        // 表名大写
-        insertSql.append("INSERT INTO ").append(getDialect().wrapName(tableName.toUpperCase())).append(columns)
-                .append(";\n");
+        // 表名大小写由dialect配置决定
+        insertSql.append("INSERT INTO ").append(getDialect().wrapName(getDialect().convertTableOrColumnName(tableName)))
+                .append(columns).append(";\n");
         writer.write(insertSql.toString());
     }
 

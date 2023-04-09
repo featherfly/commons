@@ -3,7 +3,7 @@ package cn.featherfly.common.db.metadata;
 
 import java.sql.Types;
 
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 import cn.featherfly.common.db.Table;
 

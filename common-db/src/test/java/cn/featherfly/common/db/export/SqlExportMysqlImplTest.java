@@ -7,7 +7,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 import cn.featherfly.common.db.data.DataExportorImpl;
 import cn.featherfly.common.db.data.format.SqlDataFormatFactory;

@@ -2,6 +2,7 @@
 1. ClassMapping, PropertyMapping, MappingFactory加入泛型
 2. PropertyMapping加入mode
 3. 加入Field, Params
+4. 加入Alias,AliasField
 
 # 0.3.0 2022-11-09
 1. 修复AliasManager.getAlias(int index)越界检查BUG

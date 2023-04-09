@@ -5,12 +5,5 @@ package cn.featherfly.common.repository;
  *
  * @author zhongj
  */
-public interface AliasRepository extends Repository {
-
-    /**
-     * get repository name alias.
-     *
-     * @return name alias
-     */
-    String alias();
+public interface AliasRepository extends Repository, Alias {
 }

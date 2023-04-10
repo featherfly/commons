@@ -4,6 +4,7 @@ package cn.featherfly.common.db.data.query;
 import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.Keywords;
+import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.Query;
@@ -42,6 +43,7 @@ public class TableQuery implements Query {
         sql.append("select * from ").append(dialect.buildTableSql(tableName));
         if (conditionBuilder != null) {
             String condition = conditionBuilder.build();
+            params = (Object[]) conditionBuilder.getParamValue();
             if (Lang.isNotEmpty(condition)) {
                 BuilderUtils.link(sql, dialect.getKeyword(Keywords.WHERE), condition);
             }
@@ -54,7 +56,7 @@ public class TableQuery implements Query {
 
     private String sql;
 
-    private Object[] params = new Object[0];
+    private Object[] params = ArrayUtils.EMPTY_OBJECT_ARRAY;
 
     /**
      * {@inheritDoc}

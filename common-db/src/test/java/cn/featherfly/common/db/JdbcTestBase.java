@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeGroups;

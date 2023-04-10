@@ -19,10 +19,12 @@ public class TableMetadata extends AbstractTable<ColumnMetadata> {
     /**
      * Instantiates a new table metadata.
      *
-     * @param databaseMetadata 数据库元数据
+     * @param schemaMetadata 数据库模式元数据
      */
-    public TableMetadata(DatabaseMetadata databaseMetadata) {
-        this.databaseMetadata = databaseMetadata;
+    public TableMetadata(SchemaMetadata schemaMetadata) {
+        this.schemaMetadata = schemaMetadata;
+        schema = schemaMetadata.getName();
+        catalog = schemaMetadata.getCatalogMetadata().getName();
     }
 
     /**
@@ -91,15 +93,15 @@ public class TableMetadata extends AbstractTable<ColumnMetadata> {
     //	property
     // ********************************************************************
 
-    private DatabaseMetadata databaseMetadata;
+    private SchemaMetadata schemaMetadata;
 
     /**
-     * Gets the database metadata.
+     * 返回schemaMetadata
      *
-     * @return 返回databaseMetadata
+     * @return schemaMetadata
      */
-    public DatabaseMetadata getDatabaseMetadata() {
-        return databaseMetadata;
+    public SchemaMetadata getSchemaMetadata() {
+        return schemaMetadata;
     }
 
     /**
@@ -129,21 +131,12 @@ public class TableMetadata extends AbstractTable<ColumnMetadata> {
         this.remark = remark;
     }
 
-    /**
-     * Sets the catalog.
-     *
-     * @param catalog 设置catalog
-     */
-    void setCatalog(String catalog) {
-        this.catalog = catalog;
-    }
-
-    /**
-     * Sets the schema.
-     *
-     * @param schema the new schema
-     */
-    void setSchema(String schema) {
-        this.schema = schema;
-    }
+    //    /**
+    //     * Sets the catalog.
+    //     *
+    //     * @param catalog 设置catalog
+    //     */
+    //    void setCatalog(String catalog) {
+    //        this.catalog = catalog;
+    //    }
 }

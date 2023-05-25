@@ -66,6 +66,34 @@ public class ValidateCode {
     }
 
     /**
+     * Validate.
+     *
+     * @param validCode the valid code
+     * @return true, if successful
+     */
+    public boolean validate(String validCode) {
+        return validate(validCode, false);
+    }
+
+    /**
+     * Validate.
+     *
+     * @param validCode     the valid code
+     * @param caseSensitive the case sensitive
+     * @return true, if successful
+     */
+    public boolean validate(String validCode, boolean caseSensitive) {
+        if (validCode == null) {
+            return false;
+        }
+        if (caseSensitive) {
+            return valid.equals(validCode);
+        } else {
+            return valid.equalsIgnoreCase(validCode);
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

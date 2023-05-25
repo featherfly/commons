@@ -10,7 +10,9 @@ import java.util.Random;
  */
 public class SimpleValidateCodeGenerator implements ValidateCodeGenerator {
 
-    /** VERIFY_CODES. */
+    /**
+     * VERIFY_CODES. 去掉了1,0,i,o几个容易混淆的字符.
+     */
     public static final String VERIFY_CODES = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
 
     /** The size. */

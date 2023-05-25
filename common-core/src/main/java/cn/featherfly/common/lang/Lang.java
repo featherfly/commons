@@ -472,6 +472,26 @@ public final class Lang {
     //    }
 
     /**
+     * Checks if is null or true.
+     *
+     * @param value the value
+     * @return true, if is null or true
+     */
+    public static boolean isNullOrTrue(Boolean value) {
+        return value != null && value;
+    }
+
+    /**
+     * Checks if is null or false.
+     *
+     * @param value the value
+     * @return true, if is null or false
+     */
+    public static boolean isNullOrFalse(Boolean value) {
+        return value != null && !value;
+    }
+
+    /**
      * 判断传入文件对象代表的物理文件是否存在 .
      *
      * @param file 判断的文件

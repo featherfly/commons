@@ -472,13 +472,33 @@ public final class Lang {
     //    }
 
     /**
+     * Checks if is true.
+     *
+     * @param value the value
+     * @return true, if is true
+     */
+    public static boolean isTrue(Boolean value) {
+        return value != null && value;
+    }
+
+    /**
      * Checks if is null or true.
      *
      * @param value the value
      * @return true, if is null or true
      */
     public static boolean isNullOrTrue(Boolean value) {
-        return value != null && value;
+        return value == null || value;
+    }
+
+    /**
+     * Checks if is false.
+     *
+     * @param value the value
+     * @return true, if is false
+     */
+    public static boolean isFalse(Boolean value) {
+        return value != null && !value;
     }
 
     /**
@@ -488,7 +508,7 @@ public final class Lang {
      * @return true, if is null or false
      */
     public static boolean isNullOrFalse(Boolean value) {
-        return value != null && !value;
+        return value == null || !value;
     }
 
     /**

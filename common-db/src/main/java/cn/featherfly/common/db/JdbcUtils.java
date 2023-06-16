@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.SQLType;
+import java.sql.Savepoint;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -93,6 +94,7 @@ public final class JdbcUtils {
      * @param driverClassName the driver class name
      * @param uri             the uri
      * @return the connection
+     * @throws JdbcException if a database access error occurs
      */
     public static ConnectionWrapper getConnection(String driverClassName, String uri) {
         try {
@@ -107,6 +109,7 @@ public final class JdbcUtils {
      * 关闭<code>Connection</code>, 忽略null的情况.
      *
      * @param conn 需要关闭的连接.
+     * @throws JdbcException if a database access error occurs
      */
     public static void close(Connection conn) {
         if (conn != null) {
@@ -212,36 +215,6 @@ public final class JdbcUtils {
     }
 
     /**
-     * 提交<code>Connection</code>以后关闭, 忽略null的情况.
-     *
-     * @param conn Connection
-     */
-    public static void commitAndClose(Connection conn) {
-        if (conn != null) {
-            try {
-                conn.commit();
-            } catch (SQLException e) {
-                throw new JdbcException(e);
-            } finally {
-                close(conn);
-            }
-        }
-    }
-
-    /**
-     * 提交<code>Connection</code>以后关闭, 忽略null的情况以及隐藏掉所有发生的SQL异常.
-     *
-     * @param conn Connection to close.
-     */
-    public static void commitAndCloseQuietly(Connection conn) {
-        try {
-            commitAndClose(conn);
-        } catch (JdbcException e) {
-            LogUtils.debug(e, LOGGER);
-        }
-    }
-
-    /**
      * Loads and registers a database driver class. If this succeeds, it returns
      * true, else it returns false.
      *
@@ -323,14 +296,86 @@ public final class JdbcUtils {
     }
 
     /**
+     * commit transaction
+     *
+     * @param conn Connection
+     * @throws JdbcException if a database access error occurs
+     */
+    public static void commit(Connection conn) {
+        if (conn != null) {
+            try {
+                conn.commit();
+            } catch (SQLException e) {
+                throw new JdbcException(e);
+            }
+        }
+    }
+
+    /**
+     * 提交<code>Connection</code>以后关闭, 忽略null的情况.
+     *
+     * @param conn Connection
+     * @throws JdbcException if a database access error occurs
+     */
+    public static void commitAndClose(Connection conn) {
+        if (conn != null) {
+            try {
+                conn.commit();
+            } catch (SQLException e) {
+                throw new JdbcException(e);
+            } finally {
+                close(conn);
+            }
+        }
+    }
+
+    /**
+     * 提交<code>Connection</code>以后关闭, 忽略null的情况以及隐藏掉所有发生的SQL异常.
+     *
+     * @param conn Connection to close.
+     */
+    public static void commitAndCloseQuietly(Connection conn) {
+        try {
+            commitAndClose(conn);
+        } catch (JdbcException e) {
+            LogUtils.debug(e, LOGGER);
+        }
+    }
+
+    /**
      * Rollback any changes made on the given connection.
      *
      * @param conn Connection to rollback. A null value is legal.
-     * @throws SQLException if a database access error occurs
+     * @throws JdbcException if a database access error occurs
      */
-    public static void rollback(Connection conn) throws SQLException {
+    public static void rollback(Connection conn) {
         if (conn != null) {
-            conn.rollback();
+            try {
+                conn.rollback();
+            } catch (SQLException e) {
+                throw new JdbcException(e);
+            }
+        }
+    }
+
+    /**
+     * Rollback any changes made on the given connection.
+     *
+     * @param conn      Connection to rollback. A null value is legal.
+     * @param savepoint the savepoint
+     * @throws JdbcException if a database access error occurs
+     */
+    public static void rollback(Connection conn, Savepoint savepoint) {
+        if (conn != null) {
+            try {
+                if (savepoint != null) {
+                    conn.rollback(savepoint);
+                } else {
+                    conn.rollback();
+                }
+            } catch (SQLException e) {
+                throw new JdbcException(e);
+            }
         }
     }
 

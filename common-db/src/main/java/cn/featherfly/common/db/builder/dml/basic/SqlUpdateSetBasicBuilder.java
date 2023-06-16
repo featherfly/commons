@@ -144,16 +144,16 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
      */
     @Override
     public String build() {
-        StringBuilder select = new StringBuilder();
+        StringBuilder update = new StringBuilder();
         Keyworld keyworld = dialect.getKeywords();
-        select.append(keyworld.update()).append(Chars.SPACE).append(dialect.buildTableSql(tableName, alias))
+        update.append(keyworld.update()).append(Chars.SPACE).append(dialect.buildTableSql(tableName, alias))
                 .append(Chars.SPACE).append(keyworld.set());
         // TODO 判断tableName paramMap 为空 抛出异常
         params.forEach(c -> {
-            select.append(Chars.SPACE).append(c.toSql()).append(Chars.COMMA);
+            update.append(Chars.SPACE).append(c.toSql()).append(Chars.COMMA);
         });
-        select.deleteCharAt(select.length() - 1);
-        return select.toString();
+        update.deleteCharAt(update.length() - 1);
+        return update.toString();
     }
 
     /**

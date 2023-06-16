@@ -81,23 +81,30 @@ public class SqlUtilsTest {
 
     @Test
     void testConvertNamedParamSql() {
-        String sql = "select * from user where name like ? and age = ?";
+        String sql = "select * from user where name like ? and age = ?\nand gender = ?";
         Execution execution = null;
         Map<String, Object> params = new LinkedHashMap<>();
         params.put("name", "yufei");
         params.put("age", 18);
+        params.put("gender", 0);
 
-        execution = SqlUtils.convertNamedParamSql("select * from user where name like :name and age = :age", params);
+        execution = SqlUtils.convertNamedParamSql(
+                "select * from user where name like :name and age = :age\nand gender = :gender", params);
         assertEquals(execution.getExecution(), sql);
         assertEquals(execution.getParams(), params.values().toArray());
 
-        execution = SqlUtils.convertNamedParamSql("select * from user where name like {name} and age = {age}", params,
-                '{', '}');
+        execution = SqlUtils.convertNamedParamSql(
+                "select * from user where name like {name} and age = {age}\nand gender = {gender}", params, '{', '}');
         assertEquals(execution.getExecution(), sql);
         assertEquals(execution.getParams(), params.values().toArray());
 
-        execution = SqlUtils.convertNamedParamSql("select * from user where name like @name and age = @age", params,
-                '@');
+        execution = SqlUtils.convertNamedParamSql(
+                "select * from user where name like @name and age = @age\nand gender = @gender", params, '@');
+        assertEquals(execution.getExecution(), sql);
+        assertEquals(execution.getParams(), params.values().toArray());
+
+        execution = SqlUtils.convertNamedParamSql(
+                "select * from user where name like $name and age = $age\nand gender = $gender", params, '$');
         assertEquals(execution.getExecution(), sql);
         assertEquals(execution.getParams(), params.values().toArray());
     }

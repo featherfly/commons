@@ -15,7 +15,9 @@ import cn.featherfly.common.db.Table;
 public class SchemaMetadata {
 
     /**
-     * @param catalogMetadata
+     * Instantiates a new schema metadata.
+     *
+     * @param catalogMetadata the catalog metadata
      */
     public SchemaMetadata(CatalogMetadata catalogMetadata) {
         super();

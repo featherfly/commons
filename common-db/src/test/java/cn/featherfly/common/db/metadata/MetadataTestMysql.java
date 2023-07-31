@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.stream.Collectors;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.testng.annotations.BeforeClass;
@@ -14,6 +15,8 @@ import cn.featherfly.common.db.Table;
 public class MetadataTestMysql {
 
     BasicDataSource dataSource;
+
+    String catalog = "db_test";
 
     @BeforeClass
     void setup() {
@@ -60,6 +63,28 @@ public class MetadataTestMysql {
                 System.out.println("  catalog = " + catalog);
             }
             rs.close();
+        }
+    }
+
+    @Test
+    void test2() throws SQLException {
+        DatabaseMetadata meta = DatabaseMetadataManager.getDefaultManager().create(dataSource);
+        System.out.println(meta.getName());
+        System.out.println(meta.getCatalogs().stream().map(c -> c.getName()).collect(Collectors.toList()));
+        System.out.println(meta.getCatalog(catalog));
+        System.out.println(
+                meta.getCatalog(catalog).getTables().stream().map(c -> c.getName()).collect(Collectors.toList()));
+        System.out.println(meta.getTables().stream().map(c -> c.getName()).collect(Collectors.toList()));
+
+        for (Table td : meta.getTables()) {
+            System.out.println("\t" + td.toString());
+        }
+        for (Table td : meta.getCatalog(catalog).getTables()) {
+            System.out.println("\t" + td.getName());
+            td.getColumns().forEach(c -> {
+                System.out.println("\t\t" + c.getName() + " " + c.getTypeName() + "(" + c.getType() + ")" + " "
+                        + c.getDefaultValue());
+            });
         }
     }
 

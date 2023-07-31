@@ -30,6 +30,7 @@ import cn.featherfly.common.repository.Index;
  * <p>
  * 数据库元数据管理器
  * </p>
+ * .
  *
  * @author zhongj
  */
@@ -47,6 +48,7 @@ public class DatabaseMetadataManager {
     private static final String REMARKS = "REMARKS";
 
     /**
+     * Instantiates a new database metadata manager.
      */
     public DatabaseMetadataManager() {
     }
@@ -84,7 +86,7 @@ public class DatabaseMetadataManager {
      * @return 已经初始化的数据库元数据对象
      */
     public synchronized DatabaseMetadata create(Connection connection) {
-        return create(connection, getDatabase(connection));
+        return create(connection, getDatabase(connection), true, null, false);
     }
 
     /**
@@ -123,7 +125,20 @@ public class DatabaseMetadataManager {
      * @return 已经初始化的数据库元数据对象
      */
     public DatabaseMetadata create(Connection connection, String dataBase, String schema) {
-        return create(connection, dataBase, schema, false);
+        return create(connection, dataBase, false, schema);
+    }
+
+    /**
+     * Creates the.
+     *
+     * @param connection       the connection
+     * @param dataBase         the data base
+     * @param isDefaultCatalog the is default catalog
+     * @param schema           the schema
+     * @return the database metadata
+     */
+    public DatabaseMetadata create(Connection connection, String dataBase, boolean isDefaultCatalog, String schema) {
+        return create(connection, dataBase, isDefaultCatalog, schema, false);
     }
 
     /**
@@ -148,7 +163,7 @@ public class DatabaseMetadataManager {
      * @return 已经初始化的数据库元数据对象
      */
     public synchronized DatabaseMetadata reCreate(Connection connection) {
-        return reCreate(connection, getDatabase(connection));
+        return create(connection, getDatabase(connection), true, null, true);
     }
 
     /**
@@ -200,7 +215,23 @@ public class DatabaseMetadataManager {
      * @return 已经初始化的数据库元数据对象
      */
     public synchronized DatabaseMetadata reCreate(Connection connection, String dataBase, String schema) {
-        return create(connection, dataBase, schema, true);
+        return reCreate(connection, dataBase, false, schema);
+    }
+
+    /**
+     * <p>
+     * 创建数据库元数据，会初始化表和列元数据， 不管元数据对象是否存在，都创建，原来的会被替换.
+     * </p>
+     *
+     * @param connection       数据库连接
+     * @param dataBase         具体库
+     * @param isDefaultCatalog the is default catalog
+     * @param schema           the schema
+     * @return 已经初始化的数据库元数据对象
+     */
+    public synchronized DatabaseMetadata reCreate(Connection connection, String dataBase, boolean isDefaultCatalog,
+            String schema) {
+        return create(connection, dataBase, isDefaultCatalog, schema, true);
     }
 
     // ********************************************************************
@@ -219,55 +250,57 @@ public class DatabaseMetadataManager {
         return catalog;
     }
 
-    private synchronized DatabaseMetadata createMetadata(Connection connection) {
-        DatabaseMetadata dm = createMetadata(connection, new DatabaseMetadata());
-        try {
-            connection.close();
-            return dm;
-        } catch (SQLException e) {
-            throw new JdbcException(e);
-        }
-    }
+    //    private synchronized DatabaseMetadata createMetadata(Connection connection) {
+    //        DatabaseMetadata dm = createMetadata(connection, new DatabaseMetadata());
+    //        try {
+    //            connection.close();
+    //            return dm;
+    //        } catch (SQLException e) {
+    //            throw new JdbcException(e);
+    //        }
+    //    }
 
-    private synchronized DatabaseMetadata createMetadata(Connection connection, DatabaseMetadata databaseMetadata) {
-        if (databaseMetadata == null) {
-            databaseMetadata = new DatabaseMetadata();
-        }
+    //    private synchronized DatabaseMetadata createMetadata(Connection connection, DatabaseMetadata databaseMetadata) {
+    //        if (databaseMetadata == null) {
+    //            databaseMetadata = new DatabaseMetadata();
+    //        }
+    //
+    //        // TODO 先用sql.DatabaseMetaData 把catalog和schema的树形结构弄好，再通过已经设置好关系的对象去填充metadata信息
+    //
+    //        try {
+    //            DatabaseMetaData metaData = connection.getMetaData();
+    //            boolean hasSchema = false;
+    //            ResultSet rs = metaData.getSchemas();
+    //            while (rs.next()) {
+    //                hasSchema = true;
+    //                String schema = rs.getString("TABLE_SCHEM");
+    //                String catalog = rs.getString("TABLE_CATALOG");
+    //                System.out.println("schema = " + schema);
+    //                System.out.println("catalog = " + catalog);
+    //                // TODO 这里进行多schema处理
+    //            }
+    //            rs.close();
+    //
+    //            if (!hasSchema) {
+    //                String catalog = connection.getCatalog();
+    //                createCatalog(connection, databaseMetadata, catalog);
+    //            }
+    //
+    //            return databaseMetadata;
+    //        } catch (SQLException e) {
+    //            throw new JdbcException(e);
+    //        }
+    //    }
 
-        // TODO 先用sql.DatabaseMetaData 把catalog和schema的树形结构弄好，再通过已经设置好关系的对象去填充metadata信息
-
-        try {
-            DatabaseMetaData metaData = connection.getMetaData();
-            boolean hasSchema = false;
-            ResultSet rs = metaData.getSchemas();
-            while (rs.next()) {
-                hasSchema = true;
-                String schema = rs.getString("TABLE_SCHEM");
-                String catalog = rs.getString("TABLE_CATALOG");
-                System.out.println("schema = " + schema);
-                System.out.println("catalog = " + catalog);
-                // TODO 这里进行多schema处理
-            }
-            rs.close();
-
-            if (!hasSchema) {
-                String catalog = connection.getCatalog();
-                createCatalog(connection, databaseMetadata, catalog);
-            }
-
-            return databaseMetadata;
-        } catch (SQLException e) {
-            throw new JdbcException(e);
-        }
-    }
-
-    private synchronized void createCatalog(Connection connection, DatabaseMetadata databaseMetadata, String catalog) {
+    private synchronized void createCatalog(Connection connection, DatabaseMetadata databaseMetadata, String catalog,
+            boolean isDefault) {
         if (databaseMetadata == null) {
             return;
         }
 
         CatalogMetadata catalogMetadata = new CatalogMetadata(databaseMetadata);
         catalogMetadata.setName(catalog);
+        databaseMetadata.addCatalog(catalogMetadata, isDefault);
 
         try {
             DatabaseMetaData metaData = connection.getMetaData();
@@ -275,24 +308,28 @@ public class DatabaseMetadataManager {
             boolean hasSchema = false;
             while (rs.next()) {
                 hasSchema = true;
-                createSchema(connection, catalogMetadata, catalog);
+                createSchema(connection, catalogMetadata, catalog, false);
             }
             rs.close();
 
             if (!hasSchema) {
-                createSchema(connection, catalogMetadata, catalog);
+                createSchema(connection, catalogMetadata, catalog, true);
             }
         } catch (SQLException e) {
             throw new JdbcException(e);
         }
     }
 
-    private synchronized void createSchema(Connection connection, CatalogMetadata catalogMetadata, String schema) {
+    private synchronized void createSchema(Connection connection, CatalogMetadata catalogMetadata, String schema,
+            boolean isDefualt) {
         if (catalogMetadata == null) {
             return;
         }
         try {
             SchemaMetadata schemaMetadata = new SchemaMetadata(catalogMetadata);
+            schemaMetadata.setName(schema);
+            catalogMetadata.addSchema(schemaMetadata, isDefualt);
+
             DatabaseMetaData metaData = connection.getMetaData();
             ResultSet rs = null;
             // 得到表信息
@@ -348,19 +385,22 @@ public class DatabaseMetadataManager {
         }
     }
 
-    private synchronized DatabaseMetadata create(Connection connection, String dataBase, String schema,
-            boolean reCreate) {
+    private synchronized DatabaseMetadata create(Connection connection, String catalog, boolean isDefaultCatalog,
+            String schema, boolean reCreate) {
         try {
-            DatabaseMetadata databaseMetadata = getDatabaseMetadata(dataBase);
+            DatabaseMetadata databaseMetadata = getDatabaseMetadata(catalog);
             if (databaseMetadata != null && !reCreate) {
                 return databaseMetadata;
             }
             databaseMetadata = new DatabaseMetadata();
+
+            createCatalog(connection, databaseMetadata, catalog, isDefaultCatalog);
+
             DatabaseMetaData metaData = connection.getMetaData();
             ResultSet rs = null;
             //            rs = metaData.getTableTypes();
             // 得到表信息
-            rs = metaData.getTables(dataBase, schema, null, new String[] { TableType.TABLE.toString() });
+            rs = metaData.getTables(catalog, schema, null, new String[] { TableType.TABLE.toString() });
             //            rs = metaData.getTables(dataBase, dataBase, null, new String[] { TableType.TABLE.toString() });
             //			rs = metaData.getTables("","", null, new String[]{TableType.TABLE.toString()});
 
@@ -401,11 +441,11 @@ public class DatabaseMetadataManager {
 
             }
             rs.close();
-            if (!hasDatabase && !dataBase.equals(connection.getCatalog())) {
-                throw new DatabaseMetadataException("#driver.not.find.database", new Object[] { dataBase });
+            if (!hasDatabase && !catalog.equals(connection.getCatalog())) {
+                throw new DatabaseMetadataException("#driver.not.find.database", new Object[] { catalog });
             }
-            databasemetadataPool.put(dataBase, databaseMetadata);
-            databaseMetadata.setName(dataBase);
+            databasemetadataPool.put(catalog, databaseMetadata);
+            databaseMetadata.setName(catalog);
             databaseMetadata.setProductName(metaData.getDatabaseProductName());
             databaseMetadata.setProductVersion(metaData.getDatabaseProductVersion());
             databaseMetadata.setMajorVersion(metaData.getDatabaseMajorVersion());
@@ -509,7 +549,7 @@ public class DatabaseMetadataManager {
     // ********************************************************************
 
     /**
-     * 返回dEFAULT_MANAGER
+     * 返回dEFAULT_MANAGER.
      *
      * @return dEFAULT_MANAGER
      */

@@ -2,8 +2,11 @@
 package cn.featherfly.common.db.metadata;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import cn.featherfly.common.db.Table;
 
 /**
  * CatalogMetadata.
@@ -41,6 +44,32 @@ public class CatalogMetadata {
         return schemaMap.values();
     }
 
+    /**
+     * 默认模式（schema）返回指定名称的表元数据对象. 没有找到返回null.
+     *
+     * @param tableName 表名称
+     * @return 表元数据对象
+     */
+    public Table getTable(String tableName) {
+        if (schema == null) {
+            return null;
+        }
+        return schema.getTable(tableName);
+    }
+
+    /**
+     * 默认模式（schema）返回表元数据对象的集合.
+     *
+     * @return 所有表元数据对象的集合
+     */
+    @SuppressWarnings("unchecked")
+    public Collection<Table> getTables() {
+        if (schema == null) {
+            return Collections.EMPTY_LIST;
+        }
+        return schema.getTables();
+    }
+
     //    /**
     //     * 返回所有模式元数据对象的MAP.
     //     *
@@ -69,7 +98,7 @@ public class CatalogMetadata {
         if (isDefault) {
             this.schema = schema;
         }
-        schemaMap.put(schema.getName().toUpperCase(), schema);
+        schemaMap.put(schema.getName(), schema);
     }
 
     /**

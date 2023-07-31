@@ -79,6 +79,19 @@ public class DatabaseMetadata {
         }
     }
 
+    /**
+     * Adds the catalog.
+     *
+     * @param catalog   the catalog
+     * @param isDefault the is default
+     */
+    void addCatalog(CatalogMetadata catalog, boolean isDefault) {
+        if (isDefault) {
+            defaultCatalog = catalog;
+        }
+        catalogMap.put(catalog.getName(), catalog);
+    }
+
     // ********************************************************************
     //	catalog end
     // ********************************************************************

@@ -11,6 +11,8 @@ import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.operator.LogicOperator;
+import cn.featherfly.common.operator.QueryOperator;
 import cn.featherfly.common.repository.builder.BuilderException;
 import cn.featherfly.common.repository.builder.BuilderExceptionCode;
 import cn.featherfly.common.repository.builder.dml.ConditionBuilder;
@@ -20,8 +22,6 @@ import cn.featherfly.common.repository.builder.dml.ExpressionBuilder;
 import cn.featherfly.common.repository.builder.dml.LogicBuilder;
 import cn.featherfly.common.repository.builder.dml.ParamedExpression;
 import cn.featherfly.common.repository.builder.dml.SortBuilder;
-import cn.featherfly.common.operator.LogicOperator;
-import cn.featherfly.common.operator.QueryOperator;
 
 /**
  * sql condition group builder sql条件逻辑组构造器. .
@@ -43,47 +43,47 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
     private String queryAlias;
 
     // 忽略空值
-    private Predicate<Object> ignorePolicy;
+    private Predicate<Object> ignoreStrategy;
 
     /**
      * Instantiates a new sql condition group.
      *
-     * @param dialect      the dialect
-     * @param ignorePolicy the ignore policy
-     * @param sort         the sort
+     * @param dialect        the dialect
+     * @param ignoreStrategy the ignore strategy
+     * @param sort           the sort
      */
-    public SqlConditionGroup(Dialect dialect, Predicate<Object> ignorePolicy, SqlSortBuilder sort) {
-        this(dialect, null, ignorePolicy, sort);
+    public SqlConditionGroup(Dialect dialect, Predicate<?> ignoreStrategy, SqlSortBuilder sort) {
+        this(dialect, null, ignoreStrategy, sort);
     }
 
     /**
      * Instantiates a new sql condition group.
      *
-     * @param dialect      dialect
-     * @param queryAlias   queryAlias
-     * @param ignorePolicy the ignore policy
-     * @param sort         SortBuilder
+     * @param dialect        dialect
+     * @param queryAlias     queryAlias
+     * @param ignoreStrategy the ignore strategy
+     * @param sort           SortBuilder
      */
-    public SqlConditionGroup(Dialect dialect, String queryAlias, Predicate<Object> ignorePolicy, SqlSortBuilder sort) {
-        this(dialect, queryAlias, ignorePolicy, sort, null);
+    public SqlConditionGroup(Dialect dialect, String queryAlias, Predicate<?> ignoreStrategy, SqlSortBuilder sort) {
+        this(dialect, queryAlias, ignoreStrategy, sort, null);
     }
 
     /**
      * Instantiates a new sql condition group.
      *
-     * @param dialect      dialect
-     * @param queryAlias   queryAlias
-     * @param ignorePolicy the ignore policy
-     * @param sort         排序器
-     * @param parent       上级组
+     * @param dialect        dialect
+     * @param queryAlias     queryAlias
+     * @param ignoreStrategy the ignore strategy
+     * @param sort           排序器
+     * @param parent         上级组
      */
-    SqlConditionGroup(Dialect dialect, String queryAlias, Predicate<Object> ignorePolicy, SqlSortBuilder sort,
+    SqlConditionGroup(Dialect dialect, String queryAlias, Predicate<?> ignoreStrategy, SqlSortBuilder sort,
             SqlConditionGroup parent) {
         this.dialect = dialect;
         this.sort = sort;
         this.parent = parent;
         this.queryAlias = queryAlias;
-        setIgnorePolicy(ignorePolicy);
+        setIgnoreStrategy(ignoreStrategy);
     }
 
     /**
@@ -120,7 +120,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
      */
     @Override
     public LogicBuilder lt(String name, Object value) {
-        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.LT, queryAlias, ignorePolicy));
+        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.LT, queryAlias, ignoreStrategy));
         return this;
     }
 
@@ -129,7 +129,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
      */
     @Override
     public LogicBuilder le(String name, Object value) {
-        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.LE, queryAlias, ignorePolicy));
+        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.LE, queryAlias, ignoreStrategy));
         return this;
     }
 
@@ -138,7 +138,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
      */
     @Override
     public LogicBuilder eq(String name, Object value) {
-        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.EQ, queryAlias, ignorePolicy));
+        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.EQ, queryAlias, ignoreStrategy));
         return this;
     }
 
@@ -147,7 +147,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
      */
     @Override
     public LogicBuilder ne(String name, Object value) {
-        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.NE, queryAlias, ignorePolicy));
+        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.NE, queryAlias, ignoreStrategy));
         return this;
     }
 
@@ -156,7 +156,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
      */
     @Override
     public LogicBuilder ge(String name, Object value) {
-        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.GE, queryAlias, ignorePolicy));
+        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.GE, queryAlias, ignoreStrategy));
         return this;
     }
 
@@ -165,7 +165,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
      */
     @Override
     public LogicBuilder gt(String name, Object value) {
-        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.GT, queryAlias, ignorePolicy));
+        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.GT, queryAlias, ignoreStrategy));
         return this;
     }
 
@@ -174,7 +174,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
      */
     @Override
     public LogicBuilder sw(String name, Object value) {
-        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.SW, queryAlias, ignorePolicy));
+        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.SW, queryAlias, ignoreStrategy));
         return this;
     }
 
@@ -183,7 +183,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
      */
     @Override
     public LogicBuilder co(String name, Object value) {
-        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.CO, queryAlias, ignorePolicy));
+        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.CO, queryAlias, ignoreStrategy));
         return this;
     }
 
@@ -192,7 +192,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
      */
     @Override
     public LogicBuilder ew(String name, Object value) {
-        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.EW, queryAlias, ignorePolicy));
+        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.EW, queryAlias, ignoreStrategy));
         return this;
     }
 
@@ -201,7 +201,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
      */
     @Override
     public LogicBuilder in(String name, Object value) {
-        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.IN, queryAlias, ignorePolicy));
+        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.IN, queryAlias, ignoreStrategy));
         return this;
     }
 
@@ -210,7 +210,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
      */
     @Override
     public LogicBuilder nin(String name, Object value) {
-        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.NIN, queryAlias, ignorePolicy));
+        addCondition(new SqlConditionExpression(dialect, name, value, QueryOperator.NIN, queryAlias, ignoreStrategy));
         return this;
     }
 
@@ -219,7 +219,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
      */
     @Override
     public LogicBuilder isn(String name) {
-        addCondition(new SqlConditionExpression(dialect, name, null, QueryOperator.ISN, queryAlias, ignorePolicy));
+        addCondition(new SqlConditionExpression(dialect, name, null, QueryOperator.ISN, queryAlias, ignoreStrategy));
         return this;
     }
 
@@ -228,7 +228,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
      */
     @Override
     public LogicBuilder inn(String name) {
-        addCondition(new SqlConditionExpression(dialect, name, null, QueryOperator.INN, queryAlias, ignorePolicy));
+        addCondition(new SqlConditionExpression(dialect, name, null, QueryOperator.INN, queryAlias, ignoreStrategy));
         return this;
     }
 
@@ -237,7 +237,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
      */
     @Override
     public ExpressionBuilder group() {
-        SqlConditionGroup group = new SqlConditionGroup(dialect, queryAlias, ignorePolicy, sort, this);
+        SqlConditionGroup group = new SqlConditionGroup(dialect, queryAlias, ignoreStrategy, sort, this);
         addCondition(group);
         return group;
     }
@@ -324,7 +324,7 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
         for (Expression condition : conditions) {
             if (condition instanceof ParamedExpression) {
                 Object param = ((ParamedExpression) condition).getParamValue();
-                if (!ignorePolicy.test(param)) {
+                if (!ignoreStrategy.test(param)) {
                     if (param instanceof Collection) {
                         params.addAll((Collection<?>) param);
                     } else if (param.getClass().isArray()) {
@@ -369,22 +369,23 @@ public class SqlConditionGroup implements ConditionGroup, SqlConditionBuilder {
     // ********************************************************************
 
     /**
-     * get ignorePolicy value.
+     * get ignoreStrategy value.
      *
-     * @return ignorePolicy
+     * @return ignoreStrategy
      */
-    public Predicate<Object> getIgnorePolicy() {
-        return ignorePolicy;
+    public Predicate<?> getIgnoreStrategy() {
+        return ignoreStrategy;
     }
 
     /**
-     * set ignorePolicy value.
+     * set ignoreStrategy value.
      *
-     * @param ignorePolicy ignorePolicy
+     * @param ignoreStrategy the new ignore strategy
      */
-    public void setIgnorePolicy(Predicate<Object> ignorePolicy) {
-        AssertIllegalArgument.isNotNull(ignorePolicy, "ignorePolicy");
-        this.ignorePolicy = ignorePolicy;
+    @SuppressWarnings("unchecked")
+    public void setIgnoreStrategy(Predicate<?> ignoreStrategy) {
+        AssertIllegalArgument.isNotNull(ignoreStrategy, "ignoreStrategy");
+        this.ignoreStrategy = (Predicate<Object>) ignoreStrategy;
     }
 
     /**

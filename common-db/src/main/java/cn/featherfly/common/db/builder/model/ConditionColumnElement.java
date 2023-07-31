@@ -1,3 +1,13 @@
+/*
+ * All rights Reserved, Designed By zhongj
+ * @Title: ConditionColumnElement.java
+ * @Package cn.featherfly.common.db.builder.model
+ * @Description: todo (用一句话描述该文件做什么)
+ * @author: zhongj
+ * @date: 2023年7月31日 下午4:23:07
+ * @version V1.0
+ * @Copyright: 2023 www.featherfly.cn Inc. All rights reserved.
+ */
 
 package cn.featherfly.common.db.builder.model;
 
@@ -28,30 +38,30 @@ public class ConditionColumnElement extends ParamedColumnElement {
     /**
      * Instantiates a new condition column element.
      *
-     * @param dialect       dialect
-     * @param name          name
-     * @param value         param value
-     * @param queryOperator queryOperator
-     * @param ignorePolicy  the ignore policy
+     * @param dialect        dialect
+     * @param name           name
+     * @param value          param value
+     * @param queryOperator  queryOperator
+     * @param ignoreStrategy the ignore strategy
      */
     public ConditionColumnElement(Dialect dialect, String name, Object value, QueryOperator queryOperator,
-            Predicate<Object> ignorePolicy) {
-        this(dialect, name, value, queryOperator, null, ignorePolicy);
+            Predicate<?> ignoreStrategy) {
+        this(dialect, name, value, queryOperator, null, ignoreStrategy);
     }
 
     /**
      * Instantiates a new condition column element.
      *
-     * @param dialect       dialect
-     * @param name          name
-     * @param value         param value
-     * @param queryOperator queryOperator
-     * @param tableAlias    tableAlias
-     * @param ignorePolicy  the ignore policy
+     * @param dialect        dialect
+     * @param name           name
+     * @param value          param value
+     * @param queryOperator  queryOperator
+     * @param tableAlias     tableAlias
+     * @param ignoreStrategy the ignore strategy
      */
     public ConditionColumnElement(Dialect dialect, String name, Object value, QueryOperator queryOperator,
-            String tableAlias, Predicate<Object> ignorePolicy) {
-        this(dialect, name, value, queryOperator, QueryPolicy.AUTO, tableAlias, ignorePolicy);
+            String tableAlias, Predicate<?> ignoreStrategy) {
+        this(dialect, name, value, queryOperator, QueryPolicy.AUTO, tableAlias, ignoreStrategy);
     }
 
     /**
@@ -63,11 +73,10 @@ public class ConditionColumnElement extends ParamedColumnElement {
      * @param queryOperator queryOperator
      * @param queryPolicy   the query policy
      * @param tableAlias    tableAlias
-     * @param ignorePolicy  the ignore policy
      */
     public ConditionColumnElement(Dialect dialect, String name, Object value, QueryOperator queryOperator,
-            QueryPolicy queryPolicy, String tableAlias, Predicate<Object> ignorePolicy) {
-        super(dialect, name, value, tableAlias, ignorePolicy);
+            QueryPolicy queryPolicy, String tableAlias, Predicate<?> ignoreStrategy) {
+        super(dialect, name, value, tableAlias, ignoreStrategy);
         AssertIllegalArgument.isNotNull(queryOperator, "queryOperator");
         if (queryPolicy == null) {
             queryPolicy = QueryPolicy.AUTO;
@@ -82,9 +91,9 @@ public class ConditionColumnElement extends ParamedColumnElement {
 
     private boolean ignore(Object value) {
         if (value instanceof FieldValueOperator) {
-            return ignorePolicy.test(((FieldValueOperator<?>) value).getValue());
+            return ignoreStrategy.test(((FieldValueOperator<?>) value).getValue());
         } else {
-            return ignorePolicy.test(value);
+            return ignoreStrategy.test(value);
         }
     }
 

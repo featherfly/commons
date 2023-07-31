@@ -33,33 +33,33 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
 
     private Dialect dialect;
 
-    private Predicate<Object> ignorePolicy;
+    private Predicate<Object> ignoreStrategy;
 
     /**
      * Instantiates a new sql update set basic builder.
      *
-     * @param dialect      the dialect
-     * @param tableName    the table name
-     * @param ignorePolicy the ignore policy
+     * @param dialect        the dialect
+     * @param tableName      the table name
+     * @param ignoreStrategy the ignore strategy
      */
-    public SqlUpdateSetBasicBuilder(Dialect dialect, String tableName, Predicate<Object> ignorePolicy) {
-        this(dialect, tableName, null, ignorePolicy);
+    public SqlUpdateSetBasicBuilder(Dialect dialect, String tableName, Predicate<?> ignoreStrategy) {
+        this(dialect, tableName, null, ignoreStrategy);
     }
 
     /**
      * Instantiates a new sql update set basic builder.
      *
-     * @param dialect      the dialect
-     * @param tableName    the table name
-     * @param alias        the alias
-     * @param ignorePolicy the ignore policy
+     * @param dialect        the dialect
+     * @param tableName      the table name
+     * @param alias          the alias
+     * @param ignoreStrategy the ignore strategy
      */
-    public SqlUpdateSetBasicBuilder(Dialect dialect, String tableName, String alias, Predicate<Object> ignorePolicy) {
-        AssertIllegalArgument.isNotNull(ignorePolicy, "ignorePolicy");
+    public SqlUpdateSetBasicBuilder(Dialect dialect, String tableName, String alias, Predicate<?> ignoreStrategy) {
+        AssertIllegalArgument.isNotNull(ignoreStrategy, "ignoreStrategy");
         this.tableName = tableName;
         this.alias = alias;
         this.dialect = dialect;
-        this.ignorePolicy = ignorePolicy;
+        setIgnoreStrategy(ignoreStrategy);
     }
 
     /**
@@ -70,7 +70,7 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
      * @return the sql update set basic builder
      */
     public SqlUpdateSetBasicBuilder setValue(String columnName, Object value) {
-        params.add(new UpdateColumnElement(dialect, columnName, value, alias, ignorePolicy));
+        params.add(new UpdateColumnElement(dialect, columnName, value, alias, ignoreStrategy));
         return this;
     }
 
@@ -83,7 +83,7 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
      * @return the sql update set basic builder
      */
     public SqlUpdateSetBasicBuilder setValue(String columnName, Object value, SetType setType) {
-        params.add(new UpdateColumnElement(dialect, columnName, value, alias, setType, ignorePolicy));
+        params.add(new UpdateColumnElement(dialect, columnName, value, alias, setType, ignoreStrategy));
         return this;
     }
 
@@ -157,21 +157,21 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * get ignorePolicy value
+     * get ignoreStrategy value
      *
-     * @return ignorePolicy
+     * @return ignoreStrategy
      */
-    public Predicate<Object> getIgnorePolicy() {
-        return ignorePolicy;
+    public Predicate<?> getIgnoreStrategy() {
+        return ignoreStrategy;
     }
 
     /**
-     * set ignorePolicy value
+     * set ignoreStrategy value
      *
-     * @param ignorePolicy ignorePolicy
+     * @param ignoreStrategy ignoreStrategy
      */
-    public void setIgnorePolicy(Predicate<Object> ignorePolicy) {
-        this.ignorePolicy = ignorePolicy;
+    @SuppressWarnings("unchecked")
+    public void setIgnoreStrategy(Predicate<?> ignoreStrategy) {
+        this.ignoreStrategy = (Predicate<Object>) ignoreStrategy;
     }
-
 }

@@ -18,7 +18,7 @@ import cn.featherfly.common.db.builder.dml.SqlConditionGroup;
 import cn.featherfly.common.db.builder.dml.SqlSortBuilder;
 import cn.featherfly.common.db.data.query.TableQuery;
 import cn.featherfly.common.db.dialect.Dialects;
-import cn.featherfly.common.repository.IgnorePolicy;
+import cn.featherfly.common.repository.IgnoreStrategy;
 import cn.featherfly.common.repository.builder.dml.ConditionBuilder;
 
 /**
@@ -30,7 +30,7 @@ public class TableQueryTest {
 
     @Test
     public void test() {
-        ConditionBuilder builder = new SqlConditionGroup(Dialects.MYSQL, IgnorePolicy.EMPTY,
+        ConditionBuilder builder = new SqlConditionGroup(Dialects.MYSQL, IgnoreStrategy.EMPTY,
                 new SqlSortBuilder(Dialects.MYSQL));
         builder.eq("name", "yufei").and().gt("age", 18);
         TableQuery q = new TableQuery(Dialects.MYSQL, "user", builder);

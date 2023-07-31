@@ -35,13 +35,13 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
     /**
      * Instantiates a new sql query builder.
      *
-     * @param dialect      dialect
-     * @param ignorePolicy the ignore policy
+     * @param dialect        dialect
+     * @param ignoreStrategy the ignore strategy
      */
-    public SqlQueryBuilder(Dialect dialect, Predicate<Object> ignorePolicy) {
+    public SqlQueryBuilder(Dialect dialect, Predicate<?> ignoreStrategy) {
         this.dialect = dialect;
         sortBuilder = new SqlSortBuilder(dialect);
-        conditionGroup = new SqlConditionGroup(dialect, ignorePolicy, sortBuilder);
+        conditionGroup = new SqlConditionGroup(dialect, ignoreStrategy, sortBuilder);
     }
 
     /**

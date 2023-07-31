@@ -25,7 +25,7 @@ import cn.featherfly.common.db.mapping.JdbcClassMapping;
 import cn.featherfly.common.db.mapping.pojo.User;
 import cn.featherfly.common.db.mapping.pojo.UserRole;
 import cn.featherfly.common.operator.AggregateFunction;
-import cn.featherfly.common.repository.IgnorePolicy;
+import cn.featherfly.common.repository.IgnoreStrategy;
 import cn.featherfly.common.repository.builder.AliasManager;
 import cn.featherfly.common.structure.ChainMapImpl;
 
@@ -285,14 +285,14 @@ public class BasicBuilderTest implements ClassMappingSupport {
         params.add(sex);
         params.add(pwd);
 
-        SqlUpdateSetBasicBuilder builder = new SqlUpdateSetBasicBuilder(Dialects.MYSQL, "user", IgnorePolicy.EMPTY);
+        SqlUpdateSetBasicBuilder builder = new SqlUpdateSetBasicBuilder(Dialects.MYSQL, "user", IgnoreStrategy.EMPTY);
         builder.setValue("name", name).setValue("age", age).setValue("sex", sex).setValue("pwd", pwd);
         System.out.println(builder.build());
         System.out.println(builder.getParams());
         assertEquals("UPDATE `user` SET `name` = ?, `age` = ?, `sex` = ?, `pwd` = ?", builder.build());
         assertEquals(params, builder.getParams());
 
-        builder = new SqlUpdateSetBasicBuilder(Dialects.MYSQL, "user", "u", IgnorePolicy.EMPTY);
+        builder = new SqlUpdateSetBasicBuilder(Dialects.MYSQL, "user", "u", IgnoreStrategy.EMPTY);
         builder.setValue("name", name).setValue("age", age).setValue("sex", sex).setValue("pwd", pwd);
         System.out.println(builder.build());
         System.out.println(builder.getParams());

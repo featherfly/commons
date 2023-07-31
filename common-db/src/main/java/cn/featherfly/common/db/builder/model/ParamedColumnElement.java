@@ -19,36 +19,35 @@ public abstract class ParamedColumnElement extends ColumnElement {
     /** The param. */
     protected Object param;
 
-    /** The ignore policy. */
-    protected Predicate<Object> ignorePolicy;
+    /** The ignore strategy. */
+    protected Predicate<Object> ignoreStrategy;
 
     /**
      * Instantiates a new paramed column element.
      *
-     * @param dialect      dialect
-     * @param name         name
-     * @param param        param
-     * @param ignorePolicy the ignore policy
+     * @param dialect        dialect
+     * @param name           name
+     * @param param          param
+     * @param ignoreStrategy the ignore strategy
      */
-    public ParamedColumnElement(Dialect dialect, String name, Object param, Predicate<Object> ignorePolicy) {
-        this(dialect, name, param, null, ignorePolicy);
+    public ParamedColumnElement(Dialect dialect, String name, Object param, Predicate<?> ignoreStrategy) {
+        this(dialect, name, param, null, ignoreStrategy);
     }
 
     /**
      * Instantiates a new paramed column element.
      *
-     * @param dialect      dialect
-     * @param name         name
-     * @param param        param
-     * @param tableAlias   tableAlias
-     * @param ignorePolicy the ignore policy
+     * @param dialect        dialect
+     * @param name           name
+     * @param param          param
+     * @param tableAlias     tableAlias
+     * @param ignoreStrategy the ignore strategy
      */
     public ParamedColumnElement(Dialect dialect, String name, Object param, String tableAlias,
-            Predicate<Object> ignorePolicy) {
+            Predicate<?> ignoreStrategy) {
         super(dialect, name, tableAlias);
-        AssertIllegalArgument.isNotNull(ignorePolicy, "ignorePolicy");
         this.param = param;
-        this.ignorePolicy = ignorePolicy;
+        setIgnoreStrategy(ignoreStrategy);
     }
 
     /**
@@ -70,20 +69,22 @@ public abstract class ParamedColumnElement extends ColumnElement {
     }
 
     /**
-     * get ignorePolicy value.
+     * get ignoreStrategy value
      *
-     * @return ignorePolicy
+     * @return ignoreStrategy
      */
-    public Predicate<Object> getIgnorePolicy() {
-        return ignorePolicy;
+    public Predicate<?> getIgnoreStrategy() {
+        return ignoreStrategy;
     }
 
     /**
-     * set ignorePolicy value.
+     * set ignoreStrategy value
      *
-     * @param ignorePolicy ignorePolicy
+     * @param ignoreStrategy ignoreStrategy
      */
-    public void setIgnorePolicy(Predicate<Object> ignorePolicy) {
-        this.ignorePolicy = ignorePolicy;
+    @SuppressWarnings("unchecked")
+    public void setIgnoreStrategy(Predicate<?> ignoreStrategy) {
+        AssertIllegalArgument.isNotNull(ignoreStrategy, "ignoreStrategy");
+        this.ignoreStrategy = (Predicate<Object>) ignoreStrategy;
     }
 }

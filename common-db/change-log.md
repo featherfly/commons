@@ -12,6 +12,7 @@
 11. SqlFile加入存储过程支持
 12. 修复getResultSetMap(ResultSet rs),getResultSetArray(ResultSet rs)参数越界的问题
 13. JdbcUtils加入存储过程的参数设置和存储过程的OUT Param的获取
+14. ignorePolicy重命名为ignoreStrategy
 
 # 0.5.5 2022-8-11
 1. Dialect加入getKeywordLike(QueryPolicy)、getKeywordEq(QueryPolicy)、keywordsCase()方法

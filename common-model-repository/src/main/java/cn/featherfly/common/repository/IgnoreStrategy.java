@@ -9,7 +9,7 @@ import cn.featherfly.common.lang.Lang;
  *
  * @author zhongj
  */
-public enum IgnorePolicy implements Predicate<Object> {
+public enum IgnoreStrategy implements Predicate<Object> {
 
     /** not ignore. */
     NONE,

@@ -167,7 +167,7 @@ public class ClassMapping<T, P extends PropertyMapping<P>> {
      * @param index the index
      */
     public void addIndex(Index index) {
-        this.indexs.put(index.getName(), index);
+        indexs.put(index.getName(), index);
     }
 
     /**
@@ -228,7 +228,7 @@ public class ClassMapping<T, P extends PropertyMapping<P>> {
     private String schema;
 
     /** The type. */
-    private Class<?> type;
+    private Class<T> type;
 
     /**
      * Gets the repository name.
@@ -244,7 +244,7 @@ public class ClassMapping<T, P extends PropertyMapping<P>> {
      *
      * @return 返回type
      */
-    public Class<?> getType() {
+    public Class<T> getType() {
         return type;
     }
 

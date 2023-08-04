@@ -144,6 +144,7 @@ public class SelectColumnElement extends ColumnElement {
         super(dialect, name, tableAlias);
         this.aggregateFunction = aggregateFunction;
         this.alias = alias;
+        this.distinct = distinct;
     }
 
     /**

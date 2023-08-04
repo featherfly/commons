@@ -5,7 +5,9 @@ package cn.featherfly.common.lang.function;
  *
  * @param <T> the generic type
  */
+//* @deprecated use {@link SerializableToStringFunction}
+//@Deprecated
 @FunctionalInterface
-public interface ReturnStringFunction<T> extends SerializableFunction<T, String> {
+public interface ReturnStringFunction<T> extends SerializableToStringFunction<T> {
 
 }

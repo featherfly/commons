@@ -1,8 +1,11 @@
 package cn.featherfly.common.lang.function;
 
-import java.time.LocalDateTime;
-
+/**
+ * LocalDateTimeSupplier.
+ *
+ * @author zhongj
+ */
 @FunctionalInterface
-public interface LocalDateTimeSupplier extends SerializableSupplier<LocalDateTime> {
+public interface LocalDateTimeSupplier extends SerializableLocalDateTimeSupplier {
 
 }

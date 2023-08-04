@@ -2,7 +2,11 @@ package cn.featherfly.common.lang.function;
 
 import java.util.Date;
 
-@FunctionalInterface
-public interface DateSupplier<T extends Date> extends SerializableSupplier<T> {
+/**
+ * DateSupplier.
+ *
+ * @author zhongj
+ */
+public interface DateSupplier<T extends Date> extends SerializableDateSupplier<T> {
 
 }

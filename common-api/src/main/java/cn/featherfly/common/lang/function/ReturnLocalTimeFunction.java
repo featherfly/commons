@@ -1,8 +1,14 @@
 package cn.featherfly.common.lang.function;
 
-import java.time.LocalTime;
-
+/**
+ * The Interface ReturnLocalTimeFunction.
+ *
+ * @author zhongj
+ * @param <T> the generic type
+ */
+//* @deprecated use {@link SerializableToLocalTimeFunction} instead
+//@Deprecated
 @FunctionalInterface
-public interface ReturnLocalTimeFunction<T> extends SerializableFunction<T, LocalTime> {
+public interface ReturnLocalTimeFunction<T> extends SerializableToLocalTimeFunction<T> {
 
 }

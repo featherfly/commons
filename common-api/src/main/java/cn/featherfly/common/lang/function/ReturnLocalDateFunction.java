@@ -1,8 +1,12 @@
 package cn.featherfly.common.lang.function;
 
-import java.time.LocalDate;
-
+/**
+ * The Interface ReturnLocalDateFunction.
+ *
+ * @author zhongj
+ * @param <T> the generic type
+ */
 @FunctionalInterface
-public interface ReturnLocalDateFunction<T> extends SerializableFunction<T, LocalDate> {
+public interface ReturnLocalDateFunction<T> extends SerializableToLocalDateFunction<T> {
 
 }

@@ -17,5 +17,13 @@ package cn.featherfly.common.lang;
  */
 public interface EnumConvertor {
 
+    /**
+     * To enum.
+     *
+     * @param <T>     the generic type
+     * @param toClass the to class
+     * @param object  the object
+     * @return the t
+     */
     <T extends Enum<T>> T toEnum(Class<T> toClass, Object object);
 }

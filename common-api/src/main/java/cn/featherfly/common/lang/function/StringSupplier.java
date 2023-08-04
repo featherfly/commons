@@ -2,8 +2,11 @@ package cn.featherfly.common.lang.function;
 
 /**
  * The Interface StringSupplier.
+ *
+ * @deprecated {@link SerializableStringSupplier}
  */
 @FunctionalInterface
-public interface StringSupplier extends SerializableSupplier<String> {
+@Deprecated
+public interface StringSupplier extends SerializableStringSupplier {
 
 }

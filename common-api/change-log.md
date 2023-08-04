@@ -1,4 +1,7 @@
-# 0.5.1 2022
+# 0.5.2 2023
+1. 加入SerializableToIntFunction1-9,SerializableToLongFunction1-9,SerializableToDoubleFunction1-9
+
+# 0.5.1 2022-11-15
 1. AggregateFunction删除DISTINCT
 2. 加入SerializableConsumer1-9,SerializableSupplier1-9,SerializableConsumer1-9
    

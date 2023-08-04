@@ -1,15 +1,13 @@
 
 package cn.featherfly.common.lang.function;
 
-import java.util.Map;
-
 /**
- * <p>
- * ArraySupplier
- * </p>
+ * The Interface MapSupplier.
  *
  * @author zhongj
+ * @param <K> the key type
+ * @param <V> the value type
  */
-public interface MapSupplier<K, V> extends SerializableSupplier<Map<K, V>> {
+public interface MapSupplier<K, V> extends SerializableMapSupplier<K, V> {
 
 }

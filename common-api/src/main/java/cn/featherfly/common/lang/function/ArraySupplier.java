@@ -2,12 +2,10 @@
 package cn.featherfly.common.lang.function;
 
 /**
- * <p>
- * ArraySupplier
- * </p>
+ * ArraySupplier.
  *
  * @author zhongj
  */
-public interface ArraySupplier<E> extends SerializableSupplier<E[]> {
+public interface ArraySupplier<E> extends SerializableArraySupplier<E> {
 
 }

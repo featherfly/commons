@@ -26,6 +26,7 @@ import cn.featherfly.common.lang.function.SerializableFunction;
 import cn.featherfly.common.lang.function.SerializableSupplier;
 import cn.featherfly.common.lang.vo.User;
 import cn.featherfly.common.lang.vo.User2;
+import cn.featherfly.common.lang.vo.User3;
 
 /**
  * <p>
@@ -167,6 +168,29 @@ public class LambdaUtilsTest {
     }
 
     @Test
+    public void testMethodDeclaredClassNameAndMethodInstanceClassName() {
+        System.out.println("showMethodDeclaredClassName:");
+        showMethodDeclaredClassName(User::getAge);
+        showMethodDeclaredClassName(User2::getAge);
+        showMethodDeclaredClassName(User3::getAge);
+
+        System.out.println("");
+        System.out.println("showMethodInstanceClassName:");
+        showMethodInstanceClassName(User::getAge);
+        showMethodInstanceClassName(User2::getAge);
+        showMethodInstanceClassName(User3::getAge);
+
+    }
+
+    <T, R> void showMethodInstanceClassName(SerializableFunction<T, R> p) {
+        System.out.println(LambdaUtils.getLambdaInfo(p).getMethodInstanceClassName());
+    }
+
+    <T, R> void showMethodDeclaredClassName(SerializableFunction<T, R> p) {
+        System.out.println(LambdaUtils.getLambdaInfo(p).getMethodDeclaredClassName());
+    }
+
+    @Test
     public void testSupplier() {
         User2 user = new User2();
         user.setAge(18);
@@ -201,8 +225,8 @@ public class LambdaUtilsTest {
         assertEquals(info.getMethodDeclaredClassName(), user.getClass().getSuperclass().getName());
         assertEquals(info.getMethodInstanceClassName(), user.getClass().getName());
 
-        SerializableConsumerLambdaInfo<Integer> consumerLambdaInfo = LambdaUtils
-                .getSerializableConsumerLambdaInfo(user::setAge);
+        SerializableConsumerLambdaInfo<
+                Integer> consumerLambdaInfo = LambdaUtils.getSerializableConsumerLambdaInfo(user::setAge);
 
         assertTrue(consumerLambdaInfo.getInstance() == user);
 
@@ -310,8 +334,8 @@ public class LambdaUtilsTest {
         System.out.println(info.getMethodDeclaredClassName());
         System.out.println(info.getMethodInstanceClassName());
 
-        SerializableSupplierLambdaInfo<Integer> supplier = LambdaUtils
-                .getSerializableSupplierLambdaInfo(user::getAgeInt);
+        SerializableSupplierLambdaInfo<
+                Integer> supplier = LambdaUtils.getSerializableSupplierLambdaInfo(user::getAgeInt);
 
         System.out.println(supplier.get());
 

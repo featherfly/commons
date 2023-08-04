@@ -645,10 +645,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
-     * 判断传入类型是否是抽象类
-     * </p>
-     * .
+     * 判断传入类型是否是抽象类 .
      *
      * @param type type
      * @return 是否是抽象类
@@ -658,10 +655,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
-     * 判断传入类型是否是可实例化的类
-     * </p>
-     * .
+     * 判断传入类型是否是可实例化的类 .
      *
      * @param type type
      * @return 是否是可实例化的类
@@ -671,10 +665,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
-     * Class泛型参数强制转型
-     * </p>
-     * .
+     * Class泛型参数强制转型.
      *
      * @param <T>        泛型
      * @param type       type
@@ -687,9 +678,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
-     * 获取指定类所在的JAR包的JAR文件.如果不是JAR文件中的返回null
-     * </p>
+     * 获取指定类所在的JAR包的JAR文件.如果不是JAR文件中的返回null.
      *
      * @param type 类型
      * @return JAR文件或null
@@ -699,9 +688,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
-     * 获取指定类所在的JAR包的JAR文件.如果不是JAR文件中的返回null
-     * </p>
+     * 获取指定类所在的JAR包的JAR文件.如果不是JAR文件中的返回null.
      *
      * @param className className
      * @return JAR文件或null
@@ -893,6 +880,48 @@ public final class ClassUtils {
      * 通过反射,获得指定类的父类的泛型参数的实际类型. 如BuyerServiceBean extends
      * DaoSupport&lt;Buyer&gt;
      *
+     * @param clazz clazz 需要反射的类,该类必须继承范型父类
+     * @param index 泛型参数所在索引,从0开始.
+     * @return 范型参数(ParameterizedType)
+     */
+    public static ParameterizedType getSuperClassGenericParameterizedType(Class<?> clazz, int index) {
+        // 得到泛型父类
+        Type genType = clazz.getGenericSuperclass();
+        // 如果没有实现ParameterizedType接口，即不支持泛型，抛出异常
+        if (!(genType instanceof ParameterizedType)) {
+            throw new IllegalArgumentException(
+                    "there is no generic parameter with super class, such as : public class StringList extends ArrayList<String>");
+        }
+        // 返回表示此类型实际类型参数的Type对象的数组,数组里放的都是对应类型的Class, 如BuyerServiceBean extends
+        // DaoSupport<Buyer,Contact>就返回Buyer和Contact类型
+        Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
+        if (index >= params.length || index < 0) {
+            throw new IllegalArgumentException("索引参数[index]" + (index < 0 ? "不能小于0" : "超出了参数的总数"));
+        }
+
+        Type type = params[index];
+        if (type instanceof ParameterizedType) {
+            return (ParameterizedType) type;
+        } else {
+            throw new IllegalArgumentException("super class generic parameter " + index + " is not ParameterizedType");
+        }
+    }
+
+    /**
+     * 通过反射,获得指定类的父类的第一个泛型参数的实际类型. 如BuyerServiceBean extends
+     * DaoSupport&lt;Buyer&gt;
+     *
+     * @param clazz clazz 需要反射的类,该类必须继承泛型父类
+     * @return 范型参数(ParameterizedType)
+     */
+    public static ParameterizedType getSuperClassGenericParameterizedType(Class<?> clazz) {
+        return getSuperClassGenericParameterizedType(clazz, 0);
+    }
+
+    /**
+     * 通过反射,获得指定类的父类的泛型参数的实际类型. 如BuyerServiceBean extends
+     * DaoSupport&lt;Buyer&gt;
+     *
      * @param <T>   泛型
      * @param clazz clazz 需要反射的类,该类必须继承范型父类
      * @param index 泛型参数所在索引,从0开始.
@@ -912,10 +941,14 @@ public final class ClassUtils {
         if (index >= params.length || index < 0) {
             throw new IllegalArgumentException("你输入的索引" + (index < 0 ? "不能小于0" : "超出了参数的总数"));
         }
-        if (!(params[index] instanceof Class)) {
+
+        Type type = params[index];
+        if (type instanceof ParameterizedType) {
+            return getClassType(type);
+        } else if (!(type instanceof Class)) {
             return (Class<T>) Object.class;
         }
-        return (Class<T>) params[index];
+        return (Class<T>) type;
     }
 
     /**
@@ -2087,6 +2120,23 @@ public final class ClassUtils {
             return "shortValue";
         }
         return null;
+    }
+
+    /**
+     * getClassType.
+     *
+     * @param <T>  the generic type
+     * @param type the type
+     * @return the class type
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Class<T> getClassType(Type type) {
+        if (type instanceof ParameterizedType) {
+            return getClassType(((ParameterizedType) type).getRawType());
+        } else if (!(type instanceof Class)) {
+            return (Class<T>) Object.class;
+        }
+        return (Class<T>) type;
     }
 
     /**

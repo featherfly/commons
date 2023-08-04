@@ -121,15 +121,15 @@ public class BeanDescriptor<T> {
             //                fieldType = (Class<?>) genericType;
             //            }
             Class<?> fieldType = getGenericType(field.getGenericType(), field.getType());
-            Method getter = ClassUtils.getGetter(field, this.type);
-            Method setter = ClassUtils.getSetter(field, this.type);
+            Method getter = ClassUtils.getGetter(field, type);
+            Method setter = ClassUtils.getSetter(field, type);
             if (getter != null || setter != null) {
-                BeanProperty<?> prop = FACTORY.create(field.getName(), field, fieldType, setter, getter, this.type,
+                BeanProperty<?> prop = FACTORY.create(field.getName(), field, fieldType, setter, getter, type,
                         field.getDeclaringClass());
                 beanProperties.put(prop.getName(), prop);
-                if (LOGGER.isTraceEnabled() && parent != this.type) {
+                if (LOGGER.isTraceEnabled() && parent != type) {
                     LOGGER.trace("类{}从父类{}中继承的属性：[{}]",
-                            new Object[] { this.type.getName(), parent.getName(), prop.getName() });
+                            new Object[] { type.getName(), parent.getName(), prop.getName() });
                 }
             }
         }
@@ -162,8 +162,7 @@ public class BeanDescriptor<T> {
                      * }
                      */
                 }
-            }
-            if (ClassUtils.isSetter(method)) {
+            } else if (ClassUtils.isSetter(method)) {
                 String propertyName = ClassUtils.getPropertyName(method);
                 if (!hasBeanProperty(propertyName)) {
                     Map<String, Object> prop = getProperty(properties, propertyName);
@@ -206,8 +205,8 @@ public class BeanDescriptor<T> {
                         getGenericType(setter.getGenericParameterTypes()[0], setter.getParameterTypes()[0]));
                 propertyName = Lang.pick(propertyName, ClassUtils.getPropertyName(setter));
             }
-            BeanProperty<?> property = FACTORY.create(propertyName, null, propertyType, setter, getter, type,
-                    declaringType);
+            BeanProperty<
+                    ?> property = FACTORY.create(propertyName, null, propertyType, setter, getter, type, declaringType);
             beanProperties.put(property.getName(), property);
             if (LOGGER.isTraceEnabled()) {
                 LOGGER.trace("类{}的属性：[{}]， 定义子类{}", new Object[] { property.getOwnerType().getName(),
@@ -538,7 +537,7 @@ public class BeanDescriptor<T> {
      */
     public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
         try {
-            return this.type.getAnnotation(annotationClass);
+            return type.getAnnotation(annotationClass);
         } catch (NullPointerException e) {
             return null;
         }
@@ -553,7 +552,7 @@ public class BeanDescriptor<T> {
      * @return 当前对象的所有注解
      */
     public Annotation[] getAnnotations() {
-        return this.type.getAnnotations();
+        return type.getAnnotations();
     }
 
     // ********************************************************************

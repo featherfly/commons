@@ -11,7 +11,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.DoubleSupplier;
 import java.util.function.Function;
+import java.util.function.IntSupplier;
+import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +22,9 @@ import org.apache.commons.lang3.StringUtils;
 import cn.featherfly.common.exception.ReflectException;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.function.SerializableConsumer;
+import cn.featherfly.common.lang.function.SerializableDoubleSupplier;
+import cn.featherfly.common.lang.function.SerializableIntSupplier;
+import cn.featherfly.common.lang.function.SerializableLongSupplier;
 import cn.featherfly.common.lang.function.SerializableSupplier;
 
 /**
@@ -38,6 +44,8 @@ public class LambdaUtils {
 
     /**
      * The Class SerializedLambdaInfo.
+     *
+     * @author zhongj
      */
     public static class SerializedLambdaInfo {
 
@@ -110,7 +118,7 @@ public class LambdaUtils {
         }
 
         /**
-         * 返回propertyType
+         * 返回propertyType.
          *
          * @return propertyType
          */
@@ -133,6 +141,8 @@ public class LambdaUtils {
 
     /**
      * The Class InstanceLambdaInfo.
+     *
+     * @author zhongj
      */
     public static abstract class InstanceLambdaInfo {
 
@@ -184,6 +194,7 @@ public class LambdaUtils {
     /**
      * The Class SerializableConsumerLambdaInfo.
      *
+     * @author zhongj
      * @param <T> the generic type
      */
     public static class SerializableConsumerLambdaInfo<T> extends InstanceLambdaInfo implements Consumer<T> {
@@ -207,6 +218,7 @@ public class LambdaUtils {
     /**
      * The Class SerializableSupplierLambdaInfo.
      *
+     * @author zhongj
      * @param <T> the generic type
      */
     public static class SerializableSupplierLambdaInfo<T> extends InstanceLambdaInfo implements Supplier<T> {
@@ -250,6 +262,152 @@ public class LambdaUtils {
         @Override
         public T get() {
             return supplier.get();
+        }
+    }
+
+    /**
+     * The Class SerializableIntSupplierLambdaInfo.
+     *
+     * @author zhongj
+     */
+    public static class SerializableIntSupplierLambdaInfo extends InstanceLambdaInfo implements IntSupplier {
+
+        private int value;
+
+        private IntSupplier supplier;
+
+        private boolean init;
+
+        private SerializableIntSupplierLambdaInfo(SerializedLambdaInfo serializedLambdaInfo, IntSupplier supplier) {
+            super(serializedLambdaInfo, serializedLambdaInfo.getSerializedLambda().getCapturedArg(0));
+            this.supplier = supplier;
+        }
+
+        /**
+         * 返回value.
+         *
+         * @return value
+         */
+        public int getValue() {
+            if (!init) {
+                value = getAsInt();
+                init = true;
+            }
+            return value;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return this.getClass().getSimpleName() + " [value=" + getValue() + ", serializedLambdaInfo="
+                    + getSerializedLambdaInfo() + ", instance=" + getInstance() + "]";
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int getAsInt() {
+            return supplier.getAsInt();
+        }
+    }
+
+    /**
+     * The Class SerializableLongSupplierLambdaInfo.
+     *
+     * @author zhongj
+     */
+    public static class SerializableLongSupplierLambdaInfo extends InstanceLambdaInfo implements LongSupplier {
+        private long value;
+
+        private LongSupplier supplier;
+
+        private boolean init;
+
+        private SerializableLongSupplierLambdaInfo(SerializedLambdaInfo serializedLambdaInfo, LongSupplier supplier) {
+            super(serializedLambdaInfo, serializedLambdaInfo.getSerializedLambda().getCapturedArg(0));
+            this.supplier = supplier;
+        }
+
+        /**
+         * 返回value.
+         *
+         * @return value
+         */
+        public long getValue() {
+            if (!init) {
+                value = getAsLong();
+                init = true;
+            }
+            return value;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return this.getClass().getSimpleName() + " [value=" + getValue() + ", serializedLambdaInfo="
+                    + getSerializedLambdaInfo() + ", instance=" + getInstance() + "]";
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public long getAsLong() {
+            return supplier.getAsLong();
+        }
+    }
+
+    /**
+     * The Class SerializableDoubleSupplierLambdaInfo.
+     *
+     * @author zhongj
+     */
+    public static class SerializableDoubleSupplierLambdaInfo extends InstanceLambdaInfo implements DoubleSupplier {
+        private double value;
+
+        private DoubleSupplier supplier;
+
+        private boolean init;
+
+        private SerializableDoubleSupplierLambdaInfo(SerializedLambdaInfo serializedLambdaInfo,
+                DoubleSupplier supplier) {
+            super(serializedLambdaInfo, serializedLambdaInfo.getSerializedLambda().getCapturedArg(0));
+            this.supplier = supplier;
+        }
+
+        /**
+         * 返回value.
+         *
+         * @return value
+         */
+        public double getValue() {
+            if (!init) {
+                value = getAsDouble();
+                init = true;
+            }
+            return value;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String toString() {
+            return this.getClass().getSimpleName() + " [value=" + getValue() + ", serializedLambdaInfo="
+                    + getSerializedLambdaInfo() + ", instance=" + getInstance() + "]";
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public double getAsDouble() {
+            return supplier.getAsDouble();
         }
     }
 
@@ -383,6 +541,42 @@ public class LambdaUtils {
         SerializedLambdaInfo info = getLambdaInfo(lambda);
         //        Object value = BeanUtils.getProperty(info.getSerializedLambda().getCapturedArg(0), info.getPropertyName());
         return new SerializableSupplierLambdaInfo<>(info, lambda);
+    }
+
+    /**
+     * Gets the serializable int supplier lambda info.
+     *
+     * @param lambda the lambda
+     * @return the serializable supplier lambda info
+     */
+    public static SerializableIntSupplierLambdaInfo getSerializableIntSupplierLambdaInfo(
+            SerializableIntSupplier lambda) {
+        SerializedLambdaInfo info = getLambdaInfo(lambda);
+        return new SerializableIntSupplierLambdaInfo(info, lambda);
+    }
+
+    /**
+     * Gets the serializable long supplier lambda info.
+     *
+     * @param lambda the lambda
+     * @return the serializable supplier lambda info
+     */
+    public static SerializableLongSupplierLambdaInfo getSerializableLongSupplierLambdaInfo(
+            SerializableLongSupplier lambda) {
+        SerializedLambdaInfo info = getLambdaInfo(lambda);
+        return new SerializableLongSupplierLambdaInfo(info, lambda);
+    }
+
+    /**
+     * Gets the serializable double supplier lambda info.
+     *
+     * @param lambda the lambda
+     * @return the serializable supplier lambda info
+     */
+    public static SerializableDoubleSupplierLambdaInfo getSerializableDoubleSupplierLambdaInfo(
+            SerializableDoubleSupplier lambda) {
+        SerializedLambdaInfo info = getLambdaInfo(lambda);
+        return new SerializableDoubleSupplierLambdaInfo(info, lambda);
     }
 
     /**

@@ -9,6 +9,8 @@
 5. ClassUtils加入boolean isPrimitiveClass(String), Class<?> getPrimitiveClass(String)方法
 6. ClassUtils.forName支持primitiveClass，即ClassUtils.forName("int")会返回int.class
 7. ClassUtils加入Methods,Fileds,Types以及一些列获取泛型参数的方法（可以获取泛型的泛型，以树形结构组织）
+8. 加入BeanPropertySupplier、BeanPropertySupplierImpl
+9. LambdaUtils加入getSerializableIntSupplierLambdaInfo,getSerializableLongSupplierLambdaInfo,getSerializableDoubleSupplierLambdaInfo方法
 
 # 1.11.0 2022-12-12
 

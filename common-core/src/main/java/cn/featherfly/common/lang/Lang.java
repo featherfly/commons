@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -939,15 +940,24 @@ public final class Lang {
     }
 
     /**
-     * List.
+     * craete new list.
      *
      * @param <E>      the element type
      * @param elements the elements
      * @return the list
      */
     public static <E> List<E> list(@SuppressWarnings("unchecked") E... elements) {
-        List<E> list = new ArrayList<>();
-        CollectionUtils.addAll(list, elements);
-        return list;
+        return CollectionUtils.list(elements);
+    }
+
+    /**
+     * create new set.
+     *
+     * @param <E>      the element type
+     * @param elements the elements
+     * @return the list
+     */
+    public static <E> Set<E> set(@SuppressWarnings("unchecked") E... elements) {
+        return CollectionUtils.set(elements);
     }
 }

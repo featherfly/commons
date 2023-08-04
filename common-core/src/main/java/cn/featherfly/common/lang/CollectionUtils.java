@@ -5,12 +5,23 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentNavigableMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.BiConsumer;
+
+import cn.featherfly.common.structure.ChainMap;
+import cn.featherfly.common.structure.ChainMapImpl;
 
 /**
  * 集合类工具.
@@ -225,25 +236,21 @@ public final class CollectionUtils {
             C collection = null;
             if (type == Collection.class) {
                 collection = (C) new ArrayList<E>();
-            } else if (ClassUtils.isParent(type, ArrayList.class)) {
+            } else if (List.class == type) {
                 collection = (C) new ArrayList<E>();
-            } else if (ClassUtils.isParent(type, HashSet.class)) {
+            } else if (Set.class == type) {
                 collection = (C) new HashSet<E>();
-            } else if (ClassUtils.isParent(type, ArrayDeque.class)) {
+            } else if (Queue.class == type || Deque.class == type) {
                 collection = (C) new ArrayDeque<E>();
+            } else {
+                throw new IllegalArgumentException("不支持的类型：" + type.getName());
             }
-            if (collection != null) {
-                return collection;
-            }
-            throw new IllegalArgumentException("不支持的类型：" + type.getName());
+            return collection;
         }
     }
 
     /**
-     * <p>
-     * 根据传入的类型生成Map实例
-     * </p>
-     * .
+     * 根据传入的类型生成Map实例 .
      *
      * @param <K>  Map Key泛型
      * @param <V>  Map Value泛型
@@ -259,6 +266,14 @@ public final class CollectionUtils {
         } else {
             if (type == Map.class) {
                 return new HashMap<>();
+            } else if (type == ConcurrentMap.class) {
+                return new ConcurrentHashMap<>();
+            } else if (type == ConcurrentNavigableMap.class) {
+                return new ConcurrentSkipListMap<>();
+            } else if (type == SortedMap.class) {
+                return new TreeMap<>();
+            } else if (type == ChainMap.class) {
+                return new ChainMapImpl<>();
             }
             throw new IllegalArgumentException("不支持的类型：" + type.getName());
         }

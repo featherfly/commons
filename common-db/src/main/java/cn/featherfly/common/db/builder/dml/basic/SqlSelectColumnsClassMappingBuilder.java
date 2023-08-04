@@ -36,7 +36,19 @@ public class SqlSelectColumnsClassMappingBuilder
      * @param tableAlias   table name alias
      */
     public SqlSelectColumnsClassMappingBuilder(Dialect dialect, JdbcClassMapping<?> classMapping, String tableAlias) {
-        super(dialect, tableAlias);
+        this(dialect, classMapping, tableAlias, false);
+    }
+
+    /**
+     * Instantiates a new sql select columns basic builder.
+     *
+     * @param dialect      dialect
+     * @param classMapping classMapping
+     * @param tableAlias   table name alias
+     */
+    public SqlSelectColumnsClassMappingBuilder(Dialect dialect, JdbcClassMapping<?> classMapping, String tableAlias,
+            boolean aliasPrefix) {
+        super(dialect, tableAlias, aliasPrefix);
         AssertIllegalArgument.isNotNull(classMapping, "classMapping");
         this.classMapping = classMapping;
     }
@@ -48,7 +60,8 @@ public class SqlSelectColumnsClassMappingBuilder
     public String build() {
         StringBuilder columnsBuilder = new StringBuilder();
         if (columns.isEmpty()) {
-            columnsBuilder.append(ClassMappingUtils.getSelectColumnsSql(classMapping, tableAlias, dialect));
+            columnsBuilder.append(ClassMappingUtils.getSelectColumnsSql(classMapping, tableAlias,
+                    columnAliasPrefix ? tableAlias : null, dialect));
         } else {
             // addColumn的时候判断不判断String column是column还是property
             // 因为此类基本是内部使用，所以在使用时直接addColumn(propertyMapping.getFieldName(), propertyMapping.getName())

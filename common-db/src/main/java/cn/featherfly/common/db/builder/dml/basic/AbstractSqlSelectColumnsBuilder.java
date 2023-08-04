@@ -27,6 +27,9 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
     /** The dialect. */
     protected Dialect dialect;
 
+    /** The column alias prefix. */
+    protected boolean columnAliasPrefix;
+
     /**
      * Instantiates a new sql select columns basic builder.
      *
@@ -43,9 +46,21 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
      * @param tableAlias table name alias
      */
     public AbstractSqlSelectColumnsBuilder(Dialect dialect, String tableAlias) {
+        this(dialect, tableAlias, false);
+    }
+
+    /**
+     * Instantiates a new sql select columns basic builder.
+     *
+     * @param dialect           dialect
+     * @param tableAlias        table name alias
+     * @param columnAliasPrefix the column alias prefix
+     */
+    public AbstractSqlSelectColumnsBuilder(Dialect dialect, String tableAlias, boolean columnAliasPrefix) {
         AssertIllegalArgument.isNotNull(dialect, "dialect");
         this.dialect = dialect;
         this.tableAlias = tableAlias;
+        this.columnAliasPrefix = columnAliasPrefix;
     }
 
     /**
@@ -67,11 +82,7 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
     }
 
     /**
-     * add column.
-     *
-     * @param aggregateFunction aggregateFunction
-     * @param column            column
-     * @return this
+     * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -81,25 +92,18 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
     }
 
     /**
-     * add column.
-     *
-     * @param aggregateFunction aggregateFunction
-     * @param column            column
-     * @param alias             alias name
-     * @return this
+     * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
     @Override
     public B addColumn(AggregateFunction aggregateFunction, boolean distinct, String column, String alias) {
-        columns.add(new SelectColumnElement(dialect, aggregateFunction, distinct, tableAlias, column, alias));
+        columns.add(
+                new SelectColumnElement(dialect, aggregateFunction, distinct, tableAlias, column, columnAlias(alias)));
         return (B) this;
     }
 
     /**
-     * add column.
-     *
-     * @param column column
-     * @return this
+     * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -109,24 +113,17 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
     }
 
     /**
-     * add column.
-     *
-     * @param column column
-     * @param alias  column alias
-     * @return this
+     * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
     @Override
     public B addColumn(boolean distinct, String column, String alias) {
-        columns.add(new SelectColumnElement(dialect, distinct, tableAlias, column, alias));
+        columns.add(new SelectColumnElement(dialect, distinct, tableAlias, column, columnAlias(alias)));
         return (B) this;
     }
 
     /**
-     * addColumns.
-     *
-     * @param columns columns
-     * @return this
+     * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -138,10 +135,7 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
     }
 
     /**
-     * addColumns.
-     *
-     * @param columns columns
-     * @return this
+     * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -150,5 +144,25 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
             addColumn(c);
         }
         return (B) this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public B setColumnAliasPrefix(boolean columnAliasPrefix) {
+        this.columnAliasPrefix = columnAliasPrefix;
+        return (B) this;
+    }
+
+    /**
+     * Column alias.
+     *
+     * @param alias the alias
+     * @return the alias
+     */
+    protected String columnAlias(String alias) {
+        return columnAliasPrefix ? tableAlias + "." + alias : alias;
     }
 }

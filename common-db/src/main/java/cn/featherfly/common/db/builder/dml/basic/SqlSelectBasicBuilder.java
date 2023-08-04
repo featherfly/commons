@@ -55,6 +55,8 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     //    /** The mapping factory. */
     //    protected MappingFactory mappingFactory;
 
+    protected boolean columnAliasPrefix;
+
     /**
      * Instantiates a new sql select basic builder.
      *
@@ -459,7 +461,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     public SqlSelectJoinOnBasicBuilder join(Join join, JdbcClassMapping<?> joinClassMapping, String joinTableAlias,
             String joinTableColumnName) {
         return join(join, classMapping.getPrivaryKeyPropertyMappings().get(0).getRepositoryFieldName(),
-                joinTableColumnName, joinTableAlias, joinTableColumnName);
+                joinClassMapping, joinTableAlias, joinTableColumnName);
     }
 
     /**
@@ -474,7 +476,9 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      */
     public SqlSelectJoinOnBasicBuilder join(Join join, String conditionColumn, JdbcClassMapping<?> joinClassMapping,
             String joinTableAlias, String joinTableColumnName) {
-        return join(join, getDefaultTableAlias(), conditionColumn, joinTableColumnName, joinTableAlias,
+        //        return join(join, getDefaultTableAlias(), conditionColumn, joinTableColumnName, joinTableAlias,
+        //                joinTableColumnName);
+        return join(join, getDefaultTableAlias(), conditionColumn, joinClassMapping, joinTableAlias,
                 joinTableColumnName);
     }
 
@@ -500,7 +504,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
         //        SqlSelectColumnsBasicBuilder joinSelectColumnsBuilder = new SqlSelectColumnsBasicBuilder(dialect, classMapping,
         //                tableAlias, mappingFactory);
         SqlSelectColumnsClassMappingBuilder joinSelectColumnsBuilder = new SqlSelectColumnsClassMappingBuilder(dialect,
-                joinClassMapping, joinTableAlias);
+                joinClassMapping, joinTableAlias, true);
         return new SqlSelectJoinOnBasicBuilder(this, joinSelectColumnsBuilder);
         // return join(join, conditionTableAlias, conditionColumn, classMapping,
         // tableAlias, joinTableColumnName, null);
@@ -530,16 +534,24 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
         joinSelectColumnsBasicBuilders.add(joinSelectColumnsBuilder);
     }
 
+    /**
+     * Builds the.
+     *
+     * @param filter the filter
+     * @return the string
+     */
     public String build(BiPredicate<String, String> filter) {
         StringBuilder select = new StringBuilder();
         Keyworld keyworld = dialect.getKeywords();
         select.append(keyworld.select());
         for (SqlSelectColumnsBuilder<?> selectColumnsBuilder : selectColumnsBasicBuilders.values()) {
+            selectColumnsBuilder.setColumnAliasPrefix(columnAliasPrefix);
             select.append(Chars.SPACE_CHAR).append(selectColumnsBuilder.build()).append(Chars.COMMA_CHAR);
         }
         select.deleteCharAt(select.length() - 1);
 
         for (SqlSelectColumnsBuilder<?> joinColumnsBuilder : joinSelectColumnsBasicBuilders) {
+            joinColumnsBuilder.setColumnAliasPrefix(columnAliasPrefix);
             select.append(Chars.COMMA_CHAR).append(Chars.SPACE_CHAR).append(joinColumnsBuilder.build());
         }
         // if (columns.isEmpty()) {
@@ -610,5 +622,14 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      */
     public AliasManager getAliasManager() {
         return aliasManager;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SqlSelectBasicBuilder setColumnAliasPrefix(boolean columnAliasPrefix) {
+        this.columnAliasPrefix = columnAliasPrefix;
+        return this;
     }
 }

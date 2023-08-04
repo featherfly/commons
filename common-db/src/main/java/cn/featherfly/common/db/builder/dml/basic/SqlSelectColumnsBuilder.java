@@ -122,4 +122,12 @@ public interface SqlSelectColumnsBuilder<B extends SqlSelectColumnsBuilder<B>> e
      * @return this
      */
     B addColumns(Collection<String> columns);
+
+    /**
+     * Sets the column alias prefix.
+     *
+     * @param columnAliasPrefix the column alias prefix
+     * @return the this
+     */
+    B setColumnAliasPrefix(boolean columnAliasPrefix);
 }

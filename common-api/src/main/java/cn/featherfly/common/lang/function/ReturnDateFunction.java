@@ -8,9 +8,9 @@ import java.util.Date;
  * @author zhongj
  * @param <T> the generic type
  * @param <R> the generic type
+ * @deprecated use {@link SerializableToDateFunction} instead
  */
-//* @deprecated use {@link SerializableToDateFunction} instead
-//@Deprecated
+@Deprecated
 @FunctionalInterface
 public interface ReturnDateFunction<T, R extends Date> extends SerializableToDateFunction<T, R> {
 

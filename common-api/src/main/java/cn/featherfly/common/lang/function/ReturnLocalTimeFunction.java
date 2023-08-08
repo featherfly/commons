@@ -5,9 +5,9 @@ package cn.featherfly.common.lang.function;
  *
  * @author zhongj
  * @param <T> the generic type
+ * @deprecated use {@link SerializableToLocalTimeFunction} instead
  */
-//* @deprecated use {@link SerializableToLocalTimeFunction} instead
-//@Deprecated
+@Deprecated
 @FunctionalInterface
 public interface ReturnLocalTimeFunction<T> extends SerializableToLocalTimeFunction<T> {
 

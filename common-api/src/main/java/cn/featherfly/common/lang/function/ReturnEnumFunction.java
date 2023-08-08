@@ -6,9 +6,9 @@ package cn.featherfly.common.lang.function;
  * @author zhongj
  * @param <T> the generic type
  * @param <R> the generic type
+ * @deprecated use {@link SerializableToEnumFunction} instead
  */
-//* @deprecated use {@link SerializableToEnumFunction} instead
-//@Deprecated
+@Deprecated
 @FunctionalInterface
 public interface ReturnEnumFunction<T, R extends Enum<R>> extends SerializableToEnumFunction<T, R> {
 

@@ -6,9 +6,9 @@ package cn.featherfly.common.lang.function;
  * @author zhongj
  * @param <T> the generic type
  * @param <R> the generic type
+ * @deprecated use {@link SerializableToNumberFunction} instead
  */
-//* @deprecated use {@link SerializableToNumberFunction} instead
-//@Deprecated
+@Deprecated
 @FunctionalInterface
 public interface ReturnNumberFunction<T, R extends Number> extends SerializableToNumberFunction<T, R> {
 

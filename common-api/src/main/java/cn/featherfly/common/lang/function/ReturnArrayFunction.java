@@ -6,10 +6,10 @@ package cn.featherfly.common.lang.function;
  * @author zhongj
  * @param <T> the generic type
  * @param <E> the element type
+ * @deprecated {@link SerializableToArrayFunction}
  */
-//* @deprecated use {@link SerializableToArrayFunction} instead
-//@Deprecated
 @FunctionalInterface
+@Deprecated
 public interface ReturnArrayFunction<T, E> extends SerializableToArrayFunction<T, E> {
 
 }

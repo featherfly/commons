@@ -10,6 +10,7 @@ import java.util.Map;
  * @param <K> the key type
  * @param <V> the value type
  */
+@FunctionalInterface
 public interface SerializableMapSupplier<K, V> extends SerializableSupplier<Map<K, V>> {
 
 }

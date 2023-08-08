@@ -6,7 +6,10 @@ package cn.featherfly.common.lang.function;
  *
  * @author zhongj
  * @param <E> the element type
+ * @deprecated {@link SerializableListSupplier}
  */
+@FunctionalInterface
+@Deprecated
 public interface ListSupplier<E> extends SerializableListSupplier<E> {
 
 }

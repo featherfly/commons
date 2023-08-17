@@ -10,9 +10,7 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.operator.SortOperator;
 
 /**
- * <p>
- * sql sort builder
- * </p>
+ * sql order by basic builder
  *
  * @author zhongj
  */
@@ -134,7 +132,8 @@ public class SqlOrderByBasicBuilder implements SqlBuilder {
     public String build() {
         StringBuilder sb = new StringBuilder();
         if (orderParams.size() > 0) {
-            sb.append(Chars.SPACE).append(dialect.getKeywords().orderBy());
+            //            sb.append(Chars.SPACE).append(dialect.getKeywords().orderBy());
+            sb.append(dialect.getKeywords().orderBy());
         }
         for (Order orderParam : orderParams) {
             sb.append(orderParam).append(Chars.COMMA);

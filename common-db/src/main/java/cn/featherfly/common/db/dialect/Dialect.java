@@ -407,8 +407,8 @@ public interface Dialect {
         switch (keywordsCase()) {
             case LOWER_CASE:
                 return keywords.toString().toLowerCase();
-            //            case UPPER_CASE:
-            //                return keywords.toString().toUpperCase();
+            case UPPER_CASE:
+                return keywords.toString().toUpperCase();
             default:
                 return keywords.toString();
         }

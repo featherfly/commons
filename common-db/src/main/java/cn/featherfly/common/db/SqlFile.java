@@ -379,13 +379,13 @@ public class SqlFile {
         return sqlFile;
     }
 
-    public static void main(String[] args) {
-        System.out.println(CREATE_PROCEDURE_PATTERN
-                .matcher("create DEFINER=`root`@`localhost` PROCEDURE `call_query_user`").matches());
-        System.out.println(END_PATTERN.matcher("end").matches());
-        System.out.println(END_PATTERN.matcher("end    ").matches());
-        System.out.println(END_PATTERN.matcher("end\n\n").matches());
-    }
+    //    public static void main(String[] args) {
+    //        System.out.println(CREATE_PROCEDURE_PATTERN
+    //                .matcher("create DEFINER=`root`@`localhost` PROCEDURE `call_query_user`").matches());
+    //        System.out.println(END_PATTERN.matcher("end").matches());
+    //        System.out.println(END_PATTERN.matcher("end    ").matches());
+    //        System.out.println(END_PATTERN.matcher("end\n\n").matches());
+    //    }
 
     private static String readSql(String content, int start, AtomicInteger end) {
         StringBuilder sql = new StringBuilder();

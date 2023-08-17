@@ -1072,7 +1072,7 @@ public class ClassMappingUtils {
      * @param classMapping the class mapping
      * @return the simple column name
      */
-    private static String getSimpleColumnName(String name, JdbcClassMapping<?> classMapping) {
+    public static String getSimpleColumnName(String name, JdbcClassMapping<?> classMapping) {
         JdbcPropertyMapping pm = getSimpleMapping(name, classMapping);
         if (pm != null) {
             return pm.getRepositoryFieldName();

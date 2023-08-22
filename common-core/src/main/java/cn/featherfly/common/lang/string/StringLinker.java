@@ -91,7 +91,7 @@ public class StringLinker {
     }
 
     private String trimStartSeparator(String str) {
-        return Strings.trimStart(str, separator);
+        return Strings.trimBegin(str, separator);
     }
 
     private String trimEndSeparator(String str) {
@@ -99,6 +99,6 @@ public class StringLinker {
     }
 
     private String trimStartAndEndSeparator(String str) {
-        return Strings.trimStartEnd(str, separator);
+        return Strings.trimBeginEnd(str, separator);
     }
 }

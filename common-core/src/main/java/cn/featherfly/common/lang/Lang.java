@@ -13,6 +13,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.apache.commons.lang3.StringUtils;
+
 import cn.featherfly.common.exception.ExceptionWrapper;
 import cn.featherfly.common.exception.IOException;
 
@@ -638,12 +640,11 @@ public final class Lang {
     public static <T extends Enum<T>> T toEnum0(Class<T> toClass, Object object) {
         if (object != null) {
             if (object instanceof Enum) {
-                return Enum.valueOf(toClass, ((Enum<?>) object).name());
+                return toEnum(toClass, (Enum<?>) object);
             } else if (object instanceof String) {
                 return toEnum(toClass, (String) object);
             } else if (object instanceof Integer || object.getClass() == int.class) {
-                Integer ordinal = (Integer) object;
-                return toEnum(toClass, ordinal);
+                return toEnum(toClass, (Integer) object);
             } else if (object instanceof String[]) {
                 return toEnum(toClass, ((String[]) object)[0]);
             } else if (object instanceof Byte || object.getClass() == byte.class) {
@@ -657,31 +658,31 @@ public final class Lang {
         return null;
     }
 
-    /**
-     * To enum.
-     *
-     * @param <T>     the generic type
-     * @param toClass the to class
-     * @param value   the value
-     * @return the t
-     */
-    private static <T extends Enum<T>> T toEnum(Class<T> toClass, String value) {
-        try {
-            int ordinal = Integer.parseInt(value);
-            return toEnum(toClass, ordinal);
-        } catch (NumberFormatException e) {
-            return Enum.valueOf(toClass, value);
+    @SuppressWarnings("unchecked")
+    private static <T extends Enum<T>> T toEnum(Class<T> toClass, Enum<?> value) {
+        if (value.getClass() == toClass) {
+            return (T) value;
+        } else {
+            return Enum.valueOf(toClass, value.name());
         }
     }
 
-    /**
-     * To enum.
-     *
-     * @param <T>     the generic type
-     * @param toClass the to class
-     * @param ordinal the ordinal
-     * @return the t
-     */
+    private static <T extends Enum<T>> T toEnum(Class<T> toClass, String value) {
+        if (StringUtils.isNumeric(value)) {
+            int ordinal = Integer.parseInt(value);
+            return toEnum(toClass, ordinal);
+        } else {
+            return Enum.valueOf(toClass, value);
+        }
+        // 优化逻辑，try catch 性能不行
+        //        try {
+        //            int ordinal = Integer.parseInt(value);
+        //            return toEnum(toClass, ordinal);
+        //        } catch (NumberFormatException e) {
+        //            return Enum.valueOf(toClass, value);
+        //        }
+    }
+
     private static <T extends Enum<T>> T toEnum(Class<T> toClass, Integer ordinal) {
         T[] es = toClass.getEnumConstants();
         for (T e : es) {

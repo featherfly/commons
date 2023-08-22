@@ -12,7 +12,7 @@ import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.NumberUtils;
 import cn.featherfly.common.lang.Strings;
-import cn.featherfly.common.lang.function.NumberSupplier;
+import cn.featherfly.common.lang.function.SerializableNumberSupplier;
 import cn.featherfly.common.lang.function.SerializableSupplier;
 
 /**
@@ -221,7 +221,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      * {@inheritDoc}
      */
     @Override
-    public <N extends Number> void isInRange(NumberSupplier<N> value, N min, N max) {
+    public <N extends Number> void isInRange(SerializableNumberSupplier<N> value, N min, N max) {
         SerializableSupplierLambdaInfo<N> info = LambdaUtils.getSerializableSupplierLambdaInfo(value);
         isInRange(info.getValue(), min, max, createDescp(info.getSerializedLambdaInfo()));
     }
@@ -243,7 +243,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      * {@inheritDoc}
      */
     @Override
-    public <N extends Number> void isGt(NumberSupplier<N> value, N min) {
+    public <N extends Number> void isGt(SerializableNumberSupplier<N> value, N min) {
         SerializableSupplierLambdaInfo<N> info = LambdaUtils.getSerializableSupplierLambdaInfo(value);
         isGt(info.getValue(), min, createDescp(info.getSerializedLambdaInfo()));
     }
@@ -264,7 +264,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      * {@inheritDoc}
      */
     @Override
-    public <N extends Number> void isGe(NumberSupplier<N> value, N min) {
+    public <N extends Number> void isGe(SerializableNumberSupplier<N> value, N min) {
         SerializableSupplierLambdaInfo<N> info = LambdaUtils.getSerializableSupplierLambdaInfo(value);
         isGe(info.getValue(), min, createDescp(info.getSerializedLambdaInfo()));
     }
@@ -286,7 +286,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      * {@inheritDoc}
      */
     @Override
-    public <N extends Number> void isLt(NumberSupplier<N> value, N max) {
+    public <N extends Number> void isLt(SerializableNumberSupplier<N> value, N max) {
         SerializableSupplierLambdaInfo<N> info = LambdaUtils.getSerializableSupplierLambdaInfo(value);
         isLt(info.getValue(), max, createDescp(info.getSerializedLambdaInfo()));
     }
@@ -307,7 +307,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      * {@inheritDoc}
      */
     @Override
-    public <N extends Number> void isLe(NumberSupplier<N> value, N max) {
+    public <N extends Number> void isLe(SerializableNumberSupplier<N> value, N max) {
         SerializableSupplierLambdaInfo<N> info = LambdaUtils.getSerializableSupplierLambdaInfo(value);
         isLe(info.getValue(), max, createDescp(info.getSerializedLambdaInfo()));
     }

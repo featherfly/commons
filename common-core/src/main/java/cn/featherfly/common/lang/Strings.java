@@ -32,18 +32,12 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
-     * null的字符串表示<br>
-     * public static String NULL_STRING = "null"
-     * </p>
-     * .
+     * null的字符串表示.
      */
     public static final String NULL_STRING = "null";
 
     /**
-     * <p>
      * 如果第一个为有效的字符串(不是null，空串），则返回，否则返回第二个.
-     * </p>
      *
      * @param target        目标字符串
      * @param defaultTarget 默认字符串
@@ -54,9 +48,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
      * 如果第一个为有效的字符串(不是null，空串，全空白字符组成的字符串），则返回，否则返回第二个.
-     * </p>
      *
      * @param target        目标字符串
      * @param defaultTarget 默认字符串
@@ -67,10 +59,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
-     * 返回第一个有效的字符串（不是null,不是空字符串,不是由全空白字符组成的字符串）
-     * <p>
-     * .
+     * 返回第一个有效的字符串（不是null,不是空字符串,不是由全空白字符组成的字符串）.
      *
      * @param pickedItems 需要选择的字符串
      * @return 返回第一个有效的字符串
@@ -87,10 +76,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
-     * 返回最后一个有效字符串（不是null,不是空字符串,不是由全空白字符组成的字符串）
-     * </p>
-     * .
+     * 返回最后一个有效字符串（不是null,不是空字符串,不是由全空白字符组成的字符串） .
      *
      * @param pickedItems 需要选择的字符串
      * @return 返回最后一个有效字符串
@@ -148,9 +134,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
      * 判断传入字符串数组是否为null,0长度或者全部是空字符串（即""和null）. 只要有一个不是空字符串即返回真.
-     * </p>
      *
      * @param strs 需要判断的字符串数组
      * @return 传入是否是一个空字符串数组
@@ -165,9 +149,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
      * 判断传入字符串集合是否为null,0长度或者全部是空字符串（即""和null）. 只要有一个不是空字符串即返回真.
-     * </p>
      *
      * @param strs 需要判断的字符串集合
      * @return 传入是否是一个空字符串集合
@@ -182,10 +164,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
-     * 判断传入字符串是否是空字符串（即""和null）
-     * </p>
-     * .
+     * 判断传入字符串是否是空字符串（即""和null） .
      *
      * @param str 需要判断的字符串
      * @return 传入字符串是否是空字符串
@@ -195,10 +174,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
-     * 判断传入字符串是否不是空字符串（即""和null以外的）
-     * </p>
-     * .
+     * 判断传入字符串是否不是空字符串（即""和null以外的） .
      *
      * @param str 需要判断的字符串
      * @return 传入字符串是否不是空字符串
@@ -208,10 +184,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
-     * 判断传入字符串是否不是空白字符串（即包含空白字符以外的字符）
-     * </p>
-     * .
+     * 判断传入字符串是否不是空白字符串（即包含空白字符以外的字符） .
      *
      * @param str 需要判断的字符串
      * @return 传入字符串是否不是空白字符串
@@ -231,9 +204,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
-     * 去除字符串开始和结尾的空白字符. 如果传入的对象为null，直接返回，不会出现NullPointerException
-     * </p>
+     * 去除字符串开始和结尾的空白字符. 如果传入的对象为null，直接返回，不会出现NullPointerException.
      *
      * @param str 需要处理的字符串
      * @return 去除开始和结尾空白字符后的字符串
@@ -246,9 +217,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
      * 去除字符串开始和结尾的空白字符, 如果传入的对象为null，则返回defaultValue.
-     * </p>
      *
      * @param str          需要处理的字符串
      * @param defaultValue 默认值
@@ -262,14 +231,34 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
-     * 去除字符串开始的空白字符
-     * </p>
-     * .
+     * 去除字符串开始的空白字符 .
      *
      * @param str 需要处理的字符串
      * @return 去除开始空白字符后的字符串
      */
+    public static String trimBegin(String str) {
+        if (isBlank(str)) {
+            return "";
+        }
+        char[] c = str.toCharArray();
+        int offset = 0;
+        for (int i = 0; i < c.length; i++) {
+            if (!Character.isWhitespace(c[i])) {
+                offset = i;
+                break;
+            }
+        }
+        return new String(c, offset, c.length - offset);
+    }
+
+    /**
+     * 去除字符串开始的空白字符 .
+     *
+     * @param str 需要处理的字符串
+     * @return 去除开始空白字符后的字符串
+     * @deprecated {@link #trimBegin(String)}
+     */
+    @Deprecated
     public static String trimStart(String str) {
         if (isBlank(str)) {
             return "";
@@ -286,10 +275,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
-     * 去除字符串结尾的空白字符
-     * </p>
-     * .
+     * 去除字符串结尾的空白字符 .
      *
      * @param str 需要处理的字符串
      * @return 去除结尾空白字符的字符串
@@ -316,6 +302,25 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * @param ts  需要去除的字符
      * @return 去掉起始字符后的字符串
      */
+    public static String trimBegin(String str, String ts) {
+        if (str == null) {
+            return "";
+        }
+        while (str.startsWith(ts)) {
+            str = str.substring(ts.length(), str.length());
+        }
+        return str;
+    }
+
+    /**
+     * 去掉起始字符.
+     *
+     * @param str 源字符串
+     * @param ts  需要去除的字符
+     * @return 去掉起始字符后的字符串
+     * @deprecated {@link #trimBegin(String,String)}
+     */
+    @Deprecated
     public static String trimStart(String str, String ts) {
         if (str == null) {
             return "";
@@ -349,7 +354,9 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * @param str 源字符串
      * @param ts  需要去除的字符
      * @return 去掉首尾字符后的字符串
+     * @deprecated {@link #trimBeginEnd(String,String)}
      */
+    @Deprecated
     public static String trimStartEnd(String str, String ts) {
         str = trimStart(str, ts);
         str = trimEnd(str, ts);
@@ -361,7 +368,9 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      *
      * @param str 源字符串
      * @return 去掉首尾空格后的字符串
+     * @deprecated {@link #trimBeginEndBlank(String)}
      */
+    @Deprecated
     public static String trimStartEndBlank(String str) {
         if (str == null) {
             return "";
@@ -378,20 +387,20 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * @param str 源字符串
      * @param ts  需要去除的字符
      * @return 去掉首尾字符后的字符串
-     * @deprecated {@link #trimStartEnd(String, String)}
      */
-    @Deprecated
     public static String trimBeginEnd(String str, String ts) {
-        if (str == null) {
-            return "";
-        }
-        while (str.startsWith(ts)) {
-            str = str.substring(ts.length(), str.length());
-        }
-        while (str.endsWith(ts)) {
-            str = str.substring(0, str.length() - ts.length());
-        }
-        return str;
+        //        if (str == null) {
+        //            return "";
+        //        }
+        //        while (str.startsWith(ts)) {
+        //            str = str.substring(ts.length(), str.length());
+        //        }
+        //        while (str.endsWith(ts)) {
+        //            str = str.substring(0, str.length() - ts.length());
+        //        }
+        //        return str;
+        str = trimBegin(str, ts);
+        return trimEnd(str, ts);
     }
 
     /**
@@ -399,24 +408,26 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      *
      * @param str 源字符串
      * @return 去掉首尾空格后的字符串
-     * @deprecated {@link #trimStartEndBlank(String)}
      */
-    @Deprecated
     public static String trimBeginEndBlank(String str) {
+        //        if (str == null) {
+        //            return "";
+        //        }
+        //        str = str.trim();
+        //        str = trimBeginEnd(str, " ");
+        //        str = trimBeginEnd(str, "　");
+        //        return str;
         if (str == null) {
             return "";
         }
         str = str.trim();
-        str = trimBeginEnd(str, " ");
-        str = trimBeginEnd(str, "　");
+        str = trimBeginEnd(str, "　"); // 全角空格
         return str;
+
     }
 
     /**
-     * <p>
-     * 判断传入的字符串是否为整数（使用10进制判断）
-     * </p>
-     * .
+     * 判断传入的字符串是否为整数（使用10进制判断） .
      *
      * @param str 需要判断的字符串
      * @return 传入的字符串是否为整数
@@ -427,10 +438,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
-     * 判断传入的字符串是否为整数（使用指定进制判断）
-     * </p>
-     * .
+     * 判断传入的字符串是否为整数（使用指定进制判断） .
      *
      * @param str   需要判断的字符串
      * @param radio 使用的进制
@@ -447,10 +455,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
-     * 将传入字符串以大写形式返回
-     * </p>
-     * .
+     * 将传入字符串以大写形式返回 .
      *
      * @param str 需要转换的字符串
      * @return 传入字符串的大写形式
@@ -464,10 +469,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
-     * 将传入字符串以小写形式返回
-     * </p>
-     * .
+     * 将传入字符串以小写形式返回 .
      *
      * @param str 需要转换的字符串
      * @return 传入字符串的小写形式
@@ -680,9 +682,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
      * null安全的判断两个字符串是否相等，如果两个都为null,返回true.
-     * </p>
      *
      * @param str1 字符串1
      * @param str2 字符串2
@@ -699,9 +699,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
      * null安全的判断两个字符串是否相等，忽略大小写，如果两个都为null,返回true.
-     * </p>
      *
      * @param str1 字符串1
      * @param str2 字符串2
@@ -1340,10 +1338,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * <p>
-     * 为传入URI附加请求参数
-     * </p>
-     * .
+     * 为传入URI附加请求参数 .
      *
      * @param uri   uri
      * @param name  name

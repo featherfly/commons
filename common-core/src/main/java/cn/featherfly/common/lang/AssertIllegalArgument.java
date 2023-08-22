@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import cn.featherfly.common.lang.asserts.IllegalArgumentAssert;
-import cn.featherfly.common.lang.function.NumberSupplier;
+import cn.featherfly.common.lang.function.SerializableNumberSupplier;
 import cn.featherfly.common.lang.function.SerializableSupplier;
 
 /**
@@ -204,10 +204,10 @@ public final class AssertIllegalArgument {
      * @param value the value
      * @param min   the min
      * @param max   the max
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isInRange(cn.featherfly.common.lang.function.NumberSupplier,
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isInRange(cn.featherfly.common.lang.function.SerializableNumberSupplier,
      *      java.lang.Number, java.lang.Number)
      */
-    public static <N extends Number> void isInRange(NumberSupplier<N> value, N min, N max) {
+    public static <N extends Number> void isInRange(SerializableNumberSupplier<N> value, N min, N max) {
         ASSERT.isInRange(value, min, max);
     }
 
@@ -231,10 +231,10 @@ public final class AssertIllegalArgument {
      * @param <N>   the number type
      * @param value the value
      * @param min   the min
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGt(cn.featherfly.common.lang.function.NumberSupplier,
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGt(cn.featherfly.common.lang.function.SerializableNumberSupplier,
      *      java.lang.Number)
      */
-    public static <N extends Number> void isGt(NumberSupplier<N> value, N min) {
+    public static <N extends Number> void isGt(SerializableNumberSupplier<N> value, N min) {
         ASSERT.isGt(value, min);
     }
 
@@ -258,10 +258,10 @@ public final class AssertIllegalArgument {
      * @param <N>   the number type
      * @param value the value
      * @param min   the min
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGe(cn.featherfly.common.lang.function.NumberSupplier,
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGe(cn.featherfly.common.lang.function.SerializableNumberSupplier,
      *      java.lang.Number)
      */
-    public static <N extends Number> void isGe(NumberSupplier<N> value, N min) {
+    public static <N extends Number> void isGe(SerializableNumberSupplier<N> value, N min) {
         ASSERT.isGe(value, min);
     }
 
@@ -285,10 +285,10 @@ public final class AssertIllegalArgument {
      * @param <N>   the number type
      * @param value the value
      * @param max   the max
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLt(cn.featherfly.common.lang.function.NumberSupplier,
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLt(cn.featherfly.common.lang.function.SerializableNumberSupplier,
      *      java.lang.Number)
      */
-    public static <N extends Number> void isLt(NumberSupplier<N> value, N max) {
+    public static <N extends Number> void isLt(SerializableNumberSupplier<N> value, N max) {
         ASSERT.isLt(value, max);
     }
 
@@ -312,10 +312,10 @@ public final class AssertIllegalArgument {
      * @param <N>   the number type
      * @param value the value
      * @param max   the max
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLe(cn.featherfly.common.lang.function.NumberSupplier,
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLe(cn.featherfly.common.lang.function.SerializableNumberSupplier,
      *      java.lang.Number)
      */
-    public <N extends Number> void isLe(NumberSupplier<N> value, N max) {
+    public <N extends Number> void isLe(SerializableNumberSupplier<N> value, N max) {
         ASSERT.isLe(value, max);
     }
 

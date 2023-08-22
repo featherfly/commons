@@ -5,7 +5,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 
-import cn.featherfly.common.lang.function.NumberSupplier;
+import cn.featherfly.common.lang.function.SerializableNumberSupplier;
 import cn.featherfly.common.lang.function.SerializableSupplier;
 
 /**
@@ -205,7 +205,7 @@ public interface ILocalizedAssert<E extends RuntimeException> {
      * @param min   the min
      * @param max   the max
      */
-    <N extends Number> void isInRange(NumberSupplier<N> value, N min, N max);
+    <N extends Number> void isInRange(SerializableNumberSupplier<N> value, N min, N max);
 
     /**
      * if value is &lt;= min throw exception.
@@ -224,7 +224,7 @@ public interface ILocalizedAssert<E extends RuntimeException> {
      * @param value value
      * @param min   min
      */
-    <N extends Number> void isGt(NumberSupplier<N> value, N min);
+    <N extends Number> void isGt(SerializableNumberSupplier<N> value, N min);
 
     /**
      * if value is &lt; min throw exception.
@@ -243,7 +243,7 @@ public interface ILocalizedAssert<E extends RuntimeException> {
      * @param value value
      * @param min   min
      */
-    <N extends Number> void isGe(NumberSupplier<N> value, N min);
+    <N extends Number> void isGe(SerializableNumberSupplier<N> value, N min);
 
     /**
      * if value is &gt;= max, throw exception.
@@ -262,7 +262,7 @@ public interface ILocalizedAssert<E extends RuntimeException> {
      * @param value value
      * @param max   max
      */
-    <N extends Number> void isLt(NumberSupplier<N> value, N max);
+    <N extends Number> void isLt(SerializableNumberSupplier<N> value, N max);
 
     /**
      * if value is &gt; max, throw exception.
@@ -281,5 +281,5 @@ public interface ILocalizedAssert<E extends RuntimeException> {
      * @param value value
      * @param max   max
      */
-    <N extends Number> void isLe(NumberSupplier<N> value, N max);
+    <N extends Number> void isLe(SerializableNumberSupplier<N> value, N max);
 }

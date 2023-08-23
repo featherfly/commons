@@ -126,8 +126,23 @@ public interface SqlSelectColumnsBuilder<B extends SqlSelectColumnsBuilder<B>> e
     /**
      * Sets the column alias prefix.
      *
+     * @param columnAliasPrefixTableAlias the column alias prefix table alias
+     * @return the this
+     */
+    B setColumnAliasPrefixTableAlias(boolean columnAliasPrefixTableAlias);
+
+    /**
+     * Sets the column alias prefix.
+     *
      * @param columnAliasPrefix the column alias prefix
      * @return the this
      */
-    B setColumnAliasPrefix(boolean columnAliasPrefix);
+    B setColumnAliasPrefix(String columnAliasPrefix);
+
+    /**
+     * Gets the column alias prefix.
+     *
+     * @return the column alias prefix
+     */
+    String getColumnAliasPrefix();
 }

@@ -8,6 +8,42 @@ package cn.featherfly.common.db.dialect;
  */
 public interface Dialects {
 
+    /**
+     * Mysql.
+     *
+     * @return the dialect
+     */
+    static Dialect mysql() {
+        return new MySQLDialect();
+    }
+
+    /**
+     * Postgresql.
+     *
+     * @return the dialect
+     */
+    static Dialect postgresql() {
+        return new PostgreSQLDialect();
+    }
+
+    /**
+     * Oracle.
+     *
+     * @return the dialect
+     */
+    static Dialect oracle() {
+        return new OracleDialect();
+    }
+
+    /**
+     * Sqlite.
+     *
+     * @return the dialect
+     */
+    static Dialect sqlite() {
+        return new SQLiteDialect();
+    }
+
     /** The mysql. */
     Dialect MYSQL = new MySQLDialect();
 

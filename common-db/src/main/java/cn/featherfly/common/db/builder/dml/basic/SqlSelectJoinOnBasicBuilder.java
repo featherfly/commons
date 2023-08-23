@@ -127,6 +127,16 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
      * @return the sql select basic builder
      */
     public SqlSelectBasicBuilder fetch() {
+        return fetch(null);
+    }
+
+    /**
+     * Fetch.
+     *
+     * @return the sql select basic builder
+     */
+    public SqlSelectBasicBuilder fetch(String columnAliasPrefix) {
+        joinSelectColumnsBuilder.setColumnAliasPrefix(columnAliasPrefix);
         addJoinSelectColumnsBuilder();
         return endJoin();
     }
@@ -134,24 +144,17 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
     /**
      * Fetch.
      *
-     * @param fetchProperty      the fetch property
-     * @param fetchPropertyAlias the fetch property alias
+     * @param fetchColumn      the fetch column
+     * @param fetchColumnAlias the fetch column alias
      * @return the sql select basic builder
      */
-    public SqlSelectBasicBuilder fetch(String fetchProperty, String fetchPropertyAlias) {
+    public SqlSelectBasicBuilder fetch(String fetchColumn, String fetchColumnAlias) {
         if (!fetched) {
             //            selectBuilder.addSelectProperty(fetchProperty, fetchPropertyAlias);
-            selectBuilder.addColumn(fetchProperty, fetchPropertyAlias);
+            selectBuilder.addColumn(fetchColumn, fetchColumnAlias);
             fetched = true;
         }
         return endJoin();
-    }
-
-    private void addJoinSelectColumnsBuilder() {
-        if (!fetched) {
-            selectBuilder.addJoinSelectColumnsBasicBuilder(joinSelectColumnsBuilder);
-            fetched = true;
-        }
     }
 
     /**
@@ -162,4 +165,18 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
         return selectBuilder.build();
     }
 
+    private void addJoinSelectColumnsBuilder() {
+        if (!fetched) {
+            selectBuilder.addJoinSelectColumnsBasicBuilder(joinSelectColumnsBuilder);
+            fetched = true;
+        }
+    }
+
+    //    private void addJoinSelectColumnsBuilder(String columnAliasPrefix) {
+    //        if (!fetched) {
+    //            joinSelectColumnsBuilder.setColumnAliasPrefix(columnAliasPrefix);
+    //            selectBuilder.addJoinSelectColumnsBasicBuilder(joinSelectColumnsBuilder);
+    //            fetched = true;
+    //        }
+    //    }
 }

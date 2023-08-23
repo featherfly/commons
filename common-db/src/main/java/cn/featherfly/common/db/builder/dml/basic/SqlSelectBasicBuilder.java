@@ -55,7 +55,9 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     //    /** The mapping factory. */
     //    protected MappingFactory mappingFactory;
 
-    protected boolean columnAliasPrefix;
+    protected String columnAliasPrefix;
+
+    protected boolean columnAliasPrefixTableAlias;
 
     /**
      * Instantiates a new sql select basic builder.
@@ -504,7 +506,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
         //        SqlSelectColumnsBasicBuilder joinSelectColumnsBuilder = new SqlSelectColumnsBasicBuilder(dialect, classMapping,
         //                tableAlias, mappingFactory);
         SqlSelectColumnsClassMappingBuilder joinSelectColumnsBuilder = new SqlSelectColumnsClassMappingBuilder(dialect,
-                joinClassMapping, joinTableAlias, true);
+                joinClassMapping, joinTableAlias, columnAliasPrefix);
         return new SqlSelectJoinOnBasicBuilder(this, joinSelectColumnsBuilder);
         // return join(join, conditionTableAlias, conditionColumn, classMapping,
         // tableAlias, joinTableColumnName, null);
@@ -545,13 +547,13 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
         Keyworld keyworld = dialect.getKeywords();
         select.append(keyworld.select());
         for (SqlSelectColumnsBuilder<?> selectColumnsBuilder : selectColumnsBasicBuilders.values()) {
-            selectColumnsBuilder.setColumnAliasPrefix(columnAliasPrefix);
+            selectColumnsBuilder.setColumnAliasPrefixTableAlias(columnAliasPrefixTableAlias);
             select.append(Chars.SPACE_CHAR).append(selectColumnsBuilder.build()).append(Chars.COMMA_CHAR);
         }
         select.deleteCharAt(select.length() - 1);
 
         for (SqlSelectColumnsBuilder<?> joinColumnsBuilder : joinSelectColumnsBasicBuilders) {
-            joinColumnsBuilder.setColumnAliasPrefix(columnAliasPrefix);
+            joinColumnsBuilder.setColumnAliasPrefixTableAlias(columnAliasPrefixTableAlias);
             select.append(Chars.COMMA_CHAR).append(Chars.SPACE_CHAR).append(joinColumnsBuilder.build());
         }
         // if (columns.isEmpty()) {
@@ -628,8 +630,25 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      * {@inheritDoc}
      */
     @Override
-    public SqlSelectBasicBuilder setColumnAliasPrefix(boolean columnAliasPrefix) {
+    public SqlSelectBasicBuilder setColumnAliasPrefix(String columnAliasPrefix) {
         this.columnAliasPrefix = columnAliasPrefix;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getColumnAliasPrefix() {
+        return columnAliasPrefix;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SqlSelectBasicBuilder setColumnAliasPrefixTableAlias(boolean columnAliasPrefixTableAlias) {
+        this.columnAliasPrefixTableAlias = columnAliasPrefixTableAlias;
         return this;
     }
 }

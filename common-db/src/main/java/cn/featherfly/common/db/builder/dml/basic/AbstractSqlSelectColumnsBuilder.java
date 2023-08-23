@@ -7,6 +7,7 @@ import java.util.List;
 import cn.featherfly.common.db.builder.model.SelectColumnElement;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.AssertIllegalArgument;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.operator.AggregateFunction;
 
 /**
@@ -28,7 +29,9 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
     protected Dialect dialect;
 
     /** The column alias prefix. */
-    protected boolean columnAliasPrefix;
+    protected String columnAliasPrefix;
+
+    protected boolean columnAliasPrefixTableAlias;
 
     /**
      * Instantiates a new sql select columns basic builder.
@@ -46,7 +49,7 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
      * @param tableAlias table name alias
      */
     public AbstractSqlSelectColumnsBuilder(Dialect dialect, String tableAlias) {
-        this(dialect, tableAlias, false);
+        this(dialect, tableAlias, null);
     }
 
     /**
@@ -56,7 +59,7 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
      * @param tableAlias        table name alias
      * @param columnAliasPrefix the column alias prefix
      */
-    public AbstractSqlSelectColumnsBuilder(Dialect dialect, String tableAlias, boolean columnAliasPrefix) {
+    public AbstractSqlSelectColumnsBuilder(Dialect dialect, String tableAlias, String columnAliasPrefix) {
         AssertIllegalArgument.isNotNull(dialect, "dialect");
         this.dialect = dialect;
         this.tableAlias = tableAlias;
@@ -151,8 +154,26 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
      */
     @SuppressWarnings("unchecked")
     @Override
-    public B setColumnAliasPrefix(boolean columnAliasPrefix) {
+    public B setColumnAliasPrefix(String columnAliasPrefix) {
         this.columnAliasPrefix = columnAliasPrefix;
+        return (B) this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getColumnAliasPrefix() {
+        return columnAliasPrefix;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public B setColumnAliasPrefixTableAlias(boolean columnAliasPrefixTableAlias) {
+        this.columnAliasPrefixTableAlias = columnAliasPrefixTableAlias;
         return (B) this;
     }
 
@@ -163,6 +184,6 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
      * @return the alias
      */
     protected String columnAlias(String alias) {
-        return columnAliasPrefix ? tableAlias + "." + alias : alias;
+        return Lang.isNotEmpty(columnAliasPrefix) ? columnAliasPrefix + "." + alias : alias;
     }
 }

@@ -40,9 +40,9 @@ public class JdbcTestBase {
         initDataBase(dataBase);
         sqlExecutor = new SqlExecutor(dataSource);
         // 初始化数据库
-        //        SqlExecutor sqlExecutor = new SqlExecutor(dataSource);
-        //        sqlExecutor.execute(
-        //                new File(ClassLoaderUtils.getResource("test." + dataBase + ".sql", JdbcTestBase.class).getFile()));
+        SqlExecutor sqlExecutor = new SqlExecutor(dataSource);
+        sqlExecutor.execute(
+                new File(ClassLoaderUtils.getResource("tpl_test." + dataBase + ".sql", JdbcTestBase.class).getFile()));
     }
 
     public void initDataBase(String dataBase) throws IOException {
@@ -64,7 +64,6 @@ public class JdbcTestBase {
 
     @BeforeGroups(groups = "mysql")
     public void initMysql() throws IOException {
-        DOMConfigurator.configure(ClassLoaderUtils.getResource("log4j.xml").getFile());
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl(
                 "jdbc:mysql://127.0.0.1:3306/db_test?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false");

@@ -6,6 +6,7 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.mapping.ClassMappingUtils;
 import cn.featherfly.common.db.mapping.JdbcClassMapping;
 import cn.featherfly.common.lang.AssertIllegalArgument;
+import cn.featherfly.common.lang.Lang;
 
 /**
  * sql select basic builder. columns with given table.
@@ -36,7 +37,7 @@ public class SqlSelectColumnsClassMappingBuilder
      * @param tableAlias   table name alias
      */
     public SqlSelectColumnsClassMappingBuilder(Dialect dialect, JdbcClassMapping<?> classMapping, String tableAlias) {
-        this(dialect, classMapping, tableAlias, false);
+        this(dialect, classMapping, tableAlias, null);
     }
 
     /**
@@ -47,7 +48,7 @@ public class SqlSelectColumnsClassMappingBuilder
      * @param tableAlias   table name alias
      */
     public SqlSelectColumnsClassMappingBuilder(Dialect dialect, JdbcClassMapping<?> classMapping, String tableAlias,
-            boolean aliasPrefix) {
+            String aliasPrefix) {
         super(dialect, tableAlias, aliasPrefix);
         AssertIllegalArgument.isNotNull(classMapping, "classMapping");
         this.classMapping = classMapping;
@@ -60,8 +61,15 @@ public class SqlSelectColumnsClassMappingBuilder
     public String build() {
         StringBuilder columnsBuilder = new StringBuilder();
         if (columns.isEmpty()) {
-            columnsBuilder.append(ClassMappingUtils.getSelectColumnsSql(classMapping, tableAlias,
-                    columnAliasPrefix ? tableAlias : null, dialect));
+            StringBuilder prefix = new StringBuilder(columnAliasPrefixTableAlias ? tableAlias : "");
+            if (Lang.isNotEmpty(columnAliasPrefix)) {
+                if (columnAliasPrefixTableAlias) {
+                    prefix.append(Chars.DOT_CHAR);
+                }
+                prefix.append(columnAliasPrefix);
+            }
+            columnsBuilder.append(
+                    ClassMappingUtils.getSelectColumnsSql(classMapping, tableAlias, prefix.toString(), dialect));
         } else {
             // addColumn的时候判断不判断String column是column还是property
             // 因为此类基本是内部使用，所以在使用时直接addColumn(propertyMapping.getFieldName(), propertyMapping.getName())

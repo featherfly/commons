@@ -8,6 +8,8 @@
  */
 package cn.featherfly.common.lang;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Timer.
  *
@@ -17,23 +19,48 @@ public class Timer {
 
     private long startTime = -1;
 
-    private Timer(long startTime) {
+    private TimeUnit unit;
+
+    private Timer(long startTime, TimeUnit unit) {
         this.startTime = startTime;
+        this.unit = unit;
     }
 
     public static Timer start() {
-        return start(System.currentTimeMillis());
+        return start(TimeUnit.MILLISECONDS);
     }
 
-    public static Timer start(long startTime) {
-        return new Timer(startTime);
+    public static Timer start(TimeUnit timeUnit) {
+        switch (timeUnit) {
+            case MILLISECONDS:
+                return start(System.currentTimeMillis(), timeUnit);
+            case MICROSECONDS:
+                return start(TimeUnit.NANOSECONDS.toMicros(System.nanoTime()), timeUnit);
+            case NANOSECONDS:
+                return start(System.nanoTime(), timeUnit);
+            default:
+                throw new IllegalArgumentException("only support MILLISECONDS, MICROSECONDS, NANOSECONDS");
+        }
+    }
+
+    private static Timer start(long startTime, TimeUnit unit) {
+        return new Timer(startTime, unit);
     }
 
     public long stop() {
-        return stop(System.currentTimeMillis());
+        switch (unit) {
+            case MILLISECONDS:
+                return stop(System.currentTimeMillis());
+            case MICROSECONDS:
+                return stop(TimeUnit.NANOSECONDS.toMicros(System.nanoTime()));
+            case NANOSECONDS:
+                return stop(System.nanoTime());
+            default:
+                throw new IllegalArgumentException("only support MILLISECONDS, MICROSECONDS, NANOSECONDS");
+        }
     }
 
-    public long stop(long stopTime) {
+    private long stop(long stopTime) {
         return stopTime - startTime;
     }
 }

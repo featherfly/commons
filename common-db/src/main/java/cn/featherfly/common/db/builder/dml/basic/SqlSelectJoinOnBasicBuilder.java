@@ -8,10 +8,7 @@ import cn.featherfly.common.db.builder.SqlBuilder;
 import cn.featherfly.common.operator.AggregateFunction;
 
 /**
- * <p>
- * SqlSelectJoinOnBasicBuilder
- * </p>
- * .
+ * SqlSelectJoinOnBasicBuilder .
  *
  * @author zhongj
  */
@@ -135,7 +132,11 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
     /**
      * Fetch.
      *
-     * @param columnAliasPrefix the column alias prefix
+     * @param columnAliasProcessor the column alias processor .
+     *                             <p>
+     *                             arguments see
+     *                             {@link SqlSelectColumnsBuilder#setColumnAliasPrefixProcessor(BiFunction)}
+     *                             </p>
      * @return the sql select basic builder
      */
     public SqlSelectBasicBuilder fetch(BiFunction<String, Boolean, String> columnAliasProcessor) {

@@ -2,14 +2,11 @@
 package cn.featherfly.common.operator;
 
 /**
- * <p>
- * query condition operator
- * </p>
- * .
+ * comparison operators.
  *
  * @author zhongj
  */
-public enum QueryOperator implements Operator {
+public enum ComparisonOperator implements Operator {
 
     /** 小于. */
     LT,
@@ -52,45 +49,18 @@ public enum QueryOperator implements Operator {
 
     /** like. */
     LK
-
-    // /**
-    // * 按位与 ： &
-    // */
-    // ba("&"),
-    // /**
-    // * 按位或：|
-    // */
-    // bo("|"),
-    // /**
-    // * 按位异或:^
-    // */
-    // bx("^"),
-    // /**
-    // * 按位取反:~
-    // */
-    // bn("~"),
-    // /**
-    // * 按位左移:<<
-    // */
-    // bl("<<"),
-    // /**
-    // * 按位右移：>>
-    // */
-    /**
-     * Instantiates a new query operator.
-     */
-    // br(">>")
+    //
     ;
 
-    QueryOperator() {
+    ComparisonOperator() {
     }
 
     /**
-     * The Enum LikeQueryPolicy.
+     * The Enum like query match strategy.
      *
      * @author zhongj
      */
-    public enum QueryPolicy {
+    public enum MatchStrategy {
 
         /** 自动，由具体的存储（数据库）的默认值决定. */
         AUTO,

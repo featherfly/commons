@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
@@ -14,6 +15,7 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.Dialect.Keyworld;
 import cn.featherfly.common.db.dialect.Join;
 import cn.featherfly.common.db.mapping.JdbcClassMapping;
+import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.operator.AggregateFunction;
@@ -55,9 +57,11 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     //    /** The mapping factory. */
     //    protected MappingFactory mappingFactory;
 
-    protected String columnAliasPrefix;
+    //    protected String columnAliasPrefix;
 
     protected boolean columnAliasPrefixTableAlias;
+
+    //    private BiFunction<String, Boolean, String> columnAliasPrefixProcessor;
 
     /**
      * Instantiates a new sql select basic builder.
@@ -506,7 +510,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
         //        SqlSelectColumnsBasicBuilder joinSelectColumnsBuilder = new SqlSelectColumnsBasicBuilder(dialect, classMapping,
         //                tableAlias, mappingFactory);
         SqlSelectColumnsClassMappingBuilder joinSelectColumnsBuilder = new SqlSelectColumnsClassMappingBuilder(dialect,
-                joinClassMapping, joinTableAlias, columnAliasPrefix);
+                joinClassMapping, joinTableAlias);
         return new SqlSelectJoinOnBasicBuilder(this, joinSelectColumnsBuilder);
         // return join(join, conditionTableAlias, conditionColumn, classMapping,
         // tableAlias, joinTableColumnName, null);
@@ -626,22 +630,22 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
         return aliasManager;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public SqlSelectBasicBuilder setColumnAliasPrefix(String columnAliasPrefix) {
-        this.columnAliasPrefix = columnAliasPrefix;
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getColumnAliasPrefix() {
-        return columnAliasPrefix;
-    }
+    //    /**
+    //     * {@inheritDoc}
+    //     */
+    //    @Override
+    //    public SqlSelectBasicBuilder setColumnAliasPrefix(String columnAliasPrefix) {
+    //        this.columnAliasPrefix = columnAliasPrefix;
+    //        return this;
+    //    }
+    //
+    //    /**
+    //     * {@inheritDoc}
+    //     */
+    //    @Override
+    //    public String getColumnAliasPrefix() {
+    //        return columnAliasPrefix;
+    //    }
 
     /**
      * {@inheritDoc}
@@ -650,5 +654,11 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     public SqlSelectBasicBuilder setColumnAliasPrefixTableAlias(boolean columnAliasPrefixTableAlias) {
         this.columnAliasPrefixTableAlias = columnAliasPrefixTableAlias;
         return this;
+    }
+
+    @Override
+    public void setColumnAliasPrefixProcessor(BiFunction<String, Boolean, String> columnAliasPrefixProcessor) {
+        //        this.columnAliasPrefixProcessor = columnAliasPrefixProcessor;
+        throw new UnsupportedException();
     }
 }

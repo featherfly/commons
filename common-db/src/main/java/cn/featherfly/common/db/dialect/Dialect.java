@@ -12,9 +12,9 @@ import cn.featherfly.common.db.builder.model.TableElement;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.operator.AggregateFunction;
+import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
 import cn.featherfly.common.operator.Function;
 import cn.featherfly.common.operator.LogicOperator;
-import cn.featherfly.common.operator.QueryOperator.QueryPolicy;
 import cn.featherfly.common.operator.SortOperator;
 
 /**
@@ -417,26 +417,26 @@ public interface Dialect {
     /**
      * Gets the keyword like.
      *
-     * @param queryPolicy the like query policy
+     * @param matchStrategy the like query policy
      * @return the keyword like
      */
-    String getKeywordLike(QueryPolicy queryPolicy);
+    String getKeywordLike(MatchStrategy matchStrategy);
 
     /**
      * Gets the keyword eq.
      *
-     * @param queryPolicy the query policy
+     * @param matchStrategy the query policy
      * @return the keyword eq
      */
-    String getKeywordEq(QueryPolicy queryPolicy);
+    String getKeywordEq(MatchStrategy matchStrategy);
 
     /**
      * Gets the keyword ne.
      *
-     * @param queryPolicy the query policy
+     * @param matchStrategy the query policy
      * @return the keyword eq
      */
-    String getKeywordNe(QueryPolicy queryPolicy);
+    String getKeywordNe(MatchStrategy matchStrategy);
 
     /**
      * get converted aggregate function.
@@ -1546,17 +1546,17 @@ public interface Dialect {
          * @return the string
          */
         public String like() {
-            return like(QueryPolicy.AUTO);
+            return like(MatchStrategy.AUTO);
         }
 
         /**
          * Like.
          *
-         * @param queryPolicy the like query policy
+         * @param matchStrategy the like query policy
          * @return the string
          */
-        public String like(QueryPolicy queryPolicy) {
-            return dialect.getKeywordLike(queryPolicy);
+        public String like(MatchStrategy matchStrategy) {
+            return dialect.getKeywordLike(matchStrategy);
         }
 
         /**
@@ -1565,17 +1565,17 @@ public interface Dialect {
          * @return the string
          */
         public String eq() {
-            return eq(QueryPolicy.AUTO);
+            return eq(MatchStrategy.AUTO);
         }
 
         /**
          * equals.
          *
-         * @param queryPolicy the query policy
+         * @param matchStrategy the query policy
          * @return the string
          */
-        public String eq(QueryPolicy queryPolicy) {
-            return dialect.getKeywordEq(queryPolicy);
+        public String eq(MatchStrategy matchStrategy) {
+            return dialect.getKeywordEq(matchStrategy);
         }
 
         /**
@@ -1584,17 +1584,17 @@ public interface Dialect {
          * @return the string
          */
         public String ne() {
-            return ne(QueryPolicy.AUTO);
+            return ne(MatchStrategy.AUTO);
         }
 
         /**
          * not equals.
          *
-         * @param queryPolicy the query policy
+         * @param matchStrategy the query policy
          * @return the string
          */
-        public String ne(QueryPolicy queryPolicy) {
-            return dialect.getKeywordNe(queryPolicy);
+        public String ne(MatchStrategy matchStrategy) {
+            return dialect.getKeywordNe(matchStrategy);
         }
 
         /**

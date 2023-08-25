@@ -11,6 +11,7 @@
 package cn.featherfly.common.db.builder.dml.basic;
 
 import java.util.Collection;
+import java.util.function.BiFunction;
 
 import cn.featherfly.common.db.builder.SqlBuilder;
 import cn.featherfly.common.operator.AggregateFunction;
@@ -131,18 +132,30 @@ public interface SqlSelectColumnsBuilder<B extends SqlSelectColumnsBuilder<B>> e
      */
     B setColumnAliasPrefixTableAlias(boolean columnAliasPrefixTableAlias);
 
-    /**
-     * Sets the column alias prefix.
-     *
-     * @param columnAliasPrefix the column alias prefix
-     * @return the this
-     */
-    B setColumnAliasPrefix(String columnAliasPrefix);
+    //    /**
+    //     * Sets the column alias prefix.
+    //     *
+    //     * @param columnAliasPrefix the column alias prefix
+    //     * @return the this
+    //     */
+    //    B setColumnAliasPrefix(String columnAliasPrefix);
+    //
+    //    /**
+    //     * Gets the column alias prefix.
+    //     *
+    //     * @return the column alias prefix
+    //     */
+    //    String getColumnAliasPrefix();
 
     /**
-     * Gets the column alias prefix.
+     * Sets the column alias creator.
      *
-     * @return the column alias prefix
+     * @param columnAliasCreator the column alias prefix processor
+     *                           <ul>
+     *                           <li>argu1 columnAliasPrefix
+     *                           <li>argu2 is columnAliasPrefixTableAlias
+     *                           <li>argu3 new columnAliasPrefix
+     *                           </ul>
      */
-    String getColumnAliasPrefix();
+    void setColumnAliasPrefixProcessor(BiFunction<String, Boolean, String> columnAliasPrefixProcessor);
 }

@@ -21,9 +21,10 @@ public class UpdateColumnElement extends ParamedColumnElement {
     /**
      * Instantiates a new update column element.
      *
-     * @param dialect dialect
-     * @param name    name
-     * @param param   param
+     * @param dialect        the dialect
+     * @param name           the name
+     * @param param          the param
+     * @param ignoreStrategy the ignore strategy
      */
     public UpdateColumnElement(Dialect dialect, String name, Object param, Predicate<?> ignoreStrategy) {
         this(dialect, name, param, null, ignoreStrategy);

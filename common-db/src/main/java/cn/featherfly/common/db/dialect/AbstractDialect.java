@@ -18,7 +18,7 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.repository.Index;
-import cn.featherfly.common.operator.QueryOperator.QueryPolicy;
+import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
 
 /**
  * <p>
@@ -414,11 +414,11 @@ public abstract class AbstractDialect implements Dialect {
      * {@inheritDoc}
      */
     @Override
-    public String getKeywordLike(QueryPolicy queryPolicy) {
-        if (queryPolicy == null) {
-            queryPolicy = QueryPolicy.AUTO;
+    public String getKeywordLike(MatchStrategy matchStrategy) {
+        if (matchStrategy == null) {
+            matchStrategy = MatchStrategy.AUTO;
         }
-        switch (queryPolicy) {
+        switch (matchStrategy) {
             case CASE_INSENSITIVE:
                 return getKeywordLikeCaseInsensitive();
             case CASE_SENSITIVE:
@@ -446,11 +446,11 @@ public abstract class AbstractDialect implements Dialect {
      * {@inheritDoc}
      */
     @Override
-    public String getKeywordEq(QueryPolicy queryPolicy) {
-        if (queryPolicy == null) {
-            queryPolicy = QueryPolicy.AUTO;
+    public String getKeywordEq(MatchStrategy matchStrategy) {
+        if (matchStrategy == null) {
+            matchStrategy = MatchStrategy.AUTO;
         }
-        switch (queryPolicy) {
+        switch (matchStrategy) {
             case CASE_INSENSITIVE:
                 return getKeywordEqCaseInsensitive();
             case CASE_SENSITIVE:
@@ -478,11 +478,11 @@ public abstract class AbstractDialect implements Dialect {
      * {@inheritDoc}
      */
     @Override
-    public String getKeywordNe(QueryPolicy queryPolicy) {
-        if (queryPolicy == null) {
-            queryPolicy = QueryPolicy.AUTO;
+    public String getKeywordNe(MatchStrategy matchStrategy) {
+        if (matchStrategy == null) {
+            matchStrategy = MatchStrategy.AUTO;
         }
-        switch (queryPolicy) {
+        switch (matchStrategy) {
             case CASE_INSENSITIVE:
                 return getKeywordNeCaseInsensitive();
             case CASE_SENSITIVE:

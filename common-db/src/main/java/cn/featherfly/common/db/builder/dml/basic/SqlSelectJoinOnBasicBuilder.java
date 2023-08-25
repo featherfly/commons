@@ -2,6 +2,7 @@
 package cn.featherfly.common.db.builder.dml.basic;
 
 import java.util.Collection;
+import java.util.function.BiFunction;
 
 import cn.featherfly.common.db.builder.SqlBuilder;
 import cn.featherfly.common.operator.AggregateFunction;
@@ -127,19 +128,33 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
      * @return the sql select basic builder
      */
     public SqlSelectBasicBuilder fetch() {
-        return fetch(null);
+        addJoinSelectColumnsBuilder();
+        return endJoin();
     }
 
     /**
      * Fetch.
      *
+     * @param columnAliasPrefix the column alias prefix
      * @return the sql select basic builder
      */
-    public SqlSelectBasicBuilder fetch(String columnAliasPrefix) {
-        joinSelectColumnsBuilder.setColumnAliasPrefix(columnAliasPrefix);
+    public SqlSelectBasicBuilder fetch(BiFunction<String, Boolean, String> columnAliasProcessor) {
+        joinSelectColumnsBuilder.setColumnAliasPrefixProcessor(columnAliasProcessor);
         addJoinSelectColumnsBuilder();
         return endJoin();
     }
+
+    //    /**
+    //     * Fetch.
+    //     *
+    //     * @param columnAliasPrefix the column alias prefix
+    //     * @return the sql select basic builder
+    //     */
+    //    public SqlSelectBasicBuilder fetch(String columnAliasPrefix) {
+    //        joinSelectColumnsBuilder.setColumnAliasPrefix(columnAliasPrefix);
+    //        addJoinSelectColumnsBuilder();
+    //        return endJoin();
+    //    }
 
     /**
      * Fetch.

@@ -20,8 +20,8 @@ import cn.featherfly.common.db.FieldValueOperator;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.operator.QueryOperator;
-import cn.featherfly.common.operator.QueryOperator.QueryPolicy;
+import cn.featherfly.common.operator.ComparisonOperator;
+import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
 import cn.featherfly.common.repository.Params;
 
 /**
@@ -31,61 +31,62 @@ import cn.featherfly.common.repository.Params;
  */
 public class ConditionColumnElement extends ParamedColumnElement {
 
-    private QueryOperator queryOperator;
+    private ComparisonOperator comparisonOperator;
 
-    private QueryPolicy queryPolicy;
+    private MatchStrategy matchStrategy;
 
     /**
      * Instantiates a new condition column element.
      *
-     * @param dialect        dialect
-     * @param name           name
-     * @param value          param value
-     * @param queryOperator  queryOperator
-     * @param ignoreStrategy the ignore strategy
+     * @param dialect            dialect
+     * @param name               name
+     * @param value              param value
+     * @param comparisonOperator comparisonOperator
+     * @param ignoreStrategy     the ignore strategy
      */
-    public ConditionColumnElement(Dialect dialect, String name, Object value, QueryOperator queryOperator,
+    public ConditionColumnElement(Dialect dialect, String name, Object value, ComparisonOperator comparisonOperator,
             Predicate<?> ignoreStrategy) {
-        this(dialect, name, value, queryOperator, null, ignoreStrategy);
+        this(dialect, name, value, comparisonOperator, null, ignoreStrategy);
     }
 
     /**
      * Instantiates a new condition column element.
      *
-     * @param dialect        dialect
-     * @param name           name
-     * @param value          param value
-     * @param queryOperator  queryOperator
-     * @param tableAlias     tableAlias
-     * @param ignoreStrategy the ignore strategy
+     * @param dialect            dialect
+     * @param name               name
+     * @param value              param value
+     * @param comparisonOperator comparisonOperator
+     * @param tableAlias         tableAlias
+     * @param ignoreStrategy     the ignore strategy
      */
-    public ConditionColumnElement(Dialect dialect, String name, Object value, QueryOperator queryOperator,
+    public ConditionColumnElement(Dialect dialect, String name, Object value, ComparisonOperator comparisonOperator,
             String tableAlias, Predicate<?> ignoreStrategy) {
-        this(dialect, name, value, queryOperator, QueryPolicy.AUTO, tableAlias, ignoreStrategy);
+        this(dialect, name, value, comparisonOperator, MatchStrategy.AUTO, tableAlias, ignoreStrategy);
     }
 
     /**
      * Instantiates a new condition column element.
      *
-     * @param dialect       dialect
-     * @param name          name
-     * @param value         param value
-     * @param queryOperator queryOperator
-     * @param queryPolicy   the query policy
-     * @param tableAlias    tableAlias
+     * @param dialect            the dialect
+     * @param name               the name
+     * @param value              the value
+     * @param comparisonOperator the comparison operator
+     * @param matchStrategy      the match strategy
+     * @param tableAlias         the table alias
+     * @param ignoreStrategy     the ignore strategy
      */
-    public ConditionColumnElement(Dialect dialect, String name, Object value, QueryOperator queryOperator,
-            QueryPolicy queryPolicy, String tableAlias, Predicate<?> ignoreStrategy) {
+    public ConditionColumnElement(Dialect dialect, String name, Object value, ComparisonOperator comparisonOperator,
+            MatchStrategy matchStrategy, String tableAlias, Predicate<?> ignoreStrategy) {
         super(dialect, name, value, tableAlias, ignoreStrategy);
-        AssertIllegalArgument.isNotNull(queryOperator, "queryOperator");
-        if (queryPolicy == null) {
-            queryPolicy = QueryPolicy.AUTO;
+        AssertIllegalArgument.isNotNull(comparisonOperator, "comparisonOperator");
+        if (matchStrategy == null) {
+            matchStrategy = MatchStrategy.AUTO;
         }
-        this.queryOperator = queryOperator;
-        this.queryPolicy = queryPolicy;
+        this.comparisonOperator = comparisonOperator;
+        this.matchStrategy = matchStrategy;
 
         if (!ignore(value)) { // 不忽略
-            setParam(processParam(value, queryOperator));
+            setParam(processParam(value, comparisonOperator));
         }
     }
 
@@ -98,8 +99,8 @@ public class ConditionColumnElement extends ParamedColumnElement {
     }
 
     @SuppressWarnings("unchecked")
-    private Object processParam(Object value, QueryOperator queryOperator) {
-        switch (queryOperator) {
+    private Object processParam(Object value, ComparisonOperator comparisonOperator) {
+        switch (comparisonOperator) {
             case SW:
                 if (value instanceof FieldValueOperator) {
                     FieldValueOperator<String> o = (FieldValueOperator<String>) value;
@@ -134,7 +135,7 @@ public class ConditionColumnElement extends ParamedColumnElement {
      */
     @Override
     public Object getParam() {
-        if (QueryOperator.ISN == queryOperator || QueryOperator.INN == queryOperator) {
+        if (ComparisonOperator.ISN == comparisonOperator || ComparisonOperator.INN == comparisonOperator) {
             return Params.NONE;
         } else {
             if (ignore(param)) {
@@ -159,14 +160,14 @@ public class ConditionColumnElement extends ParamedColumnElement {
         if (ignore(value)) { // 忽略
             return "";
         } else {
-            if (QueryOperator.IN == queryOperator || QueryOperator.NIN == queryOperator) {
+            if (ComparisonOperator.IN == comparisonOperator || ComparisonOperator.NIN == comparisonOperator) {
                 int length = 1;
                 if (value instanceof Collection) {
                     length = ((Collection<?>) value).size();
                 } else if (value.getClass().isArray()) {
                     length = Array.getLength(value);
                 }
-                condition.append(name).append(Chars.SPACE).append(toOperator(queryOperator)).append(" (");
+                condition.append(name).append(Chars.SPACE).append(toOperator(comparisonOperator)).append(" (");
                 for (int i = 0; i < length; i++) {
                     if (i > 0) {
                         condition.append(Chars.COMMA);
@@ -176,28 +177,28 @@ public class ConditionColumnElement extends ParamedColumnElement {
                 condition.append(")");
             } else {
                 condition.append(name).append(Chars.SPACE);
-                if (QueryOperator.ISN == queryOperator) {
+                if (ComparisonOperator.ISN == comparisonOperator) {
                     if ((Boolean) value) {
-                        condition.append(toOperator(queryOperator));
+                        condition.append(toOperator(comparisonOperator));
                     } else {
-                        condition.append(toOperator(QueryOperator.INN));
+                        condition.append(toOperator(ComparisonOperator.INN));
                     }
-                } else if (QueryOperator.INN == queryOperator) {
+                } else if (ComparisonOperator.INN == comparisonOperator) {
                     if ((Boolean) value) {
-                        condition.append(toOperator(queryOperator));
+                        condition.append(toOperator(comparisonOperator));
                     } else {
-                        condition.append(toOperator(QueryOperator.ISN));
+                        condition.append(toOperator(ComparisonOperator.ISN));
                     }
                 } else {
-                    condition.append(toOperator(queryOperator)).append(Chars.SPACE).append(Chars.QUESTION);
+                    condition.append(toOperator(comparisonOperator)).append(Chars.SPACE).append(Chars.QUESTION);
                 }
             }
         }
         return condition.toString();
     }
 
-    private String toOperator(QueryOperator queryOperator) {
-        switch (queryOperator) {
+    private String toOperator(ComparisonOperator comparisonOperator) {
+        switch (comparisonOperator) {
             case LT:
                 return "<";
             case LE:
@@ -207,15 +208,15 @@ public class ConditionColumnElement extends ParamedColumnElement {
             case GE:
                 return ">=";
             case EQ:
-                return dialect.getKeywords().eq(queryPolicy);
+                return dialect.getKeywords().eq(matchStrategy);
             case NE:
                 return "!=";
             case SW:
-                return dialect.getKeywords().like(queryPolicy);
+                return dialect.getKeywords().like(matchStrategy);
             case CO:
-                return dialect.getKeywords().like(queryPolicy);
+                return dialect.getKeywords().like(matchStrategy);
             case EW:
-                return dialect.getKeywords().like(queryPolicy);
+                return dialect.getKeywords().like(matchStrategy);
             case ISN:
                 return dialect.getKeywords().isNull();
             case INN:
@@ -225,9 +226,9 @@ public class ConditionColumnElement extends ParamedColumnElement {
             case NIN:
                 return dialect.getKeywords().notIn();
             case LK:
-                return dialect.getKeywords().like(queryPolicy);
+                return dialect.getKeywords().like(matchStrategy);
             default:
-                return dialect.getKeywords().eq(queryPolicy);
+                return dialect.getKeywords().eq(matchStrategy);
         }
     }
 }

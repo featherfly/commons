@@ -16,7 +16,7 @@
 15. 完善CatalogMetadata,SchemaMetadata,DatabaseMetadata
 16. 修复SelectColumnElement未设置distinct的问题
 17. SqlSortBuilder实现asc(String tableAlias, Field field),desc(String tableAlias, Field field)
-18. SqlSelectColumnsBuilder加入setColumnAliasPrefix(boolean)方法
+18. SqlSelectColumnsBuilder加入setColumnAliasPrefixProcessor(BiFunction)，setColumnAliasPrefixTableAlias(boolean)，并实现build()逻辑
 
 # 0.5.5 2022-8-11
 1. Dialect加入getKeywordLike(QueryPolicy)、getKeywordEq(QueryPolicy)、keywordsCase()方法

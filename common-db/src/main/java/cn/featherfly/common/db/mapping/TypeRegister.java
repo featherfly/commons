@@ -4,10 +4,7 @@ package cn.featherfly.common.db.mapping;
 import java.sql.SQLType;
 
 /**
- * <p>
- * SqlTypeToJavaRegister
- * </p>
- * .
+ * The Interface TypeRegister.
  *
  * @author zhongj
  * @param <E> to regist java type

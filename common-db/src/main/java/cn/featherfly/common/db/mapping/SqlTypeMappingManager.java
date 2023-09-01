@@ -155,7 +155,7 @@ public class SqlTypeMappingManager {
      * @param javaSqlTypeMapper the java sql type mapper
      * @return SqlTypeMappingManager
      */
-    public SqlTypeMappingManager regist(BeanProperty<?> beanProperty, JavaSqlTypeMapper<?> javaSqlTypeMapper) {
+    public SqlTypeMappingManager regist(BeanProperty<?, ?> beanProperty, JavaSqlTypeMapper<?> javaSqlTypeMapper) {
         AssertIllegalArgument.isNotNull(beanProperty, "beanProperty");
         AssertIllegalArgument.isNotNull(javaSqlTypeMapper, "mapper");
         // 属性从属与类型，所有用属性定义的类型组
@@ -170,7 +170,7 @@ public class SqlTypeMappingManager {
      * @param property the property
      * @return the java sql type mapper
      */
-    public JavaSqlTypeMapper<?> getJavaSqlTypeMapper(BeanProperty<?> property) {
+    public JavaSqlTypeMapper<?> getJavaSqlTypeMapper(BeanProperty<?, ?> property) {
         TypeStore store = getStore(property);
         if (store == null) {
             return null;
@@ -231,7 +231,7 @@ public class SqlTypeMappingManager {
      * @param beanProperty the bean property
      * @return the sql type
      */
-    public <T> SQLType getSqlType(BeanProperty<T> beanProperty) {
+    public <T> SQLType getSqlType(BeanProperty<?, T> beanProperty) {
         return getSqlType(beanProperty.getOwnerType(), beanProperty.getType());
     }
 
@@ -342,7 +342,7 @@ public class SqlTypeMappingManager {
      * @param columnValue the column value
      * @param javaType    the java type
      */
-    public <E> void set(PreparedStatement prep, int columnIndex, E columnValue, BeanProperty<E> javaType) {
+    public <E> void set(PreparedStatement prep, int columnIndex, E columnValue, BeanProperty<?, E> javaType) {
         AssertIllegalArgument.isNotNull(javaType, "javaType");
         AssertIllegalArgument.isNotNull(prep, "PreparedStatement");
         Store store = getStore(javaType);
@@ -419,7 +419,7 @@ public class SqlTypeMappingManager {
      * @param beanProperty the bean property
      * @return the e
      */
-    public <E> E get(ResultSet rs, int columnIndex, BeanProperty<E> beanProperty) {
+    public <E> E get(ResultSet rs, int columnIndex, BeanProperty<?, E> beanProperty) {
         AssertIllegalArgument.isNotNull(beanProperty, "beanProperty");
         AssertIllegalArgument.isNotNull(rs, "ResultSet");
         Store store = getStore(beanProperty);
@@ -471,7 +471,7 @@ public class SqlTypeMappingManager {
         return entityStoreMap.get(entityType);
     }
 
-    private <E> TypeStore getStoreForRegist(BeanProperty<E> entityType) {
+    private <E> TypeStore getStoreForRegist(BeanProperty<?, E> entityType) {
         TypeStore store = getStore(entityType);
         if (store == null) {
             store = new TypeStore();
@@ -480,7 +480,7 @@ public class SqlTypeMappingManager {
         return store;
     }
 
-    private <E> TypeStore getStore(BeanProperty<E> property) {
+    private <E> TypeStore getStore(BeanProperty<?, E> property) {
         return entityTypeStoreMap.get(property.getOwnerType());
     }
 

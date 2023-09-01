@@ -264,7 +264,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         sqlExecutor.execute("delete from cms_article");
 
         BeanDescriptor<Article> bd = BeanDescriptor.getBeanDescriptor(Article.class);
-        BeanProperty<Content> contentProperty = bd.getBeanProperty("content2");
+        BeanProperty<Article, Content> contentProperty = bd.getBeanProperty("content2");
 
         manager.regist(contentProperty, new ObjectToJsonMapper<>(contentProperty));
         //        manager.regist(contentProperty, new ObjectToJsonMapper<>(Content.class));
@@ -306,7 +306,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         sqlExecutor.execute("delete from cms_article");
 
         BeanDescriptor<Article> bd = BeanDescriptor.getBeanDescriptor(Article.class);
-        BeanProperty<Content> contentProperty = bd.getBeanProperty("content3");
+        BeanProperty<Article, Content> contentProperty = bd.getBeanProperty("content3");
 
         manager.regist(contentProperty, new ObjectToJsonMapper<>(contentProperty));
         //        manager.regist(contentProperty, new ObjectToJsonMapper<>(Content.class));
@@ -507,13 +507,13 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
         BeanDescriptor<Article2> bd = BeanDescriptor.getBeanDescriptor(Article2.class);
 
-        BeanProperty<?> bpContent = bd.getBeanProperty(Article2::getContent);
+        BeanProperty<?, ?> bpContent = bd.getBeanProperty(Article2::getContent);
         manager.regist(bpContent, new ObjectToJsonMapper<>(bpContent));
 
-        BeanProperty<?> bpContent2 = bd.getBeanProperty(Article2::getContent2);
+        BeanProperty<?, ?> bpContent2 = bd.getBeanProperty(Article2::getContent2);
         manager.regist(bpContent2, new ObjectToJsonMapper<>(bpContent2));
 
-        BeanProperty<?> bpContent3 = bd.getBeanProperty(Article2::getContent3);
+        BeanProperty<?, ?> bpContent3 = bd.getBeanProperty(Article2::getContent3);
         manager.regist(bpContent3, new ObjectToJsonMapper<>(bpContent3));
 
         String insert = "INSERT INTO `db_test`.`cms_article` (`ID`, `title`, `content`, `content2`, `content3`) VALUES (null, ?, ?, ?, ?)";

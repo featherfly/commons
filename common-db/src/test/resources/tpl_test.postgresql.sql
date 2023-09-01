@@ -122,5 +122,8 @@ CREATE TABLE "cms_article" (
   "id" serial NOT NULL ,
   "title" varchar(255) DEFAULT NULL,
   "content" varchar(255) DEFAULT NULL,
+  "content2" varchar(2000) DEFAULT NULL,
+  "content3" JSON DEFAULT NULL,
+  "content4" varchar(2000) DEFAULT NULL,
   CONSTRAINT "cms_article_pkey" PRIMARY KEY ("id")
 );

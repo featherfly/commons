@@ -126,7 +126,7 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
                         .constructArrayType(genericType.getType().getComponentType());
             } else {
                 if (genericType instanceof BeanProperty) {
-                    BeanProperty<?> bp = (BeanProperty<?>) genericType;
+                    BeanProperty<?, ?> bp = (BeanProperty<?, ?>) genericType;
                     if (ClassUtils.isParent(Collection.class, bp.getType())) {
                         this.javaType = objectMapper.getTypeFactory().constructCollectionType(
                                 (Class<? extends Collection>) bp.getType(), bp.getGenericType());

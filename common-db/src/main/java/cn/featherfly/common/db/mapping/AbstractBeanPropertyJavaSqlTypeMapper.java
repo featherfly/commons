@@ -11,7 +11,7 @@ import cn.featherfly.common.bean.BeanProperty;
  * @author zhongj
  * @param <E> the element type
  */
-public abstract class AbstractBeanPropertyJavaSqlTypeMapper<E extends Serializable>
+public abstract class AbstractBeanPropertyJavaSqlTypeMapper<T, E extends Serializable>
         extends AbstractJavaSqlTypeMapper<E> {
 
     /**
@@ -19,7 +19,7 @@ public abstract class AbstractBeanPropertyJavaSqlTypeMapper<E extends Serializab
      *
      * @param beanProperty the bean property
      */
-    public AbstractBeanPropertyJavaSqlTypeMapper(BeanProperty<E> beanProperty) {
+    public AbstractBeanPropertyJavaSqlTypeMapper(BeanProperty<T, E> beanProperty) {
         super(beanProperty);
     }
 }

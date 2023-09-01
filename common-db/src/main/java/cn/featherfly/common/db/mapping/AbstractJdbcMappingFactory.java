@@ -141,7 +141,7 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      * @param mapping      the mapping
      * @param beanProperty the bean property
      */
-    protected void setColumnMapping(JdbcPropertyMapping mapping, BeanProperty<?> beanProperty) {
+    protected void setColumnMapping(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty) {
         boolean isPk = beanProperty.hasAnnotation(Id.class);
         Column column = beanProperty.getAnnotation(Column.class);
         if (column != null) {
@@ -198,7 +198,7 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
         }
     }
 
-    protected void setJavaSqlTypeMapper(JdbcPropertyMapping mapping, BeanProperty<?> beanProperty) {
+    protected void setJavaSqlTypeMapper(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty) {
         JavaSqlTypeMapper<?> mapper = sqlTypeMappingManager.getJavaSqlTypeMapper(beanProperty);
         if (mapper != null) {
             mapping.setJavaTypeSqlTypeOperator(mapper);
@@ -222,7 +222,7 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      * @param logInfo      the log info
      * @return true, if is transient
      */
-    protected boolean isTransient(BeanProperty<?> beanProperty, StringBuilder logInfo) {
+    protected boolean isTransient(BeanProperty<?, ?> beanProperty, StringBuilder logInfo) {
         boolean result = beanProperty.hasAnnotation(java.beans.Transient.class)
                 || beanProperty.hasAnnotation(javax.persistence.Transient.class);
         if (result && logger.isDebugEnabled()) {

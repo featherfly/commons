@@ -125,11 +125,11 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
             throw new JdbcMappingException("#table.not.exists", new Object[] { tableName });
         }
 
-        Collection<BeanProperty<?>> bps = bd.findBeanPropertys(
+        Collection<BeanProperty<?, ?>> bps = bd.findBeanPropertys(
                 new BeanPropertyAnnotationMatcher(LogicOperator.OR, Id.class, Column.class, Embedded.class));
 
         boolean findPk = false;
-        for (BeanProperty<?> beanProperty : bps) {
+        for (BeanProperty<?, ?> beanProperty : bps) {
             if (mappingWithJpa(beanProperty, tableMapping, logInfo, tm)) {
                 findPk = true;
             }
@@ -168,7 +168,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param tableMetadata the table metadata
      * @return true, if successful
      */
-    private boolean mappingWithJpa(BeanProperty<?> beanProperty, Map<String, JdbcPropertyMapping> tableMapping,
+    private boolean mappingWithJpa(BeanProperty<?, ?> beanProperty, Map<String, JdbcPropertyMapping> tableMapping,
             StringBuilder logInfo, Table tableMetadata) {
         if (isTransient(beanProperty, logInfo)) {
             return false;
@@ -215,16 +215,16 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param logInfo       the log info
      * @param tableMetadata the table metadata
      */
-    private void mappinEmbedded(JdbcPropertyMapping mapping, BeanProperty<?> beanProperty, StringBuilder logInfo,
+    private void mappinEmbedded(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty, StringBuilder logInfo,
             Table tableMetadata) {
         mapping.setMode(Mode.EMBEDDED);
         mapping.setPropertyName(beanProperty.getName());
         mapping.setPropertyType(beanProperty.getType());
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
-        // Collection<BeanProperty<?>> bps = bd.findBeanPropertys(new
+        // Collection<BeanProperty<?,?>> bps = bd.findBeanPropertys(new
         // BeanPropertyAnnotationMatcher(Column.class));
-        Collection<BeanProperty<?>> bps = bd.getBeanProperties();
-        for (BeanProperty<?> bp : bps) {
+        //        Collection<BeanProperty<?, ?>> bps = bd.getBeanProperties();
+        for (BeanProperty<?, ?> bp : bd.getBeanProperties()) {
             String columnName = getMappingColumnName(bp);
             columnName = dialect.convertTableOrColumnName(columnName);
             JdbcPropertyMapping columnMpping = new JdbcPropertyMapping();
@@ -268,15 +268,15 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param hasPk        the has pk
      * @param logInfo      the log info
      */
-    private void mappingFk(JdbcPropertyMapping mapping, BeanProperty<?> beanProperty, String columnName, boolean hasPk,
-            StringBuilder logInfo) {
+    private void mappingFk(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty, String columnName,
+            boolean hasPk, StringBuilder logInfo) {
         mapping.setMode(Mode.MANY_TO_ONE);
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
-        Collection<BeanProperty<?>> bps = bd.findBeanPropertys(new BeanPropertyAnnotationMatcher(Id.class));
+        Collection<BeanProperty<?, ?>> bps = bd.findBeanPropertys(new BeanPropertyAnnotationMatcher(Id.class));
         if (Lang.isEmpty(bps)) {
             throw new JdbcMappingException("#no.id.property", new Object[] { beanProperty.getType().getName() });
         }
-        for (BeanProperty<?> bp : bps) {
+        for (BeanProperty<?, ?> bp : bps) {
             if (isTransient(bp, logInfo)) {
                 continue;
             }
@@ -326,7 +326,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
         if (!nameSet.containsKey(columnNameLowerCase)) {
             // 转换下划线，并使用驼峰
             String propertyName = WordUtils.parseToUpperFirst(columnNameLowerCase, Chars.UNDER_LINE_CHAR);
-            BeanProperty<?> beanProperty = bd.findBeanProperty(new BeanPropertyNameRegexMatcher(propertyName));
+            BeanProperty<?, ?> beanProperty = bd.findBeanProperty(new BeanPropertyNameRegexMatcher(propertyName));
             if (beanProperty != null && !isTransient(beanProperty, logInfo)) {
                 JdbcPropertyMapping mapping = new JdbcPropertyMapping();
                 setJavaSqlTypeMapper(mapping, beanProperty);
@@ -396,7 +396,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param type the type
      * @return the mapping column name
      */
-    private String getMappingColumnName(BeanProperty<?> type) {
+    private String getMappingColumnName(BeanProperty<?, ?> type) {
         String columnName = null;
         for (PropertyNameConversion propertyNameConversion : propertyNameConversions) {
             columnName = propertyNameConversion.getMappingName(type);

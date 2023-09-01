@@ -134,10 +134,10 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
                     String.format("###%s类%s映射到表%s", SystemPropertyUtils.getLineSeparator(), type.getName(), tableName));
         }
 
-        Collection<BeanProperty<?>> bps = bd.getBeanProperties();
+        //        Collection<BeanProperty<?, ?>> bps = bd.getBeanProperties();
         boolean findPk = false;
         int pkNo = 0;
-        for (BeanProperty<?> beanProperty : bps) {
+        for (BeanProperty<?, ?> beanProperty : bd.getBeanProperties()) {
             if (mappingWithJpa(beanProperty, tableMapping, logInfo)) {
                 findPk = true;
                 pkNo++;
@@ -174,7 +174,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         return classMapping;
     }
 
-    private boolean mappingWithJpa(BeanProperty<?> beanProperty, Map<String, JdbcPropertyMapping> tableMapping,
+    private boolean mappingWithJpa(BeanProperty<?, ?> beanProperty, Map<String, JdbcPropertyMapping> tableMapping,
             StringBuilder logInfo) {
         if (isTransient(beanProperty, logInfo)) {
             return false;
@@ -214,13 +214,13 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         return isPk;
     }
 
-    private void mappinEmbedded(JdbcPropertyMapping mapping, BeanProperty<?> beanProperty, StringBuilder logInfo) {
+    private void mappinEmbedded(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty, StringBuilder logInfo) {
         mapping.setMode(Mode.EMBEDDED);
         mapping.setPropertyName(beanProperty.getName());
         mapping.setPropertyType(beanProperty.getType());
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
-        Collection<BeanProperty<?>> bps = bd.getBeanProperties();
-        for (BeanProperty<?> bp : bps) {
+        //        Collection<BeanProperty<?, ?>> bps = bd.getBeanProperties();
+        for (BeanProperty<?, ?> bp : bd.getBeanProperties()) {
             if (isTransient(bp, logInfo)) {
                 continue;
             }
@@ -241,15 +241,15 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         }
     }
 
-    private void mappingFk(JdbcPropertyMapping mapping, BeanProperty<?> beanProperty, String columnName, boolean hasPk,
-            StringBuilder logInfo) {
+    private void mappingFk(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty, String columnName,
+            boolean hasPk, StringBuilder logInfo) {
         mapping.setMode(Mode.MANY_TO_ONE);
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
-        Collection<BeanProperty<?>> bps = bd.findBeanPropertys(new BeanPropertyAnnotationMatcher(Id.class));
+        Collection<BeanProperty<?, ?>> bps = bd.findBeanPropertys(new BeanPropertyAnnotationMatcher(Id.class));
         if (Lang.isEmpty(bps)) {
             throw new JdbcMappingException("#no.id.property", new Object[] { beanProperty.getType().getName() });
         }
-        for (BeanProperty<?> bp : bps) {
+        for (BeanProperty<?, ?> bp : bps) {
             JdbcPropertyMapping columnMpping = new JdbcPropertyMapping();
             setJavaSqlTypeMapper(columnMpping, bp);
             columnMpping.setRepositoryFieldName(columnName);
@@ -303,7 +303,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         return tableName;
     }
 
-    private String getMappingColumnName(BeanProperty<?> type) {
+    private String getMappingColumnName(BeanProperty<?, ?> type) {
         String columnName = null;
         for (PropertyNameConversion propertyNameConversion : propertyNameConversions) {
             columnName = propertyNameConversion.getMappingName(type);

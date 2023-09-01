@@ -1,5 +1,5 @@
 # 0.5.2 2023
-1. 加入SerializableToIntFunction1-9,SerializableToLongFunction1-9,SerializableToDoubleFunction1-9,SerializableToStringFunction1-9,SerializableToNumberFunction1-9
+1. 移除cn.featherfly.common.lang.function包
 
 # 0.5.1 2022-11-15
 1. AggregateFunction删除DISTINCT

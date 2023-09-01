@@ -1,7 +1,7 @@
 
 package cn.featherfly.common.log;
 
-import cn.featherfly.common.lang.function.ArraySupplier;
+import cn.featherfly.common.function.ArraySupplier;
 
 /**
  * LoggerFunctionArgs.

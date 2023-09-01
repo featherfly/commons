@@ -10,5 +10,5 @@ import cn.featherfly.common.bean.BeanProperty;
  *
  * @author zhongj
  */
-public interface PropertyNameConversion extends NameConversion<BeanProperty<?>> {
+public interface PropertyNameConversion extends NameConversion<BeanProperty<?, ?>> {
 }

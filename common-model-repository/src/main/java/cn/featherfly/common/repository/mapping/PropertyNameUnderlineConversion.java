@@ -20,7 +20,7 @@ public class PropertyNameUnderlineConversion implements PropertyNameConversion {
      * {@inheritDoc}
      */
     @Override
-    public String getMappingName(BeanProperty<?> type) {
+    public String getMappingName(BeanProperty<?, ?> type) {
         return WordUtils.addSignBeforeUpper(type.getName(), '_', true);
     }
 

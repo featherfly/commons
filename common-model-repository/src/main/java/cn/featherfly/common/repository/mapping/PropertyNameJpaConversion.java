@@ -20,7 +20,7 @@ public class PropertyNameJpaConversion implements PropertyNameConversion {
      * {@inheritDoc}
      */
     @Override
-    public String getMappingName(BeanProperty<?> type) {
+    public String getMappingName(BeanProperty<?, ?> type) {
         Column column = type.getAnnotation(Column.class);
         if (column != null) {
             return column.name();

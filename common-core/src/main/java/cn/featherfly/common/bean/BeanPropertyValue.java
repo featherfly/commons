@@ -16,13 +16,14 @@ import cn.featherfly.common.lang.vt.ValueType;
  * BeanPropertyValue.
  *
  * @author zhongj
- * @param <T> the generic type
+ * @param <T> the bean generic type
+ * @param <V> the property generic type
  */
-public class BeanPropertyValue<T> implements ValueType<T> {
+public class BeanPropertyValue<T, V> implements ValueType<V> {
 
-    private BeanProperty<T> beanProperty;
+    private BeanProperty<T, V> beanProperty;
 
-    private T value;
+    private V value;
 
     /**
      * Instantiates a new bean property value.
@@ -30,7 +31,7 @@ public class BeanPropertyValue<T> implements ValueType<T> {
      * @param beanProperty the bean property
      * @param value        the value
      */
-    public BeanPropertyValue(BeanProperty<T> beanProperty, T value) {
+    public BeanPropertyValue(BeanProperty<T, V> beanProperty, V value) {
         super();
         this.beanProperty = beanProperty;
         this.value = value;
@@ -41,7 +42,7 @@ public class BeanPropertyValue<T> implements ValueType<T> {
      *
      * @return beanProperty
      */
-    public BeanProperty<T> getBeanProperty() {
+    public BeanProperty<T, V> getBeanProperty() {
         return beanProperty;
     }
 
@@ -51,7 +52,7 @@ public class BeanPropertyValue<T> implements ValueType<T> {
      * @return value
      */
     @Override
-    public T getValue() {
+    public V getValue() {
         return value;
     }
 
@@ -67,7 +68,7 @@ public class BeanPropertyValue<T> implements ValueType<T> {
      * {@inheritDoc}
      */
     @Override
-    public Class<T> getType() {
+    public Class<V> getType() {
         return beanProperty.getType();
     }
 

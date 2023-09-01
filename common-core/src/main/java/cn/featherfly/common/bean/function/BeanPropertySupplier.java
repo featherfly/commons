@@ -10,9 +10,8 @@
  */
 package cn.featherfly.common.bean.function;
 
-import java.io.Serializable;
-import java.util.function.Supplier;
-
+import cn.featherfly.common.bean.BeanPropertyDescriptor;
+import cn.featherfly.common.function.serializable.SerializableSupplier;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.LambdaUtils;
 import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
@@ -24,17 +23,30 @@ import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
  * @param <T> the generic bean type
  * @param <V> the generic property value type
  */
-public interface BeanPropertySupplier<T, V> extends Supplier<V>, Serializable {
+public interface BeanPropertySupplier<T, V> extends BeanPropertyDescriptor<T, V>, SerializableSupplier<V> {
 
     /**
      * Gets the bean type.
      *
      * @return the bean type
      */
+    @Override
     @SuppressWarnings("unchecked")
-    default Class<T> getBeanType() {
+    default Class<T> getInstanceType() {
         SerializedLambdaInfo info = LambdaUtils.getLambdaInfo(this);
         return (Class<T>) ClassUtils.forName(info.getMethodInstanceClassName());
+    }
+
+    /**
+     * Gets the property type.
+     *
+     * @return the property type
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    default Class<V> getType() {
+        SerializedLambdaInfo info = LambdaUtils.getLambdaInfo(this);
+        return (Class<V>) info.getPropertyType();
     }
 
     /**
@@ -42,8 +54,20 @@ public interface BeanPropertySupplier<T, V> extends Supplier<V>, Serializable {
      *
      * @return the property name
      */
-    default String getPropertyName() {
+    @Override
+    default String getName() {
         SerializedLambdaInfo info = LambdaUtils.getLambdaInfo(this);
         return info.getPropertyName();
     }
+
+    //    /**
+    //     * Gets the value.
+    //     *
+    //     * @param obj the obj
+    //     * @return the value
+    //     */
+    //    @Override
+    //    default <TS extends T> V getValue(TS obj) {
+    //        return get();
+    //    }
 }

@@ -11,23 +11,27 @@ public class BeanPropertySupplierImpl<T, V> implements BeanPropertySupplier<T, V
 
     private static final long serialVersionUID = -3604947046086702819L;
 
-    private Class<T> type;
+    private Class<T> beanType;
 
-    private V value;
+    private Class<V> propertyType;
+
+    private V propertyValue;
 
     private String propertyName;
 
     /**
      * Instantiates a new bean property supplier impl.
      *
-     * @param type         the type
-     * @param value        the value
-     * @param propertyName the property name
+     * @param beanType      the bean type
+     * @param propertyType  the property type
+     * @param propertyValue the property value
+     * @param propertyName  the property name
      */
-    public BeanPropertySupplierImpl(Class<T> type, V value, String propertyName) {
+    public BeanPropertySupplierImpl(Class<T> beanType, Class<V> propertyType, V propertyValue, String propertyName) {
         super();
-        this.type = type;
-        this.value = value;
+        this.beanType = beanType;
+        this.propertyType = propertyType;
+        this.propertyValue = propertyValue;
         this.propertyName = propertyName;
     }
 
@@ -35,16 +39,21 @@ public class BeanPropertySupplierImpl<T, V> implements BeanPropertySupplier<T, V
      * {@inheritDoc}
      */
     @Override
-    public Class<T> getBeanType() {
-        return type;
+    public Class<T> getInstanceType() {
+        return beanType;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getPropertyName() {
+    public String getName() {
         return propertyName;
+    }
+
+    @Override
+    public Class<V> getType() {
+        return propertyType;
     }
 
     /**
@@ -52,6 +61,6 @@ public class BeanPropertySupplierImpl<T, V> implements BeanPropertySupplier<T, V
      */
     @Override
     public V get() {
-        return value;
+        return propertyValue;
     }
 }

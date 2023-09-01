@@ -13,6 +13,7 @@ dependencies {
     //api project(":common-api")
     api group: 'cn.featherfly.common', name: 'common-api', version: '0.5.2'
     api group: 'cn.featherfly.common', name: 'common-algorithm', version: '1.1.0'
+    api group: 'cn.featherfly.common', name: 'common-functional', version: '0.1.0'
     api group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
     api group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
     api group: 'commons-io', name: 'commons-io', version: '2.8.0'

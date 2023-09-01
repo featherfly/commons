@@ -53,6 +53,13 @@ public class BeanDescriptorTest {
         name = "featherfly";
         bd.setProperty(user, "name", name);
         assertEquals(name, bd.getProperty(user, "name"));
+
+        BeanProperty<User, String> propertyName = bd.getBeanProperty(User::getName);
+        BeanProperty<User, Integer> propertyAge = bd.getBeanProperty(User::getAge);
+        //        BeanProperty<User, Boolean> propertyAva = bd.getBeanProperty(User::getAvailable);
+
+        assertEquals(name, propertyName.getValue(user));
+        assertEquals(new Integer(age), propertyAge.getValue(user));
     }
 
     @Test
@@ -61,7 +68,7 @@ public class BeanDescriptorTest {
         String name = "yufei";
 
         BeanDescriptor<User> bd = BeanDescriptor.getBeanDescriptor(User.class);
-        BeanProperty pName = bd.getBeanProperty("name");
+        BeanProperty<User, ?> pName = bd.getBeanProperty("name");
         pName.setValue(user, name);
         assertEquals(name, pName.getValue(user));
 
@@ -95,9 +102,9 @@ public class BeanDescriptorTest {
 
         assertEquals(bdPerson.getProperty(p, "name"), name);
 
-        Iterator<BeanProperty<?>> iter = bdPerson.getBeanProperties().iterator();
+        Iterator<BeanProperty<Person, ?>> iter = bdPerson.getBeanProperties().iterator();
         while (iter.hasNext()) {
-            BeanProperty bp = iter.next();
+            BeanProperty<Person, ?> bp = iter.next();
             System.out.println(bp.getName());
         }
     }
@@ -195,7 +202,7 @@ public class BeanDescriptorTest {
         BeanDescriptor<User> bd = BeanDescriptor.getBeanDescriptor(User.class);
 
         User user = new User();
-        BeanProperty<Optional<String>> username = bd.getBeanProperty("username");
+        BeanProperty<User, Optional<String>> username = bd.getBeanProperty("username");
         System.out.println(username.getType());
         Assert.assertEquals(username.getType(), Optional.class);
 
@@ -228,7 +235,7 @@ public class BeanDescriptorTest {
         String code = "610000";
         address.setZipcode(new Zipcode(code));
         BeanDescriptor<Address> bd = BeanDescriptor.getBeanDescriptor(Address.class);
-        BeanProperty<Object> bp = bd.getBeanProperty(pn);
+        BeanProperty<Address, Object> bp = bd.getBeanProperty(pn);
         assertEquals(bp.getName(), "code");
         assertEquals(BeanUtils.getProperty(address, pn), code);
     }

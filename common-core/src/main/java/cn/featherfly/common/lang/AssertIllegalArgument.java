@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 
+import cn.featherfly.common.function.serializable.SerializableNumberSupplier;
+import cn.featherfly.common.function.serializable.SerializableSupplier;
 import cn.featherfly.common.lang.asserts.IllegalArgumentAssert;
-import cn.featherfly.common.lang.function.SerializableNumberSupplier;
-import cn.featherfly.common.lang.function.SerializableSupplier;
 
 /**
  * <p>
@@ -204,7 +204,7 @@ public final class AssertIllegalArgument {
      * @param value the value
      * @param min   the min
      * @param max   the max
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isInRange(cn.featherfly.common.lang.function.SerializableNumberSupplier,
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isInRange(SerializableNumberSupplier,
      *      java.lang.Number, java.lang.Number)
      */
     public static <N extends Number> void isInRange(SerializableNumberSupplier<N> value, N min, N max) {
@@ -231,7 +231,7 @@ public final class AssertIllegalArgument {
      * @param <N>   the number type
      * @param value the value
      * @param min   the min
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGt(cn.featherfly.common.lang.function.SerializableNumberSupplier,
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGt(SerializableNumberSupplier,
      *      java.lang.Number)
      */
     public static <N extends Number> void isGt(SerializableNumberSupplier<N> value, N min) {
@@ -258,7 +258,7 @@ public final class AssertIllegalArgument {
      * @param <N>   the number type
      * @param value the value
      * @param min   the min
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGe(cn.featherfly.common.lang.function.SerializableNumberSupplier,
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isGe(SerializableNumberSupplier,
      *      java.lang.Number)
      */
     public static <N extends Number> void isGe(SerializableNumberSupplier<N> value, N min) {
@@ -285,7 +285,7 @@ public final class AssertIllegalArgument {
      * @param <N>   the number type
      * @param value the value
      * @param max   the max
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLt(cn.featherfly.common.lang.function.SerializableNumberSupplier,
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLt(SerializableNumberSupplier,
      *      java.lang.Number)
      */
     public static <N extends Number> void isLt(SerializableNumberSupplier<N> value, N max) {
@@ -312,7 +312,7 @@ public final class AssertIllegalArgument {
      * @param <N>   the number type
      * @param value the value
      * @param max   the max
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLe(cn.featherfly.common.lang.function.SerializableNumberSupplier,
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isLe(SerializableNumberSupplier,
      *      java.lang.Number)
      */
     public <N extends Number> void isLe(SerializableNumberSupplier<N> value, N max) {
@@ -324,7 +324,7 @@ public final class AssertIllegalArgument {
      *
      * @param <T>              the generic type
      * @param propertySupplier the property supplier
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotNull(cn.featherfly.common.lang.function.SerializableSupplier)
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotNull(SerializableSupplier)
      */
     public static <T> void isNotNull(SerializableSupplier<T> propertySupplier) {
         ASSERT.isNotNull(propertySupplier);
@@ -334,7 +334,7 @@ public final class AssertIllegalArgument {
      * Checks if is not blank.
      *
      * @param propertySupplier the property supplier
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotBlank(cn.featherfly.common.lang.function.SerializableSupplier)
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotBlank(SerializableSupplier)
      */
     public static void isNotBlank(SerializableSupplier<String> propertySupplier) {
         ASSERT.isNotBlank(propertySupplier);
@@ -345,7 +345,7 @@ public final class AssertIllegalArgument {
      *
      * @param <T>              the generic type
      * @param propertySupplier the property supplier
-     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(cn.featherfly.common.lang.function.SerializableSupplier)
+     * @see cn.featherfly.common.lang.asserts.LocalizedAssert#isNotEmpty(SerializableSupplier)
      */
     public static <T> void isNotEmpty(SerializableSupplier<T> propertySupplier) {
         ASSERT.isNotEmpty(propertySupplier);

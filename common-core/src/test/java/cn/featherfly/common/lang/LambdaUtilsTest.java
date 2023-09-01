@@ -15,15 +15,15 @@ import java.util.function.Supplier;
 
 import org.testng.annotations.Test;
 
+import cn.featherfly.common.function.serializable.SerializableBiConsumer;
+import cn.featherfly.common.function.serializable.SerializableBiFunction;
+import cn.featherfly.common.function.serializable.SerializableConsumer;
+import cn.featherfly.common.function.serializable.SerializableFunction;
+import cn.featherfly.common.function.serializable.SerializableSupplier;
+import cn.featherfly.common.function.serializable.SerializableToNumberFunction;
 import cn.featherfly.common.lang.LambdaUtils.SerializableConsumerLambdaInfo;
 import cn.featherfly.common.lang.LambdaUtils.SerializableSupplierLambdaInfo;
 import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
-import cn.featherfly.common.lang.function.ReturnNumberFunction;
-import cn.featherfly.common.lang.function.SerializableBiConsumer;
-import cn.featherfly.common.lang.function.SerializableBiFunction;
-import cn.featherfly.common.lang.function.SerializableConsumer;
-import cn.featherfly.common.lang.function.SerializableFunction;
-import cn.featherfly.common.lang.function.SerializableSupplier;
 import cn.featherfly.common.lang.vo.User;
 import cn.featherfly.common.lang.vo.User2;
 import cn.featherfly.common.lang.vo.User3;
@@ -578,7 +578,7 @@ public class LambdaUtilsTest {
         return LambdaUtils.getLambdaInfo(f);
     }
 
-    <T, N extends Number> void g1(ReturnNumberFunction<T, N> f) {
+    <T, N extends Number> void g1(SerializableToNumberFunction<T, N> f) {
 
     }
 

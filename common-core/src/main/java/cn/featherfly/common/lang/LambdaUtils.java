@@ -21,23 +21,22 @@ import org.apache.commons.lang3.StringUtils;
 
 import cn.featherfly.common.exception.ReflectException;
 import cn.featherfly.common.exception.UnsupportedException;
-import cn.featherfly.common.lang.function.SerializableConsumer;
-import cn.featherfly.common.lang.function.SerializableDoubleSupplier;
-import cn.featherfly.common.lang.function.SerializableIntSupplier;
-import cn.featherfly.common.lang.function.SerializableLongSupplier;
-import cn.featherfly.common.lang.function.SerializableSupplier;
+import cn.featherfly.common.function.serializable.SerializableConsumer;
+import cn.featherfly.common.function.serializable.SerializableDoubleSupplier;
+import cn.featherfly.common.function.serializable.SerializableIntSupplier;
+import cn.featherfly.common.function.serializable.SerializableLongSupplier;
+import cn.featherfly.common.function.serializable.SerializableSupplier;
 
 /**
- * <p>
- * LambdaUtils
- * </p>
- * .
+ * LambdaUtils.
  *
  * @author zhongj
  */
 public class LambdaUtils {
 
-    private static final Map<SerializedLambda, SerializedLambdaInfo> CACHE_LAMBDA_INFO = new ConcurrentHashMap<>(8);
+    private static final Map<Serializable, SerializedLambdaInfo> CACHE_LAMBDA_INFO = new ConcurrentHashMap<>(8);
+
+    private static final Map<Serializable, SerializedLambda> CACHE_LAMBDA = new ConcurrentHashMap<>(8);
 
     // private static final Map<SerializedLambda, String> CACHE_FIELD_NAME = new
     // ConcurrentHashMap<>(8);
@@ -418,11 +417,11 @@ public class LambdaUtils {
      * @return the lambda info
      */
     public static SerializedLambdaInfo getLambdaInfo(Serializable lambda) {
-        SerializedLambda serializedLambda = getSerializedLambda(lambda);
-        SerializedLambdaInfo info = CACHE_LAMBDA_INFO.get(serializedLambda);
+        SerializedLambdaInfo info = CACHE_LAMBDA_INFO.get(lambda);
         if (null != info) {
             return info;
         }
+        SerializedLambda serializedLambda = getSerializedLambda(lambda);
         SerializedLambdaInfo info2 = new SerializedLambdaInfo();
         info2.serializedLambda = serializedLambda;
         info2.methodDeclaredClassName = serializedLambda.getImplClass().replaceAll("/", ".");
@@ -460,7 +459,7 @@ public class LambdaUtils {
         } else {
             throw new UnsupportedException("unsupported for " + lambda.getClass().getName());
         }
-        CACHE_LAMBDA_INFO.put(serializedLambda, info2);
+        CACHE_LAMBDA_INFO.put(lambda, info2);
         return info2;
     }
 
@@ -599,7 +598,12 @@ public class LambdaUtils {
      * @return the serialized lambda
      */
     public static SerializedLambda getSerializedLambda(Serializable lambda) {
-        return computeSerializedLambda(lambda);
+        SerializedLambda sl = CACHE_LAMBDA.get(lambda);
+        if (sl == null) {
+            sl = computeSerializedLambda(lambda);
+            CACHE_LAMBDA.put(lambda, sl);
+        }
+        return sl;
     }
 
     /**
@@ -633,7 +637,7 @@ public class LambdaUtils {
      * @return the lambda method name
      */
     public static String getLambdaMethodName(Serializable lambda) {
-        return getLambdaMethodName(computeSerializedLambda(lambda));
+        return getLambdaMethodName(getSerializedLambda(lambda));
     }
 
     /**
@@ -653,7 +657,7 @@ public class LambdaUtils {
      * @return the lambda property name
      */
     public static String getLambdaPropertyName(Serializable lambda) {
-        return getLambdaPropertyName(computeSerializedLambda(lambda));
+        return getLambdaPropertyName(getSerializedLambda(lambda));
     }
 
     /**
@@ -685,10 +689,10 @@ public class LambdaUtils {
         String name = null;
         if (methodName.startsWith("get")) {
             name = methodName.substring(3);
-        } else if (methodName.startsWith("is")) {
-            name = methodName.substring(2);
         } else if (methodName.startsWith("set")) {
             name = methodName.substring(3);
+        } else if (methodName.startsWith("is")) {
+            name = methodName.substring(2);
         } else {
             name = methodName;
         }

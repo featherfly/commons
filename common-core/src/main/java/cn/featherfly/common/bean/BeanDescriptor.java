@@ -18,15 +18,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.bean.matcher.BeanPropertyMatcher;
+import cn.featherfly.common.function.serializable.SerializableBiConsumer;
+import cn.featherfly.common.function.serializable.SerializableConsumer;
+import cn.featherfly.common.function.serializable.SerializableFunction;
+import cn.featherfly.common.function.serializable.SerializableSupplier;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.CollectionUtils;
 import cn.featherfly.common.lang.LambdaUtils;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.ServiceLoaderUtils;
-import cn.featherfly.common.lang.function.SerializableBiConsumer;
-import cn.featherfly.common.lang.function.SerializableConsumer;
-import cn.featherfly.common.lang.function.SerializableFunction;
-import cn.featherfly.common.lang.function.SerializableSupplier;
 
 /**
  * java bean 的描述信息.
@@ -68,7 +68,7 @@ public class BeanDescriptor<T> {
     // private Map<String, BeanProperty> beanProperties = new HashMap<String,
     // BeanProperty>(0);
 
-    private ListOrderedMap<String, BeanProperty<?>> beanProperties = new ListOrderedMap<>();
+    private ListOrderedMap<String, BeanProperty<T, ?>> beanProperties = new ListOrderedMap<>();
 
     private Map<String, Type> typeGenericParams = new HashMap<>(0);
 
@@ -124,7 +124,7 @@ public class BeanDescriptor<T> {
             Method getter = ClassUtils.getGetter(field, type);
             Method setter = ClassUtils.getSetter(field, type);
             if (getter != null || setter != null) {
-                BeanProperty<?> prop = FACTORY.create(field.getName(), field, fieldType, setter, getter, type,
+                BeanProperty<T, ?> prop = FACTORY.create(field.getName(), field, fieldType, setter, getter, type,
                         field.getDeclaringClass());
                 beanProperties.put(prop.getName(), prop);
                 if (LOGGER.isTraceEnabled() && parent != type) {
@@ -138,7 +138,7 @@ public class BeanDescriptor<T> {
     }
 
     // 初始化动态set get方法
-    private void initFromMethod(Class<?> type) {
+    private void initFromMethod(Class<T> type) {
         Map<String, Map<String, Object>> properties = new HashMap<>();
         for (Method method : type.getMethods()) {
             // 忽略Object对象
@@ -205,7 +205,7 @@ public class BeanDescriptor<T> {
                         getGenericType(setter.getGenericParameterTypes()[0], setter.getParameterTypes()[0]));
                 propertyName = Lang.pick(propertyName, ClassUtils.getPropertyName(setter));
             }
-            BeanProperty<
+            BeanProperty<T,
                     ?> property = FACTORY.create(propertyName, null, propertyType, setter, getter, type, declaringType);
             beanProperties.put(property.getName(), property);
             if (LOGGER.isTraceEnabled()) {
@@ -241,7 +241,7 @@ public class BeanDescriptor<T> {
      *
      * @return 返回beanProperties
      */
-    public Collection<BeanProperty<?>> getBeanProperties() {
+    public Collection<BeanProperty<T, ?>> getBeanProperties() {
         return beanProperties.values();
     }
 
@@ -253,47 +253,47 @@ public class BeanDescriptor<T> {
      * @return 指定属性
      */
     @SuppressWarnings("unchecked")
-    public <E> BeanProperty<E> getBeanProperty(int index) {
-        return (BeanProperty<E>) beanProperties.getValue(index);
+    public <E> BeanProperty<T, E> getBeanProperty(int index) {
+        return (BeanProperty<T, E>) beanProperties.getValue(index);
     }
 
     /**
      * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常.
      *
+     * @param <B>  the generic type
      * @param <E>  the element type
      * @param name 属性名
      * @return 指定属性
      */
     @SuppressWarnings("unchecked")
-    public <E> BeanProperty<E> getBeanProperty(String name) {
+    public <B, E> BeanProperty<B, E> getBeanProperty(String name) {
         int index = name.indexOf(".");
         if (index != -1) {
             String fn = name.substring(0, index);
             String last = name.substring(index + 1, name.length());
-            BeanProperty<?> property = beanProperties.get(fn);
+            BeanProperty<?, ?> property = beanProperties.get(fn);
             if (property == null) {
                 throw new NoSuchPropertyException(type, name);
             }
             BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperties.get(fn).getType());
             return bd.getBeanProperty(last);
         } else {
-            BeanProperty<?> property = beanProperties.get(name);
+            BeanProperty<T, ?> property = beanProperties.get(name);
             if (property == null) {
                 throw new NoSuchPropertyException(type, name);
             }
-            return (BeanProperty<E>) property;
+            return (BeanProperty<B, E>) property;
         }
     }
 
     /**
      * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常.
      *
-     * @param <E>      the element type
      * @param <R>      the property type
      * @param property 属性
      * @return 指定属性
      */
-    public <E, R> BeanProperty<R> getBeanProperty(SerializableFunction<E, R> property) {
+    public <R> BeanProperty<T, R> getBeanProperty(SerializableFunction<T, R> property) {
         return getBeanProperty(LambdaUtils.getLambdaPropertyName(property));
     }
 
@@ -305,7 +305,7 @@ public class BeanDescriptor<T> {
      * @param property 属性
      * @return 指定属性
      */
-    public <E, R> BeanProperty<R> getBeanProperty(SerializableBiConsumer<E, R> property) {
+    public <E, R> BeanProperty<T, R> getBeanProperty(SerializableBiConsumer<E, R> property) {
         return getBeanProperty(LambdaUtils.getLambdaPropertyName(property));
     }
 
@@ -316,7 +316,7 @@ public class BeanDescriptor<T> {
      * @param property 属性
      * @return 指定属性
      */
-    public <R> BeanProperty<R> getBeanProperty(SerializableConsumer<R> property) {
+    public <R> BeanProperty<T, R> getBeanProperty(SerializableConsumer<R> property) {
         return getBeanProperty(LambdaUtils.getLambdaPropertyName(property));
     }
 
@@ -327,7 +327,7 @@ public class BeanDescriptor<T> {
      * @param property 属性
      * @return 指定属性
      */
-    public <R> BeanProperty<R> getBeanProperty(SerializableSupplier<R> property) {
+    public <R> BeanProperty<T, R> getBeanProperty(SerializableSupplier<R> property) {
         return getBeanProperty(LambdaUtils.getLambdaPropertyName(property));
     }
 
@@ -352,11 +352,11 @@ public class BeanDescriptor<T> {
      * @param name 属性名
      * @return 指定属性
      */
-    public BeanProperty<?> getChildBeanProperty(String name) {
+    public BeanProperty<?, ?> getChildBeanProperty(String name) {
         if (name.contains(DOT)) {
             String currentPropertyName = name.substring(0, name.indexOf(DOT));
             String innerPropertyName = name.substring(name.indexOf(DOT) + 1);
-            BeanProperty<?> property = getBeanProperty(currentPropertyName);
+            BeanProperty<?, ?> property = getBeanProperty(currentPropertyName);
             BeanDescriptor<?> propertyDescriptor = getBeanDescriptor(property.getType());
             return propertyDescriptor.getChildBeanProperty(innerPropertyName);
         } else {
@@ -372,8 +372,8 @@ public class BeanDescriptor<T> {
      * @param condition 条件判断
      * @return 第一个符合条件BeanProperty
      */
-    public BeanProperty<?> findBeanProperty(BeanPropertyMatcher condition) {
-        for (BeanProperty<?> beanProperty : getBeanProperties()) {
+    public BeanProperty<?, ?> findBeanProperty(BeanPropertyMatcher condition) {
+        for (BeanProperty<?, ?> beanProperty : getBeanProperties()) {
             if (condition.test(beanProperty)) {
                 return beanProperty;
             }
@@ -389,9 +389,9 @@ public class BeanDescriptor<T> {
      * @param condition 条件判断
      * @return 所有符合条件BeanProperty的集合
      */
-    public Collection<BeanProperty<?>> findBeanPropertys(BeanPropertyMatcher condition) {
-        Collection<BeanProperty<?>> coll = new ArrayList<>();
-        for (BeanProperty<?> beanProperty : getBeanProperties()) {
+    public Collection<BeanProperty<?, ?>> findBeanPropertys(BeanPropertyMatcher condition) {
+        Collection<BeanProperty<?, ?>> coll = new ArrayList<>();
+        for (BeanProperty<?, ?> beanProperty : getBeanProperties()) {
             if (condition.test(beanProperty)) {
                 coll.add(beanProperty);
             }
@@ -414,7 +414,7 @@ public class BeanDescriptor<T> {
         if (name.contains(DOT)) {
             String currentPropertyName = name.substring(0, name.indexOf(DOT));
             String innerPropertyName = name.substring(name.indexOf(DOT) + 1);
-            BeanProperty<?> property = getBeanProperty(currentPropertyName);
+            BeanProperty<?, ?> property = getBeanProperty(currentPropertyName);
             Object propertyValue = property.getValue(obj);
             @SuppressWarnings("rawtypes")
             BeanDescriptor propertyDescriptor = null;
@@ -450,7 +450,7 @@ public class BeanDescriptor<T> {
             }
             propertyDescriptor.setProperty(propertyValue, innerPropertyName, value);
         } else {
-            BeanProperty<?> p = getBeanProperty(name);
+            BeanProperty<T, ?> p = getBeanProperty(name);
             p.setValue(obj, value);
         }
     }
@@ -466,7 +466,7 @@ public class BeanDescriptor<T> {
      * @param value 属性值
      */
     public void addProperty(T obj, String name, Object value) {
-        BeanProperty<?> beanProperty = getChildBeanProperty(name);
+        BeanProperty<?, ?> beanProperty = getChildBeanProperty(name);
         if (ClassUtils.isCellection(beanProperty.getType())) {
             @SuppressWarnings("unchecked")
             Collection<Object> collection = (Collection<Object>) getProperty(obj, name);
@@ -495,7 +495,7 @@ public class BeanDescriptor<T> {
         if (name.contains(DOT)) {
             String currentPropertyName = name.substring(0, name.indexOf(DOT));
             String innerPropertyName = name.substring(name.indexOf(DOT) + 1);
-            BeanProperty<?> property = getBeanProperty(currentPropertyName);
+            BeanProperty<?, ?> property = getBeanProperty(currentPropertyName);
             Object propertyValue = property.getValue(obj);
             @SuppressWarnings("rawtypes")
             BeanDescriptor propertyDescriptor = null;
@@ -508,7 +508,7 @@ public class BeanDescriptor<T> {
                 return propertyDescriptor.getProperty(propertyValue, innerPropertyName);
             }
         } else {
-            BeanProperty<?> p = getBeanProperty(name);
+            BeanProperty<?, ?> p = getBeanProperty(name);
             return p.getValue(obj);
         }
     }
@@ -585,11 +585,11 @@ public class BeanDescriptor<T> {
     // private method
     // ********************************************************************
 
-    // private BeanProperty<?> getTargetBeanProperty(Object obj, String name) {
+    // private BeanProperty<?,?> getTargetBeanProperty(Object obj, String name) {
     // if (name.contains(DOT)) {
     // String currentPropertyName = name.substring(0, name.indexOf(DOT));
     // String innerPropertyName = name.substring(name.indexOf(DOT) + 1);
-    // BeanProperty<?> property = getBeanProperty(currentPropertyName);
+    // BeanProperty<?,?> property = getBeanProperty(currentPropertyName);
     // Object propertyValue = property.getValue(obj);
     // //中间层次为空，使用默认构造函数生成一个空对象
     // if (propertyValue == null) {
@@ -606,7 +606,7 @@ public class BeanDescriptor<T> {
     // }
     // return getTargetBeanProperty(propertyValue, innerPropertyName);
     // } else {
-    // BeanProperty<?> p = getBeanProperty(name);
+    // BeanProperty<?,?> p = getBeanProperty(name);
     // return p;
     // }
     // }

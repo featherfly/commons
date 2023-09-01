@@ -5,8 +5,8 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 
-import cn.featherfly.common.lang.function.SerializableNumberSupplier;
-import cn.featherfly.common.lang.function.SerializableSupplier;
+import cn.featherfly.common.function.serializable.SerializableNumberSupplier;
+import cn.featherfly.common.function.serializable.SerializableSupplier;
 
 /**
  * <p>

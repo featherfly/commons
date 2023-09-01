@@ -9,11 +9,11 @@ import java.util.function.Supplier;
 
 import org.testng.annotations.Test;
 
-import cn.featherfly.common.lang.function.SerializableBiConsumer;
-import cn.featherfly.common.lang.function.SerializableBiFunction;
-import cn.featherfly.common.lang.function.SerializableConsumer;
-import cn.featherfly.common.lang.function.SerializableFunction;
-import cn.featherfly.common.lang.function.SerializableSupplier;
+import cn.featherfly.common.function.serializable.SerializableBiConsumer;
+import cn.featherfly.common.function.serializable.SerializableBiFunction;
+import cn.featherfly.common.function.serializable.SerializableConsumer;
+import cn.featherfly.common.function.serializable.SerializableFunction;
+import cn.featherfly.common.function.serializable.SerializableSupplier;
 import cn.featherfly.common.lang.vo.User;
 import cn.featherfly.common.lang.vo.User2;
 

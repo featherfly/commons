@@ -21,19 +21,20 @@ import cn.featherfly.common.lang.reflect.Type;
 /**
  * java bean 的属性.
  *
- * @param <T> 泛型
  * @author zhongj
- * @since 1.0
  * @version 1.0
+ * @param <T> the bean generic type
+ * @param <V> the property generic type
+ * @since 1.0
  */
-public class BeanProperty<T> implements Type<T> {
+public class BeanProperty<T, V> implements Type<V>, BeanPropertyDescriptor<T, V> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BeanProperty.class);
 
     private String name;
 
     // 属性类型，支持泛型类型自动探测
-    private Class<T> type;
+    private Class<V> type;
 
     //    private Class<?>[] genericTypes;
 
@@ -44,7 +45,7 @@ public class BeanProperty<T> implements Type<T> {
     private Field field;
 
     // 属性所在的类的类型
-    private Class<?> ownerType;
+    private Class<T> ownerType;
 
     // 属性定义所在的类（可以被子类继承）
 
@@ -53,6 +54,8 @@ public class BeanProperty<T> implements Type<T> {
     private Collection<Annotation> annotations;
 
     /**
+     * Instantiates a new bean property.
+     *
      * @param propertyName  属性名称
      * @param field         存取数据的字段
      * @param propertyType  属性类型
@@ -61,13 +64,13 @@ public class BeanProperty<T> implements Type<T> {
      * @param ownerType     属性所在的类型
      * @param declaringType 定义属性的类型 （可能是ownerType的父类，也可能一样）
      */
-    protected BeanProperty(String propertyName, Field field, Class<T> propertyType, Method setter, Method getter,
-            Class<?> ownerType, Class<?> declaringType) {
+    protected BeanProperty(String propertyName, Field field, Class<V> propertyType, Method setter, Method getter,
+            Class<T> ownerType, Class<?> declaringType) {
         this.ownerType = ownerType;
         this.declaringType = declaringType;
         this.field = field;
-        this.name = propertyName;
-        this.type = propertyType;
+        name = propertyName;
+        type = propertyType;
         this.setter = setter;
         this.getter = getter;
         initAnnotation();
@@ -121,9 +124,7 @@ public class BeanProperty<T> implements Type<T> {
     // }
 
     /**
-     * <p>
-     * 设置属性
-     * </p>
+     * 设置属性 .
      *
      * @param obj   需要设置属性的对象
      * @param value 属性值
@@ -149,9 +150,7 @@ public class BeanProperty<T> implements Type<T> {
     }
 
     /**
-     * <p>
-     * 强制设置属性,使用field而非setter设置
-     * </p>
+     * 强制设置属性,使用field而非setter设置 .
      *
      * @param obj   设置属性的目标对象
      * @param value 属性值
@@ -175,18 +174,17 @@ public class BeanProperty<T> implements Type<T> {
     }
 
     /**
-     * <p>
-     * 获取属性
-     * </p>
+     * 获取属性 .
      *
      * @param obj 获取属性的目标对象
      * @return 属性
      */
-    public Object getValue(Object obj) {
+    @SuppressWarnings("unchecked")
+    public V getValue(Object obj) {
         checkType(obj.getClass());
         if (isReadable()) {
             try {
-                return getter.invoke(obj);
+                return (V) getter.invoke(obj);
             } catch (Exception e) {
                 throw new ReflectException(Strings.format("get {0}.{1} error", ownerType.getName(), name), e);
             }
@@ -200,14 +198,13 @@ public class BeanProperty<T> implements Type<T> {
     }
 
     /**
-     * <p>
-     * 强制获取属性，使用field而非getter获取
-     * </p>
+     * 强制获取属性，使用field而非getter获取 .
      *
      * @param obj 获取属性的目标对象
      * @return 属性
      */
-    public Object getValueForce(Object obj) {
+    @SuppressWarnings("unchecked")
+    public V getValueForce(Object obj) {
         if (isReadable()) {
             return getValue(obj);
         }
@@ -217,16 +214,14 @@ public class BeanProperty<T> implements Type<T> {
         checkType(obj.getClass());
         try {
             field.setAccessible(true);
-            return field.get(obj);
+            return (V) field.get(obj);
         } catch (Exception e) {
             throw new ReflectException(Strings.format("get {0}.{1} force error", ownerType.getName(), name), e);
         }
     }
 
     /**
-     * <p>
-     * 当前属性是否是可读属性，拥有getter
-     * </p>
+     * 当前属性是否是可读属性，拥有getter .
      *
      * @return 是否可读
      */
@@ -235,9 +230,7 @@ public class BeanProperty<T> implements Type<T> {
     }
 
     /**
-     * <p>
-     * 当前属性是否是可写属性，拥有setter
-     * </p>
+     * 当前属性是否是可写属性，拥有setter .
      *
      * @return 是否可写
      */
@@ -281,9 +274,7 @@ public class BeanProperty<T> implements Type<T> {
     }
 
     /**
-     * <p>
      * 返回当前属性是否含有指定注解.
-     * </p>
      *
      * @param <A>             注解类型
      * @param annotationClass 注解类型
@@ -294,9 +285,7 @@ public class BeanProperty<T> implements Type<T> {
     }
 
     /**
-     * <p>
      * 返回当前属性的指定类型注解.
-     * </p>
      *
      * @param <A>             注解类型
      * @param annotationClass 注解类型
@@ -345,9 +334,7 @@ public class BeanProperty<T> implements Type<T> {
     }
 
     /**
-     * <p>
-     * 返回当前属性的所有注解
-     * </p>
+     * 返回当前属性的所有注解 .
      *
      * @return 当前属性的所有注解
      */
@@ -380,25 +367,44 @@ public class BeanProperty<T> implements Type<T> {
     }
 
     /**
-     * 返回属性名称
+     * {@inheritDoc}
+     */
+    @Override
+    public Class<T> getInstanceType() {
+        return ownerType;
+    }
+
+    /**
+     * 返回属性名称.
      *
      * @return 返回name
      */
+    @Override
     public String getName() {
         return name;
     }
 
     /**
-     * 返回属性类型
+     * 返回属性类型.
      *
      * @return 返回type
      */
     @Override
-    public Class<T> getType() {
+    public Class<V> getType() {
         return type;
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTypeName() {
+        return type.getName();
+    }
+
+    /**
+     * Gets the field.
+     *
      * @return 返回field
      */
     public Field getField() {
@@ -406,7 +412,7 @@ public class BeanProperty<T> implements Type<T> {
     }
 
     /**
-     * 返回ownerType
+     * 返回ownerType.
      *
      * @return ownerType
      */
@@ -415,7 +421,7 @@ public class BeanProperty<T> implements Type<T> {
     }
 
     /**
-     * 返回declaringType
+     * 返回declaringType.
      *
      * @return declaringType
      */
@@ -429,11 +435,11 @@ public class BeanProperty<T> implements Type<T> {
     @Override
     public int hashCode() {
         if (field != null) {
-            return field.hashCode();
+            return ownerType.hashCode() + field.hashCode();
         } else if (getter != null) {
-            return getter.hashCode();
+            return ownerType.hashCode() + getter.hashCode();
         } else {
-            return setter.hashCode();
+            return ownerType.hashCode() + setter.hashCode();
         }
     }
 
@@ -448,7 +454,10 @@ public class BeanProperty<T> implements Type<T> {
         if (obj.getClass() != BeanProperty.class) {
             return false;
         }
-        BeanProperty<?> target = (BeanProperty<?>) obj;
+        BeanProperty<?, ?> target = (BeanProperty<?, ?>) obj;
+        if (!ownerType.equals(target.ownerType)) {
+            return false;
+        }
         if (field != null) {
             return field.equals(target.field);
         } else if (getter != null) {
@@ -457,13 +466,4 @@ public class BeanProperty<T> implements Type<T> {
             return setter.equals(target.setter);
         }
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getTypeName() {
-        return type.getName();
-    }
-
 }

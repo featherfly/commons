@@ -25,7 +25,7 @@ public class BeanPropertyClassMatcher implements BeanPropertyMatcher {
      * {@inheritDoc}
      */
     @Override
-    public boolean test(BeanProperty<?> beanProperty) {
+    public boolean test(BeanProperty<?, ?> beanProperty) {
         for (Class<?> propertyClass : propertyClasses) {
             if (beanProperty.getType() == propertyClass) {
                 return true;

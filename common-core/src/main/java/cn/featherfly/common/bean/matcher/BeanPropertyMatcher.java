@@ -9,6 +9,6 @@ import cn.featherfly.common.data.Matcher;
  *
  * @author zhongj
  */
-public interface BeanPropertyMatcher extends Matcher<BeanProperty<?>> {
+public interface BeanPropertyMatcher extends Matcher<BeanProperty<?, ?>> {
 
 }

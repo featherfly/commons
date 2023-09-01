@@ -139,7 +139,7 @@ public final class BeanUtils {
         }
         BeanDescriptor<
                 E> beanDescriptor = BeanDescriptor.getBeanDescriptor(ClassUtils.castGenericType(bean.getClass(), bean));
-        for (BeanProperty<?> beanProperty : beanDescriptor.getBeanProperties()) {
+        for (BeanProperty<E, ?> beanProperty : beanDescriptor.getBeanProperties()) {
             if (beanProperty.isReadable()) {
                 map.put(beanProperty.getName(), beanProperty.getValue(bean));
             }
@@ -209,7 +209,7 @@ public final class BeanUtils {
         }
         BeanDescriptor<
                 E> beanDescriptor = BeanDescriptor.getBeanDescriptor(ClassUtils.castGenericType(bean.getClass(), bean));
-        for (BeanProperty<?> beanProperty : beanDescriptor.getBeanProperties()) {
+        for (BeanProperty<E, ?> beanProperty : beanDescriptor.getBeanProperties()) {
             String name = beanProperty.getName();
             if (beanProperty.isWritable() && map.containsKey(name)) {
                 Object value = map.get(name);
@@ -271,9 +271,9 @@ public final class BeanUtils {
                 .getBeanDescriptor(ClassUtils.castGenericType(target.getClass(), target));
         BeanDescriptor<E> fromBeanDescriptor = BeanDescriptor
                 .getBeanDescriptor(ClassUtils.castGenericType(from.getClass(), from));
-        Iterator<BeanProperty<?>> iter = fromBeanDescriptor.getBeanProperties().iterator();
+        Iterator<BeanProperty<E, ?>> iter = fromBeanDescriptor.getBeanProperties().iterator();
         while (iter.hasNext()) {
-            BeanProperty<?> fromProperty = iter.next();
+            BeanProperty<E, ?> fromProperty = iter.next();
             String name = fromProperty.getName();
             copyProperty(target, targetBeanDescriptor, from, fromProperty, name, rule);
         }
@@ -330,9 +330,9 @@ public final class BeanUtils {
                     .getBeanDescriptor(ClassUtils.castGenericType(target.getClass(), target));
             BeanDescriptor<E> fromBeanDescriptor = BeanDescriptor
                     .getBeanDescriptor(ClassUtils.castGenericType(from.getClass(), from));
-            Iterator<BeanProperty<?>> iter = fromBeanDescriptor.getBeanProperties().iterator();
+            Iterator<BeanProperty<E, ?>> iter = fromBeanDescriptor.getBeanProperties().iterator();
             while (iter.hasNext()) {
-                BeanProperty<?> fromProperty = iter.next();
+                BeanProperty<E, ?> fromProperty = iter.next();
                 String name = fromProperty.getName();
                 copyProperty(target, targetBeanDescriptor, from, fromProperty, name, rule);
             }
@@ -351,9 +351,9 @@ public final class BeanUtils {
             //            BeanDescriptor<E> fromBeanDescriptor = BeanDescriptor.getBeanDescriptor(
             //                    ClassUtils.castGenericType(from.getClass(), from));
             // 目标是父类，所以循环目标的属性
-            Iterator<BeanProperty<?>> iter = targetBeanDescriptor.getBeanProperties().iterator();
+            Iterator<BeanProperty<E, ?>> iter = targetBeanDescriptor.getBeanProperties().iterator();
             while (iter.hasNext()) {
-                BeanProperty<?> fromProperty = iter.next();
+                BeanProperty<E, ?> fromProperty = iter.next();
                 String name = fromProperty.getName();
                 copyProperty(target, from, name, rule);
             }
@@ -411,18 +411,18 @@ public final class BeanUtils {
      * @param rule   复制规则
      */
     public static <E> void copyProperty(E target, E from, String name, CopyRule rule) {
-        @SuppressWarnings("rawtypes")
-        BeanDescriptor targetBeanDescriptor = BeanDescriptor.getBeanDescriptor(target.getClass());
-        @SuppressWarnings("rawtypes")
-        BeanDescriptor fromBeanDescriptor = BeanDescriptor.getBeanDescriptor(from.getClass());
-        BeanProperty<?> fromProperty = fromBeanDescriptor.getBeanProperty(name);
+        @SuppressWarnings("unchecked")
+        BeanDescriptor<E> targetBeanDescriptor = BeanDescriptor.getBeanDescriptor((Class<E>) target.getClass());
+        @SuppressWarnings("unchecked")
+        BeanDescriptor<E> fromBeanDescriptor = BeanDescriptor.getBeanDescriptor((Class<E>) from.getClass());
+        BeanProperty<E, ?> fromProperty = fromBeanDescriptor.getBeanProperty(name);
         copyProperty(target, targetBeanDescriptor, from, fromProperty, name, rule);
     }
 
     private static <E> void copyProperty(E target, BeanDescriptor<?> targetBeanDescriptor, E from,
-            BeanProperty<?> fromProperty, String name, CopyRule rule) {
+            BeanProperty<E, ?> fromProperty, String name, CopyRule rule) {
         try {
-            BeanProperty<?> targetProperty = targetBeanDescriptor.getBeanProperty(name);
+            BeanProperty<E, ?> targetProperty = targetBeanDescriptor.getBeanProperty(name);
             copyProperty(target, targetProperty, from, fromProperty, name, rule);
         } catch (NoSuchPropertyException e) {
             LOGGER.debug("类{}没有属性{}", new Object[] { target.getClass().getName(), name });
@@ -441,8 +441,8 @@ public final class BeanUtils {
         //                                , fromProperty.getName()});
     }
 
-    private static <E> void copyProperty(E target, BeanProperty<?> targetProperty, E from, BeanProperty<?> fromProperty,
-            String name, CopyRule rule) {
+    private static <E> void copyProperty(E target, BeanProperty<E, ?> targetProperty, E from,
+            BeanProperty<E, ?> fromProperty, String name, CopyRule rule) {
         if (!fromProperty.isReadable()) {
             LOGGER.debug("类{}的属性{}不可读", new Object[] { from.getClass().getName(), fromProperty.getName() });
         } else if (!targetProperty.isWritable()) {

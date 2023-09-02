@@ -18,6 +18,8 @@ public class StringFormatter {
 
     private char endSymbol;
 
+    private boolean placeholderAutoIndex; //
+
     /**
      * Instantiates a new custom string formatter.
      *
@@ -25,9 +27,25 @@ public class StringFormatter {
      * @param endSymbol   the end symbol
      */
     public StringFormatter(char startSymbol, char endSymbol) {
+        this(startSymbol, endSymbol, false);
+    }
+
+    /**
+     * Instantiates a new custom string formatter.
+     *
+     * @param startSymbol          the start symbol
+     * @param endSymbol            the end symbol
+     * @param placeholderAutoIndex the placeholder auto index <br/>
+     *                             if true auto add index to params placeholder,
+     *                             such as: <br/>
+     *                             "hello {} at {} from [{1}] at {}" <br/>
+     *                             "hello {0} at {1} from [{1}] at {2}" <br/>
+     */
+    public StringFormatter(char startSymbol, char endSymbol, boolean placeholderAutoIndex) {
         super();
         this.startSymbol = startSymbol;
         this.endSymbol = endSymbol;
+        this.placeholderAutoIndex = placeholderAutoIndex;
     }
 
     /**
@@ -111,7 +129,7 @@ public class StringFormatter {
         if (Lang.isEmpty(str)) {
             return str;
         }
-
+        int autoIndex = 0;
         Function<String, Object> getParam;
         if (args instanceof Map) {
             @SuppressWarnings("unchecked")
@@ -156,6 +174,10 @@ public class StringFormatter {
                 if (c == endSymbol || isEnd) {
                     nameEndIndex = index;
                     String name = sb.substring(nameStartIndex + 1, nameEndIndex);
+                    if (placeholderAutoIndex && Lang.isEmpty(name)) {
+                        name = autoIndex + "";
+                        autoIndex++;
+                    }
                     nameEndIndex++;
                     sb.insert(nameEndIndex, getParam.apply(name));
                     sb.delete(nameStartIndex, nameEndIndex);

@@ -1,5 +1,5 @@
 
-package cn.featherfly.common.lang;
+package cn.featherfly.common.lang.string;
 
 import static org.testng.Assert.assertEquals;
 
@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 import cn.featherfly.common.lang.string.StringFormatter;
 import cn.featherfly.common.lang.vo.User;
-import cn.featherfly.common.structure.HashChainMap;
+import cn.featherfly.common.structure.ChainMapImpl;
 
 /**
  * <p>
@@ -30,7 +30,7 @@ public class StringFormatterTest {
 
     User user = new User("featherfly", 20);
 
-    Map<String, Object> argsMap = new HashChainMap<String, Object>().putChain("name", name).putChain("year", year)
+    Map<String, Object> argsMap = new ChainMapImpl<String, Object>().putChain("name", name).putChain("year", year)
             .putChain("name2", name2).putChain("time", time);
 
     Object[] args = new Object[] { name, year, name2, time };
@@ -80,5 +80,18 @@ public class StringFormatterTest {
         assertEquals(formatter.format("hello $$$0$$$ $$$$ at $$$1$$$", name, year), str);
 
         assertEquals(formatter.format("hello $$$name$$$ $$$$ at $$$year$$$", argsMap), str);
+    }
+
+    @Test
+    public void test5() {
+        StringFormatter formatter = new StringFormatter('{', '}', true);
+
+        //        actual = formatter.format("hello {name} at {year} from [{name2}] at {time}", argsMap);
+        actual = formatter.format("hello {} at {} from [{}] at {}", name, year, name2, time);
+        assertEquals(actual, expected);
+
+        assertEquals(formatter.format("hello {} at {} from [{0}] at {}", name, year, time),
+                "hello yufei at 2020 from [yufei] at 12:15");
+
     }
 }

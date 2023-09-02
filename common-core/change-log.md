@@ -12,6 +12,8 @@
 8. 加入BeanPropertySupplier、BeanPropertySupplierImpl
 9. LambdaUtils加入getSerializableIntSupplierLambdaInfo,getSerializableLongSupplierLambdaInfo,getSerializableDoubleSupplierLambdaInfo方法 
 10. BeanProperty加入BeanType泛型定义
+11. StringFormatter（Strings）加入自动占位符序号填充功能，像slf4j一样的方式，不过支持自定义序列号混排，"hello {} at {} from [{1}] at {}"
+12. 加入Console类
 
 # 1.11.0 2022-12-12
 

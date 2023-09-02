@@ -26,7 +26,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
 
     private static final Pattern UNICODE_PATTERN = Pattern.compile("(\\\\u(\\p{XDigit}{4}))");
 
-    private static final StringFormatter FORMATTER = new StringFormatter(Chars.CURLY_L_CHAR, Chars.CURLY_R_CHAR);
+    private static final StringFormatter FORMATTER = new StringFormatter(Chars.CURLY_L_CHAR, Chars.CURLY_R_CHAR, true);
 
     private Strings() {
     }

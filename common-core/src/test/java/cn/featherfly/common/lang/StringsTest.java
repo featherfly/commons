@@ -12,7 +12,7 @@ import java.util.Map;
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.lang.vo.User;
-import cn.featherfly.common.structure.HashChainMap;
+import cn.featherfly.common.structure.ChainMapImpl;
 
 public class StringsTest {
     @Test
@@ -38,7 +38,7 @@ public class StringsTest {
         int year = 2020;
         String time = "12:15";
 
-        Map<String, Object> map = new HashChainMap<String, Object>().putChain("name", name).putChain("year", year)
+        Map<String, Object> map = new ChainMapImpl<String, Object>().putChain("name", name).putChain("year", year)
                 .putChain("name2", name2).putChain("time", time);
         Object[] args = new Object[] { name, year, name2, time };
 
@@ -61,6 +61,12 @@ public class StringsTest {
 
         actual = Strings.format("hello {0} at {1} from [{2}] at {3}", name, year, name2, time);
         assertEquals(actual, expected);
+
+        actual = Strings.format("hello {} at {} from [{}] at {}", name, year, name2, time);
+        assertEquals(actual, expected);
+
+        actual = Strings.format("hello {} at {} from [{0}] at {}", name, year, time);
+        assertEquals(actual, "hello yufei at 2020 from [yufei] at 12:15");
 
         // ------------------
 
@@ -86,7 +92,7 @@ public class StringsTest {
         //        System.out.println(Strings.format(src2, name));
         User user = new User("yufei", 15);
 
-        assertEquals(Strings.format(src, new HashChainMap<String, Object>().putChain("name", name)), expected);
+        assertEquals(Strings.format(src, new ChainMapImpl<String, Object>().putChain("name", name)), expected);
         assertEquals(Strings.format(src2, name), expected);
         assertEquals(Strings.format(src2, new Object[] { name }), expected);
         assertEquals(Strings.format2(src, user), expected);
@@ -107,7 +113,7 @@ public class StringsTest {
 
         src = "{index:{index}, mid:{mid}}";
 
-        actual = Strings.format(src, new HashChainMap<String, Object>().putChain("index", index).putChain("mid", mid));
+        actual = Strings.format(src, new ChainMapImpl<String, Object>().putChain("index", index).putChain("mid", mid));
 
         System.out.println(actual);
 

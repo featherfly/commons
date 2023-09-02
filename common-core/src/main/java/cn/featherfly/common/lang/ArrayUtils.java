@@ -117,15 +117,26 @@ public final class ArrayUtils {
     }
 
     /**
-     * <p>
-     * 返回传入数组是否不为空（是null或size=0）. 当传入对象不是数组时，只会进行null的判断
-     * </p>
+     * 返回传入数组是否不为空（是null或size=0）. 当传入对象不是数组时，只会进行null的判断.
      *
      * @param array 传入的数组
      * @return 传入数组是否不为空
      */
     public static boolean isNotEmpty(Object array) {
         return !isEmpty(array);
+    }
+
+    /**
+     * 返回传入对象是否是数组.
+     *
+     * @param array the object
+     * @return boolean is array
+     */
+    public static boolean isArray(Object array) {
+        if (array == null) {
+            return false;
+        }
+        return ClassUtils.isArray(array.getClass());
     }
 
     /**

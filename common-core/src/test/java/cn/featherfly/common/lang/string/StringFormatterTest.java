@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.testng.annotations.Test;
 
-import cn.featherfly.common.lang.string.StringFormatter;
 import cn.featherfly.common.lang.vo.User;
 import cn.featherfly.common.structure.ChainMapImpl;
 
@@ -92,6 +91,9 @@ public class StringFormatterTest {
 
         assertEquals(formatter.format("hello {} at {} from [{0}] at {}", name, year, time),
                 "hello yufei at 2020 from [yufei] at 12:15");
+
+        actual = formatter.format("hello {} array:{}", name, new Object[] { name, name2 });
+        assertEquals(actual, "hello yufei array:[yufei,yi]");
 
     }
 }

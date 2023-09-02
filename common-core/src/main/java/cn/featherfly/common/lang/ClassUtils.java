@@ -625,6 +625,19 @@ public final class ClassUtils {
     }
 
     /**
+     * 是否是数组
+     *
+     * @param type 类型
+     * @return 是否是map接口，及其子接口或实现类
+     */
+    public static boolean isArray(Class<?> type) {
+        if (type == null) {
+            return false;
+        }
+        return type.isArray();
+    }
+
+    /**
      * 是否是cellection接口,及其子接口或实现类.
      *
      * @param type 类型

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import cn.featherfly.common.bean.BeanUtils;
+import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Lang;
 
 /**
@@ -134,9 +135,9 @@ public class StringFormatter {
         if (args instanceof Map) {
             @SuppressWarnings("unchecked")
             Map<String, Object> argsMap = (Map<String, Object>) args;
-            getParam = (name) -> argsMap.get(name);
+            getParam = (name) -> ArrayUtils.toString(argsMap.get(name));
         } else {
-            getParam = (name) -> BeanUtils.getProperty(args, name);
+            getParam = (name) -> ArrayUtils.toString(BeanUtils.getProperty(args, name));
         }
 
         StringBuilder sb = new StringBuilder(str);

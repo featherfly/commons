@@ -22,7 +22,7 @@ public class StringLinker {
 
     private boolean ignoreDuplicate = true;
 
-    private boolean ignoreCaseEmpty = true;
+    private boolean ignoreEmpty = true;
 
     private String separator;
 
@@ -52,13 +52,13 @@ public class StringLinker {
      *
      * @param separator       the separator
      * @param ignoreDuplicate the ignore duplicate
-     * @param ignoreCaseEmpty the ignore case empty
+     * @param ignoreEmpty     the ignore empty
      */
-    public StringLinker(String separator, boolean ignoreDuplicate, boolean ignoreCaseEmpty) {
+    public StringLinker(String separator, boolean ignoreDuplicate, boolean ignoreEmpty) {
         super();
         this.separator = separator;
         this.ignoreDuplicate = ignoreDuplicate;
-        this.ignoreCaseEmpty = ignoreCaseEmpty;
+        this.ignoreEmpty = ignoreEmpty;
     }
 
     public StringLinker link(String... values) {
@@ -67,12 +67,12 @@ public class StringLinker {
         } else {
             value.append(ignoreDuplicate ? trimEndSeparator(values[0]) : values[0]);
             for (int i = 1; i < values.length - 1; i++) {
-                if (ignoreCaseEmpty && Lang.isEmpty(values[i])) {
+                if (ignoreEmpty && Lang.isEmpty(values[i])) {
                     continue;
                 }
                 value.append(separator).append(ignoreDuplicate ? trimStartAndEndSeparator(values[i]) : values[i]);
             }
-            if (ignoreCaseEmpty && Lang.isEmpty(values[values.length - 1])) {
+            if (ignoreEmpty && Lang.isEmpty(values[values.length - 1])) {
                 return this;
             }
             value.append(separator).append(

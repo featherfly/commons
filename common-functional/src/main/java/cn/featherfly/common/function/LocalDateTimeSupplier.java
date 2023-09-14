@@ -7,6 +7,7 @@ import java.util.function.Supplier;
  * The Interface LocalDateTimeSupplier.
  *
  * @author zhongj
+ * @see java.util.function.Supplier
  */
 @FunctionalInterface
 public interface LocalDateTimeSupplier extends Supplier<LocalDateTime> {

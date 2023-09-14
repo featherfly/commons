@@ -1,13 +1,17 @@
 
 package cn.featherfly.common.function.serializable;
 
+import cn.featherfly.common.function.ArraySupplier;
+
 /**
- * <p>
- * ArraySupplier
- * </p>
+ * ArraySupplier.
  *
  * @author zhongj
+ * @param <E> the element type
+ * @see SerializableSupplier
+ * @see ArraySupplier
  */
-public interface SerializableArraySupplier<E> extends SerializableSupplier<E[]> {
+@FunctionalInterface
+public interface SerializableArraySupplier<E> extends SerializableSupplier<E[]>, ArraySupplier<E> {
 
 }

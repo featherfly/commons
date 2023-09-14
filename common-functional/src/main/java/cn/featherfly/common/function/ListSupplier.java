@@ -8,6 +8,7 @@ import java.util.List;
  *
  * @author zhongj
  * @param <E> the element type
+ * @see java.util.function.Supplier
  */
 @FunctionalInterface
 public interface ListSupplier<E> extends BaseCollectionSupplier<List<E>, E> {

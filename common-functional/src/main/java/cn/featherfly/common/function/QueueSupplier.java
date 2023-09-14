@@ -8,6 +8,7 @@ import java.util.Queue;
  *
  * @author zhongj
  * @param <E> the element type
+ * @see BaseCollectionSupplier
  */
 @FunctionalInterface
 public interface QueueSupplier<E> extends BaseCollectionSupplier<Queue<E>, E> {

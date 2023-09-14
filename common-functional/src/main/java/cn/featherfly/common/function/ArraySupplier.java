@@ -17,6 +17,7 @@ import java.util.function.Supplier;
  *
  * @author zhongj
  * @param <E> the element type
+ * @see java.util.function.Supplier
  */
 @FunctionalInterface
 public interface ArraySupplier<E> extends Supplier<E[]> {

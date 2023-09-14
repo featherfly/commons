@@ -7,6 +7,8 @@ import java.util.function.Supplier;
  *
  * @author zhongj
  * @param <T> the generic type
+ * @param <T> the type(extends Number) of results supplied by this supplier
+ * @see java.util.function.Supplier
  */
 @FunctionalInterface
 public interface NumberSupplier<T extends Number> extends Supplier<T> {

@@ -8,7 +8,6 @@ import cn.featherfly.common.function.StringSupplier;
  * @author zhongj
  * @see SerializableSupplier
  * @see StringSupplier
- * @see java.util.function.Supplier
  */
 @FunctionalInterface
 public interface SerializableStringSupplier extends SerializableSupplier<String>, StringSupplier {

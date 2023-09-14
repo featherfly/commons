@@ -1,14 +1,16 @@
 
 package cn.featherfly.common.function;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * The Interface SetSupplier.
  *
  * @author zhongj
  * @param <E> the element type
+ * @see BaseCollectionSupplier
  */
-public interface SetSupplier<E> extends BaseCollectionSupplier<List<E>, E> {
+@FunctionalInterface
+public interface SetSupplier<E> extends BaseCollectionSupplier<Set<E>, E> {
 
 }

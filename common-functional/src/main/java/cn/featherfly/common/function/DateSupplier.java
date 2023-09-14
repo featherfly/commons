@@ -7,7 +7,8 @@ import java.util.function.Supplier;
  * The Interface DateSupplier.
  *
  * @author zhongj
- * @param <T> the generic type
+ * @param <T> the type(extends Date) of results supplied by this supplier
+ * @see java.util.function.Supplier
  */
 @FunctionalInterface
 public interface DateSupplier<T extends Date> extends Supplier<T> {

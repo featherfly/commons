@@ -8,7 +8,9 @@ import java.util.function.IntSupplier;
  * The Interface SerializableIntSupplier.
  *
  * @author zhongj
+ * @see java.util.function.IntSupplier
  */
+@FunctionalInterface
 public interface SerializableIntSupplier extends Serializable, IntSupplier {
 
 }

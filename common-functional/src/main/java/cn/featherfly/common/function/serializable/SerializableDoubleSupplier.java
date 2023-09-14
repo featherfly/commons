@@ -9,6 +9,7 @@ import java.util.function.DoubleSupplier;
  *
  * @author zhongj
  */
+@FunctionalInterface
 public interface SerializableDoubleSupplier extends Serializable, DoubleSupplier {
 
 }

@@ -10,6 +10,7 @@ import java.util.function.Supplier;
  * @author zhongj
  * @param <C> the generic collection type
  * @param <E> the element type
+ * @see java.util.function.Supplier
  */
 @FunctionalInterface
 public interface BaseCollectionSupplier<C extends Collection<E>, E> extends Supplier<C> {

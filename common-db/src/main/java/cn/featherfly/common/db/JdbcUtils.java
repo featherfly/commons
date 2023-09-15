@@ -293,7 +293,7 @@ public final class JdbcUtils {
     }
 
     /**
-     * commit transaction
+     * commit transaction.
      *
      * @param conn Connection
      * @throws JdbcException if a database access error occurs
@@ -569,7 +569,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      */
@@ -584,7 +583,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -600,7 +598,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -616,7 +613,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -632,7 +628,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -644,7 +639,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -656,7 +650,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -672,7 +665,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -688,7 +680,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -704,7 +695,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -720,7 +710,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -736,7 +725,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -752,7 +740,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -768,7 +755,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -784,7 +770,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -800,7 +785,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -816,7 +800,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -832,7 +815,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -848,7 +830,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -864,7 +845,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -880,7 +860,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -896,7 +875,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -912,7 +890,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -928,7 +905,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -944,7 +920,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -960,7 +935,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -976,7 +950,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -992,7 +965,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -1008,7 +980,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -1024,7 +995,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>      the element type
      * @param prep     PreparedStatement
      * @param position 占位符位置
      * @param value    参数
@@ -1182,7 +1152,6 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
-     * @param <E>  the element type
      * @param call the CallableStatement
      * @param name the parameter name
      */
@@ -1328,6 +1297,15 @@ public final class JdbcUtils {
         return outParamMap;
     }
 
+    /**
+     * Sets the out param map.
+     *
+     * @param outParamMap the out param map
+     * @param index       the index
+     * @param arg         the arg
+     * @param meta        the meta
+     * @throws SQLException the SQL exception
+     */
     private static void setOutParamMap(Map<Integer, Class<?>> outParamMap, int index, Object arg,
             ParameterMetaData meta) throws SQLException {
         if (arg == null) {
@@ -2168,6 +2146,13 @@ public final class JdbcUtils {
     //	get value
     // ****************************************************************************************************************
 
+    /**
+     * Gets the bool.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the bool
+     */
     public static boolean getBool(ResultSet rs, int index) {
         try {
             return rs.getBoolean(index);
@@ -2176,6 +2161,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the boolean.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the boolean
+     */
     public static Boolean getBoolean(ResultSet rs, int index) {
         try {
             Boolean value = Boolean.valueOf(rs.getBoolean(index));
@@ -2188,6 +2180,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the byte value.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the byte value
+     */
     public static byte getByteValue(ResultSet rs, int index) {
         try {
             return rs.getByte(index);
@@ -2196,6 +2195,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the byte.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the byte
+     */
     public static Byte getByte(ResultSet rs, int index) {
         try {
             Byte value = Byte.valueOf(rs.getByte(index));
@@ -2208,6 +2214,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the short value.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the short value
+     */
     public static short getShortValue(ResultSet rs, int index) {
         try {
             return rs.getShort(index);
@@ -2216,6 +2229,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the short.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the short
+     */
     public static Short getShort(ResultSet rs, int index) {
         try {
             Short value = Short.valueOf(rs.getShort(index));
@@ -2228,6 +2248,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the int.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the int
+     */
     public static int getInt(ResultSet rs, int index) {
         try {
             return rs.getInt(index);
@@ -2236,6 +2263,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the integer.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the integer
+     */
     public static Integer getInteger(ResultSet rs, int index) {
         try {
             Integer value = Integer.valueOf(rs.getInt(index));
@@ -2248,6 +2282,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the long.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the long
+     */
     public static Long getLong(ResultSet rs, int index) {
         try {
             Long value = Long.valueOf(rs.getLong(index));
@@ -2260,6 +2301,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the long value.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the long value
+     */
     public static long getLongValue(ResultSet rs, int index) {
         try {
             return rs.getLong(index);
@@ -2268,6 +2316,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the float.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the float
+     */
     public static Float getFloat(ResultSet rs, int index) {
         try {
             Float value = Float.valueOf(rs.getFloat(index));
@@ -2280,6 +2335,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the float value.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the float value
+     */
     public static float getFloatValue(ResultSet rs, int index) {
         try {
             return rs.getFloat(index);
@@ -2288,6 +2350,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the double.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the double
+     */
     public static Double getDouble(ResultSet rs, int index) {
         try {
             Double value = Double.valueOf(rs.getDouble(index));
@@ -2300,6 +2369,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the double value.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the double value
+     */
     public static double getDoubleValue(ResultSet rs, int index) {
         try {
             return rs.getDouble(index);
@@ -2308,6 +2384,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the string.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the string
+     */
     public static String getString(ResultSet rs, int index) {
         try {
             return rs.getString(index);
@@ -2316,6 +2399,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the big decimal.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the big decimal
+     */
     public static BigDecimal getBigDecimal(ResultSet rs, int index) {
         try {
             return rs.getBigDecimal(index);
@@ -2324,6 +2414,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the date.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the date
+     */
     public static java.sql.Date getDate(ResultSet rs, int index) {
         try {
             return rs.getDate(index);
@@ -2332,6 +2429,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the timestamp.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the timestamp
+     */
     public static Timestamp getTimestamp(ResultSet rs, int index) {
         try {
             return rs.getTimestamp(index);
@@ -2340,6 +2444,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the time.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the time
+     */
     public static Time getTime(ResultSet rs, int index) {
         try {
             return rs.getTime(index);
@@ -2348,6 +2459,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the local date.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the local date
+     */
     public static LocalDate getLocalDate(ResultSet rs, int index) {
         java.sql.Date value = getDate(rs, index);
         if (value != null) {
@@ -2356,6 +2474,13 @@ public final class JdbcUtils {
         return null;
     }
 
+    /**
+     * Gets the local time.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the local time
+     */
     public static LocalTime getLocalTime(ResultSet rs, int index) {
         Time value = getTime(rs, index);
         if (value != null) {
@@ -2364,6 +2489,13 @@ public final class JdbcUtils {
         return null;
     }
 
+    /**
+     * Gets the local date time.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the local date time
+     */
     public static LocalDateTime getLocalDateTime(ResultSet rs, int index) {
         Timestamp value = getTimestamp(rs, index);
         if (value != null) {
@@ -2372,6 +2504,13 @@ public final class JdbcUtils {
         return null;
     }
 
+    /**
+     * Gets the bytes.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the bytes
+     */
     public static byte[] getBytes(ResultSet rs, int index) {
         try {
             return rs.getBytes(index);
@@ -2382,6 +2521,13 @@ public final class JdbcUtils {
 
     // ****************************************************************************************************************
 
+    /**
+     * Gets the bool.
+     *
+     * @param call  the call
+     * @param index the index
+     * @return the bool
+     */
     public static boolean getBool(CallableStatement call, int index) {
         try {
             return call.getBoolean(index);
@@ -2390,6 +2536,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the boolean.
+     *
+     * @param call  the call
+     * @param index the index
+     * @return the boolean
+     */
     public static Boolean getBoolean(CallableStatement call, int index) {
         try {
             Boolean value = Boolean.valueOf(call.getBoolean(index));
@@ -2402,6 +2555,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the byte value.
+     *
+     * @param call  the call
+     * @param index the index
+     * @return the byte value
+     */
     public static byte getByteValue(CallableStatement call, int index) {
         try {
             return call.getByte(index);
@@ -2410,6 +2570,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the byte.
+     *
+     * @param call  the call
+     * @param index the index
+     * @return the byte
+     */
     public static Byte getByte(CallableStatement call, int index) {
         try {
             Byte value = Byte.valueOf(call.getByte(index));
@@ -2422,6 +2589,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the short value.
+     *
+     * @param call  the call
+     * @param index the index
+     * @return the short value
+     */
     public static short getShortValue(CallableStatement call, int index) {
         try {
             return call.getShort(index);
@@ -2430,6 +2604,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the short.
+     *
+     * @param call  the call
+     * @param index the index
+     * @return the short
+     */
     public static Short getShort(CallableStatement call, int index) {
         try {
             Short value = Short.valueOf(call.getShort(index));
@@ -2442,6 +2623,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the int.
+     *
+     * @param call  the call
+     * @param index the index
+     * @return the int
+     */
     public static int getInt(CallableStatement call, int index) {
         try {
             return call.getInt(index);
@@ -2450,6 +2638,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the integer.
+     *
+     * @param call  the call
+     * @param index the index
+     * @return the integer
+     */
     public static Integer getInteger(CallableStatement call, int index) {
         try {
             Integer value = Integer.valueOf(call.getInt(index));
@@ -2462,6 +2657,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the long.
+     *
+     * @param call  the call
+     * @param index the index
+     * @return the long
+     */
     public static Long getLong(CallableStatement call, int index) {
         try {
             Long value = Long.valueOf(call.getLong(index));
@@ -2474,6 +2676,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the long value.
+     *
+     * @param call  the call
+     * @param index the index
+     * @return the long value
+     */
     public static long getLongValue(CallableStatement call, int index) {
         try {
             return call.getLong(index);
@@ -2482,6 +2691,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the float.
+     *
+     * @param call  the call
+     * @param index the index
+     * @return the float
+     */
     public static Float getFloat(CallableStatement call, int index) {
         try {
             Float value = Float.valueOf(call.getFloat(index));
@@ -2494,6 +2710,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the float value.
+     *
+     * @param call  the call
+     * @param index the index
+     * @return the float value
+     */
     public static float getFloatValue(CallableStatement call, int index) {
         try {
             return call.getFloat(index);
@@ -2502,6 +2725,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the double.
+     *
+     * @param call  the call
+     * @param index the index
+     * @return the double
+     */
     public static Double getDouble(CallableStatement call, int index) {
         try {
             Double value = Double.valueOf(call.getDouble(index));
@@ -2514,6 +2744,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the double value.
+     *
+     * @param call  the call
+     * @param index the index
+     * @return the double value
+     */
     public static double getDoubleValue(CallableStatement call, int index) {
         try {
             return call.getDouble(index);
@@ -2522,6 +2759,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the string.
+     *
+     * @param call  the call
+     * @param index the index
+     * @return the string
+     */
     public static String getString(CallableStatement call, int index) {
         try {
             return call.getString(index);
@@ -2530,6 +2774,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the big decimal.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the big decimal
+     */
     public static BigDecimal getBigDecimal(CallableStatement rs, int index) {
         try {
             return rs.getBigDecimal(index);
@@ -2538,6 +2789,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the date.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the date
+     */
     public static java.sql.Date getDate(CallableStatement rs, int index) {
         try {
             return rs.getDate(index);
@@ -2546,6 +2804,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the timestamp.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the timestamp
+     */
     public static Timestamp getTimestamp(CallableStatement rs, int index) {
         try {
             return rs.getTimestamp(index);
@@ -2554,6 +2819,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the time.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the time
+     */
     public static Time getTime(CallableStatement rs, int index) {
         try {
             return rs.getTime(index);
@@ -2562,6 +2834,13 @@ public final class JdbcUtils {
         }
     }
 
+    /**
+     * Gets the local date.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the local date
+     */
     public static LocalDate getLocalDate(CallableStatement rs, int index) {
         java.sql.Date value = getDate(rs, index);
         if (value != null) {
@@ -2570,6 +2849,13 @@ public final class JdbcUtils {
         return null;
     }
 
+    /**
+     * Gets the local time.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the local time
+     */
     public static LocalTime getLocalTime(CallableStatement rs, int index) {
         Time value = getTime(rs, index);
         if (value != null) {
@@ -2578,6 +2864,13 @@ public final class JdbcUtils {
         return null;
     }
 
+    /**
+     * Gets the local date time.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the local date time
+     */
     public static LocalDateTime getLocalDateTime(CallableStatement rs, int index) {
         Timestamp value = getTimestamp(rs, index);
         if (value != null) {
@@ -2586,6 +2879,13 @@ public final class JdbcUtils {
         return null;
     }
 
+    /**
+     * Gets the bytes.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the bytes
+     */
     public static byte[] getBytes(CallableStatement rs, int index) {
         try {
             return rs.getBytes(index);

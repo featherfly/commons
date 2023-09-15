@@ -26,8 +26,6 @@ public class IntSqlTypeOperator implements JavaTypeSqlTypeOperator<Integer> {
 
     /**
      * Instantiates a new default java sql type operator.
-     *
-     * @param type the type
      */
     public IntSqlTypeOperator() {
 

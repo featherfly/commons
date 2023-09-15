@@ -115,7 +115,6 @@ public final class JdbcUtils {
         if (conn != null) {
             try {
                 conn.close();
-                conn = null;
             } catch (SQLException e) {
                 throw new JdbcException(e);
             }
@@ -131,7 +130,6 @@ public final class JdbcUtils {
         if (rs != null) {
             try {
                 rs.close();
-                rs = null;
             } catch (SQLException e) {
                 throw new JdbcException(e);
             }
@@ -147,7 +145,6 @@ public final class JdbcUtils {
         if (stmt != null) {
             try {
                 stmt.close();
-                stmt = null;
             } catch (SQLException e) {
                 throw new JdbcException(e);
             }
@@ -576,7 +573,7 @@ public final class JdbcUtils {
      * @param prep     PreparedStatement
      * @param position 占位符位置
      */
-    public static <E> void setParameterNull(PreparedStatement prep, int position) {
+    public static void setParameterNull(PreparedStatement prep, int position) {
         try {
             prep.setObject(position, null);
         } catch (SQLException e) {
@@ -592,7 +589,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, String value) {
+    public static void setParameter(PreparedStatement prep, int position, String value) {
         try {
             prep.setString(position, value);
         } catch (SQLException e) {
@@ -608,7 +605,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, boolean value) {
+    public static void setParameter(PreparedStatement prep, int position, boolean value) {
         try {
             prep.setBoolean(position, value);
         } catch (SQLException e) {
@@ -624,7 +621,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, Boolean value) {
+    public static void setParameter(PreparedStatement prep, int position, Boolean value) {
         if (value != null) {
             setParameter(prep, position, value.booleanValue());
         } else {
@@ -640,8 +637,8 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, char value) {
-        setParameter(prep, position, new Character(value));
+    public static void setParameter(PreparedStatement prep, int position, char value) {
+        setParameter(prep, position, String.valueOf(value));
     }
 
     /**
@@ -652,12 +649,8 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, Character value) {
-        try {
-            prep.setString(position, value.toString());
-        } catch (SQLException e) {
-            throw new JdbcException(e);
-        }
+    public static void setParameter(PreparedStatement prep, int position, Character value) {
+        setParameter(prep, position, value.toString());
     }
 
     /**
@@ -668,7 +661,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, byte value) {
+    public static void setParameter(PreparedStatement prep, int position, byte value) {
         try {
             prep.setByte(position, value);
         } catch (SQLException e) {
@@ -684,7 +677,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, Byte value) {
+    public static void setParameter(PreparedStatement prep, int position, Byte value) {
         if (value != null) {
             setParameter(prep, position, value.byteValue());
         } else {
@@ -700,7 +693,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, short value) {
+    public static void setParameter(PreparedStatement prep, int position, short value) {
         try {
             prep.setShort(position, value);
         } catch (SQLException e) {
@@ -716,7 +709,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, Short value) {
+    public static void setParameter(PreparedStatement prep, int position, Short value) {
         if (value != null) {
             setParameter(prep, position, value.shortValue());
         } else {
@@ -732,7 +725,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, int value) {
+    public static void setParameter(PreparedStatement prep, int position, int value) {
         try {
             prep.setInt(position, value);
         } catch (SQLException e) {
@@ -748,7 +741,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, Integer value) {
+    public static void setParameter(PreparedStatement prep, int position, Integer value) {
         if (value != null) {
             setParameter(prep, position, value.intValue());
         } else {
@@ -764,7 +757,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, long value) {
+    public static void setParameter(PreparedStatement prep, int position, long value) {
         try {
             prep.setLong(position, value);
         } catch (SQLException e) {
@@ -780,7 +773,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, Long value) {
+    public static void setParameter(PreparedStatement prep, int position, Long value) {
         if (value != null) {
             setParameter(prep, position, value.longValue());
         } else {
@@ -796,7 +789,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, BigInteger value) {
+    public static void setParameter(PreparedStatement prep, int position, BigInteger value) {
         if (value != null) {
             setParameter(prep, position, value.longValue());
         } else {
@@ -812,7 +805,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, float value) {
+    public static void setParameter(PreparedStatement prep, int position, float value) {
         try {
             prep.setFloat(position, value);
         } catch (SQLException e) {
@@ -828,7 +821,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, Float value) {
+    public static void setParameter(PreparedStatement prep, int position, Float value) {
         if (value != null) {
             setParameter(prep, position, value.floatValue());
         } else {
@@ -844,7 +837,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, double value) {
+    public static void setParameter(PreparedStatement prep, int position, double value) {
         try {
             prep.setDouble(position, value);
         } catch (SQLException e) {
@@ -860,7 +853,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, Double value) {
+    public static void setParameter(PreparedStatement prep, int position, Double value) {
         if (value != null) {
             setParameter(prep, position, value.doubleValue());
         } else {
@@ -876,7 +869,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, BigDecimal value) {
+    public static void setParameter(PreparedStatement prep, int position, BigDecimal value) {
         try {
             prep.setBigDecimal(position, value);
         } catch (SQLException e) {
@@ -892,7 +885,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, AtomicBoolean value) {
+    public static void setParameter(PreparedStatement prep, int position, AtomicBoolean value) {
         if (value == null) {
             setParameterNull(prep, position);
         } else {
@@ -908,7 +901,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, AtomicInteger value) {
+    public static void setParameter(PreparedStatement prep, int position, AtomicInteger value) {
         if (value == null) {
             setParameterNull(prep, position);
         } else {
@@ -924,7 +917,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, AtomicLong value) {
+    public static void setParameter(PreparedStatement prep, int position, AtomicLong value) {
         if (value == null) {
             setParameterNull(prep, position);
         } else {
@@ -940,7 +933,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, java.sql.Date value) {
+    public static void setParameter(PreparedStatement prep, int position, java.sql.Date value) {
         try {
             prep.setDate(position, value);
         } catch (SQLException e) {
@@ -956,7 +949,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, Time value) {
+    public static void setParameter(PreparedStatement prep, int position, Time value) {
         try {
             prep.setTime(position, value);
         } catch (SQLException e) {
@@ -972,7 +965,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, Timestamp value) {
+    public static void setParameter(PreparedStatement prep, int position, Timestamp value) {
         try {
             prep.setTimestamp(position, value);
         } catch (SQLException e) {
@@ -988,7 +981,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, Date value) {
+    public static void setParameter(PreparedStatement prep, int position, Date value) {
         if (value != null) {
             setParameter(prep, position, new Timestamp(value.getTime()));
         } else {
@@ -1004,7 +997,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, LocalDate value) {
+    public static void setParameter(PreparedStatement prep, int position, LocalDate value) {
         if (value != null) {
             setParameter(prep, position, java.sql.Date.valueOf(value));
         } else {
@@ -1020,7 +1013,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, LocalDateTime value) {
+    public static void setParameter(PreparedStatement prep, int position, LocalDateTime value) {
         if (value != null) {
             setParameter(prep, position, Timestamp.valueOf(value));
         } else {
@@ -1036,7 +1029,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value    参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, LocalTime value) {
+    public static void setParameter(PreparedStatement prep, int position, LocalTime value) {
         if (value != null) {
             setParameter(prep, position, Time.valueOf(value));
         } else {
@@ -1169,7 +1162,7 @@ public final class JdbcUtils {
                 }
             } else if (value instanceof FieldValueOperator) { // TODO 后续FieldValue再考虑名称
                 //                ((FieldValue<?>) value).set(prep, position);
-                setParameter(prep, position, (FieldValueOperator<?>) value);
+                setParameter(prep, position, value);
             } else if (value instanceof Optional) {
                 setParameter(prep, position, ((Optional<?>) value).orElse(null), enumWithOridinal);
             } else if (value instanceof AtomicInteger) {
@@ -1193,7 +1186,7 @@ public final class JdbcUtils {
      * @param call the CallableStatement
      * @param name the parameter name
      */
-    public static <E> void setParameterNull(CallableStatement call, String name) {
+    public static void setParameterNull(CallableStatement call, String name) {
         try {
             call.setObject(name, null);
         } catch (SQLException e) {
@@ -1254,11 +1247,8 @@ public final class JdbcUtils {
                 call.setTime(name, Time.valueOf((LocalTime) value));
             } else if (value instanceof LocalDate) {
                 call.setDate(name, java.sql.Date.valueOf((LocalDate) value));
-                //                prep.setDate(position, new java.sql.Date(Dates.toDate((LocalDate) value).getTime()));
             } else if (value instanceof LocalDateTime) {
                 call.setTimestamp(name, Timestamp.valueOf((LocalDateTime) value));
-                //                prep.setTimestamp(position, new Timestamp(Dates.getTime((LocalDateTime) value)));
-                //                prep.setTimestamp(position, Timestamp.from(((LocalDateTime) value).atZone(ZoneId.systemDefault()).toInstant()));
             } else if (value instanceof Date) {
                 call.setTimestamp(name, new Timestamp(((Date) value).getTime()));
             } else if (value instanceof Timestamp) {
@@ -1289,58 +1279,6 @@ public final class JdbcUtils {
             throw new JdbcException(e);
         }
     }
-    //
-    //    /**
-    //     * set proceduce params.
-    //     *
-    //     * @param call   CallableStatement
-    //     * @param values the parameter values map
-    //     * @return the out parameter index and class map
-    //     */
-    //    public static Map<String, Class<?>> setParameters(CallableStatement call, Map<String, Object> values) {
-    //        return setParameters(call, values, true);
-    //    }
-    //
-    //    /**
-    //     * set proceduce param.
-    //     *
-    //     * @param call             CallableStatement
-    //     * @param values           the parameter values map
-    //     * @param enumWithOridinal enum with oridinal
-    //     * @return the out parameter index and class map
-    //     */
-    //    public static Map<String, Class<?>> setParameters(CallableStatement call, Map<String, Object> values,
-    //            boolean enumWithOridinal) {
-    //        Map<String, Class<?>> outParamMap = new HashMap<>(0);
-    //        ParameterMetaData meta = call.getParameterMetaData();
-    //        if (meta.getParameterCount() != values.size()) {
-    //            // ENHANCE 后续来优化异常信息
-    //            throw new JdbcException(
-    //                    Strings.format("procedure parameter count[{0}] not equals parameter values map size[{1}]",
-    //                            meta.getParameterCount(), values.size()));
-    //        }
-    //        for (Entry<String, Object> entry : values.entrySet()) {
-    //            Object arg = entry.getValue();
-    //            int mode = meta.getParameterMode(i);
-    //            if (mode == ParameterMetaData.parameterModeOut) {
-    //                if (arg == null) {
-    //                    throw new JdbcException("out parameter can not be null with ")
-    //                } else {
-    //                    outParamMap.put(entry.getKey(), arg.getClass());
-    //                }
-    //            } else if (mode == ParameterMetaData.parameterModeInOut) {
-    //                if (arg == null) {
-    //                    outParamMap.put(entry.getKey(), ClassUtils.forName(meta.getParameterClassName(i)));
-    //                } else {
-    //                    outParamMap.put(entry.getKey(), arg.getClass());
-    //                }
-    //                setParameter(call, entry.getKey(), arg);
-    //            } else {
-    //                setParameter(call, entry.getKey(), arg);
-    //            }
-    //        }
-    //        return outParamMap;
-    //    }
 
     /**
      * set proceduce param.
@@ -1553,23 +1491,23 @@ public final class JdbcUtils {
                 value = Boolean.valueOf(rs.getBoolean(index));
                 wasNullCheck = true;
             } else if (byte.class.equals(requiredType) || Byte.class.equals(requiredType)) {
-                value = new Byte(rs.getByte(index));
+                value = Byte.valueOf(rs.getByte(index));
                 wasNullCheck = true;
             } else if (short.class.equals(requiredType) || Short.class.equals(requiredType)) {
-                value = new Short(rs.getShort(index));
+                value = Short.valueOf(rs.getShort(index));
                 wasNullCheck = true;
             } else if (int.class.equals(requiredType) || Integer.class.equals(requiredType)) {
-                value = new Integer(rs.getInt(index));
+                value = Integer.valueOf(rs.getInt(index));
                 wasNullCheck = true;
             } else if (long.class.equals(requiredType) || Long.class.equals(requiredType)) {
-                value = new Long(rs.getLong(index));
+                value = Long.valueOf(rs.getLong(index));
                 wasNullCheck = true;
             } else if (float.class.equals(requiredType) || Float.class.equals(requiredType)) {
-                value = new Float(rs.getFloat(index));
+                value = Float.valueOf(rs.getFloat(index));
                 wasNullCheck = true;
             } else if (double.class.equals(requiredType) || Double.class.equals(requiredType)
                     || Number.class.equals(requiredType)) {
-                value = new Double(rs.getDouble(index));
+                value = Double.valueOf(rs.getDouble(index));
                 wasNullCheck = true;
             } else if (byte[].class.equals(requiredType)) {
                 value = rs.getBytes(index);
@@ -1914,23 +1852,23 @@ public final class JdbcUtils {
                 value = Boolean.valueOf(call.getBoolean(name));
                 wasNullCheck = true;
             } else if (byte.class.equals(requiredType) || Byte.class.equals(requiredType)) {
-                value = new Byte(call.getByte(name));
+                value = Byte.valueOf(call.getByte(name));
                 wasNullCheck = true;
             } else if (short.class.equals(requiredType) || Short.class.equals(requiredType)) {
-                value = new Short(call.getShort(name));
+                value = Short.valueOf(call.getShort(name));
                 wasNullCheck = true;
             } else if (int.class.equals(requiredType) || Integer.class.equals(requiredType)) {
-                value = new Integer(call.getInt(name));
+                value = Integer.valueOf(call.getInt(name));
                 wasNullCheck = true;
             } else if (long.class.equals(requiredType) || Long.class.equals(requiredType)) {
-                value = new Long(call.getLong(name));
+                value = Long.valueOf(call.getLong(name));
                 wasNullCheck = true;
             } else if (float.class.equals(requiredType) || Float.class.equals(requiredType)) {
-                value = new Float(call.getFloat(name));
+                value = Float.valueOf(call.getFloat(name));
                 wasNullCheck = true;
             } else if (double.class.equals(requiredType) || Double.class.equals(requiredType)
                     || Number.class.equals(requiredType)) {
-                value = new Double(call.getDouble(name));
+                value = Double.valueOf(call.getDouble(name));
                 wasNullCheck = true;
             } else if (byte[].class.equals(requiredType)) {
                 value = call.getBytes(name);
@@ -2071,23 +2009,23 @@ public final class JdbcUtils {
                 value = Boolean.valueOf(call.getBoolean(index));
                 wasNullCheck = true;
             } else if (byte.class.equals(requiredType) || Byte.class.equals(requiredType)) {
-                value = new Byte(call.getByte(index));
+                value = Byte.valueOf(call.getByte(index));
                 wasNullCheck = true;
             } else if (short.class.equals(requiredType) || Short.class.equals(requiredType)) {
-                value = new Short(call.getShort(index));
+                value = Short.valueOf(call.getShort(index));
                 wasNullCheck = true;
             } else if (int.class.equals(requiredType) || Integer.class.equals(requiredType)) {
-                value = new Integer(call.getInt(index));
+                value = Integer.valueOf(call.getInt(index));
                 wasNullCheck = true;
             } else if (long.class.equals(requiredType) || Long.class.equals(requiredType)) {
-                value = new Long(call.getLong(index));
+                value = Long.valueOf(call.getLong(index));
                 wasNullCheck = true;
             } else if (float.class.equals(requiredType) || Float.class.equals(requiredType)) {
-                value = new Float(call.getFloat(index));
+                value = Float.valueOf(call.getFloat(index));
                 wasNullCheck = true;
             } else if (double.class.equals(requiredType) || Double.class.equals(requiredType)
                     || Number.class.equals(requiredType)) {
-                value = new Double(call.getDouble(index));
+                value = Double.valueOf(call.getDouble(index));
                 wasNullCheck = true;
             } else if (byte[].class.equals(requiredType)) {
                 value = call.getBytes(index);
@@ -2221,6 +2159,436 @@ public final class JdbcUtils {
                 name = resultSetMetaData.getColumnName(columnIndex);
             }
             return name;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    // ****************************************************************************************************************
+    //	get value
+    // ****************************************************************************************************************
+
+    public static boolean getBool(ResultSet rs, int index) {
+        try {
+            return rs.getBoolean(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Boolean getBoolean(ResultSet rs, int index) {
+        try {
+            Boolean value = Boolean.valueOf(rs.getBoolean(index));
+            if (value != null && rs.wasNull()) {
+                return null;
+            }
+            return value;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static byte getByteValue(ResultSet rs, int index) {
+        try {
+            return rs.getByte(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Byte getByte(ResultSet rs, int index) {
+        try {
+            Byte value = Byte.valueOf(rs.getByte(index));
+            if (value != null && rs.wasNull()) {
+                return null;
+            }
+            return value;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static short getShortValue(ResultSet rs, int index) {
+        try {
+            return rs.getShort(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Short getShort(ResultSet rs, int index) {
+        try {
+            Short value = Short.valueOf(rs.getShort(index));
+            if (value != null && rs.wasNull()) {
+                return null;
+            }
+            return value;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static int getInt(ResultSet rs, int index) {
+        try {
+            return rs.getInt(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Integer getInteger(ResultSet rs, int index) {
+        try {
+            Integer value = Integer.valueOf(rs.getInt(index));
+            if (value != null && rs.wasNull()) {
+                return null;
+            }
+            return value;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Long getLong(ResultSet rs, int index) {
+        try {
+            Long value = Long.valueOf(rs.getLong(index));
+            if (value != null && rs.wasNull()) {
+                return null;
+            }
+            return value;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static long getLongValue(ResultSet rs, int index) {
+        try {
+            return rs.getLong(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Float getFloat(ResultSet rs, int index) {
+        try {
+            Float value = Float.valueOf(rs.getFloat(index));
+            if (value != null && rs.wasNull()) {
+                return null;
+            }
+            return value;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static float getFloatValue(ResultSet rs, int index) {
+        try {
+            return rs.getFloat(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Double getDouble(ResultSet rs, int index) {
+        try {
+            Double value = Double.valueOf(rs.getDouble(index));
+            if (value != null && rs.wasNull()) {
+                return null;
+            }
+            return value;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static double getDoubleValue(ResultSet rs, int index) {
+        try {
+            return rs.getDouble(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static String getString(ResultSet rs, int index) {
+        try {
+            return rs.getString(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static BigDecimal getBigDecimal(ResultSet rs, int index) {
+        try {
+            return rs.getBigDecimal(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static java.sql.Date getDate(ResultSet rs, int index) {
+        try {
+            return rs.getDate(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Timestamp getTimestamp(ResultSet rs, int index) {
+        try {
+            return rs.getTimestamp(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Time getTime(ResultSet rs, int index) {
+        try {
+            return rs.getTime(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static LocalDate getLocalDate(ResultSet rs, int index) {
+        java.sql.Date value = getDate(rs, index);
+        if (value != null) {
+            return value.toLocalDate();
+        }
+        return null;
+    }
+
+    public static LocalTime getLocalTime(ResultSet rs, int index) {
+        Time value = getTime(rs, index);
+        if (value != null) {
+            return value.toLocalTime();
+        }
+        return null;
+    }
+
+    public static LocalDateTime getLocalDateTime(ResultSet rs, int index) {
+        Timestamp value = getTimestamp(rs, index);
+        if (value != null) {
+            return value.toLocalDateTime();
+        }
+        return null;
+    }
+
+    public static byte[] getBytes(ResultSet rs, int index) {
+        try {
+            return rs.getBytes(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    // ****************************************************************************************************************
+
+    public static boolean getBool(CallableStatement call, int index) {
+        try {
+            return call.getBoolean(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Boolean getBoolean(CallableStatement call, int index) {
+        try {
+            Boolean value = Boolean.valueOf(call.getBoolean(index));
+            if (value != null && call.wasNull()) {
+                return null;
+            }
+            return value;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static byte getByteValue(CallableStatement call, int index) {
+        try {
+            return call.getByte(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Byte getByte(CallableStatement call, int index) {
+        try {
+            Byte value = Byte.valueOf(call.getByte(index));
+            if (value != null && call.wasNull()) {
+                return null;
+            }
+            return value;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static short getShortValue(CallableStatement call, int index) {
+        try {
+            return call.getShort(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Short getShort(CallableStatement call, int index) {
+        try {
+            Short value = Short.valueOf(call.getShort(index));
+            if (value != null && call.wasNull()) {
+                return null;
+            }
+            return value;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static int getInt(CallableStatement call, int index) {
+        try {
+            return call.getInt(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Integer getInteger(CallableStatement call, int index) {
+        try {
+            Integer value = Integer.valueOf(call.getInt(index));
+            if (value != null && call.wasNull()) {
+                return null;
+            }
+            return value;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Long getLong(CallableStatement call, int index) {
+        try {
+            Long value = Long.valueOf(call.getLong(index));
+            if (value != null && call.wasNull()) {
+                return null;
+            }
+            return value;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static long getLongValue(CallableStatement call, int index) {
+        try {
+            return call.getLong(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Float getFloat(CallableStatement call, int index) {
+        try {
+            Float value = Float.valueOf(call.getFloat(index));
+            if (value != null && call.wasNull()) {
+                return null;
+            }
+            return value;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static float getFloatValue(CallableStatement call, int index) {
+        try {
+            return call.getFloat(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Double getDouble(CallableStatement call, int index) {
+        try {
+            Double value = Double.valueOf(call.getDouble(index));
+            if (value != null && call.wasNull()) {
+                return null;
+            }
+            return value;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static double getDoubleValue(CallableStatement call, int index) {
+        try {
+            return call.getDouble(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static String getString(CallableStatement call, int index) {
+        try {
+            return call.getString(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static BigDecimal getBigDecimal(CallableStatement rs, int index) {
+        try {
+            return rs.getBigDecimal(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static java.sql.Date getDate(CallableStatement rs, int index) {
+        try {
+            return rs.getDate(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Timestamp getTimestamp(CallableStatement rs, int index) {
+        try {
+            return rs.getTimestamp(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static Time getTime(CallableStatement rs, int index) {
+        try {
+            return rs.getTime(index);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    public static LocalDate getLocalDate(CallableStatement rs, int index) {
+        java.sql.Date value = getDate(rs, index);
+        if (value != null) {
+            return value.toLocalDate();
+        }
+        return null;
+    }
+
+    public static LocalTime getLocalTime(CallableStatement rs, int index) {
+        Time value = getTime(rs, index);
+        if (value != null) {
+            return value.toLocalTime();
+        }
+        return null;
+    }
+
+    public static LocalDateTime getLocalDateTime(CallableStatement rs, int index) {
+        Timestamp value = getTimestamp(rs, index);
+        if (value != null) {
+            return value.toLocalDateTime();
+        }
+        return null;
+    }
+
+    public static byte[] getBytes(CallableStatement rs, int index) {
+        try {
+            return rs.getBytes(index);
         } catch (SQLException e) {
             throw new JdbcException(e);
         }

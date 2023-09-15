@@ -17,6 +17,8 @@
 16. 修复SelectColumnElement未设置distinct的问题
 17. SqlSortBuilder实现asc(String tableAlias, Field field),desc(String tableAlias, Field field)
 18. SqlSelectColumnsBuilder加入setColumnAliasPrefixProcessor(BiFunction)，setColumnAliasPrefixTableAlias(boolean)，并实现build()逻辑
+19. JdbcUtils加入获取各种类型的返回参数方法JdbcUtils.getXXX(ResultSet,int)
+20. 加入多种基础类型对应的JavaTypeSqlTypeOperator实现
 
 # 0.5.5 2022-8-11
 1. Dialect加入getKeywordLike(QueryPolicy)、getKeywordEq(QueryPolicy)、keywordsCase()方法

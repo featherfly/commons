@@ -7,6 +7,7 @@ import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.SqlUtils;
 import cn.featherfly.common.db.Table;
+import cn.featherfly.common.exception.NotImplementedException;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Dates;
@@ -21,6 +22,7 @@ import cn.featherfly.common.lang.Strings;
 public class OracleDialect extends AbstractDialect {
 
     /**
+     * Instantiates a new oracle dialect.
      */
     public OracleDialect() {
     }
@@ -218,11 +220,6 @@ public class OracleDialect extends AbstractDialect {
     }
 
     @Override
-    public boolean supportUpsert() {
-        return false;
-    }
-
-    @Override
     public boolean supportUpsertBatch() {
         return false;
     }
@@ -234,7 +231,7 @@ public class OracleDialect extends AbstractDialect {
     public String buildUpsertBatchSql(String tableName, String[] columnNames, String[] uniqueColumns,
             int insertAmount) {
         // NOIMPL 未实现
-        throw new UnsupportedException();
+        throw new NotImplementedException();
     }
 
     /**

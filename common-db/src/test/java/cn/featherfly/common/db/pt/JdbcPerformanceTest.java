@@ -27,9 +27,9 @@ import cn.featherfly.common.lang.Timer;
  */
 public class JdbcPerformanceTest extends JdbcTestBase {
 
-    private int batchSize = 1000;
+    private int batchSize = 10000;
 
-    private int batchTimes = 1;
+    private int batchTimes = 100;
 
     @Test
     public void testInsertBatch() {
@@ -66,19 +66,19 @@ public class JdbcPerformanceTest extends JdbcTestBase {
                 new String[] { "id", "user_id", "name", "descp", "province", "city", "district" }, batchSize);
         Timer timer = Timer.start();
         ConnectionWrapper conn = JdbcUtils.getConnectionWrapper(dataSource);
-        int index = 0;
-        int total = 0;
+        //        int total = 0;
         for (int i = 0; i < batchTimes; i++) {
+            int paramIndex = 0;
             PreparedStatementWrapper prep = conn.prepareStatement(insertSql);
             for (int j = 0; j < batchSize; j++) {
-                prep.setObject(++total, null);
-                prep.setInt(++total, 1);
-                prep.setString(++total, "yufei2_" + index);
-                prep.setString(++total, "yufei2_descp_" + index);
-                prep.setString(++total, "省2_" + index);
-                prep.setString(++total, "市2_" + index);
-                prep.setString(++total, "区2_" + index);
-                index++;
+                prep.setObject(++paramIndex, null);
+                prep.setInt(++paramIndex, 1);
+                prep.setString(++paramIndex, "yufei2_" + paramIndex);
+                prep.setString(++paramIndex, "yufei2_descp_" + paramIndex);
+                prep.setString(++paramIndex, "省2_" + paramIndex);
+                prep.setString(++paramIndex, "市2_" + paramIndex);
+                prep.setString(++paramIndex, "区2_" + paramIndex);
+                //                paramIndex++;
             }
             int res = prep.executeUpdate();
             System.out.println("res: " + res);

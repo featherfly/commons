@@ -21,7 +21,7 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.jpa.ColumnDefault;
 import cn.featherfly.common.db.jpa.Comment;
 import cn.featherfly.common.db.mapping.operator.DefaultTypesSqlTypeOperator;
-import cn.featherfly.common.db.mapping.operator.EnumTypeSqlTypeOperator;
+import cn.featherfly.common.db.mapping.operator.EnumSqlTypeOperator;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
@@ -206,7 +206,7 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
             if (beanProperty.getClass().isEnum()) {
                 @SuppressWarnings({ "rawtypes", "unchecked" })
                 Class<? extends Enum<?>> t = (Class) beanProperty.getClass();
-                mapping.setJavaTypeSqlTypeOperator(new EnumTypeSqlTypeOperator<>(t));
+                mapping.setJavaTypeSqlTypeOperator(new EnumSqlTypeOperator<>(t));
             } else {
                 // YUFEI_TODO 后续来优化打开检查，主要是现在父JdbcPropertyMapping（非具体映射）也调用了此方法，造成检查不通过
                 //                mapping.setJavaTypeSqlTypeOperator(new DefaultTypesSqlTypeOperator<>(beanProperty.getType(), true));

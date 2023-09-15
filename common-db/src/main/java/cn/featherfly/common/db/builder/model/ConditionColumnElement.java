@@ -162,10 +162,12 @@ public class ConditionColumnElement extends ParamedColumnElement {
         } else {
             if (ComparisonOperator.IN == comparisonOperator || ComparisonOperator.NIN == comparisonOperator) {
                 int length = 1;
-                if (value instanceof Collection) {
-                    length = ((Collection<?>) value).size();
-                } else if (value.getClass().isArray()) {
-                    length = Array.getLength(value);
+                if (value != null) {
+                    if (value instanceof Collection) {
+                        length = ((Collection<?>) value).size();
+                    } else if (value.getClass().isArray()) {
+                        length = Array.getLength(value);
+                    }
                 }
                 condition.append(name).append(Chars.SPACE).append(toOperator(comparisonOperator)).append(" (");
                 for (int i = 0; i < length; i++) {

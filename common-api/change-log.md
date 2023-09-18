@@ -1,5 +1,6 @@
 # 0.5.2 2023
 1. 移除cn.featherfly.common.lang.function包
+2. ComparisonOperator加入NEW,NSW,NCO,NL,BT,NBT
 
 # 0.5.1 2022-11-15
 1. AggregateFunction删除DISTINCT

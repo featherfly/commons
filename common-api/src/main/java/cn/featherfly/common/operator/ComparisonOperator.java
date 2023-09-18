@@ -29,11 +29,20 @@ public enum ComparisonOperator implements Operator {
     /** 以XX开始. */
     SW,
 
+    /** 不以XX开始. */
+    NSW,
+
     /** 包含. */
     CO,
 
+    /** 不包含. */
+    NCO,
+
     /** 以XX结尾. */
     EW,
+
+    /** 不以XX结尾. */
+    NEW,
 
     /** 为null. */
     ISN,
@@ -45,10 +54,20 @@ public enum ComparisonOperator implements Operator {
     IN,
 
     /** not in. */
-    NIN,
+    NI,
 
     /** like. */
-    LK
+    LK,
+
+    /** not like. */
+    NL,
+
+    /** between and. */
+    BT,
+
+    /** not between and. */
+    NBT
+
     //
     ;
 

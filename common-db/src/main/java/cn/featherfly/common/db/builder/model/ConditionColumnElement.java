@@ -18,6 +18,7 @@ import java.util.function.Predicate;
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.FieldValueOperator;
 import cn.featherfly.common.db.dialect.Dialect;
+import cn.featherfly.common.db.dialect.Keywords;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.operator.ComparisonOperator;
@@ -102,6 +103,7 @@ public class ConditionColumnElement extends ParamedColumnElement {
     private Object processParam(Object value, ComparisonOperator comparisonOperator) {
         switch (comparisonOperator) {
             case SW:
+            case NSW:
                 if (value instanceof FieldValueOperator) {
                     FieldValueOperator<String> o = (FieldValueOperator<String>) value;
                     o.setValue(o.getValue() + "%");
@@ -110,6 +112,7 @@ public class ConditionColumnElement extends ParamedColumnElement {
                     return value + "%";
                 }
             case CO:
+            case NCO:
                 if (value instanceof FieldValueOperator) {
                     FieldValueOperator<String> o = (FieldValueOperator<String>) value;
                     o.setValue("%" + o.getValue() + "%");
@@ -118,6 +121,7 @@ public class ConditionColumnElement extends ParamedColumnElement {
                     return "%" + value + "%";
                 }
             case EW:
+            case NEW:
                 if (value instanceof FieldValueOperator) {
                     FieldValueOperator<String> o = (FieldValueOperator<String>) value;
                     o.setValue("%" + o.getValue());
@@ -160,7 +164,7 @@ public class ConditionColumnElement extends ParamedColumnElement {
         if (ignore(value)) { // 忽略
             return "";
         } else {
-            if (ComparisonOperator.IN == comparisonOperator || ComparisonOperator.NIN == comparisonOperator) {
+            if (ComparisonOperator.IN == comparisonOperator || ComparisonOperator.NI == comparisonOperator) {
                 int length = 1;
                 if (value != null) {
                     if (value instanceof Collection) {
@@ -177,6 +181,15 @@ public class ConditionColumnElement extends ParamedColumnElement {
                     condition.append(Chars.QUESTION);
                 }
                 condition.append(")");
+            } else if (ComparisonOperator.BT == comparisonOperator || ComparisonOperator.NBT == comparisonOperator) {
+                condition.append(name).append(Chars.SPACE)
+                        .append(ComparisonOperator.NBT == comparisonOperator
+                                ? dialect.getKeyword(Keywords.NOT) + Chars.SPACE
+                                : "")
+                        .append(dialect.getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
+                        .append(Chars.QUESTION).append(Chars.SPACE) //
+                        .append(dialect.getKeyword(Keywords.AND)).append(Chars.SPACE) //
+                        .append(Chars.QUESTION);
             } else {
                 condition.append(name).append(Chars.SPACE);
                 if (ComparisonOperator.ISN == comparisonOperator) {
@@ -215,20 +228,28 @@ public class ConditionColumnElement extends ParamedColumnElement {
                 return "!=";
             case SW:
                 return dialect.getKeywords().like(matchStrategy);
+            case NSW:
+                return dialect.getKeywords().notLike(matchStrategy);
             case CO:
                 return dialect.getKeywords().like(matchStrategy);
+            case NCO:
+                return dialect.getKeywords().notLike(matchStrategy);
             case EW:
                 return dialect.getKeywords().like(matchStrategy);
+            case NEW:
+                return dialect.getKeywords().notLike(matchStrategy);
             case ISN:
                 return dialect.getKeywords().isNull();
             case INN:
                 return dialect.getKeywords().isNotNull();
             case IN:
                 return dialect.getKeywords().in();
-            case NIN:
+            case NI:
                 return dialect.getKeywords().notIn();
             case LK:
                 return dialect.getKeywords().like(matchStrategy);
+            case NL:
+                return dialect.getKeywords().notLike(matchStrategy);
             default:
                 return dialect.getKeywords().eq(matchStrategy);
         }

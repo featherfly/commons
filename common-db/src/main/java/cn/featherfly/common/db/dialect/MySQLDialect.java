@@ -269,16 +269,26 @@ public class MySQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    String getKeywordLikeCaseInsensitive() {
-        return getKeyword(Keywords.COLLATE) + " " + collateCaseInsensitive + " " + getKeyword(Keywords.LIKE);
+    String getKeywordLikeCaseInsensitive(boolean reverse) {
+        if (reverse) {
+            return getKeyword(Keywords.COLLATE) + " " + collateCaseInsensitive + " " + getKeyword(Keywords.NOT) + " "
+                    + getKeyword(Keywords.LIKE);
+        } else {
+            return getKeyword(Keywords.COLLATE) + " " + collateCaseInsensitive + " " + getKeyword(Keywords.LIKE);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    String getKeywordLikeCaseSensitive() {
-        return getKeyword(Keywords.LIKE) + " " + getKeyword("BINARY");
+    String getKeywordLikeCaseSensitive(boolean reverse) {
+        if (reverse) {
+            return getKeyword(Keywords.NOT) + " " + getKeyword(Keywords.LIKE) + " " + getKeyword("BINARY");
+
+        } else {
+            return getKeyword(Keywords.LIKE) + " " + getKeyword("BINARY");
+        }
     }
 
     /**

@@ -423,6 +423,14 @@ public interface Dialect {
     String getKeywordLike(MatchStrategy matchStrategy);
 
     /**
+     * Gets the keyword like.
+     *
+     * @param matchStrategy the like query policy
+     * @return the keyword like
+     */
+    String getKeywordNotLike(MatchStrategy matchStrategy);
+
+    /**
      * Gets the keyword eq.
      *
      * @param matchStrategy the query policy
@@ -1557,6 +1565,25 @@ public interface Dialect {
          */
         public String like(MatchStrategy matchStrategy) {
             return dialect.getKeywordLike(matchStrategy);
+        }
+
+        /**
+         * not like.
+         *
+         * @return the string
+         */
+        public String notLike() {
+            return notLike(MatchStrategy.AUTO);
+        }
+
+        /**
+         * Like.
+         *
+         * @param matchStrategy the like query policy
+         * @return the string
+         */
+        public String notLike(MatchStrategy matchStrategy) {
+            return dialect.getKeywordNotLike(matchStrategy);
         }
 
         /**

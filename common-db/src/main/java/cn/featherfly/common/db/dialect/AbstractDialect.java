@@ -17,8 +17,8 @@ import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
-import cn.featherfly.common.repository.Index;
 import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
+import cn.featherfly.common.repository.Index;
 
 /**
  * <p>
@@ -420,11 +420,29 @@ public abstract class AbstractDialect implements Dialect {
         }
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
-                return getKeywordLikeCaseInsensitive();
+                return getKeywordLikeCaseInsensitive(false);
             case CASE_SENSITIVE:
-                return getKeywordLikeCaseSensitive();
+                return getKeywordLikeCaseSensitive(false);
             default:
                 return getKeyword(Keywords.LIKE);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getKeywordNotLike(MatchStrategy matchStrategy) {
+        if (matchStrategy == null) {
+            matchStrategy = MatchStrategy.AUTO;
+        }
+        switch (matchStrategy) {
+            case CASE_INSENSITIVE:
+                return getKeywordLikeCaseInsensitive(true);
+            case CASE_SENSITIVE:
+                return getKeywordLikeCaseSensitive(true);
+            default:
+                return getKeyword(Keywords.NOT) + " " + getKeyword(Keywords.LIKE);
         }
     }
 
@@ -433,14 +451,14 @@ public abstract class AbstractDialect implements Dialect {
      *
      * @return the keyword like case insensitive
      */
-    abstract String getKeywordLikeCaseInsensitive();
+    abstract String getKeywordLikeCaseInsensitive(boolean reverse);
 
     /**
      * Gets the keyword like case sensitive.
      *
      * @return the keyword like case sensitive
      */
-    abstract String getKeywordLikeCaseSensitive();
+    abstract String getKeywordLikeCaseSensitive(boolean reverse);
 
     /**
      * {@inheritDoc}

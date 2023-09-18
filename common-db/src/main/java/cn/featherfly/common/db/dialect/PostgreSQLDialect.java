@@ -308,16 +308,24 @@ public class PostgreSQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    String getKeywordLikeCaseInsensitive() {
-        return getKeyword("ILIKE");
+    String getKeywordLikeCaseInsensitive(boolean reverse) {
+        if (reverse) {
+            return getKeyword(Keywords.NOT) + " " + getKeyword("ILIKE");
+        } else {
+            return getKeyword("ILIKE");
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    String getKeywordLikeCaseSensitive() {
-        return getKeyword(Keywords.LIKE);
+    String getKeywordLikeCaseSensitive(boolean reverse) {
+        if (reverse) {
+            return getKeyword(Keywords.NOT) + " " + getKeyword(Keywords.LIKE);
+        } else {
+            return getKeyword(Keywords.LIKE);
+        }
     }
 
     /**

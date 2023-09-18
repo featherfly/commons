@@ -365,9 +365,13 @@ public class SQLiteDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    String getKeywordLikeCaseInsensitive() {
+    String getKeywordLikeCaseInsensitive(boolean reverse) {
         if (!caseSensitiveLike) {
-            return getKeyword(Keywords.LIKE);
+            if (reverse) {
+                return getKeyword(Keywords.NOT) + " " + getKeyword(Keywords.LIKE);
+            } else {
+                return getKeyword(Keywords.LIKE);
+            }
         }
         // sqlite 目前只能全局设置 caseSensitiveLike
         throw new UnsupportedException("unsupported case insensitive like, case_sensitive_like = " + caseSensitiveLike);
@@ -377,9 +381,13 @@ public class SQLiteDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    String getKeywordLikeCaseSensitive() {
+    String getKeywordLikeCaseSensitive(boolean reverse) {
         if (caseSensitiveLike) {
-            return getKeyword(Keywords.LIKE);
+            if (reverse) {
+                return getKeyword(Keywords.NOT) + " " + getKeyword(Keywords.LIKE);
+            } else {
+                return getKeyword(Keywords.LIKE);
+            }
         }
         // sqlite 目前只能全局设置 caseSensitiveLike
         throw new UnsupportedException("unsupported case senstive like, case_sensitive_like = " + caseSensitiveLike);

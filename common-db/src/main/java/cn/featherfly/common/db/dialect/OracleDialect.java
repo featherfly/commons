@@ -238,7 +238,7 @@ public class OracleDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    String getKeywordLikeCaseInsensitive() {
+    String getKeywordLikeCaseInsensitive(boolean reverse) {
         // NOIMPL 未实现，后续来实现
         throw new UnsupportedException();
     }
@@ -247,8 +247,12 @@ public class OracleDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    String getKeywordLikeCaseSensitive() {
-        return getKeyword(Keywords.LIKE);
+    String getKeywordLikeCaseSensitive(boolean reverse) {
+        if (reverse) {
+            return getKeyword(Keywords.NOT) + " " + getKeyword(Keywords.LIKE);
+        } else {
+            return getKeyword(Keywords.LIKE);
+        }
     }
 
     /**

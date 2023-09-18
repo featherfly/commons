@@ -30,6 +30,7 @@
     ResultSet res = stat|prep|call.executeQuery("");
     conn.close(); // 会自动依次关闭ResultSet，再关闭Statement
     ```
+23. ConditionColumnElement支持ComparisonOperator.NEW|NSW|NCO|NL|BT|NBT
 
 # 0.5.5 2022-8-11
 1. Dialect加入getKeywordLike(QueryPolicy)、getKeywordEq(QueryPolicy)、keywordsCase()方法

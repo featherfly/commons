@@ -1603,14 +1603,15 @@ public final class JdbcUtils {
      * @param rs the rs
      * @return the result set map
      */
-    private static Map<String, Object> getResultSetMap(ResultSet rs) {
+    public static Map<String, Object> getResultSetMap(ResultSet rs) {
         try {
             Map<String, Object> resultMap = new HashMap<>();
             ResultSetMetaData metaData = rs.getMetaData();
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                Object value = JdbcUtils.getResultSetValue(rs, i);
-                String name = JdbcUtils.lookupColumnName(metaData, i);
-                resultMap.put(name, value);
+                //                Object value = JdbcUtils.getResultSetValue(rs, i);
+                //                String name = JdbcUtils.lookupColumnName(metaData, i, true);
+                //                resultMap.put(name, value);
+                resultMap.put(JdbcUtils.lookupColumnName(metaData, i, true), JdbcUtils.getResultSetValue(rs, i));
             }
             return resultMap;
         } catch (SQLException e) {
@@ -1625,7 +1626,7 @@ public final class JdbcUtils {
      * @param manager the manager
      * @return the result set map
      */
-    private static Map<String, Object> getResultSetMap(ResultSet rs, SqlTypeMappingManager manager) {
+    public static Map<String, Object> getResultSetMap(ResultSet rs, SqlTypeMappingManager manager) {
         try {
             Map<String, Object> resultMap = new HashMap<>();
             ResultSetMetaData metaData = rs.getMetaData();
@@ -1637,13 +1638,9 @@ public final class JdbcUtils {
                 } else {
                     value = JdbcUtils.getResultSetValue(rs, i);
                 }
-                //                String name = JdbcUtils.lookupColumnName(metaData, i);
-                String name = metaData.getColumnLabel(i);
-                if (Lang.isEmpty(name)) {
-                    name = metaData.getColumnName(i);
-                    name = WordUtils.parseToUpperFirst(name.toLowerCase(), '_');
-                }
-                resultMap.put(name, value);
+                //                String name = JdbcUtils.lookupColumnName(metaData, i, true);
+                //                resultMap.put(name, value);
+                resultMap.put(JdbcUtils.lookupColumnName(metaData, i, true), value);
             }
             return resultMap;
         } catch (SQLException e) {
@@ -2131,10 +2128,70 @@ public final class JdbcUtils {
      * @return the column name to use
      */
     public static String lookupColumnName(ResultSetMetaData resultSetMetaData, int columnIndex) {
+        return lookupColumnName(resultSetMetaData, columnIndex, false);
+    }
+
+    /**
+     * Determine the column name to use. The column name is determined based on
+     * a lookup using ResultSetMetaData.
+     * <p>
+     * This method implementation takes into account recent clarifications
+     * expressed in the JDBC 4.0 specification:
+     * <p>
+     * <i>columnLabel - the label for the column specified with the SQL AS
+     * clause. If the SQL AS clause was not specified, then the label is the
+     * name of the column</i>.
+     *
+     * @param resultSetMetaData      the current meta data to use
+     * @param columnIndex            the index of the column for the look up
+     * @param camelCaseWithUnderLine if true and no label for column, it will be
+     *                               camel case with under line. such as:
+     *                               lookupColumnName(rs,1,true), the column
+     *                               name is user_id, it will be userId
+     * @return the column name to use
+     */
+    public static String lookupColumnName(ResultSetMetaData resultSetMetaData, int columnIndex,
+            boolean camelCaseWithUnderLine) {
         try {
             String name = resultSetMetaData.getColumnLabel(columnIndex);
             if (Lang.isEmpty(name)) {
                 name = resultSetMetaData.getColumnName(columnIndex);
+                if (camelCaseWithUnderLine) {
+                    name = WordUtils.parseToUpperFirst(name.toLowerCase(), '_');
+                }
+            }
+            return name;
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * Determine the column name to use. The column name is determined based on
+     * a lookup using ResultSetMetaData.
+     * <p>
+     * This method implementation takes into account recent clarifications
+     * expressed in the JDBC 4.0 specification:
+     * <p>
+     * <i>columnLabel - the label for the column specified with the SQL AS
+     * clause. If the SQL AS clause was not specified, then the label is the
+     * name of the column</i>.
+     *
+     * @param resultSetMetaData   the current meta data to use
+     * @param columnIndex         the index of the column for the look up
+     * @param camelCaseWithSymbol if true and no label for column, it will be
+     *                            camel case with this camelCaseWithSymbol char
+     *                            . such as: lookupColumnName(rs,1,'-'), the
+     *                            column name is user_id, it will be userId
+     * @return the column name to use
+     */
+    public static String lookupColumnName(ResultSetMetaData resultSetMetaData, int columnIndex,
+            char camelCaseWithSymbol) {
+        try {
+            String name = resultSetMetaData.getColumnLabel(columnIndex);
+            if (Lang.isEmpty(name)) {
+                name = resultSetMetaData.getColumnName(columnIndex);
+                name = WordUtils.parseToUpperFirst(name.toLowerCase(), camelCaseWithSymbol);
             }
             return name;
         } catch (SQLException e) {

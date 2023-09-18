@@ -17,8 +17,19 @@
 16. 修复SelectColumnElement未设置distinct的问题
 17. SqlSortBuilder实现asc(String tableAlias, Field field),desc(String tableAlias, Field field)
 18. SqlSelectColumnsBuilder加入setColumnAliasPrefixProcessor(BiFunction)，setColumnAliasPrefixTableAlias(boolean)，并实现build()逻辑
-19. JdbcUtils加入获取各种类型的返回参数方法JdbcUtils.getXXX(ResultSet,int)
-20. 加入多种基础类型对应的JavaTypeSqlTypeOperator实现
+19. JdbcUtils加入获取各种类型的返回参数方法JdbcUtils.getXXX(ResultSet,int), 
+20. JdbcUtils加入lookupColumnName(ResultSetMetaData,int,boolean) 当返回的column name没有设置label时，对下划线进行驼峰命名转换
+21. 加入多种基础类型对应的JavaTypeSqlTypeOperator实现
+22. 加入AutoCloseConnection以及对应的Statement,PreparedStatement,CallableStatement,
+    调用close()方法会自动调用其创建的Statement（或ResultSet）的close()，例如：
+    ```java
+    Connection conn = AutoCloseConnection
+    Statement stat = conn.createStatement();
+    PreparedStatement prep = conn.preparedStatement("");
+    PreparedStatement call = conn.prepareCall("");
+    ResultSet res = stat|prep|call.executeQuery("");
+    conn.close(); // 会自动依次关闭ResultSet，再关闭Statement
+    ```
 
 # 0.5.5 2022-8-11
 1. Dialect加入getKeywordLike(QueryPolicy)、getKeywordEq(QueryPolicy)、keywordsCase()方法

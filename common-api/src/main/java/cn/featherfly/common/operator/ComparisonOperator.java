@@ -63,10 +63,10 @@ public enum ComparisonOperator implements Operator {
     NL,
 
     /** between and. */
-    BT,
+    BA,
 
     /** not between and. */
-    NBT
+    NBA
 
     //
     ;

@@ -4,6 +4,9 @@
 3. 加入Field, Params
 4. 加入Alias,AliasField
 5. IgnorePolicy重命名为IgnoreStrategy
+6. 加入ClassNameUnderscoreConversion替代,ClassNameUnderscoreConversion
+6. 加入PropertyNameUnderscoreConversion替代PropertyNameUnderscoreConversion
+
 
 # 0.3.0 2022-11-09
 1. 修复AliasManager.getAlias(int index)越界检查BUG

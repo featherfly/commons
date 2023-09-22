@@ -106,7 +106,7 @@ public interface ExpressionBuilder extends Builder {
      * @param value 参数值
      * @return LogicBuilder
      */
-    LogicBuilder nin(String name, Object value);
+    LogicBuilder ni(String name, Object value);
 
     /**
      * 为null的.

@@ -1,8 +1,6 @@
 
 package cn.featherfly.common.repository.mapping;
 
-import cn.featherfly.common.lang.WordUtils;
-
 /**
  * <p>
  * ClassNameUnderlineConversion use _ join type every word. ClassNameMapping as
@@ -12,15 +10,9 @@ import cn.featherfly.common.lang.WordUtils;
  * @author zhongj
  * @since 0.1.0
  * @version 0.1.0
+ * @deprecated use {@link ClassNameUnderscoreConversion} instead
  */
-public class ClassNameUnderlineConversion implements ClassNameConversion {
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getMappingName(Class<?> type) {
-        return WordUtils.addSignBeforeUpper(type.getSimpleName(), '_', true);
-    }
+@Deprecated
+public class ClassNameUnderlineConversion extends ClassNameUnderscoreConversion {
 
 }

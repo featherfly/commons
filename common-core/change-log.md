@@ -14,6 +14,8 @@
 10. BeanProperty加入BeanType泛型定义
 11. StringFormatter（Strings）加入自动占位符序号填充功能（支持数组作为参数），像slf4j一样的方式，不过支持自定义序列号混排，"hello {} at {} from [{1}] at {}"
 12. 加入Console类
+13. CollectionUtils加入多种addAll方法，加入ClassUtils.getClassName(Object)
+14. LambdaUtils.getLambdaInfo修复不支持ToIntFunction,ToLongFunction,ToDoubleFunction,Predicate,IntConsumer,IntSupplier,LongSupplier,DoubleSupplier,BooleanSupplier的问题
 
 # 1.11.0 2022-12-12
 

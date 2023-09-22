@@ -10,12 +10,18 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 import java.util.function.Function;
+import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.function.ToDoubleFunction;
+import java.util.function.ToIntFunction;
+import java.util.function.ToLongFunction;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -427,7 +433,11 @@ public class LambdaUtils {
         info2.methodDeclaredClassName = serializedLambda.getImplClass().replaceAll("/", ".");
         info2.methodName = serializedLambda.getImplMethodName();
         info2.propertyName = methodToPropertyName(info2.methodName);
-        if (lambda instanceof Function || lambda instanceof BiConsumer || lambda instanceof BiFunction) {
+        if (lambda instanceof Function || lambda instanceof BiConsumer || lambda instanceof BiFunction
+                || lambda instanceof ToIntFunction || lambda instanceof ToLongFunction
+                || lambda instanceof ToDoubleFunction //
+                || lambda instanceof Predicate // ToBooleanFunction
+                || lambda instanceof IntConsumer) {
             Class<?>[] pts = getParamaeterTypes(serializedLambda.getImplMethodSignature());
             info2.method = ClassUtils.getMethod(ClassUtils.forName(info2.methodDeclaredClassName), info2.methodName,
                     pts);
@@ -443,8 +453,8 @@ public class LambdaUtils {
                         .substringBefore(serializedLambda.getInstantiatedMethodType(), ";").substring(2)
                         .replaceAll("/", ".");
             }
-
-        } else if (lambda instanceof Supplier) {
+        } else if (lambda instanceof Supplier || lambda instanceof IntSupplier || lambda instanceof LongSupplier
+                || lambda instanceof DoubleSupplier || lambda instanceof BooleanSupplier) {
             Class<?> obj = serializedLambda.getCapturedArg(0).getClass();
             info2.methodInstanceClassName = obj.getName();
             info2.method = ClassUtils.getMethod(ClassUtils.forName(info2.methodDeclaredClassName), info2.methodName,

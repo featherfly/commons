@@ -34,10 +34,7 @@ public final class CollectionUtils {
     }
 
     /**
-     * <p>
-     * 返回传入集合是否为空（是null或size=0）
-     * </p>
-     * .
+     * 返回传入集合是否为空（是null或size=0） .
      *
      * @param collection 传入的集合
      * @return 传入集合是否为空
@@ -60,9 +57,27 @@ public final class CollectionUtils {
     }
 
     /**
-     * <p>
-     * 批量添加元素到集合，如果collection==null返回false,或者elements为空返回false，其他情况请参考{@link java.util.Collections#addAll(Collection, Object...)}
-     * </p>
+     * 批量添加元素到集合，如果collection==null返回false,或者appendCollection为空返回false.
+     * 其他情况请参考{@link java.util.Collection#addAll(Collection)}
+     *
+     * @param <T>              泛型
+     * @param source           原集合
+     * @param appendCollection 需要批量添加的集合
+     * @return 是否添加
+     */
+    public static <T> boolean addAll(Collection<T> source, Collection<T> appendCollection) {
+        if (source == null) {
+            return false;
+        }
+        if (Lang.isEmpty(appendCollection)) {
+            return false;
+        }
+        return source.addAll(appendCollection);
+    }
+
+    /**
+     * 批量添加元素到集合，如果collection==null返回false,或者elements为空返回false.
+     * 其他情况请参考{@link java.util.Collections#addAll(Collection, Object...)}
      *
      * @param <T>        泛型
      * @param collection 集合
@@ -80,15 +95,58 @@ public final class CollectionUtils {
     }
 
     /**
-     * <p>
-     * 批量添加元素到集合，如果collection==null返回false,或者elements为空返回false，其他情况请参考{@link java.util.Collections#addAll(Collection, Object...)}
-     * </p>
+     * 批量添加元素到集合，如果collection==null返回false,或者elements为空返回false.
+     * 其他情况请参考{@link java.util.Collection#addAll(Collection)}
      *
      * @param collection 集合
      * @param elements   需要批量添加的元素
      * @return 是否添加
      */
-    public static boolean addByteArray(Collection<Byte> collection, byte... elements) {
+    public static boolean addAll(Collection<Boolean> collection, boolean... elements) {
+        if (collection == null) {
+            return false;
+        }
+        if (Lang.isEmpty(elements)) {
+            return false;
+        }
+        boolean result = false;
+        for (boolean element : elements) {
+            result |= collection.add(element);
+        }
+        return result;
+    }
+
+    /**
+     * 批量添加元素到集合，如果collection==null返回false,或者elements为空返回false.
+     * 其他情况请参考{@link java.util.Collection#addAll(Collection)}
+     *
+     * @param collection 集合
+     * @param elements   需要批量添加的元素
+     * @return 是否添加
+     */
+    public static boolean addAll(Collection<Short> collection, short... elements) {
+        if (collection == null) {
+            return false;
+        }
+        if (Lang.isEmpty(elements)) {
+            return false;
+        }
+        boolean result = false;
+        for (short element : elements) {
+            result |= collection.add(element);
+        }
+        return result;
+    }
+
+    /**
+     * 批量添加元素到集合，如果collection==null返回false,或者elements为空返回false.
+     * 其他情况请参考{@link java.util.Collection#addAll(Collection)}
+     *
+     * @param collection 集合
+     * @param elements   需要批量添加的元素
+     * @return 是否添加
+     */
+    public static boolean addAll(Collection<Byte> collection, byte... elements) {
         if (collection == null) {
             return false;
         }
@@ -97,9 +155,89 @@ public final class CollectionUtils {
         }
         boolean result = false;
         for (byte element : elements) {
-            result = collection.add(element);
+            result |= collection.add(element);
         }
         return result;
+    }
+
+    /**
+     * 批量添加元素到集合，如果collection==null返回false,或者elements为空返回false.
+     * 其他情况请参考{@link java.util.Collection#addAll(Collection)}
+     *
+     * @param collection 集合
+     * @param elements   需要批量添加的元素
+     * @return 是否添加
+     */
+    public static boolean addAll(Collection<Integer> collection, int... elements) {
+        if (collection == null) {
+            return false;
+        }
+        if (Lang.isEmpty(elements)) {
+            return false;
+        }
+        boolean result = false;
+        for (int element : elements) {
+            result |= collection.add(element);
+        }
+        return result;
+    }
+
+    /**
+     * 批量添加元素到集合，如果collection==null返回false,或者elements为空返回false.
+     * 其他情况请参考{@link java.util.Collection#addAll(Collection)}
+     *
+     * @param collection 集合
+     * @param elements   需要批量添加的元素
+     * @return 是否添加
+     */
+    public static boolean addAll(Collection<Long> collection, long... elements) {
+        if (collection == null) {
+            return false;
+        }
+        if (Lang.isEmpty(elements)) {
+            return false;
+        }
+        boolean result = false;
+        for (long element : elements) {
+            result |= collection.add(element);
+        }
+        return result;
+    }
+
+    /**
+     * 批量添加元素到集合，如果collection==null返回false,或者elements为空返回false.
+     * 其他情况请参考{@link java.util.Collection#addAll(Collection)}
+     *
+     * @param collection 集合
+     * @param elements   需要批量添加的元素
+     * @return 是否添加
+     */
+    public static boolean addAll(Collection<Double> collection, double... elements) {
+        if (collection == null) {
+            return false;
+        }
+        if (Lang.isEmpty(elements)) {
+            return false;
+        }
+        boolean result = false;
+        for (double element : elements) {
+            result |= collection.add(element);
+        }
+        return result;
+    }
+
+    /**
+     * 批量添加元素到集合，如果collection==null返回false,或者elements为空返回false.
+     * 其他情况请参考{@link java.util.Collection#addAll(Collection)}
+     *
+     * @param collection 集合
+     * @param elements   需要批量添加的元素
+     * @return 是否添加
+     * @deprecated {@link #addAll(Collection, byte...)}
+     */
+    @Deprecated
+    public static boolean addByteArray(Collection<Byte> collection, byte... elements) {
+        return addAll(collection, elements);
     }
 
     /**
@@ -110,25 +248,15 @@ public final class CollectionUtils {
      * @param collection 集合
      * @param elements   需要批量添加的元素
      * @return 是否添加
+     * @deprecated {@link #addAll(Collection, int...)}
      */
+    @Deprecated
     public static boolean addIntArray(Collection<Integer> collection, int... elements) {
-        if (collection == null) {
-            return false;
-        }
-        if (Lang.isEmpty(elements)) {
-            return false;
-        }
-        boolean result = false;
-        for (int element : elements) {
-            result = collection.add(element);
-        }
-        return result;
+        return addAll(collection, elements);
     }
 
     /**
-     * <p>
      * 转换为数组. 如果传入集合为空（null或者size=0），返回长度为0的数组（不会返回null）.
-     * </p>
      *
      * @param <A>        泛型
      * @param collection 集合

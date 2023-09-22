@@ -19,7 +19,7 @@ public class StringFormatter {
 
     private char endSymbol;
 
-    private boolean placeholderAutoIndex; //
+    private boolean placeholderAutoIndex;
 
     /**
      * Instantiates a new custom string formatter.
@@ -36,11 +36,11 @@ public class StringFormatter {
      *
      * @param startSymbol          the start symbol
      * @param endSymbol            the end symbol
-     * @param placeholderAutoIndex the placeholder auto index <br/>
+     * @param placeholderAutoIndex the placeholder auto index <br>
      *                             if true auto add index to params placeholder,
-     *                             such as: <br/>
-     *                             "hello {} at {} from [{1}] at {}" <br/>
-     *                             "hello {0} at {1} from [{1}] at {2}" <br/>
+     *                             such as: <br>
+     *                             "hello {} at {} from [{1}] at {}" <br>
+     *                             "hello {0} at {1} from [{1}] at {2}" <br>
      */
     public StringFormatter(char startSymbol, char endSymbol, boolean placeholderAutoIndex) {
         super();

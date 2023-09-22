@@ -479,10 +479,7 @@ public final class ArrayUtils {
     }
 
     /**
-     * <p>
-     * 创建数组
-     * </p>
-     * .
+     * 创建数组 .
      *
      * @param <T>    泛型
      * @param type   类型

@@ -3,6 +3,7 @@ package cn.featherfly.common.lang;
 
 import java.lang.invoke.SerializedLambda;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.function.serializable.SerializableFunction;
@@ -14,7 +15,14 @@ import cn.featherfly.common.lang.vo.User;
  */
 public class LambdaUtilsTest2 {
 
-    int times = 100000;
+    int times = 500000;
+
+    @BeforeClass
+    public void before() {
+        Console.log("");
+        Console.log("LambdaUtils performance test with loop times {}", times);
+        Console.log("");
+    }
 
     @Test
     public void test0() {

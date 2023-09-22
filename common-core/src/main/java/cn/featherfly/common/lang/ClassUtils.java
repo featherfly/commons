@@ -60,10 +60,7 @@ public final class ClassUtils {
     private static final String IS = "is";
 
     /**
-     * <p>
-     * 查找指定类型
-     * </p>
-     * .
+     * 查找指定类型 .
      *
      * @param className 类名
      * @return 指定类型
@@ -73,6 +70,20 @@ public final class ClassUtils {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
             throw new IllegalArgumentException(e);
+        }
+    }
+
+    /**
+     * get class name. if type is null, return string "null".
+     *
+     * @param obj the obj
+     * @return name
+     */
+    public static String getClassName(Object obj) {
+        if (obj == null) {
+            return "null";
+        } else {
+            return obj.getClass().getName();
         }
     }
 

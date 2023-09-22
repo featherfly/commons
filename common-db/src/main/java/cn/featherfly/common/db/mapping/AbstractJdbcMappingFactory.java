@@ -28,10 +28,10 @@ import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.SystemPropertyUtils;
 import cn.featherfly.common.repository.mapping.ClassNameConversion;
 import cn.featherfly.common.repository.mapping.ClassNameJpaConversion;
-import cn.featherfly.common.repository.mapping.ClassNameUnderlineConversion;
+import cn.featherfly.common.repository.mapping.ClassNameUnderscoreConversion;
 import cn.featherfly.common.repository.mapping.PropertyNameConversion;
 import cn.featherfly.common.repository.mapping.PropertyNameJpaConversion;
-import cn.featherfly.common.repository.mapping.PropertyNameUnderlineConversion;
+import cn.featherfly.common.repository.mapping.PropertyNameUnderscoreConversion;
 
 /**
  * <p>
@@ -117,14 +117,14 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
 
         if (Lang.isEmpty(classNameConversions)) {
             this.classNameConversions.add(new ClassNameJpaConversion());
-            this.classNameConversions.add(new ClassNameUnderlineConversion());
+            this.classNameConversions.add(new ClassNameUnderscoreConversion());
         } else {
             this.classNameConversions.addAll(classNameConversions);
         }
 
         if (Lang.isEmpty(propertyNameConversions)) {
             this.propertyNameConversions.add(new PropertyNameJpaConversion());
-            this.propertyNameConversions.add(new PropertyNameUnderlineConversion());
+            this.propertyNameConversions.add(new PropertyNameUnderscoreConversion());
         } else {
             this.propertyNameConversions.addAll(propertyNameConversions);
         }

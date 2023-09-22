@@ -45,6 +45,7 @@ import cn.featherfly.common.db.wrapper.ConnectionWrapper;
 import cn.featherfly.common.db.wrapper.DataSourceWrapper;
 import cn.featherfly.common.db.wrapper.PreparedStatementWrapper;
 import cn.featherfly.common.db.wrapper.ResultSetWrapper;
+import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
@@ -2559,6 +2560,37 @@ public final class JdbcUtils {
             return value.toLocalDateTime();
         }
         return null;
+    }
+
+    /**
+     * Gets the enum.
+     *
+     * @param <E>      the enum type
+     * @param rs       the rs
+     * @param index    the index
+     * @param enumType the enum type
+     * @return the local date time
+     */
+    public static <E extends Enum<E>> E getEnum(ResultSet rs, int index, Class<E> enumType) {
+        AssertIllegalArgument.isNotNull(enumType, "enumType");
+        if (enumType.isEnum()) {
+            try {
+                ResultSetMetaData meta = rs.getMetaData();
+                switch (meta.getColumnType(index)) {
+                    case Types.TINYINT:
+                    case Types.SMALLINT:
+                    case Types.INTEGER:
+                    case Types.BIGINT:
+                        return Lang.toEnum(enumType, rs.getInt(index));
+                    default:
+                        return Lang.toEnum(enumType, rs.getString(index));
+                }
+            } catch (SQLException e) {
+                throw new JdbcException(e);
+            }
+        } else {
+            throw new JdbcException(enumType.getName() + " is not enum");
+        }
     }
 
     /**

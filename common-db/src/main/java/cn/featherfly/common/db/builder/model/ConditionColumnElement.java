@@ -181,9 +181,9 @@ public class ConditionColumnElement extends ParamedColumnElement {
                     condition.append(Chars.QUESTION);
                 }
                 condition.append(")");
-            } else if (ComparisonOperator.BT == comparisonOperator || ComparisonOperator.NBT == comparisonOperator) {
+            } else if (ComparisonOperator.BA == comparisonOperator || ComparisonOperator.NBA == comparisonOperator) {
                 condition.append(name).append(Chars.SPACE)
-                        .append(ComparisonOperator.NBT == comparisonOperator
+                        .append(ComparisonOperator.NBA == comparisonOperator
                                 ? dialect.getKeyword(Keywords.NOT) + Chars.SPACE
                                 : "")
                         .append(dialect.getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //

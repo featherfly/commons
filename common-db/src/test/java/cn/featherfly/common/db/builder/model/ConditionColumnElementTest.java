@@ -263,24 +263,24 @@ public class ConditionColumnElementTest {
 
         // between and
         Object[] btParams = new Object[] { 18, 22 };
-        c = new ConditionColumnElement(dialect, "age", new Object[] { 18, 22 }, ComparisonOperator.BT,
+        c = new ConditionColumnElement(dialect, "age", new Object[] { 18, 22 }, ComparisonOperator.BA,
                 IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "`age` BETWEEN ? AND ?");
         assertEquals(c.getParam(), btParams);
 
-        c = new ConditionColumnElement(dialect, "age", name, ComparisonOperator.BT, "u", IgnoreStrategy.EMPTY);
+        c = new ConditionColumnElement(dialect, "age", name, ComparisonOperator.BA, "u", IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "u.`age` BETWEEN ? AND ?");
         assertEquals(c.getParam(), name);
 
-        c = new ConditionColumnElement(dialect, "age", new Object[] { 18, 22 }, ComparisonOperator.NBT,
+        c = new ConditionColumnElement(dialect, "age", new Object[] { 18, 22 }, ComparisonOperator.NBA,
                 IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "`age` NOT BETWEEN ? AND ?");
         assertEquals(c.getParam(), btParams);
 
-        c = new ConditionColumnElement(dialect, "age", name, ComparisonOperator.NBT, "u", IgnoreStrategy.EMPTY);
+        c = new ConditionColumnElement(dialect, "age", name, ComparisonOperator.NBA, "u", IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "u.`age` NOT BETWEEN ? AND ?");
         assertEquals(c.getParam(), name);

@@ -1,3 +1,5 @@
+TODO 加入方言自发现功能，即匹配数据库连接字符串模式来获取
+
 # 0.6.0
 1. 修复cn.featherfly.common.repository.operate包移动到cn.featherfly.common.operator的问题
 2. 重构SqlSelectBasicBuilder逻辑，抽离出SqlSelectColumnsBuilder接口以及对应的实现
@@ -30,7 +32,7 @@
     ResultSet res = stat|prep|call.executeQuery("");
     conn.close(); // 会自动依次关闭ResultSet，再关闭Statement
     ```
-23. ConditionColumnElement支持ComparisonOperator.NEW|NSW|NCO|NL|BT|NBT
+23. ConditionColumnElement支持ComparisonOperator.NEW|NSW|NCO|NL|BA|NBA
 
 # 0.5.5 2022-8-11
 1. Dialect加入getKeywordLike(QueryPolicy)、getKeywordEq(QueryPolicy)、keywordsCase()方法
@@ -116,7 +118,7 @@
 
 # 0.3.19 2021-09-02  
 1. JdbcUtils.setParameter支持BigInteger,AtomicInteger,AtomicLong,AtomicBoolean
-    
+   
 # 0.3.18 2021-08-26  
 1. ConditionColumnElement.toSql()支持QueryOperator.ISN，QueryOperator.INN传入Boolean参数
     null 表示忽略当前条件

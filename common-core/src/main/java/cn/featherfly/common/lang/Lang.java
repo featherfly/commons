@@ -737,12 +737,13 @@ public final class Lang {
     }
 
     /**
-     * 获取调用getInvoker方法所在的方法被调用的信息（即调用方法、类等） .
+     * 获取调用getInvoker方法所在的方法被调用的信息（即调用方法、类等）.
+     * 在main方法中调用该方法会返回null,因为main方法是入口方法，没有其他方法会调用他.
      *
      * @return StackTraceElement
      */
     public static StackTraceElement getInvoker() {
-        return getInvoker(2);
+        return getInvoker(3);
     }
 
     /**

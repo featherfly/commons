@@ -1,12 +1,19 @@
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
+import java.io.File;
+
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 tasks.withType(Javadoc) {
     options.encoding = "UTF-8"
     options.locale = "en"
+    File overview = new File(getProjectDir().getAbsolutePath() + '/src/main/javadoc/overview.html'); 
+    //println overview.getAbsolutePath() + " exits " + overview.exists()
+    if (overview.exists()) {
+        options.overview = overview.getAbsolutePath()
+    }
 }
 
 repositories {

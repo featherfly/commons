@@ -25,6 +25,13 @@ import cn.featherfly.common.operator.AggregateFunction;
 public interface SqlSelectColumnsBuilder<B extends SqlSelectColumnsBuilder<B>> extends SqlBuilder {
 
     /**
+     * Clear columns.
+     *
+     * @return the b
+     */
+    B clearColumns();
+
+    /**
      * add column.
      *
      * @param aggregateFunction aggregateFunction

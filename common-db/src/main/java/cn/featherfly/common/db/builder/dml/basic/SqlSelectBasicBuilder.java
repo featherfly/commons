@@ -241,6 +241,15 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      * {@inheritDoc}
      */
     @Override
+    public SqlSelectBasicBuilder clearColumns() {
+        getDefaultBuilder().clearColumns();
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public SqlSelectBasicBuilder addColumn(AggregateFunction aggregateFunction, boolean distinct, String column) {
         getDefaultBuilder().addColumn(aggregateFunction, distinct, column);
         return this;
@@ -661,4 +670,5 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
         //        this.columnAliasPrefixProcessor = columnAliasPrefixProcessor;
         throw new UnsupportedException();
     }
+
 }

@@ -81,6 +81,16 @@ public abstract class AbstractSqlSelectColumnsBuilder<B extends AbstractSqlSelec
      */
     @SuppressWarnings("unchecked")
     @Override
+    public B clearColumns() {
+        columns.clear();
+        return (B) this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    @Override
     public B addColumn(AggregateFunction aggregateFunction, boolean distinct, String column) {
         columns.add(new SelectColumnElement(dialect, aggregateFunction, distinct, tableAlias, column, null));
         return (B) this;

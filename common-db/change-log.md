@@ -33,6 +33,7 @@ TODO 加入方言自发现功能，即匹配数据库连接字符串模式来获
     conn.close(); // 会自动依次关闭ResultSet，再关闭Statement
     ```
 23. ConditionColumnElement支持ComparisonOperator.NEW|NSW|NCO|NL|BA|NBA
+24. SqlSelectColumnsBuilder加入clearColumns()方法
 
 # 0.5.5 2022-8-11
 1. Dialect加入getKeywordLike(QueryPolicy)、getKeywordEq(QueryPolicy)、keywordsCase()方法

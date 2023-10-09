@@ -13,20 +13,21 @@ package cn.featherfly.common.db.mapping.operator;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalDate;
 
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.JavaTypeSqlTypeOperator;
 
 /**
+ * The Class IntegerTypeSqlTypeOperator.
+ *
  * @author zhongj
  */
-public class LocalDateTypeSqlTypeOperator implements JavaTypeSqlTypeOperator<LocalDate> {
+public class LongSqlTypeOperator implements JavaTypeSqlTypeOperator<Long> {
 
     /**
-     * Instantiates a new local date type sql type operator.
+     * Instantiates a new default java sql type operator.
      */
-    public LocalDateTypeSqlTypeOperator() {
+    public LongSqlTypeOperator() {
 
     }
 
@@ -34,7 +35,7 @@ public class LocalDateTypeSqlTypeOperator implements JavaTypeSqlTypeOperator<Loc
      * {@inheritDoc}
      */
     @Override
-    public void set(PreparedStatement prep, int parameterIndex, LocalDate value) {
+    public void set(PreparedStatement prep, int parameterIndex, Long value) {
         JdbcUtils.setParameter(prep, parameterIndex, value);
     }
 
@@ -42,7 +43,7 @@ public class LocalDateTypeSqlTypeOperator implements JavaTypeSqlTypeOperator<Loc
      * {@inheritDoc}
      */
     @Override
-    public void set(CallableStatement call, String parameterName, LocalDate value) {
+    public void set(CallableStatement call, String parameterName, Long value) {
         JdbcUtils.setParameter(call, parameterName, value);
     }
 
@@ -50,16 +51,16 @@ public class LocalDateTypeSqlTypeOperator implements JavaTypeSqlTypeOperator<Loc
      * {@inheritDoc}
      */
     @Override
-    public LocalDate get(ResultSet rs, int columnIndex) {
-        return JdbcUtils.getLocalDate(rs, columnIndex);
+    public Long get(ResultSet rs, int columnIndex) {
+        return JdbcUtils.getLong(rs, columnIndex);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public LocalDate get(CallableStatement call, int paramIndex) {
-        return JdbcUtils.getLocalDate(call, paramIndex);
+    public Long get(CallableStatement call, int paramIndex) {
+        return JdbcUtils.getLong(call, paramIndex);
     }
 
 }

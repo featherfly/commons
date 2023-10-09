@@ -20,6 +20,7 @@ import cn.featherfly.common.bean.BeanProperty;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.jpa.ColumnDefault;
 import cn.featherfly.common.db.jpa.Comment;
+import cn.featherfly.common.db.mapping.operator.BasicOperators;
 import cn.featherfly.common.db.mapping.operator.DefaultTypesSqlTypeOperator;
 import cn.featherfly.common.db.mapping.operator.EnumSqlTypeOperator;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
@@ -210,7 +211,12 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
             } else {
                 // YUFEI_TODO 后续来优化打开检查，主要是现在父JdbcPropertyMapping（非具体映射）也调用了此方法，造成检查不通过
                 //                mapping.setJavaTypeSqlTypeOperator(new DefaultTypesSqlTypeOperator<>(beanProperty.getType(), true));
-                mapping.setJavaTypeSqlTypeOperator(new DefaultTypesSqlTypeOperator<>(beanProperty.getType()));
+                JavaTypeSqlTypeOperator<?> operator = BasicOperators.getOperator(beanProperty.getType());
+                if (operator != null) {
+                    mapping.setJavaTypeSqlTypeOperator(operator);
+                } else {
+                    mapping.setJavaTypeSqlTypeOperator(new DefaultTypesSqlTypeOperator<>(beanProperty.getType()));
+                }
             }
         }
     }

@@ -34,6 +34,7 @@ TODO 加入方言自发现功能，即匹配数据库连接字符串模式来获
     ```
 23. ConditionColumnElement支持ComparisonOperator.NEW|NSW|NCO|NL|BA|NBA
 24. SqlSelectColumnsBuilder加入clearColumns()方法
+25. MappingFactory在创建JdbcPropertyMapping的时候优化了基础类型对应的JavaTypeSqlTypeOperator
 
 # 0.5.5 2022-8-11
 1. Dialect加入getKeywordLike(QueryPolicy)、getKeywordEq(QueryPolicy)、keywordsCase()方法

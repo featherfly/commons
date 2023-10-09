@@ -13,19 +13,22 @@ package cn.featherfly.common.db.mapping.operator;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.JavaTypeSqlTypeOperator;
 
 /**
+ * The Class LocalTimeTypeSqlTypeOperator.
+ *
  * @author zhongj
  */
-public class LocalDateTimeTypeSqlTypeOperator implements JavaTypeSqlTypeOperator<LocalDateTime> {
+public class LocalTimeSqlTypeOperator implements JavaTypeSqlTypeOperator<LocalTime> {
 
     /**
+     * Instantiates a new local time type sql type operator.
      */
-    public LocalDateTimeTypeSqlTypeOperator() {
+    public LocalTimeSqlTypeOperator() {
 
     }
 
@@ -33,7 +36,7 @@ public class LocalDateTimeTypeSqlTypeOperator implements JavaTypeSqlTypeOperator
      * {@inheritDoc}
      */
     @Override
-    public void set(PreparedStatement prep, int parameterIndex, LocalDateTime value) {
+    public void set(PreparedStatement prep, int parameterIndex, LocalTime value) {
         JdbcUtils.setParameter(prep, parameterIndex, value);
     }
 
@@ -41,7 +44,7 @@ public class LocalDateTimeTypeSqlTypeOperator implements JavaTypeSqlTypeOperator
      * {@inheritDoc}
      */
     @Override
-    public void set(CallableStatement call, String parameterName, LocalDateTime value) {
+    public void set(CallableStatement call, String parameterName, LocalTime value) {
         JdbcUtils.setParameter(call, parameterName, value);
     }
 
@@ -49,16 +52,16 @@ public class LocalDateTimeTypeSqlTypeOperator implements JavaTypeSqlTypeOperator
      * {@inheritDoc}
      */
     @Override
-    public LocalDateTime get(ResultSet rs, int columnIndex) {
-        return JdbcUtils.getLocalDateTime(rs, columnIndex);
+    public LocalTime get(ResultSet rs, int columnIndex) {
+        return JdbcUtils.getLocalTime(rs, columnIndex);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public LocalDateTime get(CallableStatement call, int paramIndex) {
-        return JdbcUtils.getLocalDateTime(call, paramIndex);
+    public LocalTime get(CallableStatement call, int paramIndex) {
+        return JdbcUtils.getLocalTime(call, paramIndex);
     }
 
 }

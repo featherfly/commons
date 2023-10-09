@@ -13,21 +13,20 @@ package cn.featherfly.common.db.mapping.operator;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.JavaTypeSqlTypeOperator;
 
 /**
- * The Class DubleSqlTypeOperator.
- *
  * @author zhongj
  */
-public class DubleSqlTypeOperator implements JavaTypeSqlTypeOperator<Double> {
+public class LocalDateSqlTypeOperator implements JavaTypeSqlTypeOperator<LocalDate> {
 
     /**
-     * Instantiates a new duble sql type operator.
+     * Instantiates a new local date type sql type operator.
      */
-    public DubleSqlTypeOperator() {
+    public LocalDateSqlTypeOperator() {
 
     }
 
@@ -35,7 +34,7 @@ public class DubleSqlTypeOperator implements JavaTypeSqlTypeOperator<Double> {
      * {@inheritDoc}
      */
     @Override
-    public void set(PreparedStatement prep, int parameterIndex, Double value) {
+    public void set(PreparedStatement prep, int parameterIndex, LocalDate value) {
         JdbcUtils.setParameter(prep, parameterIndex, value);
     }
 
@@ -43,7 +42,7 @@ public class DubleSqlTypeOperator implements JavaTypeSqlTypeOperator<Double> {
      * {@inheritDoc}
      */
     @Override
-    public void set(CallableStatement call, String parameterName, Double value) {
+    public void set(CallableStatement call, String parameterName, LocalDate value) {
         JdbcUtils.setParameter(call, parameterName, value);
     }
 
@@ -51,16 +50,16 @@ public class DubleSqlTypeOperator implements JavaTypeSqlTypeOperator<Double> {
      * {@inheritDoc}
      */
     @Override
-    public Double get(ResultSet rs, int columnIndex) {
-        return JdbcUtils.getDouble(rs, columnIndex);
+    public LocalDate get(ResultSet rs, int columnIndex) {
+        return JdbcUtils.getLocalDate(rs, columnIndex);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Double get(CallableStatement call, int paramIndex) {
-        return JdbcUtils.getDouble(call, paramIndex);
+    public LocalDate get(CallableStatement call, int paramIndex) {
+        return JdbcUtils.getLocalDate(call, paramIndex);
     }
 
 }

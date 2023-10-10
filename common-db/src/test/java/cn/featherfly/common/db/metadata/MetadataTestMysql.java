@@ -38,6 +38,7 @@ public class MetadataTestMysql {
             System.out.println("connection.getCatalog() = " + conn.getCatalog());
             System.out.println("connection.getSchema() = " + conn.getSchema());
 
+            System.out.println("metaData.getURL() = " + metaData.getURL());
             System.out.println(
                     "metaData.supportsCatalogsInDataManipulation() = " + metaData.supportsCatalogsInDataManipulation());
             System.out.println(

@@ -12,4 +12,12 @@ import java.util.function.DoubleSupplier;
 @FunctionalInterface
 public interface SerializableDoubleSupplier extends Serializable, DoubleSupplier {
 
+    /**
+     * Gets a result.
+     *
+     * @return a result
+     */
+    default double get() {
+        return getAsDouble();
+    }
 }

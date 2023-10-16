@@ -12,5 +12,12 @@ import java.util.function.LongSupplier;
  */
 @FunctionalInterface
 public interface SerializableLongSupplier extends Serializable, LongSupplier {
-
+    /**
+     * Gets a result.
+     *
+     * @return a result
+     */
+    default long get() {
+        return getAsLong();
+    }
 }

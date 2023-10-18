@@ -13,6 +13,8 @@ import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.operator.ComparisonOperator;
+import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
 
 /**
  * Oracle Dialect.
@@ -238,28 +240,7 @@ public class OracleDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    String getKeywordLikeCaseInsensitive(boolean reverse) {
-        // NOIMPL 未实现，后续来实现
-        throw new UnsupportedException();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    String getKeywordLikeCaseSensitive(boolean reverse) {
-        if (reverse) {
-            return getKeyword(Keywords.NOT) + " " + getKeyword(Keywords.LIKE);
-        } else {
-            return getKeyword(Keywords.LIKE);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    String getKeywordEqCaseInsensitive() {
+    public String getInOrNotInExpression(boolean isIn, String columnName, Object values, MatchStrategy matchStrategy) {
         // FIXME 未实现，后续来实现
         throw new UnsupportedException();
     }
@@ -268,16 +249,9 @@ public class OracleDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    String getKeywordEqCaseSensitive() {
-        return Chars.EQ;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    String getKeywordNeCaseInsensitive() {
-        // NOIMPL 未实现
+    public String getBetweenOrNotBetweenExpression(boolean isBetween, String name, Object values,
+            MatchStrategy matchStrategy) {
+        // FIXME 未实现，后续来实现
         throw new UnsupportedException();
     }
 
@@ -285,7 +259,9 @@ public class OracleDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    String getKeywordNeCaseSensitive() {
-        return "!=";
+    protected String getCompareExpression0(ComparisonOperator comparisonOperator, String columnName, Object values,
+            MatchStrategy matchStrategy) {
+        // FIXME 未实现，后续来实现
+        throw new UnsupportedException();
     }
 }

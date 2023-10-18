@@ -2,10 +2,7 @@
 package cn.featherfly.common.db.dialect;
 
 /**
- * <p>
- * Join Types
- * </p>
- * .
+ * Join Types .
  *
  * @author zhongj
  */

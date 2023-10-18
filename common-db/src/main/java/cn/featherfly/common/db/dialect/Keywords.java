@@ -5,10 +5,7 @@
 package cn.featherfly.common.db.dialect;
 
 /**
- * <p>
- * Keywords
- * </p>
- * .
+ * Keywords .
  *
  * @author zhongj
  */
@@ -201,5 +198,8 @@ public enum Keywords {
     UNIQUE,
 
     /** The collate. */
-    COLLATE;
+    COLLATE,
+
+    /** The binary. */
+    BINARY;
 }

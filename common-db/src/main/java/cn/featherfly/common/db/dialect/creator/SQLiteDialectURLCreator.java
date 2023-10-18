@@ -12,7 +12,7 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.SQLiteDialect;
 
 /**
- * MysqlDialectURLCreator.
+ * The Class SQLiteDialectURLCreator.
  *
  * @author zhongj
  */

@@ -9,17 +9,18 @@
 package cn.featherfly.common.db.dialect.creator;
 
 import cn.featherfly.common.db.dialect.Dialect;
-import cn.featherfly.common.db.dialect.OracleDialect;
+import cn.featherfly.common.exception.NotImplementedException;
 
 /**
- * The Class OracleDialectURLCreator.
+ * The Class SQLServerURLCreator.
  *
  * @author zhongj
  */
-public class OracleDialectURLCreator extends DialectURLCreator {
+public class SQLServerURLCreator extends DialectURLCreator {
 
     /** The Constant PREFIXES. */
-    public static final String[] PREFIXES = new String[] { "jdbc:oracle:", "jdbc:log4jdbc:oracle:" };
+    public static final String[] PREFIXES = new String[] { "jdbc:sqlserver:", "jdbc:microsoft:", "jdbc:jtds:",
+            "jdbc:log4jdbc:sqlserver:", "jdbc:log4jdbc:microsoft:", "jdbc:log4jdbc:jtds:" };
 
     /**
      * {@inheritDoc}
@@ -34,6 +35,6 @@ public class OracleDialectURLCreator extends DialectURLCreator {
      */
     @Override
     protected Dialect createDialect() {
-        return new OracleDialect();
+        throw new NotImplementedException();
     }
 }

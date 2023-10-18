@@ -1,7 +1,9 @@
 package cn.featherfly.common.db.dialect;
 
+import java.lang.reflect.Array;
 import java.sql.JDBCType;
 import java.sql.SQLType;
+import java.util.Collection;
 import java.util.Map;
 
 import cn.featherfly.common.constant.Chars;
@@ -12,15 +14,14 @@ import cn.featherfly.common.db.builder.model.TableElement;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.operator.AggregateFunction;
+import cn.featherfly.common.operator.ComparisonOperator;
 import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
 import cn.featherfly.common.operator.Function;
 import cn.featherfly.common.operator.LogicOperator;
 import cn.featherfly.common.operator.SortOperator;
 
 /**
- * <p>
  * database dialect.
- * </p>
  *
  * @author zhongj
  */
@@ -364,6 +365,73 @@ public interface Dialect {
     Keyworld getKeywords();
 
     /**
+     * Gets the operators.
+     *
+     * @return the operators
+     */
+    Operator getOperators();
+
+    /**
+     * Gets the operator.
+     *
+     * @param comparisonOperator the comparison operator
+     * @return the operator
+     */
+    default String getOperator(ComparisonOperator comparisonOperator) {
+        return getOperator(comparisonOperator, MatchStrategy.AUTO);
+    }
+
+    /**
+     * Gets the operator.
+     *
+     * @param comparisonOperator the comparison operator
+     * @param matchStrategy      the match strategy
+     * @return the operator
+     */
+    default String getOperator(ComparisonOperator comparisonOperator, MatchStrategy matchStrategy) {
+        switch (comparisonOperator) {
+            case EQ:
+                return getOperators().eq();
+            case NE:
+                return getOperators().ne();
+            case SW:
+                return getKeywords().like(matchStrategy);
+            case NSW:
+                return getKeywords().notLike(matchStrategy);
+            case CO:
+                return getKeywords().like(matchStrategy);
+            case NCO:
+                return getKeywords().notLike(matchStrategy);
+            case EW:
+                return getKeywords().like(matchStrategy);
+            case NEW:
+                return getKeywords().notLike(matchStrategy);
+            case LK:
+                return getKeywords().like(matchStrategy);
+            case NL:
+                return getKeywords().notLike(matchStrategy);
+            case LT:
+                return getOperators().lt();
+            case LE:
+                return getOperators().le();
+            case GT:
+                return getOperators().gt();
+            case GE:
+                return getOperators().ge();
+            case IN:
+                return getKeywords().in();
+            case NI:
+                return getKeywords().notIn();
+            case ISN:
+                return getKeywords().isNull();
+            case INN:
+                return getKeywords().isNotNull();
+            default:
+                throw new DialectException("unsupported for " + comparisonOperator);
+        }
+    }
+
+    /**
      * get converted keywords.
      *
      * @param keywords sql keywords
@@ -431,20 +499,215 @@ public interface Dialect {
     String getKeywordNotLike(MatchStrategy matchStrategy);
 
     /**
-     * Gets the keyword eq.
+     * Gets the compare expression.
      *
-     * @param matchStrategy the query policy
-     * @return the keyword eq
+     * @param operator the operator
+     * @param name     the name
+     * @param values   the values
+     * @return the compare expression
      */
-    String getKeywordEq(MatchStrategy matchStrategy);
+    default String getCompareExpression(ComparisonOperator operator, String name, Object values) {
+        return getCompareExpression(operator, name, values, MatchStrategy.AUTO);
+    }
 
     /**
-     * Gets the keyword ne.
+     * Gets the compare expression.
      *
-     * @param matchStrategy the query policy
-     * @return the keyword eq
+     * @param operator   the operator
+     * @param columnName the column name
+     * @param values     the values
+     * @param tableAlias the table alias
+     * @return the compare expression
      */
-    String getKeywordNe(MatchStrategy matchStrategy);
+    default String getCompareExpression(ComparisonOperator operator, String columnName, Object values,
+            String tableAlias) {
+        return getCompareExpression(operator, buildColumnSql(tableAlias, columnName), values);
+    }
+
+    /**
+     * Gets the compare expression.
+     *
+     * @param operator      the operator
+     * @param name          the name
+     * @param values        the values
+     * @param matchStrategy the match strategy
+     * @return the compare expression
+     */
+    String getCompareExpression(ComparisonOperator operator, String name, Object values, MatchStrategy matchStrategy);
+
+    /**
+     * Gets the compare expression.
+     *
+     * @param operator      the operator
+     * @param columnName    the column name
+     * @param values        the values
+     * @param tableAlias    the table alias
+     * @param matchStrategy the match strategy
+     * @return the compare expression
+     */
+    default String getCompareExpression(ComparisonOperator operator, String columnName, Object values,
+            String tableAlias, MatchStrategy matchStrategy) {
+        return getCompareExpression(operator, buildColumnSql(tableAlias, columnName), values, matchStrategy);
+    }
+
+    /**
+     * Gets the checks if is null or not is null expression.
+     *
+     * @param isNull the is null
+     * @param name   the name
+     * @return the checks if is null or not is null expression
+     */
+    default String getIsNullOrNotIsNullExpression(boolean isNull, String name) {
+        StringBuilder condition = new StringBuilder();
+        condition.append(name).append(Chars.SPACE);
+        if (isNull) {
+            condition.append(getOperator(ComparisonOperator.ISN));
+        } else {
+            condition.append(getOperator(ComparisonOperator.INN));
+        }
+        return condition.toString();
+    }
+
+    /**
+     * Gets the checks if is null or not is null expression.
+     *
+     * @param isNull     the is null
+     * @param columnName the column name
+     * @param tableAlias the table alias
+     * @return the checks if is null or not is null expression
+     */
+    default String getIsNullOrNotIsNullExpression(boolean isNull, String columnName, String tableAlias) {
+        return getIsNullOrNotIsNullExpression(isNull, buildColumnSql(tableAlias, columnName));
+    }
+
+    /**
+     * Gets the between or not between expression.
+     *
+     * @param isBetween the is between
+     * @param name      the name
+     * @param value     the value
+     * @return the between or not between expression
+     */
+    default String getBetweenOrNotBetweenExpression(boolean isBetween, String name, Object value) {
+        StringBuilder condition = new StringBuilder();
+        condition.append(name).append(Chars.SPACE) //
+                .append(!isBetween ? getKeyword(Keywords.NOT) + Chars.SPACE : "") //
+                .append(getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
+                .append(Chars.QUESTION).append(Chars.SPACE) //
+                .append(getKeyword(Keywords.AND)).append(Chars.SPACE) //
+                .append(Chars.QUESTION);
+        return condition.toString();
+    }
+
+    /**
+     * Gets the between or not between expression.
+     *
+     * @param isBetween  the is between
+     * @param columnName the column name
+     * @param values     the values
+     * @param tableAlias the table alias
+     * @return the between or not between expression
+     */
+    default String getBetweenOrNotBetweenExpression(boolean isBetween, String columnName, Object values,
+            String tableAlias) {
+        return getBetweenOrNotBetweenExpression(isBetween, buildColumnSql(tableAlias, columnName), values);
+    }
+
+    /**
+     * Gets the between or not between expression.
+     *
+     * @param isBetween     the is between
+     * @param name          the name
+     * @param values        the values
+     * @param matchStrategy the match strategy
+     * @return the between or not between expression
+     */
+    String getBetweenOrNotBetweenExpression(boolean isBetween, String name, Object values, MatchStrategy matchStrategy);
+
+    /**
+     * Gets the between or not between expression.
+     *
+     * @param isBetween     the is between
+     * @param columnName    the column name
+     * @param values        the values
+     * @param tableAlias    the table alias
+     * @param matchStrategy the match strategy
+     * @return the between or not between expression
+     */
+    default String getBetweenOrNotBetweenExpression(boolean isBetween, String columnName, Object values,
+            String tableAlias, MatchStrategy matchStrategy) {
+        return getBetweenOrNotBetweenExpression(isBetween, buildColumnSql(tableAlias, columnName), values,
+                matchStrategy);
+    }
+
+    /**
+     * Gets the in or not in expression.
+     *
+     * @param isIn   the is in
+     * @param name   the name
+     * @param values the values
+     * @return the in or not in expression
+     */
+    default String getInOrNotInExpression(boolean isIn, String name, Object values) {
+        StringBuilder condition = new StringBuilder();
+        int length = 1;
+        if (values != null) {
+            if (values instanceof Collection) {
+                length = ((Collection<?>) values).size();
+            } else if (values.getClass().isArray()) {
+                length = Array.getLength(values);
+            }
+        }
+        condition.append(name).append(Chars.SPACE).append(isIn ? getKeywords().in() : getKeywords().notIn())
+                .append(" (");
+        for (int i = 0; i < length; i++) {
+            if (i > 0) {
+                condition.append(Chars.COMMA);
+            }
+            condition.append(Chars.QUESTION);
+        }
+        condition.append(")");
+        return condition.toString();
+    }
+
+    /**
+     * Gets the in or not in expression.
+     *
+     * @param isIn       the is in
+     * @param columnName the column name
+     * @param values     the values
+     * @param tableAlias the table alias
+     * @return the in or not in expression
+     */
+    default String getInOrNotInExpression(boolean isIn, String columnName, Object values, String tableAlias) {
+        return getInOrNotInExpression(isIn, buildColumnSql(tableAlias, columnName), values);
+    }
+
+    /**
+     * Gets the in or not in expression.
+     *
+     * @param isIn          the is in
+     * @param name          the name
+     * @param values        the values
+     * @param matchStrategy the match strategy
+     * @return the in or not in expression
+     */
+    String getInOrNotInExpression(boolean isIn, String name, Object values, MatchStrategy matchStrategy);
+
+    /**
+     * Gets the in or not in expression.
+     *
+     * @param isIn          the is in
+     * @param columnName    the column name
+     * @param values        the values
+     * @param tableAlias    the table alias
+     * @param matchStrategy the match strategy
+     * @return the in or not in expression
+     */
+    default String getInOrNotInExpression(boolean isIn, String columnName, Object values, String tableAlias,
+            MatchStrategy matchStrategy) {
+        return getInOrNotInExpression(isIn, buildColumnSql(tableAlias, columnName), values, matchStrategy);
+    }
 
     /**
      * get converted aggregate function.
@@ -1587,44 +1850,6 @@ public interface Dialect {
         }
 
         /**
-         * equals.
-         *
-         * @return the string
-         */
-        public String eq() {
-            return eq(MatchStrategy.AUTO);
-        }
-
-        /**
-         * equals.
-         *
-         * @param matchStrategy the query policy
-         * @return the string
-         */
-        public String eq(MatchStrategy matchStrategy) {
-            return dialect.getKeywordEq(matchStrategy);
-        }
-
-        /**
-         * not equals.
-         *
-         * @return the string
-         */
-        public String ne() {
-            return ne(MatchStrategy.AUTO);
-        }
-
-        /**
-         * not equals.
-         *
-         * @param matchStrategy the query policy
-         * @return the string
-         */
-        public String ne(MatchStrategy matchStrategy) {
-            return dialect.getKeywordNe(matchStrategy);
-        }
-
-        /**
          * Null text.
          *
          * @return the string
@@ -1892,6 +2117,85 @@ public interface Dialect {
          */
         public String collate() {
             return dialect.getKeyword(Keywords.COLLATE);
+        }
+
+        /**
+         * Binary.
+         *
+         * @return the string
+         */
+        public String binary() {
+            return dialect.getKeyword(Keywords.BINARY);
+        }
+    }
+
+    /**
+     * The Class Operator.
+     *
+     * @author zhongj
+     */
+    public static class Operator {
+
+        /**
+         * Instantiates a new keyworld.
+         *
+         * @param dialect the dialect
+         */
+        Operator() {
+        }
+
+        /**
+         * equals.
+         *
+         * @return the string
+         */
+        public String eq() {
+            return "=";
+        }
+
+        /**
+         * not equals.
+         *
+         * @return the string
+         */
+        public String ne() {
+            return "!=";
+        }
+
+        /**
+         * great equals.
+         *
+         * @return the string
+         */
+        public String ge() {
+            return ">=";
+        }
+
+        /**
+         * great than.
+         *
+         * @return the string
+         */
+        public String gt() {
+            return ">";
+        }
+
+        /**
+         * less equals.
+         *
+         * @return the string
+         */
+        public String le() {
+            return "<=";
+        }
+
+        /**
+         * less than.
+         *
+         * @return the string
+         */
+        public String lt() {
+            return "<";
         }
     }
 }

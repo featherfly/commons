@@ -12,7 +12,7 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.MySQLDialect;
 
 /**
- * MysqlDialectURLCreator.
+ * The Class MysqlDialectURLCreator.
  *
  * @author zhongj
  */

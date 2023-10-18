@@ -15,6 +15,8 @@ import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.operator.ComparisonOperator;
+import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
 
 /**
  * PostgreSQL Dialect.
@@ -308,9 +310,9 @@ public class PostgreSQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    String getKeywordLikeCaseInsensitive(boolean reverse) {
+    protected String getKeywordLikeCaseInsensitive(boolean reverse) {
         if (reverse) {
-            return getKeyword(Keywords.NOT) + " " + getKeyword("ILIKE");
+            return getKeyword(Keywords.NOT) + Chars.SPACE + getKeyword("ILIKE");
         } else {
             return getKeyword("ILIKE");
         }
@@ -320,9 +322,9 @@ public class PostgreSQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    String getKeywordLikeCaseSensitive(boolean reverse) {
+    protected String getKeywordLikeCaseSensitive(boolean reverse) {
         if (reverse) {
-            return getKeyword(Keywords.NOT) + " " + getKeyword(Keywords.LIKE);
+            return getKeyword(Keywords.NOT) + Chars.SPACE + getKeyword(Keywords.LIKE);
         } else {
             return getKeyword(Keywords.LIKE);
         }
@@ -332,34 +334,70 @@ public class PostgreSQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    String getKeywordEqCaseInsensitive() {
-        // FIXME 使用like有隐患，后续再来优化
-        return getKeyword("ILIKE");
+    public String getInOrNotInExpression(boolean isIn, String name, Object values, MatchStrategy matchStrategy) {
+        switch (matchStrategy) {
+            case CASE_INSENSITIVE:
+            case CASE_SENSITIVE:
+                throw new DialectException("in operator unsupported " + matchStrategy);
+            default:
+                return getInOrNotInExpression(isIn, name, values);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    String getKeywordEqCaseSensitive() {
-        return Chars.EQ;
+    public String getBetweenOrNotBetweenExpression(boolean isBetween, String name, Object values,
+            MatchStrategy matchStrategy) {
+        switch (matchStrategy) {
+            case CASE_INSENSITIVE:
+            case CASE_SENSITIVE:
+                throw new DialectException("between and operator unsupported " + matchStrategy);
+            default:
+                return getBetweenOrNotBetweenExpression(isBetween, name, values);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    String getKeywordNeCaseInsensitive() {
-        // FIXME 未实现
-        throw new UnsupportedException();
-    }
+    protected String getCompareExpression0(ComparisonOperator comparisonOperator, String name, Object values,
+            MatchStrategy matchStrategy) {
+        switch (comparisonOperator) {
+            case EQ:
+            case NE:
+            case SW:
+            case NSW:
+            case CO:
+            case NCO:
+            case EW:
+            case NEW:
+            case LK:
+            case NL:
+            case LT:
+            case LE:
+            case GT:
+            case GE:
+                break;
+            default:
+                throw new DialectException("unsupported for " + comparisonOperator);
+        }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    String getKeywordNeCaseSensitive() {
-        return "!=";
+        StringBuilder condition = new StringBuilder();
+        switch (matchStrategy) {
+            case CASE_INSENSITIVE:
+            case CASE_SENSITIVE:
+                throw new DialectException(
+                        Strings.format("{} operator unsupported {}", comparisonOperator, matchStrategy));
+            default:
+                condition.append(name);
+                break;
+        }
+        condition.append(Chars.SPACE).append(getOperator(comparisonOperator)).append(Chars.SPACE)
+                .append(Chars.QUESTION);
+        return condition.toString();
     }
 
 }

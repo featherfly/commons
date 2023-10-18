@@ -17,13 +17,12 @@ import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.operator.ComparisonOperator;
 import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
 import cn.featherfly.common.repository.Index;
 
 /**
- * <p>
  * 数据库方言的抽象类. 实现了一些通用内容.
- * </p>
  *
  * @author zhongj
  */
@@ -32,8 +31,9 @@ public abstract class AbstractDialect implements Dialect {
     /** The logger. */
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    /** The keyworld. */
     private Keyworld keyworld;
+
+    private Operator operator;
 
     /** for update的后置. */
     protected static final String UPDATE_STRING = " for update";
@@ -49,6 +49,7 @@ public abstract class AbstractDialect implements Dialect {
      */
     public AbstractDialect() {
         keyworld = new Keyworld(this);
+        operator = new Operator();
     }
 
     /**
@@ -60,7 +61,7 @@ public abstract class AbstractDialect implements Dialect {
     }
 
     /**
-     * set keywordCase value
+     * set keywordCase value.
      *
      * @param keywordCase keywordCase
      */
@@ -69,7 +70,7 @@ public abstract class AbstractDialect implements Dialect {
     }
 
     /**
-     * set tableAndColumnNameCase value
+     * set tableAndColumnNameCase value.
      *
      * @param tableAndColumnNameCase tableAndColumnNameCase
      */
@@ -414,6 +415,37 @@ public abstract class AbstractDialect implements Dialect {
      * {@inheritDoc}
      */
     @Override
+    public Operator getOperators() {
+        return operator;
+    }
+
+    @Override
+    public String getCompareExpression(ComparisonOperator comparisonOperator, String name, Object values,
+            MatchStrategy matchStrategy) {
+        if (ComparisonOperator.IN == comparisonOperator || ComparisonOperator.NI == comparisonOperator) {
+            return getInOrNotInExpression(comparisonOperator == ComparisonOperator.IN, name, values, matchStrategy);
+        } else if (ComparisonOperator.BA == comparisonOperator || ComparisonOperator.NBA == comparisonOperator) {
+            return getBetweenOrNotBetweenExpression(comparisonOperator == ComparisonOperator.BA, name, values,
+                    matchStrategy);
+        } else {
+            if (ComparisonOperator.ISN == comparisonOperator) {
+                return getIsNullOrNotIsNullExpression(values == null || (Boolean) values, name);
+            } else if (ComparisonOperator.INN == comparisonOperator) {
+                return getIsNullOrNotIsNullExpression(values != null && !(Boolean) values, name);
+            } else {
+                return getCompareExpression0(comparisonOperator, name, values, matchStrategy);
+            }
+        }
+
+    }
+
+    protected abstract String getCompareExpression0(ComparisonOperator comparisonOperator, String columnName,
+            Object values, MatchStrategy matchStrategy);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getKeywordLike(MatchStrategy matchStrategy) {
         if (matchStrategy == null) {
             matchStrategy = MatchStrategy.AUTO;
@@ -449,81 +481,37 @@ public abstract class AbstractDialect implements Dialect {
     /**
      * Gets the keyword like case insensitive.
      *
+     * @param reverse the reverse
      * @return the keyword like case insensitive
      */
-    abstract String getKeywordLikeCaseInsensitive(boolean reverse);
-
-    /**
-     * Gets the keyword like case sensitive.
-     *
-     * @return the keyword like case sensitive
-     */
-    abstract String getKeywordLikeCaseSensitive(boolean reverse);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getKeywordEq(MatchStrategy matchStrategy) {
-        if (matchStrategy == null) {
-            matchStrategy = MatchStrategy.AUTO;
-        }
-        switch (matchStrategy) {
-            case CASE_INSENSITIVE:
-                return getKeywordEqCaseInsensitive();
-            case CASE_SENSITIVE:
-                return getKeywordEqCaseSensitive();
-            default:
-                return Chars.EQ;
+    protected String getKeywordLikeCaseInsensitive(boolean reverse) {
+        if (reverse) {
+            return getKeyword(Keywords.NOT) + Chars.SPACE + getKeyword(Keywords.LIKE);
+        } else {
+            return getKeyword(Keywords.LIKE);
         }
     }
 
     /**
-     * Gets the keyword like case insensitive.
-     *
-     * @return the keyword like case insensitive
-     */
-    abstract String getKeywordEqCaseInsensitive();
-
-    /**
      * Gets the keyword like case sensitive.
      *
+     * @param reverse the reverse
      * @return the keyword like case sensitive
      */
-    abstract String getKeywordEqCaseSensitive();
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getKeywordNe(MatchStrategy matchStrategy) {
-        if (matchStrategy == null) {
-            matchStrategy = MatchStrategy.AUTO;
-        }
-        switch (matchStrategy) {
-            case CASE_INSENSITIVE:
-                return getKeywordNeCaseInsensitive();
-            case CASE_SENSITIVE:
-                return getKeywordNeCaseSensitive();
-            default:
-                return "!=";
+    protected String getKeywordLikeCaseSensitive(boolean reverse) {
+        if (reverse) {
+            return getKeyword(Keywords.NOT) + Chars.SPACE + getKeyword(Keywords.LIKE);
+        } else {
+            return getKeyword(Keywords.LIKE);
         }
     }
 
     /**
-     * Gets the keyword like case insensitive.
+     * Gets the keyword.
      *
-     * @return the keyword like case insensitive
+     * @param keyword the keyword
+     * @return the keyword
      */
-    abstract String getKeywordNeCaseInsensitive();
-
-    /**
-     * Gets the keyword like case sensitive.
-     *
-     * @return the keyword like case sensitive
-     */
-    abstract String getKeywordNeCaseSensitive();
-
     protected String getKeyword(String keyword) {
         if (Lang.isEmpty(keyword)) {
             return "";

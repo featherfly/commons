@@ -12,7 +12,7 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.PostgreSQLDialect;
 
 /**
- * MysqlDialectURLCreator.
+ * The Class PostgreSQLDialectURLCreator.
  *
  * @author zhongj
  */

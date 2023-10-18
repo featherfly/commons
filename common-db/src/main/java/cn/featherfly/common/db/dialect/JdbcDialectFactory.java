@@ -19,9 +19,16 @@ import java.util.function.Function;
 import javax.sql.DataSource;
 
 import cn.featherfly.common.db.JdbcException;
+import cn.featherfly.common.db.dialect.creator.DerbyDialectURLCreator;
+import cn.featherfly.common.db.dialect.creator.DmDialectURLCreator;
+import cn.featherfly.common.db.dialect.creator.H2DialectURLCreator;
+import cn.featherfly.common.db.dialect.creator.HSQLDBDialectURLCreator;
+import cn.featherfly.common.db.dialect.creator.KingbaseDialectURLCreator;
+import cn.featherfly.common.db.dialect.creator.MariaDBDialectURLCreator;
 import cn.featherfly.common.db.dialect.creator.MysqlDialectURLCreator;
 import cn.featherfly.common.db.dialect.creator.OracleDialectURLCreator;
 import cn.featherfly.common.db.dialect.creator.PostgreSQLDialectURLCreator;
+import cn.featherfly.common.db.dialect.creator.SQLServerURLCreator;
 import cn.featherfly.common.db.dialect.creator.SQLiteDialectURLCreator;
 import cn.featherfly.common.lang.CollectionUtils;
 
@@ -53,6 +60,14 @@ public class JdbcDialectFactory implements DialectFactory {
         this.dialectCreators.add(new PostgreSQLDialectURLCreator());
         this.dialectCreators.add(new SQLiteDialectURLCreator());
         this.dialectCreators.add(new OracleDialectURLCreator());
+
+        this.dialectCreators.add(new SQLServerURLCreator());
+        this.dialectCreators.add(new KingbaseDialectURLCreator());
+        this.dialectCreators.add(new DmDialectURLCreator());
+        this.dialectCreators.add(new MariaDBDialectURLCreator());
+        this.dialectCreators.add(new H2DialectURLCreator());
+        this.dialectCreators.add(new DerbyDialectURLCreator());
+        this.dialectCreators.add(new HSQLDBDialectURLCreator());
     }
 
     /**

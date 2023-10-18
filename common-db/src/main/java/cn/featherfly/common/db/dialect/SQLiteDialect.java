@@ -1,9 +1,11 @@
 
 package cn.featherfly.common.db.dialect;
 
+import java.lang.reflect.Array;
 import java.sql.JDBCType;
 import java.sql.SQLType;
 import java.sql.Types;
+import java.util.Collection;
 import java.util.Date;
 
 import cn.featherfly.common.constant.Chars;
@@ -16,6 +18,8 @@ import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.operator.ComparisonOperator;
+import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
 
 /**
  * SQLite Dialect .
@@ -26,9 +30,6 @@ public class SQLiteDialect extends AbstractDialect {
 
     /** The Constant TEXT_TYPE. */
     public static final String TEXT_TYPE = "TEXT";
-
-    // sqlite 默认值
-    private boolean caseSensitiveLike = false;
 
     /**
      * Instantiates a new SQ lite dialect.
@@ -365,63 +366,114 @@ public class SQLiteDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    String getKeywordLikeCaseInsensitive(boolean reverse) {
-        if (!caseSensitiveLike) {
-            if (reverse) {
-                return getKeyword(Keywords.NOT) + " " + getKeyword(Keywords.LIKE);
-            } else {
-                return getKeyword(Keywords.LIKE);
+    public String getInOrNotInExpression(boolean isIn, String name, Object values, MatchStrategy matchStrategy) {
+        StringBuilder condition = new StringBuilder();
+        int length = 1;
+        if (values != null) {
+            if (values instanceof Collection) {
+                length = ((Collection<?>) values).size();
+            } else if (values.getClass().isArray()) {
+                length = Array.getLength(values);
             }
         }
-        // sqlite 目前只能全局设置 caseSensitiveLike
-        throw new UnsupportedException("unsupported case insensitive like, case_sensitive_like = " + caseSensitiveLike);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    String getKeywordLikeCaseSensitive(boolean reverse) {
-        if (caseSensitiveLike) {
-            if (reverse) {
-                return getKeyword(Keywords.NOT) + " " + getKeyword(Keywords.LIKE);
-            } else {
-                return getKeyword(Keywords.LIKE);
-            }
+        switch (matchStrategy) {
+            case CASE_INSENSITIVE:
+                condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
+                        .append(getKeyword("NOCASE"));
+                break;
+            case CASE_SENSITIVE:
+                condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
+                        .append(getKeywords().binary());
+                break;
+            default:
+                condition.append(name);
+                break;
         }
-        // sqlite 目前只能全局设置 caseSensitiveLike
-        throw new UnsupportedException("unsupported case senstive like, case_sensitive_like = " + caseSensitiveLike);
+        condition.append(Chars.SPACE).append(isIn ? getKeywords().in() : getKeywords().notIn()).append(" (");
+        for (int i = 0; i < length; i++) {
+            if (i > 0) {
+                condition.append(Chars.COMMA);
+            }
+            condition.append(Chars.QUESTION);
+        }
+        condition.append(")");
+        return condition.toString();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    String getKeywordEqCaseInsensitive() {
-        return getKeyword("= COLLATE NOCASE");
+    public String getBetweenOrNotBetweenExpression(boolean isBetween, String name, Object values,
+            MatchStrategy matchStrategy) {
+        boolean caseSensitive = false;
+        switch (matchStrategy) {
+            case CASE_INSENSITIVE:
+                break;
+            case CASE_SENSITIVE:
+                caseSensitive = true;
+                break;
+            default:
+                return getBetweenOrNotBetweenExpression(isBetween, name, values);
+        }
+        StringBuilder condition = new StringBuilder();
+        if (caseSensitive) {
+            condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
+                    .append(getKeywords().binary());
+        } else {
+            condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
+                    .append(getKeyword("NOCASE"));
+        }
+        condition.append(!isBetween ? getKeyword(Keywords.NOT) + Chars.SPACE : "") //
+                .append(getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
+                .append(Chars.QUESTION).append(Chars.SPACE) //
+                .append(getKeyword(Keywords.AND)).append(Chars.SPACE) //
+                .append(Chars.QUESTION);
+        return condition.toString();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    String getKeywordEqCaseSensitive() {
-        return getKeyword("= COLLATE BINARY");
-    }
+    protected String getCompareExpression0(ComparisonOperator comparisonOperator, String name, Object values,
+            MatchStrategy matchStrategy) {
+        switch (comparisonOperator) {
+            case EQ:
+            case NE:
+            case SW:
+            case NSW:
+            case CO:
+            case NCO:
+            case EW:
+            case NEW:
+            case LK:
+            case NL:
+            case LT:
+            case LE:
+            case GT:
+            case GE:
+                break;
+            default:
+                throw new DialectException("unsupported for " + comparisonOperator);
+        }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    String getKeywordNeCaseInsensitive() {
-        return getKeyword("!= COLLATE NOCASE");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    String getKeywordNeCaseSensitive() {
-        return getKeyword("!= COLLATE BINARY");
+        StringBuilder condition = new StringBuilder();
+        switch (matchStrategy) {
+            case CASE_INSENSITIVE:
+                condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
+                        .append(getKeyword("NOCASE"));
+                break;
+            case CASE_SENSITIVE:
+                condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
+                        .append(getKeywords().binary());
+                break;
+            default:
+                condition.append(name);
+                break;
+        }
+        condition.append(Chars.SPACE).append(getOperator(comparisonOperator)).append(Chars.SPACE)
+                .append(Chars.QUESTION);
+        return condition.toString();
     }
 }

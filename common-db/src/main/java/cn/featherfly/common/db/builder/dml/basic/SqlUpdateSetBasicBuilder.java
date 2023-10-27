@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import cn.featherfly.common.constant.Chars;
+import cn.featherfly.common.db.JdbcException;
 import cn.featherfly.common.db.builder.SqlBuilder;
 import cn.featherfly.common.db.builder.model.ParamedColumnElement;
 import cn.featherfly.common.db.builder.model.UpdateColumnElement;
@@ -14,12 +15,10 @@ import cn.featherfly.common.db.builder.model.UpdateColumnElement.SetType;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.Dialect.Keyworld;
 import cn.featherfly.common.lang.AssertIllegalArgument;
+import cn.featherfly.common.lang.Lang;
 
 /**
- * <p>
- * SqlUpdateSetBasicBuilder
- * </p>
- * .
+ * SqlUpdateSetBasicBuilder .
  *
  * @author zhongj
  */
@@ -149,9 +148,17 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
         update.append(keyworld.update()).append(Chars.SPACE).append(dialect.buildTableSql(tableName, alias))
                 .append(Chars.SPACE).append(keyworld.set());
         // TODO 判断tableName paramMap 为空 抛出异常
+        int len = update.length();
         params.forEach(c -> {
-            update.append(Chars.SPACE).append(c.toSql()).append(Chars.COMMA);
+            Lang.ifNotEmpty(c.toSql(), setValue -> update.append(Chars.SPACE).append(setValue).append(Chars.COMMA));
+            //            String setValue = c.toSql();
+            //            if (Lang.isNotEmpty(setValue)) {
+            //                update.append(Chars.SPACE).append(setValue).append(Chars.COMMA);
+            //            }
         });
+        if (len == update.length()) {
+            throw new JdbcException("no value supply for set");
+        }
         update.deleteCharAt(update.length() - 1);
         return update.toString();
     }

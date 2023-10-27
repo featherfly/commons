@@ -11,7 +11,6 @@
 
 package cn.featherfly.common.db.builder.model;
 
-import java.lang.reflect.Array;
 import java.util.function.Predicate;
 
 import cn.featherfly.common.db.FieldValueOperator;
@@ -86,36 +85,6 @@ public class ConditionColumnElement extends ParamedColumnElement {
         if (!ignore(value)) { // 不忽略
             setParam(processParam(value, comparisonOperator));
         }
-    }
-
-    private boolean ignore(Object value) {
-        if (value == null) {
-            return ignoreStrategy.test(value);
-        }
-
-        if (value instanceof FieldValueOperator) {
-            return ignoreStrategy.test(((FieldValueOperator<?>) value).getValue());
-        } else if (value.getClass().isArray()) {
-            int length = Array.getLength(value);
-            if (length > 0) {
-                Object first = Array.get(value, 0);
-                first = unwrapFieldValueOperator(first);
-                Object newArray = Array.newInstance(first.getClass(), length);
-                Array.set(newArray, 0, first);
-                for (int i = 1; i < length; i++) {
-                    Array.set(newArray, i, unwrapFieldValueOperator(Array.get(value, i)));
-                }
-                return ignoreStrategy.test(newArray);
-            } else {
-                return ignoreStrategy.test(null); // 使用null而不适用空数组可以规避类型错误
-            }
-        } else {
-            return ignoreStrategy.test(value);
-        }
-    }
-
-    private Object unwrapFieldValueOperator(Object value) {
-        return value instanceof FieldValueOperator ? ((FieldValueOperator<?>) value).getValue() : value;
     }
 
     @SuppressWarnings("unchecked")

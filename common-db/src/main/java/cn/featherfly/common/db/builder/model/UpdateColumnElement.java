@@ -69,7 +69,7 @@ public class UpdateColumnElement extends ParamedColumnElement {
      */
     @Override
     public String toSql() {
-        if (ignoreStrategy.test(param)) { // 忽略
+        if (ignore(param)) { // 忽略
             return "";
         }
         String columnName = dialect.buildColumnSql(getTableAlias(), getName());

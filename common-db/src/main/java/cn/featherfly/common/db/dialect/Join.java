@@ -15,5 +15,5 @@ public enum Join {
     /** The right join. */
     RIGHT_JOIN,
     /** The full join. */
-    FULL_JOIN,;
+    FULL_JOIN;
 }

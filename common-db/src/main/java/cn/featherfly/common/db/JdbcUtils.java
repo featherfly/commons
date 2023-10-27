@@ -957,7 +957,7 @@ public final class JdbcUtils {
      */
     public static void setParameter(PreparedStatement prep, int position, Date value) {
         if (value != null) {
-            setParameter(prep, position, new Timestamp(value.getTime()));
+            setParameter(prep, position, new java.sql.Date(value.getTime()));
         } else {
             setParameterNull(prep, position);
         }
@@ -987,7 +987,9 @@ public final class JdbcUtils {
      */
     public static void setParameter(PreparedStatement prep, int position, LocalDateTime value) {
         if (value != null) {
-            setParameter(prep, position, Timestamp.valueOf(value));
+            Timestamp timestamp = Timestamp.valueOf(value);
+            timestamp.setNanos(0); // 去掉nano
+            setParameter(prep, position, timestamp);
         } else {
             setParameterNull(prep, position);
         }
@@ -1086,6 +1088,12 @@ public final class JdbcUtils {
         try {
             if (value == null) {
                 prep.setObject(position, value);
+            } else if (value.getClass().isEnum()) {
+                if (enumWithOridinal) {
+                    prep.setInt(position, ((Enum<?>) value).ordinal());
+                } else {
+                    prep.setString(position, ((Enum<?>) value).name());
+                }
             } else if (value instanceof Boolean) {
                 prep.setBoolean(position, ((Boolean) value).booleanValue());
             } else if (value instanceof String) {
@@ -1116,24 +1124,16 @@ public final class JdbcUtils {
                 prep.setTime(position, Time.valueOf((LocalTime) value));
             } else if (value instanceof LocalDate) {
                 prep.setDate(position, java.sql.Date.valueOf((LocalDate) value));
-                //                prep.setDate(position, new java.sql.Date(Dates.toDate((LocalDate) value).getTime()));
             } else if (value instanceof LocalDateTime) {
-                prep.setTimestamp(position, Timestamp.valueOf((LocalDateTime) value));
-                //                prep.setTimestamp(position, new Timestamp(Dates.getTime((LocalDateTime) value)));
-                //                prep.setTimestamp(position, Timestamp.from(((LocalDateTime) value).atZone(ZoneId.systemDefault()).toInstant()));
+                setParameter(prep, position, (LocalDateTime) value);
+                //                prep.setTimestamp(position, Timestamp.valueOf((LocalDateTime) value));
             } else if (value instanceof Date) {
-                prep.setTimestamp(position, new Timestamp(((Date) value).getTime()));
+                setParameter(prep, position, (Date) value);
+                //                prep.setTimestamp(position, new Timestamp(((Date) value).getTime()));
             } else if (value instanceof Timestamp) {
                 prep.setTimestamp(position, (Timestamp) value);
-            } else if (value.getClass().isEnum()) {
-                if (enumWithOridinal) {
-                    prep.setInt(position, ((Enum<?>) value).ordinal());
-                } else {
-                    prep.setString(position, ((Enum<?>) value).name());
-                }
-            } else if (value instanceof FieldValueOperator) { // TODO 后续FieldValue再考虑名称
-                //                ((FieldValue<?>) value).set(prep, position);
-                setParameter(prep, position, value);
+            } else if (value instanceof FieldValueOperator) {
+                setParameter(prep, position, (FieldValueOperator<?>) value);
             } else if (value instanceof Optional) {
                 setParameter(prep, position, ((Optional<?>) value).orElse(null), enumWithOridinal);
             } else if (value instanceof AtomicInteger) {
@@ -1147,6 +1147,22 @@ public final class JdbcUtils {
             }
         } catch (SQLException e) {
             throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>   the element type
+     * @param call  the CallableStatement
+     * @param name  the parameter name
+     * @param value the value
+     */
+    public static <E> void setParameter(CallableStatement call, String name, FieldValueOperator<E> value) {
+        if (value == null) {
+            setParameterNull(call, name);
+        } else {
+            value.set(call, name);
         }
     }
 
@@ -1187,6 +1203,12 @@ public final class JdbcUtils {
         try {
             if (value == null) {
                 call.setObject(name, value);
+            } else if (value.getClass().isEnum()) {
+                if (enumWithOridinal) {
+                    call.setInt(name, ((Enum<?>) value).ordinal());
+                } else {
+                    call.setString(name, ((Enum<?>) value).name());
+                }
             } else if (value instanceof Boolean) {
                 call.setBoolean(name, ((Boolean) value).booleanValue());
             } else if (value instanceof String) {
@@ -1223,18 +1245,9 @@ public final class JdbcUtils {
                 call.setTimestamp(name, new Timestamp(((Date) value).getTime()));
             } else if (value instanceof Timestamp) {
                 call.setTimestamp(name, (Timestamp) value);
-            } else if (value.getClass().isEnum()) {
-                if (enumWithOridinal) {
-                    call.setInt(name, ((Enum<?>) value).ordinal());
-                } else {
-                    call.setString(name, ((Enum<?>) value).name());
-                }
-            }
-            //            else if (value instanceof FieldValueOperator) { // TODO 后续FieldValue再考虑名称
-            //                //                ((FieldValue<?>) value).set(prep, position);
-            //                setParameter(call, name, (FieldValueOperator<?>) value);
-            //            }
-            else if (value instanceof Optional) {
+            } else if (value instanceof FieldValueOperator) {
+                setParameter(call, name, value);
+            } else if (value instanceof Optional) {
                 setParameter(call, name, ((Optional<?>) value).orElse(null), enumWithOridinal);
             } else if (value instanceof AtomicInteger) {
                 call.setInt(name, ((AtomicInteger) value).get());

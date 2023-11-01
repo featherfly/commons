@@ -303,11 +303,6 @@ public class SQLiteDialect extends AbstractDialect {
         return false;
     }
 
-    @Override
-    public boolean supportSelectForUpdate() {
-        return false;
-    }
-
     /**
      * {@inheritDoc}
      */

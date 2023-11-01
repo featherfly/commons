@@ -234,6 +234,16 @@ public class DatabaseMetadataManager {
         return create(connection, dataBase, isDefaultCatalog, schema, true);
     }
 
+    /**
+     * 重新加载元数据.
+     *
+     * @param connection 数据库连接
+     * @param metadata   the metadata
+     */
+    public synchronized void reload(Connection connection, DatabaseMetadata metadata) {
+        create(connection, metadata.getName(), true, null, false, metadata);
+    }
+
     // ********************************************************************
     //	private method
     // ********************************************************************
@@ -387,16 +397,31 @@ public class DatabaseMetadataManager {
 
     private synchronized DatabaseMetadata create(Connection connection, String catalog, boolean isDefaultCatalog,
             String schema, boolean reCreate) {
+        return create(connection, catalog, isDefaultCatalog, schema, reCreate, null);
+    }
+
+    private synchronized DatabaseMetadata create(Connection connection, String catalog, boolean isDefaultCatalog,
+            String schema, boolean reCreate, DatabaseMetadata dbm) {
         try {
-            DatabaseMetadata databaseMetadata = getDatabaseMetadata(catalog);
-            if (databaseMetadata != null && !reCreate) {
-                return databaseMetadata;
+            DatabaseMetaData metaData = null;
+            // reload 逻辑
+            if (dbm == null) {
+                dbm = getDatabaseMetadata(catalog);
+            } else {
+                metaData = connection.getMetaData();
+                dbm.reload(metaData);
             }
-            databaseMetadata = new DatabaseMetadata();
+            // reload 逻辑
 
-            createCatalog(connection, databaseMetadata, catalog, isDefaultCatalog);
+            // recreate 逻辑
+            if (dbm != null && !reCreate) {
+                return dbm;
+            }
+            metaData = Lang.pick(metaData, connection.getMetaData());
+            dbm = new DatabaseMetadata(metaData);
 
-            DatabaseMetaData metaData = connection.getMetaData();
+            createCatalog(connection, dbm, catalog, isDefaultCatalog);
+
             ResultSet rs = null;
             //            rs = metaData.getTableTypes();
             // 得到表信息
@@ -444,14 +469,9 @@ public class DatabaseMetadataManager {
             if (!hasDatabase && !catalog.equals(connection.getCatalog())) {
                 throw new DatabaseMetadataException("#driver.not.find.database", new Object[] { catalog });
             }
-            databasemetadataPool.put(catalog, databaseMetadata);
-            databaseMetadata.setName(catalog);
-            databaseMetadata.setProductName(metaData.getDatabaseProductName());
-            databaseMetadata.setProductVersion(metaData.getDatabaseProductVersion());
-            databaseMetadata.setMajorVersion(metaData.getDatabaseMajorVersion());
-            databaseMetadata.setMinorVersion(metaData.getDatabaseMinorVersion());
-            databaseMetadata.setSupportsBatchUpdate(metaData.supportsBatchUpdates());
-            return databaseMetadata;
+            databasemetadataPool.put(catalog, dbm);
+            dbm.setName(catalog);
+            return dbm;
         } catch (SQLException e) {
             throw new JdbcException(e);
         } finally {

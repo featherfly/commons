@@ -148,15 +148,6 @@ public interface Dialect {
     }
 
     /**
-     * Support select for update.
-     *
-     * @return true, if successful
-     */
-    default boolean supportSelectForUpdate() {
-        return true;
-    }
-
-    /**
      * Support auto generate key batch.
      *
      * @return true, if successful

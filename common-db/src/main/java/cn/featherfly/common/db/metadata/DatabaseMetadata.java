@@ -1,28 +1,59 @@
 
 package cn.featherfly.common.db.metadata;
 
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.featherfly.common.db.JdbcException;
 import cn.featherfly.common.db.Table;
 
 /**
- * <p>
- * 库元数据
- * </p>
- * .
+ * database metadata. 数据库元数据.
  *
  * @author zhongj
  */
 public class DatabaseMetadata {
-    // FIXME 多个schema内有相同名称表的会出错
-    // TODO 后续加入多个schema管理，当前的方法都不该，只是代理到default schema去获取
+
     /**
      * Instantiates a new database metadata.
+     *
+     * @param databaseMetaData the database meta data
      */
-    DatabaseMetadata() {
+    DatabaseMetadata(DatabaseMetaData databaseMetaData) {
+        reload(databaseMetaData);
+    }
+
+    /**
+     * Reload.
+     *
+     * @param databaseMetaData the database meta data
+     */
+    public void reload(DatabaseMetaData databaseMetaData) {
+        try {
+            productName = databaseMetaData.getDatabaseProductName();
+            productVersion = databaseMetaData.getDatabaseProductVersion();
+            majorVersion = databaseMetaData.getDatabaseMajorVersion();
+            minorVersion = databaseMetaData.getDatabaseMinorVersion();
+
+            jdbcMajorVersion = databaseMetaData.getJDBCMajorVersion();
+            jdbcMinorVersion = databaseMetaData.getJDBCMinorVersion();
+
+            driverMajorVersion = databaseMetaData.getDriverMajorVersion();
+            driverMinorVersion = databaseMetaData.getDriverMinorVersion();
+            driverName = databaseMetaData.getDriverName();
+            driverVersion = databaseMetaData.getDriverVersion();
+
+            jdbcMajorVersion = databaseMetaData.getJDBCMajorVersion();
+            jdbcMinorVersion = databaseMetaData.getJDBCMinorVersion();
+
+            features = new Features(databaseMetaData);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
     }
 
     // ********************************************************************
@@ -116,10 +147,9 @@ public class DatabaseMetadata {
      * @return the schemas
      * @see cn.featherfly.common.db.metadata.CatalogMetadata#getSchemas()
      */
-    @SuppressWarnings("unchecked")
     public Collection<SchemaMetadata> getSchemas() {
         if (defaultCatalog == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         return defaultCatalog.getSchemas();
     }
@@ -152,10 +182,9 @@ public class DatabaseMetadata {
      *
      * @return 所有表元数据对象的集合
      */
-    @SuppressWarnings("unchecked")
     public Collection<Table> getTables() {
         if (defaultCatalog == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         return defaultCatalog.getSchema().getTables();
     }
@@ -210,8 +239,6 @@ public class DatabaseMetadata {
 
     private Map<String, CatalogMetadata> catalogMap = new HashMap<>(0);
 
-    //    private Map<String, Table> tableMap = new HashMap<>(0);
-
     private String name;
 
     private String productName;
@@ -222,24 +249,27 @@ public class DatabaseMetadata {
 
     private Integer minorVersion;
 
-    private boolean supportsBatchUpdates;
+    private String driverName;
+
+    private String driverVersion;
+
+    private Integer driverMajorVersion;
+
+    private Integer driverMinorVersion;
+
+    private Integer jdbcMajorVersion;
+
+    private Integer jdbcMinorVersion;
+
+    private Features features;
 
     /**
-     * Sets the supports batch update.
+     * Gets the features.
      *
-     * @param supportsBatchUpdates the new supports batch update
+     * @return the features
      */
-    void setSupportsBatchUpdate(boolean supportsBatchUpdates) {
-        this.supportsBatchUpdates = supportsBatchUpdates;
-    }
-
-    /**
-     * Supports batch updates.
-     *
-     * @return true, if successful
-     */
-    public boolean supportsBatchUpdates() {
-        return supportsBatchUpdates;
+    public Features getFeatures() {
+        return features;
     }
 
     /**
@@ -279,39 +309,12 @@ public class DatabaseMetadata {
     }
 
     /**
-     * 设置productName.
-     *
-     * @param productName productName
-     */
-    void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    /**
-     * 设置productVersion.
-     *
-     * @param productVersion productVersion
-     */
-    void setProductVersion(String productVersion) {
-        this.productVersion = productVersion;
-    }
-
-    /**
      * 返回majorVersion.
      *
      * @return majorVersion
      */
     public Integer getMajorVersion() {
         return majorVersion;
-    }
-
-    /**
-     * 设置majorVersion.
-     *
-     * @param majorVersion majorVersion
-     */
-    void setMajorVersion(Integer majorVersion) {
-        this.majorVersion = majorVersion;
     }
 
     /**
@@ -324,11 +327,56 @@ public class DatabaseMetadata {
     }
 
     /**
-     * 设置minorVersion.
+     * get driverName value.
      *
-     * @param minorVersion minorVersion
+     * @return driverName
      */
-    void setMinorVersion(Integer minorVersion) {
-        this.minorVersion = minorVersion;
+    public String getDriverName() {
+        return driverName;
+    }
+
+    /**
+     * get driverVersion value.
+     *
+     * @return driverVersion
+     */
+    public String getDriverVersion() {
+        return driverVersion;
+    }
+
+    /**
+     * get driverMajorVersion value.
+     *
+     * @return driverMajorVersion
+     */
+    public Integer getDriverMajorVersion() {
+        return driverMajorVersion;
+    }
+
+    /**
+     * get driverMinorVersion value.
+     *
+     * @return driverMinorVersion
+     */
+    public Integer getDriverMinorVersion() {
+        return driverMinorVersion;
+    }
+
+    /**
+     * get jdbcMajorVersion value.
+     *
+     * @return jdbcMajorVersion
+     */
+    public Integer getJdbcMajorVersion() {
+        return jdbcMajorVersion;
+    }
+
+    /**
+     * get jdbcMinorVersion value.
+     *
+     * @return jdbcMinorVersion
+     */
+    public Integer getJdbcMinorVersion() {
+        return jdbcMinorVersion;
     }
 }

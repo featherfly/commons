@@ -507,26 +507,6 @@ public abstract class AbstractDialect implements Dialect {
     }
 
     /**
-     * Gets the keyword.
-     *
-     * @param keyword the keyword
-     * @return the keyword
-     */
-    protected String getKeyword(String keyword) {
-        if (Lang.isEmpty(keyword)) {
-            return "";
-        }
-        switch (keywordsCase()) {
-            case LOWER_CASE:
-                return keyword.toLowerCase();
-            case UPPER_CASE:
-                return keyword.toUpperCase();
-            default:
-                return keyword;
-        }
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override

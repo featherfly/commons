@@ -423,6 +423,26 @@ public interface Dialect {
     }
 
     /**
+     * Gets the keyword.
+     *
+     * @param keyword the keyword
+     * @return the keyword
+     */
+    default String getKeyword(String keyword) {
+        if (Lang.isEmpty(keyword)) {
+            return "";
+        }
+        switch (keywordsCase()) {
+            case LOWER_CASE:
+                return keyword.toLowerCase();
+            case UPPER_CASE:
+                return keyword.toUpperCase();
+            default:
+                return keyword;
+        }
+    }
+
+    /**
      * get converted keywords.
      *
      * @param keywords sql keywords

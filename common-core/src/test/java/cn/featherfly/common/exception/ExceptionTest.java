@@ -7,7 +7,6 @@ import java.util.Locale;
 
 import org.testng.annotations.Test;
 
-import cn.featherfly.common.locale.ResourceBundleUtils;
 import cn.featherfly.common.locale.Text;
 
 /**
@@ -24,7 +23,8 @@ public class ExceptionTest {
     @Test
     public void testPracticeException() {
 
-        String key = ResourceBundleUtils.KEY_SIGN + code.getKey();
+        //        String key = ResourceBundleUtils.KEY_SIGN + code.getKey();
+        String key = code.getKey();
 
         Locale.setDefault(Locale.CHINESE);
 
@@ -36,6 +36,7 @@ public class ExceptionTest {
             //            assertEquals(e.getMessage(), key);
             assertEquals(e.getMessage(), msg);
             assertEquals(e.getLocalizedMessage(), msg);
+            assertEquals(e.getExceptionCode().getKey(), key);
         }
 
         msg = "cn has no such property：pn";
@@ -47,6 +48,7 @@ public class ExceptionTest {
             //            assertEquals(e.getMessage(), key);
             assertEquals(e.getMessage(), msg);
             assertEquals(e.getLocalizedMessage(), msg);
+            assertEquals(e.getExceptionCode().getKey(), key);
         }
     }
 

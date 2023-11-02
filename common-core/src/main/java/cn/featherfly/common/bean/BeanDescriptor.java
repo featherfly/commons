@@ -43,31 +43,6 @@ public class BeanDescriptor<T> {
     private static final BeanPropertyFactory FACTORY = ServiceLoaderUtils.load(BeanPropertyFactory.class,
             new ReflectionBeanPropertyFactory());
 
-    // private static BeanPropertyFactory factory = new
-    // ReflectionBeanPropertyFactory();
-    //
-    // static {
-    // ServiceLoader<BeanPropertyFactory> serviceLoader =
-    // ServiceLoader.load(BeanPropertyFactory.class);
-    // List<BeanPropertyFactory> factorys = new
-    // ArrayList<BeanPropertyFactory>();
-    // for (BeanPropertyFactory factory : serviceLoader) {
-    // factorys.add(factory);
-    // }
-    // if (factorys.size() > 1) {
-    // throw new IllegalArgumentException("找到多个BeanPropertyFactory实现 -> " +
-    // factorys) ;
-    // }
-    // if (factorys.isEmpty()) {
-    // factory = new ReflectionBeanPropertyFactory();
-    // } else {
-    // factory = factorys.get(0);
-    // }
-    // }
-
-    // private Map<String, BeanProperty> beanProperties = new HashMap<String,
-    // BeanProperty>(0);
-
     private ListOrderedMap<String, BeanProperty<T, ?>> beanProperties = new ListOrderedMap<>();
 
     private Map<String, Type> typeGenericParams = new HashMap<>(0);
@@ -104,22 +79,12 @@ public class BeanDescriptor<T> {
     }
 
     // 从field开始初始化
-    private void initFromField(Class<?> parent) {
-        if (null == parent || parent == Object.class) {
+    private void initFromField(Class<?> initType) {
+        if (null == initType || initType == Object.class) {
             return;
         }
-        Field[] fields = parent.getDeclaredFields();
+        Field[] fields = initType.getDeclaredFields();
         for (Field field : fields) {
-            //            Type genericType = typeGenericParams.get(field.getGenericType().toString());
-            //            Class<?> fieldType = null;
-            //            // 判断类型定义的泛型参数
-            //            if (genericType == null) {
-            //                fieldType = field.getType();
-            //            } else if (genericType instanceof TypeVariable) {
-            //                fieldType = ClassUtils.forName(((TypeVariable<?>) genericType).getBounds()[0].getTypeName());
-            //            } else {
-            //                fieldType = (Class<?>) genericType;
-            //            }
             Class<?> fieldType = getGenericType(field.getGenericType(), field.getType());
             Method getter = ClassUtils.getGetter(field, type);
             Method setter = ClassUtils.getSetter(field, type);
@@ -127,14 +92,13 @@ public class BeanDescriptor<T> {
                 BeanProperty<T, ?> prop = FACTORY.create(field.getName(), field, fieldType, setter, getter, type,
                         field.getDeclaringClass());
                 beanProperties.put(prop.getName(), prop);
-                if (LOGGER.isTraceEnabled() && parent != type) {
-                    LOGGER.trace("类{}从父类{}中继承的属性：[{}]",
-                            new Object[] { type.getName(), parent.getName(), prop.getName() });
+                if (LOGGER.isTraceEnabled() && initType != type) {
+                    LOGGER.trace("类{}从父类{}中继承的属性：[{}]", type.getName(), initType.getName(), prop.getName());
                 }
             }
         }
         // 到父类中查找属性
-        initFromField(parent.getSuperclass());
+        initFromField(initType.getSuperclass());
     }
 
     // 初始化动态set get方法
@@ -209,8 +173,8 @@ public class BeanDescriptor<T> {
                     ?> property = FACTORY.create(propertyName, null, propertyType, setter, getter, type, declaringType);
             beanProperties.put(property.getName(), property);
             if (LOGGER.isTraceEnabled()) {
-                LOGGER.trace("类{}的属性：[{}]， 定义子类{}", new Object[] { property.getOwnerType().getName(),
-                        property.getName(), property.getDeclaringType().getName() });
+                LOGGER.trace("类{}的属性：[{}]， 定义子类{}", property.getOwnerType().getName(), property.getName(),
+                        property.getDeclaringType().getName());
             }
         }
     }
@@ -228,12 +192,7 @@ public class BeanDescriptor<T> {
     }
 
     private Map<String, Object> getProperty(Map<String, Map<String, Object>> properties, String propertyName) {
-        Map<String, Object> prop = properties.get(propertyName);
-        if (prop == null) {
-            prop = new HashMap<>();
-            properties.put(propertyName, prop);
-        }
-        return prop;
+        return properties.computeIfAbsent(propertyName, key -> new HashMap<>());
     }
 
     /**
@@ -423,20 +382,20 @@ public class BeanDescriptor<T> {
                 propertyDescriptor = getBeanDescriptor(property.getType());
                 try {
                     if (ClassUtils.isCellection(property.getType())) {
-                        LOGGER.trace("类{}的属性[{}]为空，对象为Collection接口实现类，自动创建该属性对象",
-                                new Object[] { property.getOwnerType().getName(), property.getName() });
+                        LOGGER.trace("类{}的属性[{}]为空，对象为Collection接口实现类，自动创建该属性对象", property.getOwnerType().getName(),
+                                property.getName());
                         propertyValue = CollectionUtils.newInstance(property.getType());
                     } else if (ClassUtils.isMap(property.getType())) {
-                        LOGGER.trace("类{}的属性[{}]为空，对象为MAP接口，自动创建该属性对象",
-                                new Object[] { property.getOwnerType().getName(), property.getName() });
+                        LOGGER.trace("类{}的属性[{}]为空，对象为MAP接口，自动创建该属性对象", property.getOwnerType().getName(),
+                                property.getName());
                         propertyValue = CollectionUtils.newMap(property.getType());
                     } else if (property.getType() == Optional.class) {
                         LOGGER.trace("类{}的属性[{}]为空，对象为Optional容器，自动创建Optional和其对应的泛型对象",
-                                new Object[] { property.getOwnerType().getName(), property.getName() });
+                                property.getOwnerType().getName(), property.getName());
                         propertyValue = Optional.of(ClassUtils.newInstance(property.getGenericType()));
                     } else {
-                        LOGGER.trace("类{}的属性[{}]为空，自动创建该属性对象[使用newInstance()]",
-                                new Object[] { property.getOwnerType().getName(), property.getName() });
+                        LOGGER.trace("类{}的属性[{}]为空，自动创建该属性对象[使用newInstance()]", property.getOwnerType().getName(),
+                                property.getName());
 
                         propertyValue = ClassUtils.newInstance(property.getType());
                     }
@@ -501,7 +460,7 @@ public class BeanDescriptor<T> {
             BeanDescriptor propertyDescriptor = null;
             // 如果层次中间一个为空，返回空
             if (propertyValue == null) {
-                LOGGER.trace("类{}的属性[{}]为空", new Object[] { property.getOwnerType().getName(), property.getName() });
+                LOGGER.trace("类{}的属性[{}]为空", property.getOwnerType().getName(), property.getName());
                 return null;
             } else {
                 propertyDescriptor = getBeanDescriptor(propertyValue.getClass());

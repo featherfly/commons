@@ -3,13 +3,11 @@ package cn.featherfly.common.locale;
 import java.util.Locale;
 
 /**
- * <p>
- * SimpleLocaleManager
- * </p>
- * 
+ * DefaultLocaleManager.
+ *
  * @author zhongj
  */
-public class DefaultLocaleManager implements LocaleManager{
+public class DefaultLocaleManager implements LocaleManager {
 
     /**
      * {@inheritDoc}
@@ -18,5 +16,5 @@ public class DefaultLocaleManager implements LocaleManager{
     public Locale getLocale() {
         return Locale.getDefault();
     }
-   
+
 }

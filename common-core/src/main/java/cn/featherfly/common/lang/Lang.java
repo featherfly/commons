@@ -81,6 +81,24 @@ public final class Lang {
     }
 
     /**
+     * 返回第一个非空的项，!=null .
+     *
+     * @param <T>         泛型
+     * @param pickedItems 需要选择的对象
+     * @return 第一个非空的对象
+     */
+    public static <T> T pickFirst(Collection<T> pickedItems) {
+        if (pickedItems != null) {
+            for (T t : pickedItems) {
+                if (t != null) {
+                    return t;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * 返回最后一个非空的对象，!=null .
      *
      * @param <T>         泛型
@@ -92,6 +110,25 @@ public final class Lang {
         if (pickedItems != null) {
             for (int i = pickedItems.length - 1; i >= 0; i--) {
                 T t = pickedItems[i];
+                if (t != null) {
+                    return t;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 返回最后一个非空的对象，!=null .
+     *
+     * @param <T>         泛型
+     * @param pickedItems 需要选择的对象
+     * @return 最后一个非空的对象
+     */
+    public static <T> T pickLast(List<T> pickedItems) {
+        if (pickedItems != null) {
+            for (int i = pickedItems.size() - 1; i >= 0; i--) {
+                T t = pickedItems.get(i);
                 if (t != null) {
                     return t;
                 }
@@ -206,6 +243,22 @@ public final class Lang {
         } else {
             return notEmpty.apply(object);
         }
+    }
+
+    /**
+     * 判断传入对象是否不为null，如果不为空则执行传入的方法, 并返回其返回值.
+     *
+     * @param <O>      the generic type
+     * @param <R>      the generic type
+     * @param object   传入的对象
+     * @param notEmpty 需要执行的方法
+     * @return object
+     */
+    public static <O, R extends O> R ifNotNull(O object, Function<O, R> notEmpty) {
+        if (object == null) {
+            return null;
+        }
+        return notEmpty.apply(object);
     }
 
     /**

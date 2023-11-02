@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import cn.featherfly.common.exception.ReflectException;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.ClassUtils;
+import cn.featherfly.common.lang.CollectionUtils;
 import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.lang.reflect.Type;
 
@@ -90,19 +91,13 @@ public class BeanProperty<T, V> implements Type<V>, BeanPropertyDescriptor<T, V>
     private void initAnnotation() {
         annotations = new HashSet<>();
         if (isWritable()) {
-            for (Annotation a : setter.getAnnotations()) {
-                annotations.add(a);
-            }
+            CollectionUtils.addAll(annotations, setter.getAnnotations());
         }
         if (isReadable()) {
-            for (Annotation a : getter.getAnnotations()) {
-                annotations.add(a);
-            }
+            CollectionUtils.addAll(annotations, getter.getAnnotations());
         }
         if (field != null) {
-            for (Annotation a : field.getAnnotations()) {
-                annotations.add(a);
-            }
+            CollectionUtils.addAll(annotations, field.getAnnotations());
         }
     }
     // /**
@@ -134,7 +129,7 @@ public class BeanProperty<T, V> implements Type<V>, BeanPropertyDescriptor<T, V>
         if (isWritable()) {
             try {
                 if (type == Optional.class) {
-                    setter.invoke(obj, Optional.of(value));
+                    setter.invoke(obj, Optional.ofNullable(value));
                 } else {
                     setter.invoke(obj, value);
                 }
@@ -163,7 +158,7 @@ public class BeanProperty<T, V> implements Type<V>, BeanPropertyDescriptor<T, V>
             try {
                 field.setAccessible(true);
                 if (type == Optional.class) {
-                    field.set(obj, Optional.of(value));
+                    field.set(obj, Optional.ofNullable(value));
                 } else {
                     field.set(obj, value);
                 }
@@ -371,7 +366,7 @@ public class BeanProperty<T, V> implements Type<V>, BeanPropertyDescriptor<T, V>
      */
     @Override
     public Class<T> getInstanceType() {
-        return ownerType;
+        return getOwnerType();
     }
 
     /**
@@ -416,7 +411,7 @@ public class BeanProperty<T, V> implements Type<V>, BeanPropertyDescriptor<T, V>
      *
      * @return ownerType
      */
-    public Class<?> getOwnerType() {
+    public Class<T> getOwnerType() {
         return ownerType;
     }
 

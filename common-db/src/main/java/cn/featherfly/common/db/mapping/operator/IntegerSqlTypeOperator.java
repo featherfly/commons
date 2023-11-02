@@ -62,4 +62,12 @@ public class IntegerSqlTypeOperator implements JavaTypeSqlTypeOperator<Integer> 
         return JdbcUtils.getInteger(call, paramIndex);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, Integer value) {
+        JdbcUtils.setParameter(rs, parameterIndex, value);
+    }
+
 }

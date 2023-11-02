@@ -63,4 +63,12 @@ public class StringSqlTypeOperator implements JavaTypeSqlTypeOperator<String> {
         return JdbcUtils.getString(call, paramIndex);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, String value) {
+        JdbcUtils.setParameter(rs, parameterIndex, value);
+    }
+
 }

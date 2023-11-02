@@ -32,6 +32,15 @@ public interface JavaTypeSqlTypeOperator<E> {
     void set(CallableStatement call, String parameterName, E value);
 
     /**
+     * update the value with ResultSet.
+     *
+     * @param rs             the ResultSet
+     * @param parameterIndex the parameter index
+     * @param value          the parameter value
+     */
+    void update(ResultSet rs, int parameterIndex, E value);
+
+    /**
      * Gets the result value.
      *
      * @param rs          the ResultSet

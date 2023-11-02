@@ -112,4 +112,12 @@ public class EnumSqlTypeOperator<E extends Enum<?>> implements JavaTypeSqlTypeOp
         return JdbcUtils.getCallableParam(call, paramIndex, type);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, E value) {
+        JdbcUtils.setParameter(rs, parameterIndex, value);
+    }
+
 }

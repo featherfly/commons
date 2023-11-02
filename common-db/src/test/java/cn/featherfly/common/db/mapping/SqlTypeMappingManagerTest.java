@@ -228,6 +228,12 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
                 System.out.println(ArrayUtils.toString(value, ','));
                 JdbcUtils.setParameter(call, parameterName, ArrayUtils.toString(value, ','));
             }
+
+            @Override
+            public void update(ResultSet rs, int parameterIndex, Long[] value) {
+                System.out.println(ArrayUtils.toString(value, ','));
+                JdbcUtils.setParameter(rs, parameterIndex, ArrayUtils.toString(value, ','));
+            }
         });
 
         String insert = "INSERT INTO `db_test`.`cms_article` (`ID`, `title`, `content`) VALUES (null, ?, ?)";
@@ -529,7 +535,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
         Content[] contentArray = new Content[] { content1, content2, content3 };
         List<Content> content2List = ArrayUtils.toList(content3, content2, content1);
-        Map<String, Content> content3Map = new ChainMapImpl<>(new LinkedHashMap<String, Content>())
+        Map<String, Content> content3Map = new ChainMapImpl<String, Content>(new LinkedHashMap<>())
                 .putChain("content2", content2).putChain("content1", content1).putChain("content3", content3);
 
         System.out.println("content3Map -> " + content3Map.toString());

@@ -63,4 +63,12 @@ public class DoubleSqlTypeOperator implements JavaTypeSqlTypeOperator<Double> {
         return JdbcUtils.getDouble(call, paramIndex);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, Double value) {
+        JdbcUtils.setParameter(rs, parameterIndex, value);
+    }
+
 }

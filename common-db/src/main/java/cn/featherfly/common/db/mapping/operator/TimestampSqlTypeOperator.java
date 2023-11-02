@@ -64,4 +64,12 @@ public class TimestampSqlTypeOperator implements JavaTypeSqlTypeOperator<Timesta
         return JdbcUtils.getTimestamp(call, paramIndex);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, Timestamp value) {
+        JdbcUtils.setParameter(rs, parameterIndex, value);
+    }
+
 }

@@ -96,4 +96,12 @@ public class DefaultTypesSqlTypeOperator<E> implements JavaTypeSqlTypeOperator<E
     public E get(CallableStatement call, int paramIndex) {
         return JdbcUtils.getCallableParam(call, paramIndex, type);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, E value) {
+        JdbcUtils.setParameter(rs, parameterIndex, value);
+    }
 }

@@ -67,6 +67,14 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
      * {@inheritDoc}
      */
     @Override
+    public void update(ResultSet rs, int parameterIndex) {
+        operator.update(rs, parameterIndex, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public T get(ResultSet rs, int parameterIndex) {
         value = operator.get(rs, parameterIndex);
         return value;
@@ -165,4 +173,5 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
         }
         throw new JdbcException("no JavaTypeSqlTypeOperator support for " + value.getClass().getName());
     }
+
 }

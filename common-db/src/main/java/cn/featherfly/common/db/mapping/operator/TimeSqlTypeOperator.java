@@ -64,4 +64,12 @@ public class TimeSqlTypeOperator implements JavaTypeSqlTypeOperator<Time> {
         return JdbcUtils.getTime(call, paramIndex);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, Time value) {
+        JdbcUtils.setParameter(rs, parameterIndex, value);
+    }
+
 }

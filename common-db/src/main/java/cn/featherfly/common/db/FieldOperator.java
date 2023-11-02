@@ -29,6 +29,14 @@ public interface FieldOperator<T> {
     void set(CallableStatement prep, String parameterName);
 
     /**
+     * update the field value with ResultSet.
+     *
+     * @param rs             the rs
+     * @param parameterIndex the parameter index
+     */
+    void update(ResultSet rs, int parameterIndex);
+
+    /**
      * get the field value.
      *
      * @param rs             the rs

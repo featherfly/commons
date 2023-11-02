@@ -63,4 +63,12 @@ public class LongSqlTypeOperator implements JavaTypeSqlTypeOperator<Long> {
         return JdbcUtils.getLong(call, paramIndex);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, Long value) {
+        JdbcUtils.setParameter(rs, parameterIndex, value);
+    }
+
 }

@@ -60,4 +60,12 @@ public class ShortSqlTypeOperator implements JavaTypeSqlTypeOperator<Short> {
         return JdbcUtils.getShort(call, paramIndex);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, Short value) {
+        JdbcUtils.setParameter(rs, parameterIndex, value);
+    }
+
 }

@@ -63,4 +63,12 @@ public class ByteSqlTypeOperator implements JavaTypeSqlTypeOperator<Byte> {
         return JdbcUtils.getByte(call, paramIndex);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, Byte value) {
+        JdbcUtils.setParameter(rs, parameterIndex, value);
+    }
+
 }

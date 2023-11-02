@@ -62,4 +62,12 @@ public class LocalDateSqlTypeOperator implements JavaTypeSqlTypeOperator<LocalDa
         return JdbcUtils.getLocalDate(call, paramIndex);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, LocalDate value) {
+        JdbcUtils.setParameter(rs, parameterIndex, value);
+    }
+
 }

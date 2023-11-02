@@ -64,4 +64,12 @@ public class DateSqlTypeOperator implements JavaTypeSqlTypeOperator<Date> {
         return JdbcUtils.getDate(call, paramIndex);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, Date value) {
+        JdbcUtils.setParameter(rs, parameterIndex, value);
+    }
+
 }

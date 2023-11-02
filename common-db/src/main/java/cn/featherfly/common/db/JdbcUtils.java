@@ -1,6 +1,5 @@
 package cn.featherfly.common.db;
 
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Blob;
@@ -209,87 +208,6 @@ public final class JdbcUtils {
             close(stmt);
         } catch (Exception e) {
             LogUtils.debug(e, LOGGER);
-        }
-    }
-
-    /**
-     * Loads and registers a database driver class. If this succeeds, it returns
-     * true, else it returns false.
-     *
-     * @param driverClassName of driver to load
-     * @return boolean <code>true</code> if the driver was found, otherwise
-     *         <code>false</code>
-     */
-    public static boolean loadDriver(String driverClassName) {
-        boolean result = false;
-        try {
-            Class.forName(driverClassName).newInstance();
-            result = true;
-
-        } catch (ClassNotFoundException e) {
-            result = false;
-
-        } catch (IllegalAccessException e) {
-            // Constructor is private, OK for DriverManager contract
-            result = true;
-
-        } catch (InstantiationException e) {
-            result = false;
-
-        } catch (Throwable e) {
-            result = false;
-        }
-        return result;
-    }
-
-    /**
-     * Print the stack trace for a SQLException to STDERR.
-     *
-     * @param e SQLException to print stack trace of
-     */
-    public static void printStackTrace(SQLException e) {
-        printStackTrace(e, new PrintWriter(System.err));
-    }
-
-    /**
-     * Print the stack trace for a SQLException to a specified PrintWriter.
-     *
-     * @param e  SQLException to print stack trace of
-     * @param pw PrintWriter to print to
-     */
-    public static void printStackTrace(SQLException e, PrintWriter pw) {
-        SQLException next = e;
-        while (next != null) {
-            next.printStackTrace(pw);
-            next = next.getNextException();
-            if (next != null) {
-                pw.println("Next SQLException:");
-            }
-        }
-    }
-
-    /**
-     * Print warnings on a Connection to STDERR.
-     *
-     * @param conn Connection to print warnings from
-     */
-    public static void printWarnings(Connection conn) {
-        printWarnings(conn, new PrintWriter(System.err));
-    }
-
-    /**
-     * Print warnings on a Connection to a specified PrintWriter.
-     *
-     * @param conn Connection to print warnings from
-     * @param pw   PrintWriter to print to
-     */
-    public static void printWarnings(Connection conn, PrintWriter pw) {
-        if (conn != null) {
-            try {
-                printStackTrace(conn.getWarnings(), pw);
-            } catch (SQLException e) {
-                printStackTrace(e, pw);
-            }
         }
     }
 
@@ -1150,6 +1068,679 @@ public final class JdbcUtils {
         }
     }
 
+    // ****************************************************************************************************************
+    //  set parameter for ResultSet
+    // ****************************************************************************************************************
+
+    /**
+     * 设置参数 .
+     *
+     * @param res    ResultSetWrapper
+     * @param values 参数
+     */
+    public static void setParameters(ResultSetWrapper res, Object... values) {
+        setParameters(res, true, values);
+    }
+
+    /**
+     * 设置参数 .
+     *
+     * @param res              ResultSetWrapper
+     * @param enumWithOridinal the enum with oridinal
+     * @param values           参数
+     */
+    public static void setParameters(ResultSetWrapper res, boolean enumWithOridinal, Object... values) {
+        if (Lang.isNotEmpty(values)) {
+            for (int i = 0; i < values.length; i++) {
+                setParameter(res, i + 1, values[i], enumWithOridinal);
+            }
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res    the res
+     * @param values 参数
+     */
+    public static void setParameters(ResultSet res, Object... values) {
+        setParameters(res, true, values);
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res              the res
+     * @param enumWithOridinal the enum with oridinal
+     * @param values           参数
+     */
+    public static void setParameters(ResultSet res, boolean enumWithOridinal, Object... values) {
+        if (Lang.isNotEmpty(values)) {
+            for (int i = 0; i < values.length; i++) {
+                setParameter(res, i + 1, values[i], enumWithOridinal);
+            }
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      ResultSetWrapper
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSetWrapper res, int position, Object value) {
+        setParameter(res, position, value, true);
+    }
+
+    /**
+     * 设置参数 .
+     *
+     * @param res              ResultSetWrapper
+     * @param position         占位符位置
+     * @param value            参数
+     * @param enumWithOridinal enum with oridinal
+     */
+    public static void setParameter(ResultSetWrapper res, int position, Object value, boolean enumWithOridinal) {
+        setParameter(res.getResultSet(), position, value, enumWithOridinal);
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      the res
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, Object value) {
+        setParameter(res, position, value, true);
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      the res
+     * @param position 占位符位置
+     */
+    public static void setParameterNull(ResultSet res, int position) {
+        try {
+            res.updateObject(position, null);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      the res
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, String value) {
+        try {
+            res.updateString(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      the res
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, boolean value) {
+        try {
+            res.updateBoolean(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      the res
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, Boolean value) {
+        if (value != null) {
+            setParameter(res, position, value.booleanValue());
+        } else {
+            setParameterNull(res, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, char value) {
+        setParameter(res, position, String.valueOf(value));
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, Character value) {
+        setParameter(res, position, value.toString());
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, byte value) {
+        try {
+            res.updateByte(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, Byte value) {
+        if (value != null) {
+            setParameter(res, position, value.byteValue());
+        } else {
+            setParameterNull(res, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, short value) {
+        try {
+            res.updateShort(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, Short value) {
+        if (value != null) {
+            setParameter(res, position, value.shortValue());
+        } else {
+            setParameterNull(res, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, int value) {
+        try {
+            res.updateInt(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, Integer value) {
+        if (value != null) {
+            setParameter(res, position, value.intValue());
+        } else {
+            setParameterNull(res, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, long value) {
+        try {
+            res.updateLong(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, Long value) {
+        if (value != null) {
+            setParameter(res, position, value.longValue());
+        } else {
+            setParameterNull(res, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, BigInteger value) {
+        if (value != null) {
+            setParameter(res, position, value.longValue());
+        } else {
+            setParameterNull(res, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, float value) {
+        try {
+            res.updateFloat(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, Float value) {
+        if (value != null) {
+            setParameter(res, position, value.floatValue());
+        } else {
+            setParameterNull(res, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, double value) {
+        try {
+            res.updateDouble(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, Double value) {
+        if (value != null) {
+            setParameter(res, position, value.doubleValue());
+        } else {
+            setParameterNull(res, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, BigDecimal value) {
+        try {
+            res.updateBigDecimal(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, AtomicBoolean value) {
+        if (value == null) {
+            setParameterNull(res, position);
+        } else {
+            setParameter(res, position, value.get());
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, AtomicInteger value) {
+        if (value == null) {
+            setParameterNull(res, position);
+        } else {
+            setParameter(res, position, value.intValue());
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, AtomicLong value) {
+        if (value == null) {
+            setParameterNull(res, position);
+        } else {
+            setParameter(res, position, value.longValue());
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, java.sql.Date value) {
+        try {
+            res.updateDate(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, Time value) {
+        try {
+            res.updateTime(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, Timestamp value) {
+        try {
+            res.updateTimestamp(position, value);
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, Date value) {
+        if (value != null) {
+            setParameter(res, position, new java.sql.Date(value.getTime()));
+        } else {
+            setParameterNull(res, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, LocalDate value) {
+        if (value != null) {
+            setParameter(res, position, java.sql.Date.valueOf(value));
+        } else {
+            setParameterNull(res, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, LocalDateTime value) {
+        if (value != null) {
+            Timestamp timestamp = Timestamp.valueOf(value);
+            timestamp.setNanos(0); // 去掉nano
+            setParameter(res, position, timestamp);
+        } else {
+            setParameterNull(res, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static void setParameter(ResultSet res, int position, LocalTime value) {
+        if (value != null) {
+            setParameter(res, position, Time.valueOf(value));
+        } else {
+            setParameterNull(res, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(ResultSet res, int position, FieldValueOperator<E> value) {
+        if (value == null) {
+            setParameterNull(res, position);
+        } else {
+            value.update(res, position);
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E extends Enum<?>> void setParameter(ResultSet res, int position, E value) {
+        setParameter(res, position, value, true);
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>              the element type
+     * @param res              PreparedStatement
+     * @param position         占位符位置
+     * @param value            参数
+     * @param enumWithOridinal the enum with oridinal
+     */
+    public static <E extends Enum<?>> void setParameter(ResultSet res, int position, E value,
+            boolean enumWithOridinal) {
+        if (value == null) {
+            setParameterNull(res, position);
+        } else {
+            try {
+                if (enumWithOridinal) {
+                    res.updateInt(position, value.ordinal());
+                } else {
+                    res.updateString(position, value.name());
+                }
+            } catch (SQLException e) {
+                throw new JdbcException(e);
+            }
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param <E>      the element type
+     * @param res      PreparedStatement
+     * @param position 占位符位置
+     * @param value    参数
+     */
+    public static <E> void setParameter(ResultSet res, int position, Optional<E> value) {
+        setParameter(res, position, value.orElse(null));
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res              the res
+     * @param position         param position
+     * @param value            param value
+     * @param enumWithOridinal enum with oridinal
+     */
+    public static void setParameter(ResultSet res, int position, Object value, boolean enumWithOridinal) {
+        try {
+            if (value == null) {
+                res.updateObject(position, value);
+            } else if (value.getClass().isEnum()) {
+                if (enumWithOridinal) {
+                    res.updateInt(position, ((Enum<?>) value).ordinal());
+                } else {
+                    res.updateString(position, ((Enum<?>) value).name());
+                }
+            } else if (value instanceof Boolean) {
+                res.updateBoolean(position, ((Boolean) value).booleanValue());
+            } else if (value instanceof String) {
+                res.updateString(position, (String) value);
+            } else if (value instanceof Integer) {
+                res.updateInt(position, ((Integer) value).intValue());
+            } else if (value instanceof Long) {
+                res.updateLong(position, ((Long) value).longValue());
+            } else if (value instanceof Float) {
+                res.updateFloat(position, ((Float) value).floatValue());
+            } else if (value instanceof Double) {
+                res.updateDouble(position, ((Double) value).doubleValue());
+            } else if (value instanceof BigDecimal) {
+                res.updateBigDecimal(position, (BigDecimal) value);
+            } else if (value instanceof BigInteger) {
+                res.updateLong(position, ((BigInteger) value).longValue());
+            } else if (value instanceof Byte) {
+                res.updateByte(position, ((Byte) value).byteValue());
+            } else if (value instanceof Character) {
+                res.updateString(position, ((Character) value).toString());
+            } else if (value instanceof Short) {
+                res.updateShort(position, ((Short) value).shortValue());
+            } else if (value instanceof java.sql.Date) {
+                res.updateDate(position, (java.sql.Date) value);
+            } else if (value instanceof Time) {
+                res.updateTime(position, (Time) value);
+            } else if (value instanceof LocalTime) {
+                res.updateTime(position, Time.valueOf((LocalTime) value));
+            } else if (value instanceof LocalDate) {
+                res.updateDate(position, java.sql.Date.valueOf((LocalDate) value));
+            } else if (value instanceof LocalDateTime) {
+                setParameter(res, position, (LocalDateTime) value);
+            } else if (value instanceof Date) {
+                setParameter(res, position, (Date) value);
+            } else if (value instanceof Timestamp) {
+                res.updateTimestamp(position, (Timestamp) value);
+            } else if (value instanceof FieldValueOperator) {
+                setParameter(res, position, (FieldValueOperator<?>) value);
+            } else if (value instanceof Optional) {
+                setParameter(res, position, ((Optional<?>) value).orElse(null), enumWithOridinal);
+            } else if (value instanceof AtomicInteger) {
+                res.updateInt(position, ((AtomicInteger) value).get());
+            } else if (value instanceof AtomicLong) {
+                res.updateLong(position, ((AtomicLong) value).get());
+            } else if (value instanceof AtomicBoolean) {
+                res.updateBoolean(position, ((AtomicBoolean) value).get());
+            } else {
+                res.updateObject(position, value);
+            }
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    // ****************************************************************************************************************
+    //	set parameter for CallableStatement
+    // ****************************************************************************************************************
+
     /**
      * 设置参数.
      *
@@ -1300,9 +1891,9 @@ public final class JdbcUtils {
                     setOutParamMap(outParamMap, i, arg, meta);
                 } else if (mode == ParameterMetaData.parameterModeInOut) {
                     setOutParamMap(outParamMap, i, arg, meta);
-                    setParameter(call, i, arg);
+                    setParameter(call, i, arg, enumWithOridinal);
                 } else {
-                    setParameter(call, i, arg);
+                    setParameter(call, i, arg, enumWithOridinal);
                 }
             }
         } catch (SQLException e) {

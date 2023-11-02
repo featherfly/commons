@@ -61,4 +61,12 @@ public class LocalDateTimeSqlTypeOperator implements JavaTypeSqlTypeOperator<Loc
         return JdbcUtils.getLocalDateTime(call, paramIndex);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, LocalDateTime value) {
+        JdbcUtils.setParameter(rs, parameterIndex, value);
+    }
+
 }

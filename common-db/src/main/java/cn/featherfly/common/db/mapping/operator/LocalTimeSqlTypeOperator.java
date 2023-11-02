@@ -64,4 +64,12 @@ public class LocalTimeSqlTypeOperator implements JavaTypeSqlTypeOperator<LocalTi
         return JdbcUtils.getLocalTime(call, paramIndex);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, LocalTime value) {
+        JdbcUtils.setParameter(rs, parameterIndex, value);
+    }
+
 }

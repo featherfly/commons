@@ -212,6 +212,29 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
      * {@inheritDoc}
      */
     @Override
+    public void update(ResultSet rs, int parameterIndex, E value) {
+        try {
+            if (value == null) {
+                rs.updateObject(parameterIndex, null);
+            }
+            if (storeAsString) {
+                String json = objectMapper.writerFor(javaType).writeValueAsString(value);
+                rs.updateString(parameterIndex, json);
+            } else {
+                ByteArrayInputStream is = new ByteArrayInputStream(
+                        objectMapper.writerFor(getType().getType()).writeValueAsBytes(value));
+                rs.updateBlob(parameterIndex, is);
+            }
+        } catch (JsonProcessingException | SQLException e) {
+            // ENHANCE 优化错误信息
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public E get(ResultSet rs, int columnIndex) {
         try {
             if (storeAsString) {

@@ -60,4 +60,12 @@ public class FloatSqlTypeOperator implements JavaTypeSqlTypeOperator<Float> {
         return JdbcUtils.getFloat(call, paramIndex);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, Float value) {
+        JdbcUtils.setParameter(rs, parameterIndex, value);
+    }
+
 }

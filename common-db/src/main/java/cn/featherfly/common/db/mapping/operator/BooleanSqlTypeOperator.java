@@ -63,4 +63,12 @@ public class BooleanSqlTypeOperator implements JavaTypeSqlTypeOperator<Boolean> 
         return JdbcUtils.getBoolean(call, paramIndex);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, Boolean value) {
+        JdbcUtils.setParameter(rs, parameterIndex, value);
+    }
+
 }

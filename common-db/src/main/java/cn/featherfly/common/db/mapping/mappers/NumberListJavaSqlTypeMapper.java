@@ -92,6 +92,25 @@ public class NumberListJavaSqlTypeMapper<N extends Number> extends AbstractGener
      * {@inheritDoc}
      */
     @Override
+    public void update(ResultSet rs, int parameterIndex, List<N> values) {
+        if (values != null) {
+            StringBuilder result = new StringBuilder();
+            for (N value : values) {
+                result.append(value).append(",");
+            }
+            if (result.length() > 0) {
+                result.deleteCharAt(result.length() - 1);
+            }
+            JdbcUtils.setParameter(rs, parameterIndex, result.toString());
+        } else {
+            JdbcUtils.setParameterNull(rs, parameterIndex);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<N> get(ResultSet rs, int columnIndex) {
         String value = JdbcUtils.getResultSetValue(rs, columnIndex, String.class);
         if (value != null) {

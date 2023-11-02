@@ -64,4 +64,12 @@ public class BigDecimalSqlTypeOperator implements JavaTypeSqlTypeOperator<BigDec
         return JdbcUtils.getBigDecimal(call, paramIndex);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, BigDecimal value) {
+        JdbcUtils.setParameter(rs, parameterIndex, value);
+    }
+
 }

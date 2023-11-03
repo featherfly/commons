@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.ObjIntConsumer;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.StringUtils;
@@ -980,18 +981,19 @@ public final class Lang {
      * @param iterable the iterable
      * @param consumer the consumer
      */
-    public static <T> void each(Iterable<T> iterable, BiConsumer<T, Integer> consumer) {
+    public static <T> void each(Iterable<T> iterable, ObjIntConsumer<T> consumer) {
         CollectionUtils.each(iterable, consumer);
     }
 
     /**
-     * array.
+     * create new array.
      *
-     * @param objs the objs
-     * @return Object[]
+     * @param <T>   the generic type
+     * @param array the array
+     * @return the t[]
      */
-    public static Object[] array(Object... objs) {
-        return objs;
+    public static <T> T[] array(@SuppressWarnings("unchecked") T... array) {
+        return array;
     }
 
     /**

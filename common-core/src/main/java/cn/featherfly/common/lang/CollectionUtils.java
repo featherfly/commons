@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.function.BiConsumer;
+import java.util.function.ObjIntConsumer;
 
 import cn.featherfly.common.structure.ChainMap;
 import cn.featherfly.common.structure.ChainMapImpl;
@@ -414,7 +414,7 @@ public final class CollectionUtils {
      * @param iterable the iterable
      * @param consumer the consumer
      */
-    public static <T> void each(Iterable<T> iterable, BiConsumer<T, Integer> consumer) {
+    public static <T> void each(Iterable<T> iterable, ObjIntConsumer<T> consumer) {
         if (iterable != null) {
             int i = 0;
             for (T t : iterable) {
@@ -432,7 +432,9 @@ public final class CollectionUtils {
      * @return the list
      */
     public static <T> List<T> list(@SuppressWarnings("unchecked") T... args) {
-        return ArrayUtils.toList(args);
+        List<T> list = new ArrayList<>();
+        addAll(list, args);
+        return list;
     }
 
     /**
@@ -444,11 +446,7 @@ public final class CollectionUtils {
      */
     public static <T> Set<T> set(@SuppressWarnings("unchecked") T... args) {
         Set<T> set = new HashSet<>();
-        if (args != null) {
-            for (T t : args) {
-                set.add(t);
-            }
-        }
+        addAll(set, args);
         return set;
     }
 }

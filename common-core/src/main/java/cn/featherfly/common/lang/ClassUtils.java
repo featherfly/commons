@@ -129,7 +129,7 @@ public final class ClassUtils {
         }
     }
 
-    private static Field _getField(Class<?> type, String fieldName) {
+    private static Field getField0(Class<?> type, String fieldName) {
         try {
             return type.getField(fieldName);
         } catch (NoSuchFieldException | SecurityException e) {
@@ -1511,7 +1511,7 @@ public final class ClassUtils {
      * @return field的实际类型,如果是一个没有具现化的泛型，则返回Object.class
      */
     public static <T> Class<T> getFieldType(Class<?> type, String fieldName) {
-        return getFieldType(type, _getField(type, fieldName));
+        return getFieldType(type, getField0(type, fieldName));
     }
 
     /**
@@ -1541,7 +1541,7 @@ public final class ClassUtils {
      *         如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
      */
     public static <T> Class<T> getFieldGenericParameterType(Class<?> type, String fieldName) {
-        return getFieldGenericParameterType(type, _getField(type, fieldName));
+        return getFieldGenericParameterType(type, getField0(type, fieldName));
     }
 
     /**
@@ -1557,7 +1557,7 @@ public final class ClassUtils {
      *         如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
      */
     public static <T> Class<T> getFieldGenericParameterType(Class<?> type, String fieldName, int index) {
-        return getFieldGenericParameterType(type, _getField(type, fieldName), index);
+        return getFieldGenericParameterType(type, getField0(type, fieldName), index);
     }
 
     /**
@@ -1603,7 +1603,7 @@ public final class ClassUtils {
      *         如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
      */
     public static List<Class<?>> getFieldGenericParameterTypes(Class<?> type, String fieldName) {
-        return getFieldGenericParameterTypes(type, _getField(type, fieldName));
+        return getFieldGenericParameterTypes(type, getField0(type, fieldName));
     }
 
     /**
@@ -2271,7 +2271,7 @@ public final class ClassUtils {
          * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，直接返回null
          */
         public static <T> GenericType<T> getGenericParameterType(Class<?> type, String fieldName) {
-            return getGenericParameterType(type, _getField(type, fieldName));
+            return getGenericParameterType(type, getField0(type, fieldName));
         }
 
         /**
@@ -2286,7 +2286,7 @@ public final class ClassUtils {
          * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，直接返回null
          */
         public static <T> GenericType<T> getGenericParameterType(Class<?> type, String fieldName, int index) {
-            return getGenericParameterType(type, _getField(type, fieldName), index);
+            return getGenericParameterType(type, getField0(type, fieldName), index);
         }
 
         /**
@@ -2329,7 +2329,7 @@ public final class ClassUtils {
          * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，直接返回empty list
          */
         public static List<GenericType<?>> getGenericParameterTypes(Class<?> type, String fieldName) {
-            return getGenericParameterTypes(type, _getField(type, fieldName));
+            return getGenericParameterTypes(type, getField0(type, fieldName));
         }
 
         /**

@@ -1,10 +1,11 @@
 package cn.featherfly.common.lang;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 import cn.featherfly.common.constant.Chars;
@@ -284,13 +285,18 @@ public final class ArrayUtils {
      * @return the list
      */
     public static <T> List<T> toList(@SuppressWarnings("unchecked") T... arrays) {
-        List<T> list = new ArrayList<>();
-        if (arrays != null) {
-            for (T t : arrays) {
-                list.add(t);
-            }
-        }
-        return list;
+        return CollectionUtils.list(arrays);
+    }
+
+    /**
+     * To set.
+     *
+     * @param <T>    the generic type
+     * @param arrays the arrays
+     * @return the sets
+     */
+    public static <T> Set<T> toSet(@SuppressWarnings("unchecked") T... arrays) {
+        return CollectionUtils.set(arrays);
     }
 
     /**
@@ -363,10 +369,7 @@ public final class ArrayUtils {
     }
 
     /**
-     * <p>
-     * fill target array with source array
-     * </p>
-     * .
+     * fill target array with source array .
      *
      * @param <T>    泛型
      * @param target fill target
@@ -377,16 +380,14 @@ public final class ArrayUtils {
         if (len > source.length) {
             len = source.length;
         }
-        for (int i = 0; i < len; i++) {
-            target[i] = source[i];
-        }
+        System.arraycopy(source, 0, target, 0, len);
+        //        for (int i = 0; i < len; i++) {
+        //            target[i] = source[i];
+        //        }
     }
 
     /**
-     * <p>
-     * 判断第一个传入的数组中是否存在第二个参数
-     * </p>
-     * .
+     * 判断第一个传入的数组中是否存在第二个参数 .
      *
      * @param <T>    泛型
      * @param tSet   源数组
@@ -406,7 +407,6 @@ public final class ArrayUtils {
     }
 
     /**
-     * <p>
      * 判断第一个传入的字符串数组中是否存在第二个传入的字符串.
      *
      * @param strSet     源字符串数组
@@ -436,7 +436,6 @@ public final class ArrayUtils {
     }
 
     /**
-     * <p>
      * 判断第一个传入的字符串数组中是否存在第二个传入的字符串.
      *
      * @param strSet     源字符串数组
@@ -451,10 +450,7 @@ public final class ArrayUtils {
     }
 
     /**
-     * <p>
-     * 数组链接
-     * </p>
-     * .
+     * 数组链接 .
      *
      * @param arr1 arr1
      * @param arr2 arr2
@@ -490,6 +486,21 @@ public final class ArrayUtils {
     public static <T> T[] create(Class<T> type, int length) {
         Object o = Array.newInstance(type, length);
         return (T[]) o;
+    }
+
+    /**
+     * create array and fill the array with given argu.
+     *
+     * @param <T>     the array element type
+     * @param type    the type
+     * @param length  the length
+     * @param element the element
+     * @return the array
+     */
+    public static <T> T[] createFill(Class<T> type, int length, T element) {
+        T[] array = create(type, length);
+        Arrays.fill(array, element);
+        return array;
     }
 
     /**

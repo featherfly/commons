@@ -716,6 +716,52 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
+     * 使用给定的连接符连接传入的字符串, 如果传入的字符串为null或长度为0，则返回"".
+     *
+     * @param str 需要连接的字符串
+     * @param num 连接次数
+     * @return String 形式为：str＋str＋...
+     */
+    public static String join(String str, int num) {
+        return join(str, num, null);
+    }
+
+    /**
+     * 使用给定的连接符连接传入的字符串, 如果传入的字符串为null或长度为0，则返回"".
+     *
+     * @param str   需要连接的字符串
+     * @param num   连接次数
+     * @param delim 集合中的元素的分隔符。(null表示直接连接集合中的元素，不加入分割符)
+     * @return String 形式为：str＋delim＋str＋delim＋...
+     */
+    public static String join(String str, int num, String delim) {
+        if (Lang.isEmpty(str)) {
+            return EMPTY;
+        }
+        if (delim == null) {
+            delim = EMPTY;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < num; i++) {
+            sb.append(str);
+            if (i < num - 1) {
+                sb.append(delim);
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 连接集合中的所有元素以创建一个String，其中集合中的元素间以指定的delim来分隔, 如果 集合为null或长度为0，则返回"".
+     *
+     * @param collection 需要连接的String为元素的集合
+     * @return String 形式为：list的元素＋list的元素＋...
+     */
+    public static String join(Collection<String> collection) {
+        return join(collection, EMPTY);
+    }
+
+    /**
      * 连接集合中的所有元素以创建一个String，其中集合中的元素间以指定的delim来分隔, 如果 集合为null或长度为0，则返回"".
      *
      * @param collection 需要连接的String为元素的集合
@@ -736,6 +782,16 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
             }
         }
         return sb.toString();
+    }
+
+    /**
+     * 将字符串数组使用指定的分隔符合并成一个字符串. 如果数组为null或长度为0，则返回"".
+     *
+     * @param array 字符串数组
+     * @return 合并后的字符串
+     */
+    public static String join(String[] array) {
+        return join(array, EMPTY);
     }
 
     /**

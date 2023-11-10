@@ -2,6 +2,8 @@ package cn.featherfly.common.function.serializable;
 
 import java.util.Collection;
 
+import cn.featherfly.common.function.ToCollectionFunction;
+
 /**
  * The Interface SerializableToCollectionFunction.
  *
@@ -11,6 +13,7 @@ import java.util.Collection;
  * @param <R> the type with collection
  */
 @FunctionalInterface
-public interface SerializableToCollectionFunction<T, C extends Collection<R>, R> extends SerializableFunction<T, C> {
+public interface SerializableToCollectionFunction<T, C extends Collection<R>, R>
+        extends SerializableFunction<T, C>, ToCollectionFunction<T, C, R> {
 
 }

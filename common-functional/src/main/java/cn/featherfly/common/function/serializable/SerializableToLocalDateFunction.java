@@ -2,6 +2,8 @@ package cn.featherfly.common.function.serializable;
 
 import java.time.LocalDate;
 
+import cn.featherfly.common.function.ToLocalDateFunction;
+
 /**
  * The Interface SerializableToLocalDateFunction.
  *
@@ -9,6 +11,6 @@ import java.time.LocalDate;
  * @param <T> the type of the input to the function
  */
 @FunctionalInterface
-public interface SerializableToLocalDateFunction<T> extends SerializableFunction<T, LocalDate> {
+public interface SerializableToLocalDateFunction<T> extends ToLocalDateFunction<T>, SerializableFunction<T, LocalDate> {
 
 }

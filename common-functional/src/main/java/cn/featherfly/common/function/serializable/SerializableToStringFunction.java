@@ -1,5 +1,7 @@
 package cn.featherfly.common.function.serializable;
 
+import cn.featherfly.common.function.ToStringFunction;
+
 /**
  * The Interface SerializableToStringFunction.
  *
@@ -7,6 +9,6 @@ package cn.featherfly.common.function.serializable;
  * @param <T> the type of the input to the function
  */
 @FunctionalInterface
-public interface SerializableToStringFunction<T> extends SerializableFunction<T, String> {
+public interface SerializableToStringFunction<T> extends ToStringFunction<T>, SerializableFunction<T, String> {
 
 }

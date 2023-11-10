@@ -1,5 +1,7 @@
 package cn.featherfly.common.function.serializable;
 
+import cn.featherfly.common.function.ToArrayFunction;
+
 /**
  * The Interface SerializableToArrayFunction.
  *
@@ -8,6 +10,6 @@ package cn.featherfly.common.function.serializable;
  * @param <E> the type of the result array element of the function
  */
 @FunctionalInterface
-public interface SerializableToArrayFunction<T, E> extends SerializableFunction<T, E[]> {
+public interface SerializableToArrayFunction<T, E> extends SerializableFunction<T, E[]>, ToArrayFunction<T, E> {
 
 }

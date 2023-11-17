@@ -17,6 +17,8 @@
 13. CollectionUtils加入多种addAll方法，加入ClassUtils.getClassName(Object)
 14. LambdaUtils.getLambdaInfo修复不支持ToIntFunction,ToLongFunction,ToDoubleFunction,Predicate,IntConsumer,IntSupplier,LongSupplier,DoubleSupplier,BooleanSupplier的问题
 15. 加入TableMessage类，用于生成结构化字符串用作调试
+16. ClassUtils加入getClass(T obj)方法
+17. ArrayUtils加入create(Class<T> type, int length, IntFunction<T> filler)用于创建并填充数组
 
 # 1.11.0 2022-12-12
 

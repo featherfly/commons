@@ -2147,6 +2147,21 @@ public final class ClassUtils {
     }
 
     /**
+     * get the obj class.
+     *
+     * @param <T> the generic type
+     * @param obj the obj
+     * @return the class type. null when obj is null.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Class<T> getClass(T obj) {
+        if (obj == null) {
+            return null;
+        }
+        return (Class<T>) obj.getClass();
+    }
+
+    /**
      * getClassType.
      *
      * @param <T>  the generic type

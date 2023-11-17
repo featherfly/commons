@@ -6,7 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.BiConsumer;
+import java.util.function.IntFunction;
+import java.util.function.ObjIntConsumer;
 
 import cn.featherfly.common.constant.Chars;
 
@@ -147,7 +148,7 @@ public final class ArrayUtils {
      * @param array    the array
      * @param consumer the consumer
      */
-    public static <T> void each(BiConsumer<T, Integer> consumer, @SuppressWarnings("unchecked") T... array) {
+    public static <T> void each(ObjIntConsumer<T> consumer, @SuppressWarnings("unchecked") T... array) {
         if (array != null) {
             for (int i = 0; i < array.length; i++) {
                 consumer.accept(array[i], i);
@@ -155,28 +156,13 @@ public final class ArrayUtils {
         }
     }
 
-    //    /**
-    //     * Each.
-    //     *
-    //     * @param <T>      the generic type
-    //     * @param array    the array
-    //     * @param consumer the consumer
-    //     */
-    //    public static <T> void each(T[] array, BiConsumer<T, Integer> consumer) {
-    //        if (array != null) {
-    //            for (int i = 0; i < array.length; i++) {
-    //                consumer.accept(array[i], i);
-    //            }
-    //        }
-    //    }
-
     /**
      * Each.
      *
      * @param array    the array
      * @param consumer the consumer
      */
-    public static void each(Object array, BiConsumer<Object, Integer> consumer) {
+    public static void each(Object array, ObjIntConsumer<Object> consumer) {
         if (array != null) {
             if (array.getClass().isArray()) {
                 for (int i = 0; i < Array.getLength(array); i++) {
@@ -457,21 +443,23 @@ public final class ArrayUtils {
      * @return 链接后的数组
      */
     public static Object concat(Object arr1, Object arr2) {
-        int len1 = arr1 != null ? Array.getLength(arr1) : -1;
-        if (len1 <= 0) {
+        if (arr1 == null && arr2 == null) {
+            return null;
+        }
+        if (arr1 == null) {
             return arr2;
-        }
-        int len2 = arr2 != null ? Array.getLength(arr2) : -1;
-        if (len2 <= 0) {
+        } else if (arr2 == null) {
             return arr1;
-        } else {
-            Class<?> commonComponentType = ClassUtils.parentClass(arr1.getClass().getComponentType(),
-                    arr2.getClass().getComponentType());
-            Object newArray = Array.newInstance(commonComponentType, len1 + len2);
-            System.arraycopy(arr1, 0, newArray, 0, len1);
-            System.arraycopy(arr2, 0, newArray, len1, len2);
-            return newArray;
         }
+
+        int len1 = Array.getLength(arr1);
+        int len2 = Array.getLength(arr2);
+        Class<?> commonComponentType = ClassUtils.parentClass(arr1.getClass().getComponentType(),
+                arr2.getClass().getComponentType());
+        Object newArray = Array.newInstance(commonComponentType, len1 + len2);
+        System.arraycopy(arr1, 0, newArray, 0, len1);
+        System.arraycopy(arr2, 0, newArray, len1, len2);
+        return newArray;
     }
 
     /**
@@ -486,6 +474,23 @@ public final class ArrayUtils {
     public static <T> T[] create(Class<T> type, int length) {
         Object o = Array.newInstance(type, length);
         return (T[]) o;
+    }
+
+    /**
+     * create array and fill the array with given filler.
+     *
+     * @param <T>    the array element type
+     * @param type   the type
+     * @param length the length
+     * @param filler the filler
+     * @return the array
+     */
+    public static <T> T[] create(Class<T> type, int length, IntFunction<T> filler) {
+        T[] array = create(type, length);
+        each(array, (e, i) -> {
+            array[i] = filler.apply(i);
+        });
+        return array;
     }
 
     /**

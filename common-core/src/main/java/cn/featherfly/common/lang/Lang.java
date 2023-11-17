@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.ObjIntConsumer;
@@ -163,6 +162,9 @@ public final class Lang {
         if (object instanceof Optional) {
             isEmpty((Optional<?>) object);
         }
+        if (object instanceof Supplier) {
+            isEmpty((Supplier<?>) object);
+        }
         return false;
     }
 
@@ -208,6 +210,40 @@ public final class Lang {
         } else {
             return isFalse.get();
         }
+    }
+
+    /**
+     * 判断传入对象是否为空，（String、Collection、Map、Array还要判断长度是否为0）.
+     * 如果为空则执行传入的方法，并返回期执行结果. 否则直接返回传入对象.
+     *
+     * @param <O>      the generic type
+     * @param <R>      the generic type
+     * @param object   传入的对象
+     * @param supplier 需要执行的方法
+     * @return object
+     */
+    public static <O, R extends O> O ifEmpty(O object, Supplier<R> supplier) {
+        if (Lang.isNotEmpty(object)) {
+            return object;
+        }
+        return supplier.get();
+    }
+
+    /**
+     * 判断传入对象是否为空，（String、Collection、Map、Array还要判断长度是否为0）.
+     * 如果为空则执行传入的方法，并返回期执行结果. 否则直接返回传入对象.
+     *
+     * @param <O>      the generic type
+     * @param <R>      the generic type
+     * @param object   传入的对象
+     * @param supplier 需要执行的方法
+     * @return object
+     */
+    public static <O, R extends O> O ifEmpty(Supplier<O> object, Supplier<R> supplier) {
+        if (Lang.isNotEmpty(object)) {
+            return object.get();
+        }
+        return supplier.get();
     }
 
     /**
@@ -260,6 +296,38 @@ public final class Lang {
             return null;
         }
         return notEmpty.apply(object);
+    }
+
+    /**
+     * 判断传入对象是否为null，如果为空则执行传入的方法, 并返回其返回值.
+     *
+     * @param <O>      the generic type
+     * @param <R>      the generic type
+     * @param object   传入的对象
+     * @param supplier 需要执行的方法
+     * @return object
+     */
+    public static <O, R extends O> O ifNull(O object, Supplier<R> supplier) {
+        if (object != null) {
+            return object;
+        }
+        return supplier.get();
+    }
+
+    /**
+     * 判断传入对象是否为null，如果为空则执行传入的方法, 并返回其返回值.
+     *
+     * @param <O>      the generic type
+     * @param <R>      the generic type
+     * @param object   传入的对象
+     * @param supplier 需要执行的方法
+     * @return object
+     */
+    public static <O, R extends O> O ifNull(Supplier<O> object, Supplier<R> supplier) {
+        if (Lang.isNotEmpty(object)) {
+            return object.get();
+        }
+        return supplier.get();
     }
 
     /**
@@ -325,6 +393,19 @@ public final class Lang {
     }
 
     /**
+     * 返回传入Supplier是否为空（是null或者get()返回值为null） .
+     *
+     * @param supplier 传入的Supplier
+     * @return 传入Optional是否为空
+     */
+    public static boolean isEmpty(Supplier<?> supplier) {
+        if (supplier == null) {
+            return true;
+        }
+        return isEmpty(supplier.get());
+    }
+
+    /**
      * 返回传入Optional是否不为空（不是null或者内部数据不为null） .
      *
      * @param optional 传入的Optional
@@ -332,6 +413,16 @@ public final class Lang {
      */
     public static boolean isNotEmpty(Optional<?> optional) {
         return !isEmpty(optional);
+    }
+
+    /**
+     * 返回传入Supplier是否不为空（不是null或者get()返回值不为null） .
+     *
+     * @param supplier the Supplier
+     * @return Supplier is not empty
+     */
+    public static boolean isNotEmpty(Supplier<?> supplier) {
+        return !isEmpty(supplier);
     }
 
     /**
@@ -959,7 +1050,7 @@ public final class Lang {
      * @param array    the array
      * @param consumer the consumer
      */
-    public static <T> void each(T[] array, BiConsumer<T, Integer> consumer) {
+    public static <T> void each(T[] array, ObjIntConsumer<T> consumer) {
         ArrayUtils.each(consumer, array);
     }
 
@@ -970,7 +1061,7 @@ public final class Lang {
      * @param consumer the consumer
      * @param array    the array
      */
-    public static <T> void each(BiConsumer<T, Integer> consumer, @SuppressWarnings("unchecked") T... array) {
+    public static <T> void each(ObjIntConsumer<T> consumer, @SuppressWarnings("unchecked") T... array) {
         ArrayUtils.each(consumer, array);
     }
 
@@ -992,7 +1083,8 @@ public final class Lang {
      * @param array the array
      * @return the t[]
      */
-    public static <T> T[] array(@SuppressWarnings("unchecked") T... array) {
+    @SuppressWarnings("unchecked")
+    public static <T> T[] array(T... array) {
         return array;
     }
 

@@ -1,8 +1,11 @@
 package cn.featherfly.common.db;
 
+import java.lang.reflect.Array;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 import cn.featherfly.common.db.mapping.JavaTypeSqlTypeOperator;
 import cn.featherfly.common.db.mapping.JdbcPropertyMapping;
@@ -142,6 +145,40 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
     }
 
     /**
+     * Creates FieldValueOperator or array or list.
+     * <ul>
+     * <li>when value is array create FieldValueOperator array
+     * <li>when value is collection create FieldValueOperator list
+     * <li>when value is FieldValueOperator return it
+     * <li>otherwise create FieldValueOperator.
+     * </ul>
+     *
+     * @param pm    the JdbcPropertyMapping
+     * @param value the value
+     * @return FieldValueOperator or FieldValueOperator[] or
+     *         List&lt;FieldValueOperator&gt;
+     */
+    protected Object createAll(JdbcPropertyMapping pm, Object value) {
+        Object param = null;
+        if (value != null) {
+            if (value.getClass().isArray()) {
+                int length = Array.getLength(value);
+                param = Array.newInstance(FieldValueOperator.class, length);
+                for (int i = 0; i < length; i++) {
+                    Array.set(param, i, create(pm, Array.get(value, i)));
+                }
+            } else if (value instanceof Collection) {
+                param = ((Collection<?>) value).stream().map(op -> create(pm, op)).collect(Collectors.toList());
+            } else if (value instanceof FieldValueOperator) {
+                param = value;
+            } else {
+                param = create(pm, value);
+            }
+        }
+        return param;
+    }
+
+    /**
      * Creates FieldValueOperator.
      *
      * @param <E>   the element type
@@ -167,11 +204,10 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
             return null;
         }
         @SuppressWarnings("unchecked")
-        JavaTypeSqlTypeOperator<E> operator = (JavaTypeSqlTypeOperator<E>) BasicOperators.getOperator(value.getClass());
+        JavaTypeSqlTypeOperator<E> operator = (JavaTypeSqlTypeOperator<E>) BasicOperators.get(value.getClass());
         if (operator != null) {
             return new FieldValueOperator<>(operator, value);
         }
         throw new JdbcException("no JavaTypeSqlTypeOperator support for " + value.getClass().getName());
     }
-
 }

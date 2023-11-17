@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 
+import cn.featherfly.common.db.JdbcException;
 import cn.featherfly.common.db.mapping.JavaTypeSqlTypeOperator;
 import cn.featherfly.common.structure.ChainMap;
 import cn.featherfly.common.structure.ChainMapImpl;
@@ -65,7 +66,24 @@ public class BasicOperators {
      * @param type the type
      * @return the operator
      */
-    public static <T> JavaTypeSqlTypeOperator<?> getOperator(Class<T> type) {
-        return OPERATORS.get(type);
+    @SuppressWarnings("unchecked")
+    public static <T> JavaTypeSqlTypeOperator<T> get(Class<T> type) {
+        return (JavaTypeSqlTypeOperator<T>) OPERATORS.get(type);
+    }
+
+    /**
+     * Gets the exist operator.
+     *
+     * @param <T>  the generic type
+     * @param type the type
+     * @return the operator
+     * @throws JdbcException no JavaTypeSqlTypeOperator found for type
+     */
+    public static <T> JavaTypeSqlTypeOperator<T> getExist(Class<T> type) {
+        JavaTypeSqlTypeOperator<T> o = get(type);
+        if (o == null) {
+            throw new JdbcException("no JavaTypeSqlTypeOperator support for " + type.getName());
+        }
+        return o;
     }
 }

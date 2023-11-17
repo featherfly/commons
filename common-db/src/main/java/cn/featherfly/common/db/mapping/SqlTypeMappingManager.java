@@ -40,6 +40,7 @@ public class SqlTypeMappingManager {
      * Instantiates a new sql type mapping manager.
      */
     public SqlTypeMappingManager() {
+        super();
     }
 
     /**

@@ -211,7 +211,7 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
             } else {
                 // YUFEI_TODO 后续来优化打开检查，主要是现在父JdbcPropertyMapping（非具体映射）也调用了此方法，造成检查不通过
                 //                mapping.setJavaTypeSqlTypeOperator(new DefaultTypesSqlTypeOperator<>(beanProperty.getType(), true));
-                JavaTypeSqlTypeOperator<?> operator = BasicOperators.getOperator(beanProperty.getType());
+                JavaTypeSqlTypeOperator<?> operator = BasicOperators.get(beanProperty.getType());
                 if (operator != null) {
                     mapping.setJavaTypeSqlTypeOperator(operator);
                 } else {

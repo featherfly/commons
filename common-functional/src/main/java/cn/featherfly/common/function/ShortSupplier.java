@@ -20,4 +20,13 @@ public interface ShortSupplier {
      * @return a result
      */
     short getAsShort();
+
+    /**
+     * Gets a result.
+     *
+     * @return a result
+     */
+    default short get() {
+        return getAsShort();
+    }
 }

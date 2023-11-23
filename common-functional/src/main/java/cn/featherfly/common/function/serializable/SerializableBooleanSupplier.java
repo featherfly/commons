@@ -13,4 +13,12 @@ import java.util.function.BooleanSupplier;
 @FunctionalInterface
 public interface SerializableBooleanSupplier extends Serializable, BooleanSupplier {
 
+    /**
+     * Gets a result.
+     *
+     * @return a result
+     */
+    default boolean get() {
+        return getAsBoolean();
+    }
 }

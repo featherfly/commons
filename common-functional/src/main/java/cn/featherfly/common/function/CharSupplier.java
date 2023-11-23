@@ -20,4 +20,13 @@ public interface CharSupplier {
      * @return a result
      */
     char getAsChar();
+
+    /**
+     * Gets a result.
+     *
+     * @return a result
+     */
+    default char get() {
+        return getAsChar();
+    }
 }

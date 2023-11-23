@@ -20,4 +20,13 @@ public interface ByteSupplier {
      * @return a result
      */
     byte getAsByte();
+
+    /**
+     * Gets a result.
+     *
+     * @return a result
+     */
+    default byte get() {
+        return getAsByte();
+    }
 }

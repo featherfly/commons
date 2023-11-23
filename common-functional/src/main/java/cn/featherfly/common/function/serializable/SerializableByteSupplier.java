@@ -3,15 +3,15 @@ package cn.featherfly.common.function.serializable;
 
 import java.io.Serializable;
 
-import cn.featherfly.common.function.ShortSupplier;
+import cn.featherfly.common.function.ByteSupplier;
 
 /**
  * The Interface SerializableByteSupplier.
  *
  * @author zhongj
- * @see ShortSupplier
+ * @see ByteSupplier
  */
 @FunctionalInterface
-public interface SerializableByteSupplier extends Serializable, ShortSupplier {
+public interface SerializableByteSupplier extends Serializable, ByteSupplier {
 
 }

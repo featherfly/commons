@@ -219,7 +219,7 @@ public abstract class AbstractStore implements Store {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private <E> Optional<E> _get(ResultSet rs, int columnIndex, Type<E> javaType) {
-        SQLType sqlType = JdbcUtils.getResultSQLType(rs, columnIndex);
+        SQLType sqlType = JdbcUtils.getResultSetType(rs, columnIndex);
         for (JavaSqlTypeMapper<?> sqlTypeToJavaMapper : getJavaSqlTypeMappers()) {
             String tableName = JdbcUtils.getTableName(rs, columnIndex);
             String columnName = JdbcUtils.getColumnName(rs, columnIndex);

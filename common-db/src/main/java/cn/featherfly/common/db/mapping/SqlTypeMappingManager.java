@@ -374,6 +374,7 @@ public class SqlTypeMappingManager {
      * @param javaType   the java type
      * @return the e
      */
+    @SuppressWarnings("unchecked")
     public <E> E getParam(CallableStatement call, int paramIndex, Class<E> javaType) {
         AssertIllegalArgument.isNotNull(javaType, "javaType");
         AssertIllegalArgument.isNotNull(call, "ResultSet");
@@ -384,6 +385,12 @@ public class SqlTypeMappingManager {
         }
         if ((e = globalStore.get(call, paramIndex, javaType)) != null) {
             return e.orElse(null);
+        }
+        if (javaType == null || javaType == Object.class) {
+            Class<?> type = getJavaType(JdbcUtils.getParameterType(call, paramIndex));
+            if (type != null) {
+                return (E) JdbcUtils.getCallableParam(call, paramIndex, type);
+            }
         }
         return JdbcUtils.getCallableParam(call, paramIndex, javaType);
     }
@@ -397,16 +404,24 @@ public class SqlTypeMappingManager {
      * @param javaType    the java type
      * @return the e
      */
+    @SuppressWarnings("unchecked")
     public <E> E get(ResultSet rs, int columnIndex, Class<E> javaType) {
         AssertIllegalArgument.isNotNull(javaType, "javaType");
         AssertIllegalArgument.isNotNull(rs, "ResultSet");
         Store store = getStore(javaType);
-        Optional<E> e = null;
-        if (store != null && (e = store.get(rs, columnIndex, javaType)) != null) {
-            return e.orElse(null);
+        Optional<E> optional = null;
+        if (store != null && (optional = store.get(rs, columnIndex, javaType)) != null) {
+            return optional.orElse(null);
         }
-        if ((e = globalStore.get(rs, columnIndex, javaType)) != null) {
-            return e.orElse(null);
+        if ((optional = globalStore.get(rs, columnIndex, javaType)) != null) {
+            return optional.orElse(null);
+        }
+
+        if (javaType == null || javaType == Object.class) {
+            Class<?> type = getJavaType(JdbcUtils.getResultSetType(rs, columnIndex));
+            if (type != null) {
+                return (E) JdbcUtils.getResultSetValue(rs, columnIndex, type);
+            }
         }
         return JdbcUtils.getResultSetValue(rs, columnIndex, javaType);
     }
@@ -437,13 +452,12 @@ public class SqlTypeMappingManager {
         if ((e = globalStore.get(rs, columnIndex, beanProperty.getType())) != null) {
             return e.orElse(null);
         }
+
         return JdbcUtils.getResultSetValue(rs, columnIndex, beanProperty.getType());
     }
 
     /*
-     * Gets the store for regist.
-     */
-
+    
     //    /*
     //     * Gets the store.
     //     */

@@ -2017,14 +2017,35 @@ public final class JdbcUtils {
     }
 
     /**
-     * Gets the result SQL type.
+     * Gets the parameter SQL type.
      *
-     * @param rs    the rs
+     * @param prep  the prep
      * @param index the index
      * @return the result SQL type
      */
-    public static SQLType getResultSQLType(ResultSetWrapper rs, int index) {
-        return getResultSQLType(rs.getResultSet(), index);
+    public static SQLType getParameterType(PreparedStatementWrapper prep, int index) {
+        if (prep == null) {
+            return null;
+        }
+        return getParameterType(prep.getPreparedStatement(), index);
+    }
+
+    /**
+     * Gets the parameter SQL type.
+     *
+     * @param prep  the prep
+     * @param index the index
+     * @return the result SQL type
+     */
+    public static SQLType getParameterType(PreparedStatement prep, int index) {
+        if (prep == null) {
+            return null;
+        }
+        try {
+            return JDBCType.valueOf(prep.getMetaData().getColumnType(index));
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
     }
 
     /**
@@ -2033,8 +2054,51 @@ public final class JdbcUtils {
      * @param rs    the rs
      * @param index the index
      * @return the result SQL type
+     * @deprecated {@link #getResultSetType(ResultSet, int)}
      */
+    @Deprecated
+    public static SQLType getResultSQLType(ResultSetWrapper rs, int index) {
+        return getResultSetType(rs, index);
+    }
+
+    /**
+     * Gets the result SQL type.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the result SQL type
+     * @deprecated {@link #getResultSetType(ResultSet, int)}
+     */
+    @Deprecated
     public static SQLType getResultSQLType(ResultSet rs, int index) {
+        return getResultSetType(rs, index);
+    }
+
+    /**
+     * Gets the resultset SQL type.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the result SQL type
+     */
+    public static SQLType getResultSetType(ResultSetWrapper rs, int index) {
+        if (rs == null) {
+            return null;
+        }
+        return getResultSetType(rs.getResultSet(), index);
+    }
+
+    /**
+     * Gets the resultset SQL type.
+     *
+     * @param rs    the rs
+     * @param index the index
+     * @return the result SQL type
+     */
+    public static SQLType getResultSetType(ResultSet rs, int index) {
+        if (rs == null) {
+            return null;
+        }
         try {
             return JDBCType.valueOf(rs.getMetaData().getColumnType(index));
         } catch (SQLException e) {

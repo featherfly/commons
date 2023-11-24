@@ -13,7 +13,7 @@ package cn.featherfly.common.function;
  *
  * @author zhongj
  */
-public interface CharSupplier {
+public interface CharSupplier extends PrimitiveSupplier {
     /**
      * Gets a result.
      *

@@ -13,7 +13,7 @@ import java.util.function.Function;
  * @see Function
  */
 @FunctionalInterface
-public interface ToByteFunction<T> {
+public interface ToByteFunction<T> extends ToPrimitiveFunction<T> {
 
     /**
      * Applies this function to the given argument.

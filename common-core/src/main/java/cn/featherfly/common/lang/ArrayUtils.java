@@ -145,8 +145,8 @@ public final class ArrayUtils {
      * Each.
      *
      * @param <T>      the generic type
-     * @param array    the array
      * @param consumer the consumer
+     * @param array    the array
      */
     public static <T> void each(ObjIntConsumer<T> consumer, @SuppressWarnings("unchecked") T... array) {
         if (array != null) {
@@ -472,6 +472,9 @@ public final class ArrayUtils {
      */
     @SuppressWarnings("unchecked")
     public static <T> T[] create(Class<T> type, int length) {
+        if (type == null) {
+            return null;
+        }
         Object o = Array.newInstance(type, length);
         return (T[]) o;
     }
@@ -486,6 +489,9 @@ public final class ArrayUtils {
      * @return the array
      */
     public static <T> T[] create(Class<T> type, int length, IntFunction<T> filler) {
+        if (type == null) {
+            return null;
+        }
         T[] array = create(type, length);
         each(array, (e, i) -> {
             array[i] = filler.apply(i);
@@ -503,6 +509,9 @@ public final class ArrayUtils {
      * @return the array
      */
     public static <T> T[] createFill(Class<T> type, int length, T element) {
+        if (type == null) {
+            return null;
+        }
         T[] array = create(type, length);
         Arrays.fill(array, element);
         return array;
@@ -653,4 +662,200 @@ public final class ArrayUtils {
             target[i + startIndex] = source[i];
         }
     }
+
+    /**
+     * sets value for array at index.
+     *
+     * @param array the array
+     * @param index the index
+     * @param value the value
+     */
+    public static void set(Object array, int index, Object value) {
+        Array.set(array, index, value);
+    }
+
+    /**
+     * sets value for array at index.
+     *
+     * @param array the array
+     * @param index the index
+     * @param value the value
+     */
+    public static void set(Object array, int index, int value) {
+        Array.setInt(array, index, value);
+    }
+
+    /**
+     * sets value for array at index.
+     *
+     * @param array the array
+     * @param index the index
+     * @param value the value
+     */
+    public static void set(Object array, int index, long value) {
+        Array.setLong(array, index, value);
+    }
+
+    /**
+     * sets value for array at index.
+     *
+     * @param array the array
+     * @param index the index
+     * @param value the value
+     */
+    public static void set(Object array, int index, boolean value) {
+        Array.setBoolean(array, index, value);
+    }
+
+    /**
+     * sets value for array at index.
+     *
+     * @param array the array
+     * @param index the index
+     * @param value the value
+     */
+    public static void set(Object array, int index, byte value) {
+        Array.setByte(array, index, value);
+    }
+
+    /**
+     * sets value for array at index.
+     *
+     * @param array the array
+     * @param index the index
+     * @param value the value
+     */
+    public static void set(Object array, int index, short value) {
+        Array.setShort(array, index, value);
+    }
+
+    /**
+     * sets value for array at index.
+     *
+     * @param array the array
+     * @param index the index
+     * @param value the value
+     */
+    public static void set(Object array, int index, char value) {
+        Array.setChar(array, index, value);
+    }
+
+    /**
+     * sets value for array at index.
+     *
+     * @param array the array
+     * @param index the index
+     * @param value the value
+     */
+    public static void set(Object array, int index, double value) {
+        Array.setDouble(array, index, value);
+    }
+
+    /**
+     * sets value for array at index.
+     *
+     * @param array the array
+     * @param index the index
+     * @param value the value
+     */
+    public static void set(Object array, int index, float value) {
+        Array.setFloat(array, index, value);
+    }
+
+    /**
+     * Unpack.
+     *
+     * @param array the array
+     * @return the int[]
+     */
+    public static int[] unpack(Integer... array) {
+        int[] a = new int[array.length];
+        each((e, i) -> a[i] = e, array);
+        return a;
+    }
+
+    /**
+     * Unpack.
+     *
+     * @param array the array
+     * @return the long[]
+     */
+    public static long[] unpack(Long... array) {
+        long[] a = new long[array.length];
+        each((e, i) -> a[i] = e, array);
+        return a;
+    }
+
+    /**
+     * Unpack.
+     *
+     * @param array the array
+     * @return the double[]
+     */
+    public static double[] unpack(Double... array) {
+        double[] a = new double[array.length];
+        each((e, i) -> a[i] = e, array);
+        return a;
+    }
+
+    /**
+     * Unpack.
+     *
+     * @param array the array
+     * @return the float[]
+     */
+    public static float[] unpack(Float... array) {
+        float[] a = new float[array.length];
+        each((e, i) -> a[i] = e, array);
+        return a;
+    }
+
+    /**
+     * Unpack.
+     *
+     * @param array the array
+     * @return the short[]
+     */
+    public static short[] unpack(Short... array) {
+        short[] a = new short[array.length];
+        each((e, i) -> a[i] = e, array);
+        return a;
+    }
+
+    /**
+     * Unpack.
+     *
+     * @param array the array
+     * @return the byte[]
+     */
+    public static byte[] unpack(Byte... array) {
+        byte[] a = new byte[array.length];
+        each((e, i) -> a[i] = e, array);
+        return a;
+    }
+
+    /**
+     * Unpack.
+     *
+     * @param array the array
+     * @return the char[]
+     */
+    public static char[] unpack(Character... array) {
+        char[] a = new char[array.length];
+        each((e, i) -> a[i] = e, array);
+        return a;
+    }
+
+    /**
+     * Unpack.
+     *
+     * @param array the array
+     * @return the boolean[]
+     */
+    public static boolean[] unpack(Boolean... array) {
+        boolean[] a = new boolean[array.length];
+        each((e, i) -> a[i] = e, array);
+        return a;
+    }
+
 }

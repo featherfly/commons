@@ -12,11 +12,16 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
+import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
+import java.util.function.LongConsumer;
 import java.util.function.LongSupplier;
+import java.util.function.ObjDoubleConsumer;
+import java.util.function.ObjIntConsumer;
+import java.util.function.ObjLongConsumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.ToDoubleFunction;
@@ -27,6 +32,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import cn.featherfly.common.exception.ReflectException;
 import cn.featherfly.common.exception.UnsupportedException;
+import cn.featherfly.common.function.PrimitiveSupplier;
+import cn.featherfly.common.function.ToPrimitiveFunction;
 import cn.featherfly.common.function.serializable.SerializableConsumer;
 import cn.featherfly.common.function.serializable.SerializableDoubleSupplier;
 import cn.featherfly.common.function.serializable.SerializableIntSupplier;
@@ -433,11 +440,18 @@ public class LambdaUtils {
         info2.methodDeclaredClassName = serializedLambda.getImplClass().replaceAll("/", ".");
         info2.methodName = serializedLambda.getImplMethodName();
         info2.propertyName = methodToPropertyName(info2.methodName);
-        if (lambda instanceof Function || lambda instanceof BiConsumer || lambda instanceof BiFunction
-                || lambda instanceof ToIntFunction || lambda instanceof ToLongFunction
-                || lambda instanceof ToDoubleFunction //
-                || lambda instanceof Predicate // ToBooleanFunction
-                || lambda instanceof IntConsumer) {
+        if (lambda instanceof Function // R getXx()    T::getXx
+                || lambda instanceof BiConsumer //   setXx(U)   T::setXx
+                || lambda instanceof ToIntFunction // int getXx()
+                || lambda instanceof ToLongFunction // long getXx()
+                || lambda instanceof ToDoubleFunction // double getXx()
+                || lambda instanceof Predicate // ToBooleanFunction boolean isXx()
+                || lambda instanceof ToPrimitiveFunction // char|byte|short getXx()
+                || lambda instanceof ObjDoubleConsumer // setXx(double)
+                || lambda instanceof ObjIntConsumer // setXx(int)
+                || lambda instanceof ObjLongConsumer // setXx(long)
+                || lambda instanceof BiFunction // R getXx(U)  T::getXx
+        ) {
             Class<?>[] pts = getParamaeterTypes(serializedLambda.getImplMethodSignature());
             info2.method = ClassUtils.getMethod(ClassUtils.forName(info2.methodDeclaredClassName), info2.methodName,
                     pts);
@@ -453,14 +467,26 @@ public class LambdaUtils {
                         .substringBefore(serializedLambda.getInstantiatedMethodType(), ";").substring(2)
                         .replaceAll("/", ".");
             }
-        } else if (lambda instanceof Supplier || lambda instanceof IntSupplier || lambda instanceof LongSupplier
-                || lambda instanceof DoubleSupplier || lambda instanceof BooleanSupplier) {
+        } else if (lambda instanceof Supplier // R getXx()   T t; t::getXx
+                || lambda instanceof IntSupplier // int getXx()   T t; t::getXx
+                || lambda instanceof LongSupplier // long getXx()   T t; t::getXx
+                || lambda instanceof DoubleSupplier// double getXx()   T t; t::getXx
+                || lambda instanceof BooleanSupplier // boolean getXx()   T t; t::getXx
+                || lambda instanceof PrimitiveSupplier // char|byte|short getXx()   T t; t::getXx
+        //                || lambda instanceof CharSupplier // char getXx()   T t; t::getXx
+        //                || lambda instanceof ByteSupplier// byte getXx()   T t; t::getXx
+        //                || lambda instanceof ShortSupplier // short getXx()   T t; t::getXx
+        ) {
             Class<?> obj = serializedLambda.getCapturedArg(0).getClass();
             info2.methodInstanceClassName = obj.getName();
             info2.method = ClassUtils.getMethod(ClassUtils.forName(info2.methodDeclaredClassName), info2.methodName,
                     ArrayUtils.EMPTY_CLASS_ARRAY);
             info2.propertyType = info2.method.getReturnType();
-        } else if (lambda instanceof Consumer) {
+        } else if (lambda instanceof Consumer //   setXx(U)   T t; t::setXx
+                || lambda instanceof IntConsumer //   setXx(int)   T t; t::setXx
+                || lambda instanceof LongConsumer //   setXx(long)   T t; t::setXx
+                || lambda instanceof DoubleConsumer //   setXx(double)   T t; t::setXx
+        ) {
             info2.methodInstanceClassName = serializedLambda.getCapturedArg(0).getClass().getName();
             Class<?>[] pts = getParamaeterTypes(serializedLambda.getImplMethodSignature());
             info2.method = ClassUtils.getMethod(ClassUtils.forName(info2.methodDeclaredClassName), info2.methodName,

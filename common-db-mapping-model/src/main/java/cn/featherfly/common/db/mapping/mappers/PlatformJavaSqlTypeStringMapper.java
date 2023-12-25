@@ -1,5 +1,6 @@
 package cn.featherfly.common.db.mapping.mappers;
 
+import java.sql.CallableStatement;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,8 +9,6 @@ import java.sql.SQLType;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.AbstractGenericJavaSqlTypeMapper;
 import cn.featherfly.common.db.mapping.JdbcMappingException;
-import cn.featherfly.common.lang.ClassUtils;
-import cn.featherfly.common.lang.GenericType;
 import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.model.app.Platform;
 import cn.featherfly.common.model.app.Platforms;
@@ -37,13 +36,13 @@ public class PlatformJavaSqlTypeStringMapper extends AbstractGenericJavaSqlTypeM
                 || JDBCType.NCHAR == sqlType;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean support(GenericType<Platform> type) {
-        return ClassUtils.isParent(getGenericType().getType(), type.getType());
-    }
+    //    /**
+    //     * {@inheritDoc}
+    //     */
+    //    @Override
+    //    public boolean support(GenericType<Platform> type) {
+    //        return ClassUtils.isParent(getGenericType().getType(), type.getType());
+    //    }
 
     /**
      * {@inheritDoc}
@@ -53,7 +52,31 @@ public class PlatformJavaSqlTypeStringMapper extends AbstractGenericJavaSqlTypeM
         if (value != null) {
             JdbcUtils.setParameter(prep, parameterIndex, value.value());
         } else {
-            JdbcUtils.setParameter(prep, parameterIndex, null);
+            JdbcUtils.setParameterNull(prep, parameterIndex);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void set(CallableStatement call, String parameterName, Platform value) {
+        if (value != null) {
+            JdbcUtils.setParameter(call, parameterName, value.value());
+        } else {
+            JdbcUtils.setParameterNull(call, parameterName);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(ResultSet rs, int parameterIndex, Platform value) {
+        if (value != null) {
+            JdbcUtils.setParameter(rs, parameterIndex, value.value());
+        } else {
+            JdbcUtils.setParameterNull(rs, parameterIndex);
         }
     }
 
@@ -62,7 +85,18 @@ public class PlatformJavaSqlTypeStringMapper extends AbstractGenericJavaSqlTypeM
      */
     @Override
     public Platform get(ResultSet rs, int columnIndex) {
-        String value = (String) JdbcUtils.getResultSetValue(rs, columnIndex, String.class);
+        return toPlatform(JdbcUtils.getResultSetValue(rs, columnIndex, String.class));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Platform get(CallableStatement call, int paramIndex) {
+        return toPlatform(JdbcUtils.getCallableParam(call, paramIndex, String.class));
+    }
+
+    private Platform toPlatform(String value) {
         if (value != null) {
             try {
                 return Platforms.valueOf(value);

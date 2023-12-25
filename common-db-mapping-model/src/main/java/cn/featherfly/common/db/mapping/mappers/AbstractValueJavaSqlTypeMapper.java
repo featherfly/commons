@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.AbstractGenericJavaSqlTypeMapper;
 import cn.featherfly.common.lang.ClassUtils;
-import cn.featherfly.common.lang.GenericType;
 import cn.featherfly.common.model.Value;
 
 /**
@@ -34,13 +33,13 @@ public abstract class AbstractValueJavaSqlTypeMapper<V extends Value<E>, E>
         elementType = ClassUtils.getSuperClassGenericType(this.getClass(), 1);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean support(GenericType<V> type) {
-        return ClassUtils.isParent(getGenericType().getType(), type.getType());
-    }
+    //    /**
+    //     * {@inheritDoc}
+    //     */
+    //    @Override
+    //    public boolean support(GenericType<V> type) {
+    //        return ClassUtils.isParent(getGenericType().getType(), type.getType());
+    //    }
 
     /**
      * Sets the value.
@@ -54,7 +53,7 @@ public abstract class AbstractValueJavaSqlTypeMapper<V extends Value<E>, E>
         if (value != null) {
             JdbcUtils.setParameter(prep, parameterIndex, value.value());
         } else {
-            JdbcUtils.setParameter(prep, parameterIndex, -1);
+            JdbcUtils.setParameterNull(prep, parameterIndex);
         }
     }
 
@@ -67,8 +66,7 @@ public abstract class AbstractValueJavaSqlTypeMapper<V extends Value<E>, E>
      */
     @Override
     public V get(ResultSet rs, int columnIndex) {
-        @SuppressWarnings("unchecked")
-        E value = (E) JdbcUtils.getResultSetValue(rs, columnIndex, elementType);
+        E value = JdbcUtils.getResultSetValue(rs, columnIndex, elementType);
         if (value != null) {
             return toValue(value);
         } else {

@@ -89,9 +89,7 @@ public class PropertiesImpl implements Properties {
     public PropertiesImpl(java.util.Properties properties, Charset charset) {
         this(charset);
         if (properties != null) {
-            properties.stringPropertyNames().forEach(pn -> {
-                setProperty(pn, properties.getProperty(pn));
-            });
+            properties.stringPropertyNames().forEach(pn -> setProperty(pn, properties.getProperty(pn)));
         }
     }
 
@@ -158,7 +156,7 @@ public class PropertiesImpl implements Properties {
      */
     @Override
     public Collection<Property> getPropertyParts() {
-        return partMap.values().stream().filter(p -> p instanceof Property).map(p -> (Property) p)
+        return partMap.values().stream().filter(Property.class::isInstance).map(p -> (Property) p)
                 .collect(Collectors.toList());
     }
 

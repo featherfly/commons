@@ -3,6 +3,7 @@ package cn.featherfly.common.lang.asserts;
 import java.io.File;
 import java.util.Collection;
 import java.util.Map;
+import java.util.function.Function;
 
 import cn.featherfly.common.exception.LocalizedExceptionUtils;
 import cn.featherfly.common.function.serializable.SerializableNumberSupplier;
@@ -16,23 +17,45 @@ import cn.featherfly.common.lang.NumberUtils;
 import cn.featherfly.common.lang.Strings;
 
 /**
- * <p>
- * 断言工具类，对于满足断言的情况，抛出支持国际化消息输出的异常 一般用于检查传入参数是否合法
- * </p>
+ * 断言工具类，对于满足断言的情况，抛出支持国际化消息输出的异常 一般用于检查传入参数是否合法.
  *
  * @since 1.7
  * @version 1.7
  * @author zhongj
  */
-public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAssert<E> {
+public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAssert {
+
+    private static final String IS_NOT_EMPTY = "#isNotEmpty";
+    private static final String MIN = "min";
+    private static final String MAX = "max";
+    private static final String VALUE = "value";
+
+    private Function<String, E> newException;
 
     private Class<E> exceptionType;
 
     /**
-     * @param exceptionType 断言失败抛出的异常类型
+     * Instantiates a new localized assert.
+     *
+     * @param exceptionType the exception type
      */
     public LocalizedAssert(Class<E> exceptionType) {
+        this(exceptionType, null);
+    }
+
+    /**
+     * Instantiates a new localized assert.
+     *
+     * @param exceptionType the exception type
+     * @param newException  create new exception function
+     */
+    public LocalizedAssert(Class<E> exceptionType, Function<String, E> newException) {
         this.exceptionType = exceptionType;
+        if (newException == null) {
+            this.newException = msg -> ClassUtils.newInstance(exceptionType, msg);
+        } else {
+            this.newException = newException;
+        }
     }
 
     /**
@@ -41,7 +64,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     @Override
     public void isNotNull(Object object, String arg) {
         if (object == null) {
-            throwException("#isNotNull", new Object[] { arg });
+            throwException("#isNotNull", arg);
         }
     }
 
@@ -51,7 +74,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     @Override
     public void isNotBlank(String text, String arg) {
         if (!Strings.isNotBlank(text)) {
-            throwException("#isNotBlank", new Object[] { arg });
+            throwException("#isNotBlank", arg);
         }
     }
 
@@ -61,7 +84,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     @Override
     public void isNotEmpty(Object obj, String args) {
         if (!Lang.isNotEmpty(obj)) {
-            throwException("#isNotEmpty", new Object[] { args });
+            throwException(IS_NOT_EMPTY, args);
         }
     }
 
@@ -71,7 +94,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     @Override
     public void isNotEmpty(String text, String arg) {
         if (!Lang.isNotEmpty(text)) {
-            throwException("#isNotEmpty", new Object[] { arg });
+            throwException(IS_NOT_EMPTY, arg);
         }
     }
 
@@ -81,7 +104,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     @Override
     public void isNotEmpty(Object[] array, String arg) {
         if (Lang.isEmpty(array)) {
-            throwException("#isNotEmpty", new Object[] { arg });
+            throwException(IS_NOT_EMPTY, arg);
         }
     }
 
@@ -91,7 +114,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     @Override
     public void isNotEmpty(Collection<?> collection, String arg) {
         if (Lang.isEmpty(collection)) {
-            throwException("#isNotEmpty", new Object[] { arg });
+            throwException(IS_NOT_EMPTY, arg);
         }
     }
 
@@ -101,7 +124,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     @Override
     public void isNotEmpty(Map<?, ?> map, String arg) {
         if (Lang.isEmpty(map)) {
-            throwException("#isNotEmpty", new Object[] { arg });
+            throwException(IS_NOT_EMPTY, arg);
         }
     }
 
@@ -195,8 +218,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
 
     private void throwException(String msg, Object... args) {
         msg = "@assert" + msg;
-        LocalizedExceptionUtils.throwException(exceptionType, msg, args);
-        //        throw ClassUtils.newInstance(exceptionType, ResourceBundleUtils.getString(msg, args));
+        LocalizedExceptionUtils.throwException(newException, exceptionType, msg, args);
     }
 
     /**
@@ -204,9 +226,9 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      */
     @Override
     public <N extends Number> void isInRange(N value, N min, N max, String arguDescp) {
-        isNotNull(min, "min");
-        isNotNull(max, "max");
-        isNotNull(value, "value");
+        isNotNull(min, MIN);
+        isNotNull(max, MAX);
+        isNotNull(value, VALUE);
         int result = NumberUtils.compare(value, min);
         if (result < 0) {
             throwException("#isInRange", value, min, max, arguDescp);
@@ -231,8 +253,8 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      */
     @Override
     public <N extends Number> void isGt(N value, N min, String arguDescp) {
-        isNotNull(min, "min");
-        isNotNull(value, "value");
+        isNotNull(min, MIN);
+        isNotNull(value, VALUE);
         int result = NumberUtils.compare(value, min);
         if (result == -1 || result == 0) {
             throwException("#isGt", value, min, arguDescp);
@@ -253,8 +275,8 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      */
     @Override
     public <N extends Number> void isGe(N value, N min, String arguDescp) {
-        isNotNull(min, "min");
-        isNotNull(value, "value");
+        isNotNull(min, MIN);
+        isNotNull(value, VALUE);
         if (NumberUtils.compare(value, min) == -1) {
             throwException("#isGe", value, min, arguDescp);
         }
@@ -274,8 +296,8 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      */
     @Override
     public <N extends Number> void isLt(N value, N max, String arguDescp) {
-        isNotNull(max, "max");
-        isNotNull(value, "value");
+        isNotNull(max, MAX);
+        isNotNull(value, VALUE);
         int result = NumberUtils.compare(value, max);
         if (result == 0 || result == 1) {
             throwException("#isLt", value, max, arguDescp);
@@ -296,8 +318,8 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      */
     @Override
     public <N extends Number> void isLe(N value, N max, String arguDescp) {
-        isNotNull(max, "max");
-        isNotNull(value, "value");
+        isNotNull(max, MAX);
+        isNotNull(value, VALUE);
         if (NumberUtils.compare(value, max) == 1) {
             throwException("#isLe", value, max, arguDescp);
         }

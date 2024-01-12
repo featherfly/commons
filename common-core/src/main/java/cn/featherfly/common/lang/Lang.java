@@ -291,7 +291,7 @@ public final class Lang {
      * @param notEmpty 需要执行的方法
      * @return object
      */
-    public static <O, R extends O> R ifNotNull(O object, Function<O, R> notEmpty) {
+    public static <O, R> R ifNotNull(O object, Function<O, R> notEmpty) {
         if (object == null) {
             return null;
         }

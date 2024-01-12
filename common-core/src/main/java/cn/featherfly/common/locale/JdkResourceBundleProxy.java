@@ -84,20 +84,9 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.locale.Resou
      */
     @Override
     public final String[] getStringArray(String key) {
-        return Stream.of(bundle.getStringArray(key)).map(value -> {
-            return encode(value);
-        }).collect(Collectors.toList()).toArray(new String[] {});
+        return Stream.of(bundle.getStringArray(key)).map(this::encode).collect(Collectors.toList())
+                .toArray(new String[] {});
     }
-
-    //    /**
-    //     * getObject
-    //     * @param key
-    //     * @return
-    //     */
-    //    @Override
-    //    public final Object getObject(String key) {
-    //        return bundle.getObject(key);
-    //    }
 
     /**
      * @return Locale

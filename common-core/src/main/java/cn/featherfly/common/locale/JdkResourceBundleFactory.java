@@ -5,17 +5,17 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
- * <p>
- * JdkResourceBundleFactory
- * </p>
+ * JdkResourceBundleFactory.
  *
  * @author zhongj
  */
 public class JdkResourceBundleFactory implements ResourceBundleFactory {
 
     /**
+     * Instantiates a new jdk resource bundle factory.
      */
     public JdkResourceBundleFactory() {
+        super();
     }
 
     /**
@@ -31,7 +31,7 @@ public class JdkResourceBundleFactory implements ResourceBundleFactory {
      */
     @Override
     public cn.featherfly.common.locale.ResourceBundle getBundle(String baseName, Locale locale, Charset charset) {
-        return new JdkResourceBundleProxy(
-                ResourceBundle.getBundle(baseName, locale == null ? ResourceBundleUtils.getLocale() : locale), charset);
+        return new JdkResourceBundleProxy(ResourceBundle.getBundle(baseName, ResourceBundleUtils.getLocale(locale)),
+                charset);
     }
 }

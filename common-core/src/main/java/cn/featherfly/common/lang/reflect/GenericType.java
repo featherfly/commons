@@ -66,7 +66,37 @@ public class GenericType<T> extends ClassType<T> {
     }
 
     public boolean isGeneric() {
-        return genericTypes.size() > 0;
+        return !genericTypes.isEmpty();
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + (genericTypes == null ? 0 : genericTypes.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        GenericType<?> other = (GenericType<?>) obj;
+        if (genericTypes == null) {
+            if (other.genericTypes != null) {
+                return false;
+            }
+        } else if (!genericTypes.equals(other.genericTypes)) {
+            return false;
+        }
+        return true;
     }
 
     /**

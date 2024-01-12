@@ -5,23 +5,27 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * <p>
- * ResourceBundle
- * </p>
+ * ResourceBundle.
  *
  * @author zhongj
  */
 public interface ResourceBundle {
 
     /**
-     * @param key key {@link java.util.ResourceBundle#getString(String)}
+     * get string.
+     *
+     * @param key key
      * @return the string for the given key
+     * @see {@link java.util.ResourceBundle#getString(String)}
      */
     String getString(String key);
 
     /**
-     * @param key key {@link java.util.ResourceBundle#getStringArray(String)}
+     * get string array.
+     *
+     * @param key key
      * @return the string array for the given key
+     * @see {@link java.util.ResourceBundle#getStringArray(String)}
      */
     String[] getStringArray(String key);
 
@@ -32,30 +36,35 @@ public interface ResourceBundle {
     //    Object getObject(String key);
 
     /**
-     * {@link java.util.ResourceBundle#getLocale()}
-     * 
+     * get locale.
+     *
      * @return the locale of this resource bundle
+     * @see {@link java.util.ResourceBundle#getLocale()}
      */
     Locale getLocale();
 
     /**
-     * {@link java.util.ResourceBundle#getKeys()}
-     * 
+     * get keys
+     *
      * @return Enumeration Kyes
+     * @see {@link java.util.ResourceBundle#getKeys()}
      */
     Enumeration<String> getKeys();
 
     /**
+     * contains key.
+     *
      * @param key key
-     *            {@link java.util.ResourceBundle#containsKey(java.lang.String)}
      * @return boolean containsKey
+     * @see {@link java.util.ResourceBundle#containsKey(java.lang.String)}
      */
     boolean containsKey(String key);
 
     /**
-     * {@link java.util.ResourceBundle#keySet()}
-     * 
+     * key set.
+     *
      * @return keySet
+     * @see {@link java.util.ResourceBundle#keySet()}
      */
     Set<String> keySet();
 }

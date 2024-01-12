@@ -11,9 +11,9 @@ package cn.featherfly.common.lang.asserts;
 public class IllegalArgumentAssert extends LocalizedAssert<IllegalArgumentException> {
 
     /**
+     * Instantiates a new illegal argument assert.
      */
     public IllegalArgumentAssert() {
-        super(IllegalArgumentException.class);
+        super(IllegalArgumentException.class, IllegalArgumentException::new);
     }
-
 }

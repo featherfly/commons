@@ -9,23 +9,16 @@ import cn.featherfly.common.function.serializable.SerializableNumberSupplier;
 import cn.featherfly.common.function.serializable.SerializableSupplier;
 
 /**
- * <p>
- * IAssertLocalized
- * </p>
- * .
+ * IAssertLocalized.
  *
  * @author zhongj
  * @version 1.7
- * @param <E> the element type
  * @since 1.7
  */
-public interface ILocalizedAssert<E extends RuntimeException> {
+public interface ILocalizedAssert {
 
     /**
-     * <p>
-     * 判断不为空，如果为空，抛出指定异常
-     * </p>
-     * .
+     * 判断不为空，如果为空，抛出指定异常 .
      *
      * @param object    判断的对象
      * @param arguDescp 出错时对参数的描述信息，例如：user.id、username等等
@@ -33,10 +26,7 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     void isNotNull(Object object, String arguDescp);
 
     /**
-     * <p>
-     * if null, throw exception
-     * </p>
-     * .
+     * if null, throw exception .
      *
      * @param <T>              the generic type
      * @param propertySupplier object property lambda
@@ -44,10 +34,7 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     <T> void isNotNull(SerializableSupplier<T> propertySupplier);
 
     /**
-     * <p>
-     * 判断不为空或空串（包括只有空字符的串），判断失败抛出指定异常
-     * </p>
-     * .
+     * 判断不为空或空串（包括只有空字符的串），判断失败抛出指定异常 .
      *
      * @param text      判断的字符串
      * @param arguDescp 出错时对参数的描述信息，例如：user.id、username等等
@@ -55,20 +42,14 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     void isNotBlank(String text, String arguDescp);
 
     /**
-     * <p>
-     * 判断不为空或空串（包括只有空字符的串），判断失败抛出指定异常
-     * </p>
-     * .
+     * 判断不为空或空串（包括只有空字符的串），判断失败抛出指定异常 .
      *
      * @param propertySupplier object property lambda
      */
     void isNotBlank(SerializableSupplier<String> propertySupplier);
 
     /**
-     * <p>
-     * 判断不为空（String,Collection,Map,Array还要判断长度是否为0），判断失败抛出指定异常
-     * </p>
-     * .
+     * 判断不为空（String,Collection,Map,Array还要判断长度是否为0），判断失败抛出指定异常 .
      *
      * @param obj        判断的对象
      * @param arguDescps 出错时对参数的描述信息，例如：user.id、username等等
@@ -76,10 +57,7 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     void isNotEmpty(Object obj, String arguDescps);
 
     /**
-     * <p>
-     * 判断不为空（String,Collection,Map,Array还要判断长度是否为0），判断失败抛出指定异常
-     * </p>
-     * .
+     * 判断不为空（String,Collection,Map,Array还要判断长度是否为0），判断失败抛出指定异常 .
      *
      * @param <T>              the generic type
      * @param propertySupplier object property lambda
@@ -87,10 +65,7 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     <T> void isNotEmpty(SerializableSupplier<T> propertySupplier);
 
     /**
-     * <p>
-     * 判断不为空或空串，判断失败抛出指定异常
-     * </p>
-     * .
+     * 判断不为空或空串，判断失败抛出指定异常 .
      *
      * @param text      判断的字符串
      * @param arguDescp 出错时对参数的描述信息，例如：user.id、username等等
@@ -98,10 +73,7 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     void isNotEmpty(String text, String arguDescp);
 
     /**
-     * <p>
-     * 判断数组不为null或size不为0，判断失败抛出指定异常
-     * </p>
-     * .
+     * 判断数组不为null或size不为0，判断失败抛出指定异常 .
      *
      * @param array     需要判断的数组
      * @param arguDescp 出错时对参数的描述信息，例如：user.id、username等等
@@ -109,10 +81,7 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     void isNotEmpty(Object[] array, String arguDescp);
 
     /**
-     * <p>
-     * 判断集合不为null或size不为0，判断失败抛出指定异常
-     * </p>
-     * .
+     * 判断集合不为null或size不为0，判断失败抛出指定异常 .
      *
      * @param collection 判断的集合
      * @param arguDescp  出错时对参数的描述信息，例如：user.id、username等等
@@ -120,10 +89,7 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     void isNotEmpty(Collection<?> collection, String arguDescp);
 
     /**
-     * <p>
-     * 判断MAP不为null或size不为0，判断失败抛出指定异常
-     * </p>
-     * .
+     * 判断MAP不为null或size不为0，判断失败抛出指定异常 .
      *
      * @param map       判断的集合
      * @param arguDescp 出错时对参数的描述信息，例如：user.id、username等等
@@ -131,10 +97,7 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     void isNotEmpty(Map<?, ?> map, String arguDescp);
 
     /**
-     * <p>
-     * 判断传入文件对象代表的物理文件是否存在，判断失败抛出指定异常
-     * </p>
-     * .
+     * 判断传入文件对象代表的物理文件是否存在，判断失败抛出指定异常 .
      *
      * @param file       判断的文件对象
      * @param arguDescps 出错时对参数的描述信息，例如：uploadFile等等
@@ -158,10 +121,7 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     void isDirectory(File file, String arguDescps);
 
     /**
-     * <p>
-     * 判断对象（第二个参数）是指定类型（第一个参数）的实例，判断失败抛出指定异常
-     * </p>
-     * .
+     * 判断对象（第二个参数）是指定类型（第一个参数）的实例，判断失败抛出指定异常 .
      *
      * @param clazz 类型
      * @param obj   对象
@@ -169,10 +129,7 @@ public interface ILocalizedAssert<E extends RuntimeException> {
     void isInstanceOf(Class<?> clazz, Object obj);
 
     /**
-     * <p>
-     * 判断类型（第一个参数）是指定类型（第二个参数）的父类（包括接口实现和类继承），判断失败抛出指定异常
-     * </p>
-     * .
+     * 判断类型（第一个参数）是指定类型（第二个参数）的父类（包括接口实现和类继承），判断失败抛出指定异常 .
      *
      * @param parentType 父类型
      * @param subType    子类型

@@ -81,7 +81,7 @@ public class PropertiesPlus extends java.util.Properties implements cn.featherfl
      * {@inheritDoc}
      */
     @Override
-    public String setProperty(String key, String value) {
+    public synchronized String setProperty(String key, String value) {
         return properties.setProperty(key, value);
     }
 
@@ -202,7 +202,7 @@ public class PropertiesPlus extends java.util.Properties implements cn.featherfl
      * {@inheritDoc}
      */
     @Override
-    public void load(InputStream is) throws IOException {
+    public synchronized void load(InputStream is) throws IOException {
         properties.load(is);
     }
 

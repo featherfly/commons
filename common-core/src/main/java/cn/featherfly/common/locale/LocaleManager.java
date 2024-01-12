@@ -3,17 +3,14 @@ package cn.featherfly.common.locale;
 import java.util.Locale;
 
 /**
- * <p>
- * LocaleManager
- * </p>
- * 
+ * LocaleManager.
+ *
  * @author zhongj
  */
 public interface LocaleManager {
     /**
-     * <p>
-     * get Locale
-     * </p>
+     * get Locale.
+     *
      * @return Locale
      */
     Locale getLocale();

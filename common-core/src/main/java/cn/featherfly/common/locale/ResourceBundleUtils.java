@@ -13,10 +13,7 @@ import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.ServiceLoaderUtils;
 
 /**
- * <p>
- * ResourceBundleUtils
- * </p>
- * .
+ * ResourceBundleUtils .
  *
  * @author zhongj
  */
@@ -31,7 +28,7 @@ public final class ResourceBundleUtils {
             new DefaultLocaleManager());
 
     /**
-     *
+     * Instantiates a new resource bundle utils.
      */
     private ResourceBundleUtils() {
         super();
@@ -44,10 +41,17 @@ public final class ResourceBundleUtils {
     public static final char KEY_SIGN = '#';
 
     /**
-     * <p>
-     * 获取ResourceBundleUtils在没有传入Locale时使用的默认Locale,默认Locale使用LocaleManager加载
-     * </p>
-     * .
+     * 获取ResourceBundleUtils在没有传入Locale时使用的默认Locale,默认Locale使用LocaleManager加载 .
+     *
+     * @param locale the locale
+     * @return Locale
+     */
+    public static Locale getLocale(Locale locale) {
+        return locale == null ? getLocale() : locale;
+    }
+
+    /**
+     * 获取ResourceBundleUtils在没有传入Locale时使用的默认Locale,默认Locale使用LocaleManager加载 .
      *
      * @return Locale
      */
@@ -56,10 +60,7 @@ public final class ResourceBundleUtils {
     }
 
     /**
-     * <p>
-     * getBundle,use default locale
-     * </p>
-     * .
+     * getBundle,use default locale .
      *
      * @param baseName the base name of the resource bundle, a fully qualified
      *                 class name
@@ -394,21 +395,14 @@ public final class ResourceBundleUtils {
 
     private static String getStringFromBundle(String baseName, String key, Object[] argus, Locale locale,
             Charset charset) {
-        if (locale == null) {
-            locale = getLocale();
-        }
-        String string = format(getBundle(baseName, locale, charset).getString(key), argus);
-        return string;
+        return format(getBundle(baseName, getLocale(locale), charset).getString(key), argus);
     }
 
     private static String getStringFromBundle(String code, String baseName, String key, Object[] argus, Locale locale,
             Charset charset) {
-        if (locale == null) {
-            locale = getLocale();
-        }
-        String string = format(getBundle(baseName, locale, charset).getString(key), argus);
-        LOGGER.debug("match ResourceBundle pattern -> [{}] : baseName[{}] and key[{}], message -> {}",
-                new Object[] { code, baseName, key, string });
+        String string = format(getBundle(baseName, getLocale(locale), charset).getString(key), argus);
+        LOGGER.debug("match ResourceBundle pattern -> [{}] : baseName[{}] and key[{}], message -> {}", code, baseName,
+                key, string);
         return string;
     }
 

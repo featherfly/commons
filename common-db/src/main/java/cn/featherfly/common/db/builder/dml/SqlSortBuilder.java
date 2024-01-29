@@ -3,7 +3,6 @@ package cn.featherfly.common.db.builder.dml;
 import cn.featherfly.common.db.builder.SqlBuilder;
 import cn.featherfly.common.db.builder.dml.basic.SqlOrderByBasicBuilder;
 import cn.featherfly.common.db.dialect.Dialect;
-import cn.featherfly.common.repository.Field;
 import cn.featherfly.common.repository.builder.dml.SortBuilder;
 
 /**
@@ -52,8 +51,8 @@ public class SqlSortBuilder implements SortBuilder, SqlBuilder {
      * {@inheritDoc}
      */
     @Override
-    public SortBuilder asc(String tableAlias, Field field) {
-        orderByBuilder.addAsc(field.name(), tableAlias);
+    public SortBuilder ascWith(String tableAlias, String field) {
+        orderByBuilder.addAsc(field, tableAlias);
         return this;
     }
 
@@ -72,8 +71,8 @@ public class SqlSortBuilder implements SortBuilder, SqlBuilder {
      * {@inheritDoc}
      */
     @Override
-    public SortBuilder desc(String tableAlias, Field field) {
-        orderByBuilder.addDesc(field.name(), tableAlias);
+    public SortBuilder descWith(String tableAlias, String field) {
+        orderByBuilder.addDesc(field, tableAlias);
         return this;
     }
 
@@ -110,5 +109,4 @@ public class SqlSortBuilder implements SortBuilder, SqlBuilder {
     public void setTableAlias(String tableAlias) {
         this.tableAlias = tableAlias;
     }
-
 }

@@ -5,11 +5,6 @@ package cn.featherfly.common.repository;
  *
  * @author zhongj
  */
-public interface Repository {
-    /**
-     * get repository name
-     *
-     * @return name
-     */
-    String name();
+public interface Repository extends Naming {
+
 }

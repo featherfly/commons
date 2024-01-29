@@ -5,11 +5,6 @@ package cn.featherfly.common.repository;
  *
  * @author zhongj
  */
-public interface Field {
-    /**
-     * get field name
-     *
-     * @return name
-     */
-    String name();
+public interface Field extends Naming {
+
 }

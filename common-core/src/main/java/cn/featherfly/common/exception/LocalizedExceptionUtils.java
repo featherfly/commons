@@ -12,8 +12,8 @@ import cn.featherfly.common.locale.ResourceBundleUtils;
  * 抛出国际化支持的异常信息.
  *
  * @author zhongj
- * @since 1.7
  * @version 1.7
+ * @since 1.7
  */
 public final class LocalizedExceptionUtils {
 
@@ -26,6 +26,7 @@ public final class LocalizedExceptionUtils {
     /**
      * 抛出指定类型的异常.
      *
+     * @param newException  the new exception
      * @param exceptionType throw exception type
      * @param message       message
      * @param args          消息绑定参数
@@ -38,6 +39,7 @@ public final class LocalizedExceptionUtils {
     /**
      * 抛出指定类型的异常.
      *
+     * @param newException  the new exception
      * @param exceptionType throw exception type
      * @param locale        locale
      * @param message       message
@@ -51,6 +53,7 @@ public final class LocalizedExceptionUtils {
     /**
      * 抛出指定类型的异常.
      *
+     * @param newException  the new exception
      * @param exceptionType throw exception type
      * @param cause         the cause (which is saved for later retrieval by the
      *                      {@link Throwable#getCause()} method). (A null value
@@ -67,6 +70,7 @@ public final class LocalizedExceptionUtils {
     /**
      * 抛出指定类型的异常.
      *
+     * @param newException  the new exception
      * @param exceptionType throw exception type
      * @param cause         the cause (which is saved for later retrieval by the
      *                      {@link Throwable#getCause()} method). (A null value

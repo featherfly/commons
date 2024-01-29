@@ -16,7 +16,7 @@ public interface ResourceBundle {
      *
      * @param key key
      * @return the string for the given key
-     * @see {@link java.util.ResourceBundle#getString(String)}
+     * @see java.util.ResourceBundle#getString(String)
      */
     String getString(String key);
 
@@ -25,7 +25,7 @@ public interface ResourceBundle {
      *
      * @param key key
      * @return the string array for the given key
-     * @see {@link java.util.ResourceBundle#getStringArray(String)}
+     * @see java.util.ResourceBundle#getStringArray(String)
      */
     String[] getStringArray(String key);
 
@@ -39,7 +39,7 @@ public interface ResourceBundle {
      * get locale.
      *
      * @return the locale of this resource bundle
-     * @see {@link java.util.ResourceBundle#getLocale()}
+     * @see java.util.ResourceBundle#getLocale()
      */
     Locale getLocale();
 
@@ -47,7 +47,7 @@ public interface ResourceBundle {
      * get keys
      *
      * @return Enumeration Kyes
-     * @see {@link java.util.ResourceBundle#getKeys()}
+     * @see java.util.ResourceBundle#getKeys()
      */
     Enumeration<String> getKeys();
 
@@ -56,7 +56,7 @@ public interface ResourceBundle {
      *
      * @param key key
      * @return boolean containsKey
-     * @see {@link java.util.ResourceBundle#containsKey(java.lang.String)}
+     * @see java.util.ResourceBundle#containsKey(java.lang.String)
      */
     boolean containsKey(String key);
 
@@ -64,7 +64,7 @@ public interface ResourceBundle {
      * key set.
      *
      * @return keySet
-     * @see {@link java.util.ResourceBundle#keySet()}
+     * @see java.util.ResourceBundle#keySet()
      */
     Set<String> keySet();
 }

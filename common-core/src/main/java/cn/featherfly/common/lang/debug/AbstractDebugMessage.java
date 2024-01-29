@@ -1,5 +1,7 @@
 package cn.featherfly.common.lang.debug;
 
+import java.util.Collection;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -30,5 +32,46 @@ public abstract class AbstractDebugMessage<T extends AbstractDebugMessage<T>> ex
             consumer.accept((T) this);
         }
         return (T) this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TableMessage addColumn(String column) {
+        return debug ? super.addColumn(column) : this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TableMessage addColumn(String... columns) {
+        return debug ? super.addColumn(columns) : this;
+    }
+
+    /**
+     * Adds the column.
+     *
+     * @param columns the columns
+     * @return the table message
+     */
+    @Override
+    public TableMessage addColumn(Collection<String> columns) {
+        return debug ? super.addColumn(columns) : this;
+    }
+
+    @Override
+    public TableMessage addRow(Map<String, Object> row) {
+        return debug ? super.addRow(row) : this;
+    }
+
+    @Override
+    public String toString() {
+        if (debug) {
+            return super.toString();
+        } else {
+            return "";
+        }
     }
 }

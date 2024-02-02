@@ -39,12 +39,12 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
      *
      * @param column            column
      * @param aggregateFunction aggregateFunction
-     * @return this
+     * @return the sql select join on basic builder
+     * @deprecated {@link #addColumn(AggregateFunction, String)}
      */
+    @Deprecated
     public SqlSelectJoinOnBasicBuilder addColumn(String column, AggregateFunction aggregateFunction) {
-        joinSelectColumnsBuilder.addColumn(aggregateFunction, column);
-        addJoinSelectColumnsBuilder();
-        return this;
+        return addColumn(aggregateFunction, column);
     }
 
     /**
@@ -54,9 +54,52 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
      * @param aggregateFunction aggregateFunction
      * @param asName            alias name
      * @return this
+     * @deprecated {@link #addColumn(AggregateFunction, String, String)}
      */
+    @Deprecated
     public SqlSelectJoinOnBasicBuilder addColumn(String column, AggregateFunction aggregateFunction, String asName) {
+        return addColumn(aggregateFunction, column, asName);
+    }
+
+    /**
+     * add column.
+     *
+     * @param aggregateFunction aggregateFunction
+     * @param column            column
+     * @return this
+     */
+    public SqlSelectJoinOnBasicBuilder addColumn(AggregateFunction aggregateFunction, String column) {
+        joinSelectColumnsBuilder.addColumn(aggregateFunction, column);
+        addJoinSelectColumnsBuilder();
+        return this;
+    }
+
+    /**
+     * add column.
+     *
+     * @param aggregateFunction aggregateFunction
+     * @param column            column
+     * @param asName            alias name
+     * @return this
+     */
+    public SqlSelectJoinOnBasicBuilder addColumn(AggregateFunction aggregateFunction, String column, String asName) {
         joinSelectColumnsBuilder.addColumn(aggregateFunction, column, asName);
+        addJoinSelectColumnsBuilder();
+        return this;
+    }
+
+    /**
+     * add column.
+     *
+     * @param aggregateFunction aggregateFunction
+     * @param distinct          the distinct
+     * @param column            column
+     * @param asName            alias name
+     * @return this
+     */
+    public SqlSelectJoinOnBasicBuilder addColumn(AggregateFunction aggregateFunction, boolean distinct, String column,
+            String asName) {
+        joinSelectColumnsBuilder.addColumn(aggregateFunction, distinct, column, asName);
         addJoinSelectColumnsBuilder();
         return this;
     }
@@ -82,6 +125,20 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
      */
     public SqlSelectJoinOnBasicBuilder addColumn(String column, String asName) {
         joinSelectColumnsBuilder.addColumn(column, asName);
+        addJoinSelectColumnsBuilder();
+        return this;
+    }
+
+    /**
+     * add column.
+     *
+     * @param distinct the distinct
+     * @param column   column
+     * @param asName   asName
+     * @return this
+     */
+    public SqlSelectJoinOnBasicBuilder addColumn(boolean distinct, String column, String asName) {
+        joinSelectColumnsBuilder.addColumn(distinct, column, asName);
         addJoinSelectColumnsBuilder();
         return this;
     }

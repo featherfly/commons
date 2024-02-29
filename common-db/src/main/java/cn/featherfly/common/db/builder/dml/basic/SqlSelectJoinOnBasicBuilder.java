@@ -196,7 +196,7 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
      *                             </p>
      * @return the sql select basic builder
      */
-    public SqlSelectBasicBuilder fetch(BiFunction<String, Boolean, String> columnAliasProcessor) {
+    public SqlSelectBasicBuilder fetch(BiFunction<Boolean, String, String> columnAliasProcessor) {
         joinSelectColumnsBuilder.setColumnAliasPrefixProcessor(columnAliasProcessor);
         addJoinSelectColumnsBuilder();
         return endJoin();

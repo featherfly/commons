@@ -159,10 +159,11 @@ public interface SqlSelectColumnsBuilder<B extends SqlSelectColumnsBuilder<B>> e
      *
      * @param columnAliasPrefixProcessor the column alias prefix processor
      *                                   <ul>
-     *                                   <li>argu1 columnAliasPrefix
-     *                                   <li>argu2 columnAliasPrefixTableAlias
+     *                                   <li>argu1 enable
+     *                                   columnAliasPrefixTableAlias
+     *                                   <li>argu2 columnAliasPrefix
      *                                   <li>argu3 new columnAliasPrefix
      *                                   </ul>
      */
-    void setColumnAliasPrefixProcessor(BiFunction<String, Boolean, String> columnAliasPrefixProcessor);
+    void setColumnAliasPrefixProcessor(BiFunction<Boolean, String, String> columnAliasPrefixProcessor);
 }

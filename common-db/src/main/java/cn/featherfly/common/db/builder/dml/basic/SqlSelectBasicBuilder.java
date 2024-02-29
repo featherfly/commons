@@ -666,7 +666,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     }
 
     @Override
-    public void setColumnAliasPrefixProcessor(BiFunction<String, Boolean, String> columnAliasPrefixProcessor) {
+    public void setColumnAliasPrefixProcessor(BiFunction<Boolean, String, String> columnAliasPrefixProcessor) {
         //        this.columnAliasPrefixProcessor = columnAliasPrefixProcessor;
         throw new UnsupportedException();
     }

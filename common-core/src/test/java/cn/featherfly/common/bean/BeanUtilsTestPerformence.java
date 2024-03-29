@@ -10,6 +10,7 @@ import cn.featherfly.common.bean.rule.CopyRules;
 import cn.featherfly.common.bean.vo.Address;
 import cn.featherfly.common.bean.vo.User;
 import cn.featherfly.common.bean.vo.Zipcode;
+import cn.featherfly.common.lang.Strings;
 
 public class BeanUtilsTestPerformence {
 
@@ -26,7 +27,21 @@ public class BeanUtilsTestPerformence {
 
     @Test
     public void testWithRef() throws Exception {
+        System.out.println(Strings.format("loop {} times", max));
 
+        invokeWithJavaCode();
+
+        // ********************************************************************
+
+        invokeWithBeanUtils();
+
+        // ********************************************************************
+
+        invokeWithApacheBeanUtils();
+
+    }
+
+    private void invokeWithJavaCode() {
         System.out.println("直接方法调用：");
         start = new Date();
 
@@ -50,11 +65,9 @@ public class BeanUtilsTestPerformence {
         end = new Date();
         time = end.getTime() - start.getTime();
         System.out.println("get:" + time);
+    }
 
-        // ********************************************************************
-        //
-        // ********************************************************************
-
+    private void invokeWithBeanUtils() {
         System.out.println(BeanUtils.class);
         start = new Date();
         for (int i = 0; i < max; i++) {
@@ -86,10 +99,10 @@ public class BeanUtilsTestPerformence {
         end = new Date();
         time = end.getTime() - start.getTime();
         System.out.println("getProperty:" + time);
+    }
 
-        // ********************************************************************
-        //	apache
-        // ********************************************************************
+    private void invokeWithApacheBeanUtils()
+            throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         System.out.println(org.apache.commons.beanutils.BeanUtils.class);
         start = new Date();
         for (int i = 0; i < max; i++) {

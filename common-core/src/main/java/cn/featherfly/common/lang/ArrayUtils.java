@@ -471,12 +471,21 @@ public final class ArrayUtils {
      * @return 数组
      */
     @SuppressWarnings("unchecked")
+    public static <T> T newInstance(Class<?> type, int length) {
+        return (T) Array.newInstance(type, length);
+    }
+
+    /**
+     * 创建数组 .
+     *
+     * @param <T>    泛型
+     * @param type   类型
+     * @param length 长度
+     * @return 数组
+     */
+    @SuppressWarnings("unchecked")
     public static <T> T[] create(Class<T> type, int length) {
-        if (type == null) {
-            return null;
-        }
-        Object o = Array.newInstance(type, length);
-        return (T[]) o;
+        return (T[]) Array.newInstance(type, length);
     }
 
     /**

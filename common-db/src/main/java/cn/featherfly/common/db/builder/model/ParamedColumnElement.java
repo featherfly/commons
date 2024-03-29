@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 import cn.featherfly.common.db.FieldValueOperator;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.AssertIllegalArgument;
+import cn.featherfly.common.repository.Params;
 
 /**
  * ParamedColumnElement .
@@ -57,6 +58,8 @@ public abstract class ParamedColumnElement extends ColumnElement {
     public Object getParam() {
         if (param instanceof ParamedColumnElement) {
             return ((ParamedColumnElement) param).getParam();
+        } else if (param instanceof SqlElement) {
+            return Params.NONE;
         }
         return param;
     }

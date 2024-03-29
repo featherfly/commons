@@ -18,6 +18,7 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.Dialects;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.repository.IgnoreStrategy;
+import cn.featherfly.common.repository.Params;
 
 /**
  * UpdateColumnElementTest.
@@ -53,19 +54,19 @@ public class UpdateColumnElementTest {
         u = new UpdateColumnElement(dialect, usernameColumn, ce, userTableAlias, IgnoreStrategy.NONE);
         print(u);
         assertEquals(u.toSql(), "u.`username` = u2.`username`");
-        assertEquals(u.getParam(), ce);
+        assertEquals(u.getParam(), Params.NONE);
 
         u = new UpdateColumnElement(dialect, usernameColumn, ce, userTableAlias, SetType.INCR, IgnoreStrategy.NONE);
         print(u);
         assertEquals(u.toSql(), "u.`username` = u.`username` + u2.`username`");
-        assertEquals(u.getParam(), ce);
+        assertEquals(u.getParam(), Params.NONE);
 
         // ----------------------------------------------------------------------------------------------------------------
         ce = new ColumnElement(dialect, "balance", "a2");
         u = new UpdateColumnElement(dialect, "balance", ce, "a", SetType.DECR, IgnoreStrategy.NONE);
         print(u);
         assertEquals(u.toSql(), "a.`balance` = a.`balance` - a2.`balance`");
-        assertEquals(u.getParam(), ce);
+        assertEquals(u.getParam(), Params.NONE);
     }
 
     @Test
@@ -76,19 +77,19 @@ public class UpdateColumnElementTest {
         u = new UpdateColumnElement(dialect, usernameColumn, ce, userTableAlias, IgnoreStrategy.NONE);
         print(u);
         assertEquals(u.toSql(), "u.\"username\" = u2.\"username\"");
-        assertEquals(u.getParam(), ce);
+        assertEquals(u.getParam(), Params.NONE);
 
         u = new UpdateColumnElement(dialect, usernameColumn, ce, userTableAlias, SetType.INCR, IgnoreStrategy.NONE);
         print(u);
         assertEquals(u.toSql(), "u.\"username\" = u.\"username\" + u2.\"username\"");
-        assertEquals(u.getParam(), ce);
+        assertEquals(u.getParam(), Params.NONE);
 
         // ----------------------------------------------------------------------------------------------------------------
         ce = new ColumnElement(dialect, "balance", "a2");
         u = new UpdateColumnElement(dialect, "balance", ce, "a", SetType.DECR, IgnoreStrategy.NONE);
         print(u);
         assertEquals(u.toSql(), "a.\"balance\" = a.\"balance\" - a2.\"balance\"");
-        assertEquals(u.getParam(), ce);
+        assertEquals(u.getParam(), Params.NONE);
     }
 
     @Test
@@ -100,19 +101,19 @@ public class UpdateColumnElementTest {
         u = new UpdateColumnElement(dialect, usernameColumn, ce, userTableAlias, IgnoreStrategy.NONE);
         print(u);
         assertEquals(u.toSql(), "u.`username` = u2.`username`");
-        assertEquals(u.getParam(), ce);
+        assertEquals(u.getParam(), Params.NONE);
 
         u = new UpdateColumnElement(dialect, usernameColumn, ce, userTableAlias, SetType.INCR, IgnoreStrategy.NONE);
         print(u);
         assertEquals(u.toSql(), "u.`username` = u.`username` + u2.`username`");
-        assertEquals(u.getParam(), ce);
+        assertEquals(u.getParam(), Params.NONE);
 
         // ----------------------------------------------------------------------------------------------------------------
         ce = new ColumnElement(dialect, "balance", "a2");
         u = new UpdateColumnElement(dialect, "balance", ce, "a", SetType.DECR, IgnoreStrategy.NONE);
         print(u);
         assertEquals(u.toSql(), "a.`balance` = a.`balance` - a2.`balance`");
-        assertEquals(u.getParam(), ce);
+        assertEquals(u.getParam(), Params.NONE);
     }
 
     @Test
@@ -123,18 +124,18 @@ public class UpdateColumnElementTest {
         u = new UpdateColumnElement(dialect, usernameColumn, ce, userTableAlias, IgnoreStrategy.NONE);
         print(u);
         assertEquals(u.toSql(), "u.'username' = u2.'username'");
-        assertEquals(u.getParam(), ce);
+        assertEquals(u.getParam(), Params.NONE);
 
         u = new UpdateColumnElement(dialect, usernameColumn, ce, userTableAlias, SetType.INCR, IgnoreStrategy.NONE);
         print(u);
         assertEquals(u.toSql(), "u.'username' = u.'username' + u2.'username'");
-        assertEquals(u.getParam(), ce);
+        assertEquals(u.getParam(), Params.NONE);
 
         // ----------------------------------------------------------------------------------------------------------------
         ce = new ColumnElement(dialect, "balance", "a2");
         u = new UpdateColumnElement(dialect, "balance", ce, "a", SetType.DECR, IgnoreStrategy.NONE);
         print(u);
         assertEquals(u.toSql(), "a.'balance' = a.'balance' - a2.'balance'");
-        assertEquals(u.getParam(), ce);
+        assertEquals(u.getParam(), Params.NONE);
     }
 }

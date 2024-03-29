@@ -9,10 +9,7 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 
 /**
- * <p>
- * ParamedColumnElement
- * </p>
- * .
+ * ParamedColumnElement .
  *
  * @author zhongj
  */
@@ -32,7 +29,7 @@ public abstract class ParamedColumnElement extends ColumnElement {
      * @param param          param
      * @param ignoreStrategy the ignore strategy
      */
-    public ParamedColumnElement(Dialect dialect, String name, Object param, Predicate<?> ignoreStrategy) {
+    protected ParamedColumnElement(Dialect dialect, String name, Object param, Predicate<?> ignoreStrategy) {
         this(dialect, name, param, null, ignoreStrategy);
     }
 
@@ -45,7 +42,7 @@ public abstract class ParamedColumnElement extends ColumnElement {
      * @param tableAlias     tableAlias
      * @param ignoreStrategy the ignore strategy
      */
-    public ParamedColumnElement(Dialect dialect, String name, Object param, String tableAlias,
+    protected ParamedColumnElement(Dialect dialect, String name, Object param, String tableAlias,
             Predicate<?> ignoreStrategy) {
         super(dialect, name, tableAlias);
         this.param = param;
@@ -58,6 +55,9 @@ public abstract class ParamedColumnElement extends ColumnElement {
      * @return param
      */
     public Object getParam() {
+        if (param instanceof ParamedColumnElement) {
+            return ((ParamedColumnElement) param).getParam();
+        }
         return param;
     }
 
@@ -103,6 +103,9 @@ public abstract class ParamedColumnElement extends ColumnElement {
     }
 
     protected boolean ignore(Object value) {
+        if (value instanceof SqlElement) {
+            return true;
+        }
         if (value == null) {
             return ignoreStrategy.test(value);
         }

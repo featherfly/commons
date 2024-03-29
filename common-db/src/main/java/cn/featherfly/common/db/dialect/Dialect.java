@@ -10,6 +10,7 @@ import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.builder.BuilderUtils;
+import cn.featherfly.common.db.builder.model.SqlElement;
 import cn.featherfly.common.db.builder.model.TableElement;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
@@ -550,6 +551,18 @@ public interface Dialect {
      * Gets the compare expression.
      *
      * @param operator      the operator
+     * @param name          the name
+     * @param values        the values
+     * @param matchStrategy the match strategy
+     * @return the compare expression
+     */
+    String getCompareExpression(ComparisonOperator operator, String name, SqlElement values,
+            MatchStrategy matchStrategy);
+
+    /**
+     * Gets the compare expression.
+     *
+     * @param operator      the operator
      * @param columnName    the column name
      * @param values        the values
      * @param tableAlias    the table alias
@@ -650,6 +663,20 @@ public interface Dialect {
         return getBetweenOrNotBetweenExpression(isBetween, buildColumnSql(tableAlias, columnName), values,
                 matchStrategy);
     }
+
+    default String getBetweenOrNotBetweenExpression(boolean isBetween, String name, SqlElement min, SqlElement max) {
+        StringBuilder condition = new StringBuilder();
+        condition.append(name).append(Chars.SPACE) //
+                .append(!isBetween ? getKeyword(Keywords.NOT) + Chars.SPACE : "") //
+                .append(getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
+                .append(min.toSql()).append(Chars.SPACE) //
+                .append(getKeyword(Keywords.AND)).append(Chars.SPACE) //
+                .append(max.toSql());
+        return condition.toString();
+    }
+
+    String getBetweenOrNotBetweenExpression(boolean isBetween, String columnName, SqlElement min, SqlElement max,
+            MatchStrategy matchStrategy);
 
     /**
      * Gets the in or not in expression.
@@ -2063,7 +2090,7 @@ public interface Dialect {
          *
          * @return the string
          */
-        public String if_() {
+        public String if0() {
             return dialect.getKeyword(Keywords.IF);
         }
 

@@ -215,6 +215,8 @@ public abstract class DialectTest {
 
     abstract void testBuildInsertBatchSql();
 
+    abstract void testPaginationSql();
+
     abstract void testParamNamedPaginationSql();
 
     abstract void testInsert();

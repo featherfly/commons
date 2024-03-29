@@ -6,10 +6,7 @@ import java.util.function.Predicate;
 import cn.featherfly.common.db.dialect.Dialect;
 
 /**
- * <p>
- * UpdateColumnElement
- * </p>
- * .
+ * UpdateColumnElement .
  *
  * @author zhongj
  */
@@ -69,14 +66,29 @@ public class UpdateColumnElement extends ParamedColumnElement {
      */
     @Override
     public String toSql() {
-        if (ignore(param)) { // 忽略
+        if (param instanceof SqlElement) {
+            SqlElement sqlElement = (SqlElement) param;
+            String columnName = dialect.buildColumnSql(getTableAlias(), getName());
+            switch (setType) {
+                case INCR:
+                    return columnName + " = " + columnName + " + " + sqlElement;
+                case DECR:
+                    return columnName + " = " + columnName + " - " + sqlElement;
+                default:
+                    return columnName + " = " + sqlElement;
+            }
+        } else if (ignore(param)) { // 忽略
             return "";
-        }
-        String columnName = dialect.buildColumnSql(getTableAlias(), getName());
-        if (setType == SetType.SET) {
-            return columnName + " = ?";
         } else {
-            return columnName + " = " + columnName + " + ?";
+            String columnName = dialect.buildColumnSql(getTableAlias(), getName());
+            switch (setType) {
+                case INCR:
+                    return columnName + " = " + columnName + " + ?";
+                case DECR:
+                    return columnName + " = " + columnName + " - ?";
+                default:
+                    return columnName + " = ?";
+            }
         }
     }
 
@@ -91,6 +103,9 @@ public class UpdateColumnElement extends ParamedColumnElement {
         SET,
 
         /** The incr. */
-        INCR
+        INCR,
+
+        /** The decr. */
+        DECR
     }
 }

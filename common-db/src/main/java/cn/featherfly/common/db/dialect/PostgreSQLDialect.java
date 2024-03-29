@@ -10,6 +10,7 @@ import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.SqlUtils;
 import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.builder.BuilderUtils;
+import cn.featherfly.common.db.builder.model.SqlElement;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Dates;
@@ -29,6 +30,7 @@ public class PostgreSQLDialect extends AbstractDialect {
      * Instantiates a new postgre SQL dialect.
      */
     public PostgreSQLDialect() {
+        super();
     }
 
     /**
@@ -92,10 +94,10 @@ public class PostgreSQLDialect extends AbstractDialect {
         pagingSelect.append(sql);
         if (isParamNamed) {
             if (start > 0) {
-                pagingSelect.append(Strings.format(" LIMIT {0}{1} OFFSET {0}{2}",
-                        Lang.array(startSymbol, LIMIT_PARAM_NAME, START_PARAM_NAME)));
+                pagingSelect.append(
+                        Strings.format(" LIMIT {0}{1} OFFSET {0}{2}", startSymbol, LIMIT_PARAM_NAME, START_PARAM_NAME));
             } else {
-                pagingSelect.append(Strings.format(" LIMIT {0}{1}", Lang.array(startSymbol, LIMIT_PARAM_NAME)));
+                pagingSelect.append(Strings.format(" LIMIT {0}{1}", startSymbol, LIMIT_PARAM_NAME));
             }
         } else {
             if (start > 0) {
@@ -196,7 +198,7 @@ public class PostgreSQLDialect extends AbstractDialect {
      */
     @Override
     protected String getTableComment(Table table) {
-        //        COMMENT ON TABLE "p"."user4" IS 'user用户表';
+        // COMMENT ON TABLE "p"."user4" IS 'user用户表';
         return Lang.isEmpty(table.getRemark()) ? ""
                 : BuilderUtils.link(Chars.SEMI + Chars.NEW_LINE + getKeyword(Keywords.COMMENT), getKeyword(Keywords.ON),
                         getKeyword(Keywords.TABLE),
@@ -363,6 +365,21 @@ public class PostgreSQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
+    public String getBetweenOrNotBetweenExpression(boolean isBetween, String name, SqlElement min, SqlElement max,
+            MatchStrategy matchStrategy) {
+        switch (matchStrategy) {
+            case CASE_INSENSITIVE:
+            case CASE_SENSITIVE:
+                throw new DialectException("between and operator unsupported " + matchStrategy);
+            default:
+                return getBetweenOrNotBetweenExpression(isBetween, name, min, max);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected String getCompareExpression0(ComparisonOperator comparisonOperator, String name, Object values,
             MatchStrategy matchStrategy) {
         switch (comparisonOperator) {
@@ -397,6 +414,27 @@ public class PostgreSQLDialect extends AbstractDialect {
         }
         condition.append(Chars.SPACE).append(getOperator(comparisonOperator)).append(Chars.SPACE)
                 .append(Chars.QUESTION);
+        return condition.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getCompareExpression0(ComparisonOperator comparisonOperator, String name, SqlElement values,
+            MatchStrategy matchStrategy) {
+        StringBuilder condition = new StringBuilder();
+        switch (matchStrategy) {
+            case CASE_INSENSITIVE:
+            case CASE_SENSITIVE:
+                throw new DialectException(
+                        Strings.format("{} operator unsupported {}", comparisonOperator, matchStrategy));
+            default:
+                condition.append(name);
+                break;
+        }
+        condition.append(Chars.SPACE).append(getOperator(comparisonOperator)).append(Chars.SPACE)
+                .append(values.toSql());
         return condition.toString();
     }
 

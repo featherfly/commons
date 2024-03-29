@@ -7,11 +7,11 @@ import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.SqlUtils;
 import cn.featherfly.common.db.Table;
+import cn.featherfly.common.db.builder.model.SqlElement;
 import cn.featherfly.common.exception.NotImplementedException;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Dates;
-import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.operator.ComparisonOperator;
 import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
@@ -27,6 +27,7 @@ public class OracleDialect extends AbstractDialect {
      * Instantiates a new oracle dialect.
      */
     public OracleDialect() {
+        super();
     }
 
     /**
@@ -98,13 +99,9 @@ public class OracleDialect extends AbstractDialect {
         if (isParamNamed) {
             if (start > 0) {
                 pagingSelect.append(Strings.format(" ) row_ ) where rownum_ > {0}{1} and rownum_ <= {0}{2} ",
-                        Lang.array(startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME)));
-                //                pagingSelect.append(String.format(" ) row_ ) where rownum_ > :%s and rownum_ <= :%s ", START_PARAM_NAME,
-                //                        LIMIT_PARAM_NAME));
+                        startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME));
             } else {
-                pagingSelect
-                        .append(Strings.format(") where rownum <= {0}{1}", Lang.array(startSymbol, LIMIT_PARAM_NAME)));
-                //                pagingSelect.append(String.format(") where rownum <= :%s", LIMIT_PARAM_NAME));
+                pagingSelect.append(Strings.format(") where rownum <= {0}{1}", startSymbol, LIMIT_PARAM_NAME));
             }
         } else {
             if (start > 0) {
@@ -251,6 +248,16 @@ public class OracleDialect extends AbstractDialect {
     @Override
     public String getBetweenOrNotBetweenExpression(boolean isBetween, String name, Object values,
             MatchStrategy matchStrategy) {
+        //        boolean caseSensitive = false;
+        switch (matchStrategy) {
+            case CASE_INSENSITIVE:
+                break;
+            case CASE_SENSITIVE:
+                //                caseSensitive = true;
+                break;
+            default:
+                return getBetweenOrNotBetweenExpression(isBetween, name, values);
+        }
         // FIXME 未实现，后续来实现
         throw new UnsupportedException();
     }
@@ -259,9 +266,83 @@ public class OracleDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    protected String getCompareExpression0(ComparisonOperator comparisonOperator, String columnName, Object values,
+    public String getBetweenOrNotBetweenExpression(boolean isBetween, String name, SqlElement min, SqlElement max,
             MatchStrategy matchStrategy) {
+        //        boolean caseSensitive = false;
+        switch (matchStrategy) {
+            case CASE_INSENSITIVE:
+                break;
+            case CASE_SENSITIVE:
+                //                caseSensitive = true;
+                break;
+            default:
+                return getBetweenOrNotBetweenExpression(isBetween, name, min, max);
+        }
         // FIXME 未实现，后续来实现
         throw new UnsupportedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getCompareExpression0(ComparisonOperator comparisonOperator, String name, Object values,
+            MatchStrategy matchStrategy) {
+        switch (comparisonOperator) {
+            case EQ:
+            case NE:
+            case SW:
+            case NSW:
+            case CO:
+            case NCO:
+            case EW:
+            case NEW:
+            case LK:
+            case NL:
+            case LT:
+            case LE:
+            case GT:
+            case GE:
+                break;
+            default:
+                throw new DialectException("unsupported for " + comparisonOperator);
+        }
+
+        StringBuilder condition = new StringBuilder();
+        switch (matchStrategy) {
+            case CASE_INSENSITIVE:
+                // FIXME 未实现，后续来实现
+                throw new UnsupportedException();
+            case CASE_SENSITIVE:
+                // FIXME 未实现，后续来实现
+                throw new UnsupportedException();
+            default:
+                condition.append(name);
+                break;
+        }
+        condition.append(Chars.SPACE).append(getOperator(comparisonOperator)).append(Chars.SPACE)
+                .append(Chars.QUESTION);
+        return condition.toString();
+    }
+
+    @Override
+    protected String getCompareExpression0(ComparisonOperator comparisonOperator, String name, SqlElement values,
+            MatchStrategy matchStrategy) {
+        StringBuilder condition = new StringBuilder();
+        switch (matchStrategy) {
+            case CASE_INSENSITIVE:
+                // FIXME 未实现，后续来实现
+                throw new UnsupportedException();
+            case CASE_SENSITIVE:
+                // FIXME 未实现，后续来实现
+                throw new UnsupportedException();
+            default:
+                condition.append(name);
+                break;
+        }
+        condition.append(Chars.SPACE).append(getOperator(comparisonOperator)).append(Chars.SPACE)
+                .append(values.toSql());
+        return condition.toString();
+
     }
 }

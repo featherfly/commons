@@ -1,27 +1,46 @@
-TODO 加入方言自发现功能，即匹配数据库连接字符串模式来获取
-
 # 0.6.0
 1. 修复cn.featherfly.common.repository.operate包移动到cn.featherfly.common.operator的问题
+
 2. 重构SqlSelectBasicBuilder逻辑，抽离出SqlSelectColumnsBuilder接口以及对应的实现
+
 3. 重构distinct相关逻辑
+
 4. 优化SqlTypeMappingManager关于JavaSqlTypeMapper的逻辑
+
 5. 加入JdbcPropertyMapping
+
 6. 加入FieldValueOperator，用于优化Entity的数据设置与解析不走SqlTypeMappingManager
+
 7. Dialect加入buildDeleteFromSql方法,SqlDeleteFromBasicBuilder加入tableAlias支持
+
 8. 修复SqliteDialect的buildInsertBatchSql方法返回sql不正确的问题
+
 9. 优化ClassMappingUtils的getInsertBatchSqlAndParamPositions,getInsertSqlAndParamPositions方法
+
 10. 修复SqlUtils.convertNamedParamSql参数Map内的key存在而value为null时报错的问题
+
 11. SqlFile加入存储过程支持
+
 12. 修复getResultSetMap(ResultSet rs),getResultSetArray(ResultSet rs)参数越界的问题
+
 13. JdbcUtils加入存储过程的参数设置和存储过程的OUT Param的获取
+
 14. ignorePolicy重命名为ignoreStrategy
+
 15. 完善CatalogMetadata,SchemaMetadata,DatabaseMetadata
+
 16. 修复SelectColumnElement未设置distinct的问题
+
 17. SqlSortBuilder实现asc(String tableAlias, Field field),desc(String tableAlias, Field field)
+
 18. SqlSelectColumnsBuilder加入setColumnAliasPrefixProcessor(BiFunction)，setColumnAliasPrefixTableAlias(boolean)，并实现build()逻辑
+
 19. JdbcUtils加入获取各种类型的返回参数方法JdbcUtils.getXXX(ResultSet,int), 
+
 20. JdbcUtils加入lookupColumnName(ResultSetMetaData,int,boolean) 当返回的column name没有设置label时，对下划线进行驼峰命名转换
+
 21. 加入多种基础类型对应的JavaTypeSqlTypeOperator实现
+
 22. 加入AutoCloseConnection以及对应的Statement,PreparedStatement,CallableStatement,
     调用close()方法会自动调用其创建的Statement（或ResultSet）的close()，例如：
     ```java
@@ -32,10 +51,18 @@ TODO 加入方言自发现功能，即匹配数据库连接字符串模式来获
     ResultSet res = stat|prep|call.executeQuery("");
     conn.close(); // 会自动依次关闭ResultSet，再关闭Statement
     ```
+    
 23. ConditionColumnElement支持ComparisonOperator.NEW|NSW|NCO|NL|BA|NBA
+
 24. SqlSelectColumnsBuilder加入clearColumns()方法
+
 25. MappingFactory在创建JdbcPropertyMapping的时候优化了基础类型对应的JavaTypeSqlTypeOperator
-26. 实现根据Connection获取Dialect
+
+26. 实现方言自发现功能（根据Connection获取Dialect）
+
+27. ParamedColumnElement实现参数为SqlElement的特性（用于子查询或者列名作为参数）
+
+28. UpdateColumnElement实现DECR（自减）
 
 # 0.5.5 2022-8-11
 1. Dialect加入getKeywordLike(QueryPolicy)、getKeywordEq(QueryPolicy)、keywordsCase()方法

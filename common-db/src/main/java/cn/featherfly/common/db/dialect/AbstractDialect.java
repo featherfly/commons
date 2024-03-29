@@ -12,6 +12,7 @@ import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.builder.BuilderUtils;
+import cn.featherfly.common.db.builder.model.SqlElement;
 import cn.featherfly.common.db.mapping.JdbcMappingException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
@@ -47,7 +48,7 @@ public abstract class AbstractDialect implements Dialect {
     /**
      * Instantiates a new abstract dialect.
      */
-    public AbstractDialect() {
+    protected AbstractDialect() {
         keyworld = new Keyworld(this);
         operator = new Operator();
     }
@@ -436,11 +437,28 @@ public abstract class AbstractDialect implements Dialect {
                 return getCompareExpression0(comparisonOperator, name, values, matchStrategy);
             }
         }
+    }
 
+    @Override
+    public String getCompareExpression(ComparisonOperator comparisonOperator, String name, SqlElement values,
+            MatchStrategy matchStrategy) {
+        switch (comparisonOperator) {
+            case ISN:
+            case INN:
+                throw new DialectException(
+                        Strings.format("unspport for {} with {} ", values.getClass().getName(), comparisonOperator));
+            default:
+                break;
+        }
+        // FIXME 后续来处理between, not between
+        return getCompareExpression0(comparisonOperator, name, values, matchStrategy);
     }
 
     protected abstract String getCompareExpression0(ComparisonOperator comparisonOperator, String columnName,
             Object values, MatchStrategy matchStrategy);
+
+    protected abstract String getCompareExpression0(ComparisonOperator comparisonOperator, String columnName,
+            SqlElement values, MatchStrategy matchStrategy);
 
     /**
      * {@inheritDoc}

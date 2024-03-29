@@ -14,6 +14,7 @@ import cn.featherfly.common.db.JdbcException;
 import cn.featherfly.common.db.SqlUtils;
 import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.builder.BuilderUtils;
+import cn.featherfly.common.db.builder.model.SqlElement;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
@@ -35,6 +36,7 @@ public class SQLiteDialect extends AbstractDialect {
      * Instantiates a new SQ lite dialect.
      */
     public SQLiteDialect() {
+        super();
     }
 
     /**
@@ -73,10 +75,10 @@ public class SQLiteDialect extends AbstractDialect {
         pagingSelect.append(sql);
         if (isParamNamed) {
             if (start > 0) {
-                pagingSelect.append(Strings.format(" LIMIT {0}{1},{0}{2}",
-                        Lang.array(startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME)));
+                pagingSelect.append(
+                        Strings.format(" LIMIT {0}{1},{0}{2}", startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME));
             } else {
-                pagingSelect.append(Strings.format(" LIMIT {0}{1}", Lang.array(startSymbol, LIMIT_PARAM_NAME)));
+                pagingSelect.append(Strings.format(" LIMIT {0}{1}", startSymbol, LIMIT_PARAM_NAME));
             }
         } else {
             if (start > 0) {
@@ -431,6 +433,38 @@ public class SQLiteDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
+    public String getBetweenOrNotBetweenExpression(boolean isBetween, String name, SqlElement min, SqlElement max,
+            MatchStrategy matchStrategy) {
+        boolean caseSensitive = false;
+        switch (matchStrategy) {
+            case CASE_INSENSITIVE:
+                break;
+            case CASE_SENSITIVE:
+                caseSensitive = true;
+                break;
+            default:
+                return getBetweenOrNotBetweenExpression(isBetween, name, min, max);
+        }
+        StringBuilder condition = new StringBuilder();
+        if (caseSensitive) {
+            condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
+                    .append(getKeywords().binary());
+        } else {
+            condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
+                    .append(getKeyword("NOCASE"));
+        }
+        condition.append(!isBetween ? getKeyword(Keywords.NOT) + Chars.SPACE : "") //
+                .append(getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
+                .append(min.toSql()).append(Chars.SPACE) //
+                .append(getKeyword(Keywords.AND)).append(Chars.SPACE) //
+                .append(max.toSql());
+        return condition.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected String getCompareExpression0(ComparisonOperator comparisonOperator, String name, Object values,
             MatchStrategy matchStrategy) {
         switch (comparisonOperator) {
@@ -469,6 +503,31 @@ public class SQLiteDialect extends AbstractDialect {
         }
         condition.append(Chars.SPACE).append(getOperator(comparisonOperator)).append(Chars.SPACE)
                 .append(Chars.QUESTION);
+        return condition.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getCompareExpression0(ComparisonOperator comparisonOperator, String name, SqlElement values,
+            MatchStrategy matchStrategy) {
+        StringBuilder condition = new StringBuilder();
+        switch (matchStrategy) {
+            case CASE_INSENSITIVE:
+                condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
+                        .append(getKeyword("NOCASE"));
+                break;
+            case CASE_SENSITIVE:
+                condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
+                        .append(getKeywords().binary());
+                break;
+            default:
+                condition.append(name);
+                break;
+        }
+        condition.append(Chars.SPACE).append(getOperator(comparisonOperator)).append(Chars.SPACE)
+                .append(values.toSql());
         return condition.toString();
     }
 }

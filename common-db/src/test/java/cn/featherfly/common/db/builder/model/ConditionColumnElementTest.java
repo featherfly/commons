@@ -5,6 +5,7 @@ import static org.testng.Assert.assertEquals;
 
 import java.util.List;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.db.dialect.Dialect;
@@ -15,13 +16,30 @@ import cn.featherfly.common.repository.IgnoreStrategy;
 import cn.featherfly.common.repository.Params;
 
 /**
- * <p>
- * ConditionColumnElementTest
- * </p>
+ * ConditionColumnElementTest.
  *
  * @author zhongj
  */
 public class ConditionColumnElementTest {
+
+    ConditionColumnElement c;
+
+    String userTableAlias = "u";
+    String userTableAlias2 = "u2";
+    String username = "yufei";
+    Integer age = 18;
+
+    String usernameColumn = "username";
+    String ageColumn = "age";
+
+    @BeforeMethod
+    void beforeMethod() {
+        c = null;
+        userTableAlias = "u";
+        userTableAlias2 = "u2";
+        username = "yufei";
+        age = 18;
+    }
 
     void print(ConditionColumnElement c) {
         System.out.println(c);
@@ -30,17 +48,16 @@ public class ConditionColumnElementTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    void testMySql() {
+    void mysql() {
         Dialect dialect = Dialects.MYSQL;
-        String username = "yufei";
-        Integer age = 18;
-        ConditionColumnElement c = new ConditionColumnElement(dialect, "username", username, ComparisonOperator.EQ,
-                IgnoreStrategy.EMPTY);
+
+        c = new ConditionColumnElement(dialect, "username", username, ComparisonOperator.EQ, IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "`username` = ?");
         assertEquals(c.getParam(), username);
 
-        c = new ConditionColumnElement(dialect, "username", "yufei", ComparisonOperator.EQ, "u", IgnoreStrategy.EMPTY);
+        c = new ConditionColumnElement(dialect, "username", "yufei", ComparisonOperator.EQ, userTableAlias,
+                IgnoreStrategy.EMPTY);
         assertEquals(c.toSql(), "u.`username` = ?");
         assertEquals(c.getParam(), username);
         print(c);
@@ -284,15 +301,30 @@ public class ConditionColumnElementTest {
         print(c);
         assertEquals(c.toSql(), "u.`age` NOT BETWEEN ? AND ?");
         assertEquals(c.getParam(), name);
+    }
 
+    @Test
+    void mysql_sqlelement() {
+        Dialect dialect = Dialects.MYSQL;
+        SqlElement se = new ColumnElement(dialect, usernameColumn, userTableAlias2);
+        c = new ConditionColumnElement(dialect, usernameColumn, se, ComparisonOperator.EQ, userTableAlias,
+                IgnoreStrategy.EMPTY);
+        print(c);
+        assertEquals(c.toSql(), "u.`username` = u2.`username`");
+        assertEquals(c.getParam(), se);
+
+        se = () -> "(select name from `user_info` where id = 1)";
+        c = new ConditionColumnElement(dialect, usernameColumn, se, ComparisonOperator.EQ, userTableAlias,
+                IgnoreStrategy.EMPTY);
+        print(c);
+        assertEquals(c.toSql(), "u.`username` = (select name from `user_info` where id = 1)");
+        assertEquals(c.getParam(), se);
     }
 
     @SuppressWarnings("unchecked")
     @Test
-    void testPostgresql() {
+    void postgresql() {
         Dialect dialect = Dialects.POSTGRESQL;
-        String username = "yufei";
-        Integer age = 18;
         ConditionColumnElement c = new ConditionColumnElement(dialect, "username", username, ComparisonOperator.EQ,
                 IgnoreStrategy.EMPTY);
         print(c);
@@ -479,7 +511,7 @@ public class ConditionColumnElementTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    void testOracle() {
+    void oracle() {
         Dialect dialect = Dialects.ORACLE;
         String username = "yufei";
         Integer age = 18;

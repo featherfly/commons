@@ -31,6 +31,7 @@ import cn.featherfly.common.db.dialect.creator.PostgreSQLDialectURLCreator;
 import cn.featherfly.common.db.dialect.creator.SQLServerURLCreator;
 import cn.featherfly.common.db.dialect.creator.SQLiteDialectURLCreator;
 import cn.featherfly.common.lang.CollectionUtils;
+import cn.featherfly.common.lang.Strings;
 
 /**
  * JdbcDialectFactory.
@@ -38,6 +39,8 @@ import cn.featherfly.common.lang.CollectionUtils;
  * @author zhongj
  */
 public class JdbcDialectFactory implements DialectFactory {
+
+    private boolean exceptionWhenNoDialectCreate;
 
     private Set<Function<String, Dialect>> dialectCreators = new LinkedHashSet<>();
 
@@ -51,10 +54,32 @@ public class JdbcDialectFactory implements DialectFactory {
     /**
      * Instantiates a new jdbc dialect factory.
      *
+     * @param exceptionWhenNoDialectCreate the exception when no dialect create
+     */
+    public JdbcDialectFactory(boolean exceptionWhenNoDialectCreate) {
+        this(exceptionWhenNoDialectCreate, new HashSet<>());
+    }
+
+    /**
+     * Instantiates a new jdbc dialect factory.
+     *
      * @param dialectCreators the dialect creators
      */
     public JdbcDialectFactory(Set<Function<String, Dialect>> dialectCreators) {
+        this(false, dialectCreators);
+    }
+
+    /**
+     * Instantiates a new jdbc dialect factory.
+     *
+     * @param exceptionWhenNoDialectCreate the exception when no dialect create
+     * @param dialectCreators              the dialect creators
+     */
+    public JdbcDialectFactory(boolean exceptionWhenNoDialectCreate, Set<Function<String, Dialect>> dialectCreators) {
         super();
+
+        this.exceptionWhenNoDialectCreate = exceptionWhenNoDialectCreate;
+
         this.dialectCreators.addAll(dialectCreators);
         this.dialectCreators.add(new MysqlDialectURLCreator());
         this.dialectCreators.add(new PostgreSQLDialectURLCreator());
@@ -131,11 +156,15 @@ public class JdbcDialectFactory implements DialectFactory {
     public Dialect create(Connection connection) {
         try {
             DatabaseMetaData metadata = connection.getMetaData();
+            String url = metadata.getURL();
             for (Function<String, Dialect> dialectCreator : dialectCreators) {
-                Dialect dialect = dialectCreator.apply(metadata.getURL());
+                Dialect dialect = dialectCreator.apply(url);
                 if (dialect != null) {
                     return dialect;
                 }
+            }
+            if (exceptionWhenNoDialectCreate) {
+                throw new DialectException(Strings.format("no dialect craete for datasource[{}]", url));
             }
         } catch (SQLException e) {
             throw new JdbcException(e);

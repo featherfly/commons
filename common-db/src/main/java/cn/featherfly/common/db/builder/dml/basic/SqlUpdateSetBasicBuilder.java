@@ -1,3 +1,13 @@
+/*
+ * All rights Reserved, Designed By zhongj
+ * @Title: SqlUpdateSetBasicBuilder.java
+ * @Package cn.featherfly.common.db.builder.dml.basic
+ * @Description: todo (用一句话描述该文件做什么)
+ * @author: zhongj
+ * @date: 2024年3月29日 下午1:49:04
+ * @version V1.0
+ * @Copyright: 2024 www.featherfly.cn Inc. All rights reserved.
+ */
 
 package cn.featherfly.common.db.builder.dml.basic;
 

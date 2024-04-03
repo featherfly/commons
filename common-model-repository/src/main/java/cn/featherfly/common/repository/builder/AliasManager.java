@@ -15,18 +15,30 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
  */
 public class AliasManager {
 
+    /** The Constant DEFAULT_ALIAS_GENERETOR. */
+    public static final AliasGeneretor DEFAULT_ALIAS_GENERETOR = (name, no) -> "_" + name + no;
+
     private Map<String, String> nameAlias = new LinkedHashMap<>();
 
     private Map<String, Integer> nameAliasSize = new ConcurrentHashMap<>(0);
 
+    private AliasGeneretor aliasGeneretor;
+
     /**
-     * Generate alias.
-     *
-     * @param name the name
-     * @return the string
+     * Instantiates a new alias manager.
      */
-    public static String generateAlias(String name) {
-        return "_" + name;
+    public AliasManager() {
+        this(DEFAULT_ALIAS_GENERETOR);
+    }
+
+    /**
+     * Instantiates a new alias manager.
+     *
+     * @param aliasGeneretor the alias generetor
+     */
+    public AliasManager(AliasGeneretor aliasGeneretor) {
+        AssertIllegalArgument.isNotNull(aliasGeneretor, "aliasGeneretor");
+        this.aliasGeneretor = aliasGeneretor;
     }
 
     /**
@@ -37,7 +49,7 @@ public class AliasManager {
      */
     public String put(String name) {
         int size = getNameSize(name);
-        String alias = generateAlias(name) + size;
+        String alias = aliasGeneretor.apply(name, size);
         put(name, alias, size);
         return alias;
     }
@@ -105,7 +117,7 @@ public class AliasManager {
         AssertIllegalArgument.isGe(index, 0, "index");
         if (index >= nameAlias.size()) {
             throw new BuilderException(
-                    BuilderExceptionCode.createIndexOutOffBoundsNameAliasSizeCode(index, nameAlias.size()));
+                BuilderExceptionCode.createIndexOutOffBoundsNameAliasSizeCode(index, nameAlias.size()));
         }
         int size = 0;
         for (Entry<String, String> entry : nameAlias.entrySet()) {
@@ -137,11 +149,29 @@ public class AliasManager {
     }
 
     /**
-     * get nameAlias value
+     * get nameAlias value.
      *
      * @return nameAlias
      */
     public Map<String, String> getNameAlias() {
         return nameAlias;
+    }
+    
+    /**
+     * The Interface AliasGeneretor.
+     *
+     * @author zhongj
+     */
+    @FunctionalInterface
+    public interface AliasGeneretor {
+
+        /**
+         * Apply.
+         *
+         * @param name the name
+         * @param num  the num
+         * @return the string
+         */
+        String apply(String name, int num);
     }
 }

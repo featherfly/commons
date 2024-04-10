@@ -40,7 +40,7 @@ public class SqlSelectColumnsBasicBuilder extends AbstractSqlSelectColumnsBuilde
      * @param classMapping classMapping
      */
     public SqlSelectColumnsBasicBuilder(Dialect dialect, JdbcClassMapping<?> classMapping) {
-        this(dialect, AliasManager.generateAlias(classMapping.getRepositoryName()));
+        this(dialect, AliasManager.DEFAULT_ALIAS_GENERETOR.apply(classMapping.getRepositoryName(), 0));
     }
 
     /**

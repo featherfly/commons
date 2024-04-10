@@ -124,30 +124,64 @@ public class BasicBuilderTest implements ClassMappingSupport {
         builder.addColumns("username", "mobile", "age", "sex").join("id", "user_info", "ui", "user_id");
         System.out.println(builder.build());
         assertEquals(
-                "SELECT u.`username`, u.`mobile`, u.`age`, u.`sex` FROM `user` u JOIN `user_info` ui ON ui.`user_id` = u.`id`",
-                builder.build());
+            "SELECT u.`username`, u.`mobile`, u.`age`, u.`sex` FROM `user` u JOIN `user_info` ui ON ui.`user_id` = u.`id`",
+            builder.build());
 
         builder = new SqlSelectBasicBuilder(Dialects.MYSQL, "user", "u");
         builder.addColumns("username", "mobile", "age", "sex").join("id", "user_info", "ui", "user_id")
-                .addColumns("name", "passport");
+            .addColumns("name", "passport");
         System.out.println(builder.build());
         assertEquals(
-                "SELECT u.`username`, u.`mobile`, u.`age`, u.`sex`, ui.`name`, ui.`passport` FROM `user` u JOIN `user_info` ui ON ui.`user_id` = u.`id`",
-                builder.build());
+            "SELECT u.`username`, u.`mobile`, u.`age`, u.`sex`, ui.`name`, ui.`passport` FROM `user` u JOIN `user_info` ui ON ui.`user_id` = u.`id`",
+            builder.build());
 
         builder = new SqlSelectBasicBuilder(Dialects.MYSQL, "user", "u");
         sql = builder.addColumns("username", "mobile", "age", "sex").join("id", "user_info", "ui", "user_id").fetch()
-                .build();
+            .build();
         System.out.println(sql);
         assertEquals(
-                "SELECT u.`username`, u.`mobile`, u.`age`, u.`sex`, ui.* FROM `user` u JOIN `user_info` ui ON ui.`user_id` = u.`id`",
-                sql);
+            "SELECT u.`username`, u.`mobile`, u.`age`, u.`sex`, ui.* FROM `user` u JOIN `user_info` ui ON ui.`user_id` = u.`id`",
+            sql);
 
         builder = new SqlSelectBasicBuilder(Dialects.MYSQL, "user", "u");
         sql = builder.addColumns("username", "mobile", "age", "sex").join("id", "user_info", "ui", "user_id")
-                .addColumns("name", "passport").endJoin().join("id", "user_role", "ur", "user_id").endJoin()
-                .join("ur", "role_id", "role", "r", "id").build();
+            .addColumns("name", "passport").endJoin().join("id", "user_role", "ur", "user_id").endJoin()
+            .join("ur", "role_id", "role", "r", "id").build();
         System.out.println(sql);
+
+    }
+
+    @Test
+    void testSqlSelectBasicBuilderJoin2() {
+        String sql = null;
+        SqlSelectBasicBuilder builder = new SqlSelectBasicBuilder(Dialects.MYSQL, "user", "u");
+        builder.addColumns("username", "mobile", "age", "sex").join("user_info", "ui", "ui.`user_id` = u.`id`");
+        System.out.println(builder.build());
+        assertEquals(
+            "SELECT u.`username`, u.`mobile`, u.`age`, u.`sex` FROM `user` u JOIN `user_info` ui ON ui.`user_id` = u.`id`",
+            builder.build());
+
+        //        builder = new SqlSelectBasicBuilder(Dialects.MYSQL, "user", "u");
+        //        builder.addColumns("username", "mobile", "age", "sex").join("id", "user_info", "ui", "user_id")
+        //                .addColumns("name", "passport");
+        //        System.out.println(builder.build());
+        //        assertEquals(
+        //                "SELECT u.`username`, u.`mobile`, u.`age`, u.`sex`, ui.`name`, ui.`passport` FROM `user` u JOIN `user_info` ui ON ui.`user_id` = u.`id`",
+        //                builder.build());
+        //
+        //        builder = new SqlSelectBasicBuilder(Dialects.MYSQL, "user", "u");
+        //        sql = builder.addColumns("username", "mobile", "age", "sex").join("id", "user_info", "ui", "user_id").fetch()
+        //                .build();
+        //        System.out.println(sql);
+        //        assertEquals(
+        //                "SELECT u.`username`, u.`mobile`, u.`age`, u.`sex`, ui.* FROM `user` u JOIN `user_info` ui ON ui.`user_id` = u.`id`",
+        //                sql);
+        //
+        //        builder = new SqlSelectBasicBuilder(Dialects.MYSQL, "user", "u");
+        //        sql = builder.addColumns("username", "mobile", "age", "sex").join("id", "user_info", "ui", "user_id")
+        //                .addColumns("name", "passport").endJoin().join("id", "user_role", "ur", "user_id").endJoin()
+        //                .join("ur", "role_id", "role", "r", "id").build();
+        //        System.out.println(sql);
 
     }
 
@@ -155,7 +189,7 @@ public class BasicBuilderTest implements ClassMappingSupport {
     void testSqlSelectBasicBuilderMulityTables() {
         String sql = null;
         Map<String, String> tables = new ChainMapImpl<String, String>(new LinkedHashMap<>()).putChain("u", "user")
-                .putChain("r", "role");
+            .putChain("r", "role");
 
         SqlSelectBasicBuilder builder = new SqlSelectBasicBuilder(Dialects.MYSQL, tables);
         sql = builder.addColumns("username", "mobile", "age", "sex").table("role", b -> {
@@ -163,7 +197,7 @@ public class BasicBuilderTest implements ClassMappingSupport {
         }).build();
         System.out.println(sql);
         assertEquals("SELECT u.`username`, u.`mobile`, u.`age`, u.`sex`, r.`id`, r.`name` FROM `user` u, `role` r",
-                sql);
+            sql);
 
         builder = new SqlSelectBasicBuilder(Dialects.MYSQL, tables);
         sql = builder.addColumns("username", "mobile", "age", "sex").table(1, b -> {
@@ -171,7 +205,7 @@ public class BasicBuilderTest implements ClassMappingSupport {
         }).build();
         System.out.println(sql);
         assertEquals("SELECT u.`username`, u.`mobile`, u.`age`, u.`sex`, r.`id`, r.`name` FROM `user` u, `role` r",
-                sql);
+            sql);
 
         builder = new SqlSelectBasicBuilder(Dialects.MYSQL, tables);
         sql = builder.addColumns("username", "mobile", "age", "sex").table("role", b -> {
@@ -179,8 +213,8 @@ public class BasicBuilderTest implements ClassMappingSupport {
         }).join("id", "user_info", "ui", "user_id").build();
         System.out.println(sql);
         assertEquals(
-                "SELECT u.`username`, u.`mobile`, u.`age`, u.`sex`, r.`id`, r.`name` FROM `user` u, `role` r JOIN `user_info` ui ON ui.`user_id` = u.`id`",
-                sql);
+            "SELECT u.`username`, u.`mobile`, u.`age`, u.`sex`, r.`id`, r.`name` FROM `user` u, `role` r JOIN `user_info` ui ON ui.`user_id` = u.`id`",
+            sql);
 
         builder = new SqlSelectBasicBuilder(Dialects.MYSQL, tables);
         sql = builder.addColumns("username", "mobile", "age", "sex").table(1, b -> {
@@ -188,8 +222,8 @@ public class BasicBuilderTest implements ClassMappingSupport {
         }).join("id", "user_info", "ui", "user_id").build();
         System.out.println(sql);
         assertEquals(
-                "SELECT u.`username`, u.`mobile`, u.`age`, u.`sex`, r.`id`, r.`name` FROM `user` u, `role` r JOIN `user_info` ui ON ui.`user_id` = u.`id`",
-                sql);
+            "SELECT u.`username`, u.`mobile`, u.`age`, u.`sex`, r.`id`, r.`name` FROM `user` u, `role` r JOIN `user_info` ui ON ui.`user_id` = u.`id`",
+            sql);
     }
 
     @Test
@@ -236,11 +270,11 @@ public class BasicBuilderTest implements ClassMappingSupport {
         builder.addColumn("id", "id").addColumn("name", "name").addColumn("password", "pwd");
 
         SqlSelectJoinOnBasicBuilder joinBuilder = builder.join(userAlias, "id", urm, userRoleAlias, "role_id")
-                .addColumn("role_id", "role_id");
+            .addColumn("role_id", "role_id");
         sql = joinBuilder.build();
         System.out.println(sql);
         assertEquals(sql,
-                "SELECT u.`id` `id`, u.`name` `name`, u.`password` `pwd`, ur.`role_id` `role_id` FROM `user` u JOIN `user_role` ur ON ur.`role_id` = u.`id`");
+            "SELECT u.`id` `id`, u.`name` `name`, u.`password` `pwd`, ur.`role_id` `role_id` FROM `user` u JOIN `user_role` ur ON ur.`role_id` = u.`id`");
 
         builder = joinBuilder.endJoin();
         joinBuilder = builder.join(urm, userRoleAlias2, "role_id");
@@ -248,7 +282,7 @@ public class BasicBuilderTest implements ClassMappingSupport {
         sql = joinBuilder.build();
         System.out.println(sql);
         assertEquals(sql,
-                "SELECT u.`id` `id`, u.`name` `name`, u.`password` `pwd`, ur.`role_id` `role_id`, ur2.`role_id` `role_id2` FROM `user` u JOIN `user_role` ur ON ur.`role_id` = u.`id` JOIN `role_id` ur2 ON ur2.`role_id` = u.`id`");
+            "SELECT u.`id` `id`, u.`name` `name`, u.`password` `pwd`, ur.`role_id` `role_id`, ur2.`role_id` `role_id2` FROM `user` u JOIN `user_role` ur ON ur.`role_id` = u.`id` JOIN `role_id` ur2 ON ur2.`role_id` = u.`id`");
     }
 
     @Test
@@ -272,7 +306,7 @@ public class BasicBuilderTest implements ClassMappingSupport {
         String alias2 = "p";
         builder = new SqlOrderByBasicBuilder(Dialects.MYSQL);
         builder.addAsc("name", alias).addDesc("sex", alias).addDesc("mobile", alias2).addAsc("age", alias2).addAsc("no",
-                alias);
+            alias);
         System.out.println(builder.build());
         assertEquals(" ORDER BY u.`name` ASC, u.`sex` DESC, p.`mobile` DESC, p.`age` ASC, u.`no` ASC", builder.build());
     }

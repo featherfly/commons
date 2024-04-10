@@ -1,18 +1,15 @@
 package cn.featherfly.common.db.builder.dml.basic;
 
 import cn.featherfly.common.constant.Chars;
-import cn.featherfly.common.db.builder.SqlBuilder;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.Join;
 
 /**
- * <p>
- * sql select basic builder. columns with given table
- * </p>
+ * sql select basic builder. columns with given table.
  *
  * @author zhongj
  */
-public class SqlJoinOnBasicBuilder implements SqlBuilder {
+public class SqlJoinOnBasicBuilder implements SqlJoinOnBuilder {
 
     /** The table alias. */
     protected String tableAlias;
@@ -34,6 +31,8 @@ public class SqlJoinOnBasicBuilder implements SqlBuilder {
 
     /** The join. */
     protected Join join;
+
+    protected String onSql;
 
     /**
      * Instantiates a new sql join on basic builder.
@@ -57,7 +56,7 @@ public class SqlJoinOnBasicBuilder implements SqlBuilder {
      * @param conditionColumn conditionColumn
      */
     public SqlJoinOnBasicBuilder(Dialect dialect, Join join, String tableName, String columnName,
-            String conditionColumn) {
+        String conditionColumn) {
         this(dialect, join, tableName, null, columnName, null, conditionColumn);
     }
 
@@ -72,7 +71,7 @@ public class SqlJoinOnBasicBuilder implements SqlBuilder {
      * @param conditionColumn     conditionColumn
      */
     public SqlJoinOnBasicBuilder(Dialect dialect, String tableName, String tableAlias, String columnName,
-            String conditionTableAlias, String conditionColumn) {
+        String conditionTableAlias, String conditionColumn) {
         this(dialect, null, tableName, tableAlias, columnName, conditionTableAlias, conditionColumn);
     }
 
@@ -88,7 +87,7 @@ public class SqlJoinOnBasicBuilder implements SqlBuilder {
      * @param conditionColumn     conditionColumn
      */
     public SqlJoinOnBasicBuilder(Dialect dialect, Join join, String tableName, String tableAlias, String columnName,
-            String conditionTableAlias, String conditionColumn) {
+        String conditionTableAlias, String conditionColumn) {
         this.dialect = dialect;
         if (join == null) {
             this.join = Join.INNER_JOIN;
@@ -143,12 +142,10 @@ public class SqlJoinOnBasicBuilder implements SqlBuilder {
      */
     @Override
     public String build() {
-        StringBuilder joinSql = new StringBuilder();
-        joinSql.append(dialect.getKeywords().join(join)).append(Chars.SPACE)
-                .append(dialect.buildTableSql(tableName, tableAlias)).append(Chars.SPACE)
-                .append(dialect.getKeywords().on()).append(Chars.SPACE)
-                .append(dialect.buildColumnSql(tableAlias, columnName)).append(Chars.SPACE).append(Chars.EQ)
-                .append(Chars.SPACE).append(dialect.buildColumnSql(conditionTableAlias, conditionColumn));
-        return joinSql.toString();
+        return new StringBuilder().append(dialect.getKeywords().join(join)).append(Chars.SPACE)
+            .append(dialect.buildTableSql(tableName, tableAlias)).append(Chars.SPACE).append(dialect.getKeywords().on())
+            .append(Chars.SPACE).append(dialect.buildColumnSql(tableAlias, columnName)).append(Chars.SPACE)
+            .append(Chars.EQ).append(Chars.SPACE).append(dialect.buildColumnSql(conditionTableAlias, conditionColumn))
+            .toString();
     }
 }

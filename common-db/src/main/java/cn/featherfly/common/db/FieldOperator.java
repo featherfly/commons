@@ -13,6 +13,13 @@ import java.sql.ResultSet;
 public interface FieldOperator<T> {
 
     /**
+     * Gets the type.
+     *
+     * @return the type
+     */
+    Class<T> getType();
+
+    /**
      * set the field value.
      *
      * @param prep           the prep

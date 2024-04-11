@@ -44,7 +44,7 @@ public abstract class ParamedColumnElement extends ColumnElement {
      * @param ignoreStrategy the ignore strategy
      */
     protected ParamedColumnElement(Dialect dialect, String name, Object param, String tableAlias,
-            Predicate<?> ignoreStrategy) {
+        Predicate<?> ignoreStrategy) {
         super(dialect, name, tableAlias);
         this.param = param;
         setIgnoreStrategy(ignoreStrategy);
@@ -119,8 +119,9 @@ public abstract class ParamedColumnElement extends ColumnElement {
             int length = Array.getLength(value);
             if (length > 0) {
                 Object first = Array.get(value, 0);
+                Class<?> type = getFieldValueType(first);
                 first = unwrapFieldValueOperator(first);
-                Object newArray = Array.newInstance(first.getClass(), length);
+                Object newArray = Array.newInstance(type, length);
                 Array.set(newArray, 0, first);
                 for (int i = 1; i < length; i++) {
                     Array.set(newArray, i, unwrapFieldValueOperator(Array.get(value, i)));
@@ -136,5 +137,9 @@ public abstract class ParamedColumnElement extends ColumnElement {
 
     private Object unwrapFieldValueOperator(Object value) {
         return value instanceof FieldValueOperator ? ((FieldValueOperator<?>) value).getValue() : value;
+    }
+
+    private Class<?> getFieldValueType(Object value) {
+        return value instanceof FieldValueOperator ? ((FieldValueOperator<?>) value).getType() : value.getClass();
     }
 }

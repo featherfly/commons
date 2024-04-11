@@ -79,7 +79,7 @@ public final class JdbcUtils {
      * @return the connection
      */
     public static ConnectionWrapper getConnection(String driverClassName, String uri, String username,
-            String password) {
+        String password) {
         try {
             ClassUtils.forName(driverClassName);
             return new ConnectionWrapper(DriverManager.getConnection(uri, username, password));
@@ -470,7 +470,7 @@ public final class JdbcUtils {
      * @param enumWithOridinal enum with oridinal
      */
     public static void setParameter(PreparedStatementWrapper prep, int position, Object value,
-            boolean enumWithOridinal) {
+        boolean enumWithOridinal) {
         setParameter(prep.getPreparedStatement(), position, value, enumWithOridinal);
     }
 
@@ -966,7 +966,7 @@ public final class JdbcUtils {
      * @param enumWithOridinal the enum with oridinal
      */
     public static <E extends Enum<?>> void setParameter(PreparedStatement prep, int position, E value,
-            boolean enumWithOridinal) {
+        boolean enumWithOridinal) {
         if (value == null) {
             setParameterNull(prep, position);
         } else {
@@ -1637,7 +1637,7 @@ public final class JdbcUtils {
      * @param enumWithOridinal the enum with oridinal
      */
     public static <E extends Enum<?>> void setParameter(ResultSet res, int position, E value,
-            boolean enumWithOridinal) {
+        boolean enumWithOridinal) {
         if (value == null) {
             setParameterNull(res, position);
         } else {
@@ -1874,15 +1874,15 @@ public final class JdbcUtils {
      * @return the out parameter index and class map
      */
     public static Map<Integer, Class<?>> setParameters(CallableStatement call, boolean enumWithOridinal,
-            Object... values) {
+        Object... values) {
         Map<Integer, Class<?>> outParamMap = new HashMap<>(0);
         try {
             ParameterMetaData meta = call.getParameterMetaData();
             if (meta.getParameterCount() != values.length) {
                 // ENHANCE 后续来优化异常信息
                 throw new JdbcException(
-                        Strings.format("procedure parameter count[{0}] not equals parameter values length[{1}]",
-                                meta.getParameterCount(), values.length));
+                    Strings.format("procedure parameter count[{0}] not equals parameter values length[{1}]",
+                        meta.getParameterCount(), values.length));
             }
             for (int i = 1; i <= values.length; i++) {
                 Object arg = values[i - 1];
@@ -1912,7 +1912,7 @@ public final class JdbcUtils {
      * @throws SQLException the SQL exception
      */
     private static void setOutParamMap(Map<Integer, Class<?>> outParamMap, int index, Object arg,
-            ParameterMetaData meta) throws SQLException {
+        ParameterMetaData meta) throws SQLException {
         if (arg == null) {
             outParamMap.put(index, ClassUtils.forName(meta.getParameterClassName(index)));
         } else {
@@ -2153,7 +2153,7 @@ public final class JdbcUtils {
                 value = Float.valueOf(rs.getFloat(index));
                 wasNullCheck = true;
             } else if (double.class.equals(requiredType) || Double.class.equals(requiredType)
-                    || Number.class.equals(requiredType)) {
+                || Number.class.equals(requiredType)) {
                 value = Double.valueOf(rs.getDouble(index));
                 wasNullCheck = true;
             } else if (byte[].class.equals(requiredType)) {
@@ -2245,12 +2245,12 @@ public final class JdbcUtils {
             } else if (obj instanceof Clob) {
                 obj = rs.getString(index);
             } else if (className != null
-                    && ("oracle.sql.TIMESTAMP".equals(className) || "oracle.sql.TIMESTAMPTZ".equals(className))) {
+                && ("oracle.sql.TIMESTAMP".equals(className) || "oracle.sql.TIMESTAMPTZ".equals(className))) {
                 obj = rs.getTimestamp(index);
             } else if (className != null && className.startsWith("oracle.sql.DATE")) {
                 String metaDataClassName = rs.getMetaData().getColumnClassName(index);
                 if ("java.sql.Timestamp".equals(metaDataClassName)
-                        || "oracle.sql.TIMESTAMP".equals(metaDataClassName)) {
+                    || "oracle.sql.TIMESTAMP".equals(metaDataClassName)) {
                     obj = rs.getTimestamp(index);
                 } else {
                     obj = rs.getDate(index);
@@ -2511,7 +2511,7 @@ public final class JdbcUtils {
                 value = Float.valueOf(call.getFloat(name));
                 wasNullCheck = true;
             } else if (double.class.equals(requiredType) || Double.class.equals(requiredType)
-                    || Number.class.equals(requiredType)) {
+                || Number.class.equals(requiredType)) {
                 value = Double.valueOf(call.getDouble(name));
                 wasNullCheck = true;
             } else if (byte[].class.equals(requiredType)) {
@@ -2604,7 +2604,7 @@ public final class JdbcUtils {
             } else if (obj instanceof Clob) {
                 obj = call.getString(name);
             } else if (className != null
-                    && ("oracle.sql.TIMESTAMP".equals(className) || "oracle.sql.TIMESTAMPTZ".equals(className))) {
+                && ("oracle.sql.TIMESTAMP".equals(className) || "oracle.sql.TIMESTAMPTZ".equals(className))) {
                 obj = call.getTimestamp(name);
             }
             // FIXME 后续看看能不能实现
@@ -2668,7 +2668,7 @@ public final class JdbcUtils {
                 value = Float.valueOf(call.getFloat(index));
                 wasNullCheck = true;
             } else if (double.class.equals(requiredType) || Double.class.equals(requiredType)
-                    || Number.class.equals(requiredType)) {
+                || Number.class.equals(requiredType)) {
                 value = Double.valueOf(call.getDouble(index));
                 wasNullCheck = true;
             } else if (byte[].class.equals(requiredType)) {
@@ -2760,12 +2760,12 @@ public final class JdbcUtils {
             } else if (obj instanceof Clob) {
                 obj = call.getString(index);
             } else if (className != null
-                    && ("oracle.sql.TIMESTAMP".equals(className) || "oracle.sql.TIMESTAMPTZ".equals(className))) {
+                && ("oracle.sql.TIMESTAMP".equals(className) || "oracle.sql.TIMESTAMPTZ".equals(className))) {
                 obj = call.getTimestamp(index);
             } else if (className != null && className.startsWith("oracle.sql.DATE")) {
                 String metaDataClassName = call.getParameterMetaData().getParameterClassName(index);
                 if ("java.sql.Timestamp".equals(metaDataClassName)
-                        || "oracle.sql.TIMESTAMP".equals(metaDataClassName)) {
+                    || "oracle.sql.TIMESTAMP".equals(metaDataClassName)) {
                     obj = call.getTimestamp(index);
                 } else {
                     obj = call.getDate(index);
@@ -2820,7 +2820,7 @@ public final class JdbcUtils {
      * @return the column name to use
      */
     public static String lookupColumnName(ResultSetMetaData resultSetMetaData, int columnIndex,
-            boolean camelCaseWithUnderLine) {
+        boolean camelCaseWithUnderLine) {
         try {
             String name = resultSetMetaData.getColumnLabel(columnIndex);
             if (Lang.isEmpty(name)) {
@@ -2855,7 +2855,7 @@ public final class JdbcUtils {
      * @return the column name to use
      */
     public static String lookupColumnName(ResultSetMetaData resultSetMetaData, int columnIndex,
-            char camelCaseWithSymbol) {
+        char camelCaseWithSymbol) {
         try {
             String name = resultSetMetaData.getColumnLabel(columnIndex);
             if (Lang.isEmpty(name)) {

@@ -217,7 +217,7 @@ public interface Dialect {
      */
     default String buildDeleteFromSql(String tableName, String tableAlias) {
         return BuilderUtils.link(getKeyword(Keywords.DELETE), getKeyword(Keywords.FROM), wrapName(tableName),
-                Lang.isEmpty(tableAlias) ? null : wrapName(tableAlias));
+            Lang.isEmpty(tableAlias) ? null : wrapName(tableAlias));
     }
 
     /**
@@ -229,7 +229,7 @@ public interface Dialect {
      */
     default String buildInsertSql(String tableName, String[] columnNames) {
         String sql = BuilderUtils.link(getKeyword(Keywords.INSERT), getKeyword(Keywords.INTO), wrapName(tableName),
-                Chars.PAREN_L);
+            Chars.PAREN_L);
         StringBuilder names = new StringBuilder();
         for (String column : columnNames) {
             BuilderUtils.link(names, wrapName(column) + Chars.COMMA);
@@ -256,7 +256,7 @@ public interface Dialect {
      */
     default String buildInsertBatchSql(String tableName, String[] columnNames, int insertAmount) {
         String sql = BuilderUtils.link(getKeyword(Keywords.INSERT), getKeyword(Keywords.INTO), wrapName(tableName),
-                Chars.PAREN_L);
+            Chars.PAREN_L);
         StringBuilder names = new StringBuilder();
         for (String column : columnNames) {
             BuilderUtils.link(names, wrapName(column) + Chars.COMMA);
@@ -532,7 +532,7 @@ public interface Dialect {
      * @return the compare expression
      */
     default String getCompareExpression(ComparisonOperator operator, String columnName, Object values,
-            String tableAlias) {
+        String tableAlias) {
         return getCompareExpression(operator, buildColumnSql(tableAlias, columnName), values);
     }
 
@@ -557,7 +557,7 @@ public interface Dialect {
      * @return the compare expression
      */
     String getCompareExpression(ComparisonOperator operator, String name, SqlElement values,
-            MatchStrategy matchStrategy);
+        MatchStrategy matchStrategy);
 
     /**
      * Gets the compare expression.
@@ -570,7 +570,7 @@ public interface Dialect {
      * @return the compare expression
      */
     default String getCompareExpression(ComparisonOperator operator, String columnName, Object values,
-            String tableAlias, MatchStrategy matchStrategy) {
+        String tableAlias, MatchStrategy matchStrategy) {
         return getCompareExpression(operator, buildColumnSql(tableAlias, columnName), values, matchStrategy);
     }
 
@@ -615,11 +615,11 @@ public interface Dialect {
     default String getBetweenOrNotBetweenExpression(boolean isBetween, String name, Object value) {
         StringBuilder condition = new StringBuilder();
         condition.append(name).append(Chars.SPACE) //
-                .append(!isBetween ? getKeyword(Keywords.NOT) + Chars.SPACE : "") //
-                .append(getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
-                .append(Chars.QUESTION).append(Chars.SPACE) //
-                .append(getKeyword(Keywords.AND)).append(Chars.SPACE) //
-                .append(Chars.QUESTION);
+            .append(!isBetween ? getKeyword(Keywords.NOT) + Chars.SPACE : "") //
+            .append(getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
+            .append(Chars.QUESTION).append(Chars.SPACE) //
+            .append(getKeyword(Keywords.AND)).append(Chars.SPACE) //
+            .append(Chars.QUESTION);
         return condition.toString();
     }
 
@@ -633,7 +633,7 @@ public interface Dialect {
      * @return the between or not between expression
      */
     default String getBetweenOrNotBetweenExpression(boolean isBetween, String columnName, Object values,
-            String tableAlias) {
+        String tableAlias) {
         return getBetweenOrNotBetweenExpression(isBetween, buildColumnSql(tableAlias, columnName), values);
     }
 
@@ -659,24 +659,24 @@ public interface Dialect {
      * @return the between or not between expression
      */
     default String getBetweenOrNotBetweenExpression(boolean isBetween, String columnName, Object values,
-            String tableAlias, MatchStrategy matchStrategy) {
+        String tableAlias, MatchStrategy matchStrategy) {
         return getBetweenOrNotBetweenExpression(isBetween, buildColumnSql(tableAlias, columnName), values,
-                matchStrategy);
+            matchStrategy);
     }
 
     default String getBetweenOrNotBetweenExpression(boolean isBetween, String name, SqlElement min, SqlElement max) {
         StringBuilder condition = new StringBuilder();
         condition.append(name).append(Chars.SPACE) //
-                .append(!isBetween ? getKeyword(Keywords.NOT) + Chars.SPACE : "") //
-                .append(getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
-                .append(min.toSql()).append(Chars.SPACE) //
-                .append(getKeyword(Keywords.AND)).append(Chars.SPACE) //
-                .append(max.toSql());
+            .append(!isBetween ? getKeyword(Keywords.NOT) + Chars.SPACE : "") //
+            .append(getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
+            .append(min.toSql()).append(Chars.SPACE) //
+            .append(getKeyword(Keywords.AND)).append(Chars.SPACE) //
+            .append(max.toSql());
         return condition.toString();
     }
 
     String getBetweenOrNotBetweenExpression(boolean isBetween, String columnName, SqlElement min, SqlElement max,
-            MatchStrategy matchStrategy);
+        MatchStrategy matchStrategy);
 
     /**
      * Gets the in or not in expression.
@@ -697,7 +697,7 @@ public interface Dialect {
             }
         }
         condition.append(name).append(Chars.SPACE).append(isIn ? getKeywords().in() : getKeywords().notIn())
-                .append(" (");
+            .append(" (");
         for (int i = 0; i < length; i++) {
             if (i > 0) {
                 condition.append(Chars.COMMA);
@@ -743,7 +743,7 @@ public interface Dialect {
      * @return the in or not in expression
      */
     default String getInOrNotInExpression(boolean isIn, String columnName, Object values, String tableAlias,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         return getInOrNotInExpression(isIn, buildColumnSql(tableAlias, columnName), values, matchStrategy);
     }
 
@@ -843,7 +843,7 @@ public interface Dialect {
      * @return sql
      */
     default String buildColumnSql(Function function, boolean distinct, String tableAlias, String columnName,
-            String columnAlias) {
+        String columnAlias) {
         if (function instanceof AggregateFunction) {
             return buildColumnSql(function, distinct, tableAlias, columnName, columnAlias);
         }
@@ -874,7 +874,7 @@ public interface Dialect {
      * @return sql
      */
     default String buildColumnSql(AggregateFunction aggregateFunction, String tableAlias, String columnName,
-            String columnAlias) {
+        String columnAlias) {
         return buildColumnSql(aggregateFunction, false, tableAlias, columnName, columnAlias);
     }
 
@@ -889,7 +889,7 @@ public interface Dialect {
      * @return sql
      */
     default String buildColumnSql(AggregateFunction aggregateFunction, boolean distinct, String tableAlias,
-            String columnName, String columnAlias) {
+        String columnName, String columnAlias) {
         String column = columnName;
         if (!Chars.STAR.equals(columnName)) {
             column = wrapName(convertTableOrColumnName(columnName));
@@ -976,7 +976,7 @@ public interface Dialect {
     default String buildTableSql(String tableName, String tableAlias) {
         String result = wrapName(convertTableOrColumnName(tableName));
         if (Lang.isNotEmpty(tableAlias)) {
-            result = result + " " + tableAlias;
+            result = result + " " + wrapName(tableAlias);
         }
         return result;
     }
@@ -990,7 +990,7 @@ public interface Dialect {
     default String buildCreateDataBaseDDL(String dataBaseName) {
         AssertIllegalArgument.isNotEmpty(dataBaseName, "dataBaseName");
         return BuilderUtils.link(getKeyword(Keywords.CREATE), getKeyword(Keywords.DATABASE), wrapName(dataBaseName))
-                + Chars.SEMI;
+            + Chars.SEMI;
     }
 
     /**
@@ -1014,10 +1014,10 @@ public interface Dialect {
         AssertIllegalArgument.isNotEmpty(dataBaseName, "dataBaseName");
         if (ifExists) {
             return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.DATABASE), getKeyword(Keywords.IF),
-                    getKeyword(Keywords.EXISTS), wrapName(dataBaseName)) + Chars.SEMI;
+                getKeyword(Keywords.EXISTS), wrapName(dataBaseName)) + Chars.SEMI;
         } else {
             return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.DATABASE), wrapName(dataBaseName))
-                    + Chars.SEMI;
+                + Chars.SEMI;
         }
     }
 
@@ -1030,7 +1030,7 @@ public interface Dialect {
     default String buildCreateSchemaDDL(String schemaName) {
         AssertIllegalArgument.isNotEmpty(schemaName, "schemaName");
         return BuilderUtils.link(getKeyword(Keywords.CREATE), getKeyword(Keywords.SCHEMA), wrapName(schemaName))
-                + Chars.SEMI;
+            + Chars.SEMI;
     }
 
     /**
@@ -1054,10 +1054,10 @@ public interface Dialect {
         AssertIllegalArgument.isNotEmpty(schemaName, "dataBaseName");
         if (ifExists) {
             return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.SCHEMA), getKeyword(Keywords.IF),
-                    getKeyword(Keywords.EXISTS), wrapName(schemaName)) + Chars.SEMI;
+                getKeyword(Keywords.EXISTS), wrapName(schemaName)) + Chars.SEMI;
         } else {
             return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.SCHEMA), wrapName(schemaName))
-                    + Chars.SEMI;
+                + Chars.SEMI;
         }
     }
 
@@ -1128,7 +1128,7 @@ public interface Dialect {
         String ddl = "";
         if (ifExists) {
             ddl = BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.TABLE), getKeyword(Keywords.IF),
-                    getKeyword(Keywords.EXISTS), tn);
+                getKeyword(Keywords.EXISTS), tn);
         } else {
             ddl = BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.TABLE), tn);
         }
@@ -1161,7 +1161,7 @@ public interface Dialect {
             return BuilderUtils.link(getKeyword(Keywords.ALTER), getKeyword(Keywords.TABLE), wrapName(tableName));
         } else {
             return BuilderUtils.link(getKeyword(Keywords.ALTER), getKeyword(Keywords.TABLE),
-                    wrapName(schema) + Chars.DOT + wrapName(tableName));
+                wrapName(schema) + Chars.DOT + wrapName(tableName));
         }
     }
 
@@ -1176,7 +1176,7 @@ public interface Dialect {
      * @return the string
      */
     String buildAlterTableDDL(String schema, String tableName, Column[] addColumns, Column[] modifyColumns,
-            Column[] dropColumns);
+        Column[] dropColumns);
 
     /**
      * Builds the alter table add column DDL.
@@ -1310,7 +1310,7 @@ public interface Dialect {
         String tn = Lang.isEmpty(schema) ? wrapName(name) : wrapName(schema) + Chars.DOT + wrapName(name);
         if (ifExists) {
             return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(type), getKeyword(Keywords.IF),
-                    getKeyword(Keywords.EXISTS), tn) + Chars.SEMI;
+                getKeyword(Keywords.EXISTS), tn) + Chars.SEMI;
         } else {
             return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(type), tn) + Chars.SEMI;
         }
@@ -1365,7 +1365,7 @@ public interface Dialect {
      * @return the string
      */
     default String buildCreateIndexDDL(String schema, String tableName, String indexName, String[] columns,
-            boolean unique) {
+        boolean unique) {
         AssertIllegalArgument.isNotEmpty(columns, "columns");
         StringBuilder ddl = new StringBuilder();
         String tn = Lang.isEmpty(schema) ? wrapName(tableName) : wrapName(schema) + Chars.DOT + wrapName(tableName);
@@ -1377,9 +1377,9 @@ public interface Dialect {
         cols.deleteCharAt(cols.length() - 1);
         cols.append(Chars.PAREN_R);
         String indexKeyWords = unique ? getKeyword(Keywords.UNIQUE) + Chars.SPACE + getKeyword(Keywords.INDEX)
-                : getKeyword(Keywords.INDEX);
+            : getKeyword(Keywords.INDEX);
         BuilderUtils.link(ddl, getKeyword(Keywords.CREATE), indexKeyWords, indexName, getKeyword(Keywords.ON),
-                tn + cols.toString());
+            tn + cols.toString());
         return ddl.toString() + Chars.SEMI;
     }
 
@@ -1433,7 +1433,7 @@ public interface Dialect {
         String name = Lang.isEmpty(schema) ? wrapName(indexName) : wrapName(schema) + Chars.DOT + wrapName(indexName);
         if (ifExists) {
             return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.INDEX), getKeyword(Keywords.IF),
-                    getKeyword(Keywords.EXISTS), name) + Chars.SEMI;
+                getKeyword(Keywords.EXISTS), name) + Chars.SEMI;
         } else {
             return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.INDEX), name) + Chars.SEMI;
         }

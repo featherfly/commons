@@ -1,6 +1,10 @@
 
 package cn.featherfly.common.db.builder.dml.basic;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.builder.SqlBuilder;
 import cn.featherfly.common.db.dialect.Dialect;
 
@@ -16,6 +20,8 @@ public class SqlDeleteFromBasicBuilder implements SqlBuilder {
     private String tableAlias;
 
     private Dialect dialect;
+
+    private List<SqlJoinOnBuilder> sqlJoinOnBuilders;
 
     /**
      * Instantiates a new sql delete from basic builder.
@@ -47,6 +53,7 @@ public class SqlDeleteFromBasicBuilder implements SqlBuilder {
         this.tableName = tableName;
         this.dialect = dialect;
         this.tableAlias = tableAlias;
+        sqlJoinOnBuilders = new ArrayList<>(0);
     }
 
     /**
@@ -68,7 +75,7 @@ public class SqlDeleteFromBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * get tableAlias value
+     * get tableAlias value.
      *
      * @return tableAlias
      */
@@ -77,7 +84,7 @@ public class SqlDeleteFromBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * set tableAlias value
+     * set tableAlias value.
      *
      * @param tableAlias tableAlias
      */
@@ -86,11 +93,31 @@ public class SqlDeleteFromBasicBuilder implements SqlBuilder {
     }
 
     /**
+     * Adds the sql join on builder.
+     *
+     * @param sqlJoinOnBuilder the sql join on builder
+     * @return the sql delete from basic builder
+     */
+    public SqlDeleteFromBasicBuilder join(SqlJoinOnBuilder sqlJoinOnBuilder) {
+        sqlJoinOnBuilders.add(sqlJoinOnBuilder);
+        return this;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public String build() {
-        return dialect.buildDeleteFromSql(tableName, tableAlias);
+        if (sqlJoinOnBuilders.isEmpty()) {
+            return dialect.buildDeleteFromSql(tableName, tableAlias);
+        } else {
+            StringBuilder sql = new StringBuilder();
+            sql.append(dialect.buildDeleteFromSql(tableName, tableAlias));
+            for (SqlJoinOnBuilder sqlJoinOnBuilder : sqlJoinOnBuilders) {
+                sql.append(Chars.SPACE_CHAR).append(sqlJoinOnBuilder.build());
+            }
+            return sql.toString();
+        }
     }
 
 }

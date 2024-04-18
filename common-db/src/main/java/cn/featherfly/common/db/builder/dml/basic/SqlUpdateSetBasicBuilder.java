@@ -40,6 +40,8 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
 
     private List<ParamedColumnElement> params = new ArrayList<>();
 
+    private List<SqlJoinOnBuilder> sqlJoinOnBuilders;
+
     private Dialect dialect;
 
     private Predicate<Object> ignoreStrategy;
@@ -69,6 +71,18 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
         this.alias = alias;
         this.dialect = dialect;
         setIgnoreStrategy(ignoreStrategy);
+        sqlJoinOnBuilders = new ArrayList<>(0);
+    }
+
+    /**
+     * Adds the sql join on builder.
+     *
+     * @param sqlJoinOnBuilder the sql join on builder
+     * @return the sql update set basic builder
+     */
+    public SqlUpdateSetBasicBuilder join(SqlJoinOnBuilder sqlJoinOnBuilder) {
+        sqlJoinOnBuilders.add(sqlJoinOnBuilder);
+        return this;
     }
 
     /**
@@ -102,6 +116,36 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
     // value));
     // return this;
     // }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String build() {
+        StringBuilder update = new StringBuilder();
+        Keyworld keyworld = dialect.getKeywords();
+        update.append(keyworld.update()).append(Chars.SPACE).append(dialect.buildTableSql(tableName, alias));
+        // TODO 判断tableName paramMap 为空 抛出异常
+        if (!sqlJoinOnBuilders.isEmpty()) {
+            for (SqlJoinOnBuilder sqlJoinOnBuilder : sqlJoinOnBuilders) {
+                update.append(Chars.SPACE).append(sqlJoinOnBuilder.build());
+            }
+        }
+        update.append(Chars.SPACE).append(keyworld.set());
+        int len = update.length();
+        params.forEach(c -> {
+            Lang.ifNotEmpty(c.toSql(), setValue -> update.append(Chars.SPACE).append(setValue).append(Chars.COMMA));
+            //            String setValue = c.toSql();
+            //            if (Lang.isNotEmpty(setValue)) {
+            //                update.append(Chars.SPACE).append(setValue).append(Chars.COMMA);
+            //            }
+        });
+        if (len == update.length()) {
+            throw new JdbcException("no value supply for set");
+        }
+        update.deleteCharAt(update.length() - 1);
+        return update.toString();
+    }
 
     /**
      * Gets the params.
@@ -146,35 +190,13 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
      */
     public void setAlias(String alias) {
         this.alias = alias;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String build() {
-        StringBuilder update = new StringBuilder();
-        Keyworld keyworld = dialect.getKeywords();
-        update.append(keyworld.update()).append(Chars.SPACE).append(dialect.buildTableSql(tableName, alias))
-                .append(Chars.SPACE).append(keyworld.set());
-        // TODO 判断tableName paramMap 为空 抛出异常
-        int len = update.length();
-        params.forEach(c -> {
-            Lang.ifNotEmpty(c.toSql(), setValue -> update.append(Chars.SPACE).append(setValue).append(Chars.COMMA));
-            //            String setValue = c.toSql();
-            //            if (Lang.isNotEmpty(setValue)) {
-            //                update.append(Chars.SPACE).append(setValue).append(Chars.COMMA);
-            //            }
-        });
-        if (len == update.length()) {
-            throw new JdbcException("no value supply for set");
+        for (ParamedColumnElement params : params) {
+            params.setTableAlias(alias);
         }
-        update.deleteCharAt(update.length() - 1);
-        return update.toString();
     }
 
     /**
-     * get ignoreStrategy value
+     * get ignoreStrategy value.
      *
      * @return ignoreStrategy
      */
@@ -183,7 +205,7 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
     }
 
     /**
-     * set ignoreStrategy value
+     * set ignoreStrategy value.
      *
      * @param ignoreStrategy ignoreStrategy
      */

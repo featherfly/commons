@@ -66,6 +66,8 @@
 
 29. 加入SqlJoinOnBasicBuilder2，SqlSelectBasicBuilder加入join(String joinTableName, String joinTableAlias, String onSql) |join(Join join, String joinTableName, String joinTableAlias, String onSql)
 
+30. SqlUpdateSetBasicBuilder，SqlDeleteFromBasicBuilder实现join
+
 # 0.5.5 2022-8-11
 1. Dialect加入getKeywordLike(QueryPolicy)、getKeywordEq(QueryPolicy)、keywordsCase()方法
 2. Dialect删除isKeywordUpcase()方法

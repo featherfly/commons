@@ -23,6 +23,16 @@ public class SelectColumnElement extends ColumnElement {
     /**
      * Instantiates a new select column element.
      *
+     * @param element the element
+     */
+    public SelectColumnElement(SelectColumnElement element) {
+        this(element.getDialect(), element.getAggregateFunction(), element.isDistinct(), element.getTableAlias(),
+            element.getName(), element.getAlias());
+    }
+
+    /**
+     * Instantiates a new select column element.
+     *
      * @param dialect dialect
      * @param name    name
      */
@@ -98,7 +108,7 @@ public class SelectColumnElement extends ColumnElement {
      * @param alias             the column alias
      */
     public SelectColumnElement(Dialect dialect, AggregateFunction aggregateFunction, String tableAlias, String name,
-            String alias) {
+        String alias) {
         this(dialect, aggregateFunction, false, tableAlias, name, alias);
     }
 
@@ -140,7 +150,7 @@ public class SelectColumnElement extends ColumnElement {
      * @param alias             column alias
      */
     public SelectColumnElement(Dialect dialect, AggregateFunction aggregateFunction, boolean distinct,
-            String tableAlias, String name, String alias) {
+        String tableAlias, String name, String alias) {
         super(dialect, name, tableAlias);
         this.aggregateFunction = aggregateFunction;
         this.alias = alias;
@@ -172,6 +182,15 @@ public class SelectColumnElement extends ColumnElement {
      */
     public boolean isDistinct() {
         return distinct;
+    }
+
+    /**
+     * Sets the alias.
+     *
+     * @param alias the new alias
+     */
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     /**

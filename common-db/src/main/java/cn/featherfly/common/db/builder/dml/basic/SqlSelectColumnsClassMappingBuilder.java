@@ -13,10 +13,10 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
  * @author zhongj
  */
 public class SqlSelectColumnsClassMappingBuilder
-        extends AbstractSqlSelectColumnsBuilder<SqlSelectColumnsClassMappingBuilder> {
+    extends AbstractSqlSelectColumnsBuilder<SqlSelectColumnsClassMappingBuilder> {
 
     /** The class mapping. */
-    protected JdbcClassMapping<?> classMapping;
+    protected final JdbcClassMapping<?> classMapping;
 
     /**
      * Instantiates a new sql select columns basic builder.
@@ -58,7 +58,7 @@ public class SqlSelectColumnsClassMappingBuilder
             //            columnsBuilder.append(
             //                    ClassMappingUtils.getSelectColumnsSql(classMapping, tableAlias, prefix.toString(), dialect));
             columnsBuilder.append(ClassMappingUtils.getSelectColumnsSql(classMapping, tableAlias,
-                    columnAliasPrefixProcessor.apply(enableColumnAliasPrefixTableAlias, tableAlias), dialect));
+                columnAliasPrefixProcessor.apply(enableColumnAliasPrefixTableAlias, tableAlias), dialect));
         } else {
             // addColumn的时候判断不判断String column是column还是property
             // 因为此类基本是内部使用，所以在使用时直接addColumn(propertyMapping.getFieldName(), propertyMapping.getName())

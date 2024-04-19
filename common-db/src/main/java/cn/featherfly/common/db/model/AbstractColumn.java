@@ -57,6 +57,23 @@ public abstract class AbstractColumn implements Column {
     protected Table table;
 
     /**
+     * Instantiates a new abstract column.
+     */
+    protected AbstractColumn() {
+        super();
+    }
+
+    /**
+     * Instantiates a new abstract column.
+     *
+     * @param name the name
+     */
+    protected AbstractColumn(String name) {
+        super();
+        this.name = name;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -146,9 +163,9 @@ public abstract class AbstractColumn implements Column {
     @Override
     public String toString() {
         return "Column [name=" + name + ", sqlType=" + sqlType + ", type=" + type + ", typeName=" + typeName + ", size="
-                + size + ", remark=" + remark + ", defaultValue=" + defaultValue + ", nullable=" + nullable
-                + ", columnIndex=" + columnIndex + ", primaryKey=" + primaryKey + ", decimalDigits=" + decimalDigits
-                + ", autoincrement=" + autoincrement + "]";
+            + size + ", remark=" + remark + ", defaultValue=" + defaultValue + ", nullable=" + nullable
+            + ", columnIndex=" + columnIndex + ", primaryKey=" + primaryKey + ", decimalDigits=" + decimalDigits
+            + ", autoincrement=" + autoincrement + "]";
     }
 
     /**

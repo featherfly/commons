@@ -8,15 +8,28 @@ import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.Table;
 
 /**
- * <p>
- * AbstractColumn
- * </p>
- * .
+ * AbstractColumn .
  *
  * @author zhongj
  * @param <C> the generic type
  */
 public abstract class AbstractColumnPojo<C extends Column> extends AbstractColumn {
+
+    /**
+     * Instantiates a new abstract column pojo.
+     */
+    protected AbstractColumnPojo() {
+        super();
+    }
+
+    /**
+     * Instantiates a new abstract column pojo.
+     *
+     * @param name the name
+     */
+    protected AbstractColumnPojo(String name) {
+        super(name);
+    }
 
     /**
      * 设置name.

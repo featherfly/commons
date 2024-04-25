@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 
 import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.dialect.Dialect;
-import cn.featherfly.common.exception.UnsupportedException;
+import cn.featherfly.common.exception.NotImplementedException;
 import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.operator.AggregateFunction;
 import cn.featherfly.common.repository.builder.dml.FindBuilder;
@@ -202,7 +202,7 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
     @Override
     public SqlConditionBuilder from(String[] tableNames) {
         // NOIMPL Auto-generated method stub
-        throw new UnsupportedException();
+        throw new NotImplementedException();
     }
 
     /**
@@ -211,7 +211,7 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
     @Override
     public SqlConditionBuilder from(Collection<String> tableNames) {
         // NOIMPL Auto-generated method stub
-        throw new UnsupportedException();
+        throw new NotImplementedException();
     }
 
     /**
@@ -220,7 +220,7 @@ public class SqlQueryBuilder implements SelectBuilder, QueryBuilder {
     @Override
     public SqlConditionBuilder from(Map<String, String> tableNames) {
         // NOIMPL Auto-generated method stub
-        throw new UnsupportedException();
+        throw new NotImplementedException();
     }
 
     // ********************************************************************

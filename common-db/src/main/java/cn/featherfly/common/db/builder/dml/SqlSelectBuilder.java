@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import cn.featherfly.common.db.dialect.Dialect;
+import cn.featherfly.common.exception.NotImplementedException;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.operator.AggregateFunction;
 
@@ -138,7 +139,7 @@ public class SqlSelectBuilder extends AbstractSqlSelectBuilder implements Select
     @Override
     public SqlConditionBuilder from(String[] tableNames) {
         // NOIMPL 需要从底层开始加入多tableName tableAlias的Builder
-        return null;
+        throw new NotImplementedException();
     }
 
     /**
@@ -147,7 +148,7 @@ public class SqlSelectBuilder extends AbstractSqlSelectBuilder implements Select
     @Override
     public SqlConditionBuilder from(Collection<String> tableNames) {
         // NOIMPL 需要从底层开始加入多tableName tableAlias的Builder
-        return null;
+        throw new NotImplementedException();
     }
 
     /**
@@ -156,6 +157,6 @@ public class SqlSelectBuilder extends AbstractSqlSelectBuilder implements Select
     @Override
     public SqlConditionBuilder from(Map<String, String> tableNames) {
         // NOIMPL 需要从底层开始加入多tableName tableAlias的Builder
-        return null;
+        throw new NotImplementedException();
     }
 }

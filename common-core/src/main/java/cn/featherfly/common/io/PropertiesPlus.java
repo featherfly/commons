@@ -185,6 +185,14 @@ public class PropertiesPlus extends java.util.Properties implements cn.featherfl
      * {@inheritDoc}
      */
     @Override
+    public void store(OutputStream out, Charset charset) throws IOException {
+        properties.store(out, charset);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void store(OutputStream out, String comment) throws IOException {
         logger.warn("comment argu is ignore");
         properties.store(out);

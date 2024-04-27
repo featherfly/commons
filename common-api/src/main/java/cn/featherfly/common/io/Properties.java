@@ -10,10 +10,7 @@ import java.util.Collection;
 import cn.featherfly.common.constant.Chars;
 
 /**
- * <p>
- * Properties
- * </p>
- * .
+ * Properties.
  *
  * @author zhongj
  */
@@ -108,6 +105,15 @@ public interface Properties {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     void store(OutputStream out) throws IOException;
+
+    /**
+     * Store.
+     *
+     * @param out     the out
+     * @param charset the charset
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    void store(OutputStream out, Charset charset) throws IOException;
 
     /**
      * Load.

@@ -27,10 +27,13 @@ import cn.featherfly.common.lang.Strings;
  */
 public class PropertiesImpl implements Properties {
 
+    /** The charset. */
     private Charset charset = StandardCharsets.UTF_8;
 
+    /** The part map. */
     private Map<String, Part> partMap = new LinkedHashMap<>();
 
+    /** The defaults. */
     private Properties defaults;
 
     /**
@@ -41,12 +44,36 @@ public class PropertiesImpl implements Properties {
     }
 
     /**
+     * Creates an empty property list with no default values.
+     *
+     * @param charset the charset
+     * @deprecated jdk properties file only charset 8859_1，PropertiesImpl stored
+     *             file write it's charset in file
+     */
+    @Deprecated
+    public PropertiesImpl(Charset charset) {
+        if (charset != null) {
+            this.charset = charset;
+        }
+    }
+
+    /**
      * Creates an empty property list with the specified defaults.
      *
      * @param defaults the defaults.
      */
     public PropertiesImpl(Properties defaults) {
-        this(defaults.getCharset());
+        this(defaults, null);
+    }
+
+    /**
+     * Creates an empty property list with the specified defaults.
+     *
+     * @param defaults the defaults.
+     * @param charset  the charset
+     */
+    PropertiesImpl(Properties defaults, Charset charset) {
+        this(charset);
         this.defaults = defaults;
         int i = 1;
         for (Part part : defaults.listAll()) {
@@ -60,19 +87,7 @@ public class PropertiesImpl implements Properties {
     }
 
     /**
-     * Creates an empty property list with no default values.
-     *
-     * @param charset charset
-     */
-    public PropertiesImpl(Charset charset) {
-        super();
-        if (charset != null) {
-            this.charset = charset;
-        }
-    }
-
-    /**
-     * Creates an empty property list with no default values.
+     * Creates an empty property list with the specified defaults.
      *
      * @param properties properties
      */
@@ -81,12 +96,12 @@ public class PropertiesImpl implements Properties {
     }
 
     /**
-     * Creates an empty property list with no default values.
+     * Creates an empty property list with the specified defaults.
      *
-     * @param properties java.util.Properties
-     * @param charset    charset
+     * @param properties properties
+     * @param charset    the charset
      */
-    public PropertiesImpl(java.util.Properties properties, Charset charset) {
+    PropertiesImpl(java.util.Properties properties, Charset charset) {
         this(charset);
         if (properties != null) {
             properties.stringPropertyNames().forEach(pn -> setProperty(pn, properties.getProperty(pn)));
@@ -179,6 +194,12 @@ public class PropertiesImpl implements Properties {
     //        return this;
     //    }
 
+    /**
+     * Adds the comment.
+     *
+     * @param comment the comment
+     * @return the string
+     */
     private String addComment(String comment) {
         String key = System.currentTimeMillis() + "";
         partMap.put(key, new Comment(comment));
@@ -216,8 +237,7 @@ public class PropertiesImpl implements Properties {
      */
     @Override
     public void store(OutputStream out) throws IOException {
-        store0(new BufferedWriter(new OutputStreamWriter(out, charset)), charset == StandardCharsets.ISO_8859_1,
-                charset);
+        store(out, charset);
         //        if (charset == StandardCharsets.ISO_8859_1) {
         //            //            store0(new BufferedWriter(new OutputStreamWriter(out, "8859_1")), comments, true);
         //            store0(new BufferedWriter(new OutputStreamWriter(out, StandardCharsets.ISO_8859_1)), true,
@@ -231,10 +251,25 @@ public class PropertiesImpl implements Properties {
      * {@inheritDoc}
      */
     @Override
+    public void store(OutputStream out, Charset charset) throws IOException {
+        store0(new BufferedWriter(new OutputStreamWriter(out, charset)), charset == StandardCharsets.ISO_8859_1,
+                charset);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void load(InputStream is) throws IOException {
         load0(new LineReader(is));
     }
 
+    /**
+     * Load 0.
+     *
+     * @param lr the lr
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void load0(LineReader lr) throws IOException {
         char[] convtBuf = new char[1024];
         int limit;
@@ -310,6 +345,15 @@ public class PropertiesImpl implements Properties {
         }
     }
 
+    /**
+     * Load convert.
+     *
+     * @param in       the in
+     * @param off      the off
+     * @param len      the len
+     * @param convtBuf the convt buf
+     * @return the string
+     */
     private String loadConvert(char[] in, int off, int len, char[] convtBuf) {
         if (convtBuf.length < len) {
             int newLen = len * 2;
@@ -385,6 +429,14 @@ public class PropertiesImpl implements Properties {
         return new String(out, 0, outLen);
     }
 
+    /**
+     * Store 0.
+     *
+     * @param bw         the bw
+     * @param escUnicode the esc unicode
+     * @param charset    the charset
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void store0(BufferedWriter bw, boolean escUnicode, Charset charset) throws IOException {
         bw.write(Chars.SHARP + "charset=" + charset.displayName() + Chars.NEW_LINE);
         bw.write(Chars.SHARP + "updated at " + Dates.formatTime(new Date()) + Chars.NEW_LINE);
@@ -417,6 +469,14 @@ public class PropertiesImpl implements Properties {
         bw.flush();
     }
 
+    /**
+     * Save convert.
+     *
+     * @param theString     the the string
+     * @param escapeSpace   the escape space
+     * @param escapeUnicode the escape unicode
+     * @return the string
+     */
     private String saveConvert(String theString, boolean escapeSpace, boolean escapeUnicode) {
         int len = theString.length();
         int bufLen = len * 2;
@@ -484,25 +544,58 @@ public class PropertiesImpl implements Properties {
         return outBuffer.toString();
     }
 
+    /**
+     * The Class LineReader.
+     */
     class LineReader {
+
+        /**
+         * Instantiates a new line reader.
+         *
+         * @param inStream the in stream
+         */
         public LineReader(InputStream inStream) {
             this.inStream = inStream;
             inByteBuf = new byte[8192];
         }
 
+        /**
+         * Instantiates a new line reader.
+         *
+         * @param reader the reader
+         */
         public LineReader(Reader reader) {
             this.reader = reader;
             inCharBuf = new char[8192];
         }
 
+        /** The in byte buf. */
         byte[] inByteBuf;
+
+        /** The in char buf. */
         char[] inCharBuf;
+
+        /** The line buf. */
         char[] lineBuf = new char[1024];
+
+        /** The in limit. */
         int inLimit = 0;
+
+        /** The in off. */
         int inOff = 0;
+
+        /** The in stream. */
         InputStream inStream;
+
+        /** The reader. */
         Reader reader;
 
+        /**
+         * Read line.
+         *
+         * @return the int
+         * @throws IOException Signals that an I/O exception has occurred.
+         */
         int readLine() throws IOException {
             int len = 0;
             char c = 0;
@@ -614,15 +707,16 @@ public class PropertiesImpl implements Properties {
     }
 
     /**
-     * Convert a nibble to a hex character
+     * Convert a nibble to a hex character.
      *
      * @param nibble the nibble to convert.
+     * @return the char
      */
     private static char toHex(int nibble) {
         return hexDigit[nibble & 0xF];
     }
 
-    /** A table of hex digits */
+    /** A table of hex digits. */
     private static final char[] hexDigit = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
             'F' };
 

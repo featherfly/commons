@@ -1,14 +1,3 @@
-/*
- * All rights Reserved, Designed By zhongj
- * @Title: SqlUpdateSetBasicBuilder.java
- * @Package cn.featherfly.common.db.builder.dml.basic
- * @Description: todo (用一句话描述该文件做什么)
- * @author: zhongj
- * @date: 2024年3月29日 下午1:49:04
- * @version V1.0
- * @Copyright: 2024 www.featherfly.cn Inc. All rights reserved.
- */
-
 package cn.featherfly.common.db.builder.dml.basic;
 
 import java.util.ArrayList;
@@ -44,7 +33,7 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
 
     private Dialect dialect;
 
-    private Predicate<Object> ignoreStrategy;
+    private Predicate<?> ignoreStrategy;
 
     /**
      * Instantiates a new sql update set basic builder.
@@ -93,7 +82,19 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
      * @return the sql update set basic builder
      */
     public SqlUpdateSetBasicBuilder setValue(String columnName, Object value) {
-        params.add(new UpdateColumnElement(dialect, columnName, value, alias, ignoreStrategy));
+        return setValue(columnName, value, ignoreStrategy);
+    }
+
+    /**
+     * Sets the value.
+     *
+     * @param columnName        the column name
+     * @param value             the value
+     * @param setIgnoreStrategy the set ignore strategy
+     * @return the sql update set basic builder
+     */
+    public SqlUpdateSetBasicBuilder setValue(String columnName, Object value, Predicate<?> setIgnoreStrategy) {
+        params.add(new UpdateColumnElement(dialect, columnName, value, alias, setIgnoreStrategy));
         return this;
     }
 
@@ -106,7 +107,21 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
      * @return the sql update set basic builder
      */
     public SqlUpdateSetBasicBuilder setValue(String columnName, Object value, SetType setType) {
-        params.add(new UpdateColumnElement(dialect, columnName, value, alias, setType, ignoreStrategy));
+        return setValue(columnName, value, setType, ignoreStrategy);
+    }
+
+    /**
+     * Sets the value.
+     *
+     * @param columnName        the column name
+     * @param value             the value
+     * @param setType           the set type
+     * @param setIgnoreStrategy the set ignore strategy
+     * @return the sql update set basic builder
+     */
+    public SqlUpdateSetBasicBuilder setValue(String columnName, Object value, SetType setType,
+            Predicate<?> setIgnoreStrategy) {
+        params.add(new UpdateColumnElement(dialect, columnName, value, alias, setType, setIgnoreStrategy));
         return this;
     }
 
@@ -209,8 +224,7 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
      *
      * @param ignoreStrategy ignoreStrategy
      */
-    @SuppressWarnings("unchecked")
     public void setIgnoreStrategy(Predicate<?> ignoreStrategy) {
-        this.ignoreStrategy = (Predicate<Object>) ignoreStrategy;
+        this.ignoreStrategy = ignoreStrategy;
     }
 }

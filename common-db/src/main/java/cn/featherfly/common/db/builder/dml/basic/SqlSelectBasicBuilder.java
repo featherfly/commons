@@ -722,6 +722,17 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
         return new SqlSelectJoinOnBasicBuilder(this, joinSelectColumnsBuilder);
     }
 
+    /**
+     * Adds the sql join on builder.
+     *
+     * @param sqlJoinOnBuilder the sql join on builder
+     * @return the sql delete from basic builder
+     */
+    public SqlSelectBasicBuilder join(SqlJoinOnBuilder sqlJoinOnBuilder) {
+        sqlJoinOnBasicBuilders.add(sqlJoinOnBuilder);
+        return this;
+    }
+
     //    /**
     //     * Join.
     //     *

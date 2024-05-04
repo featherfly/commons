@@ -6,10 +6,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.speedment.common.tuple.MutableTuples;
+import com.speedment.common.tuple.mutable.MutableTuple1;
+
 import cn.featherfly.common.constant.Chars;
+import cn.featherfly.common.db.NamedParamSql.NamedParam;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.Execution;
@@ -82,8 +87,7 @@ public final class SqlUtils {
     /**
      * convert named param sql with {@link #PARAM_NAME_START_SYMBOL}.
      * <p>
-     * transfer <code>select * from user where name = :user</code> to
-     * <code>select * from user where name = ?</code>
+     * transfer <code>select * from user where name = :user</code> to <code>select * from user where name = ?</code>
      * <p>
      *
      * @param namedParamSql the named param sql
@@ -95,7 +99,7 @@ public final class SqlUtils {
     }
 
     /**
-     * convert named param sql.
+     * convert named param sql with startSymbol.
      *
      * @param namedParamSql the named param sql
      * @param params        the params
@@ -107,7 +111,7 @@ public final class SqlUtils {
     }
 
     /**
-     * convert named param sql.
+     * convert named param sql startSymbol and endSymbol.
      *
      * @param namedParamSql the named param sql
      * @param params        the params
@@ -117,11 +121,64 @@ public final class SqlUtils {
      */
     public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol,
             Character endSymbol) {
+        final MutableTuple1<Object[]> paramsTuple = MutableTuples.create1();
+        return new SimpleExecution(convertNamedParamSql(namedParamSql, params, startSymbol, endSymbol,
+                paramArray -> paramsTuple.set0(paramArray), null), paramsTuple.get0().get());
+    }
+
+    /**
+     * convert named param sql with {@link #PARAM_NAME_START_SYMBOL}.
+     * <p>
+     * transfer <code>select * from user where name = :user</code> to <code>select * from user where name = ?</code>
+     * <p>
+     *
+     * @param namedParamSql the named param sql
+     * @return NamedParamSql
+     */
+    public static NamedParamSql convertNamedParamSql(String namedParamSql) {
+        return convertNamedParamSql(namedParamSql, PARAM_NAME_START_SYMBOL);
+    }
+
+    /**
+     * convert named param sql with startSymbol argument.
+     *
+     * @param namedParamSql the named param sql
+     * @param startSymbol   the start symbol
+     * @return NamedParamSql
+     */
+    public static NamedParamSql convertNamedParamSql(String namedParamSql, char startSymbol) {
+        return convertNamedParamSql(namedParamSql, startSymbol, null);
+    }
+
+    /**
+     * convert named param sql with startSymbol and endSymbol.
+     *
+     * @param namedParamSql the named param sql
+     * @param startSymbol   the start symbol
+     * @param endSymbol     the end symbol
+     * @return NamedParamSql
+     */
+    public static NamedParamSql convertNamedParamSql(String namedParamSql, char startSymbol, Character endSymbol) {
+        final MutableTuple1<NamedParam[]> paramNamesTuple = MutableTuples.create1();
+        String sql = convertNamedParamSql(namedParamSql, null, startSymbol, endSymbol, null,
+                namedParamArray -> paramNamesTuple.set0(namedParamArray));
+        return new NamedParamSql(sql, paramNamesTuple.get0().get());
+    }
+
+    private static String convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol,
+            Character endSymbol, Consumer<Object[]> paramValuesConsumer, Consumer<NamedParam[]> namedParamsConsumer) {
         AssertIllegalArgument.isNotNull(namedParamSql, "namedParamSql");
         AssertIllegalArgument.isNotEmpty(startSymbol, "startSymbol");
 
         StringBuilder sql = new StringBuilder();
-        List<Object> paramList = new ArrayList<>();
+        List<Object> paramList = null;
+        if (paramValuesConsumer != null) {
+            paramList = new ArrayList<>(params.size());
+        }
+        List<NamedParam> nameList = null;
+        if (namedParamsConsumer != null) {
+            nameList = new ArrayList<>(0);
+        }
 
         int nameStartIndex = -1;
         int nameEndIndex = -1;
@@ -147,24 +204,39 @@ public final class SqlUtils {
                         nameEndIndex++;
                     }
                     String name = namedParamSql.substring(nameStartIndex + 1, nameEndIndex);
-                    Object param = getNamedParam(params, name);
-
-                    if (param == null) {
-                        paramList.add(param);
-                        sql.append(Chars.QUESTION_CHAR);
-                    } else if (param instanceof Collection) {
-                        paramList.addAll((Collection<?>) param);
-                        setParams(sql, ((Collection<?>) param).size(), namedParamSql, nameStartIndex);
-                    } else if (param.getClass().isArray()) {
-                        int length = Array.getLength(param);
-                        for (int i = 0; i < length; i++) {
-                            paramList.add(Array.get(param, i));
-                        }
-                        setParams(sql, length, namedParamSql, nameStartIndex);
-                    } else {
-                        paramList.add(param);
-                        sql.append(Chars.QUESTION_CHAR);
+                    boolean isIn = isInCondition(namedParamSql, nameStartIndex);
+                    if (namedParamsConsumer != null) {
+                        nameList.add(new NamedParam(name, isIn));
                     }
+                    if (params != null) {
+                        Object param = getNamedParam(params, name);
+                        String paramSql = addParam(param, paramList, isIn);
+                        sql.append(paramSql);
+                    } else {
+                        if (isIn) {
+                            sql.append("{").append(name).append("}"); // YUFEI_TODO 后续来把 {  } 做为可设置参数
+                        } else {
+                            sql.append(Chars.QUESTION_CHAR);
+                        }
+                    }
+
+                    //                    if (param == null) {
+                    //                        paramList.add(param);
+                    //                        sql.append(Chars.QUESTION_CHAR);
+                    //                    } else if (param instanceof Collection) {
+                    //                        paramList.addAll((Collection<?>) param);
+                    //                        setParams(sql, ((Collection<?>) param).size(), namedParamSql, nameStartIndex);
+                    //                    } else if (param.getClass().isArray()) {
+                    //                        int length = Array.getLength(param);
+                    //                        for (int i = 0; i < length; i++) {
+                    //                            paramList.add(Array.get(param, i));
+                    //                        }
+                    //                        setParams(sql, length, namedParamSql, nameStartIndex);
+                    //                    } else {
+                    //                        paramList.add(param);
+                    //                        sql.append(Chars.QUESTION_CHAR);
+                    //                    }
+
                     if (!emptySymbol) {
                         nameEndIndex++;
                     }
@@ -178,16 +250,26 @@ public final class SqlUtils {
                 sql.append(c);
             }
         }
-        return new SimpleExecution(sql.toString(), paramList.toArray());
+        if (paramValuesConsumer != null) {
+            paramValuesConsumer.accept(paramList.toArray());
+        }
+        if (namedParamsConsumer != null) {
+            namedParamsConsumer.accept(nameList.toArray(new NamedParam[nameList.size()]));
+        }
+        return sql.toString();
     }
 
-    private static void setParams(StringBuilder sql, int length, String namedParamSql, int nameStartIndex) {
-        if (isInCondition(namedParamSql, nameStartIndex)) {
-            sqlInParams(sql, length);
-        } else {
-            sql.append(Chars.QUESTION_CHAR);
-        }
-    }
+    //    private static void sqlInParams(StringBuilder sql, int size) {
+    //        sql.append(inParamsSql(size));
+    //    }
+    //
+    //    private static void setParams(StringBuilder sql, int length, String namedParamSql, int nameStartIndex) {
+    //        if (isInCondition(namedParamSql, nameStartIndex)) {
+    //            sqlInParams(sql, length);
+    //        } else {
+    //            sql.append(Chars.QUESTION_CHAR);
+    //        }
+    //    }
 
     private static boolean isInCondition(String namedParamSql, int nameStartIndex) {
         int endIndex = -1;
@@ -204,15 +286,21 @@ public final class SqlUtils {
         return false;
     }
 
-    private static void sqlInParams(StringBuilder sql, int size) {
-        sql.append(Chars.PAREN_L_CHAR);
-        for (int i = 0; i < size; i++) {
-            sql.append(Chars.QUESTION_CHAR).append(Chars.COMMA_CHAR);
+    private static String inParamsSql(int size) {
+        if (size <= 0) {
+            throw new IllegalArgumentException("size must be > 0");
+        } else {
+            StringBuilder sql = new StringBuilder();
+            sql.append(Chars.PAREN_L_CHAR);
+            for (int i = 0; i < size; i++) {
+                sql.append(Chars.QUESTION_CHAR).append(Chars.COMMA_CHAR);
+            }
+            if (sql.length() > 0) {
+                sql.deleteCharAt(sql.length() - 1);
+            }
+            sql.append(Chars.PAREN_R_CHAR);
+            return sql.toString();
         }
-        if (sql.length() > 0) {
-            sql.deleteCharAt(sql.length() - 1);
-        }
-        sql.append(Chars.PAREN_R_CHAR);
     }
 
     private static boolean isSqlWordSplitChar(char c) {
@@ -228,11 +316,38 @@ public final class SqlUtils {
      * @param name   the name
      * @return the named param
      */
-    private static Object getNamedParam(Map<String, Object> params, String name) {
+    static Object getNamedParam(Map<String, Object> params, String name) {
         if (params.containsKey(name)) {
             return params.get(name);
         } else {
             throw new JdbcException("no param found for name -> " + name);
         }
+    }
+
+    static String addParam(Object param, List<Object> paramList) {
+        return addParam(param, paramList, false);
+    }
+
+    static String addParam(Object param, List<Object> paramList, boolean isIn) {
+        if (isIn) {
+            if (param == null) {
+                paramList.add(param);
+                return inParamsSql(1);
+            } else if (param instanceof Collection) {
+                paramList.addAll((Collection<?>) param);
+                return inParamsSql(((Collection<?>) param).size());
+            } else if (param.getClass().isArray()) {
+                int length = Array.getLength(param);
+                for (int i = 0; i < length; i++) {
+                    paramList.add(Array.get(param, i));
+                }
+                return inParamsSql(length);
+            } else {
+                paramList.add(param);
+                return inParamsSql(1);
+            }
+        }
+        paramList.add(param);
+        return Chars.QUESTION;
     }
 }

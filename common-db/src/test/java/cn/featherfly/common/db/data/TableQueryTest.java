@@ -1,13 +1,3 @@
-
-/*
- * All rights Reserved, Designed By zhongj
- * @Title: TableQueryTest.java
- * @Package cn.featherfly.common.db.data
- * @Description: TODO (用一句话描述该文件做什么)
- * @author: zhongj
- * @date: 2021-12-19 19:13:19
- * @Copyright: 2021 www.featherfly.cn Inc. All rights reserved.
- */
 package cn.featherfly.common.db.data;
 
 import static org.testng.Assert.assertEquals;

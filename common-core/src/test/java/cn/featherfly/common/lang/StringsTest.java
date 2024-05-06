@@ -39,7 +39,7 @@ public class StringsTest {
         String time = "12:15";
 
         Map<String, Object> map = new ChainMapImpl<String, Object>().putChain("name", name).putChain("year", year)
-                .putChain("name2", name2).putChain("time", time);
+            .putChain("name2", name2).putChain("time", time);
         Object[] args = new Object[] { name, year, name2, time };
 
         String actual = null;
@@ -118,5 +118,10 @@ public class StringsTest {
         System.out.println(actual);
 
         assertEquals(actual, expected);
+    }
+
+    @Test
+    public void testUnicode() {
+        assertEquals("\u3000", "　");
     }
 }

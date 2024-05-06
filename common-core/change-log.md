@@ -19,6 +19,7 @@
 15. 加入TableMessage类，用于生成结构化字符串用作调试
 16. ClassUtils加入getClass(T obj)方法
 17. ArrayUtils加入create(Class<T> type, int length, IntFunction<T> filler)用于创建并填充数组
+18. Lang加入更多ifXxx方法
 
 # 1.11.0 2022-12-12
 

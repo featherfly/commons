@@ -18,105 +18,105 @@ import org.testng.annotations.Test;
 
 public class LangTest {
     @Test
-    public void testObjectEmpty() {
-        List<Object> list = new ArrayList<>();
+    public void ifEmpty_Object() {
         Object obj = null;
-        Lang.ifEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 1);
+        Object result = null;
+        result = Lang.ifEmptyOrElse(obj, () -> Integer.valueOf(1), (s) -> Integer.valueOf(2));
+        assertEquals(result, 1);
 
         obj = "123";
-        Lang.ifEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 1);
+        result = Lang.ifEmptyOrElse(obj, () -> Integer.valueOf(1), (s) -> Integer.valueOf(2));
+        assertEquals(result, 2);
 
         obj = null;
-        Lang.ifNotEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 1);
+        result = Lang.ifNotEmptyOrElse(obj, (s) -> Integer.valueOf(1), () -> Integer.valueOf(2));
+        assertEquals(result, 2);
 
         obj = "123";
-        Lang.ifNotEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 2);
+        result = Lang.ifNotEmptyOrElse(obj, (s) -> Integer.valueOf(1), () -> Integer.valueOf(2));
+        assertEquals(result, 1);
     }
 
     @Test
-    public void testStringEmpty() {
-        List<Object> list = new ArrayList<>();
+    public void ifEmpty_String() {
         String obj = "";
-        Lang.ifEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 1);
+        Object result = null;
+        result = Lang.ifEmptyOrElse(obj, () -> Integer.valueOf(1), (s) -> Integer.valueOf(2));
+        assertEquals(result, 1);
 
         obj = "123";
-        Lang.ifEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 1);
+        result = Lang.ifEmptyOrElse(obj, () -> Integer.valueOf(1), (s) -> Integer.valueOf(2));
+        assertEquals(result, 2);
 
         obj = null;
-        Lang.ifNotEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 1);
+        result = Lang.ifNotEmptyOrElse(obj, (s) -> Integer.valueOf(1), () -> Integer.valueOf(2));
+        assertEquals(result, 2);
 
         obj = "123";
-        Lang.ifNotEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 2);
+        result = Lang.ifNotEmptyOrElse(obj, (s) -> Integer.valueOf(1), () -> Integer.valueOf(2));
+        assertEquals(result, 1);
     }
 
     @Test
-    public void testArrayEmpty() {
-        List<Object> list = new ArrayList<>();
+    public void ifEmpty_Array() {
         String[] obj = new String[] {};
-        Lang.ifEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 1);
+        Object result = null;
+        result = Lang.ifEmptyOrElse(obj, () -> Integer.valueOf(1), (s) -> Integer.valueOf(2));
+        assertEquals(result, 1);
 
         obj = new String[1];
-        Lang.ifEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 1);
+        result = Lang.ifEmptyOrElse(obj, () -> Integer.valueOf(1), (s) -> Integer.valueOf(2));
+        assertEquals(result, 2);
 
         obj = null;
-        Lang.ifNotEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 1);
+        result = Lang.ifNotEmptyOrElse(obj, (s) -> Integer.valueOf(1), () -> Integer.valueOf(2));
+        assertEquals(result, 2);
 
         obj = new String[1];
-        Lang.ifNotEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 2);
+        result = Lang.ifNotEmptyOrElse(obj, (s) -> Integer.valueOf(1), () -> Integer.valueOf(2));
+        assertEquals(result, 1);
     }
 
     @Test
-    public void testCollectionEmpty() {
-        List<Object> list = new ArrayList<>();
+    public void ifEmpty_Collection() {
         List<String> obj = new ArrayList<>();
-        Lang.ifEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 1);
+        Object result = null;
+        result = Lang.ifEmptyOrElse(obj, () -> Integer.valueOf(1), (s) -> Integer.valueOf(2));
+        assertEquals(result, 1);
 
         obj.add("a");
-        Lang.ifEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 1);
+        result = Lang.ifEmptyOrElse(obj, () -> Integer.valueOf(1), (s) -> Integer.valueOf(2));
+        assertEquals(result, 2);
 
         obj = null;
-        Lang.ifNotEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 1);
+        result = Lang.ifNotEmptyOrElse(obj, (s) -> Integer.valueOf(1), () -> Integer.valueOf(2));
+        assertEquals(result, 2);
 
         obj = new ArrayList<>();
         obj.add("b");
-        Lang.ifNotEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 2);
+        result = Lang.ifNotEmptyOrElse(obj, (s) -> Integer.valueOf(1), () -> Integer.valueOf(2));
+        assertEquals(result, 1);
     }
 
     @Test
-    public void testMapEmpty() {
-        List<Object> list = new ArrayList<>();
+    public void ifEmpty_Map() {
         Map<String, String> obj = new HashMap<>();
-        Lang.ifEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 1);
+        Object result = null;
+        result = Lang.ifEmptyOrElse(obj, () -> Integer.valueOf(1), (s) -> Integer.valueOf(2));
+        assertEquals(result, 1);
 
         obj.put("a", "a");
-        Lang.ifEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 1);
+        result = Lang.ifEmptyOrElse(obj, () -> Integer.valueOf(1), (s) -> Integer.valueOf(2));
+        assertEquals(result, 2);
 
         obj = null;
-        Lang.ifNotEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 1);
+        result = Lang.ifNotEmptyOrElse(obj, (s) -> Integer.valueOf(1), () -> Integer.valueOf(2));
+        assertEquals(result, 2);
 
         obj = new HashMap<>();
         obj.put("b", "b");
-        Lang.ifNotEmpty(obj, () -> list.add("1"), () -> null);
-        assertEquals(list.size(), 2);
+        result = Lang.ifNotEmptyOrElse(obj, (s) -> Integer.valueOf(1), () -> Integer.valueOf(2));
+        assertEquals(result, 1);
     }
 
     @Test
@@ -127,7 +127,7 @@ public class LangTest {
         assertEquals(list.size(), 0);
 
         obj = new File(
-                ClassLoaderUtils.getResource(ClassUtils.packageToFile(this.getClass()), this.getClass()).getFile());
+            ClassLoaderUtils.getResource(ClassUtils.packageToFile(this.getClass()), this.getClass()).getFile());
         System.out.println(obj.getAbsolutePath());
         Lang.ifExists(obj, t -> {
             list.add("1");
@@ -141,11 +141,185 @@ public class LangTest {
         assertEquals(list.size(), 2);
 
         obj = new File(
-                ClassLoaderUtils.getResource(ClassUtils.packageToFile(this.getClass()), this.getClass()).getFile());
+            ClassLoaderUtils.getResource(ClassUtils.packageToFile(this.getClass()), this.getClass()).getFile());
         Lang.ifNotExists(obj, t -> {
             list.add("1");
         });
         assertEquals(list.size(), 2);
+    }
+
+    @Test
+    public void ifNull() {
+        String s = "yufei";
+        String snull = null;
+        String result = Lang.ifNull(null, s);
+        assertEquals(result, s);
+
+        result = Lang.ifNull(s, snull);
+        assertEquals(result, s);
+
+    }
+
+    @Test
+    public void ifNull2() {
+        String s = "yufei";
+        String snull = null;
+        String result = Lang.ifNull(snull, () -> s);
+        assertEquals(result, s);
+
+        result = Lang.ifNull(s, () -> null);
+        assertEquals(result, s);
+
+    }
+
+    @Test
+    public void ifNull3() {
+        String s = "yufei";
+        String yi = "yi";
+        String snull = null;
+        String result = null;
+
+        result = Lang.ifNull(s, () -> snull, () -> snull);
+        assertEquals(result, s);
+
+        result = Lang.ifNull(snull, () -> snull, () -> s);
+        assertEquals(result, s);
+
+        result = Lang.ifNull(snull, () -> s, () -> snull);
+        assertEquals(result, s);
+
+        result = Lang.ifNull(snull, () -> s, () -> yi, () -> snull);
+        assertEquals(result, s);
+
+        result = Lang.ifNull(snull, () -> yi, () -> s, () -> snull);
+        assertEquals(result, yi);
+
+        // ----------------------------------------------------------------------------------------------------------------
+
+        result = Lang.ifNull(() -> s, () -> snull, () -> snull);
+        assertEquals(result, s);
+
+        result = Lang.ifNull(() -> snull, () -> snull, () -> s);
+        assertEquals(result, s);
+
+        result = Lang.ifNull(() -> snull, () -> s, () -> snull);
+        assertEquals(result, s);
+
+        result = Lang.ifNull(() -> snull, () -> s, () -> yi, () -> snull);
+        assertEquals(result, s);
+
+        result = Lang.ifNull(() -> snull, () -> yi, () -> s, () -> snull);
+        assertEquals(result, yi);
+    }
+
+    @Test
+    public void ifNotNullFirst() {
+        String s = "yufei";
+        String yi = "yi";
+        String snull = null;
+        String result = null;
+
+        result = Lang.ifNotNullFirst(s, snull);
+        assertEquals(result, s);
+
+        result = Lang.ifNotNullFirst(snull, snull, s);
+        assertEquals(result, s);
+
+        result = Lang.ifNotNullFirst(snull, s, snull);
+        assertEquals(result, s);
+
+        result = Lang.ifNotNullFirst(snull, s, yi, snull);
+        assertEquals(result, s);
+
+        result = Lang.ifNotNullFirst(snull, yi, s, snull);
+        assertEquals(result, yi);
+    }
+
+    @Test
+    public void ifEmpty() {
+        String s = "yufei";
+        String snull = "";
+        String result = Lang.ifEmpty(snull, s);
+        assertEquals(result, s);
+
+        result = Lang.ifEmpty(s, snull);
+        assertEquals(result, s);
+
+    }
+
+    @Test
+    public void ifEmpty2() {
+        String s = "yufei";
+        String snull = "";
+        String result = Lang.ifEmpty(snull, () -> s);
+        assertEquals(result, s);
+
+        result = Lang.ifNull(s, () -> null);
+        assertEquals(result, s);
+
+    }
+
+    @Test
+    public void ifEmpty3() {
+        String s = "yufei";
+        String yi = "yi";
+        String snull = "";
+        String result = null;
+
+        result = Lang.ifEmpty(s, () -> snull, () -> snull);
+        assertEquals(result, s);
+
+        result = Lang.ifEmpty(snull, () -> snull, () -> s);
+        assertEquals(result, s);
+
+        result = Lang.ifEmpty(snull, () -> s, () -> snull);
+        assertEquals(result, s);
+
+        result = Lang.ifEmpty(snull, () -> s, () -> yi, () -> snull);
+        assertEquals(result, s);
+
+        result = Lang.ifEmpty(snull, () -> yi, () -> s, () -> snull);
+        assertEquals(result, yi);
+
+        // ----------------------------------------------------------------------------------------------------------------
+
+        result = Lang.ifEmpty(() -> s, () -> snull, () -> snull);
+        assertEquals(result, s);
+
+        result = Lang.ifEmpty(() -> snull, () -> snull, () -> s);
+        assertEquals(result, s);
+
+        result = Lang.ifEmpty(() -> snull, () -> s, () -> snull);
+        assertEquals(result, s);
+
+        result = Lang.ifEmpty(() -> snull, () -> s, () -> yi, () -> snull);
+        assertEquals(result, s);
+
+        result = Lang.ifEmpty(() -> snull, () -> yi, () -> s, () -> snull);
+        assertEquals(result, yi);
+    }
+
+    @Test
+    public void ifNotEmptyFirst() {
+        String s = "yufei";
+        String yi = "yi";
+        String snull = "";
+        String result = null;
+
+        result = Lang.ifNotEmptyFirst(s, snull);
+        assertEquals(result, s);
+
+        result = Lang.ifNotEmptyFirst(snull, snull, s);
+        assertEquals(result, s);
+
+        result = Lang.ifNotEmptyFirst(snull, s, snull);
+        assertEquals(result, s);
+
+        result = Lang.ifNotEmptyFirst(snull, s, yi, snull);
+        assertEquals(result, s);
+
+        result = Lang.ifNotEmptyFirst(snull, yi, s, snull);
+        assertEquals(result, yi);
     }
 
     @Test
@@ -195,8 +369,8 @@ public class LangTest {
     @Test
     public void testGetInvoker() {
         StackTraceElement e = Lang.getInvoker();
-        System.out.println(Strings.format("e.getClassName = {0}     e.getMethodName() = {1}", e.getClassName(),
-                e.getMethodName()));
+        System.out.println(
+            Strings.format("e.getClassName = {0}     e.getMethodName() = {1}", e.getClassName(), e.getMethodName()));
         assertEquals(e.getMethodName(), "testGetInvoker");
 
         assertInvoker1("testGetInvoker");
@@ -228,7 +402,7 @@ public class LangTest {
         StackTraceElement e = Lang.getInvoker(2);
         assertEquals(e.getClassName(), this.getClass().getName());
         System.out.println(Strings.format("assertEquals(e.getMethodName(), invokeMethod) = assertEquals({0}, {1})",
-                e.getMethodName(), invokeMethod));
+            e.getMethodName(), invokeMethod));
         //        assertEquals(Lang.getInvoker().getMethodName(), "getInvoker1");
         assertEquals(e.getMethodName(), invokeMethod);
     }

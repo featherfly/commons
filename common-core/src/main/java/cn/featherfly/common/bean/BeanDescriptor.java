@@ -31,8 +31,8 @@ import cn.featherfly.common.lang.ServiceLoaderUtils;
 /**
  * java bean 的描述信息.
  *
- * @author zhongj
- * @param <T> 描述的类型
+ * @author     zhongj
+ * @param  <T> 描述的类型
  */
 public class BeanDescriptor<T> {
 
@@ -41,7 +41,7 @@ public class BeanDescriptor<T> {
     private static final Map<Class<?>, BeanDescriptor<?>> BEAN_DESCRIPTORS = new ConcurrentHashMap<>();
 
     private static final BeanPropertyFactory FACTORY = ServiceLoaderUtils.load(BeanPropertyFactory.class,
-            new ReflectionBeanPropertyFactory());
+        new ReflectionBeanPropertyFactory());
 
     private ListOrderedMap<String, BeanProperty<T, ?>> beanProperties = new ListOrderedMap<>();
 
@@ -90,7 +90,7 @@ public class BeanDescriptor<T> {
             Method setter = ClassUtils.getSetter(field, type);
             if (getter != null || setter != null) {
                 BeanProperty<T, ?> prop = FACTORY.create(field.getName(), field, fieldType, setter, getter, type,
-                        field.getDeclaringClass());
+                    field.getDeclaringClass());
                 beanProperties.put(prop.getName(), prop);
                 if (LOGGER.isTraceEnabled() && initType != type) {
                     LOGGER.trace("类{}从父类{}中继承的属性：[{}]", type.getName(), initType.getName(), prop.getName());
@@ -157,24 +157,24 @@ public class BeanDescriptor<T> {
              */
             if (prop.get("get") != null) {
                 getter = (Method) prop.get("get");
-                declaringType = Lang.pick(declaringType, getter.getDeclaringClass());
-                propertyType = Lang.pick(propertyType,
-                        getGenericType(getter.getGenericReturnType(), getter.getReturnType()));
-                propertyName = Lang.pick(propertyName, ClassUtils.getPropertyName(getter));
+                declaringType = Lang.ifNull(declaringType, getter.getDeclaringClass());
+                propertyType = Lang.ifNull(propertyType,
+                    getGenericType(getter.getGenericReturnType(), getter.getReturnType()));
+                propertyName = Lang.ifNull(propertyName, ClassUtils.getPropertyName(getter));
             }
             if (prop.get("set") != null) {
                 setter = (Method) prop.get("set");
-                declaringType = Lang.pick(declaringType, setter.getDeclaringClass());
-                propertyType = Lang.pick(propertyType,
-                        getGenericType(setter.getGenericParameterTypes()[0], setter.getParameterTypes()[0]));
-                propertyName = Lang.pick(propertyName, ClassUtils.getPropertyName(setter));
+                declaringType = Lang.ifNull(declaringType, setter.getDeclaringClass());
+                propertyType = Lang.ifNull(propertyType,
+                    getGenericType(setter.getGenericParameterTypes()[0], setter.getParameterTypes()[0]));
+                propertyName = Lang.ifNull(propertyName, ClassUtils.getPropertyName(setter));
             }
             BeanProperty<T,
-                    ?> property = FACTORY.create(propertyName, null, propertyType, setter, getter, type, declaringType);
+                ?> property = FACTORY.create(propertyName, null, propertyType, setter, getter, type, declaringType);
             beanProperties.put(property.getName(), property);
             if (LOGGER.isTraceEnabled()) {
                 LOGGER.trace("类{}的属性：[{}]， 定义子类{}", property.getOwnerType().getName(), property.getName(),
-                        property.getDeclaringType().getName());
+                    property.getDeclaringType().getName());
             }
         }
     }
@@ -207,9 +207,9 @@ public class BeanDescriptor<T> {
     /**
      * 返回指定索引属性.
      *
-     * @param <E>   the element type
-     * @param index 索引
-     * @return 指定属性
+     * @param  <E>   the element type
+     * @param  index 索引
+     * @return       指定属性
      */
     @SuppressWarnings("unchecked")
     public <E> BeanProperty<T, E> getBeanProperty(int index) {
@@ -219,10 +219,10 @@ public class BeanDescriptor<T> {
     /**
      * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常.
      *
-     * @param <B>  the generic type
-     * @param <E>  the element type
-     * @param name 属性名
-     * @return 指定属性
+     * @param  <B>  the generic type
+     * @param  <E>  the element type
+     * @param  name 属性名
+     * @return      指定属性
      */
     @SuppressWarnings("unchecked")
     public <B, E> BeanProperty<B, E> getBeanProperty(String name) {
@@ -248,9 +248,9 @@ public class BeanDescriptor<T> {
     /**
      * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常.
      *
-     * @param <R>      the property type
-     * @param property 属性
-     * @return 指定属性
+     * @param  <R>      the property type
+     * @param  property 属性
+     * @return          指定属性
      */
     public <R> BeanProperty<T, R> getBeanProperty(SerializableFunction<T, R> property) {
         return getBeanProperty(LambdaUtils.getLambdaPropertyName(property));
@@ -259,10 +259,10 @@ public class BeanDescriptor<T> {
     /**
      * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常.
      *
-     * @param <E>      the element type
-     * @param <R>      the property type
-     * @param property 属性
-     * @return 指定属性
+     * @param  <E>      the element type
+     * @param  <R>      the property type
+     * @param  property 属性
+     * @return          指定属性
      */
     public <E, R> BeanProperty<T, R> getBeanProperty(SerializableBiConsumer<E, R> property) {
         return getBeanProperty(LambdaUtils.getLambdaPropertyName(property));
@@ -271,9 +271,9 @@ public class BeanDescriptor<T> {
     /**
      * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常.
      *
-     * @param <R>      the property type
-     * @param property 属性
-     * @return 指定属性
+     * @param  <R>      the property type
+     * @param  property 属性
+     * @return          指定属性
      */
     public <R> BeanProperty<T, R> getBeanProperty(SerializableConsumer<R> property) {
         return getBeanProperty(LambdaUtils.getLambdaPropertyName(property));
@@ -282,9 +282,9 @@ public class BeanDescriptor<T> {
     /**
      * 返回指定属性. 如果没有则抛出NoSuchPropertyException异常.
      *
-     * @param <R>      the property type
-     * @param property 属性
-     * @return 指定属性
+     * @param  <R>      the property type
+     * @param  property 属性
+     * @return          指定属性
      */
     public <R> BeanProperty<T, R> getBeanProperty(SerializableSupplier<R> property) {
         return getBeanProperty(LambdaUtils.getLambdaPropertyName(property));
@@ -296,8 +296,8 @@ public class BeanDescriptor<T> {
      * </p>
      * .
      *
-     * @param name 属性名
-     * @return 指定属性是否存在
+     * @param  name 属性名
+     * @return      指定属性是否存在
      */
     public boolean hasBeanProperty(String name) {
         return beanProperties.get(name) != null;
@@ -308,8 +308,8 @@ public class BeanDescriptor<T> {
      * 返回指定子孙属性. 如果没有则抛出NoSuchPropertyException异常
      * </p>
      *
-     * @param name 属性名
-     * @return 指定属性
+     * @param  name 属性名
+     * @return      指定属性
      */
     public BeanProperty<?, ?> getChildBeanProperty(String name) {
         if (name.contains(DOT)) {
@@ -328,8 +328,8 @@ public class BeanDescriptor<T> {
      * 查找并返回第一个符合条件BeanProperty. 如果没有则返回null.
      * </p>
      *
-     * @param condition 条件判断
-     * @return 第一个符合条件BeanProperty
+     * @param  condition 条件判断
+     * @return           第一个符合条件BeanProperty
      */
     public BeanProperty<?, ?> findBeanProperty(BeanPropertyMatcher condition) {
         for (BeanProperty<?, ?> beanProperty : getBeanProperties()) {
@@ -345,8 +345,8 @@ public class BeanDescriptor<T> {
      * 查找并返回所有符合条件BeanProperty的集合. 如果没有则返回一个长度为0的集合.
      * </p>
      *
-     * @param condition 条件判断
-     * @return 所有符合条件BeanProperty的集合
+     * @param  condition 条件判断
+     * @return           所有符合条件BeanProperty的集合
      */
     public Collection<BeanProperty<?, ?>> findBeanPropertys(BeanPropertyMatcher condition) {
         Collection<BeanProperty<?, ?>> coll = new ArrayList<>();
@@ -383,26 +383,26 @@ public class BeanDescriptor<T> {
                 try {
                     if (ClassUtils.isCellection(property.getType())) {
                         LOGGER.trace("类{}的属性[{}]为空，对象为Collection接口实现类，自动创建该属性对象", property.getOwnerType().getName(),
-                                property.getName());
+                            property.getName());
                         propertyValue = CollectionUtils.newInstance(property.getType());
                     } else if (ClassUtils.isMap(property.getType())) {
                         LOGGER.trace("类{}的属性[{}]为空，对象为MAP接口，自动创建该属性对象", property.getOwnerType().getName(),
-                                property.getName());
+                            property.getName());
                         propertyValue = CollectionUtils.newMap(property.getType());
                     } else if (property.getType() == Optional.class) {
                         LOGGER.trace("类{}的属性[{}]为空，对象为Optional容器，自动创建Optional和其对应的泛型对象",
-                                property.getOwnerType().getName(), property.getName());
+                            property.getOwnerType().getName(), property.getName());
                         propertyValue = Optional.of(ClassUtils.newInstance(property.getGenericType()));
                     } else {
                         LOGGER.trace("类{}的属性[{}]为空，自动创建该属性对象[使用newInstance()]", property.getOwnerType().getName(),
-                                property.getName());
+                            property.getName());
 
                         propertyValue = ClassUtils.newInstance(property.getType());
                     }
                     property.setValue(obj, propertyValue);
                 } catch (Exception e) {
                     throw new IllegalArgumentException(String.format("类%s缺少没有参数的构造函数", property.getType().getName()),
-                            e);
+                        e);
                 }
             } else {
                 propertyDescriptor = getBeanDescriptor(propertyValue.getClass());
@@ -445,9 +445,9 @@ public class BeanDescriptor<T> {
      * </p>
      * .
      *
-     * @param obj  目标对象
-     * @param name 属性名
-     * @return 属性
+     * @param  obj  目标对象
+     * @param  name 属性名
+     * @return      属性
      */
     @SuppressWarnings("unchecked")
     public Object getProperty(T obj, String name) {
@@ -477,9 +477,9 @@ public class BeanDescriptor<T> {
      * 返回当前对象是否含有指定注解.
      * </p>
      *
-     * @param <A>             注解类型
-     * @param annotationClass 注解类型
-     * @return 是否含有指定注解
+     * @param  <A>             注解类型
+     * @param  annotationClass 注解类型
+     * @return                 是否含有指定注解
      */
     public <A extends Annotation> boolean hasAnnotation(Class<A> annotationClass) {
         return getAnnotation(annotationClass) != null;
@@ -490,9 +490,9 @@ public class BeanDescriptor<T> {
      * 返回当前对象的指定类型注解.
      * </p>
      *
-     * @param <A>             注解类型
-     * @param annotationClass 注解类型
-     * @return 当前对象的指定类型注解
+     * @param  <A>             注解类型
+     * @param  annotationClass 注解类型
+     * @return                 当前对象的指定类型注解
      */
     public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
         try {
@@ -521,9 +521,9 @@ public class BeanDescriptor<T> {
     /**
      * 返回指定类型的描述.
      *
-     * @param <T>  类型
-     * @param type 类型
-     * @return 指定类型的描述
+     * @param  <T>  类型
+     * @param  type 类型
+     * @return      指定类型的描述
      */
     public static <T> BeanDescriptor<T> getBeanDescriptor(Class<T> type) {
         @SuppressWarnings("unchecked")
@@ -583,7 +583,7 @@ public class BeanDescriptor<T> {
     @Override
     public String toString() {
         return "BeanDescriptor [beanProperties=" + beanProperties + ", typeGenericParams=" + typeGenericParams
-                + ", type=" + type + "]";
+            + ", type=" + type + "]";
     }
 
     /**

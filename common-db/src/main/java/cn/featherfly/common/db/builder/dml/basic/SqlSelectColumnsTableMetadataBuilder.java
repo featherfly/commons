@@ -17,7 +17,7 @@ import cn.featherfly.common.lang.Strings;
  * @author zhongj
  */
 public class SqlSelectColumnsTableMetadataBuilder
-    extends AbstractSqlSelectColumnsBuilder<SqlSelectColumnsTableMetadataBuilder> {
+        extends AbstractSqlSelectColumnsBuilder<SqlSelectColumnsTableMetadataBuilder> {
 
     /** The table metadata. */
     protected final Table table;
@@ -55,7 +55,7 @@ public class SqlSelectColumnsTableMetadataBuilder
      * @param prefixColumnAliasName the prefix column alias name
      */
     public SqlSelectColumnsTableMetadataBuilder(Dialect dialect, Table table, String tableAlias,
-        String prefixColumnAliasName) {
+            String prefixColumnAliasName) {
         super(dialect, tableAlias);
         AssertIllegalArgument.isNotNull(table, "table");
         this.table = table;
@@ -74,8 +74,8 @@ public class SqlSelectColumnsTableMetadataBuilder
             for (SelectColumnElement c : columns) {
                 SelectColumnElement column = new SelectColumnElement(c);
                 column.setTableAlias(tableAlias);
-                column.setAlias(buildAsName(Lang.pick(column.getAlias(), column.getName()), getPrefixColumnAliasName(),
-                    dialect, false));
+                column.setAlias(buildAsName(Lang.ifNull(column.getAlias(), column.getName()),
+                        getPrefixColumnAliasName(), dialect, false));
                 columnsBuilder.append(column).append(Chars.COMMA).append(Chars.SPACE);
             }
             columnsBuilder.delete(columnsBuilder.length() - 2, columnsBuilder.length());
@@ -88,7 +88,7 @@ public class SqlSelectColumnsTableMetadataBuilder
     }
 
     private static String buildSelectColumnsSql(Table table, String tableAlias, String prefixColumnAliasName,
-        Dialect dialect) {
+            Dialect dialect) {
         StringBuilder selectSql = new StringBuilder();
         for (Column column : table.getColumns()) {
             selectSql.append(buildSelectColumnsSql(tableAlias, column, prefixColumnAliasName, dialect));
@@ -100,13 +100,14 @@ public class SqlSelectColumnsTableMetadataBuilder
     }
 
     private static String buildSelectColumnsSql(String tableAlias, Column column, String prefixColumnAliasName,
-        Dialect dialect) {
+            Dialect dialect) {
         StringBuilder selectSql = new StringBuilder();
         if (Strings.isNotBlank(tableAlias)) {
             selectSql.append(tableAlias).append(Chars.DOT);
         }
         selectSql.append(dialect.wrapName(column.name())).append(Chars.SPACE)
-            .append(buildAsName(column.name(), prefixColumnAliasName, dialect)).append(Chars.COMMA).append(Chars.SPACE);
+                .append(buildAsName(column.name(), prefixColumnAliasName, dialect)).append(Chars.COMMA)
+                .append(Chars.SPACE);
         return selectSql.toString();
     }
 

@@ -2,6 +2,7 @@ package cn.featherfly.common.db.builder.dml.basic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -149,7 +150,8 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
         update.append(Chars.SPACE).append(keyworld.set());
         int len = update.length();
         params.forEach(c -> {
-            Lang.ifNotEmpty(c.toSql(), setValue -> update.append(Chars.SPACE).append(setValue).append(Chars.COMMA));
+            Lang.ifNotEmpty(c.toSql(),
+                    (Consumer<String>) setValue -> update.append(Chars.SPACE).append(setValue).append(Chars.COMMA));
             //            String setValue = c.toSql();
             //            if (Lang.isNotEmpty(setValue)) {
             //                update.append(Chars.SPACE).append(setValue).append(Chars.COMMA);

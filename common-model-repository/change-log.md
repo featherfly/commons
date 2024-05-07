@@ -1,11 +1,16 @@
-# 0.3.1
+# 0.4.0 2024-05-05
 1. ClassMapping, PropertyMapping, MappingFactory加入泛型
 2. PropertyMapping加入mode
 3. 加入Field, Params
 4. 加入Alias,AliasField
 5. IgnorePolicy重命名为IgnoreStrategy
 6. 加入ClassNameUnderscoreConversion替代,ClassNameUnderscoreConversion
-6. 加入PropertyNameUnderscoreConversion替代PropertyNameUnderscoreConversion
+7. 加入PropertyNameUnderscoreConversion替代PropertyNameUnderscoreConversion
+8. AliasField&vert;Repository add getAliasOrName() method
+9. 加入  Aliasable&vert;Distinct&vert;Distinctive&vert;FunctionField&vert;Nameable&vert;Naming&vert;QueryableField&vert;StringField&vert;FieldConsumer&vert;FieldFunction&vert;RepositoryConsumer&vert;RepositoryFunction
+10. 加入 RepositoryAwareField
+11. AliasManager support customer AliasGeneretor
+12. 加入 FieldAware,RepositoryAwareFieldImpl
 
 
 # 0.3.0 2022-11-09

@@ -1,4 +1,4 @@
-# 0.6.0
+# 0.6.0 2024-05-05
 1. 修复cn.featherfly.common.repository.operate包移动到cn.featherfly.common.operator的问题
 
 2. 重构SqlSelectBasicBuilder逻辑，抽离出SqlSelectColumnsBuilder接口以及对应的实现
@@ -67,6 +67,20 @@
 29. 加入SqlJoinOnBasicBuilder2，SqlSelectBasicBuilder加入join(String joinTableName, String joinTableAlias, String onSql) |join(Join join, String joinTableName, String joinTableAlias, String onSql)
 
 30. SqlUpdateSetBasicBuilder，SqlDeleteFromBasicBuilder实现join
+
+31. 加入NamedParamSql用于缓存已经转换后的命名sql，类似正则表达式的编译概念，用于优化性能
+
+    ```java
+    NamedParamSql namedParamSql = NamedParamSql.compile("select u.id,u.name from user u where u.id = :id");
+    // 类似正则表达式 Pattern pattern = Pattern.compile();
+    Map<String,Object> params ...;
+    params.put("id", 1);
+    Execution exec = namedParamSql.getExecution(params);
+    exec.getSql() // "select u.id,u.name from user u where u.id = ?"
+    exec.getParams() // Array Object [1]
+    ```
+
+    
 
 # 0.5.5 2022-8-11
 1. Dialect加入getKeywordLike(QueryPolicy)、getKeywordEq(QueryPolicy)、keywordsCase()方法

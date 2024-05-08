@@ -417,7 +417,7 @@ public class DatabaseMetadataManager {
             if (dbm != null && !reCreate) {
                 return dbm;
             }
-            metaData = Lang.pick(metaData, connection.getMetaData());
+            metaData = Lang.ifNull(metaData, connection.getMetaData());
             dbm = new DatabaseMetadata(metaData);
 
             createCatalog(connection, dbm, catalog, isDefaultCatalog);

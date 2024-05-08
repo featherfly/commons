@@ -85,7 +85,7 @@ public class VersionManager {
         }
         file = new File(dir.getAbsolutePath() + "/" + VERSION_FILE_NAME);
         init = initVersion;
-        properties = new PropertiesImpl(StandardCharsets.UTF_8);
+        properties = new PropertiesImpl();
         if (Lang.isExists(file)) {
             try {
                 properties.load(new FileInputStream(file));

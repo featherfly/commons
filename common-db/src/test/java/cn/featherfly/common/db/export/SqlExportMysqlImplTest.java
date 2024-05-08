@@ -2,7 +2,6 @@
 package cn.featherfly.common.db.export;
 
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,8 +32,7 @@ public class SqlExportMysqlImplTest {
         dataSource.setUsername("root");
         dataSource.setPassword("123456");
 
-        FileWriter fw = null;
-
+        //        FileWriter fw = null;
         //		SqlDataFormat sqlDataFormat = (SqlDataFormat) new SqlDataFormatFactory().createDataFormat(fw, new MySqlDialect());
 
         DataExportorImpl exportor = new DataExportorImpl(Dialects.MYSQL, new SqlDataFormatFactory());

@@ -3,9 +3,7 @@ package cn.featherfly.common.db.export;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
@@ -30,9 +28,9 @@ public class Test {
 
         Connection conn = dataSource.getConnection();
 
-        PreparedStatement prep = conn.prepareStatement("select * from user");
-        ResultSet res = prep.executeQuery();
-        ResultSetMetaData rsmd = res.getMetaData();
+        //        PreparedStatement prep = conn.prepareStatement("select * from user");
+        //        ResultSet res = prep.executeQuery();
+        //        ResultSetMetaData rsmd = res.getMetaData();
 
         DatabaseMetaData dbmd = conn.getMetaData();
 
@@ -121,5 +119,7 @@ public class Test {
          * 表示形式的字符长度（假定允许的最大小数秒组件的精度）。对于二进制数据，这是字节长度。对于 ROWID
          * 数据类型，这是字节长度。对于列大小不适用的数据类型，则返回 Null。
          */
+
+        dataSource.close();
     }
 }

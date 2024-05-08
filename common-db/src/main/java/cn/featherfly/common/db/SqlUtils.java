@@ -206,18 +206,25 @@ public final class SqlUtils {
                     String name = namedParamSql.substring(nameStartIndex + 1, nameEndIndex);
                     boolean isIn = isInCondition(namedParamSql, nameStartIndex);
                     if (namedParamsConsumer != null) {
-                        nameList.add(new NamedParam(name, isIn));
+                        if (isIn) {
+                            nameList.add(new NamedParam(name, sql.length()));
+                        } else {
+                            nameList.add(new NamedParam(name));
+                        }
                     }
                     if (params != null) {
+                        // create native sql
                         Object param = getNamedParam(params, name);
                         String paramSql = addParam(param, paramList, isIn);
                         sql.append(paramSql);
                     } else {
-                        if (isIn) {
-                            sql.append("{").append(name).append("}"); // YUFEI_TODO 后续来把 {  } 做为可设置参数
-                        } else {
+                        // craete sql pattern for NamedParamSql
+                        if (!isIn) {
                             sql.append(Chars.QUESTION_CHAR);
                         }
+                        //                        else {
+                        //                            sql.append("{").append(name).append("}"); // YUFEI_TODO 后续来把 {  } 做为可设置参数
+                        //                        }
                     }
 
                     //                    if (param == null) {

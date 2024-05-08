@@ -1,4 +1,9 @@
+# 0.6.1
+
+1. 优化NamedParamSql逻辑，提升性能
+
 # 0.6.0 2024-05-05
+
 1. 修复cn.featherfly.common.repository.operate包移动到cn.featherfly.common.operator的问题
 
 2. 重构SqlSelectBasicBuilder逻辑，抽离出SqlSelectColumnsBuilder接口以及对应的实现
@@ -134,7 +139,7 @@
 
     ```sql
     SET FOREIGN_KEY_CHECKS=0;
-
+    
     //include executor1.sql;
     //include executor2.sql;
     

@@ -10,13 +10,12 @@ package cn.featherfly.common.db;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.speedment.common.tuple.Tuple2;
-import com.speedment.common.tuple.Tuples;
-
 import cn.featherfly.common.lang.AssertIllegalArgument;
+import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.repository.Execution;
 import cn.featherfly.common.repository.SimpleExecution;
 
@@ -25,11 +24,11 @@ import cn.featherfly.common.repository.SimpleExecution;
  *
  * @author zhongj
  */
-public class NamedParamSql {
+public class OldNamedParamSql {
 
     private final String sql;
 
-    private final NamedParam[] paramNames;
+    private final OldNamedParam[] paramNames;
 
     private final int inParamCount;
 
@@ -39,13 +38,13 @@ public class NamedParamSql {
      * @param sql        the sql
      * @param paramNames the param names
      */
-    NamedParamSql(String sql, NamedParam[] paramNames) {
+    OldNamedParamSql(String sql, OldNamedParam[] paramNames) {
         super();
         AssertIllegalArgument.isNotBlank(sql, "sql");
         AssertIllegalArgument.isNotNull(paramNames, "paramNames");
         this.sql = sql;
         this.paramNames = paramNames;
-        inParamCount = Arrays.stream(this.paramNames).filter(pn -> pn.isIn()).mapToInt(value -> 1).sum();
+        inParamCount = Arrays.stream(this.paramNames).filter(pn -> pn.in).mapToInt(value -> 1).sum();
     }
 
     /**
@@ -55,8 +54,8 @@ public class NamedParamSql {
      * @return the named param sql
      * @see SqlUtils#convertNamedParamSql(String)
      */
-    public static NamedParamSql compile(String namedParamSql) {
-        return SqlUtils.convertNamedParamSql(namedParamSql);
+    public static OldNamedParamSql compile(String namedParamSql) {
+        return OldSqlUtils.convertNamedParamSql(namedParamSql);
     }
 
     /**
@@ -67,8 +66,8 @@ public class NamedParamSql {
      * @return NamedParamSql
      * @see SqlUtils#convertNamedParamSql(String,char)
      */
-    public static NamedParamSql compile(String namedParamSql, char startSymbol) {
-        return SqlUtils.convertNamedParamSql(namedParamSql, startSymbol);
+    public static OldNamedParamSql compile(String namedParamSql, char startSymbol) {
+        return OldSqlUtils.convertNamedParamSql(namedParamSql, startSymbol);
     }
 
     /**
@@ -92,39 +91,25 @@ public class NamedParamSql {
      */
     public Execution getExecution(Map<String, Object> params) {
         List<Object> paramList = new ArrayList<>();
-        final List<Tuple2<NamedParam, String>> inParams = new ArrayList<>(inParamCount);
-        for (NamedParam pn : paramNames) {
+        final Map<String, Object> inParamsSqls = new HashMap<>(inParamCount);
+        for (OldNamedParam pn : paramNames) {
             Object param = SqlUtils.getNamedParam(params, pn.name);
-            if (pn.isIn()) {
-                inParams.add(Tuples.of(pn, SqlUtils.addParam(param, paramList, pn.isIn())));
+            if (pn.in) {
+                inParamsSqls.put(pn.name, SqlUtils.addParam(param, paramList, pn.in));
             } else {
                 SqlUtils.addParam(param, paramList);
             }
         }
 
         if (inParamCount > 0) {
-            StringBuilder sql = new StringBuilder(this.sql);
-            for (int i = inParams.size() - 1; i >= 0; i--) {
-                Tuple2<NamedParam, String> tuple = inParams.get(i);
-                sql.insert(tuple.get0().in, tuple.get1());
-            }
-            return new SimpleExecution(sql.toString(), paramList.toArray());
+            return new SimpleExecution(Strings.format(sql, inParamsSqls), paramList.toArray());
         } else {
             return new SimpleExecution(sql, paramList.toArray());
         }
     }
 
     /**
-     * get paramNames value.
-     *
-     * @return paramNames
-     */
-    public NamedParam[] getParamNames() {
-        return paramNames;
-    }
-
-    /**
-     * get sql value
+     * get sql value.
      *
      * @return sql
      */
@@ -133,21 +118,30 @@ public class NamedParamSql {
     }
 
     /**
+     * get paramNames value.
+     *
+     * @return paramNames
+     */
+    public OldNamedParam[] getParamNames() {
+        return paramNames;
+    }
+
+    /**
      * The Class NamedParam.
      */
-    public static class NamedParam {
+    public static class OldNamedParam {
 
         private final String name;
 
-        private final int in;
+        private final boolean in;
 
         /**
          * Instantiates a new named param.
          *
          * @param name the name
          */
-        public NamedParam(String name) {
-            this(name, -1);
+        public OldNamedParam(String name) {
+            this(name, false);
         }
 
         /**
@@ -156,7 +150,7 @@ public class NamedParamSql {
          * @param name the name
          * @param in   the in
          */
-        public NamedParam(String name, int in) {
+        public OldNamedParam(String name, boolean in) {
             super();
             this.name = name;
             this.in = in;
@@ -172,20 +166,11 @@ public class NamedParamSql {
         }
 
         /**
-         * Checks if is in.
-         *
-         * @return in
-         */
-        public boolean isIn() {
-            return in >= 0;
-        }
-
-        /**
          * get in value.
          *
          * @return in
          */
-        public int getIn() {
+        public boolean isIn() {
             return in;
         }
     }

@@ -253,18 +253,21 @@ public class SqlUtilsTest {
 
     @Test
     void testConvertNamedParamSqlPatternInParams() {
-        String namedSql = "select * from user where id in :ids and gender = :gender";
-        String sql = "select * from user where id in (?) and gender = ?";
-        String sql2 = "select * from user where id in (?,?) and gender = ?";
-        String sql3 = "select * from user where id in (?,?,?) and gender = ?";
+        String namedSql = "select * from user where id in :ids and gender = :gender and state in :states";
+        String sql = "select * from user where id in (?) and gender = ? and state in (?)";
+        String sql2 = "select * from user where id in (?,?) and gender = ? and state in (?,?)";
+        String sql3 = "select * from user where id in (?,?,?) and gender = ? and state in (?,?,?)";
         NamedParamSql namedParamSql = null;
 
         Map<String, Object> params = new LinkedHashMap<>();
         List<Integer> idList = new ArrayList<>();
+        List<Integer> stateList = new ArrayList<>();
         params.put("ids", idList);
         params.put("gender", "male");
+        params.put("states", stateList);
 
         idList.add(1);
+        stateList.add(1);
         namedParamSql = SqlUtils.convertNamedParamSql(namedSql);
         Execution execution = namedParamSql.getExecution(params);
         System.out.println(namedParamSql.getSql());
@@ -272,25 +275,27 @@ public class SqlUtilsTest {
         assertEquals(execution.getExecution(), sql);
         System.out.println(ArrayUtils.toString(getParamNames(namedParamSql)));
         //        assertEquals(execution.getParams(), params.values().toArray());
-        assertEquals(execution.getParams().length, idList.size() + 1);
+        assertEquals(execution.getParams().length, idList.size() + stateList.size() + 1);
         // getParamNames(pattern)的顺序是从sql中named param定义一致
 
         idList.add(2);
+        stateList.add(2);
         namedParamSql = SqlUtils.convertNamedParamSql(namedSql);
         execution = namedParamSql.getExecution(params);
         System.out.println(namedParamSql.getSql());
         System.out.println(execution.getExecution());
         assertEquals(execution.getExecution(), sql2);
         //        assertEquals(execution.getParams(), params.values().toArray());
-        assertEquals(execution.getParams().length, idList.size() + 1);
+        assertEquals(execution.getParams().length, idList.size() + stateList.size() + 1);
         System.out.println(ArrayUtils.toString(getParamNames(namedParamSql)));
 
         idList.add(3);
+        stateList.add(3);
         namedParamSql = SqlUtils.convertNamedParamSql(namedSql);
         execution = namedParamSql.getExecution(params);
         assertEquals(execution.getExecution(), sql3);
         //        assertEquals(execution.getParams(), params.values().toArray());
-        assertEquals(execution.getParams().length, idList.size() + 1);
+        assertEquals(execution.getParams().length, idList.size() + stateList.size() + 1);
 
         System.out.println(namedParamSql.getSql());
         System.out.println(execution.getExecution());
@@ -299,36 +304,42 @@ public class SqlUtilsTest {
         // array
 
         Integer[] idArray = { 1 };
+        Integer[] stateArray = { 1 };
         params.put("ids", idArray);
+        params.put("states", stateArray);
         namedParamSql = SqlUtils.convertNamedParamSql(namedSql);
         execution = namedParamSql.getExecution(params);
         assertEquals(execution.getExecution(), sql);
         //        assertEquals(execution.getParams(), params.values().toArray());
-        assertEquals(execution.getParams().length, idArray.length + 1);
+        assertEquals(execution.getParams().length, idArray.length + stateArray.length + 1);
 
         System.out.println(namedParamSql.getSql());
         System.out.println(execution.getExecution());
         System.out.println(ArrayUtils.toString(getParamNames(namedParamSql)));
 
         Integer[] idArray2 = { 1, 2 };
+        Integer[] stateArray2 = { 1, 2 };
         params.put("ids", idArray2);
+        params.put("states", stateArray2);
         namedParamSql = SqlUtils.convertNamedParamSql(namedSql);
         execution = namedParamSql.getExecution(params);
         assertEquals(execution.getExecution(), sql2);
         //        assertEquals(execution.getParams(), params.values().toArray());
-        assertEquals(execution.getParams().length, idArray2.length + 1);
+        assertEquals(execution.getParams().length, idArray2.length + stateArray2.length + 1);
 
         System.out.println(namedParamSql.getSql());
         System.out.println(execution.getExecution());
         System.out.println(ArrayUtils.toString(getParamNames(namedParamSql)));
 
         Integer[] idArray3 = { 1, 2, 3 };
+        Integer[] stateArray3 = { 1, 2, 3 };
         params.put("ids", idArray3);
+        params.put("states", stateArray3);
         namedParamSql = SqlUtils.convertNamedParamSql(namedSql);
         execution = namedParamSql.getExecution(params);
         assertEquals(execution.getExecution(), sql3);
         //        assertEquals(execution.getParams(), params.values().toArray());
-        assertEquals(execution.getParams().length, idArray3.length + 1);
+        assertEquals(execution.getParams().length, idArray3.length + stateArray3.length + 1);
 
         System.out.println(namedParamSql.getSql());
         System.out.println(execution.getExecution());

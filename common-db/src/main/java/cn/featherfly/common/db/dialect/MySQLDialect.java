@@ -1,7 +1,9 @@
 package cn.featherfly.common.db.dialect;
 
 import java.lang.reflect.Array;
+import java.sql.DatabaseMetaData;
 import java.sql.JDBCType;
+import java.sql.SQLException;
 import java.sql.SQLType;
 import java.sql.Types;
 import java.util.Collection;
@@ -94,8 +96,8 @@ public class MySQLDialect extends AbstractDialect {
         pagingSelect.append(sql);
         if (isParamNamed) {
             if (start > 0) {
-                pagingSelect.append(
-                        Strings.format(" LIMIT {0}{1},{0}{2}", startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME));
+                pagingSelect
+                    .append(Strings.format(" LIMIT {0}{1},{0}{2}", startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME));
             } else {
                 pagingSelect.append(Strings.format(" LIMIT {0}{1}", startSymbol, LIMIT_PARAM_NAME));
             }
@@ -223,7 +225,7 @@ public class MySQLDialect extends AbstractDialect {
     public String buildDeleteFromSql(String tableName, String tableAlias) {
         String alias = Lang.isEmpty(tableAlias) ? null : wrapName(tableAlias);
         return BuilderUtils.link(getKeyword(Keywords.DELETE), alias, getKeyword(Keywords.FROM), wrapName(tableName),
-                alias);
+            alias);
     }
 
     /**
@@ -237,10 +239,10 @@ public class MySQLDialect extends AbstractDialect {
         String tn = Lang.isEmpty(schema) ? wrapName(tableName) : wrapName(schema) + Chars.DOT + wrapName(tableName);
         if (ifExists) {
             return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.INDEX), getKeyword(Keywords.IF),
-                    getKeyword(Keywords.EXISTS), in, getKeyword(Keywords.ON), tn) + Chars.SEMI;
+                getKeyword(Keywords.EXISTS), in, getKeyword(Keywords.ON), tn) + Chars.SEMI;
         } else {
             return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.INDEX), in, getKeyword(Keywords.ON),
-                    tn) + Chars.SEMI;
+                tn) + Chars.SEMI;
         }
     }
 
@@ -249,7 +251,7 @@ public class MySQLDialect extends AbstractDialect {
      */
     @Override
     public String buildUpsertBatchSql(String tableName, String[] columnNames, String[] uniqueColumns,
-            int insertAmount) {
+        int insertAmount) {
         String sql = buildInsertBatchSql(tableName, columnNames, insertAmount);
         sql = BuilderUtils.link(sql, "ON DUPLICATE KEY UPDATE");
 
@@ -277,7 +279,7 @@ public class MySQLDialect extends AbstractDialect {
     protected String getKeywordLikeCaseInsensitive(boolean reverse) {
         if (reverse) {
             return getKeyword(Keywords.COLLATE) + " " + collateCaseInsensitive + " " + getKeyword(Keywords.NOT) + " "
-                    + getKeyword(Keywords.LIKE);
+                + getKeyword(Keywords.LIKE);
         } else {
             return getKeyword(Keywords.COLLATE) + " " + collateCaseInsensitive + " " + getKeyword(Keywords.LIKE);
         }
@@ -290,7 +292,7 @@ public class MySQLDialect extends AbstractDialect {
     protected String getKeywordLikeCaseSensitive(boolean reverse) {
         if (reverse) {
             return getKeyword(Keywords.NOT) + Chars.SPACE + getKeyword(Keywords.LIKE) + Chars.SPACE
-                    + getKeyword(Keywords.BINARY);
+                + getKeyword(Keywords.BINARY);
 
         } else {
             return getKeyword(Keywords.LIKE) + Chars.SPACE + getKeyword(Keywords.BINARY);
@@ -314,7 +316,7 @@ public class MySQLDialect extends AbstractDialect {
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
                 condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
-                        .append(collateCaseInsensitive);
+                    .append(collateCaseInsensitive);
                 break;
             case CASE_SENSITIVE:
                 condition.append(getKeyword(Keywords.BINARY)).append(Chars.SPACE).append(name);
@@ -339,7 +341,7 @@ public class MySQLDialect extends AbstractDialect {
      */
     @Override
     public String getBetweenOrNotBetweenExpression(boolean isBetween, String name, Object values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         boolean caseSensitive = false;
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
@@ -355,13 +357,13 @@ public class MySQLDialect extends AbstractDialect {
             condition.append(getKeyword(Keywords.BINARY)).append(Chars.SPACE).append(name);
         } else {
             condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
-                    .append(collateCaseInsensitive);
+                .append(collateCaseInsensitive);
         }
         condition.append(Chars.SPACE).append(!isBetween ? getKeyword(Keywords.NOT) + Chars.SPACE : "") //
-                .append(getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
-                .append(Chars.QUESTION).append(Chars.SPACE) //
-                .append(getKeyword(Keywords.AND)).append(Chars.SPACE) //
-                .append(Chars.QUESTION);
+            .append(getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
+            .append(Chars.QUESTION).append(Chars.SPACE) //
+            .append(getKeyword(Keywords.AND)).append(Chars.SPACE) //
+            .append(Chars.QUESTION);
         return condition.toString();
     }
 
@@ -370,7 +372,7 @@ public class MySQLDialect extends AbstractDialect {
      */
     @Override
     public String getBetweenOrNotBetweenExpression(boolean isBetween, String name, SqlElement min, SqlElement max,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         boolean caseSensitive = false;
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
@@ -386,13 +388,13 @@ public class MySQLDialect extends AbstractDialect {
             condition.append(getKeyword(Keywords.BINARY)).append(Chars.SPACE).append(name);
         } else {
             condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
-                    .append(collateCaseInsensitive);
+                .append(collateCaseInsensitive);
         }
         condition.append(Chars.SPACE).append(!isBetween ? getKeyword(Keywords.NOT) + Chars.SPACE : "") //
-                .append(getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
-                .append(min.toSql()).append(Chars.SPACE) //
-                .append(getKeyword(Keywords.AND)).append(Chars.SPACE) //
-                .append(max.toSql());
+            .append(getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
+            .append(min.toSql()).append(Chars.SPACE) //
+            .append(getKeyword(Keywords.AND)).append(Chars.SPACE) //
+            .append(max.toSql());
         return condition.toString();
     }
 
@@ -401,7 +403,7 @@ public class MySQLDialect extends AbstractDialect {
      */
     @Override
     protected String getCompareExpression0(ComparisonOperator comparisonOperator, String name, Object values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         switch (comparisonOperator) {
             case EQ:
             case NE:
@@ -426,7 +428,7 @@ public class MySQLDialect extends AbstractDialect {
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
                 condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
-                        .append(collateCaseInsensitive);
+                    .append(collateCaseInsensitive);
                 break;
             case CASE_SENSITIVE:
                 condition.append(getKeyword("BINARY")).append(Chars.SPACE).append(name);
@@ -436,18 +438,18 @@ public class MySQLDialect extends AbstractDialect {
                 break;
         }
         condition.append(Chars.SPACE).append(getOperator(comparisonOperator)).append(Chars.SPACE)
-                .append(Chars.QUESTION);
+            .append(Chars.QUESTION);
         return condition.toString();
     }
 
     @Override
     protected String getCompareExpression0(ComparisonOperator comparisonOperator, String name, SqlElement values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         StringBuilder condition = new StringBuilder();
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
                 condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
-                        .append(collateCaseInsensitive);
+                    .append(collateCaseInsensitive);
                 break;
             case CASE_SENSITIVE:
                 condition.append(getKeyword("BINARY")).append(Chars.SPACE).append(name);
@@ -457,7 +459,12 @@ public class MySQLDialect extends AbstractDialect {
                 break;
         }
         condition.append(Chars.SPACE).append(getOperator(comparisonOperator)).append(Chars.SPACE)
-                .append(values.toSql());
+            .append(values.toSql());
         return condition.toString();
+    }
+
+    @Override
+    public boolean supportBatchUpdates(DatabaseMetaData metaData) throws SQLException {
+        return metaData.supportsBatchUpdates() && metaData.getURL().contains("rewriteBatchedStatements=true");
     }
 }

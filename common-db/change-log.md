@@ -1,6 +1,8 @@
 # 0.6.1
 
 1. 优化NamedParamSql逻辑，提升性能
+2. JdbcUtils加入BigInteger的支持
+3. 创建DatabaseMetadata时自动创建dialect
 
 # 0.6.0 2024-05-05
 

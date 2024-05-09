@@ -66,7 +66,7 @@ public class JdbcDialectFactory implements DialectFactory {
      * @param dialectCreators the dialect creators
      */
     public JdbcDialectFactory(Set<Function<String, Dialect>> dialectCreators) {
-        this(false, dialectCreators);
+        this(true, dialectCreators);
     }
 
     /**
@@ -107,8 +107,8 @@ public class JdbcDialectFactory implements DialectFactory {
     /**
      * Adds the dialect creator.
      *
-     * @param dialectCreator the dialect creator
-     * @return the jdbc dialect factory
+     * @param  dialectCreator the dialect creator
+     * @return                the jdbc dialect factory
      */
     public JdbcDialectFactory addDialectCreator(Function<String, Dialect> dialectCreator) {
         dialectCreators.add(dialectCreator);
@@ -118,11 +118,11 @@ public class JdbcDialectFactory implements DialectFactory {
     /**
      * Adds the dialect creator.
      *
-     * @param dialectCreators the dialect creators
-     * @return the jdbc dialect factory
+     * @param  dialectCreators the dialect creators
+     * @return                 the jdbc dialect factory
      */
     public JdbcDialectFactory addDialectCreator(
-            @SuppressWarnings("unchecked") Function<String, Dialect>... dialectCreators) {
+        @SuppressWarnings("unchecked") Function<String, Dialect>... dialectCreators) {
         CollectionUtils.addAll(this.dialectCreators, dialectCreators);
         return this;
     }
@@ -155,7 +155,18 @@ public class JdbcDialectFactory implements DialectFactory {
     @Override
     public Dialect create(Connection connection) {
         try {
-            DatabaseMetaData metadata = connection.getMetaData();
+            return create(connection.getMetaData());
+        } catch (SQLException e) {
+            throw new JdbcException(e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Dialect create(DatabaseMetaData metadata) {
+        try {
             String url = metadata.getURL();
             for (Function<String, Dialect> dialectCreator : dialectCreators) {
                 Dialect dialect = dialectCreator.apply(url);

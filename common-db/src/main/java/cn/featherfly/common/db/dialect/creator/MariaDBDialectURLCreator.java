@@ -19,7 +19,7 @@ import cn.featherfly.common.exception.NotImplementedException;
 public class MariaDBDialectURLCreator extends DialectURLCreator {
 
     /** The Constant PREFIXES. */
-    public static final String[] PREFIXES = new String[] { "jdbc:mariadb:" };
+    protected static final String[] PREFIXES = new String[] { "jdbc:mariadb:" };
 
     /**
      * {@inheritDoc}

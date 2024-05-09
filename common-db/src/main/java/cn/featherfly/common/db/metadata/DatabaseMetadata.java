@@ -10,6 +10,8 @@ import java.util.Map;
 
 import cn.featherfly.common.db.JdbcException;
 import cn.featherfly.common.db.Table;
+import cn.featherfly.common.db.dialect.Dialect;
+import cn.featherfly.common.db.dialect.JdbcDialectFactory;
 
 /**
  * database metadata. 数据库元数据.
@@ -18,12 +20,16 @@ import cn.featherfly.common.db.Table;
  */
 public class DatabaseMetadata {
 
+    private JdbcDialectFactory jdbcDialectFactory;
+
     /**
      * Instantiates a new database metadata.
      *
-     * @param databaseMetaData the database meta data
+     * @param databaseMetaData   the database meta data
+     * @param jdbcDialectFactory the jdbc dialect factory
      */
-    DatabaseMetadata(DatabaseMetaData databaseMetaData) {
+    DatabaseMetadata(DatabaseMetaData databaseMetaData, JdbcDialectFactory jdbcDialectFactory) {
+        this.jdbcDialectFactory = jdbcDialectFactory;
         reload(databaseMetaData);
     }
 
@@ -34,6 +40,8 @@ public class DatabaseMetadata {
      */
     public void reload(DatabaseMetaData databaseMetaData) {
         try {
+            dialect = jdbcDialectFactory.create(databaseMetaData);
+
             productName = databaseMetaData.getDatabaseProductName();
             productVersion = databaseMetaData.getDatabaseProductVersion();
             majorVersion = databaseMetaData.getDatabaseMajorVersion();
@@ -50,7 +58,8 @@ public class DatabaseMetadata {
             jdbcMajorVersion = databaseMetaData.getJDBCMajorVersion();
             jdbcMinorVersion = databaseMetaData.getJDBCMinorVersion();
 
-            features = new Features(databaseMetaData);
+            features = new Features(databaseMetaData, dialect);
+
         } catch (SQLException e) {
             throw new JdbcException(e);
         }
@@ -63,8 +72,8 @@ public class DatabaseMetadata {
     /**
      * Gets the catalog.
      *
-     * @param catalogName the catalog name
-     * @return the catalog metadata
+     * @param  catalogName the catalog name
+     * @return             the catalog metadata
      */
     public CatalogMetadata getCatalog(String catalogName) {
         return catalogMap.get(catalogName);
@@ -130,9 +139,9 @@ public class DatabaseMetadata {
     /**
      * 默认catalog 返回指定名称的模式（schema）. 没有找到返回null.
      *
-     * @param schemaName the schema name
-     * @return the schema
-     * @see cn.featherfly.common.db.metadata.CatalogMetadata#getSchema(java.lang.String)
+     * @param  schemaName the schema name
+     * @return            the schema
+     * @see               cn.featherfly.common.db.metadata.CatalogMetadata#getSchema(java.lang.String)
      */
     public SchemaMetadata getSchema(String schemaName) {
         if (defaultCatalog == null) {
@@ -145,7 +154,7 @@ public class DatabaseMetadata {
      * 默认catalog 返回模式（schema）集合.
      *
      * @return the schemas
-     * @see cn.featherfly.common.db.metadata.CatalogMetadata#getSchemas()
+     * @see    cn.featherfly.common.db.metadata.CatalogMetadata#getSchemas()
      */
     public Collection<SchemaMetadata> getSchemas() {
         if (defaultCatalog == null) {
@@ -167,8 +176,8 @@ public class DatabaseMetadata {
     /**
      * 默认模式（schema）返回指定名称的表元数据对象. 没有找到返回null.
      *
-     * @param tableName 表名称
-     * @return 表元数据对象
+     * @param  tableName the table name
+     * @return           表元数据对象
      */
     public Table getTable(String tableName) {
         if (defaultCatalog == null) {
@@ -234,6 +243,8 @@ public class DatabaseMetadata {
     // ********************************************************************
     //	property
     // ********************************************************************
+
+    private Dialect dialect;
 
     private CatalogMetadata defaultCatalog;
 
@@ -378,5 +389,14 @@ public class DatabaseMetadata {
      */
     public Integer getJdbcMinorVersion() {
         return jdbcMinorVersion;
+    }
+
+    /**
+     * Gets the dialect.
+     *
+     * @return the dialect
+     */
+    public Dialect getDialect() {
+        return dialect;
     }
 }

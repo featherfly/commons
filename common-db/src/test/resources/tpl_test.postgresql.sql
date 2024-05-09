@@ -42,7 +42,7 @@ CREATE TABLE "public"."user" (
   "username" varchar(255) COLLATE "pg_catalog"."default",
   "password" varchar(255) COLLATE "pg_catalog"."default",
   "mobile_no" varchar(11) COLLATE "pg_catalog"."default",
-  "age" int4,
+  "age" bigint,
   CONSTRAINT "user_pkey" PRIMARY KEY ("id"),
   CONSTRAINT "USER_NAME_UQ" UNIQUE ("username"),
   CONSTRAINT "MOBILE_NO_UQ" UNIQUE ("mobile_no")

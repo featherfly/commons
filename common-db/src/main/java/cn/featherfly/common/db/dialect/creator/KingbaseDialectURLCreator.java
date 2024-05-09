@@ -19,7 +19,7 @@ import cn.featherfly.common.exception.NotImplementedException;
 public class KingbaseDialectURLCreator extends DialectURLCreator {
 
     /** The Constant PREFIXES. */
-    public static final String[] PREFIXES = new String[] { "jdbc:kingbase:" };
+    protected static final String[] PREFIXES = new String[] { "jdbc:kingbase:" };
 
     /**
      * {@inheritDoc}

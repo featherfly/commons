@@ -9,6 +9,7 @@
 package cn.featherfly.common.db.dialect;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 
 import javax.sql.DataSource;
 
@@ -22,16 +23,24 @@ public interface DialectFactory {
     /**
      * Creates Dialect.
      *
-     * @param dataSource the data source
-     * @return the dialect or null.
+     * @param  dataSource the data source
+     * @return            the dialect or null.
      */
     Dialect create(DataSource dataSource);
 
     /**
      * Creates Dialect. The caller closes connection by himself.
      *
-     * @param connection the connection.
-     * @return the dialect or null.
+     * @param  connection the connection.
+     * @return            the dialect or null.
      */
     Dialect create(Connection connection);
+
+    /**
+     * Creates Dialect.
+     *
+     * @param  metadata the metadata
+     * @return          the dialect or null.
+     */
+    Dialect create(DatabaseMetaData metadata);
 }

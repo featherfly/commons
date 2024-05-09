@@ -40,7 +40,7 @@ CREATE TABLE `user` (
   `USERNAME` varchar(255) DEFAULT NULL COMMENT '用户名，登陆系统用，单一数据库保证唯一',
   `PASSWORD` varchar(255) DEFAULT NULL COMMENT '密码，保存加密后的密码',
   `MOBILE_NO` varchar(11) DEFAULT NULL COMMENT '手机号码',
-  `AGE` int(11) DEFAULT NULL,
+  `AGE` bigint unsigned DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `USER_NAME_UQ` (`USERNAME`),
   UNIQUE KEY `MOBILE_NO_UQ` (`MOBILE_NO`)

@@ -19,7 +19,7 @@ import cn.featherfly.common.db.dialect.MySQLDialect;
 public class MysqlDialectURLCreator extends DialectURLCreator {
 
     /** The Constant PREFIXES. */
-    public static final String[] PREFIXES = new String[] { "jdbc:mysql:", "jdbc:cobar:", "jdbc:log4jdbc:mysql:" };
+    protected static final String[] PREFIXES = new String[] { "jdbc:mysql:", "jdbc:cobar:", "jdbc:log4jdbc:mysql:" };
 
     /**
      * {@inheritDoc}

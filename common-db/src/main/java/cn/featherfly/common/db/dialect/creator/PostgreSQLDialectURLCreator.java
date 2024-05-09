@@ -19,7 +19,7 @@ import cn.featherfly.common.db.dialect.PostgreSQLDialect;
 public class PostgreSQLDialectURLCreator extends DialectURLCreator {
 
     /** The Constant PREFIXES. */
-    public static final String[] PREFIXES = new String[] { "jdbc:postgresql:", "jdbc:log4jdbc:postgresql:" };
+    protected static final String[] PREFIXES = new String[] { "jdbc:postgresql:", "jdbc:log4jdbc:postgresql:" };
 
     /**
      * {@inheritDoc}

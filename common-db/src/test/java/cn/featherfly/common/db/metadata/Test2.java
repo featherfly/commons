@@ -21,7 +21,7 @@ public class Test2 {
     public static void main(String[] args) throws SQLException {
         try (BasicDataSource dataSource = new BasicDataSource()) {
             dataSource.setUrl(
-                    "jdbc:mysql://127.0.0.1:3306/db_test?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false");
+                "jdbc:mysql://127.0.0.1:3306/db_test?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false");
             dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
             dataSource.setUsername("root");
             dataSource.setPassword("123456");
@@ -32,6 +32,7 @@ public class Test2 {
 
                 DatabaseMetaData metaData = connection.getMetaData();
                 ResultSet rs = null;
+                System.err.println("url: " + metaData.getURL());
 
                 rs = metaData.getCatalogs();
                 System.out.println("catalogs:");

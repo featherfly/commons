@@ -19,8 +19,8 @@ import cn.featherfly.common.exception.NotImplementedException;
 public class SQLServerURLCreator extends DialectURLCreator {
 
     /** The Constant PREFIXES. */
-    public static final String[] PREFIXES = new String[] { "jdbc:sqlserver:", "jdbc:microsoft:", "jdbc:jtds:",
-            "jdbc:log4jdbc:sqlserver:", "jdbc:log4jdbc:microsoft:", "jdbc:log4jdbc:jtds:" };
+    protected static final String[] PREFIXES = new String[] { "jdbc:sqlserver:", "jdbc:microsoft:", "jdbc:jtds:",
+        "jdbc:log4jdbc:sqlserver:", "jdbc:log4jdbc:microsoft:", "jdbc:log4jdbc:jtds:" };
 
     /**
      * {@inheritDoc}

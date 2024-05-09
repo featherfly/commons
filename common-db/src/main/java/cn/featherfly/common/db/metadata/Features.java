@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.featherfly.common.db.JdbcException;
+import cn.featherfly.common.db.dialect.Dialect;
 
 /**
  * Features.
@@ -46,29 +47,27 @@ public class Features {
 
     private boolean supportsPositionedDelete;
 
-    DatabaseMetaData metaData;
-
-    public Features(DatabaseMetaData databaseMetaData) {
-        reload(databaseMetaData);
+    public Features(DatabaseMetaData databaseMetaData, Dialect dialect) {
+        reload(databaseMetaData, dialect);
     }
 
-    public void reload(DatabaseMetaData databaseMetaData) {
+    public void reload(DatabaseMetaData databaseMetaData, Dialect dialect) {
         try {
             for (ResultSetType type : ResultSetType.values()) {
                 supportsResultSetType.put(type.value(), databaseMetaData.supportsResultSetType(type.value()));
 
                 for (ResultSetConcurrency concurrency : ResultSetConcurrency.values()) {
                     supportsResultSetConcurrency.put(generateKey(type.value(), concurrency.value()),
-                            databaseMetaData.supportsResultSetConcurrency(type.value(), concurrency.value()));
+                        databaseMetaData.supportsResultSetConcurrency(type.value(), concurrency.value()));
                 }
             }
 
             for (ResultSetHoldability holdability : ResultSetHoldability.values()) {
                 supportsResultSetHoldability.put(holdability.value(),
-                        databaseMetaData.supportsResultSetType(holdability.value()));
+                    databaseMetaData.supportsResultSetType(holdability.value()));
             }
 
-            supportsBatchUpdates = databaseMetaData.supportsBatchUpdates();
+            supportsBatchUpdates = dialect.supportBatchUpdates(databaseMetaData);
 
             supportsSelectForUpdate = databaseMetaData.supportsSelectForUpdate();
 

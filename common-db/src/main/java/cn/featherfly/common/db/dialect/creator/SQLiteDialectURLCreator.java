@@ -19,7 +19,7 @@ import cn.featherfly.common.db.dialect.SQLiteDialect;
 public class SQLiteDialectURLCreator extends DialectURLCreator {
 
     /** The Constant PREFIXES. */
-    public static final String[] PREFIXES = new String[] { "jdbc:sqlite:" };
+    protected static final String[] PREFIXES = new String[] { "jdbc:sqlite:" };
 
     /**
      * {@inheritDoc}

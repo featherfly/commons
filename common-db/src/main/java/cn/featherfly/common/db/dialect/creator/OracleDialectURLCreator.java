@@ -19,7 +19,7 @@ import cn.featherfly.common.db.dialect.OracleDialect;
 public class OracleDialectURLCreator extends DialectURLCreator {
 
     /** The Constant PREFIXES. */
-    public static final String[] PREFIXES = new String[] { "jdbc:oracle:", "jdbc:log4jdbc:oracle:" };
+    protected static final String[] PREFIXES = new String[] { "jdbc:oracle:", "jdbc:log4jdbc:oracle:" };
 
     /**
      * {@inheritDoc}

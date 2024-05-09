@@ -19,7 +19,7 @@ import cn.featherfly.common.exception.NotImplementedException;
 public class H2DialectURLCreator extends DialectURLCreator {
 
     /** The Constant PREFIXES. */
-    public static final String[] PREFIXES = new String[] { "jdbc:h2:", "jdbc:log4jdbc:h2:" };
+    protected static final String[] PREFIXES = new String[] { "jdbc:h2:", "jdbc:log4jdbc:h2:" };
 
     /**
      * {@inheritDoc}

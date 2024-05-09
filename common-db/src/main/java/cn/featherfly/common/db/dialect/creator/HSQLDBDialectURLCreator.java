@@ -19,7 +19,7 @@ import cn.featherfly.common.exception.NotImplementedException;
 public class HSQLDBDialectURLCreator extends DialectURLCreator {
 
     /** The Constant PREFIXES. */
-    public static final String[] PREFIXES = new String[] { "jdbc:hsqldb:", "jdbc:log4jdbc:hsqldb:" };
+    protected static final String[] PREFIXES = new String[] { "jdbc:hsqldb:", "jdbc:log4jdbc:hsqldb:" };
 
     /**
      * {@inheritDoc}

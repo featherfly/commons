@@ -19,7 +19,7 @@ import cn.featherfly.common.exception.NotImplementedException;
 public class DerbyDialectURLCreator extends DialectURLCreator {
 
     /** The Constant PREFIXES. */
-    public static final String[] PREFIXES = new String[] { "jdbc:derby:", "jdbc:log4jdbc:derby:" };
+    protected static final String[] PREFIXES = new String[] { "jdbc:derby:", "jdbc:log4jdbc:derby:" };
 
     /**
      * {@inheritDoc}

@@ -1,5 +1,5 @@
 ext {
-    asmv = '9.0' 
+    asmv = '9.7' 
 }
   
 dependencies {
@@ -9,7 +9,6 @@ dependencies {
     api group: 'org.ow2.asm', name: 'asm-tree', version: asmv
     //implementation group: 'org.ow2.asm', name: 'asm-common', version: asmv
     //implementation group: 'org.ow2.asm', name: 'asm-util', version: asmv
-    
     testImplementation group: 'com.github.houbb', name: 'asm-tool', version: '0.0.3'
     testImplementation group: 'org.springframework', name: 'spring-core', version: '5.3.2'
     

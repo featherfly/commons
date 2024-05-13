@@ -5,7 +5,7 @@ dependencies {
     //api project(":common-model")    
     //api project(":common-core")
     //api project(":common-model-repository")
-    api group: 'cn.featherfly.common', name: 'common-core', version: '1.12.0'
+    api group: 'cn.featherfly.common', name: 'common-core', version: '1.12.1'
     api group: 'cn.featherfly.common', name: 'common-model-repository', version: '0.4.0'
     api group: 'com.speedment.common', name: 'tuple', version: '3.2.10'
     api group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.3'

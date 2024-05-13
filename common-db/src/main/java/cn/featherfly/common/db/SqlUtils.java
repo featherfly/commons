@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,6 +16,7 @@ import com.speedment.common.tuple.mutable.MutableTuple1;
 
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.NamedParamSql.NamedParam;
+import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.Execution;
@@ -33,6 +35,8 @@ public final class SqlUtils {
     /** The Constant SELECT_PATTERN. */
     private static final Pattern SELECT_PATTERN = Pattern.compile("((select )(distinct [\\w-_.]+)?,?.+)(from .+)",
             Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+
+    private static final NamedSqlConvertFeature NAMEDSQL_CONVERTOR = new NamedSqlConvertFeature();
 
     //	private static final Pattern SELECT_PATTERN =
     //	        Pattern.compile("((select )(distinct [\\w-_.]+)?,?.+)(from +[\\w-_.]+(( as)? +[\\w-_.&&[^where]]+)?)( +where +[\\w-_.]+ ?\\W ?[\\w-_.]+)?( +order +by +[\\w-_.]+ (desc|asc))?.?"
@@ -85,6 +89,68 @@ public final class SqlUtils {
     }
 
     /**
+     * Flat params. if item of the param array is array or Collection, will expand them and Sequential insertion.
+     *
+     * <pre>
+     * give ["a", "b", ["1", "2"], "c"] return ["a", "b", "1", "2", "c"]
+     * </pre>
+     *
+     * @param params the params
+     * @return the flat object[]
+     */
+    public static Object[] flatParam(Object[] params) {
+        if (params == null) {
+            return ArrayUtils.EMPTY_OBJECT_ARRAY;
+        }
+        final List<Object> paramList = new ArrayList<>();
+        for (Object inParam : params) {
+            Lang.eachObj(inParam, p -> paramList.add(p));
+        }
+        return paramList.toArray();
+    }
+
+    /**
+     * Convert in params placeholder. such as (?,?,?).
+     *
+     * @param inParam the in param
+     * @return in params placeholder
+     */
+    public static String convertInParamsPlaceholder(Object inParam) {
+        if (inParam == null) {
+            return convertInParamsPlaceholder(1);
+        } else if (inParam instanceof Collection) {
+            return convertInParamsPlaceholder(((Collection<?>) inParam).size());
+        } else if (inParam.getClass().isArray()) {
+            int length = Array.getLength(inParam);
+            return convertInParamsPlaceholder(length);
+        } else {
+            return convertInParamsPlaceholder(1);
+        }
+    }
+
+    /**
+     * Convert in params placeholder. such as (?,?,?).
+     *
+     * @param placeholderNum the placeholder number
+     * @return in params placeholder
+     */
+    public static String convertInParamsPlaceholder(int placeholderNum) {
+        if (placeholderNum <= 0) {
+            throw new IllegalArgumentException("size must be > 0");
+        }
+        StringBuilder sql = new StringBuilder();
+        sql.append(Chars.PAREN_L_CHAR);
+        for (int i = 0; i < placeholderNum; i++) {
+            sql.append(Chars.QUESTION_CHAR).append(Chars.COMMA_CHAR);
+        }
+        if (sql.length() > 0) {
+            sql.deleteCharAt(sql.length() - 1);
+        }
+        sql.append(Chars.PAREN_R_CHAR);
+        return sql.toString();
+    }
+
+    /**
      * convert named param sql with {@link #PARAM_NAME_START_SYMBOL}.
      * <p>
      * transfer <code>select * from user where name = :user</code> to <code>select * from user where name = ?</code>
@@ -92,7 +158,7 @@ public final class SqlUtils {
      *
      * @param namedParamSql the named param sql
      * @param params        the params
-     * @return the execution
+     * @return the execution contains jdbc placeholder sql and params array
      */
     public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params) {
         return convertNamedParamSql(namedParamSql, params, PARAM_NAME_START_SYMBOL);
@@ -104,7 +170,7 @@ public final class SqlUtils {
      * @param namedParamSql the named param sql
      * @param params        the params
      * @param startSymbol   the start symbol
-     * @return the execution
+     * @return the execution contains jdbc placeholder sql and params array
      */
     public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol) {
         return convertNamedParamSql(namedParamSql, params, startSymbol, null);
@@ -117,13 +183,45 @@ public final class SqlUtils {
      * @param params        the params
      * @param startSymbol   the start symbol
      * @param endSymbol     the end symbol
-     * @return the execution
+     * @return the execution contains jdbc placeholder sql and params array
      */
     public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol,
             Character endSymbol) {
         final MutableTuple1<Object[]> paramsTuple = MutableTuples.create1();
         return new SimpleExecution(convertNamedParamSql(namedParamSql, params, startSymbol, endSymbol,
-                paramArray -> paramsTuple.set0(paramArray), null), paramsTuple.get0().get());
+                paramArray -> paramsTuple.set0(paramArray), null, null), paramsTuple.get0().get());
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * convert named param sql with {@link #PARAM_NAME_START_SYMBOL}.
+     * <p>
+     * transfer <code>select * from user where name = :user</code> to <code>select * from user where name = ?</code>
+     * <p>
+     *
+     * @param namedParamSql   the named param sql
+     * @param featureConsumer the feature consumer
+     * @return jdbc placeholder sql
+     */
+    public static String convertNamedParamSql(String namedParamSql, Consumer<NamedSqlConvertFeature> featureConsumer) {
+        return convertNamedParamSql(namedParamSql, PARAM_NAME_START_SYMBOL, null, featureConsumer);
+    }
+
+    /**
+     * convert named param sql with startSymbol and endSymbol.
+     *
+     * @param namedParamSql   the named param sql
+     * @param startSymbol     the start symbol
+     * @param endSymbol       the end symbol
+     * @param featureConsumer the feature consumer
+     * @return jdbc placeholder sql
+     */
+    public static String convertNamedParamSql(String namedParamSql, char startSymbol, Character endSymbol,
+            Consumer<NamedSqlConvertFeature> featureConsumer) {
+        NamedSqlConvertFeature convertor = new NamedSqlConvertFeature();
+        featureConsumer.accept(convertor);
+        return convertNamedParamSql(namedParamSql, null, startSymbol, endSymbol, null, null, convertor);
     }
 
     /**
@@ -161,12 +259,13 @@ public final class SqlUtils {
     public static NamedParamSql convertNamedParamSql(String namedParamSql, char startSymbol, Character endSymbol) {
         final MutableTuple1<NamedParam[]> paramNamesTuple = MutableTuples.create1();
         String sql = convertNamedParamSql(namedParamSql, null, startSymbol, endSymbol, null,
-                namedParamArray -> paramNamesTuple.set0(namedParamArray));
+                namedParamArray -> paramNamesTuple.set0(namedParamArray), NAMEDSQL_CONVERTOR);
         return new NamedParamSql(sql, paramNamesTuple.get0().get());
     }
 
     private static String convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol,
-            Character endSymbol, Consumer<Object[]> paramValuesConsumer, Consumer<NamedParam[]> namedParamsConsumer) {
+            Character endSymbol, Consumer<Object[]> paramValuesConsumer, Consumer<NamedParam[]> namedParamsConsumer,
+            NamedSqlConvertFeature convertFeature) {
         AssertIllegalArgument.isNotNull(namedParamSql, "namedParamSql");
         AssertIllegalArgument.isNotEmpty(startSymbol, "startSymbol");
 
@@ -221,29 +320,10 @@ public final class SqlUtils {
                         // craete sql pattern for NamedParamSql
                         if (!isIn) {
                             sql.append(Chars.QUESTION_CHAR);
+                        } else if (convertFeature != null) {
+                            sql.append(convertFeature.inParamsPlaceholder.apply(name));
                         }
-                        //                        else {
-                        //                            sql.append("{").append(name).append("}"); // YUFEI_TODO 后续来把 {  } 做为可设置参数
-                        //                        }
                     }
-
-                    //                    if (param == null) {
-                    //                        paramList.add(param);
-                    //                        sql.append(Chars.QUESTION_CHAR);
-                    //                    } else if (param instanceof Collection) {
-                    //                        paramList.addAll((Collection<?>) param);
-                    //                        setParams(sql, ((Collection<?>) param).size(), namedParamSql, nameStartIndex);
-                    //                    } else if (param.getClass().isArray()) {
-                    //                        int length = Array.getLength(param);
-                    //                        for (int i = 0; i < length; i++) {
-                    //                            paramList.add(Array.get(param, i));
-                    //                        }
-                    //                        setParams(sql, length, namedParamSql, nameStartIndex);
-                    //                    } else {
-                    //                        paramList.add(param);
-                    //                        sql.append(Chars.QUESTION_CHAR);
-                    //                    }
-
                     if (!emptySymbol) {
                         nameEndIndex++;
                     }
@@ -293,24 +373,13 @@ public final class SqlUtils {
         return false;
     }
 
-    private static String inParamsSql(int size) {
-        if (size <= 0) {
-            throw new IllegalArgumentException("size must be > 0");
-        } else {
-            StringBuilder sql = new StringBuilder();
-            sql.append(Chars.PAREN_L_CHAR);
-            for (int i = 0; i < size; i++) {
-                sql.append(Chars.QUESTION_CHAR).append(Chars.COMMA_CHAR);
-            }
-            if (sql.length() > 0) {
-                sql.deleteCharAt(sql.length() - 1);
-            }
-            sql.append(Chars.PAREN_R_CHAR);
-            return sql.toString();
-        }
-    }
-
-    private static boolean isSqlWordSplitChar(char c) {
+    /**
+     * Checks if is sql word split char.
+     *
+     * @param c the c
+     * @return true, if is sql word split char
+     */
+    public static boolean isSqlWordSplitChar(char c) {
         return c == Chars.SPACE_CHAR || c == Chars.NEW_LINE_CHAR || c == Chars.COMMA_CHAR || c == Chars.PAREN_R_CHAR
                 || c == Chars.TAB_CHAR;
         //                || c == ')'
@@ -331,30 +400,73 @@ public final class SqlUtils {
         }
     }
 
+    /**
+     * Adds the param.
+     *
+     * @param param     the param
+     * @param paramList the param list
+     * @return the string
+     */
     static String addParam(Object param, List<Object> paramList) {
         return addParam(param, paramList, false);
     }
 
+    /**
+     * Adds the param.
+     *
+     * @param param     the param
+     * @param paramList the param list
+     * @param isIn      the is in
+     * @return the string
+     */
     static String addParam(Object param, List<Object> paramList, boolean isIn) {
         if (isIn) {
             if (param == null) {
                 paramList.add(param);
-                return inParamsSql(1);
+                return convertInParamsPlaceholder(1);
             } else if (param instanceof Collection) {
                 paramList.addAll((Collection<?>) param);
-                return inParamsSql(((Collection<?>) param).size());
+                return convertInParamsPlaceholder(((Collection<?>) param).size());
             } else if (param.getClass().isArray()) {
                 int length = Array.getLength(param);
                 for (int i = 0; i < length; i++) {
                     paramList.add(Array.get(param, i));
                 }
-                return inParamsSql(length);
+                return convertInParamsPlaceholder(length);
             } else {
                 paramList.add(param);
-                return inParamsSql(1);
+                return convertInParamsPlaceholder(1);
             }
         }
         paramList.add(param);
         return Chars.QUESTION;
+    }
+
+    /**
+     * The Class NamedSqlConvertFeature.
+     */
+    public static final class NamedSqlConvertFeature {
+
+        private Function<String, String> inParamsPlaceholder;
+
+        private NamedSqlConvertFeature() {
+            this((name) -> "");
+        }
+
+        private NamedSqlConvertFeature(Function<String, String> inParamsPlaceholder) {
+            setInParamsPlaceholder(inParamsPlaceholder);
+        }
+
+        /**
+         * Sets the in params placeholder.
+         *
+         * @param inParamsPlaceholder the in params placeholder
+         * @return the convertor
+         */
+        public NamedSqlConvertFeature setInParamsPlaceholder(Function<String, String> inParamsPlaceholder) {
+            AssertIllegalArgument.isNotNull(inParamsPlaceholder, "inParamsPlaceholder");
+            this.inParamsPlaceholder = inParamsPlaceholder;
+            return this;
+        }
     }
 }

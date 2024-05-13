@@ -3,6 +3,7 @@
 1. 优化NamedParamSql逻辑，提升性能
 2. JdbcUtils加入BigInteger的支持
 3. 创建DatabaseMetadata时自动创建dialect
+4. SqlUtils加入多个处理in参数占位符的方法
 
 # 0.6.0 2024-05-05
 

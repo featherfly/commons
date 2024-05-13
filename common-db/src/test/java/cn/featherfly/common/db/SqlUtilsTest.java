@@ -15,14 +15,9 @@ import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.repository.Execution;
 
 /**
- * <p>
- * 类的说明放这里
- * </p>
- * <p>
- * copyright cdthgk 2010-2020, all rights reserved.
- * </p>
+ * SqlUtils unit test
  *
- * @author 钟冀
+ * @author zhongj
  */
 public class SqlUtilsTest {
     public static void main(String[] args) {
@@ -344,6 +339,17 @@ public class SqlUtilsTest {
         System.out.println(namedParamSql.getSql());
         System.out.println(execution.getExecution());
         System.out.println(ArrayUtils.toString(getParamNames(namedParamSql)));
+    }
+
+    @Test
+    void testConvertNamedParamSqlConvertFeatureInParams() {
+        String namedSql = "select * from user where id in :ids and gender = :gender and state in :states";
+        String sql = "select * from user where id in ${_ids} and gender = ? and state in ${_states}";
+        String resultSql = null;
+
+        resultSql = SqlUtils.convertNamedParamSql(namedSql, f -> f.setInParamsPlaceholder(name -> "${_" + name + "}"));
+        System.out.println(resultSql);
+        assertEquals(resultSql, sql);
     }
 
     private String[] getParamNames(NamedParamSql namedParamSql) {

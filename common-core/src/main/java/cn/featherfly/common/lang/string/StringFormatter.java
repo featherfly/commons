@@ -4,6 +4,7 @@ package cn.featherfly.common.lang.string;
 import java.util.Map;
 import java.util.function.Function;
 
+import cn.featherfly.common.bean.BeanDescriptor;
 import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Lang;
@@ -21,11 +22,13 @@ public class StringFormatter {
 
     private boolean placeholderAutoIndex;
 
+    private NotMatchStrategy notMatchStrategy = NotMatchStrategy.KEEP_PLACEHOLDER;
+
     /**
      * Instantiates a new custom string formatter.
      *
      * @param startSymbol the start symbol
-     * @param endSymbol   the end symbol
+     * @param endSymbol the end symbol
      */
     public StringFormatter(char startSymbol, char endSymbol) {
         this(startSymbol, endSymbol, false);
@@ -34,19 +37,37 @@ public class StringFormatter {
     /**
      * Instantiates a new custom string formatter.
      *
-     * @param startSymbol          the start symbol
-     * @param endSymbol            the end symbol
+     * @param startSymbol the start symbol
+     * @param endSymbol the end symbol
      * @param placeholderAutoIndex the placeholder auto index <br>
-     *                             if true auto add index to params placeholder,
-     *                             such as: <br>
-     *                             "hello {} at {} from [{1}] at {}" <br>
-     *                             "hello {0} at {1} from [{1}] at {2}" <br>
+     *        if true auto add index to params placeholder,
+     *        such as: <br>
+     *        "hello {} at {} from [{1}] at {}" <br>
+     *        "hello {0} at {1} from [{1}] at {2}" <br>
      */
     public StringFormatter(char startSymbol, char endSymbol, boolean placeholderAutoIndex) {
+        this(startSymbol, endSymbol, placeholderAutoIndex, NotMatchStrategy.KEEP_PLACEHOLDER);
+    }
+
+    /**
+     * Instantiates a new custom string formatter.
+     *
+     * @param startSymbol the start symbol
+     * @param endSymbol the end symbol
+     * @param placeholderAutoIndex the placeholder auto index <br>
+     *        if true auto add index to params placeholder,
+     *        such as: <br>
+     *        "hello {} at {} from [{1}] at {}" <br>
+     *        "hello {0} at {1} from [{1}] at {2}" <br>
+     * @param notMatchStrategy the not match strategy
+     */
+    public StringFormatter(char startSymbol, char endSymbol, boolean placeholderAutoIndex,
+        NotMatchStrategy notMatchStrategy) {
         super();
         this.startSymbol = startSymbol;
         this.endSymbol = endSymbol;
         this.placeholderAutoIndex = placeholderAutoIndex;
+        this.notMatchStrategy = notMatchStrategy;
     }
 
     /**
@@ -77,8 +98,8 @@ public class StringFormatter {
      *
      * </blockquote>
      *
-     * @param str  format string
-     * @param args format args
+     * @param str the str
+     * @param args the args
      * @return formated str
      */
     public String format(String str, Object... args) {
@@ -91,13 +112,13 @@ public class StringFormatter {
      * <pre>
      * StringFormatter formatter = new StringFormatter('{', '}');
      * formatter.format("my name is {name}, i am {age} years old",
-     *         new HashChainMap&lt;String, Object&gt;().putChain("name", "yufei").putChain("age", 18));
+     *     new HashChainMap&lt;String, Object&gt;().putChain("name", "yufei").putChain("age", 18));
      * </pre>
      *
      * </blockquote>
      *
-     * @param str  format string
-     * @param args format args
+     * @param str the str
+     * @param args the args
      * @return formated str
      */
     public String format(String str, Map<String, Object> args) {
@@ -117,9 +138,9 @@ public class StringFormatter {
      *
      * </blockquote>
      *
-     * @param <O>  the generic type
-     * @param str  format string
-     * @param args format args
+     * @param <O> the generic type
+     * @param str the str
+     * @param args the args
      * @return formated str
      */
     public <O extends Object> String format(String str, O args) {
@@ -131,15 +152,7 @@ public class StringFormatter {
             return str;
         }
         int autoIndex = 0;
-        Function<String, Object> getParam;
-        if (args instanceof Map) {
-            @SuppressWarnings("unchecked")
-            Map<String, Object> argsMap = (Map<String, Object>) args;
-            getParam = (name) -> ArrayUtils.toString(argsMap.get(name));
-        } else {
-            getParam = (name) -> ArrayUtils.toString(BeanUtils.getProperty(args, name));
-        }
-
+        Function<String, Object> getParam = getParam(args);
         StringBuilder sb = new StringBuilder(str);
         int nameStartIndex = -1;
         int nameEndIndex = -1;
@@ -190,5 +203,56 @@ public class StringFormatter {
             }
         }
         return sb.toString();
+    }
+
+    private Function<String, Object> getParam(Object args) {
+        if (args instanceof Map) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> argsMap = (Map<String, Object>) args;
+            return (name) -> {
+                if (argsMap.containsKey(name)) {
+                    return ArrayUtils.toString(argsMap.get(name));
+                } else {
+                    return getNotMatch(name,
+                        "no parameter was found for the placeholder " + startSymbol + name + endSymbol);
+                }
+            };
+        } else {
+            return (name) -> {
+                if (BeanDescriptor.getBeanDescriptor(args.getClass()).hasBeanProperty(name)) {
+                    return ArrayUtils.toString(BeanUtils.getProperty(args, name));
+                } else {
+                    return getNotMatch(name, "no property[" + name + "] was found in " + args.getClass().getName()
+                        + " for the placeholder " + startSymbol + name + endSymbol);
+                }
+            };
+        }
+    }
+
+    private String getNotMatch(String name, String exceptionMessage) {
+        switch (notMatchStrategy) {
+            case THROW_EXCEPTION:
+                throw new StringFormatterException(exceptionMessage);
+            case KEEP_PLACEHOLDER:
+                return "" + startSymbol + endSymbol;
+            case TRIM_PLACEHOLDER:
+                return "";
+            default:
+                throw new StringFormatterException("unkonw strategy " + notMatchStrategy.name());
+        }
+    }
+
+    /**
+     * not match strategy.
+     *
+     * @author zhongj
+     */
+    public enum NotMatchStrategy {
+        /** The trim placeholder. */
+        TRIM_PLACEHOLDER,
+        /** The keep placeholder. */
+        KEEP_PLACEHOLDER,
+        /** The throw exception. */
+        THROW_EXCEPTION;
     }
 }

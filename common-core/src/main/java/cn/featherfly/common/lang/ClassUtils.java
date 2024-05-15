@@ -91,7 +91,7 @@ public final class ClassUtils {
      * 判断第一个参数是否是第二个参数的父类（父接口）.
      *
      * @param parentType 父类型（包括类和接口）
-     * @param childType  子类型（包括类和接口）
+     * @param childType 子类型（包括类和接口）
      * @return 第一个参数是否是第二个参数的父类（父接口）
      */
     public static boolean isParent(Class<?> parentType, Class<?> childType) {
@@ -123,7 +123,7 @@ public final class ClassUtils {
         }
         if (c1.isPrimitive() || c2.isPrimitive()) {
             throw new IllegalArgumentException(
-                    new StringBuilder("incompatible types ").append(c1).append(" and ").append(c2).toString());
+                new StringBuilder("incompatible types ").append(c1).append(" and ").append(c2).toString());
         } else {
             return Object.class;
         }
@@ -140,7 +140,7 @@ public final class ClassUtils {
     /**
      * 返回目标类型的指定名称的字段，支持多层嵌套 例如, user.address.no
      *
-     * @param type      目标类型
+     * @param type 目标类型
      * @param fieldName 字段名
      * @return 目标类型的指定名称的字段，支持多层嵌套
      */
@@ -161,7 +161,7 @@ public final class ClassUtils {
     /**
      * 返回目标类型的指定类型的静态字段值，支持多层嵌套 例如, user.address.no
      *
-     * @param type      目标类型
+     * @param type 目标类型
      * @param fieldName 字段名
      * @return 目标类型的指定名称的字段，支持多层嵌套
      */
@@ -176,7 +176,7 @@ public final class ClassUtils {
     /**
      * 返回目标对象的指定类型的字段值，支持多层嵌套 例如, user.address.no
      *
-     * @param object    目标对象
+     * @param object 目标对象
      * @param fieldName 字段名
      * @return 目标类型的指定名称的字段，支持多层嵌套
      */
@@ -191,9 +191,9 @@ public final class ClassUtils {
     /**
      * 设置目标类型的指定类型的静态字段值，支持多层嵌套 例如, user.address.no
      *
-     * @param type      目标类型
+     * @param type 目标类型
      * @param fieldName 字段名
-     * @param value     the value
+     * @param value the value
      */
     public static void setFieldValue(Class<?> type, String fieldName, Object value) {
         try {
@@ -206,9 +206,9 @@ public final class ClassUtils {
     /**
      * 设置目标对象的指定类型的字段值，支持多层嵌套 例如, user.address.no
      *
-     * @param object    目标对象
+     * @param object 目标对象
      * @param fieldName 字段名
-     * @param value     value
+     * @param value value
      */
     public static void setFieldValue(Object object, String fieldName, Object value) {
         try {
@@ -221,8 +221,8 @@ public final class ClassUtils {
     /**
      * Gets the method.
      *
-     * @param type           the type
-     * @param methodName     the method name
+     * @param type the type
+     * @param methodName the method name
      * @param parameterTypes the parameter types
      * @return the method
      */
@@ -237,7 +237,7 @@ public final class ClassUtils {
     /**
      * invoke static method.
      *
-     * @param type       type
+     * @param type type
      * @param methodName method name
      * @return method return value
      */
@@ -248,9 +248,9 @@ public final class ClassUtils {
     /**
      * invoke static method.
      *
-     * @param type       type
+     * @param type type
      * @param methodName method name
-     * @param args       method arguments
+     * @param args method arguments
      * @return method return value
      */
     public static Object invokeMethod(Class<?> type, String methodName, Object... args) {
@@ -260,9 +260,9 @@ public final class ClassUtils {
     /**
      * invoke static method.
      *
-     * @param type   type
+     * @param type type
      * @param method method
-     * @param args   method arguments
+     * @param args method arguments
      * @return method return value
      */
     public static Object invokeMethod(Class<?> type, Method method, Object... args) {
@@ -276,7 +276,7 @@ public final class ClassUtils {
     /**
      * invoke object method.
      *
-     * @param object     object
+     * @param object object
      * @param methodName method name
      * @return method return value
      */
@@ -287,9 +287,9 @@ public final class ClassUtils {
     /**
      * invoke object method.
      *
-     * @param object     object
+     * @param object object
      * @param methodName method name
-     * @param args       method arguments
+     * @param args method arguments
      * @return method return value
      */
     public static Object invokeMethod(Object object, String methodName, Object... args) {
@@ -301,7 +301,7 @@ public final class ClassUtils {
      *
      * @param object object
      * @param method method
-     * @param args   method arguments
+     * @param args method arguments
      * @return method return value
      */
     public static Object invokeMethod(Object object, Method method, Object... args) {
@@ -315,22 +315,22 @@ public final class ClassUtils {
     /**
      * 获取标注的注解实力对象，如果没有标注，返回null.
      *
-     * @param <A1>              被标注的注解泛型
-     * @param <A2>              标注的注解泛型
-     * @param annotation        被标注的注解实例对象
+     * @param <A1> 被标注的注解泛型
+     * @param <A2> 标注的注解泛型
+     * @param annotation 被标注的注解实例对象
      * @param annotationPresent 标注的注解类型
      * @return 返回标注的注解实力对象
      */
     public static <A1 extends Annotation, A2 extends Annotation> A2 getAnnotation(A1 annotation,
-            Class<A2> annotationPresent) {
+        Class<A2> annotationPresent) {
         return getAnnotation(annotation.annotationType(), annotationPresent, false);
     }
 
     /**
      * 返回指定类型(objectType)的指定注解类型(annotationType), 会把父类里有被标注的字段也进行返回.
      *
-     * @param <A>            注解泛型
-     * @param objectType     对象类型
+     * @param <A> 注解泛型
+     * @param objectType 对象类型
      * @param annotationType 注解类型
      * @return 指定注解类型
      */
@@ -342,14 +342,14 @@ public final class ClassUtils {
      * 返回指定类型(objectType)的指定注解类型(annotationType), fromSuper 为 true
      * 时如果没有找到annotionType,则继续从父类查找.
      *
-     * @param <A>            注解泛型
-     * @param objectType     对象类型
+     * @param <A> 注解泛型
+     * @param objectType 对象类型
      * @param annotationType 注解类型
-     * @param fromSuper      是否从父类型查找
+     * @param fromSuper 是否从父类型查找
      * @return 指定注解类型
      */
     public static <A extends Annotation> A getAnnotation(Class<?> objectType, Class<A> annotationType,
-            boolean fromSuper) {
+        boolean fromSuper) {
         if (objectType != null && objectType != Object.class) {
             A a = objectType.getAnnotation(annotationType);
             if (a == null && fromSuper) {
@@ -364,22 +364,22 @@ public final class ClassUtils {
     /**
      * 获取标注的注解实力对象，如果没有标注，返回null.
      *
-     * @param <A1>              被标注的注解泛型
-     * @param <A2>              标注的注解泛型
-     * @param annotation        被标注的注解实例对象
+     * @param <A1> 被标注的注解泛型
+     * @param <A2> 标注的注解泛型
+     * @param annotation 被标注的注解实例对象
      * @param annotationPresent 标注的注解类型
      * @return 返回标注的注解实力对象数组
      */
     public static <A1 extends Annotation, A2 extends Annotation> A2[] getAnnotations(A1 annotation,
-            Class<A2> annotationPresent) {
+        Class<A2> annotationPresent) {
         return getAnnotations(annotation.annotationType(), annotationPresent, false);
     }
 
     /**
      * 返回指定类型(objectType)的指定注解类型(annotationType), 会把父类里有被标注的字段也进行返回.
      *
-     * @param <A>            注解泛型
-     * @param objectType     对象类型
+     * @param <A> 注解泛型
+     * @param objectType 对象类型
      * @param annotationType 注解类型
      * @return 指定注解类型数组
      */
@@ -391,14 +391,14 @@ public final class ClassUtils {
      * 返回指定类型(objectType)的指定注解类型(annotationType), fromSuper 为 true
      * 时如果没有找到annotionType,则继续从父类查找.
      *
-     * @param <A>            注解泛型
-     * @param objectType     对象类型
+     * @param <A> 注解泛型
+     * @param objectType 对象类型
      * @param annotationType 注解类型
-     * @param fromSuper      是否从父类型查找
+     * @param fromSuper 是否从父类型查找
      * @return 指定注解类型数组
      */
     public static <A extends Annotation> A[] getAnnotations(Class<?> objectType, Class<A> annotationType,
-            boolean fromSuper) {
+        boolean fromSuper) {
         if (objectType != null && objectType != Object.class) {
             A[] a = objectType.getAnnotationsByType(annotationType);
             if (a == null && fromSuper) {
@@ -414,8 +414,8 @@ public final class ClassUtils {
      * 返回指定类型(objectType)被指定注解(annotationType)标注的所有字段【成员变量】(field)
      * 会把父类里有被标注的字段也进行返回.
      *
-     * @param <A>            注解泛型
-     * @param objectType     对象类型
+     * @param <A> 注解泛型
+     * @param objectType 对象类型
      * @param annotationType 注解类型
      * @return 指定类型被指定注解标注的所有字段
      */
@@ -427,21 +427,21 @@ public final class ClassUtils {
      * 返回指定类型(objectType)被指定注解(annotationType)标注的所有字段【成员变量】(field) fromSuper 为
      * true 时会把父类里有被标注的字段也进行返回，为false则只返回本类的.
      *
-     * @param <A>            注解泛型
-     * @param objectType     对象类型
+     * @param <A> 注解泛型
+     * @param objectType 对象类型
      * @param annotationType 注解类型
-     * @param fromSuper      是否从父类型查找
+     * @param fromSuper 是否从父类型查找
      * @return 指定类型被指定注解标注的所有字段
      */
     public static <A extends Annotation> List<Field> getAnnotatedFields(Class<?> objectType, Class<A> annotationType,
-            boolean fromSuper) {
+        boolean fromSuper) {
         List<Field> fieldList = new ArrayList<>();
         getAnnotatedFields(objectType, fieldList, annotationType, fromSuper);
         return fieldList;
     }
 
     private static <A extends Annotation> void getAnnotatedFields(Class<?> objectType, List<Field> fieldList,
-            Class<A> annotationType, boolean fromSuper) {
+        Class<A> annotationType, boolean fromSuper) {
         if (objectType != null && objectType != Object.class) {
             Field[] fields = objectType.getDeclaredFields();
             for (Field field : fields) {
@@ -458,13 +458,13 @@ public final class ClassUtils {
     /**
      * 返回指定类型(objectType)被指定注解(annotationType)标注的公共(public)方法(method).
      *
-     * @param <A>            注解类型
-     * @param objectType     目标类型
+     * @param <A> 注解类型
+     * @param objectType 目标类型
      * @param annotationType 注解类型
      * @return 指定注解标注的公共方法
      */
     public static <A extends Annotation> List<Method> getAnnotatedMethods(Class<?> objectType,
-            Class<A> annotationType) {
+        Class<A> annotationType) {
         List<Method> methodList = new ArrayList<>();
         Method[] methods = objectType.getMethods();
         for (Method method : methods) {
@@ -509,7 +509,10 @@ public final class ClassUtils {
     public static boolean isSetter(Method method) {
         String set = SET;
         String name = method.getName();
-        return name.startsWith(set) && !set.equals(name) && method.getParameterTypes().length == 1;
+        if (Modifier.isStatic(method.getModifiers())) {
+            return false;
+        }
+        return method.getParameterTypes().length == 1 && name.startsWith(set) && !set.equals(name);
     }
 
     /**
@@ -522,22 +525,22 @@ public final class ClassUtils {
         String get = GET;
         String is = IS;
         String name = method.getName();
-        if (name.startsWith(get) && !get.equals(name) && method.getReturnType() != void.class
-                && method.getParameterCount() == 0) {
-            return true;
+        if (Modifier.isStatic(method.getModifiers()) || method.getReturnType() == void.class
+            || method.getParameterCount() > 0) {
+            return false;
         }
-        if (name.startsWith(is) && !is.equals(name) && method.getReturnType() != void.class
-                && method.getParameterCount() == 0) {
-            return true;
+        if (method.getReturnType() == Boolean.TYPE) {
+            return name.startsWith(is) && !is.equals(name);
+        } else {
+            return name.startsWith(get) && !get.equals(name);
         }
-        return false;
     }
 
     /**
      * 返回getter方法，包括getXxx和isXxx 没有找到返回null.
      *
      * @param field 成员变量
-     * @param type  类型
+     * @param type 类型
      * @return getter方法
      */
     public static Method getGetter(Field field, Class<?> type) {
@@ -546,11 +549,22 @@ public final class ClassUtils {
         String get = GET + WordUtils.upperCaseFirst(fieldName);
         try {
             method = type.getMethod(get, new Class[] {});
+            if (Modifier.isStatic(method.getModifiers())) {
+                LOGGER.trace("{} method is static, not a java bean getter", method.getName());
+                throw new NoSuchMethodException("method is static, not a java bean getter");
+            }
         } catch (Exception e) {
+            if (type != Boolean.TYPE) {
+                return method;
+            }
             LOGGER.trace("没有找到get{}方法, 使用is{}查找", field.getName(), field.getName());
             try {
                 String is = IS + WordUtils.upperCaseFirst(fieldName);
                 method = type.getMethod(is, new Class[] {});
+                if (Modifier.isStatic(method.getModifiers())) {
+                    LOGGER.trace("{} method is static, not a java bean getter", method.getName());
+                    method = null;
+                }
             } catch (Exception e1) {
                 LOGGER.trace("没有找到get{}和is{}方法", field.getName(), field.getName());
             }
@@ -562,7 +576,7 @@ public final class ClassUtils {
      * 返回setter方法 没有找到返回null.
      *
      * @param field 成员变量
-     * @param type  类型
+     * @param type 类型
      * @return 返回setter方法
      */
     public static Method getSetter(Field field, Class<?> type) {
@@ -571,6 +585,10 @@ public final class ClassUtils {
         String set = SET + WordUtils.upperCaseFirst(fieldName);
         try {
             method = type.getMethod(set, field.getType());
+            if (Modifier.isStatic(method.getModifiers())) {
+                LOGGER.trace("{} method is static, not a java bean setter", method.getName());
+                method = null;
+            }
         } catch (Exception e) {
             LOGGER.trace("没有找到{}的set方法", field.getName(), field.getName());
         }
@@ -675,7 +693,7 @@ public final class ClassUtils {
      * @return 是否是抽象类
      */
     public static boolean isAbstractClass(Class<?> type) {
-        return cn.featherfly.common.lang.reflect.Modifier.ABSTRACT.isModifier(type.getModifiers());
+        return Modifier.isAbstract(type.getModifiers());
     }
 
     /**
@@ -691,8 +709,8 @@ public final class ClassUtils {
     /**
      * Class泛型参数强制转型.
      *
-     * @param <T>        泛型
-     * @param type       type
+     * @param <T> 泛型
+     * @param type type
      * @param castToType castToType
      * @return 泛型Class
      */
@@ -764,7 +782,7 @@ public final class ClassUtils {
      * 转换包模式为目录模式.xx.yy.Ttt -&gt; xx/yy/Ttt
      * </p>
      *
-     * @param type       类型
+     * @param type 类型
      * @param containExt 包含扩展名
      * @return 目录模式表示的type文件
      */
@@ -832,7 +850,7 @@ public final class ClassUtils {
      * 通过反射,获得指定类的父类的泛型参数的实际类型. 如BuyerServiceBean extends
      * DaoSupport&lt;Buyer&gt;
      *
-     * @param <T>   泛型
+     * @param <T> 泛型
      * @param clazz clazz 需要反射的类,该类必须继承范型父类
      * @param index 泛型参数所在索引,从0开始.
      * @return 范型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
@@ -864,7 +882,7 @@ public final class ClassUtils {
      * 通过反射,获得指定类的父类的第一个泛型参数的实际类型. 如BuyerServiceBean extends
      * DaoSupport&lt;Buyer&gt;
      *
-     * @param <T>   泛型
+     * @param <T> 泛型
      * @param clazz clazz 需要反射的类,该类必须继承泛型父类
      * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
      *         <code>Object.class</code>
@@ -914,7 +932,7 @@ public final class ClassUtils {
         // 如果没有实现ParameterizedType接口，即不支持泛型，抛出异常
         if (!(genType instanceof ParameterizedType)) {
             throw new IllegalArgumentException(
-                    "there is no generic parameter with super class, such as : public class StringList extends ArrayList<String>");
+                "there is no generic parameter with super class, such as : public class StringList extends ArrayList<String>");
         }
         // 返回表示此类型实际类型参数的Type对象的数组,数组里放的都是对应类型的Class, 如BuyerServiceBean extends
         // DaoSupport<Buyer,Contact>就返回Buyer和Contact类型
@@ -946,7 +964,7 @@ public final class ClassUtils {
      * 通过反射,获得指定类的父类的泛型参数的实际类型. 如BuyerServiceBean extends
      * DaoSupport&lt;Buyer&gt;
      *
-     * @param <T>   泛型
+     * @param <T> 泛型
      * @param clazz clazz 需要反射的类,该类必须继承范型父类
      * @param index 泛型参数所在索引,从0开始.
      * @return 范型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，直接返回Object.class
@@ -979,7 +997,7 @@ public final class ClassUtils {
      * 通过反射,获得指定类的父类的第一个泛型参数的实际类型. 如BuyerServiceBean extends
      * DaoSupport&lt;Buyer&gt;
      *
-     * @param <T>   泛型
+     * @param <T> 泛型
      * @param clazz clazz 需要反射的类,该类必须继承泛型父类
      * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
      *         <code>Object.class</code>
@@ -1035,7 +1053,7 @@ public final class ClassUtils {
     }
 
     private static Map<Class<?>, Map<String, Type>> getSuperClassAllGenericTypeMap(Class<?> clazz,
-            Map<Class<?>, Map<String, Type>> typeGenericMap) {
+        Map<Class<?>, Map<String, Type>> typeGenericMap) {
         if (clazz.getSuperclass() == Object.class) {
             return typeGenericMap;
         }
@@ -1047,9 +1065,9 @@ public final class ClassUtils {
      * 获得指定类实现的接口的泛型参数的实际类型. 如BuyerServiceBean implements
      * DaoSupport&lt;Buyer&gt;
      *
-     * @param <T>           泛型
-     * @param clazz         clazz 需要反射的类,该类必须继承范型父类
-     * @param index         泛型参数所在索引,从0开始.
+     * @param <T> 泛型
+     * @param clazz clazz 需要反射的类,该类必须继承范型父类
+     * @param index 泛型参数所在索引,从0开始.
      * @param interfaceType 实现的接口类型
      * @return 范型参数的实际类型,
      *         如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
@@ -1080,8 +1098,8 @@ public final class ClassUtils {
      * 获得指定类实现的接口的第一个泛型参数的实际类型. 如BuyerServiceBean implements
      * DaoSupport&lt;Buyer&gt;
      *
-     * @param <T>           泛型
-     * @param clazz         clazz 需要反射的类,该类必须继承泛型父类
+     * @param <T> 泛型
+     * @param clazz clazz 需要反射的类,该类必须继承泛型父类
      * @param interfaceType 实现的接口类型
      * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
      *         <code>Object.class</code>
@@ -1093,7 +1111,7 @@ public final class ClassUtils {
     /**
      * 通过反射,获得指定类的父类的泛型参数的实际类型与父类定义泛型是的定义之间的映射关系.
      *
-     * @param clazz         clazz 需要反射的类,该类必须继承泛型父类
+     * @param clazz clazz 需要反射的类,该类必须继承泛型父类
      * @param interfaceType the interface type
      * @return 使用父类定义泛型的参数名作为KEY,子类实例化泛型的TYPE作为VALUE作为 <code>Object.class</code>
      */
@@ -1144,9 +1162,9 @@ public final class ClassUtils {
      * </code>
      * </pre>
      *
-     * @param <T>            the generic type
-     * @param type           the type
-     * @param methodName     the method name
+     * @param <T> the generic type
+     * @param type the type
+     * @param methodName the method name
      * @param parameterTypes the parameter types
      * @return 方法返回对象的实际类型.
      */
@@ -1157,8 +1175,8 @@ public final class ClassUtils {
     /**
      * 获得方法返回对象的实际类型,如果是具现化的泛型类型，则返回具现化的类型.
      *
-     * @param <T>    泛型
-     * @param type   the type
+     * @param <T> 泛型
+     * @param type the type
      * @param method 方法
      * @return 方法返回对象的实际类型.
      * @see #getMethodReturnType(Class, String, Class...)
@@ -1181,23 +1199,23 @@ public final class ClassUtils {
      * </code>
      * </pre>
      *
-     * @param <T>            泛型
-     * @param type           the type
-     * @param methodName     the method name
+     * @param <T> 泛型
+     * @param type the type
+     * @param methodName the method name
      * @param parameterTypes the parameter types
      * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
      *         <code>Object.class</code>
      */
     public static <T> Class<T> getMethodReturnTypeGenericParameterType(Class<?> type, String methodName,
-            Class<?>... parameterTypes) {
+        Class<?>... parameterTypes) {
         return getMethodReturnTypeGenericParameterType(type, getMethod(type, methodName, parameterTypes));
     }
 
     /**
      * 获得方法返回值第一个泛型参数的实际类型. 如: public Map&lt;String, Buyer&gt; getNames(){}
      *
-     * @param <T>    泛型
-     * @param type   the type
+     * @param <T> 泛型
+     * @param type the type
      * @param method 方法
      * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
      *         <code>Object.class</code>
@@ -1231,10 +1249,10 @@ public final class ClassUtils {
      * </code>
      * </pre>
      *
-     * @param <T>    泛型
-     * @param type   the type
+     * @param <T> 泛型
+     * @param type the type
      * @param method 方法
-     * @param index  泛型参数所在索引,从0开始.
+     * @param index 泛型参数所在索引,从0开始.
      * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
      *         <code>Object.class</code>
      */
@@ -1247,14 +1265,14 @@ public final class ClassUtils {
      * 获得方法返回对象的所有泛型参数的实际类型列表，如果是已经具现化的泛型，则返回具现化的类型.
      * </pre>
      *
-     * @param type           the type
-     * @param methodName     the method name
+     * @param type the type
+     * @param methodName the method name
      * @param parameterTypes the parameter types
      * @return 泛型参数的实际类型,
      *         如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
      */
     public static List<Class<?>> getMethodReturnTypeGenericParameterTypes(Class<?> type, String methodName,
-            Class<?>... parameterTypes) {
+        Class<?>... parameterTypes) {
         return getMethodReturnTypeGenericParameterTypes(type, getMethod(type, methodName, parameterTypes));
     }
 
@@ -1263,7 +1281,7 @@ public final class ClassUtils {
      * 获得方法返回对象的所有泛型参数的实际类型列表，如果是已经具现化的泛型，则返回具现化的类型.
      * </pre>
      *
-     * @param type   the type
+     * @param type the type
      * @param method the method
      * @return 泛型参数的实际类型,
      *         如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
@@ -1277,9 +1295,9 @@ public final class ClassUtils {
      * 获得第一个方法参数对象的实际类型,如果是具现化的泛型类型，则返回具现化的类型.
      * </pre>
      *
-     * @param <T>            the generic type
-     * @param type           the type
-     * @param methodName     the method name
+     * @param <T> the generic type
+     * @param type the type
+     * @param methodName the method name
      * @param parameterTypes the parameter types
      * @return 方法参数对象的实际类型.
      * @see #getMethodParameterType(Class, Method, int)
@@ -1291,8 +1309,8 @@ public final class ClassUtils {
     /**
      * 获得第一个方法参数对象的实际类型,如果是具现化的泛型类型，则返回具现化的类型.
      *
-     * @param <T>    泛型
-     * @param type   the type
+     * @param <T> 泛型
+     * @param type the type
      * @param method 方法
      * @return 方法参数的实际类型.
      * @see #getMethodParameterType(Class, Method, int)
@@ -1319,9 +1337,9 @@ public final class ClassUtils {
      * </code>
      * </pre>
      *
-     * @param <T>        泛型
-     * @param type       the type
-     * @param method     方法
+     * @param <T> 泛型
+     * @param type the type
+     * @param method 方法
      * @param paramIndex the param index
      * @return 方法参数对象的实际类型.
      */
@@ -1339,8 +1357,8 @@ public final class ClassUtils {
     /**
      * 获得方法参数对象的实际类型,如果是具现化的泛型类型，则返回具现化的类型.
      *
-     * @param type           the type
-     * @param methodName     the method name
+     * @param type the type
+     * @param methodName the method name
      * @param parameterTypes the parameter types
      * @return 方法参数对象的实际类型列表.
      * @see #getMethodReturnType(Class, String, Class...)
@@ -1352,7 +1370,7 @@ public final class ClassUtils {
     /**
      * 获得方法参数对象的实际类型,如果是具现化的泛型类型，则返回具现化的类型.
      *
-     * @param type   the type
+     * @param type the type
      * @param method 方法
      * @return 方法返回对象的实际类型.
      * @see #getMethodReturnType(Class, String, Class...)
@@ -1369,8 +1387,8 @@ public final class ClassUtils {
      * 获得方法输入参数第一个输入参数的第一个泛型参数的实际类型. 如: public void add(Map&lt;String, Buyer&gt;
      * maps, List&lt;String&gt; names){}
      *
-     * @param type           the type
-     * @param methodName     the method name
+     * @param type the type
+     * @param methodName the method name
      * @param parameterTypes the parameter types
      * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
      */
@@ -1382,7 +1400,7 @@ public final class ClassUtils {
      * 获得方法输入参数第一个输入参数的第一个泛型参数的实际类型. 如: public void add(Map&lt;String, Buyer&gt;
      * maps, List&lt;String&gt; names){}
      *
-     * @param type   the type
+     * @param type the type
      * @param method 方法
      * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
      */
@@ -1394,9 +1412,9 @@ public final class ClassUtils {
      * 获得方法输入参数第index个输入参数的第一个泛型参数的实际类型. 如: public void add(Map&lt;String,
      * Buyer&gt; maps, List&lt;String&gt; names){}
      *
-     * @param type   the type
+     * @param type the type
      * @param method 方法
-     * @param index  第几个输入参数
+     * @param index 第几个输入参数
      * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
      */
     public static Class<?> getMethodGenericParameterType(Class<?> type, Method method, int index) {
@@ -1407,19 +1425,19 @@ public final class ClassUtils {
      * 获得方法输入参数第index个输入参数的所有泛型参数的实际类型. 如: public void add(Map&lt;String,
      * Buyer&gt; maps, List&lt;String&gt; names){}
      *
-     * @param <T>              the generic type
-     * @param type             the type
-     * @param method           方法
-     * @param paramIndex       第几个输入参数
+     * @param <T> the generic type
+     * @param type the type
+     * @param method 方法
+     * @param paramIndex 第几个输入参数
      * @param genericTypeIndex 第几个泛型参数
      * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
      */
     public static <T> Class<T> getMethodGenericParameterType(Class<?> type, Method method, int paramIndex,
-            int genericTypeIndex) {
+        int genericTypeIndex) {
         Type[] genericParameterTypes = method.getGenericParameterTypes();
         if (paramIndex >= genericParameterTypes.length || paramIndex < 0) {
             throw new IllegalArgumentException(
-                    "你输入的索引" + (paramIndex < 0 ? "不能小于0" : "超出了参数的总数" + genericParameterTypes.length));
+                "你输入的索引" + (paramIndex < 0 ? "不能小于0" : "超出了参数的总数" + genericParameterTypes.length));
         }
         return getGenericParameterType(type, genericParameterTypes[paramIndex], genericTypeIndex);
     }
@@ -1428,7 +1446,7 @@ public final class ClassUtils {
      * 获得方法所有参数的所有泛型参数的实际类型列表. 如: public void add(Map&lt;String, Buyer&gt; maps,
      * List&lt;String&gt; names){}
      *
-     * @param type   the type
+     * @param type the type
      * @param method 方法
      * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
      */
@@ -1444,7 +1462,7 @@ public final class ClassUtils {
      * 获得方法输入参数第一个输入参数的所有泛型参数的实际类型列表. 如: public void add(Map&lt;String,
      * Buyer&gt; maps, List&lt;String&gt; names){}
      *
-     * @param type   the type
+     * @param type the type
      * @param method 方法
      * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
      */
@@ -1456,9 +1474,9 @@ public final class ClassUtils {
      * 获得方法输入参数第index个输入参数的所有泛型参数的实际类型. 如: public void add(Map&lt;String,
      * Buyer&gt; maps, List&lt;String&gt; names){}
      *
-     * @param type   the type
+     * @param type the type
      * @param method 方法
-     * @param index  第几个输入参数
+     * @param index 第几个输入参数
      * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
      */
     public static List<Class<?>> getMethodGenericParameterTypes(Class<?> type, Method method, int index) {
@@ -1505,8 +1523,8 @@ public final class ClassUtils {
      *  </code>
      * </pre>
      *
-     * @param <T>       泛型
-     * @param type      the type
+     * @param <T> 泛型
+     * @param type the type
      * @param fieldName the field name
      * @return field的实际类型,如果是一个没有具现化的泛型，则返回Object.class
      */
@@ -1519,8 +1537,8 @@ public final class ClassUtils {
      * 获得Field参数的实际类型，如果是已经具现化的泛型，则返回具现化的类型.
      * </pre>
      *
-     * @param <T>   泛型
-     * @param type  the type
+     * @param <T> 泛型
+     * @param type the type
      * @param field 字段
      * @return field的实际类型,如果是一个没有具现化的泛型，则返回Object.class
      * @see #getFieldType(Class, String)
@@ -1534,8 +1552,8 @@ public final class ClassUtils {
      * 获得Field的第一个泛型参数的实际类型，如果是已经具现化的泛型，则返回具现化的类型.
      * </pre>
      *
-     * @param <T>       the generic type
-     * @param type      the type
+     * @param <T> the generic type
+     * @param type the type
      * @param fieldName the field name
      * @return 泛型参数的实际类型,
      *         如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
@@ -1549,10 +1567,10 @@ public final class ClassUtils {
      * 获得Field的指定位置的泛型参数的实际类型，如果是已经具现化的泛型，则返回具现化的类型.
      * </pre>
      *
-     * @param <T>       the generic type
-     * @param type      the type
+     * @param <T> the generic type
+     * @param type the type
      * @param fieldName the field name
-     * @param index     the index
+     * @param index the index
      * @return 泛型参数的实际类型,
      *         如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
      */
@@ -1565,8 +1583,8 @@ public final class ClassUtils {
      * 获得Field的第一个泛型参数的实际类型，如果是已经具现化的泛型，则返回具现化的类型.
      * </pre>
      *
-     * @param <T>   the generic type
-     * @param type  the type
+     * @param <T> the generic type
+     * @param type the type
      * @param field 字段
      * @return 泛型参数的实际类型,
      *         如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
@@ -1581,8 +1599,8 @@ public final class ClassUtils {
      * 获得Field的泛型参数的实际类型，如果是已经具现化的泛型，则返回具现化的类型.
      * </pre>
      *
-     * @param <T>   the generic type
-     * @param type  the type
+     * @param <T> the generic type
+     * @param type the type
      * @param field 字段
      * @param index 泛型参数所在索引,从0开始.
      * @return 泛型参数的实际类型,
@@ -1597,7 +1615,7 @@ public final class ClassUtils {
      * 获得Field的所有泛型参数的实际类型列表，如果是已经具现化的泛型，则返回具现化的类型.
      * </pre>
      *
-     * @param type      the type
+     * @param type the type
      * @param fieldName the field name
      * @return 泛型参数的实际类型,
      *         如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
@@ -1611,7 +1629,7 @@ public final class ClassUtils {
      * 获得Field的所有泛型参数的实际类型列表，如果是已经具现化的泛型，则返回具现化的类型.
      * </pre>
      *
-     * @param type  the type
+     * @param type the type
      * @param field 字段
      * @return 泛型参数的实际类型,
      *         如果没有实现ParameterizedType接口，即不支持泛型，直接返回<code>Object.class</code>
@@ -1624,7 +1642,7 @@ public final class ClassUtils {
     private static <T> Class<T> getGenericInstanceType(Class<?> clazz, TypeVariable<?> typeVariable) {
         if (typeVariable.getGenericDeclaration() instanceof Class) {
             return getGenericInstanceType(clazz, (Class<?>) typeVariable.getGenericDeclaration(),
-                    typeVariable.getName());
+                typeVariable.getName());
         } else if (typeVariable.getGenericDeclaration() instanceof Method) {
             return (Class<T>) typeVariable.getBounds()[0];
         } else if (typeVariable.getGenericDeclaration() instanceof Constructor) {
@@ -1636,7 +1654,7 @@ public final class ClassUtils {
 
     @SuppressWarnings("unchecked")
     private static <T> Class<T> getGenericInstanceType(Class<?> clazz, Class<?> genericInstanceType,
-            String genericName) {
+        String genericName) {
         if (clazz == Object.class) {
             return (Class<T>) Object.class;
         }
@@ -1712,7 +1730,7 @@ public final class ClassUtils {
             Type[] fieldArgTypes = pt.getActualTypeArguments();
             if (index >= fieldArgTypes.length || index < 0) {
                 throw new IllegalArgumentException(
-                        "你输入的索引" + (index < 0 ? "不能小于0" : "超出了泛型参数的总数" + fieldArgTypes.length));
+                    "你输入的索引" + (index < 0 ? "不能小于0" : "超出了泛型参数的总数" + fieldArgTypes.length));
             }
             Type genericType = fieldArgTypes[index];
             if (genericType instanceof Class) {
@@ -1810,7 +1828,7 @@ public final class ClassUtils {
 
     @SuppressWarnings("unchecked")
     private static <T> GenericType<T> craeteGenericType(Type fieldArgType, Class<?> clazz,
-            ParameterizedType parameterizedType) {
+        ParameterizedType parameterizedType) {
         if (fieldArgType instanceof Class) {
             return new GenericType<>((Class<T>) fieldArgType);
         } else if (fieldArgType instanceof WildcardType) {
@@ -1832,7 +1850,7 @@ public final class ClassUtils {
     }
 
     private static void addGenericType(Type fieldArgType, Class<?> clazz, ParameterizedType parameterizedType,
-            GenericType<?> gt) {
+        GenericType<?> gt) {
         GenericType<?> genericType = craeteGenericType(fieldArgType, clazz, parameterizedType);
         if (genericType != null) {
             gt.addGenericType(genericType);
@@ -1863,7 +1881,7 @@ public final class ClassUtils {
     /**
      * 实例化.
      *
-     * @param <T>   泛型
+     * @param <T> 泛型
      * @param clazz 类型
      * @return 对象
      */
@@ -1888,9 +1906,9 @@ public final class ClassUtils {
     /**
      * 实例化.
      *
-     * @param <T>   泛型
+     * @param <T> 泛型
      * @param clazz 类型
-     * @param args  参数数组
+     * @param args 参数数组
      * @return 对象
      */
     public static <T> T newInstance(Class<T> clazz, Object... args) {
@@ -1925,7 +1943,7 @@ public final class ClassUtils {
 
     @SuppressWarnings("unchecked")
     private static <E extends Executable> E match(List<Executable> matchs, Class<?> type, Object[] args,
-            boolean isMethod) {
+        boolean isMethod) {
         Executable matchExecutable = null;
         if (!matchs.isEmpty()) {
             Class<?>[] arguTypes = new Class<?>[args.length];
@@ -1965,7 +1983,7 @@ public final class ClassUtils {
         }
         if (matchExecutable == null) {
             throw new ReflectException(Strings.format("{0}({1}) 此{2}不存在",
-                    new Object[] { type.getName(), Arrays.asList(args).toString(), isMethod ? "方法" : "构造器" }));
+                new Object[] { type.getName(), Arrays.asList(args).toString(), isMethod ? "方法" : "构造器" }));
         }
         return (E) matchExecutable;
     }
@@ -1973,15 +1991,15 @@ public final class ClassUtils {
     /**
      * 实例化.
      *
-     * @param <T>         泛型
+     * @param <T> 泛型
      * @param constructor 构造器
-     * @param args        参数数组
+     * @param args 参数数组
      * @return 对象
      */
     public static <T> T newInstance(Constructor<T> constructor, Object... args) {
         AssertIllegalArgument.isNotNull(constructor, "Constructor<T> constructor");
         if (!Modifier.isPublic(constructor.getModifiers())
-                || !Modifier.isPublic(constructor.getDeclaringClass().getModifiers())) {
+            || !Modifier.isPublic(constructor.getDeclaringClass().getModifiers())) {
             constructor.setAccessible(true);
         }
         try {
@@ -1989,7 +2007,7 @@ public final class ClassUtils {
         } catch (IllegalArgumentException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
             throw new ReflectException(
-                    Strings.format(" {0} 是否定义成抽象类了 不能实例化", constructor.getDeclaringClass().getName()));
+                Strings.format(" {0} 是否定义成抽象类了 不能实例化", constructor.getDeclaringClass().getName()));
         } catch (InstantiationException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
             throw new ReflectException(Strings.format("{0} 构造器是否为私有", constructor.getDeclaringClass().getName()));
@@ -2011,7 +2029,7 @@ public final class ClassUtils {
      * 查找并返回第一个符合条件的Field. 如果没有则返回null.
      * </p>
      *
-     * @param type    匹配条件
+     * @param type 匹配条件
      * @param matcher 匹配条件
      * @return 第一个符合条件Field
      */
@@ -2031,7 +2049,7 @@ public final class ClassUtils {
      * 查找并返回所有符合条件Field的集合. 如果没有则返回一个长度为0的集合.
      * </p>
      *
-     * @param type    类型
+     * @param type 类型
      * @param matcher 匹配条件
      * @return 所有符合条件Field的集合
      */
@@ -2052,7 +2070,7 @@ public final class ClassUtils {
      * 查找并返回第一个符合条件的Method. 如果没有则返回null.
      * </p>
      *
-     * @param type    类型
+     * @param type 类型
      * @param matcher 匹配条件
      * @return 第一个符合条件Method
      */
@@ -2072,7 +2090,7 @@ public final class ClassUtils {
      * 查找并返回所有符合条件Method的集合. 如果没有则返回一个长度为0的集合.
      * </p>
      *
-     * @param type    类型
+     * @param type 类型
      * @param matcher 匹配条件
      * @return 所有符合条件Method的集合
      */
@@ -2164,7 +2182,7 @@ public final class ClassUtils {
     /**
      * getClassType.
      *
-     * @param <T>  the generic type
+     * @param <T> the generic type
      * @param type the type
      * @return the class type
      */
@@ -2207,7 +2225,7 @@ public final class ClassUtils {
          * 通过反射,获得指定类的父类的泛型参数的实际类型. 如BuyerServiceBean extends
          * DaoSupport&lt;Buyer&gt;
          *
-         * @param <T>   泛型
+         * @param <T> 泛型
          * @param clazz clazz 需要反射的类,该类必须继承范型父类
          * @param index 泛型参数所在索引,从0开始.
          * @return 范型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，直接返回null
@@ -2220,7 +2238,7 @@ public final class ClassUtils {
          * 通过反射,获得指定类的父类的第一个泛型参数的实际类型. 如BuyerServiceBean extends
          * DaoSupport&lt;Buyer&gt;
          *
-         * @param <T>   泛型
+         * @param <T> 泛型
          * @param clazz clazz 需要反射的类,该类必须继承泛型父类
          * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回
          *         <code>Object.class</code>
@@ -2233,9 +2251,9 @@ public final class ClassUtils {
          * 获得指定类实现的接口的泛型参数的实际类型. 如BuyerServiceBean implements
          * DaoSupport&lt;Buyer&gt;
          *
-         * @param <T>           泛型
-         * @param clazz         clazz 需要反射的类,该类必须继承范型父类
-         * @param index         泛型参数所在索引,从0开始.
+         * @param <T> 泛型
+         * @param clazz clazz 需要反射的类,该类必须继承范型父类
+         * @param index 泛型参数所在索引,从0开始.
          * @param interfaceType 实现的接口类型
          * @return 范型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，直接返回null
          */
@@ -2255,8 +2273,8 @@ public final class ClassUtils {
          * 获得指定类实现的接口的第一个泛型参数的实际类型. 如BuyerServiceBean implements
          * DaoSupport&lt;Buyer&gt;
          *
-         * @param <T>           泛型
-         * @param clazz         clazz 需要反射的类,该类必须继承泛型父类
+         * @param <T> 泛型
+         * @param clazz clazz 需要反射的类,该类必须继承泛型父类
          * @param interfaceType 实现的接口类型
          * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回null
          */
@@ -2280,8 +2298,8 @@ public final class ClassUtils {
          * 获得Field的第一个泛型参数的实际类型，如果是已经具现化的泛型，则返回具现化的类型.
          * </pre>
          *
-         * @param <T>       the generic type
-         * @param type      the type
+         * @param <T> the generic type
+         * @param type the type
          * @param fieldName the field name
          * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，直接返回null
          */
@@ -2294,10 +2312,10 @@ public final class ClassUtils {
          * 获得Field的指定位置的泛型参数的实际类型，如果是已经具现化的泛型，则返回具现化的类型.
          * </pre>
          *
-         * @param <T>       the generic type
-         * @param type      the type
+         * @param <T> the generic type
+         * @param type the type
          * @param fieldName the field name
-         * @param index     the index
+         * @param index the index
          * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，直接返回null
          */
         public static <T> GenericType<T> getGenericParameterType(Class<?> type, String fieldName, int index) {
@@ -2309,8 +2327,8 @@ public final class ClassUtils {
          * 获得Field的第一个泛型参数的实际类型，如果是已经具现化的泛型，则返回具现化的类型.
          * </pre>
          *
-         * @param <T>   the generic type
-         * @param type  the type
+         * @param <T> the generic type
+         * @param type the type
          * @param field 字段
          * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，直接返回null
          * @see #getFieldType(Class, String)
@@ -2324,8 +2342,8 @@ public final class ClassUtils {
          * 获得Field的泛型参数的实际类型，如果是已经具现化的泛型，则返回具现化的类型.
          * </pre>
          *
-         * @param <T>   the generic type
-         * @param type  the type
+         * @param <T> the generic type
+         * @param type the type
          * @param field 字段
          * @param index 泛型参数所在索引,从0开始.
          * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，直接返回null
@@ -2339,7 +2357,7 @@ public final class ClassUtils {
          * 获得Field的所有泛型参数的实际类型列表，如果是已经具现化的泛型，则返回具现化的类型.
          * </pre>
          *
-         * @param type      the type
+         * @param type the type
          * @param fieldName the field name
          * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，直接返回empty list
          */
@@ -2352,7 +2370,7 @@ public final class ClassUtils {
          * 获得Field的所有泛型参数的实际类型列表，如果是已经具现化的泛型，则返回具现化的类型.
          * </pre>
          *
-         * @param type  the type
+         * @param type the type
          * @param field 字段
          * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，直接返回empty list
          */
@@ -2385,22 +2403,22 @@ public final class ClassUtils {
          * </code>
          * </pre>
          *
-         * @param <T>            泛型
-         * @param type           the type
-         * @param methodName     the method name
+         * @param <T> 泛型
+         * @param type the type
+         * @param methodName the method name
          * @param parameterTypes the parameter types
          * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，返回null
          */
         public static <T> GenericType<T> getReturnTypeGenericParameterType(Class<?> type, String methodName,
-                Class<?>... parameterTypes) {
+            Class<?>... parameterTypes) {
             return getReturnTypeGenericParameterType(type, getMethod(type, methodName, parameterTypes));
         }
 
         /**
          * 获得方法返回值第一个泛型参数的实际类型. 如: public Map&lt;String, Buyer&gt; getNames(){}
          *
-         * @param <T>    泛型
-         * @param type   the type
+         * @param <T> 泛型
+         * @param type the type
          * @param method 方法
          * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，返回null
          * @see #getReturnTypeGenericParameterType(Class, String, Class...)
@@ -2433,10 +2451,10 @@ public final class ClassUtils {
          * </code>
          * </pre>
          *
-         * @param <T>    泛型
-         * @param type   the type
+         * @param <T> 泛型
+         * @param type the type
          * @param method 方法
-         * @param index  泛型参数所在索引,从0开始.
+         * @param index 泛型参数所在索引,从0开始.
          * @return 泛型参数的实际类型, 如果没有实现ParameterizedType接口，即不支持泛型，返回null
          */
         public static <T> GenericType<T> getReturnTypeGenericParameterType(Class<?> type, Method method, int index) {
@@ -2448,13 +2466,13 @@ public final class ClassUtils {
          * 获得方法返回对象所有泛型参数列表，如果是已经具现化的泛型，则返回具现化的类型.
          * </pre>
          *
-         * @param type           the type
-         * @param methodName     the method name
+         * @param type the type
+         * @param methodName the method name
          * @param parameterTypes the parameter types
          * @return 方法返回参数类型为根的树形结构,
          */
         public static List<GenericType<?>> getReturnTypeGenericParameterTypes(Class<?> type, String methodName,
-                Class<?>... parameterTypes) {
+            Class<?>... parameterTypes) {
             return getReturnTypeGenericParameterTypes(type, getMethod(type, methodName, parameterTypes));
         }
 
@@ -2463,7 +2481,7 @@ public final class ClassUtils {
          * 获得方法返回对象所有泛型参数列表，如果是已经具现化的泛型，则返回具现化的类型.
          * </pre>
          *
-         * @param type   the type
+         * @param type the type
          * @param method the method
          * @return 方法返回参数类型为根的树形结构,
          */
@@ -2475,14 +2493,14 @@ public final class ClassUtils {
          * 获得方法输入参数第一个输入参数的第一个泛型参数的实际类型. 如: public void add(Map&lt;String,
          * Buyer&gt; maps, List&lt;String&gt; names){}
          *
-         * @param <T>            the generic type
-         * @param type           the type
-         * @param methodName     the method name
+         * @param <T> the generic type
+         * @param type the type
+         * @param methodName the method name
          * @param parameterTypes the parameter types
          * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
          */
         public static <T> GenericType<T> getGenericParameterType(Class<?> type, String methodName,
-                Class<?>... parameterTypes) {
+            Class<?>... parameterTypes) {
             return getGenericParameterType(type, getMethod(type, methodName, parameterTypes));
         }
 
@@ -2490,8 +2508,8 @@ public final class ClassUtils {
          * 获得方法输入参数第一个输入参数的第一个泛型参数的实际类型. 如: public void add(Map&lt;String,
          * Buyer&gt; maps, List&lt;String&gt; names){}
          *
-         * @param <T>    the generic type
-         * @param type   the type
+         * @param <T> the generic type
+         * @param type the type
          * @param method 方法
          * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
          */
@@ -2503,10 +2521,10 @@ public final class ClassUtils {
          * 获得方法输入参数第index个输入参数的第一个泛型参数的实际类型. 如: public void add(Map&lt;String,
          * Buyer&gt; maps, List&lt;String&gt; names){}
          *
-         * @param <T>    the generic type
-         * @param type   the type
+         * @param <T> the generic type
+         * @param type the type
          * @param method 方法
-         * @param index  第几个输入参数
+         * @param index 第几个输入参数
          * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
          */
         public static <T> GenericType<T> getGenericParameterType(Class<?> type, Method method, int index) {
@@ -2517,19 +2535,19 @@ public final class ClassUtils {
          * 获得方法输入参数第index个输入参数的所有泛型参数的实际类型. 如: public void add(Map&lt;String,
          * Buyer&gt; maps, List&lt;String&gt; names){}
          *
-         * @param <T>              the generic type
-         * @param type             the type
-         * @param method           方法
-         * @param paramIndex       第几个输入参数
+         * @param <T> the generic type
+         * @param type the type
+         * @param method 方法
+         * @param paramIndex 第几个输入参数
          * @param genericTypeIndex 第几个泛型参数
          * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
          */
         public static <T> GenericType<T> getGenericParameterType(Class<?> type, Method method, int paramIndex,
-                int genericTypeIndex) {
+            int genericTypeIndex) {
             Type[] genericParameterTypes = method.getGenericParameterTypes();
             if (paramIndex >= genericParameterTypes.length || paramIndex < 0) {
                 throw new IllegalArgumentException(
-                        "你输入的索引" + (paramIndex < 0 ? "不能小于0" : "超出了参数的总数" + genericParameterTypes.length));
+                    "你输入的索引" + (paramIndex < 0 ? "不能小于0" : "超出了参数的总数" + genericParameterTypes.length));
             }
             return getGenericType(type, genericParameterTypes[paramIndex], genericTypeIndex);
         }
@@ -2538,7 +2556,7 @@ public final class ClassUtils {
          * 获得方法所有参数的所有泛型参数的实际类型列表. 如: public void add(Map&lt;String, Buyer&gt;
          * maps, List&lt;String&gt; names){}
          *
-         * @param type   the type
+         * @param type the type
          * @param method 方法
          * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
          */
@@ -2554,7 +2572,7 @@ public final class ClassUtils {
          * 获得方法输入参数第一个输入参数的所有泛型参数的实际类型列表. 如: public void add(Map&lt;String,
          * Buyer&gt; maps, List&lt;String&gt; names){}
          *
-         * @param type   the type
+         * @param type the type
          * @param method 方法
          * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
          */
@@ -2566,9 +2584,9 @@ public final class ClassUtils {
          * 获得方法输入参数第index个输入参数的所有泛型参数的实际类型. 如: public void add(Map&lt;String,
          * Buyer&gt; maps, List&lt;String&gt; names){}
          *
-         * @param type   the type
+         * @param type the type
          * @param method 方法
-         * @param index  第几个输入参数
+         * @param index 第几个输入参数
          * @return 输入参数的泛型参数的实际类型集合, 如果没有实现ParameterizedType接口，即不支持泛型，所以直接返回空集合
          */
         public static List<GenericType<?>> getGenericParameterTypes(Class<?> type, Method method, int index) {

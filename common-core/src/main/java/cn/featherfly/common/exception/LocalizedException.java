@@ -3,15 +3,14 @@ package cn.featherfly.common.exception;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
+import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.locale.LocalizedMessage;
 import cn.featherfly.common.locale.ResourceBundleUtils;
 
 /**
- * <p>
- * 支持国际化消息输出的异常
- * </p>
- * .
+ * support i18n message exception. <br>
+ * 支持国际化消息输出的异常.
  *
  * @author zhongj
  */
@@ -19,9 +18,9 @@ public abstract class LocalizedException extends BaseException {
 
     private static final long serialVersionUID = -580152334157640022L;
 
-    private Object[] args;
+    private final Object[] args;
 
-    private Locale locale;
+    private final Locale locale;
 
     private String localizedMessage;
 
@@ -37,6 +36,8 @@ public abstract class LocalizedException extends BaseException {
      */
     protected LocalizedException(Throwable ex) {
         super(ex);
+        locale = getDefaultLocale();
+        args = ArrayUtils.EMPTY_OBJECT_ARRAY;
     }
 
     /**
@@ -95,7 +96,11 @@ public abstract class LocalizedException extends BaseException {
     protected LocalizedException(String message, Object[] args, Locale locale) {
         super(message);
         this.args = args;
-        this.locale = locale;
+        if (locale == null) {
+            this.locale = getDefaultLocale();
+        } else {
+            this.locale = locale;
+        }
     }
 
     /**
@@ -115,8 +120,7 @@ public abstract class LocalizedException extends BaseException {
      * @param args    消息绑定参数
      */
     protected LocalizedException(String message, Object[] args) {
-        super(message);
-        this.args = args;
+        this(message, args, (Locale) null);
     }
 
     /**
@@ -171,7 +175,7 @@ public abstract class LocalizedException extends BaseException {
      * @param ex      异常
      */
     protected LocalizedException(LocalizedMessage message, Object[] args, Throwable ex) {
-        this(message, args, Locale.getDefault(), ex);
+        this(message, args, (Locale) null, ex);
     }
 
     /**
@@ -204,7 +208,7 @@ public abstract class LocalizedException extends BaseException {
      * @param args    消息绑定参数
      */
     protected LocalizedException(LocalizedMessage message, Object[] args) {
-        this(message, args, Locale.getDefault());
+        this(message, args, (Locale) null);
     }
 
     /**
@@ -214,6 +218,15 @@ public abstract class LocalizedException extends BaseException {
      */
     protected LocalizedException(LocalizedMessage message) {
         this(message, new Object[] {});
+    }
+
+    /**
+     * Gets the default locale.
+     *
+     * @return the default locale
+     */
+    protected Locale getDefaultLocale() {
+        return Locale.getDefault();
     }
 
     /**
@@ -235,7 +248,7 @@ public abstract class LocalizedException extends BaseException {
                 localizedMessage = ResourceBundleUtils.getString(message, args, locale, charset);
             } else if (firstChar == ResourceBundleUtils.KEY_SIGN) {
                 localizedMessage = ResourceBundleUtils.getString(this.getClass(), message.substring(1), args, locale,
-                        charset);
+                    charset);
             } else {
                 localizedMessage = message;
             }
@@ -263,8 +276,8 @@ public abstract class LocalizedException extends BaseException {
     /**
      * 设置charset.
      *
-     * @param charset charset
-     * @return the localized exception
+     * @param  charset charset
+     * @return         the localized exception
      */
     public LocalizedException setCharset(Charset charset) {
         this.charset = charset;

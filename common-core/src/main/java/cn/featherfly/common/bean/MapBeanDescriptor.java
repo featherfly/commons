@@ -11,8 +11,8 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
 /**
  * map 的描述信息.
  *
- * @author zhongj
- * @param <T> 描述的类型
+ * @author     zhongj
+ * @param  <T> 描述的类型
  */
 public final class MapBeanDescriptor<T> extends BeanDescriptor<T> {
 
@@ -24,13 +24,11 @@ public final class MapBeanDescriptor<T> extends BeanDescriptor<T> {
     protected MapBeanDescriptor(Class<T> type) {
         super(type);
         AssertIllegalArgument.isParent(Map.class, type);
-        //        if (!ClassUtils.isParent(Map.class, type)) {
-        //            throw new IllegalArgumentException(String.format("类型%s不是Map类型及其子类型", type.getName()));
-        //        }
     }
 
     /**
-     * 设置属性.
+     * set propery value. <br>
+     * 设置属性值.
      *
      * @param obj   目标对象
      * @param name  属性名称
@@ -43,11 +41,8 @@ public final class MapBeanDescriptor<T> extends BeanDescriptor<T> {
             return;
         }
         AssertIllegalArgument.isParent(Map.class, obj.getClass());
-        //        if (!(obj instanceof Map)) {
-        //            throw new IllegalArgumentException(String.format("类型%s不是Map类型及其子类型", obj.getClass().getName()));
-        //        }
         Map<String, Object> map = (Map<String, Object>) obj;
-        if (name.contains(DOT)) {
+        if (name.indexOf(DOT) != -1) {
             String currentPropertyName = name.substring(0, name.indexOf(DOT));
             String innerPropertyName = name.substring(name.indexOf(DOT) + 1);
             Object propertyValue = map.get(currentPropertyName);
@@ -66,11 +61,12 @@ public final class MapBeanDescriptor<T> extends BeanDescriptor<T> {
     }
 
     /**
-     * 返回属性.
+     * get property value.
+     * 返回属性值.
      *
-     * @param obj  目标对象
-     * @param name 属性名
-     * @return 属性
+     * @param  obj  目标对象
+     * @param  name 属性名
+     * @return      属性
      */
     @Override
     @SuppressWarnings("unchecked")
@@ -79,11 +75,8 @@ public final class MapBeanDescriptor<T> extends BeanDescriptor<T> {
             return null;
         }
         AssertIllegalArgument.isParent(Map.class, obj.getClass());
-        //        if (!(obj instanceof Map)) {
-        //            throw new IllegalArgumentException(String.format("类型%s不是Map类型及其子类型", obj.getClass().getName()));
-        //        }
         Map<String, Object> map = (Map<String, Object>) obj;
-        if (name.contains(DOT)) {
+        if (name.indexOf(DOT) != -1) {
             String currentPropertyName = name.substring(0, name.indexOf(DOT));
             String innerPropertyName = name.substring(name.indexOf(DOT) + 1);
             Object propertyValue = map.get(currentPropertyName);

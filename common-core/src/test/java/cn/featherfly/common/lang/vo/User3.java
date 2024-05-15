@@ -65,4 +65,12 @@ public class User3 extends User {
         return false;
     }
 
+    public boolean isUser() {
+        return false;
+    }
+
+    public Boolean isUser2() {
+        return false;
+    }
+
 }

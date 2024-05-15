@@ -127,6 +127,14 @@ public class ClassUtilsTest {
     public void testGetter() throws NoSuchMethodException, SecurityException {
         Method method = User3.class.getMethod("isUser", new Class[] { String.class });
         assertFalse(ClassUtils.isGetter(method));
+
+        // boolean isUser
+        method = User3.class.getMethod("isUser", new Class[0]);
+        assertTrue(ClassUtils.isGetter(method));
+
+        // Boolean isUser
+        method = User3.class.getMethod("isUser2", new Class[0]);
+        assertFalse(ClassUtils.isGetter(method));
     }
 
     @Test
@@ -135,8 +143,8 @@ public class ClassUtilsTest {
         assertEquals(ClassUtils.getSuperClassGenericType(genericType, 1), String.class);
         assertEquals(ClassUtils.getSuperClassGenericType(genericType, 2), Long.class);
 
-        Map<Class<?>, Map<String, Type>> typeGenericParameterMap = ClassUtils
-                .getSuperClassAllGenericTypeMap(genericType);
+        Map<Class<?>,
+            Map<String, Type>> typeGenericParameterMap = ClassUtils.getSuperClassAllGenericTypeMap(genericType);
         Map<String, Type> superClassGenericType = ClassUtils.getSuperClassGenericTypeMap(genericType);
         assertEquals(typeGenericParameterMap.get(genericType.getSuperclass()), superClassGenericType);
         Map<String, Type> abstractSuperGetClassGenericType = typeGenericParameterMap.get(AbstractSuperGet.class);
@@ -167,23 +175,23 @@ public class ClassUtilsTest {
 
     @Test
     public void testGetFieldGenericParameterType()
-            throws NoSuchFieldException, SecurityException, NoSuchMethodException {
+        throws NoSuchFieldException, SecurityException, NoSuchMethodException {
         assertEquals(ClassUtils.getFieldGenericParameterType(User.class, User.class.getDeclaredField("list")),
-                String.class);
+            String.class);
         assertEquals(ClassUtils.getFieldGenericParameterType(User.class, User.class.getDeclaredField("map")),
-                String.class);
+            String.class);
         assertEquals(ClassUtils.getFieldGenericParameterType(User.class, User.class.getDeclaredField("map"), 1),
-                Integer.class);
+            Integer.class);
         assertEquals(ClassUtils.getFieldGenericParameterType(User.class, User.class.getDeclaredField("optional")),
-                String.class);
+            String.class);
         assertEquals(ClassUtils.getFieldGenericParameterType(User.class, User.class.getDeclaredField("obj")),
-                Object.class);
+            Object.class);
         assertEquals(ClassUtils.getFieldGenericParameterType(User.class, User.class.getDeclaredField("obj1")),
-                Number.class);
+            Number.class);
         assertEquals(ClassUtils.getFieldGenericParameterType(User.class, User.class.getDeclaredField("obj2")),
-                User.class);
+            User.class);
         assertEquals(ClassUtils.getFieldGenericParameterType(User.class, User.class.getDeclaredField("obj3")),
-                Object.class);
+            Object.class);
 
         assertEquals(ClassUtils.getFieldGenericParameterType(genericType, "map"), Integer.class);
 
@@ -225,28 +233,28 @@ public class ClassUtilsTest {
     @Test
     public void testGetMethodReturnTypeGenericParameterType2() {
         assertEquals(ClassUtils.getMethodReturnTypeGenericParameterType(genericType, "listNumber", EMPTY_CLASS_ARRAY),
-                Number.class);
+            Number.class);
     }
 
     @Test
     public void testGetMethodReturnTypeGenericParameterType()
-            throws NoSuchFieldException, SecurityException, NoSuchMethodException {
+        throws NoSuchFieldException, SecurityException, NoSuchMethodException {
         assertEquals(ClassUtils.getMethodReturnTypeGenericParameterType(genericType,
-                genericType.getMethod("listUser", EMPTY_CLASS_ARRAY)), User.class);
+            genericType.getMethod("listUser", EMPTY_CLASS_ARRAY)), User.class);
         assertEquals(ClassUtils.getMethodReturnTypeGenericParameterType(genericType,
-                genericType.getMethod("listInteger", EMPTY_CLASS_ARRAY)), Integer.class);
+            genericType.getMethod("listInteger", EMPTY_CLASS_ARRAY)), Integer.class);
         assertEquals(ClassUtils.getMethodReturnTypeGenericParameterType(genericType,
-                genericType.getMethod("listString", EMPTY_CLASS_ARRAY)), String.class);
+            genericType.getMethod("listString", EMPTY_CLASS_ARRAY)), String.class);
         assertEquals(ClassUtils.getMethodReturnTypeGenericParameterType(genericType,
-                genericType.getMethod("function", EMPTY_CLASS_ARRAY), 0), Integer.class);
+            genericType.getMethod("function", EMPTY_CLASS_ARRAY), 0), Integer.class);
         assertEquals(ClassUtils.getMethodReturnTypeGenericParameterType(genericType,
-                genericType.getMethod("function", EMPTY_CLASS_ARRAY), 1), String.class);
+            genericType.getMethod("function", EMPTY_CLASS_ARRAY), 1), String.class);
         assertEquals(ClassUtils.getMethodReturnTypeGenericParameterType(genericType, "listId", EMPTY_CLASS_ARRAY),
-                Long.class);
+            Long.class);
         assertEquals(ClassUtils.getMethodReturnTypeGenericParameterType(genericType, "getMap", EMPTY_CLASS_ARRAY),
-                Integer.class);
+            Integer.class);
         assertEquals(ClassUtils.getMethodReturnTypeGenericParameterType(genericType,
-                ClassUtils.getMethod(genericType, "getMap", EMPTY_CLASS_ARRAY), 1), String.class);
+            ClassUtils.getMethod(genericType, "getMap", EMPTY_CLASS_ARRAY), 1), String.class);
         //        // TODO 返回泛型 <T> T get(); 拿不到具体泛型
         //        System.out.println(ClassUtils
         //                .getMethodReturnTypeGenericParameterType(genericType.getMethod("listGeneric", EMPTY_CLASS_ARRAY)));
@@ -254,9 +262,9 @@ public class ClassUtilsTest {
         //        System.out.println(
         //                ClassUtils.getMethodReturnTypeGenericParameterType(genericType.getMethod("listGeneric", Object.class)));
         System.out
-                .println(ClassUtils.getMethodReturnTypeGenericParameterType(genericType, "listId", EMPTY_CLASS_ARRAY));
+            .println(ClassUtils.getMethodReturnTypeGenericParameterType(genericType, "listId", EMPTY_CLASS_ARRAY));
         System.out
-                .println(ClassUtils.getMethodReturnTypeGenericParameterTypes(genericType, "getMap", EMPTY_CLASS_ARRAY));
+            .println(ClassUtils.getMethodReturnTypeGenericParameterTypes(genericType, "getMap", EMPTY_CLASS_ARRAY));
     }
 
     @SuppressWarnings("unchecked")
@@ -270,7 +278,7 @@ public class ClassUtilsTest {
         assertEquals(ClassUtils.getMethodParameterType(genericType, method, 2), Long.class);
 
         assertEquals(ClassUtils.getMethodParameterTypes(genericType, method),
-                ArrayUtils.toList(Integer.class, String.class, Long.class));
+            ArrayUtils.toList(Integer.class, String.class, Long.class));
 
         //        System.out.println(ClassUtils.getMethodParameterType(genericType,
         //                ClassUtils.getMethod(genericType, "setId", Number.class), 0));
@@ -316,19 +324,19 @@ public class ClassUtilsTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testGetMethodGenericParameterType()
-            throws NoSuchFieldException, SecurityException, NoSuchMethodException {
+        throws NoSuchFieldException, SecurityException, NoSuchMethodException {
         //        assertEquals(
         //                ClassUtils.getMethodGenericParameterType(genericType, genericType.getMethod("setId", Object.class)),
         //                Long.class);
         assertEquals(
-                ClassUtils.getMethodGenericParameterType(genericType, genericType.getMethod("setListId", List.class)),
-                Long.class);
+            ClassUtils.getMethodGenericParameterType(genericType, genericType.getMethod("setListId", List.class)),
+            Long.class);
 
         Method setMap = genericType.getMethod("setMap", Map.class);
         assertEquals(ClassUtils.getMethodGenericParameterType(genericType, setMap), Integer.class);
         assertEquals(ClassUtils.getMethodGenericParameterType(genericType, setMap, 0, 1), String.class);
         assertEquals(ClassUtils.getMethodGenericParameterTypes(genericType, setMap, 0),
-                ArrayUtils.toList(Integer.class, String.class));
+            ArrayUtils.toList(Integer.class, String.class));
 
         Method set = genericType.getMethod("set2", List.class, Map.class);
         assertEquals(ClassUtils.getMethodGenericParameterType(genericType, set), Long.class);
@@ -342,9 +350,9 @@ public class ClassUtilsTest {
         assertEquals(ClassUtils.getMethodGenericParameterTypesAll(genericType, set), ArrayUtils.toList(param1, param2));
 
         System.out.println(
-                ClassUtils.getMethodGenericParameterType(genericType, genericType.getMethod("setId", Number.class)));
+            ClassUtils.getMethodGenericParameterType(genericType, genericType.getMethod("setId", Number.class)));
         System.out.println(
-                ClassUtils.getMethodGenericParameterType(genericType, genericType.getMethod("setListId", List.class)));
+            ClassUtils.getMethodGenericParameterType(genericType, genericType.getMethod("setListId", List.class)));
         System.out.println(ClassUtils.getMethodGenericParameterType(genericType, setMap));
         System.out.println(ClassUtils.getMethodGenericParameterType(genericType, setMap, 0, 1));
 
@@ -352,7 +360,7 @@ public class ClassUtilsTest {
 
     @Test
     public void testGetMethodGenericParameterType2()
-            throws NoSuchFieldException, SecurityException, NoSuchMethodException {
+        throws NoSuchFieldException, SecurityException, NoSuchMethodException {
         //        assertEquals(ClassUtils.getMethodGenericReturnType(User.class.getMethod("getList", new Class[0])),
         //                String.class);
         //        assertEquals(ClassUtils.getMethodGenericReturnType(User.class.getMethod("getMap", new Class[0])), String.class);
@@ -369,7 +377,7 @@ public class ClassUtilsTest {
 
     static void p(Method method, Class<?> target) throws NoSuchMethodException, SecurityException {
         System.out.println(Strings.format("target {0}, method {1}, declaringClass {2}",
-                new Object[] { target.getName(), method.getName(), method.getDeclaringClass().getName() }));
+            new Object[] { target.getName(), method.getName(), method.getDeclaringClass().getName() }));
         System.out.println(method);
         TypeVariable<?> tv = (TypeVariable<?>) method.getGenericReturnType();
         System.out.println(tv);
@@ -383,8 +391,8 @@ public class ClassUtilsTest {
         System.out.println(ClassUtils.getInterfaceGenericTypeMap(target));
 
         if (tv.getGenericDeclaration() instanceof Class) {
-            Map<String, Type> genericMap = ClassUtils.getInterfaceGenericTypeMap(target)
-                    .get(tv.getGenericDeclaration());
+            Map<String,
+                Type> genericMap = ClassUtils.getInterfaceGenericTypeMap(target).get(tv.getGenericDeclaration());
             if (genericMap != null) {
                 System.err.println(genericMap.get(tv.getName()));
             }

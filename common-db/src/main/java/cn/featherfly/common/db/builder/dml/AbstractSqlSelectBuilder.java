@@ -23,7 +23,7 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     /**
      * Instantiates a new abstract sql select builder.
      *
-     * @param dialect          dialect
+     * @param dialect dialect
      * @param conditionBuilder conditionBuilder
      */
     public AbstractSqlSelectBuilder(Dialect dialect, SqlConditionGroup conditionBuilder) {
@@ -33,8 +33,8 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     /**
      * Instantiates a new abstract sql select builder.
      *
-     * @param dialect          dialect
-     * @param tableName        tableName
+     * @param dialect dialect
+     * @param tableName tableName
      * @param conditionBuilder conditionBuilder
      */
     public AbstractSqlSelectBuilder(Dialect dialect, String tableName, SqlConditionGroup conditionBuilder) {
@@ -44,13 +44,13 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     /**
      * Instantiates a new abstract sql select builder.
      *
-     * @param dialect          dialect
-     * @param tableName        tableName
-     * @param alias            alias
+     * @param dialect dialect
+     * @param tableName tableName
+     * @param alias alias
      * @param conditionBuilder conditionBuilder
      */
     public AbstractSqlSelectBuilder(Dialect dialect, String tableName, String alias,
-            SqlConditionGroup conditionBuilder) {
+        SqlConditionGroup conditionBuilder) {
         this.conditionBuilder = conditionBuilder;
         selectBuilder = new SqlSelectBasicBuilder(dialect, tableName, alias, new AliasManager());
     }
@@ -58,7 +58,7 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     /**
      * addSelectColumn.
      *
-     * @param function   function
+     * @param function function
      * @param columnName columnName
      */
     protected void addSelectColumn(AggregateFunction function, String columnName) {
@@ -78,7 +78,7 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
      * addSelectColumn.
      *
      * @param columnName columnName
-     * @param asName     asName
+     * @param asName asName
      */
     protected void addSelectColumn(String columnName, String asName) {
         selectBuilder.addColumn(columnName, asName);
@@ -87,9 +87,9 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     /**
      * addSelectColumn.
      *
-     * @param function    function
+     * @param function function
      * @param columnNames columnNames
-     * @param asName      asName
+     * @param asName asName
      */
     protected void addSelectColumn(AggregateFunction function, String columnNames, String asName) {
         selectBuilder.addColumn(function, columnNames, asName);
@@ -141,24 +141,6 @@ public abstract class AbstractSqlSelectBuilder implements SqlBuilder {
     //    public void setTableName(String tableName) {
     //        selectBuilder.setTableName(tableName);
     //    }
-
-    /**
-     * 返回buildWithFrom.
-     *
-     * @return buildWithFrom
-     */
-    public boolean isBuildWithFrom() {
-        return selectBuilder.isBuildWithFrom();
-    }
-
-    /**
-     * 设置buildWithFrom.
-     *
-     * @param buildWithFrom buildWithFrom
-     */
-    public void setBuildWithFrom(boolean buildWithFrom) {
-        selectBuilder.setBuildWithFrom(buildWithFrom);
-    }
 
     /**
      * {@inheritDoc}

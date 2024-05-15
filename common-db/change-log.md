@@ -4,6 +4,7 @@
 2. JdbcUtils加入BigInteger的支持
 3. 创建DatabaseMetadata时自动创建dialect
 4. SqlUtils加入多个处理in参数占位符的方法
+5. SqlSelectBasicBuilder删除buildWithFrom属性，加入带boolean buildWithFrom参数的build方法
 
 # 0.6.0 2024-05-05
 

@@ -27,7 +27,7 @@ import cn.featherfly.common.repository.IgnoreStrategy;
 public class SqlUpdateSetBasicBuilderTest {
     @Test
     void test() {
-        SqlUpdateSetBasicBuilder builder = new SqlUpdateSetBasicBuilder(Dialects.MYSQL, "user", IgnoreStrategy.NONE);
+        SqlUpdateSetBasicBuilder builder = new SqlUpdateSetBasicBuilder(Dialects.mysql(), "user", IgnoreStrategy.NONE);
         builder.setValue("name", "yufei");
         String sql = builder.build();
 
@@ -45,7 +45,7 @@ public class SqlUpdateSetBasicBuilderTest {
 
     @Test
     void join() {
-        Dialect dialect = Dialects.MYSQL;
+        Dialect dialect = Dialects.mysql();
         SqlUpdateSetBasicBuilder builder = new SqlUpdateSetBasicBuilder(dialect, "user", "_user0", IgnoreStrategy.NONE);
         builder.join(
             new SqlJoinOnBasicBuilder(dialect, Join.INNER_JOIN, "user_info", "_user_info0", "user_id", "_user0", "id"))

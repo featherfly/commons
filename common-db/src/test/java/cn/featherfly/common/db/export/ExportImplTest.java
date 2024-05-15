@@ -47,12 +47,12 @@ public class ExportImplTest {
 
         DataSource dataSource = getDatasource(database);
 
-        DataExportorImpl exportor = new DataExportorImpl(Dialects.MYSQL, new SqlDataFormatFactory());
+        DataExportorImpl exportor = new DataExportorImpl(Dialects.mysql(), new SqlDataFormatFactory());
 
         exportor.setDataSource(dataSource);
         exportor.exportDatabase(new OutputStreamWriter(new FileOutputStream("C:/" + database + ".sql"), "UTF-8"));
 
-        exportor = new DataExportorImpl(Dialects.MYSQL, new JsonDataFormatFactory());
+        exportor = new DataExportorImpl(Dialects.mysql(), new JsonDataFormatFactory());
         exportor.setDataSource(dataSource);
         exportor.exportDatabase(new OutputStreamWriter(new FileOutputStream("C:/" + database + ".json"), "UTF-8"));
     }
@@ -62,7 +62,7 @@ class ImpTest {
     public static void main(String[] args) throws UnsupportedEncodingException, FileNotFoundException {
         String database = "meihuo_imp";
 
-        JsonImportor imp = new JsonImportor(Dialects.MYSQL);
+        JsonImportor imp = new JsonImportor(Dialects.mysql());
         imp.setDataSource(ExportImplTest.getDatasource(database));
         imp.setFkCheck(false);
         imp.imp(new InputStreamReader(new FileInputStream("C:/" + ExportImplTest.database + ".json"), "UTF-8"));

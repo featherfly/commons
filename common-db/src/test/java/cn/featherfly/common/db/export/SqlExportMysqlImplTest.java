@@ -35,7 +35,7 @@ public class SqlExportMysqlImplTest {
         //        FileWriter fw = null;
         //		SqlDataFormat sqlDataFormat = (SqlDataFormat) new SqlDataFormatFactory().createDataFormat(fw, new MySqlDialect());
 
-        DataExportorImpl exportor = new DataExportorImpl(Dialects.MYSQL, new SqlDataFormatFactory());
+        DataExportorImpl exportor = new DataExportorImpl(Dialects.mysql(), new SqlDataFormatFactory());
         //		SqlExportorMysqlImpl exportor = new SqlExportorMysqlImpl();
         exportor.setDataSource(dataSource);
         exportor.exportDatabase(new OutputStreamWriter(new FileOutputStream("tmp/" + database + ".sql"), "UTF-8"));

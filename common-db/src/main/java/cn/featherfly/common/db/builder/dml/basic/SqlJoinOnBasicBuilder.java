@@ -56,7 +56,7 @@ public class SqlJoinOnBasicBuilder implements SqlJoinOnBuilder {
      * @param conditionColumn conditionColumn
      */
     public SqlJoinOnBasicBuilder(Dialect dialect, Join join, String tableName, String columnName,
-        String conditionColumn) {
+            String conditionColumn) {
         this(dialect, join, tableName, null, columnName, null, conditionColumn);
     }
 
@@ -71,7 +71,7 @@ public class SqlJoinOnBasicBuilder implements SqlJoinOnBuilder {
      * @param conditionColumn     conditionColumn
      */
     public SqlJoinOnBasicBuilder(Dialect dialect, String tableName, String tableAlias, String columnName,
-        String conditionTableAlias, String conditionColumn) {
+            String conditionTableAlias, String conditionColumn) {
         this(dialect, null, tableName, tableAlias, columnName, conditionTableAlias, conditionColumn);
     }
 
@@ -87,7 +87,7 @@ public class SqlJoinOnBasicBuilder implements SqlJoinOnBuilder {
      * @param conditionColumn     conditionColumn
      */
     public SqlJoinOnBasicBuilder(Dialect dialect, Join join, String tableName, String tableAlias, String columnName,
-        String conditionTableAlias, String conditionColumn) {
+            String conditionTableAlias, String conditionColumn) {
         this.dialect = dialect;
         if (join == null) {
             this.join = Join.INNER_JOIN;
@@ -143,9 +143,9 @@ public class SqlJoinOnBasicBuilder implements SqlJoinOnBuilder {
     @Override
     public String build() {
         return new StringBuilder().append(dialect.getKeywords().join(join)).append(Chars.SPACE)
-            .append(dialect.buildTableSql(tableName, tableAlias)).append(Chars.SPACE).append(dialect.getKeywords().on())
-            .append(Chars.SPACE).append(dialect.buildColumnSql(tableAlias, columnName)).append(Chars.SPACE)
-            .append(Chars.EQ).append(Chars.SPACE).append(dialect.buildColumnSql(conditionTableAlias, conditionColumn))
-            .toString();
+                .append(dialect.dml().table(tableName, tableAlias)).append(Chars.SPACE)
+                .append(dialect.getKeywords().on()).append(Chars.SPACE)
+                .append(dialect.dml().column(tableAlias, columnName)).append(Chars.SPACE).append(Chars.EQ)
+                .append(Chars.SPACE).append(dialect.dml().column(conditionTableAlias, conditionColumn)).toString();
     }
 }

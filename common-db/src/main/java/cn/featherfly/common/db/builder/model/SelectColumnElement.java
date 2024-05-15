@@ -27,7 +27,7 @@ public class SelectColumnElement extends ColumnElement {
      */
     public SelectColumnElement(SelectColumnElement element) {
         this(element.getDialect(), element.getAggregateFunction(), element.isDistinct(), element.getTableAlias(),
-            element.getName(), element.getAlias());
+                element.getName(), element.getAlias());
     }
 
     /**
@@ -108,7 +108,7 @@ public class SelectColumnElement extends ColumnElement {
      * @param alias             the column alias
      */
     public SelectColumnElement(Dialect dialect, AggregateFunction aggregateFunction, String tableAlias, String name,
-        String alias) {
+            String alias) {
         this(dialect, aggregateFunction, false, tableAlias, name, alias);
     }
 
@@ -150,7 +150,7 @@ public class SelectColumnElement extends ColumnElement {
      * @param alias             column alias
      */
     public SelectColumnElement(Dialect dialect, AggregateFunction aggregateFunction, boolean distinct,
-        String tableAlias, String name, String alias) {
+            String tableAlias, String name, String alias) {
         super(dialect, name, tableAlias);
         this.aggregateFunction = aggregateFunction;
         this.alias = alias;
@@ -198,6 +198,6 @@ public class SelectColumnElement extends ColumnElement {
      */
     @Override
     public String toSql() {
-        return dialect.buildColumnSql(aggregateFunction, distinct, tableAlias, name, alias);
+        return dialect.dml().column(aggregateFunction, distinct, tableAlias, name, alias);
     }
 }

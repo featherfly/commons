@@ -49,7 +49,7 @@ public class ConditionColumnElementTest {
     @SuppressWarnings("unchecked")
     @Test
     void mysql() {
-        Dialect dialect = Dialects.MYSQL;
+        Dialect dialect = Dialects.mysql();
 
         c = new ConditionColumnElement(dialect, "username", username, ComparisonOperator.EQ, IgnoreStrategy.EMPTY);
         print(c);
@@ -305,7 +305,7 @@ public class ConditionColumnElementTest {
 
     @Test
     void mysql_sqlelement() {
-        Dialect dialect = Dialects.MYSQL;
+        Dialect dialect = Dialects.mysql();
         SqlElement se = new ColumnElement(dialect, usernameColumn, userTableAlias2);
         c = new ConditionColumnElement(dialect, usernameColumn, se, ComparisonOperator.EQ, userTableAlias,
                 IgnoreStrategy.EMPTY);
@@ -324,7 +324,7 @@ public class ConditionColumnElementTest {
     @SuppressWarnings("unchecked")
     @Test
     void postgresql() {
-        Dialect dialect = Dialects.POSTGRESQL;
+        Dialect dialect = Dialects.postgresql();
         ConditionColumnElement c = new ConditionColumnElement(dialect, "username", username, ComparisonOperator.EQ,
                 IgnoreStrategy.EMPTY);
         print(c);
@@ -512,7 +512,7 @@ public class ConditionColumnElementTest {
     @SuppressWarnings("unchecked")
     @Test
     void oracle() {
-        Dialect dialect = Dialects.ORACLE;
+        Dialect dialect = Dialects.oracle();
         String username = "yufei";
         Integer age = 18;
         ConditionColumnElement c = new ConditionColumnElement(dialect, "username", username, ComparisonOperator.EQ,

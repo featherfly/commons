@@ -40,9 +40,10 @@ public class TableQuery implements Query {
     public TableQuery(Dialect dialect, String tableName, ConditionBuilder conditionBuilder) {
         AssertIllegalArgument.isNotEmpty(tableName, "tableName");
         StringBuilder sql = new StringBuilder();
-        sql.append("select * from ").append(dialect.buildTableSql(tableName));
+        sql.append("select * from ").append(dialect.dml().table(tableName));
         if (conditionBuilder != null) {
             String condition = conditionBuilder.build();
+            // FIXME 这里不能强制类型转换，需要处理
             params = (Object[]) conditionBuilder.getParamValue();
             if (Lang.isNotEmpty(condition)) {
                 BuilderUtils.link(sql, dialect.getKeyword(Keywords.WHERE), condition);

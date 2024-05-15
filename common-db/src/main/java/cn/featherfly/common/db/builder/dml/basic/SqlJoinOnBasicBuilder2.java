@@ -101,7 +101,7 @@ public class SqlJoinOnBasicBuilder2 implements SqlJoinOnBuilder {
     @Override
     public String build() {
         return new StringBuilder().append(dialect.getKeywords().join(join)).append(Chars.SPACE)
-            .append(dialect.buildTableSql(tableName, tableAlias)).append(Chars.SPACE).append(dialect.getKeywords().on())
-            .append(Chars.SPACE).append(onSql).toString();
+                .append(dialect.dml().table(tableName, tableAlias)).append(Chars.SPACE)
+                .append(dialect.getKeywords().on()).append(Chars.SPACE).append(onSql).toString();
     }
 }

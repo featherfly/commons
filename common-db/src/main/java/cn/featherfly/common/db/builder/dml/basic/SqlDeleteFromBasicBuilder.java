@@ -109,10 +109,10 @@ public class SqlDeleteFromBasicBuilder implements SqlBuilder {
     @Override
     public String build() {
         if (sqlJoinOnBuilders.isEmpty()) {
-            return dialect.buildDeleteFromSql(tableName, tableAlias);
+            return dialect.dml().deleteFrom(tableName, tableAlias);
         } else {
             StringBuilder sql = new StringBuilder();
-            sql.append(dialect.buildDeleteFromSql(tableName, tableAlias));
+            sql.append(dialect.dml().deleteFrom(tableName, tableAlias));
             for (SqlJoinOnBuilder sqlJoinOnBuilder : sqlJoinOnBuilders) {
                 sql.append(Chars.SPACE_CHAR).append(sqlJoinOnBuilder.build());
             }

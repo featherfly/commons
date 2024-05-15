@@ -29,7 +29,7 @@ public class SqlDeleteFromBasicBuilderTest {
 
     @Test
     void test() {
-        SqlDeleteFromBasicBuilder builder = new SqlDeleteFromBasicBuilder(Dialects.MYSQL, "user");
+        SqlDeleteFromBasicBuilder builder = new SqlDeleteFromBasicBuilder(Dialects.mysql(), "user");
         String sql = builder.build();
         System.out.println(sql);
         assertEquals(sql, "DELETE FROM `user`");
@@ -43,7 +43,7 @@ public class SqlDeleteFromBasicBuilderTest {
 
     @Test
     void join() {
-        Dialect dialect = Dialects.MYSQL;
+        Dialect dialect = Dialects.mysql();
         SqlDeleteFromBasicBuilder builder = new SqlDeleteFromBasicBuilder(dialect, "user", "_user0");
         builder.join(
             new SqlJoinOnBasicBuilder(dialect, Join.INNER_JOIN, "user_info", "_user_info0", "user_id", "_user0", "id"));

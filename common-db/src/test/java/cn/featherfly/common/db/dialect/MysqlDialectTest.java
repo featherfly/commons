@@ -6,75 +6,73 @@ import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
 /**
- * <p>
- * MysqlDialectTest
- * </p>
+ * MysqlDialectTest.
  *
  * @author zhongj
  */
 public class MysqlDialectTest extends DialectTest {
 
-    Dialect dialect = Dialects.MYSQL;
+    Dialect dialect = Dialects.mysql();
 
     @Override
     @Test
     void testCreateDatabase() {
         String database = "db_test";
-        String sql = dialect.buildCreateDataBaseDDL(database);
+        String sql = dialect.ddl().createDataBase(database);
         assertEquals(sql, "CREATE DATABASE `db_test`;");
     }
 
     @Override
     @Test
     void testDrop() {
-        String sql = dialect.buildDropDataBaseDDL(database);
+        String sql = dialect.ddl().dropDataBase(database);
         assertEquals(sql, "DROP DATABASE `db_test`;");
 
-        sql = dialect.buildDropTableDDL(table);
+        sql = dialect.ddl().dropTable(table);
         assertEquals(sql, "DROP TABLE `user`;");
 
-        sql = dialect.buildDropTableDDL(database, table);
+        sql = dialect.ddl().dropTable(database, table);
         assertEquals(sql, "DROP TABLE `db_test`.`user`;");
 
-        sql = dialect.buildDropViewDDL(view);
+        sql = dialect.ddl().dropView(view);
         assertEquals(sql, "DROP VIEW `user_view`;");
 
-        sql = dialect.buildDropViewDDL(database, view);
+        sql = dialect.ddl().dropView(database, view);
         assertEquals(sql, "DROP VIEW `db_test`.`user_view`;");
 
-        sql = dialect.buildDropViewDDL(database, view, true);
+        sql = dialect.ddl().dropView(database, view, true);
         assertEquals(sql, "DROP VIEW IF EXISTS `db_test`.`user_view`;");
 
-        sql = dialect.buildDropIndexDDL(table, index);
+        sql = dialect.ddl().dropIndex(table, index);
         assertEquals(sql, "DROP INDEX `username_uq` ON `user`;");
 
-        sql = dialect.buildDropIndexDDL(database, table, index);
+        sql = dialect.ddl().dropIndex(database, table, index);
         assertEquals(sql, "DROP INDEX `db_test`.`username_uq` ON `db_test`.`user`;");
     }
 
     @Override
     @Test
     void testDropIfExists() {
-        String sql = dialect.buildDropDataBaseDDL(database, true);
+        String sql = dialect.ddl().dropDataBase(database, true);
         assertEquals(sql, "DROP DATABASE IF EXISTS `db_test`;");
 
-        sql = dialect.buildDropTableDDL(table, true);
+        sql = dialect.ddl().dropTable(table, true);
         assertEquals(sql, "DROP TABLE IF EXISTS `user`;");
 
-        sql = dialect.buildDropTableDDL(database, table, true);
+        sql = dialect.ddl().dropTable(database, table, true);
         assertEquals(sql, "DROP TABLE IF EXISTS `db_test`.`user`;");
 
-        sql = dialect.buildDropIndexDDL(table, index, true);
+        sql = dialect.ddl().dropIndex(table, index, true);
         assertEquals(sql, "DROP INDEX IF EXISTS `username_uq` ON `user`;");
 
-        sql = dialect.buildDropIndexDDL(database, table, index, true);
+        sql = dialect.ddl().dropIndex(database, table, index, true);
         assertEquals(sql, "DROP INDEX IF EXISTS `db_test`.`username_uq` ON `db_test`.`user`;");
     }
 
     @Override
     @Test
     void testCreateTable() {
-        String sql = dialect.buildCreateTableDDL(getTableModel());
+        String sql = dialect.ddl().createTable(getTableModel());
         System.out.println(sql);
         String s = "CREATE TABLE `db_test`.`user` (\n" + " `id` INT NOT NULL AUTO_INCREMENT COMMENT 'id主键',\n"
                 + " `name` VARCHAR(255) NOT NULL COMMENT 'name名称',\n"
@@ -87,7 +85,7 @@ public class MysqlDialectTest extends DialectTest {
     @Override
     @Test
     void testCreateTableMulitiKey() {
-        String sql = dialect.buildCreateTableDDL(getMultiKeyTableModel());
+        String sql = dialect.ddl().createTable(getMultiKeyTableModel());
         System.out.println(sql);
         String s = "CREATE TABLE `user_role` (\n" + " `user_id` INT NOT NULL COMMENT 'user id',\n"
                 + " `role_id` INT NOT NULL COMMENT 'role id',\n" + " `descp` VARCHAR(255) COMMENT 'descp描述',\n"
@@ -98,7 +96,7 @@ public class MysqlDialectTest extends DialectTest {
     @Override
     @Test
     void testAlterTableDropColumn() {
-        String sql = dialect.buildAlterTableDropColumnDDL(table, getColumnModels());
+        String sql = dialect.ddl().alterTableDropColumn(table, getColumnModels());
         System.out.println(sql);
         String s = "ALTER TABLE `user`\n" + " DROP COLUMN `user_id`,\n" + " DROP COLUMN `role_id`,\n"
                 + " DROP COLUMN `descp`;";
@@ -108,7 +106,7 @@ public class MysqlDialectTest extends DialectTest {
     @Override
     @Test
     void testAlterTableAddColumns() {
-        String sql = dialect.buildAlterTableAddColumnDDL(table, getColumnModels());
+        String sql = dialect.ddl().alterTableAddColumn(table, getColumnModels());
         System.out.println(sql);
         String s = "ALTER TABLE `user`\n" + " ADD COLUMN `user_id` INT NOT NULL COMMENT 'user id',\n"
                 + " ADD COLUMN `role_id` INT NOT NULL COMMENT 'role id',\n"
@@ -119,7 +117,7 @@ public class MysqlDialectTest extends DialectTest {
     @Override
     @Test
     void testAlterTableModifyColumns() {
-        String sql = dialect.buildAlterTableModifyColumnDDL("user_info", getModifyColumnModels());
+        String sql = dialect.ddl().alterTableModifyColumn("user_info", getModifyColumnModels());
         System.out.println(sql);
         String s = "ALTER TABLE `user_info`\n" + " MODIFY COLUMN `descp` VARCHAR(222) COMMENT 'descp',\n"
                 + " MODIFY COLUMN `province` VARCHAR(222) COMMENT '省',\n"
@@ -133,16 +131,16 @@ public class MysqlDialectTest extends DialectTest {
     void testBuildInsertBatchSql() {
         String sql = null;
 
-        sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 1);
+        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 1);
         assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?)");
 
-        sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 2);
+        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 2);
         assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?),(?, ?, ?)");
 
-        sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 3);
+        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 3);
         assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?)");
 
-        sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 5);
+        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 5);
         assertEquals(sql,
                 "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?)");
     }
@@ -172,13 +170,13 @@ public class MysqlDialectTest extends DialectTest {
     @Override
     @Test
     void testCreateIndex() {
-        String sql = dialect.buildCreateIndexDDL(table, index, new String[] { "user_id" });
+        String sql = dialect.ddl().createIndex(table, index, new String[] { "user_id" });
         assertEquals(sql, "CREATE INDEX username_uq ON `user`(`user_id`);");
 
-        sql = dialect.buildCreateIndexDDL(table, index, new String[] { "user_id", "role_id" });
+        sql = dialect.ddl().createIndex(table, index, new String[] { "user_id", "role_id" });
         assertEquals(sql, "CREATE INDEX username_uq ON `user`(`user_id`,`role_id`);");
 
-        sql = dialect.buildCreateIndexDDL(table, index, new String[] { "user_id" }, true);
+        sql = dialect.ddl().createIndex(table, index, new String[] { "user_id" }, true);
         assertEquals(sql, "CREATE UNIQUE INDEX username_uq ON `user`(`user_id`);");
     }
 
@@ -188,7 +186,7 @@ public class MysqlDialectTest extends DialectTest {
     @Override
     @Test
     void testUpsert() {
-        String sql = dialect.buildUpsertSql("user", new String[] { "id", "name", "age" }, "id");
+        String sql = dialect.dml().upsert("user", new String[] { "id", "name", "age" }, "id");
         System.out.println(sql);
         assertEquals(sql,
                 "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `name`=values(`name`), `age`=values(`age`)");
@@ -200,7 +198,7 @@ public class MysqlDialectTest extends DialectTest {
     @Override
     @Test
     void testUpsertBatch() {
-        String sql = dialect.buildUpsertBatchSql("user", new String[] { "id", "name", "age" }, "id", 2);
+        String sql = dialect.dml().upsertBatch("user", new String[] { "id", "name", "age" }, "id", 2);
         System.out.println(sql);
         assertEquals(sql,
                 "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?),(?, ?, ?) ON DUPLICATE KEY UPDATE `name`=values(`name`), `age`=values(`age`)");
@@ -212,7 +210,7 @@ public class MysqlDialectTest extends DialectTest {
     @Override
     @Test
     void testInsert() {
-        String sql = dialect.buildInsertSql("user", new String[] { "id", "name", "age" });
+        String sql = dialect.dml().insert("user", new String[] { "id", "name", "age" });
         System.out.println(sql);
         assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?)");
     }
@@ -223,7 +221,7 @@ public class MysqlDialectTest extends DialectTest {
     @Override
     @Test
     void testInsertBatch() {
-        String sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "age" }, 2);
+        String sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "age" }, 2);
         System.out.println(sql);
         assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?),(?, ?, ?)");
     }
@@ -234,11 +232,11 @@ public class MysqlDialectTest extends DialectTest {
     @Override
     @Test
     void testDeleteFrom() {
-        String sql = dialect.buildDeleteFromSql("user");
+        String sql = dialect.dml().deleteFrom("user");
         System.out.println(sql);
         assertEquals(sql, "DELETE FROM `user`");
 
-        sql = dialect.buildDeleteFromSql("user", "u");
+        sql = dialect.dml().deleteFrom("user", "u");
         System.out.println(sql);
         assertEquals(sql, "DELETE `u` FROM `user` `u`");
     }

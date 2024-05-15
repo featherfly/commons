@@ -83,6 +83,6 @@ public class ColumnElement extends AbstractSqlElement {
      */
     @Override
     public String toSql() {
-        return dialect.buildColumnSql(getTableAlias(), getName());
+        return dialect.dml().column(getTableAlias(), getName());
     }
 }

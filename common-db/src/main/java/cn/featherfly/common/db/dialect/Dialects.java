@@ -44,15 +44,35 @@ public interface Dialects {
         return new SQLiteDialect();
     }
 
-    /** The mysql. */
+    /**
+     * The mysql.
+     *
+     * @deprecated use {@link #mysql()} instead, because dialect have state, you need manager instance by youself
+     */
+    @Deprecated
     Dialect MYSQL = new MySQLDialect();
 
-    /** The oracle. */
+    /**
+     * The oracle.
+     *
+     * @deprecated use {@link #oracle()} instead, because dialect have state, you need manager instance by youself
+     */
+    @Deprecated
     Dialect ORACLE = new OracleDialect();
 
-    /** The postgresql. */
+    /**
+     * The postgresql.
+     *
+     * @deprecated use {@link #postgresql()} instead, because dialect have state, you need manager instance by youself
+     */
+    @Deprecated
     Dialect POSTGRESQL = new PostgreSQLDialect();
 
-    /** The sqlite. */
+    /**
+     * The sqlite.
+     *
+     * @deprecated use {@link #sqlite()} instead, because dialect have state, you need manager instance by youself
+     */
+    @Deprecated
     Dialect SQLITE = new SQLiteDialect();
 }

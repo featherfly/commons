@@ -35,7 +35,7 @@ public class MetadataTestPostgreSQL {
             System.out.println("\t" + td.toString());
         }
 
-        //        String sql = Dialects.POSTGRESQL.buildDropTableDDL("db_test", "user", true);
+        //        String sql = Dialects.postgresql().buildDropTableDDL("db_test", "user", true);
         //        System.out.println(sql);
         //        try (Connection conn = dataSource.getConnection(); Statement statement = conn.createStatement();) {
         //            statement.execute(sql);

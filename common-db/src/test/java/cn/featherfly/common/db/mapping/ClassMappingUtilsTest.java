@@ -25,7 +25,7 @@ import cn.featherfly.common.db.mapping.pojo.UserRole;
  */
 public class ClassMappingUtilsTest implements ClassMappingSupport {
 
-    Dialect dialect = Dialects.MYSQL;
+    Dialect dialect = Dialects.mysql();
 
     @Test
     void testSelectSql() {
@@ -253,7 +253,7 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
     @Test
     void testUpsertMysql() {
         Tuple2<String, Map<Integer, JdbcPropertyMapping>> t = ClassMappingUtils
-                .getUpsertSqlAndParamPositions(getUserClassMapping(), Dialects.MYSQL);
+                .getUpsertSqlAndParamPositions(getUserClassMapping(), Dialects.mysql());
         System.out.println(t.get0());
         System.out.println(t.get1());
 
@@ -264,7 +264,7 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
     @Test
     void testUpsertPostgresql() {
         Tuple2<String, Map<Integer, JdbcPropertyMapping>> t = ClassMappingUtils
-                .getUpsertSqlAndParamPositions(getUserClassMapping(), Dialects.POSTGRESQL);
+                .getUpsertSqlAndParamPositions(getUserClassMapping(), Dialects.postgresql());
         System.out.println(t.get0());
         System.out.println(t.get1());
 
@@ -297,7 +297,7 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
     @Test
     void testUpsertBatchPostgresql() {
         Tuple2<String, Map<Integer, JdbcPropertyMapping>> t = ClassMappingUtils.getUpsertBatchSqlAndParamPositions(5,
-                getUserClassMapping(), Dialects.POSTGRESQL);
+                getUserClassMapping(), Dialects.postgresql());
         assertEquals(t.get0(),
                 "INSERT INTO \"user\" (\"id\", \"name\", \"descp\", \"password\") VALUES (?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?),(?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"descp\"=EXCLUDED.\"descp\", \"password\"=EXCLUDED.\"password\"");
         assertEquals(t.get1().get(1).getPropertyFullName(), "id");

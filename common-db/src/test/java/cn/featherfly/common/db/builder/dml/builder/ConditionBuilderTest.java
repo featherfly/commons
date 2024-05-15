@@ -46,49 +46,45 @@ public class ConditionBuilderTest {
 
     @Test
     public void testSqlQueryBuilderFind() {
-        builder = new SqlQueryBuilder(Dialects.MYSQL, IgnoreStrategy.EMPTY);
+        builder = new SqlQueryBuilder(Dialects.mysql(), IgnoreStrategy.EMPTY);
         builder.find("user", "u").where().eq("name", name).and().eq("pwd", pwd).and().group().eq("sex", sex).or()
                 .gt("age", age).sort().asc("age", "sex").desc("name");
-        builder = new SqlQueryBuilder(Dialects.MYSQL, IgnoreStrategy.EMPTY);
+        builder = new SqlQueryBuilder(Dialects.mysql(), IgnoreStrategy.EMPTY);
         builder.find("user", "u").property("name", "pwd", "age", "sex").where().eq("name", name).and().eq("pwd", pwd)
                 .and().group().eq("sex", sex).or().gt("age", age).sort().asc("age", "sex").desc("name");
 
         System.out.println(builder.build());
         System.out.println(((SqlQueryBuilder) builder).getParams());
-        assertEquals(
-                "SELECT u.`name`, u.`pwd`, u.`age`, u.`sex` FROM `user` u WHERE u.`name` = ? AND u.`pwd` = ? AND ( u.`sex` = ? OR u.`age` > ? ) ORDER BY u.`age` ASC, u.`sex` ASC, u.`name` DESC",
-                builder.build());
+        assertEquals(builder.build(),
+                "SELECT u.`name`, u.`pwd`, u.`age`, u.`sex` FROM `user` `u` WHERE u.`name` = ? AND u.`pwd` = ? AND ( u.`sex` = ? OR u.`age` > ? ) ORDER BY u.`age` ASC, u.`sex` ASC, u.`name` DESC");
         assertEquals(params, ((SqlQueryBuilder) builder).getParams());
     }
 
     @Test
     void testSqlQueryBuilderSelect() {
         // FIXME 这个测试未通过SelectBuilder有BUG
-        SqlQueryBuilder builder2 = new SqlQueryBuilder(Dialects.MYSQL, IgnoreStrategy.EMPTY);
+        SqlQueryBuilder builder2 = new SqlQueryBuilder(Dialects.mysql(), IgnoreStrategy.EMPTY);
         builder2.from("user", "u").where().eq("name", name).and().eq("pwd", pwd).and().group().eq("sex", sex).or()
                 .gt("age", 18).sort().asc("age", "sex").desc("name");
         System.out.println(builder2.build());
         System.out.println(builder2.getParams());
-        assertEquals(
-                "SELECT u.* FROM `user` u WHERE u.`name` = ? AND u.`pwd` = ? AND ( u.`sex` = ? OR u.`age` > ? ) ORDER BY u.`age` ASC, u.`sex` ASC, u.`name` DESC",
-                builder2.build());
+        assertEquals(builder2.build(),
+                "SELECT u.* FROM `user` `u` WHERE u.`name` = ? AND u.`pwd` = ? AND ( u.`sex` = ? OR u.`age` > ? ) ORDER BY u.`age` ASC, u.`sex` ASC, u.`name` DESC");
         assertEquals(params, builder2.getParams());
 
-        builder2 = new SqlQueryBuilder(Dialects.MYSQL, IgnoreStrategy.EMPTY);
+        builder2 = new SqlQueryBuilder(Dialects.mysql(), IgnoreStrategy.EMPTY);
         builder2.select(new String[] { "name", "pwd", "age", "sex" }).from("user", "u2").where().eq("name", name).and()
                 .eq("pwd", pwd).and().group().eq("sex", sex).or().gt("age", age).sort().asc("age", "sex").desc("name");
         System.out.println(builder2.build());
         System.out.println(builder2.getParams());
-        assertEquals(
-                "SELECT u2.`name`, u2.`pwd`, u2.`age`, u2.`sex` FROM `user` u2 WHERE u2.`name` = ? AND u2.`pwd` = ? AND ( u2.`sex` = ? OR u2.`age` > ? ) ORDER BY u2.`age` ASC, u2.`sex` ASC, u2.`name` DESC",
-                builder2.build());
+        assertEquals(builder2.build(),
+                "SELECT u2.`name`, u2.`pwd`, u2.`age`, u2.`sex` FROM `user` `u2` WHERE u2.`name` = ? AND u2.`pwd` = ? AND ( u2.`sex` = ? OR u2.`age` > ? ) ORDER BY u2.`age` ASC, u2.`sex` ASC, u2.`name` DESC");
         assertEquals(params, builder2.getParams());
-
     }
 
     @Test
     void testConditionBuilder() {
-        ConditionBuilder cb = new SqlConditionGroup(Dialects.MYSQL, IgnoreStrategy.EMPTY, null);
+        ConditionBuilder cb = new SqlConditionGroup(Dialects.mysql(), IgnoreStrategy.EMPTY, null);
         cb.eq("name", name).and().eq("pwd", pwd).and().group().eq("sex", sex).or().gt("age", age);
         System.out.println(cb.build());
         System.out.println(((SqlConditionGroup) cb).getParamValues());
@@ -99,24 +95,23 @@ public class ConditionBuilderTest {
 
     @Test
     void testSortBuilder() {
-        //
-        SortBuilder sortBuilder = new SqlSortBuilder(Dialects.MYSQL);
+        SortBuilder sortBuilder = new SqlSortBuilder(Dialects.mysql());
         sortBuilder.desc("dddesc").asc("zzz", "xxx");
         System.out.println(sortBuilder.build());
-        assertEquals(" ORDER BY `dddesc` DESC, `zzz` ASC, `xxx` ASC", sortBuilder.build());
+        assertEquals(sortBuilder.build(), "ORDER BY `dddesc` DESC, `zzz` ASC, `xxx` ASC");
 
     }
 
     @Test
     void testSqlFindBuilder() {
-        SqlFindBuilder findBuilder = new SqlFindBuilder(Dialects.MYSQL, "user", null);
+        SqlFindBuilder findBuilder = new SqlFindBuilder(Dialects.mysql(), "user", null);
         System.out.println(findBuilder.build());
         //        assertEquals(findBuilder.build(), "SELECT * FROM `user`");
-        assertEquals(findBuilder.build(), "SELECT _user0.* FROM `user` _user0");
+        assertEquals(findBuilder.build(), "SELECT _user0.* FROM `user` `_user0`");
 
-        findBuilder = new SqlFindBuilder(Dialects.MYSQL, "user", "u3", null);
+        findBuilder = new SqlFindBuilder(Dialects.mysql(), "user", "u3", null);
         System.out.println(findBuilder.build());
-        assertEquals("SELECT u3.* FROM `user` u3", findBuilder.build());
+        assertEquals(findBuilder.build(), "SELECT u3.* FROM `user` `u3`");
     }
 
 }

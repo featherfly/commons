@@ -62,7 +62,7 @@ public class JdbcPerformanceTest extends JdbcTestBase {
 
     @Test
     public void testInsertBatch2() {
-        String insertSql = Dialects.MYSQL.buildInsertBatchSql("user_info",
+        String insertSql = Dialects.mysql().dml().insertBatch("user_info",
                 new String[] { "id", "user_id", "name", "descp", "province", "city", "district" }, batchSize);
         Timer timer = Timer.start();
         ConnectionWrapper conn = JdbcUtils.getConnectionWrapper(dataSource);

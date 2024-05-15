@@ -140,7 +140,7 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
     public String build() {
         StringBuilder update = new StringBuilder();
         Keyworld keyworld = dialect.getKeywords();
-        update.append(keyworld.update()).append(Chars.SPACE).append(dialect.buildTableSql(tableName, alias));
+        update.append(keyworld.update()).append(Chars.SPACE).append(dialect.dml().table(tableName, alias));
         // TODO 判断tableName paramMap 为空 抛出异常
         if (!sqlJoinOnBuilders.isEmpty()) {
             for (SqlJoinOnBuilder sqlJoinOnBuilder : sqlJoinOnBuilders) {

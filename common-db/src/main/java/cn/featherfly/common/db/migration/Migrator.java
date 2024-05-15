@@ -178,9 +178,9 @@ public class Migrator {
     private String createSql(Table table, boolean dropIfExists, Class<?> type) {
         StringBuilder sql = new StringBuilder();
         if (dropIfExists) {
-            appendSqlWithEnd(sql, dialect.buildDropTableDDL(table.getSchema(), table.getName(), true));
+            appendSqlWithEnd(sql, dialect.ddl().dropTable(table.getSchema(), table.getName(), true));
         }
-        String result = sql.append(dialect.buildCreateTableDDL(table)).toString();
+        String result = sql.append(dialect.ddl().createTable(table)).toString();
         if (type == null) {
             LOGGER.debug("create sql for table {} -> \n{}", table.getName(), result);
         } else {
@@ -328,18 +328,14 @@ public class Migrator {
     }
 
     /**
-     * Gets the update sql with cached DatabaseMetadata(maybe different from
-     * database).
+     * Gets the update sql with cached DatabaseMetadata(maybe different from database).
      *
      * @param classMappings       the class mappings
      * @param tableModifyType     the table modify type
-     * @param dropNoMappingTable  if true, drop the table which no mapping with
-     *                            object; if false, do nothing.
+     * @param dropNoMappingTable  if true, drop the table which no mapping with object; if false, do nothing.
      * @param columnModifyType    the column modify type
-     * @param dropNoMappingColumn if true, drop the column which no mapping with
-     *                            object; if false, do nothing.
-     * @param dropNoMappingIndex  if true, drop the index which no mapping with
-     *                            object; if false, do nothing.
+     * @param dropNoMappingColumn if true, drop the column which no mapping with object; if false, do nothing.
+     * @param dropNoMappingIndex  if true, drop the index which no mapping with object; if false, do nothing.
      * @return the inits the sql
      */
     public String updateSql(Set<JdbcClassMapping<?>> classMappings, ModifyType tableModifyType,
@@ -354,13 +350,10 @@ public class Migrator {
      *
      * @param classMappings       the class mappings
      * @param tableModifyType     the table modify type
-     * @param dropNoMappingTable  if true, drop the table which no mapping with
-     *                            object; if false, do nothing.
+     * @param dropNoMappingTable  if true, drop the table which no mapping with object; if false, do nothing.
      * @param columnModifyType    the column modify type
-     * @param dropNoMappingColumn if true, drop the column which no mapping with
-     *                            object; if false, do nothing.
-     * @param dropNoMappingIndex  if true, drop the index which no mapping with
-     *                            object; if false, do nothing.
+     * @param dropNoMappingColumn if true, drop the column which no mapping with object; if false, do nothing.
+     * @param dropNoMappingIndex  if true, drop the index which no mapping with object; if false, do nothing.
      * @param databaseMetadata    database metadata
      * @return the inits the sql
      */
@@ -483,12 +476,11 @@ public class Migrator {
 
                 // 删除的索引
                 for (Index index : dropIndex) {
-                    appendSqlWithEnd(sql,
-                            dialect.buildDropIndexDDL(table.getSchema(), table.getName(), index.getName()));
+                    appendSqlWithEnd(sql, dialect.ddl().dropIndex(table.getSchema(), table.getName(), index.getName()));
                 }
 
                 if (ModifyType.MODIFY == columnModifyType) {
-                    appendSqlWithEnd(sql, dialect.buildAlterTableDDL(table.getSchema(), table.getName(),
+                    appendSqlWithEnd(sql, dialect.ddl().alterTable(table.getSchema(), table.getName(),
                             //  添加新的属性列映射
                             CollectionUtils.toArray(modifyTable.newColumns.values(), Column.class),
                             // 需要修改的对象映射
@@ -498,14 +490,14 @@ public class Migrator {
                 } else if (ModifyType.DROP_AND_CREATE == columnModifyType) {
                     dropColumns.addAll(modifyTable.modifyColumns.values());
 
-                    appendSqlWithEnd(sql, dialect.buildAlterTableDropColumnDDL(table.getSchema(), table.getName(),
+                    appendSqlWithEnd(sql, dialect.ddl().alterTableDropColumn(table.getSchema(), table.getName(),
                             CollectionUtils.toArray(dropColumns, Column.class)));
 
                     List<Column> addColumns = new ArrayList<>();
                     addColumns.addAll(modifyTable.newColumns.values());
                     addColumns.addAll(modifyTable.modifyColumns.values());
 
-                    appendSqlWithEnd(sql, dialect.buildAlterTableDDL(table.getSchema(), table.getName(),
+                    appendSqlWithEnd(sql, dialect.ddl().alterTable(table.getSchema(), table.getName(),
                             //  添加新的属性列映射
                             CollectionUtils.toArray(addColumns, Column.class),
                             // 需要修改的对象映射
@@ -518,8 +510,8 @@ public class Migrator {
 
                 // 新增加的索引
                 for (Index index : modifyTable.addIndexs) {
-                    appendSqlWithEnd(sql, dialect.buildCreateIndexDDL(table.getSchema(), table.getName(),
-                            index.getName(), index.getColumns()));
+                    appendSqlWithEnd(sql, dialect.ddl().createIndex(table.getSchema(), table.getName(), index.getName(),
+                            index.getColumns()));
                 }
 
             } else if (ModifyType.DROP_AND_CREATE == tableModifyType) {
@@ -531,7 +523,7 @@ public class Migrator {
         // 删除没有对象映射的表
         if (dropNotExistTable) {
             diff.notExistTables.forEach(table -> {
-                appendSqlWithEnd(sql, dialect.buildDropTableDDL(table.getSchema(), table.getName()));
+                appendSqlWithEnd(sql, dialect.ddl().dropTable(table.getSchema(), table.getName()));
             });
         }
         // 添加尾部

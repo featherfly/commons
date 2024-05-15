@@ -20,10 +20,10 @@ public class TableQueryTest {
 
     @Test
     public void test() {
-        ConditionBuilder builder = new SqlConditionGroup(Dialects.MYSQL, IgnoreStrategy.EMPTY,
-                new SqlSortBuilder(Dialects.MYSQL));
+        ConditionBuilder builder = new SqlConditionGroup(Dialects.mysql(), IgnoreStrategy.EMPTY,
+                new SqlSortBuilder(Dialects.mysql()));
         builder.eq("name", "yufei").and().gt("age", 18);
-        TableQuery q = new TableQuery(Dialects.MYSQL, "user", builder);
+        TableQuery q = new TableQuery(Dialects.mysql(), "user", builder);
         System.out.println(q.getSql());
         assertEquals(q.getSql(), "select * from `user` WHERE `name` = ? AND `age` > ?");
     }

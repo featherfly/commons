@@ -6,66 +6,64 @@ import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
 /**
- * <p>
- * MysqlDialectTest
- * </p>
+ * PostgresqlDialectTest.
  *
  * @author zhongj
  */
 public class PostgresqlDialectTest extends DialectTest {
 
-    Dialect dialect = Dialects.POSTGRESQL;
+    Dialect dialect = Dialects.postgresql();
 
     @Override
     @Test
     void testCreateDatabase() {
         String database = "db_test";
-        String sql = dialect.buildCreateDataBaseDDL(database);
+        String sql = dialect.ddl().createDataBase(database);
         assertEquals(sql, "CREATE DATABASE \"db_test\";");
     }
 
     @Override
     @Test
     void testDrop() {
-        String sql = dialect.buildDropDataBaseDDL(database);
+        String sql = dialect.ddl().dropDataBase(database);
         assertEquals(sql, "DROP DATABASE \"db_test\";");
 
-        sql = dialect.buildDropTableDDL(table);
+        sql = dialect.ddl().dropTable(table);
         assertEquals(sql, "DROP TABLE \"user\";");
 
-        sql = dialect.buildDropTableDDL(database, table);
+        sql = dialect.ddl().dropTable(database, table);
         assertEquals(sql, "DROP TABLE \"db_test\".\"user\";");
 
-        sql = dialect.buildDropViewDDL(view);
+        sql = dialect.ddl().dropView(view);
         assertEquals(sql, "DROP VIEW \"user_view\";");
 
-        sql = dialect.buildDropViewDDL(database, view);
+        sql = dialect.ddl().dropView(database, view);
         assertEquals(sql, "DROP VIEW \"db_test\".\"user_view\";");
 
-        sql = dialect.buildDropIndexDDL(table, index);
+        sql = dialect.ddl().dropIndex(table, index);
         assertEquals(sql, "DROP INDEX \"username_uq\";");
 
-        sql = dialect.buildDropIndexDDL(database, table, index);
+        sql = dialect.ddl().dropIndex(database, table, index);
         assertEquals(sql, "DROP INDEX \"db_test\".\"username_uq\";");
     }
 
     @Override
     @Test
     void testDropIfExists() {
-        String sql = dialect.buildDropDataBaseDDL(database, true);
+        String sql = dialect.ddl().dropDataBase(database, true);
         assertEquals(sql, "DROP DATABASE IF EXISTS \"db_test\";");
 
-        sql = dialect.buildDropTableDDL(table, true);
+        sql = dialect.ddl().dropTable(table, true);
         assertEquals(sql, "DROP TABLE IF EXISTS \"user\";");
 
-        sql = dialect.buildDropTableDDL(database, table, true);
+        sql = dialect.ddl().dropTable(database, table, true);
         assertEquals(sql, "DROP TABLE IF EXISTS \"db_test\".\"user\";");
     }
 
     @Override
     @Test
     void testCreateTable() {
-        String sql = dialect.buildCreateTableDDL(getTableModel());
+        String sql = dialect.ddl().createTable(getTableModel());
         System.out.println(sql);
         //        assertEquals(sql,
         //                "CREATE TABLE \"db_test\".\"user\" (\r\n" + " \"id\" SERIAL4 NOT NULL,\r\n"
@@ -83,7 +81,7 @@ public class PostgresqlDialectTest extends DialectTest {
     @Override
     @Test
     void testCreateTableMulitiKey() {
-        String sql = dialect.buildCreateTableDDL(getMultiKeyTableModel());
+        String sql = dialect.ddl().createTable(getMultiKeyTableModel());
         System.out.println(sql);
         // TODO 后续有环境了把测试补上
         //        String s = "";
@@ -93,7 +91,7 @@ public class PostgresqlDialectTest extends DialectTest {
     @Override
     @Test
     void testAlterTableDropColumn() {
-        String sql = dialect.buildAlterTableDropColumnDDL(table, getColumnModels());
+        String sql = dialect.ddl().alterTableDropColumn(table, getColumnModels());
         System.out.println(sql);
         // TODO 后续有环境了把测试补上
         //        String s = "";
@@ -103,7 +101,7 @@ public class PostgresqlDialectTest extends DialectTest {
     @Override
     @Test
     void testAlterTableAddColumns() {
-        String sql = dialect.buildAlterTableAddColumnDDL(table, getColumnModels());
+        String sql = dialect.ddl().alterTableAddColumn(table, getColumnModels());
         System.out.println(sql);
         // TODO 后续有环境了把测试补上
         //        String s = "";
@@ -113,7 +111,7 @@ public class PostgresqlDialectTest extends DialectTest {
     @Override
     @Test
     void testAlterTableModifyColumns() {
-        String sql = dialect.buildAlterTableModifyColumnDDL("user_info", getModifyColumnModels());
+        String sql = dialect.ddl().alterTableModifyColumn("user_info", getModifyColumnModels());
         System.out.println(sql);
         // TODO 后续有环境了把测试补上
         //        String s = "";
@@ -125,16 +123,16 @@ public class PostgresqlDialectTest extends DialectTest {
     void testBuildInsertBatchSql() {
         String sql = null;
 
-        sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 1);
+        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 1);
         assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?)");
 
-        sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 2);
+        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 2);
         assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?),(?, ?, ?)");
 
-        sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 3);
+        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 3);
         assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?)");
 
-        sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "descp" }, 5);
+        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 5);
         assertEquals(sql,
                 "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?)");
     }
@@ -164,13 +162,13 @@ public class PostgresqlDialectTest extends DialectTest {
     @Override
     @Test
     void testCreateIndex() {
-        String sql = dialect.buildCreateIndexDDL(table, index, new String[] { "user_id" });
+        String sql = dialect.ddl().createIndex(table, index, new String[] { "user_id" });
         assertEquals(sql, "CREATE INDEX username_uq ON \"user\"(\"user_id\");");
 
-        sql = dialect.buildCreateIndexDDL(table, index, new String[] { "user_id", "role_id" });
+        sql = dialect.ddl().createIndex(table, index, new String[] { "user_id", "role_id" });
         assertEquals(sql, "CREATE INDEX username_uq ON \"user\"(\"user_id\",\"role_id\");");
 
-        sql = dialect.buildCreateIndexDDL(table, index, new String[] { "user_id" }, true);
+        sql = dialect.ddl().createIndex(table, index, new String[] { "user_id" }, true);
         assertEquals(sql, "CREATE UNIQUE INDEX username_uq ON \"user\"(\"user_id\");");
     }
 
@@ -180,7 +178,7 @@ public class PostgresqlDialectTest extends DialectTest {
     @Override
     @Test
     void testUpsert() {
-        String sql = dialect.buildUpsertSql("user", new String[] { "id", "name", "age" }, "id");
+        String sql = dialect.dml().upsert("user", new String[] { "id", "name", "age" }, "id");
         System.out.println(sql);
         assertEquals(sql,
                 "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"age\"=EXCLUDED.\"age\"");
@@ -192,7 +190,7 @@ public class PostgresqlDialectTest extends DialectTest {
     @Override
     @Test
     void testUpsertBatch() {
-        String sql = dialect.buildUpsertBatchSql("user", new String[] { "id", "name", "age" }, "id", 2);
+        String sql = dialect.dml().upsertBatch("user", new String[] { "id", "name", "age" }, "id", 2);
         System.out.println(sql);
         assertEquals(sql,
                 "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (?, ?, ?),(?, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"age\"=EXCLUDED.\"age\"");
@@ -204,7 +202,7 @@ public class PostgresqlDialectTest extends DialectTest {
     @Override
     @Test
     void testInsert() {
-        String sql = dialect.buildInsertSql("user", new String[] { "id", "name", "age" });
+        String sql = dialect.dml().insert("user", new String[] { "id", "name", "age" });
         System.out.println(sql);
         assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (?, ?, ?)");
     }
@@ -215,7 +213,7 @@ public class PostgresqlDialectTest extends DialectTest {
     @Test
     @Override
     void testInsertBatch() {
-        String sql = dialect.buildInsertBatchSql("user", new String[] { "id", "name", "age" }, 2);
+        String sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "age" }, 2);
         System.out.println(sql);
         assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (?, ?, ?),(?, ?, ?)");
     }
@@ -226,11 +224,11 @@ public class PostgresqlDialectTest extends DialectTest {
     @Override
     @Test
     void testDeleteFrom() {
-        String sql = dialect.buildDeleteFromSql("user");
+        String sql = dialect.dml().deleteFrom("user");
         System.out.println(sql);
         assertEquals(sql, "DELETE FROM \"user\"");
 
-        sql = dialect.buildDeleteFromSql("user", "u");
+        sql = dialect.dml().deleteFrom("user", "u");
         System.out.println(sql);
         assertEquals(sql, "DELETE FROM \"user\" \"u\"");
     }

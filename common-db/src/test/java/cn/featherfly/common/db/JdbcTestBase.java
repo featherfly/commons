@@ -72,7 +72,7 @@ public class JdbcTestBase {
         dataSource.setPassword("123456");
 
         this.dataSource = dataSource;
-        dialect = Dialects.MYSQL;
+        dialect = Dialects.mysql();
     }
 
     @BeforeGroups(groups = "postgresql")
@@ -85,7 +85,7 @@ public class JdbcTestBase {
         dataSource.setPassword("123456");
 
         this.dataSource = dataSource;
-        dialect = Dialects.POSTGRESQL;
+        dialect = Dialects.postgresql();
     }
 
     @BeforeGroups(groups = "sqlite")

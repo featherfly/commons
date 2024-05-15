@@ -32,7 +32,7 @@ public class ClassMappingMulityEmbeddedTest extends JdbcTestBase {
 
         //        String insertSql = "INSERT INTO `order` (`wx_package`,`wx_package_expire_time`,`app_id`,`alipay_trade_no`,`id`,`no`,`app_key`) VALUES (?,?,?,?,?,?,?)";
 
-        String result = ClassMappingUtils.getInsertSqlAndParamPositions(mapping, Dialects.MYSQL).get0();
+        String result = ClassMappingUtils.getInsertSqlAndParamPositions(mapping, Dialects.mysql()).get0();
 
         System.out.println(result);
 

@@ -48,7 +48,7 @@ public class UpdateColumnElementTest {
 
     @Test
     void mysql_sqlelement() {
-        Dialect dialect = Dialects.MYSQL;
+        Dialect dialect = Dialects.mysql();
         ColumnElement ce = new ColumnElement(dialect, usernameColumn, userTableAlias2);
 
         u = new UpdateColumnElement(dialect, usernameColumn, ce, userTableAlias, IgnoreStrategy.NONE);
@@ -71,7 +71,7 @@ public class UpdateColumnElementTest {
 
     @Test
     void postgresql_sqlelement() {
-        Dialect dialect = Dialects.POSTGRESQL;
+        Dialect dialect = Dialects.postgresql();
         ColumnElement ce = new ColumnElement(dialect, usernameColumn, userTableAlias2);
 
         u = new UpdateColumnElement(dialect, usernameColumn, ce, userTableAlias, IgnoreStrategy.NONE);
@@ -118,7 +118,7 @@ public class UpdateColumnElementTest {
 
     @Test
     void oracle_sqlelement() {
-        Dialect dialect = Dialects.ORACLE;
+        Dialect dialect = Dialects.oracle();
         ColumnElement ce = new ColumnElement(dialect, usernameColumn, userTableAlias2);
 
         u = new UpdateColumnElement(dialect, usernameColumn, ce, userTableAlias, IgnoreStrategy.NONE);

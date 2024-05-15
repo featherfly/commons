@@ -6,18 +6,13 @@ import java.sql.Types;
 import java.util.Date;
 
 import cn.featherfly.common.constant.Chars;
-import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.SqlUtils;
-import cn.featherfly.common.db.Table;
-import cn.featherfly.common.db.builder.BuilderUtils;
-import cn.featherfly.common.db.builder.model.SqlElement;
+import cn.featherfly.common.db.dialect.ddl.PostgreSQLDDLFeature;
+import cn.featherfly.common.db.dialect.dml.PostgreSQLDMLFeature;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Dates;
-import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
-import cn.featherfly.common.operator.ComparisonOperator;
-import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
 
 /**
  * PostgreSQL Dialect.
@@ -26,11 +21,33 @@ import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
  */
 public class PostgreSQLDialect extends AbstractDialect {
 
+    private final PostgreSQLDDLFeature ddlFeature;
+
+    private final PostgreSQLDMLFeature dmlFeature;
+
     /**
      * Instantiates a new postgre SQL dialect.
      */
     public PostgreSQLDialect() {
         super();
+        ddlFeature = new PostgreSQLDDLFeature(this);
+        dmlFeature = new PostgreSQLDMLFeature(this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DDLFeature ddl() {
+        return ddlFeature;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DMLFeature dml() {
+        return dmlFeature;
     }
 
     /**
@@ -118,7 +135,7 @@ public class PostgreSQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public String convertValueToSql(Object value, int sqlType) {
+    public String valueToSql(Object value, int sqlType) {
         StringBuilder sqlPart = new StringBuilder();
         if (value == null) {
             sqlPart.append("null");
@@ -166,101 +183,6 @@ public class PostgreSQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public String buildCreateTableDDL(Table table) {
-        final StringBuilder comments = new StringBuilder();
-        for (Column column : table.getColumns()) {
-            if (Lang.isNotEmpty(column.getRemark())) {
-                StringBuilder comment = new StringBuilder();
-                String columnName = wrapName(table.getName()) + Chars.DOT + wrapName(column.getName());
-                if (Lang.isNotEmpty(table.getSchema())) {
-                    columnName = wrapName(table.getSchema()) + Chars.DOT + columnName;
-                }
-                BuilderUtils.link(comment, getKeyword(Keywords.COMMENT), getKeyword(Keywords.ON),
-                        getKeyword(Keywords.COLUMN), columnName, getKeyword(Keywords.IS),
-                        Chars.QM + column.getRemark() + Chars.QM);
-                comment.append(Chars.SEMI).append(Chars.NEW_LINE);
-                comments.append(comment);
-            }
-        }
-        String result = super.buildCreateTableDDL(table);
-        if (comments.length() > 0) {
-            comments.deleteCharAt(comments.length() - 1);
-            result += Chars.SEMI + Chars.NEW_LINE + comments.toString();
-        }
-        return result;
-    }
-
-    /**
-     * Gets the table comment.
-     *
-     * @param table the table
-     * @return the table comment
-     */
-    @Override
-    protected String getTableComment(Table table) {
-        // COMMENT ON TABLE "p"."user4" IS 'user用户表';
-        return Lang.isEmpty(table.getRemark()) ? ""
-                : BuilderUtils.link(Chars.SEMI + Chars.NEW_LINE + getKeyword(Keywords.COMMENT), getKeyword(Keywords.ON),
-                        getKeyword(Keywords.TABLE),
-                        Lang.ifEmpty(table.getSchema(), () -> wrapName(table.getName()),
-                                () -> wrapName(table.getSchema()) + Chars.DOT + wrapName(table.getName())),
-                        getKeyword(Keywords.IS), Chars.QM + table.getRemark() + Chars.QM);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected String getPrimaryKeyDDL(Table table) {
-        StringBuilder result = new StringBuilder(Chars.PAREN_L);
-        for (Column column : table.getColumns()) {
-            if (column.isPrimaryKey()) {
-                result.append(wrapName(column.getName())).append(Chars.DOT);
-            }
-        }
-        result.deleteCharAt(result.length() - 1);
-        result.append(Chars.PAREN_R);
-        return BuilderUtils.link(getKeyword(Keywords.CONSTRAINT), wrapName(table.getName() + "_" + "pkey"),
-                getKeyword(Keywords.PRIMARY), getKeyword(Keywords.KEY), result.toString());
-    }
-
-    /**
-     * Gets the column DDL.
-     *
-     * @param column the column
-     * @return the column DDL
-     */
-    @Override
-    protected String getColumnDDL(Column column) {
-        // FIXME 注释要用单独语句，不能放在列语句中
-        if (column.isAutoincrement()) {
-            return BuilderUtils.link(wrapName(column.getName()), getSerial(column.getSqlType()),
-                    getColumnNotNull(column));
-        } else {
-            return BuilderUtils.link(wrapName(column.getName()), getColumnTypeDDL(column), getColumnNotNull(column),
-                    getDefaultValue(column));
-        }
-    }
-
-    private String getSerial(SQLType sqlType) {
-        JDBCType type = JDBCType.valueOf(sqlType.getVendorTypeNumber());
-        switch (type) {
-            case SMALLINT:
-                return "SERIAL2";
-            case INTEGER:
-                return "SERIAL4";
-            case BIGINT:
-                return "SERIAL8";
-            default:
-                throw new DialectException(
-                        "serial only support for JDBCType.BIGINT, JDBCType.INTEGER, JDBCType.SMALLINT");
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String getColumnTypeName(SQLType sqlType) {
         JDBCType type = JDBCType.valueOf(sqlType.getVendorTypeNumber());
         switch (type) {
@@ -279,15 +201,6 @@ public class PostgreSQLDialect extends AbstractDialect {
             default:
                 return super.getColumnTypeName(sqlType);
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected String getAutoIncrement(Column column) {
-        // FIXME 未实现
-        throw new UnsupportedException();
     }
 
     /**
@@ -331,111 +244,4 @@ public class PostgreSQLDialect extends AbstractDialect {
             return getKeyword(Keywords.LIKE);
         }
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getInOrNotInExpression(boolean isIn, String name, Object values, MatchStrategy matchStrategy) {
-        switch (matchStrategy) {
-            case CASE_INSENSITIVE:
-            case CASE_SENSITIVE:
-                throw new DialectException("in operator unsupported " + matchStrategy);
-            default:
-                return getInOrNotInExpression(isIn, name, values);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getBetweenOrNotBetweenExpression(boolean isBetween, String name, Object values,
-            MatchStrategy matchStrategy) {
-        switch (matchStrategy) {
-            case CASE_INSENSITIVE:
-            case CASE_SENSITIVE:
-                throw new DialectException("between and operator unsupported " + matchStrategy);
-            default:
-                return getBetweenOrNotBetweenExpression(isBetween, name, values);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getBetweenOrNotBetweenExpression(boolean isBetween, String name, SqlElement min, SqlElement max,
-            MatchStrategy matchStrategy) {
-        switch (matchStrategy) {
-            case CASE_INSENSITIVE:
-            case CASE_SENSITIVE:
-                throw new DialectException("between and operator unsupported " + matchStrategy);
-            default:
-                return getBetweenOrNotBetweenExpression(isBetween, name, min, max);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected String getCompareExpression0(ComparisonOperator comparisonOperator, String name, Object values,
-            MatchStrategy matchStrategy) {
-        switch (comparisonOperator) {
-            case EQ:
-            case NE:
-            case SW:
-            case NSW:
-            case CO:
-            case NCO:
-            case EW:
-            case NEW:
-            case LK:
-            case NL:
-            case LT:
-            case LE:
-            case GT:
-            case GE:
-                break;
-            default:
-                throw new DialectException("unsupported for " + comparisonOperator);
-        }
-
-        StringBuilder condition = new StringBuilder();
-        switch (matchStrategy) {
-            case CASE_INSENSITIVE:
-            case CASE_SENSITIVE:
-                throw new DialectException(
-                        Strings.format("{} operator unsupported {}", comparisonOperator, matchStrategy));
-            default:
-                condition.append(name);
-                break;
-        }
-        condition.append(Chars.SPACE).append(getOperator(comparisonOperator)).append(Chars.SPACE)
-                .append(Chars.QUESTION);
-        return condition.toString();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected String getCompareExpression0(ComparisonOperator comparisonOperator, String name, SqlElement values,
-            MatchStrategy matchStrategy) {
-        StringBuilder condition = new StringBuilder();
-        switch (matchStrategy) {
-            case CASE_INSENSITIVE:
-            case CASE_SENSITIVE:
-                throw new DialectException(
-                        Strings.format("{} operator unsupported {}", comparisonOperator, matchStrategy));
-            default:
-                condition.append(name);
-                break;
-        }
-        condition.append(Chars.SPACE).append(getOperator(comparisonOperator)).append(Chars.SPACE)
-                .append(values.toSql());
-        return condition.toString();
-    }
-
 }

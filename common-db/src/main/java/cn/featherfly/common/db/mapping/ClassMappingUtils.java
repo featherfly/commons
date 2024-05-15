@@ -90,7 +90,7 @@ public class ClassMappingUtils {
      */
     public static String getCreateTableSql(JdbcClassMapping<?> classMapping, Dialect dialect,
             SqlTypeMappingManager sqlTypeMappingManager) {
-        return dialect.buildCreateTableDDL(createTable(classMapping, dialect, sqlTypeMappingManager));
+        return dialect.ddl().createTable(createTable(classMapping, dialect, sqlTypeMappingManager));
     }
 
     private static ColumnModel createColumn(JdbcPropertyMapping propertyMapping,
@@ -156,12 +156,12 @@ public class ClassMappingUtils {
         if (insertAmount == 1) {
             Tuple2<Map<Integer, JdbcPropertyMapping>, String[]> tuple = getInsertParamPositionsAndColumns(classMapping,
                     dialect);
-            String sql = dialect.buildInsertSql(classMapping.getRepositoryName(), tuple.get1());
+            String sql = dialect.dml().insert(classMapping.getRepositoryName(), tuple.get1());
             return Tuples.of(sql, tuple.get0());
         } else if (insertAmount > 1) {
             Tuple2<Map<Integer, JdbcPropertyMapping>, String[]> tuple = getInsertParamPositionsAndColumns(classMapping,
                     dialect);
-            String sql = dialect.buildInsertBatchSql(classMapping.getRepositoryName(), tuple.get1(), insertAmount);
+            String sql = dialect.dml().insertBatch(classMapping.getRepositoryName(), tuple.get1(), insertAmount);
             return Tuples.of(sql, tuple.get0());
         } else {
             throw new JdbcMappingException("insertAmount can not < 1, current value is " + insertAmount);
@@ -225,7 +225,7 @@ public class ClassMappingUtils {
             JdbcClassMapping<?> classMapping, Dialect dialect) {
         Tuple2<Map<Integer, JdbcPropertyMapping>, String[]> tuple = getInsertParamPositionsAndColumns(classMapping,
                 dialect);
-        String sql = dialect.buildInsertSql(classMapping.getRepositoryName(), tuple.get1());
+        String sql = dialect.dml().insert(classMapping.getRepositoryName(), tuple.get1());
         return Tuples.of(sql, tuple.get0());
     }
 
@@ -241,7 +241,7 @@ public class ClassMappingUtils {
             JdbcClassMapping<?> classMapping, Dialect dialect) {
         Tuple3<Map<Integer, JdbcPropertyMapping>, String[], String[]> tuple = getUpsertSqlAndParamPositionsColumnsAndIdsAnd(
                 classMapping, dialect);
-        String sql = dialect.buildUpsertBatchSql(classMapping.getRepositoryName(), tuple.get1(), tuple.get2(),
+        String sql = dialect.dml().upsertBatch(classMapping.getRepositoryName(), tuple.get1(), tuple.get2(),
                 upsertAmount);
         return Tuples.of(sql, tuple.get0());
     }
@@ -257,7 +257,7 @@ public class ClassMappingUtils {
             JdbcClassMapping<?> classMapping, Dialect dialect) {
         Tuple3<Map<Integer, JdbcPropertyMapping>, String[], String[]> tuple = getUpsertSqlAndParamPositionsColumnsAndIdsAnd(
                 classMapping, dialect);
-        String upsert = dialect.buildUpsertBatchSql(classMapping.getRepositoryName(), tuple.get1(), tuple.get2(), 1);
+        String upsert = dialect.dml().upsertBatch(classMapping.getRepositoryName(), tuple.get1(), tuple.get2(), 1);
         return Tuples.of(upsert, tuple.get0());
     }
 

@@ -68,7 +68,7 @@ public class UpdateColumnElement extends ParamedColumnElement {
     public String toSql() {
         if (param instanceof SqlElement) {
             SqlElement sqlElement = (SqlElement) param;
-            String columnName = dialect.buildColumnSql(getTableAlias(), getName());
+            String columnName = dialect.dml().column(getTableAlias(), getName());
             switch (setType) {
                 case INCR:
                     return columnName + " = " + columnName + " + " + sqlElement;
@@ -80,7 +80,7 @@ public class UpdateColumnElement extends ParamedColumnElement {
         } else if (ignore(param)) { // 忽略
             return "";
         } else {
-            String columnName = dialect.buildColumnSql(getTableAlias(), getName());
+            String columnName = dialect.dml().column(getTableAlias(), getName());
             switch (setType) {
                 case INCR:
                     return columnName + " = " + columnName + " + ?";

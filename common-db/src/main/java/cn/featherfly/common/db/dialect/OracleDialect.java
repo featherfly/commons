@@ -4,17 +4,13 @@ import java.sql.Types;
 import java.util.Date;
 
 import cn.featherfly.common.constant.Chars;
-import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.SqlUtils;
-import cn.featherfly.common.db.Table;
-import cn.featherfly.common.db.builder.model.SqlElement;
-import cn.featherfly.common.exception.NotImplementedException;
+import cn.featherfly.common.db.dialect.ddl.OracleDDLFeature;
+import cn.featherfly.common.db.dialect.dml.OracleDMLFeature;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Strings;
-import cn.featherfly.common.operator.ComparisonOperator;
-import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
 
 /**
  * Oracle Dialect.
@@ -23,11 +19,27 @@ import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
  */
 public class OracleDialect extends AbstractDialect {
 
+    private final OracleDDLFeature ddlFeature;
+
+    private final OracleDMLFeature dmlFeature;
+
     /**
      * Instantiates a new oracle dialect.
      */
     public OracleDialect() {
         super();
+        ddlFeature = new OracleDDLFeature(this);
+        dmlFeature = new OracleDMLFeature(this);
+    }
+
+    @Override
+    public OracleDDLFeature ddl() {
+        return ddlFeature;
+    }
+
+    @Override
+    public OracleDMLFeature dml() {
+        return dmlFeature;
     }
 
     /**
@@ -128,7 +140,7 @@ public class OracleDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public String convertValueToSql(Object value, int sqlType) {
+    public String valueToSql(Object value, int sqlType) {
         StringBuilder sqlPart = new StringBuilder();
         if (value == null) {
             sqlPart.append("null");
@@ -177,33 +189,6 @@ public class OracleDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    protected String getPrimaryKeyDDL(Table table) {
-        // NOIMPL 未实现
-        throw new UnsupportedException();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String buildInsertBatchSql(String tableName, String[] columnNames, int insertAmount) {
-        // NOIMPL 未实现
-        throw new UnsupportedException();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected String getAutoIncrement(Column column) {
-        // NOIMPL 未实现
-        throw new UnsupportedException();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String getInitSqlHeader() {
         // NOIMPL 未实现
         throw new UnsupportedException();
@@ -221,128 +206,5 @@ public class OracleDialect extends AbstractDialect {
     @Override
     public boolean supportUpsertBatch() {
         return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String buildUpsertBatchSql(String tableName, String[] columnNames, String[] uniqueColumns,
-            int insertAmount) {
-        // NOIMPL 未实现
-        throw new NotImplementedException();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getInOrNotInExpression(boolean isIn, String columnName, Object values, MatchStrategy matchStrategy) {
-        // FIXME 未实现，后续来实现
-        throw new UnsupportedException();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getBetweenOrNotBetweenExpression(boolean isBetween, String name, Object values,
-            MatchStrategy matchStrategy) {
-        //        boolean caseSensitive = false;
-        switch (matchStrategy) {
-            case CASE_INSENSITIVE:
-                break;
-            case CASE_SENSITIVE:
-                //                caseSensitive = true;
-                break;
-            default:
-                return getBetweenOrNotBetweenExpression(isBetween, name, values);
-        }
-        // FIXME 未实现，后续来实现
-        throw new UnsupportedException();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getBetweenOrNotBetweenExpression(boolean isBetween, String name, SqlElement min, SqlElement max,
-            MatchStrategy matchStrategy) {
-        //        boolean caseSensitive = false;
-        switch (matchStrategy) {
-            case CASE_INSENSITIVE:
-                break;
-            case CASE_SENSITIVE:
-                //                caseSensitive = true;
-                break;
-            default:
-                return getBetweenOrNotBetweenExpression(isBetween, name, min, max);
-        }
-        // FIXME 未实现，后续来实现
-        throw new UnsupportedException();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected String getCompareExpression0(ComparisonOperator comparisonOperator, String name, Object values,
-            MatchStrategy matchStrategy) {
-        switch (comparisonOperator) {
-            case EQ:
-            case NE:
-            case SW:
-            case NSW:
-            case CO:
-            case NCO:
-            case EW:
-            case NEW:
-            case LK:
-            case NL:
-            case LT:
-            case LE:
-            case GT:
-            case GE:
-                break;
-            default:
-                throw new DialectException("unsupported for " + comparisonOperator);
-        }
-
-        StringBuilder condition = new StringBuilder();
-        switch (matchStrategy) {
-            case CASE_INSENSITIVE:
-                // FIXME 未实现，后续来实现
-                throw new UnsupportedException();
-            case CASE_SENSITIVE:
-                // FIXME 未实现，后续来实现
-                throw new UnsupportedException();
-            default:
-                condition.append(name);
-                break;
-        }
-        condition.append(Chars.SPACE).append(getOperator(comparisonOperator)).append(Chars.SPACE)
-                .append(Chars.QUESTION);
-        return condition.toString();
-    }
-
-    @Override
-    protected String getCompareExpression0(ComparisonOperator comparisonOperator, String name, SqlElement values,
-            MatchStrategy matchStrategy) {
-        StringBuilder condition = new StringBuilder();
-        switch (matchStrategy) {
-            case CASE_INSENSITIVE:
-                // FIXME 未实现，后续来实现
-                throw new UnsupportedException();
-            case CASE_SENSITIVE:
-                // FIXME 未实现，后续来实现
-                throw new UnsupportedException();
-            default:
-                condition.append(name);
-                break;
-        }
-        condition.append(Chars.SPACE).append(getOperator(comparisonOperator)).append(Chars.SPACE)
-                .append(values.toSql());
-        return condition.toString();
-
     }
 }

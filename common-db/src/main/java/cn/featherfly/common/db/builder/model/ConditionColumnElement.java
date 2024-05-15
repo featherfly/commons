@@ -149,13 +149,13 @@ public class ConditionColumnElement extends ParamedColumnElement {
             return "";
         }
         Object value = param;
-        String name = dialect.buildColumnSql(tableAlias, this.name);
+        String name = dialect.dml().column(tableAlias, this.name);
         if (value instanceof SqlElement) {
-            return dialect.getCompareExpression(comparisonOperator, name, (SqlElement) value, matchStrategy);
+            return dialect.dml().compareExpression(comparisonOperator, name, (SqlElement) value, matchStrategy);
         } else if (ignore(value)) { // 忽略
             return "";
         } else {
-            return dialect.getCompareExpression(comparisonOperator, name, value, matchStrategy);
+            return dialect.dml().compareExpression(comparisonOperator, name, value, matchStrategy);
         }
     }
 }

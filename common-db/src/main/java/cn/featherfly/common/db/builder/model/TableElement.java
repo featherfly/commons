@@ -4,9 +4,7 @@ package cn.featherfly.common.db.builder.model;
 import cn.featherfly.common.db.dialect.Dialect;
 
 /**
- * <p>
- * Column
- * </p>
+ * Column.
  *
  * @author zhongj
  */
@@ -76,6 +74,6 @@ public class TableElement extends AbstractSqlElement {
      */
     @Override
     public String toSql() {
-        return dialect.buildTableSql(name, alias);
+        return dialect.dml().table(name, alias);
     }
 }

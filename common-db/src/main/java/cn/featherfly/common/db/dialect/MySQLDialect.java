@@ -1,27 +1,18 @@
 package cn.featherfly.common.db.dialect;
 
-import java.lang.reflect.Array;
 import java.sql.DatabaseMetaData;
 import java.sql.JDBCType;
 import java.sql.SQLException;
 import java.sql.SQLType;
 import java.sql.Types;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 import cn.featherfly.common.constant.Chars;
-import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.SqlUtils;
-import cn.featherfly.common.db.builder.BuilderUtils;
-import cn.featherfly.common.db.builder.model.SqlElement;
-import cn.featherfly.common.lang.ArrayUtils;
-import cn.featherfly.common.lang.AssertIllegalArgument;
+import cn.featherfly.common.db.dialect.ddl.MysqlDDLFeature;
+import cn.featherfly.common.db.dialect.dml.MysqlDMLFeature;
 import cn.featherfly.common.lang.Dates;
-import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
-import cn.featherfly.common.operator.ComparisonOperator;
-import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
 
 /**
  * MySQL Dialect.
@@ -35,11 +26,29 @@ public class MySQLDialect extends AbstractDialect {
 
     private String collateCaseInsensitive = DEFAULT_COLLATE_CASE_INSENSITIVE;
 
+    private final DDLFeature ddlFeature;
+    private final DMLFeature dmlFeature;
+
     /**
      * Instantiates a new my SQL
      */
     public MySQLDialect() {
         super();
+        ddlFeature = new MysqlDDLFeature(this);
+        dmlFeature = new MysqlDMLFeature(this);
+    }
+
+    @Override
+    public DDLFeature ddl() {
+        return ddlFeature;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DMLFeature dml() {
+        return dmlFeature;
     }
 
     /**
@@ -96,8 +105,8 @@ public class MySQLDialect extends AbstractDialect {
         pagingSelect.append(sql);
         if (isParamNamed) {
             if (start > 0) {
-                pagingSelect
-                    .append(Strings.format(" LIMIT {0}{1},{0}{2}", startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME));
+                pagingSelect.append(
+                        Strings.format(" LIMIT {0}{1},{0}{2}", startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME));
             } else {
                 pagingSelect.append(Strings.format(" LIMIT {0}{1}", startSymbol, LIMIT_PARAM_NAME));
             }
@@ -120,7 +129,7 @@ public class MySQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public String convertValueToSql(Object value, int sqlType) {
+    public String valueToSql(Object value, int sqlType) {
         StringBuilder sqlPart = new StringBuilder();
         if (value == null) {
             sqlPart.append("null");
@@ -172,18 +181,6 @@ public class MySQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    protected String getAutoIncrement(Column column) {
-        if (column.isAutoincrement()) {
-            return "AUTO_INCREMENT";
-        } else {
-            return "";
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String getColumnTypeName(SQLType sqlType) {
         JDBCType type = JDBCType.valueOf(sqlType.getVendorTypeNumber());
         switch (type) {
@@ -222,64 +219,10 @@ public class MySQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public String buildDeleteFromSql(String tableName, String tableAlias) {
-        String alias = Lang.isEmpty(tableAlias) ? null : wrapName(tableAlias);
-        return BuilderUtils.link(getKeyword(Keywords.DELETE), alias, getKeyword(Keywords.FROM), wrapName(tableName),
-            alias);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String buildDropIndexDDL(String schema, String tableName, String indexName, boolean ifExists) {
-        AssertIllegalArgument.isNotEmpty(tableName, "tableName");
-        AssertIllegalArgument.isNotEmpty(indexName, "indexName");
-        String in = Lang.isEmpty(schema) ? wrapName(indexName) : wrapName(schema) + Chars.DOT + wrapName(indexName);
-        String tn = Lang.isEmpty(schema) ? wrapName(tableName) : wrapName(schema) + Chars.DOT + wrapName(tableName);
-        if (ifExists) {
-            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.INDEX), getKeyword(Keywords.IF),
-                getKeyword(Keywords.EXISTS), in, getKeyword(Keywords.ON), tn) + Chars.SEMI;
-        } else {
-            return BuilderUtils.link(getKeyword(Keywords.DROP), getKeyword(Keywords.INDEX), in, getKeyword(Keywords.ON),
-                tn) + Chars.SEMI;
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String buildUpsertBatchSql(String tableName, String[] columnNames, String[] uniqueColumns,
-        int insertAmount) {
-        String sql = buildInsertBatchSql(tableName, columnNames, insertAmount);
-        sql = BuilderUtils.link(sql, "ON DUPLICATE KEY UPDATE");
-
-        List<String> columns = ArrayUtils.toList(columnNames);
-        for (String uc : uniqueColumns) {
-            if (ArrayUtils.contain(columnNames, uc)) {
-                columns.remove(uc);
-            }
-        }
-
-        StringBuilder columnsSql = new StringBuilder();
-        for (String columnName : columns) {
-            BuilderUtils.link(columnsSql, Strings.format("{0}=values({0}),", wrapName(columnName)));
-        }
-        if (columnsSql.length() > 0) {
-            columnsSql.deleteCharAt(columnsSql.length() - 1);
-        }
-        return BuilderUtils.link(sql, columnsSql.toString());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     protected String getKeywordLikeCaseInsensitive(boolean reverse) {
         if (reverse) {
             return getKeyword(Keywords.COLLATE) + " " + collateCaseInsensitive + " " + getKeyword(Keywords.NOT) + " "
-                + getKeyword(Keywords.LIKE);
+                    + getKeyword(Keywords.LIKE);
         } else {
             return getKeyword(Keywords.COLLATE) + " " + collateCaseInsensitive + " " + getKeyword(Keywords.LIKE);
         }
@@ -292,175 +235,11 @@ public class MySQLDialect extends AbstractDialect {
     protected String getKeywordLikeCaseSensitive(boolean reverse) {
         if (reverse) {
             return getKeyword(Keywords.NOT) + Chars.SPACE + getKeyword(Keywords.LIKE) + Chars.SPACE
-                + getKeyword(Keywords.BINARY);
+                    + getKeyword(Keywords.BINARY);
 
         } else {
             return getKeyword(Keywords.LIKE) + Chars.SPACE + getKeyword(Keywords.BINARY);
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getInOrNotInExpression(boolean isIn, String name, Object values, MatchStrategy matchStrategy) {
-        StringBuilder condition = new StringBuilder();
-        int length = 1;
-        if (values != null) {
-            if (values instanceof Collection) {
-                length = ((Collection<?>) values).size();
-            } else if (values.getClass().isArray()) {
-                length = Array.getLength(values);
-            }
-        }
-        switch (matchStrategy) {
-            case CASE_INSENSITIVE:
-                condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
-                    .append(collateCaseInsensitive);
-                break;
-            case CASE_SENSITIVE:
-                condition.append(getKeyword(Keywords.BINARY)).append(Chars.SPACE).append(name);
-                break;
-            default:
-                condition.append(name);
-                break;
-        }
-        condition.append(Chars.SPACE).append(isIn ? getKeywords().in() : getKeywords().notIn()).append(" (");
-        for (int i = 0; i < length; i++) {
-            if (i > 0) {
-                condition.append(Chars.COMMA);
-            }
-            condition.append(Chars.QUESTION);
-        }
-        condition.append(")");
-        return condition.toString();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getBetweenOrNotBetweenExpression(boolean isBetween, String name, Object values,
-        MatchStrategy matchStrategy) {
-        boolean caseSensitive = false;
-        switch (matchStrategy) {
-            case CASE_INSENSITIVE:
-                break;
-            case CASE_SENSITIVE:
-                caseSensitive = true;
-                break;
-            default:
-                return getBetweenOrNotBetweenExpression(isBetween, name, values);
-        }
-        StringBuilder condition = new StringBuilder();
-        if (caseSensitive) {
-            condition.append(getKeyword(Keywords.BINARY)).append(Chars.SPACE).append(name);
-        } else {
-            condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
-                .append(collateCaseInsensitive);
-        }
-        condition.append(Chars.SPACE).append(!isBetween ? getKeyword(Keywords.NOT) + Chars.SPACE : "") //
-            .append(getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
-            .append(Chars.QUESTION).append(Chars.SPACE) //
-            .append(getKeyword(Keywords.AND)).append(Chars.SPACE) //
-            .append(Chars.QUESTION);
-        return condition.toString();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getBetweenOrNotBetweenExpression(boolean isBetween, String name, SqlElement min, SqlElement max,
-        MatchStrategy matchStrategy) {
-        boolean caseSensitive = false;
-        switch (matchStrategy) {
-            case CASE_INSENSITIVE:
-                break;
-            case CASE_SENSITIVE:
-                caseSensitive = true;
-                break;
-            default:
-                return getBetweenOrNotBetweenExpression(isBetween, name, min, max);
-        }
-        StringBuilder condition = new StringBuilder();
-        if (caseSensitive) {
-            condition.append(getKeyword(Keywords.BINARY)).append(Chars.SPACE).append(name);
-        } else {
-            condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
-                .append(collateCaseInsensitive);
-        }
-        condition.append(Chars.SPACE).append(!isBetween ? getKeyword(Keywords.NOT) + Chars.SPACE : "") //
-            .append(getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
-            .append(min.toSql()).append(Chars.SPACE) //
-            .append(getKeyword(Keywords.AND)).append(Chars.SPACE) //
-            .append(max.toSql());
-        return condition.toString();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected String getCompareExpression0(ComparisonOperator comparisonOperator, String name, Object values,
-        MatchStrategy matchStrategy) {
-        switch (comparisonOperator) {
-            case EQ:
-            case NE:
-            case SW:
-            case NSW:
-            case CO:
-            case NCO:
-            case EW:
-            case NEW:
-            case LK:
-            case NL:
-            case LT:
-            case LE:
-            case GT:
-            case GE:
-                break;
-            default:
-                throw new DialectException("unsupported for " + comparisonOperator);
-        }
-
-        StringBuilder condition = new StringBuilder();
-        switch (matchStrategy) {
-            case CASE_INSENSITIVE:
-                condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
-                    .append(collateCaseInsensitive);
-                break;
-            case CASE_SENSITIVE:
-                condition.append(getKeyword("BINARY")).append(Chars.SPACE).append(name);
-                break;
-            default:
-                condition.append(name);
-                break;
-        }
-        condition.append(Chars.SPACE).append(getOperator(comparisonOperator)).append(Chars.SPACE)
-            .append(Chars.QUESTION);
-        return condition.toString();
-    }
-
-    @Override
-    protected String getCompareExpression0(ComparisonOperator comparisonOperator, String name, SqlElement values,
-        MatchStrategy matchStrategy) {
-        StringBuilder condition = new StringBuilder();
-        switch (matchStrategy) {
-            case CASE_INSENSITIVE:
-                condition.append(name).append(Chars.SPACE).append(getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
-                    .append(collateCaseInsensitive);
-                break;
-            case CASE_SENSITIVE:
-                condition.append(getKeyword("BINARY")).append(Chars.SPACE).append(name);
-                break;
-            default:
-                condition.append(name);
-                break;
-        }
-        condition.append(Chars.SPACE).append(getOperator(comparisonOperator)).append(Chars.SPACE)
-            .append(values.toSql());
-        return condition.toString();
     }
 
     @Override

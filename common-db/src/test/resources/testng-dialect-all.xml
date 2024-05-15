@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="dialect Test Suite" parallel="tests" thread-count="1">
+ <test name="sql dialect test">
+  <packages>
+   <package name="cn.featherfly.common.db.dialect.*" />
+  </packages>
+ </test>
+
+</suite>

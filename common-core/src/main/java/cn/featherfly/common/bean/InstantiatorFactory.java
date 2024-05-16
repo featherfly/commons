@@ -8,31 +8,19 @@
  */
 package cn.featherfly.common.bean;
 
-import java.util.function.Supplier;
-
-import cn.featherfly.common.lang.reflect.Type;
-
 /**
- * Instantiator.
+ * instantiator factory.
  *
  * @author zhongj
  * @param <T> the generic type
  * @since 1.12.1
  */
-public interface Instantiator<T> extends Supplier<T>, Type<T> {
+public interface InstantiatorFactory {
 
     /**
      * Instantiate.
      *
      * @return the u
      */
-    T instantiate();
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    default T get() {
-        return instantiate();
-    }
+    <T> Instantiator<T> create(Class<T> type, ClassLoader classLoader);
 }

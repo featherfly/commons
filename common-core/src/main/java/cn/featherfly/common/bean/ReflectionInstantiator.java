@@ -15,6 +15,7 @@ import cn.featherfly.common.lang.ClassUtils;
  *
  * @author zhongj
  * @param <T> the generic type
+ * @since 1.12.1
  */
 public class ReflectionInstantiator<T> implements Instantiator<T> {
 

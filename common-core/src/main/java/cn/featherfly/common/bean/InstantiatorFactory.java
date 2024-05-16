@@ -21,8 +21,7 @@ public interface InstantiatorFactory {
      *
      * @param <T> the generic type
      * @param type the type
-     * @param classLoader the class loader
      * @return the Instantiator
      */
-    <T> Instantiator<T> create(Class<T> type, ClassLoader classLoader);
+    <T> Instantiator<T> create(Class<T> type);
 }

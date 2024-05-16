@@ -25,17 +25,17 @@ public class InstantiatorFactorTest {
 
     @BeforeClass
     void before() {
-        factor = new AsmInstantiatorFactory();
+        factor = new AsmInstantiatorFactory(() -> Thread.currentThread().getContextClassLoader());
     }
 
     @Test
     void test1() throws Exception {
-        Instantiator<User> userInstantiator = factor.create(User.class, null);
+        Instantiator<User> userInstantiator = factor.create(User.class);
 
         User user = userInstantiator.instantiate();
         System.out.println(user.getDescp());
 
-        Instantiator<Role> roleInstantiator = factor.create(Role.class, null);
+        Instantiator<Role> roleInstantiator = factor.create(Role.class);
         Role role = roleInstantiator.instantiate();
 
         System.out.println(role.getDescp());

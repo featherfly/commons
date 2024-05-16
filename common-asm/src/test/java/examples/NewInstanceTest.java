@@ -28,7 +28,7 @@ import vo.User;
  */
 public class NewInstanceTest {
 
-    int max = 50000000;
+    int max = 100000000;
 
     Constructor<User> cons;
 
@@ -41,8 +41,9 @@ public class NewInstanceTest {
         cons = User.class.getConstructor(ArrayUtils.EMPTY_CLASS_ARRAY);
         create = () -> new User();
 
-        AsmInstantiatorFactory factor = new AsmInstantiatorFactory();
-        instantiator = factor.create(User.class, this.getClass().getClassLoader());
+        AsmInstantiatorFactory factor = new AsmInstantiatorFactory(
+            () -> Thread.currentThread().getContextClassLoader());
+        instantiator = factor.create(User.class);
     }
 
     @Test

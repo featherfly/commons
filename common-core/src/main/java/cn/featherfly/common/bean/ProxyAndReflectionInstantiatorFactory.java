@@ -37,9 +37,9 @@ public class ProxyAndReflectionInstantiatorFactory implements InstantiatorFactor
      * {@inheritDoc}
      */
     @Override
-    public <T> Instantiator<T> create(Class<T> type, ClassLoader classLoader) {
+    public <T> Instantiator<T> create(Class<T> type) {
         try {
-            return instantiatorFactory.create(type, classLoader);
+            return instantiatorFactory.create(type);
         } catch (Exception e) {
             LOGGER.warn(
                 "InstantiatorFactor create Instantiator for {} error, use ReflectionInstantiator instead. \n\t{}",

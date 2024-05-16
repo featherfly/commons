@@ -23,6 +23,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import cn.featherfly.common.bean.Instantiator;
+import cn.featherfly.common.bean.InstantiatorFactory;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.ClassLoaderUtils;
 import cn.featherfly.common.lang.ClassUtils;
@@ -32,7 +33,7 @@ import cn.featherfly.common.lang.ClassUtils;
  *
  * @author zhongj
  */
-public class InstantiatorFactor {
+public class AsmInstantiatorFactory implements InstantiatorFactory {
 
     private final Map<Class<?>, Instantiator<?>> types = new HashMap<>(0);
 
@@ -49,7 +50,7 @@ public class InstantiatorFactor {
     /**
      * Instantiates a new instantiator factor.
      */
-    public InstantiatorFactor() {
+    public AsmInstantiatorFactory() {
         this(true);
     }
 
@@ -58,26 +59,34 @@ public class InstantiatorFactor {
      *
      * @param cacheResults the cache results
      */
-    public InstantiatorFactor(boolean cacheResults) {
+    public AsmInstantiatorFactory(boolean cacheResults) {
         super();
         bytesClassLoader = new BytesClassLoader();
         this.cacheResults = cacheResults;
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     @SuppressWarnings("unchecked")
-    public <T> Instantiator<T> create(Class<T> type, ClassLoader classLoader) throws Exception {
+    public <T> Instantiator<T> create(Class<T> type, ClassLoader classLoader) {
         Instantiator<T> instantiator = (Instantiator<T>) types.get(type);
         if (cacheResults && instantiator != null) {
             return instantiator;
         }
 
-        Class<Instantiator<T>> newType = create0(type, classLoader);
-        instantiator = ClassUtils.newInstance(newType);
-        if (cacheResults) {
-            types.put(type, instantiator);
+        try {
+            Class<Instantiator<T>> newType = create0(type, classLoader);
+            instantiator = ClassUtils.newInstance(newType);
+            if (cacheResults) {
+                types.put(type, instantiator);
+            }
+            return instantiator;
+        } catch (Exception e) {
+            throw new AsmException(e);
         }
-        return instantiator;
     }
 
     @SuppressWarnings("unchecked")

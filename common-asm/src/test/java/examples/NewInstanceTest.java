@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import cn.featherfly.common.asm.InstantiatorFactor;
+import cn.featherfly.common.asm.AsmInstantiatorFactory;
 import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.bean.Instantiator;
 import cn.featherfly.common.lang.ArrayUtils;
@@ -41,7 +41,7 @@ public class NewInstanceTest {
         cons = User.class.getConstructor(ArrayUtils.EMPTY_CLASS_ARRAY);
         create = () -> new User();
 
-        InstantiatorFactor factor = new InstantiatorFactor();
+        AsmInstantiatorFactory factor = new AsmInstantiatorFactory();
         instantiator = factor.create(User.class, this.getClass().getClassLoader());
     }
 

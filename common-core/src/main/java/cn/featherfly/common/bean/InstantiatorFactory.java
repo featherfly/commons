@@ -12,7 +12,6 @@ package cn.featherfly.common.bean;
  * instantiator factory.
  *
  * @author zhongj
- * @param <T> the generic type
  * @since 1.12.1
  */
 public interface InstantiatorFactory {
@@ -20,7 +19,10 @@ public interface InstantiatorFactory {
     /**
      * Instantiate.
      *
-     * @return the u
+     * @param <T> the generic type
+     * @param type the type
+     * @param classLoader the class loader
+     * @return the Instantiator
      */
     <T> Instantiator<T> create(Class<T> type, ClassLoader classLoader);
 }

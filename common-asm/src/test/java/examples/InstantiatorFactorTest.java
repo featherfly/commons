@@ -11,7 +11,7 @@ package examples;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import cn.featherfly.common.asm.InstantiatorFactor;
+import cn.featherfly.common.asm.AsmInstantiatorFactory;
 import cn.featherfly.common.bean.Instantiator;
 
 /**
@@ -21,11 +21,11 @@ import cn.featherfly.common.bean.Instantiator;
  */
 public class InstantiatorFactorTest {
 
-    InstantiatorFactor factor;
+    AsmInstantiatorFactory factor;
 
     @BeforeClass
     void before() {
-        factor = new InstantiatorFactor();
+        factor = new AsmInstantiatorFactory();
     }
 
     @Test

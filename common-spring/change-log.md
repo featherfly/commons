@@ -1,3 +1,7 @@
+# 0.4.0 2024-05-16
+
+1. 加入SmartClassLoaderClassDefiner
+
 # 0.3.0 2022-07-15
 
 1. 加入RestartClassLoaderClassDefiner
@@ -6,8 +10,9 @@
 
 1. 修复MulitiCacheManager，MulitiUniqueKeyCacheManager decorateCache(Cache)把包装好的cache再包装的问题
 2. 升级依赖
-    
-0.2.1 2019-12-03
+   
+
+# 0.2.1 2019-12-03
 
 1. 修改group名称
 2. 升级spring依赖

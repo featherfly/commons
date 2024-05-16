@@ -47,10 +47,10 @@ public class AsmMethodCloneTest {
         cn.interfaces.add(Asm.getName(type));
 
         MethodNode constructor = new MethodNode(ACC_PUBLIC, Asm.CONSTRUCT_METHOD, Asm.getConstructorDescriptor(), null,
-                null);
+            null);
         constructor.visitVarInsn(ALOAD, 0);
         constructor.visitMethodInsn(INVOKESPECIAL, cn.superName, Asm.CONSTRUCT_METHOD, Asm.getConstructorDescriptor(),
-                false);
+            false);
         constructor.visitInsn(RETURN);
         constructor.visitMaxs(1, 1);
         constructor.visitEnd();
@@ -124,7 +124,7 @@ public class AsmMethodCloneTest {
         reader.accept(new ClassVisitor(Opcodes.ASM9) {
             @Override
             public MethodVisitor visitMethod(final int access, final String name, final String descriptor,
-                    final String signature, final String[] exceptions) {
+                final String signature, final String[] exceptions) {
                 MethodNodeVisitor mnv = new MethodNodeVisitor();
                 final MethodNode methodNode = mnv.getMethodNode();
                 methodNode.access = access;
@@ -208,8 +208,7 @@ public class AsmMethodCloneTest {
         //        fos.write(code);
         //        fos.close();
 
-        org.springframework.objenesis.instantiator.util.DefineClassHelper.defineClass(typeName, code, 0, code.length,
-                null, this.getClass().getClassLoader(), this.getClass().getProtectionDomain());
+        new BytesClassLoader().defineClass(typeName, code, this.getClass().getProtectionDomain());
 
         Class.forName(typeName).newInstance();
     }

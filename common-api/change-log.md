@@ -1,3 +1,6 @@
+# 0.5.3
+1. 移除无效依赖
+
 # 0.5.2 2024-05-05
 1. 移除cn.featherfly.common.lang.function包
 2. ComparisonOperator加入NEW,NSW,NCO,NL,BT,NBT

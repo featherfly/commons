@@ -5,6 +5,7 @@
 1. Lang加入eachObj方法
 2. StringFormatter加入NotMatchStrategy用于处理占位符没有参数匹配的情况
 3. 修复ClassUtils判断getter，setter没有过滤static方法的问题，优化isXxxx只能匹配boolean isXxxx
+4. 加入Instantiator，ReflectionInstantiator
 
 # 1.12.0 2024-05-05
 

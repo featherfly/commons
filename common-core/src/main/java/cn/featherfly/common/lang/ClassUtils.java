@@ -1921,6 +1921,38 @@ public final class ClassUtils {
         }
     }
 
+    /**
+     * 实例化.
+     *
+     * @param <T> 泛型
+     * @param constructor 构造器
+     * @param args 参数数组
+     * @return 对象
+     */
+    public static <T> T newInstance(Constructor<T> constructor, Object... args) {
+        AssertIllegalArgument.isNotNull(constructor, "Constructor<T> constructor");
+        if (!Modifier.isPublic(constructor.getModifiers())
+            || !Modifier.isPublic(constructor.getDeclaringClass().getModifiers())) {
+            constructor.setAccessible(true);
+        }
+        try {
+            return constructor.newInstance(args);
+        } catch (IllegalArgumentException e) {
+            LOGGER.debug(ExceptionUtils.getStackTrace(e));
+            throw new ReflectException(
+                Strings.format(" {0} 是否定义成抽象类了 不能实例化", constructor.getDeclaringClass().getName()));
+        } catch (InstantiationException e) {
+            LOGGER.debug(ExceptionUtils.getStackTrace(e));
+            throw new ReflectException(Strings.format("{0} 构造器是否为私有", constructor.getDeclaringClass().getName()));
+        } catch (IllegalAccessException e) {
+            LOGGER.debug(ExceptionUtils.getStackTrace(e));
+            throw new ReflectException(Strings.format("{0} 构造器参数不匹配", constructor.getDeclaringClass().getName()));
+        } catch (InvocationTargetException e) {
+            LOGGER.debug(ExceptionUtils.getStackTrace(e));
+            throw new ReflectException(Strings.format("{0} 构造器抛出异常", constructor.getDeclaringClass().getName()));
+        }
+    }
+
     private static <E extends Executable> E matchMethod(Class<?> type, String name, Object[] args) {
         List<Executable> matchs = new ArrayList<>();
         for (Method method : type.getMethods()) {
@@ -1986,38 +2018,6 @@ public final class ClassUtils {
                 new Object[] { type.getName(), Arrays.asList(args).toString(), isMethod ? "方法" : "构造器" }));
         }
         return (E) matchExecutable;
-    }
-
-    /**
-     * 实例化.
-     *
-     * @param <T> 泛型
-     * @param constructor 构造器
-     * @param args 参数数组
-     * @return 对象
-     */
-    public static <T> T newInstance(Constructor<T> constructor, Object... args) {
-        AssertIllegalArgument.isNotNull(constructor, "Constructor<T> constructor");
-        if (!Modifier.isPublic(constructor.getModifiers())
-            || !Modifier.isPublic(constructor.getDeclaringClass().getModifiers())) {
-            constructor.setAccessible(true);
-        }
-        try {
-            return constructor.newInstance(args);
-        } catch (IllegalArgumentException e) {
-            LOGGER.debug(ExceptionUtils.getStackTrace(e));
-            throw new ReflectException(
-                Strings.format(" {0} 是否定义成抽象类了 不能实例化", constructor.getDeclaringClass().getName()));
-        } catch (InstantiationException e) {
-            LOGGER.debug(ExceptionUtils.getStackTrace(e));
-            throw new ReflectException(Strings.format("{0} 构造器是否为私有", constructor.getDeclaringClass().getName()));
-        } catch (IllegalAccessException e) {
-            LOGGER.debug(ExceptionUtils.getStackTrace(e));
-            throw new ReflectException(Strings.format("{0} 构造器参数不匹配", constructor.getDeclaringClass().getName()));
-        } catch (InvocationTargetException e) {
-            LOGGER.debug(ExceptionUtils.getStackTrace(e));
-            throw new ReflectException(Strings.format("{0} 构造器抛出异常", constructor.getDeclaringClass().getName()));
-        }
     }
 
     // ********************************************************************

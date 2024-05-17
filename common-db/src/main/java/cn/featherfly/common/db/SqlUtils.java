@@ -144,7 +144,9 @@ public final class SqlUtils {
             int length = Array.getLength(param);
             result = new FieldValueOperator[length];
             for (int i = 0; i < length; i++) {
-                if (param.getClass() == int[].class) {
+                if (param.getClass() == FieldValueOperator[].class) {
+                    Array.set(result, i, Array.get(param, i));
+                } else if (param.getClass() == int[].class) {
                     Array.set(result, i, FieldValueOperator.create(propertyMapping, Array.getInt(param, i)));
                 } else if (param.getClass() == long[].class) {
                     Array.set(result, i, FieldValueOperator.create(propertyMapping, Array.getLong(param, i)));
@@ -171,7 +173,11 @@ public final class SqlUtils {
         } else if (param instanceof Collection) {
             result = new ArrayList<>();
             for (Object op : (Collection<?>) param) {
-                ((Collection<FieldValueOperator<?>>) result).add(FieldValueOperator.create(propertyMapping, op));
+                if (op instanceof FieldValueOperator) {
+                    ((Collection<FieldValueOperator<?>>) result).add((FieldValueOperator<?>) op);
+                } else {
+                    ((Collection<FieldValueOperator<?>>) result).add(FieldValueOperator.create(propertyMapping, op));
+                }
             }
         } else if (!(param instanceof FieldValueOperator)) {
             result = FieldValueOperator.create(propertyMapping, param);
@@ -198,7 +204,13 @@ public final class SqlUtils {
         }
         @SuppressWarnings("rawtypes")
         final List<FieldValueOperator> paramList = new ArrayList<>();
-        Lang.eachObj(param, p -> paramList.add(FieldValueOperator.create(p)));
+        Lang.eachObj(param, p -> {
+            if (p instanceof FieldValueOperator) {
+                paramList.add((FieldValueOperator<?>) p);
+            } else {
+                paramList.add(FieldValueOperator.create(p));
+            }
+        });
         if (paramList.isEmpty()) {
             return null;
         } else if (paramList.size() == 1) {
@@ -226,7 +238,13 @@ public final class SqlUtils {
         @SuppressWarnings("rawtypes")
         final List<FieldValueOperator> paramList = new ArrayList<>();
         for (Object param : params) {
-            Lang.eachObj(param, p -> paramList.add(FieldValueOperator.create(p)));
+            Lang.eachObj(param, p -> {
+                if (p instanceof FieldValueOperator) {
+                    paramList.add((FieldValueOperator<?>) p);
+                } else {
+                    paramList.add(FieldValueOperator.create(p));
+                }
+            });
         }
         return CollectionUtils.toArray(paramList, FieldValueOperator.class);
     }

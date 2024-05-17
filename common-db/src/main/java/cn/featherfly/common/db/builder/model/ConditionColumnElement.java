@@ -28,52 +28,52 @@ import cn.featherfly.common.repository.Params;
  */
 public class ConditionColumnElement extends ParamedColumnElement {
 
-    private ComparisonOperator comparisonOperator;
+    protected final ComparisonOperator comparisonOperator;
 
-    private MatchStrategy matchStrategy;
+    protected final MatchStrategy matchStrategy;
 
     /**
      * Instantiates a new condition column element.
      *
-     * @param dialect            dialect
-     * @param name               name
-     * @param value              param value
+     * @param dialect dialect
+     * @param name name
+     * @param value param value
      * @param comparisonOperator comparisonOperator
-     * @param ignoreStrategy     the ignore strategy
+     * @param ignoreStrategy the ignore strategy
      */
     public ConditionColumnElement(Dialect dialect, String name, Object value, ComparisonOperator comparisonOperator,
-            Predicate<?> ignoreStrategy) {
+        Predicate<?> ignoreStrategy) {
         this(dialect, name, value, comparisonOperator, null, ignoreStrategy);
     }
 
     /**
      * Instantiates a new condition column element.
      *
-     * @param dialect            dialect
-     * @param name               name
-     * @param value              param value
+     * @param dialect dialect
+     * @param name name
+     * @param value param value
      * @param comparisonOperator comparisonOperator
-     * @param tableAlias         tableAlias
-     * @param ignoreStrategy     the ignore strategy
+     * @param tableAlias tableAlias
+     * @param ignoreStrategy the ignore strategy
      */
     public ConditionColumnElement(Dialect dialect, String name, Object value, ComparisonOperator comparisonOperator,
-            String tableAlias, Predicate<?> ignoreStrategy) {
+        String tableAlias, Predicate<?> ignoreStrategy) {
         this(dialect, name, value, comparisonOperator, MatchStrategy.AUTO, tableAlias, ignoreStrategy);
     }
 
     /**
      * Instantiates a new condition column element.
      *
-     * @param dialect            the dialect
-     * @param name               the name
-     * @param value              the value
+     * @param dialect the dialect
+     * @param name the name
+     * @param value the value
      * @param comparisonOperator the comparison operator
-     * @param matchStrategy      the match strategy
-     * @param tableAlias         the table alias
-     * @param ignoreStrategy     the ignore strategy
+     * @param matchStrategy the match strategy
+     * @param tableAlias the table alias
+     * @param ignoreStrategy the ignore strategy
      */
     public ConditionColumnElement(Dialect dialect, String name, Object value, ComparisonOperator comparisonOperator,
-            MatchStrategy matchStrategy, String tableAlias, Predicate<?> ignoreStrategy) {
+        MatchStrategy matchStrategy, String tableAlias, Predicate<?> ignoreStrategy) {
         super(dialect, name, value, tableAlias, ignoreStrategy);
         AssertIllegalArgument.isNotNull(comparisonOperator, "comparisonOperator");
         if (matchStrategy == null) {

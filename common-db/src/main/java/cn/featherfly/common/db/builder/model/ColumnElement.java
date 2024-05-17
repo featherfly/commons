@@ -4,10 +4,7 @@ package cn.featherfly.common.db.builder.model;
 import cn.featherfly.common.db.dialect.Dialect;
 
 /**
- * <p>
- * Column
- * </p>
- * .
+ * ColumnElement.
  *
  * @author zhongj
  */
@@ -23,7 +20,7 @@ public class ColumnElement extends AbstractSqlElement {
      * Instantiates a new column element.
      *
      * @param dialect dialect
-     * @param name    name
+     * @param name name
      */
     public ColumnElement(Dialect dialect, String name) {
         this(dialect, name, null);
@@ -32,8 +29,8 @@ public class ColumnElement extends AbstractSqlElement {
     /**
      * Instantiates a new column element.
      *
-     * @param dialect    dialect
-     * @param name       name
+     * @param dialect dialect
+     * @param name name
      * @param tableAlias tableAlias
      */
     public ColumnElement(Dialect dialect, String name, String tableAlias) {

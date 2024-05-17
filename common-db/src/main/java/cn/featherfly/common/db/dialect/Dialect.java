@@ -68,7 +68,7 @@ public interface Dialect {
     /**
      * 转换普通sql为带分页的sql.
      *
-     * @param sql   带转换的sql
+     * @param sql 带转换的sql
      * @param start 起始数
      * @param limit 数量
      * @return 返回转换好的分页sql
@@ -82,8 +82,8 @@ public interface Dialect {
      * .
      *
      * @param params 参数数组
-     * @param start  起始数
-     * @param limit  数量
+     * @param start 起始数
+     * @param limit 数量
      * @return 分页参数的数组
      */
     Object[] getPaginationSqlParameter(Object[] params, int start, int limit);
@@ -95,8 +95,8 @@ public interface Dialect {
      * .
      *
      * @param params 参数MAP
-     * @param start  起始数
-     * @param limit  数量
+     * @param start 起始数
+     * @param limit 数量
      * @return 分页参数的MAP
      */
     Map<String, Object> getPaginationSqlParameter(Map<String, Object> params, int start, int limit);
@@ -107,7 +107,7 @@ public interface Dialect {
      * </p>
      * .
      *
-     * @param sql   带转换的sql
+     * @param sql 带转换的sql
      * @param start 起始数
      * @param limit 数量
      * @return 返回转换好的分页sql
@@ -120,9 +120,9 @@ public interface Dialect {
      * </p>
      * .
      *
-     * @param sql         带转换的sql
-     * @param start       起始数
-     * @param limit       数量
+     * @param sql 带转换的sql
+     * @param start 起始数
+     * @param limit 数量
      * @param startSymbol 命名参数的起始符号
      * @return 返回转换好的分页sql
      */
@@ -131,7 +131,7 @@ public interface Dialect {
     /**
      * 转换为SQL语句中使用的字符串 .
      *
-     * @param value   值
+     * @param value 值
      * @param sqlType sql类型
      * @return the string
      */
@@ -288,7 +288,7 @@ public interface Dialect {
      * Gets the operator.
      *
      * @param comparisonOperator the comparison operator
-     * @param matchStrategy      the match strategy
+     * @param matchStrategy the match strategy
      * @return the operator
      */
     default String getOperator(ComparisonOperator comparisonOperator, MatchStrategy matchStrategy) {
@@ -494,23 +494,12 @@ public interface Dialect {
     }
 
     /**
-     * Gets the wrap sign.
-     *
-     * @return the wrap sign
-     * @deprecated {@link #getWrapSymbol()}
-     */
-    @Deprecated
-    default String getWrapSign() {
-        return getWrapSymbol();
-    }
-
-    /**
      * Gets the wrap symbol.
      *
      * @return the wrap symbol
-     * @deprecated use {@link #getLeftWrapSymbol()} and {@link #getRightWrapSymbol()} instead
+     * @throws DialectException when wrap with {@linkplain #getLeftWrapSymbol() left} and
+     *         {@linkplain #getRightWrapSymbol() right} different symbol.
      */
-    @Deprecated
     String getWrapSymbol();
 
     /**

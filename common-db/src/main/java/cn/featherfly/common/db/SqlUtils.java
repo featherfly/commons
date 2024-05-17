@@ -1,3 +1,13 @@
+/*
+ * All rights Reserved, Designed By zhongj
+ * @Title: SqlUtils.java
+ * @Package cn.featherfly.common.db
+ * @Description: todo (用一句话描述该文件做什么)
+ * @author: zhongj
+ * @date: 2024年5月17日 下午5:41:18
+ * @version V1.0
+ * @Copyright: 2024 www.featherfly.cn Inc. All rights reserved.
+ */
 
 package cn.featherfly.common.db;
 
@@ -16,8 +26,10 @@ import com.speedment.common.tuple.mutable.MutableTuple1;
 
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.NamedParamSql.NamedParam;
+import cn.featherfly.common.db.mapping.JdbcPropertyMapping;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
+import cn.featherfly.common.lang.CollectionUtils;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.Execution;
 import cn.featherfly.common.repository.SimpleExecution;
@@ -34,7 +46,7 @@ public final class SqlUtils {
 
     /** The Constant SELECT_PATTERN. */
     private static final Pattern SELECT_PATTERN = Pattern.compile("((select )(distinct [\\w-_.]+)?,?.+)(from .+)",
-            Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+        Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
     private static final NamedSqlConvertFeature NAMEDSQL_CONVERTOR = new NamedSqlConvertFeature();
 
@@ -89,7 +101,8 @@ public final class SqlUtils {
     }
 
     /**
-     * Flat params. if item of the param array is array or Collection, will expand them and Sequential insertion.
+     * Flat params. if item of the param array is array or Collection, will expand them and
+     * Sequential insertion.
      *
      * <pre>
      * give ["a", "b", ["1", "2"], "c"] return ["a", "b", "1", "2", "c"]
@@ -98,15 +111,124 @@ public final class SqlUtils {
      * @param params the params
      * @return the flat object[]
      */
-    public static Object[] flatParam(Object[] params) {
+    public static Object[] flatParams(Object... params) {
         if (params == null) {
             return ArrayUtils.EMPTY_OBJECT_ARRAY;
         }
         final List<Object> paramList = new ArrayList<>();
-        for (Object inParam : params) {
-            Lang.eachObj(inParam, p -> paramList.add(p));
+        for (Object param : params) {
+            Lang.eachObj(param, (Consumer<Object>) paramList::add);
         }
         return paramList.toArray();
+    }
+
+    /**
+     * Flat params. if item of the param array is array or Collection, will expand them and
+     * Sequential insertion.
+     *
+     * <pre>
+     * give ["a", "b", ["1", "2"], "c"] return ["a", "b", "1", "2", "c"]
+     * </pre>
+     *
+     * @param param the param
+     * @param propertyMapping the property mapping
+     * @return the flat FieldValueOperator Array or FieldValueOperator Object
+     */
+    @SuppressWarnings("unchecked")
+    public static Object flatParamToFieldValueOperator(Object param, JdbcPropertyMapping propertyMapping) {
+        if (param == null) {
+            return param;
+        }
+        Object result = null;
+        if (param.getClass().isArray()) {
+            int length = Array.getLength(param);
+            result = new FieldValueOperator[length];
+            for (int i = 0; i < length; i++) {
+                if (param.getClass() == int[].class) {
+                    Array.set(result, i, FieldValueOperator.create(propertyMapping, Array.getInt(param, i)));
+                } else if (param.getClass() == long[].class) {
+                    Array.set(result, i, FieldValueOperator.create(propertyMapping, Array.getLong(param, i)));
+                } else if (param.getClass() == boolean[].class) {
+                    Array.set(result, i, FieldValueOperator.create(propertyMapping, Array.getBoolean(param, i)));
+                } /*
+                   * else if (value.getClass() == char[].class) {
+                   * Array.set(param, i, FieldValueOperator.create(pm, (byte)
+                   * Array.getChar(value, i)));
+                   * // database don't support getChar
+                   * }
+                   */ else if (param.getClass() == byte[].class) {
+                    Array.set(result, i, FieldValueOperator.create(propertyMapping, Array.getByte(param, i)));
+                } else if (param.getClass() == short[].class) {
+                    Array.set(result, i, FieldValueOperator.create(propertyMapping, Array.getShort(param, i)));
+                } else if (param.getClass() == double[].class) {
+                    Array.set(result, i, FieldValueOperator.create(propertyMapping, Array.getDouble(param, i)));
+                } else if (param.getClass() == float[].class) {
+                    Array.set(result, i, FieldValueOperator.create(propertyMapping, Array.getFloat(param, i)));
+                } else {
+                    Array.set(result, i, FieldValueOperator.create(propertyMapping, Array.get(param, i)));
+                }
+            }
+        } else if (param instanceof Collection) {
+            result = new ArrayList<>();
+            for (Object op : (Collection<?>) param) {
+                ((Collection<FieldValueOperator<?>>) result).add(FieldValueOperator.create(propertyMapping, op));
+            }
+        } else if (!(param instanceof FieldValueOperator)) {
+            result = FieldValueOperator.create(propertyMapping, param);
+        } else {
+            result = param;
+        }
+        return result;
+    }
+
+    /**
+     * Flat params. if item of the param array is array or Collection, will expand them and
+     * Sequential insertion.
+     *
+     * <pre>
+     * give ["a", "b", ["1", "2"], "c"] return ["a", "b", "1", "2", "c"]
+     * </pre>
+     *
+     * @param param the param
+     * @return the flat FieldValueOperator Array or FieldValueOperator Object
+     */
+    public static Object flatParamToFieldValueOperator(Object param) {
+        if (param == null) {
+            return null;
+        }
+        @SuppressWarnings("rawtypes")
+        final List<FieldValueOperator> paramList = new ArrayList<>();
+        Lang.eachObj(param, p -> paramList.add(FieldValueOperator.create(p)));
+        if (paramList.isEmpty()) {
+            return null;
+        } else if (paramList.size() == 1) {
+            return paramList.get(0);
+        } else {
+            return CollectionUtils.toArray(paramList, FieldValueOperator.class);
+        }
+    }
+
+    /**
+     * Flat params. if item of the param array is array or Collection, will expand them and
+     * Sequential insertion.
+     *
+     * <pre>
+     * give ["a", "b", ["1", "2"], "c"] return ["a", "b", "1", "2", "c"]
+     * </pre>
+     *
+     * @param params the params
+     * @return the flat FieldValueOperator[]
+     */
+    public static FieldValueOperator<?>[] flatParamsToFieldValueOperator(Object... params) {
+        if (params == null) {
+            return FieldValueOperator.EMPTY_ARRAY;
+        }
+        @SuppressWarnings("rawtypes")
+        final List<FieldValueOperator> paramList = new ArrayList<>();
+        for (Object param : params) {
+            Lang.eachObj(param, p -> paramList.add(FieldValueOperator.create(p)));
+        }
+        return CollectionUtils.toArray(paramList, FieldValueOperator.class);
     }
 
     /**
@@ -153,11 +275,12 @@ public final class SqlUtils {
     /**
      * convert named param sql with {@link #PARAM_NAME_START_SYMBOL}.
      * <p>
-     * transfer <code>select * from user where name = :user</code> to <code>select * from user where name = ?</code>
+     * transfer <code>select * from user where name = :user</code> to
+     * <code>select * from user where name = ?</code>
      * <p>
      *
      * @param namedParamSql the named param sql
-     * @param params        the params
+     * @param params the params
      * @return the execution contains jdbc placeholder sql and params array
      */
     public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params) {
@@ -168,8 +291,8 @@ public final class SqlUtils {
      * convert named param sql with startSymbol.
      *
      * @param namedParamSql the named param sql
-     * @param params        the params
-     * @param startSymbol   the start symbol
+     * @param params the params
+     * @param startSymbol the start symbol
      * @return the execution contains jdbc placeholder sql and params array
      */
     public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol) {
@@ -180,16 +303,16 @@ public final class SqlUtils {
      * convert named param sql startSymbol and endSymbol.
      *
      * @param namedParamSql the named param sql
-     * @param params        the params
-     * @param startSymbol   the start symbol
-     * @param endSymbol     the end symbol
+     * @param params the params
+     * @param startSymbol the start symbol
+     * @param endSymbol the end symbol
      * @return the execution contains jdbc placeholder sql and params array
      */
     public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol,
-            Character endSymbol) {
+        Character endSymbol) {
         final MutableTuple1<Object[]> paramsTuple = MutableTuples.create1();
         return new SimpleExecution(convertNamedParamSql(namedParamSql, params, startSymbol, endSymbol,
-                paramArray -> paramsTuple.set0(paramArray), null, null), paramsTuple.get0().get());
+            paramArray -> paramsTuple.set0(paramArray), null, null), paramsTuple.get0().get());
     }
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -197,10 +320,11 @@ public final class SqlUtils {
     /**
      * convert named param sql with {@link #PARAM_NAME_START_SYMBOL}.
      * <p>
-     * transfer <code>select * from user where name = :user</code> to <code>select * from user where name = ?</code>
+     * transfer <code>select * from user where name = :user</code> to
+     * <code>select * from user where name = ?</code>
      * <p>
      *
-     * @param namedParamSql   the named param sql
+     * @param namedParamSql the named param sql
      * @param featureConsumer the feature consumer
      * @return jdbc placeholder sql
      */
@@ -211,14 +335,14 @@ public final class SqlUtils {
     /**
      * convert named param sql with startSymbol and endSymbol.
      *
-     * @param namedParamSql   the named param sql
-     * @param startSymbol     the start symbol
-     * @param endSymbol       the end symbol
+     * @param namedParamSql the named param sql
+     * @param startSymbol the start symbol
+     * @param endSymbol the end symbol
      * @param featureConsumer the feature consumer
      * @return jdbc placeholder sql
      */
     public static String convertNamedParamSql(String namedParamSql, char startSymbol, Character endSymbol,
-            Consumer<NamedSqlConvertFeature> featureConsumer) {
+        Consumer<NamedSqlConvertFeature> featureConsumer) {
         NamedSqlConvertFeature convertor = new NamedSqlConvertFeature();
         featureConsumer.accept(convertor);
         return convertNamedParamSql(namedParamSql, null, startSymbol, endSymbol, null, null, convertor);
@@ -227,7 +351,8 @@ public final class SqlUtils {
     /**
      * convert named param sql with {@link #PARAM_NAME_START_SYMBOL}.
      * <p>
-     * transfer <code>select * from user where name = :user</code> to <code>select * from user where name = ?</code>
+     * transfer <code>select * from user where name = :user</code> to
+     * <code>select * from user where name = ?</code>
      * <p>
      *
      * @param namedParamSql the named param sql
@@ -241,7 +366,7 @@ public final class SqlUtils {
      * convert named param sql with startSymbol argument.
      *
      * @param namedParamSql the named param sql
-     * @param startSymbol   the start symbol
+     * @param startSymbol the start symbol
      * @return NamedParamSql
      */
     public static NamedParamSql convertNamedParamSql(String namedParamSql, char startSymbol) {
@@ -252,20 +377,20 @@ public final class SqlUtils {
      * convert named param sql with startSymbol and endSymbol.
      *
      * @param namedParamSql the named param sql
-     * @param startSymbol   the start symbol
-     * @param endSymbol     the end symbol
+     * @param startSymbol the start symbol
+     * @param endSymbol the end symbol
      * @return NamedParamSql
      */
     public static NamedParamSql convertNamedParamSql(String namedParamSql, char startSymbol, Character endSymbol) {
         final MutableTuple1<NamedParam[]> paramNamesTuple = MutableTuples.create1();
         String sql = convertNamedParamSql(namedParamSql, null, startSymbol, endSymbol, null,
-                namedParamArray -> paramNamesTuple.set0(namedParamArray), NAMEDSQL_CONVERTOR);
+            namedParamArray -> paramNamesTuple.set0(namedParamArray), NAMEDSQL_CONVERTOR);
         return new NamedParamSql(sql, paramNamesTuple.get0().get());
     }
 
     private static String convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol,
-            Character endSymbol, Consumer<Object[]> paramValuesConsumer, Consumer<NamedParam[]> namedParamsConsumer,
-            NamedSqlConvertFeature convertFeature) {
+        Character endSymbol, Consumer<Object[]> paramValuesConsumer, Consumer<NamedParam[]> namedParamsConsumer,
+        NamedSqlConvertFeature convertFeature) {
         AssertIllegalArgument.isNotNull(namedParamSql, "namedParamSql");
         AssertIllegalArgument.isNotEmpty(startSymbol, "startSymbol");
 
@@ -381,7 +506,7 @@ public final class SqlUtils {
      */
     public static boolean isSqlWordSplitChar(char c) {
         return c == Chars.SPACE_CHAR || c == Chars.NEW_LINE_CHAR || c == Chars.COMMA_CHAR || c == Chars.PAREN_R_CHAR
-                || c == Chars.TAB_CHAR;
+            || c == Chars.TAB_CHAR;
         //                || c == ')'
     }
 
@@ -389,7 +514,7 @@ public final class SqlUtils {
      * Gets the named param.
      *
      * @param params the params
-     * @param name   the name
+     * @param name the name
      * @return the named param
      */
     static Object getNamedParam(Map<String, Object> params, String name) {
@@ -403,7 +528,7 @@ public final class SqlUtils {
     /**
      * Adds the param.
      *
-     * @param param     the param
+     * @param param the param
      * @param paramList the param list
      * @return the string
      */
@@ -414,9 +539,9 @@ public final class SqlUtils {
     /**
      * Adds the param.
      *
-     * @param param     the param
+     * @param param the param
      * @param paramList the param list
-     * @param isIn      the is in
+     * @param isIn the is in
      * @return the string
      */
     static String addParam(Object param, List<Object> paramList, boolean isIn) {

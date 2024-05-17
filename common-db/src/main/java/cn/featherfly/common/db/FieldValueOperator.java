@@ -22,6 +22,9 @@ import cn.featherfly.common.lang.vt.Value;
  */
 public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
 
+    /** The Constant EMPTY_ARRAY. */
+    public static final FieldValueOperator<?>[] EMPTY_ARRAY = new FieldValueOperator[0];
+
     /** The operator. */
     private JavaTypeSqlTypeOperator<T> operator;
 
@@ -34,7 +37,7 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
      * Instantiates a new field value.
      *
      * @param operator the operator
-     * @param value    the value
+     * @param value the value
      */
     public FieldValueOperator(JavaTypeSqlTypeOperator<T> operator, T value) {
         this(operator, value, ClassUtils.getClass(value));
@@ -44,8 +47,8 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
      * Instantiates a new field value.
      *
      * @param operator the operator
-     * @param value    the value
-     * @param type     the type
+     * @param value the value
+     * @param type the type
      */
     private FieldValueOperator(JavaTypeSqlTypeOperator<T> operator, T value, Class<T> type) {
         super();
@@ -168,7 +171,7 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
      * <li>otherwise create FieldValueOperator.
      * </ul>
      *
-     * @param pm    the JdbcPropertyMapping
+     * @param pm the JdbcPropertyMapping
      * @param value the value
      * @return FieldValueOperator or FieldValueOperator[] or
      *         List&lt;FieldValueOperator&gt;
@@ -196,8 +199,8 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
     /**
      * Creates FieldValueOperator.
      *
-     * @param <E>   the element type
-     * @param pm    the pm
+     * @param <E> the element type
+     * @param pm the pm
      * @param value the value
      * @return the field value operator
      */
@@ -210,7 +213,7 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
     /**
      * Creates FieldValueOperator.
      *
-     * @param pm    the pm
+     * @param pm the pm
      * @param value the value
      * @return the field value operator
      */
@@ -223,7 +226,7 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
     /**
      * Creates FieldValueOperator.
      *
-     * @param pm    the pm
+     * @param pm the pm
      * @param value the value
      * @return the field value operator
      */
@@ -236,7 +239,7 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
     /**
      * Creates FieldValueOperator.
      *
-     * @param pm    the pm
+     * @param pm the pm
      * @param value the value
      * @return the field value operator
      */
@@ -249,7 +252,7 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
     /**
      * Creates FieldValueOperator.
      *
-     * @param pm    the pm
+     * @param pm the pm
      * @param value the value
      * @return the field value operator
      */
@@ -262,7 +265,7 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
     /**
      * Creates FieldValueOperator.
      *
-     * @param pm    the pm
+     * @param pm the pm
      * @param value the value
      * @return the field value operator
      */
@@ -275,7 +278,7 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
     /**
      * Creates FieldValueOperator.
      *
-     * @param pm    the pm
+     * @param pm the pm
      * @param value the value
      * @return the field value operator
      */
@@ -288,7 +291,7 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
     /**
      * Creates FieldValueOperator.
      *
-     * @param pm    the pm
+     * @param pm the pm
      * @param value the value
      * @return the field value operator
      */
@@ -301,7 +304,7 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
     /**
      * Creates FieldValueOperator.
      *
-     * @param <E>   the element type
+     * @param <E> the element type
      * @param value the value
      * @return the field value operator
      */

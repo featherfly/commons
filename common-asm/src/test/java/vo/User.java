@@ -1,17 +1,22 @@
 
 package vo;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 /**
  * User.
  *
  * @author zhongj
  */
 public class User {
+
+    public String name;
+
+    public Integer age;
+
+    private String username;
+
+    private String gender;
+
+    private boolean locked;
 
     /**
      */
@@ -29,59 +34,7 @@ public class User {
     }
 
     /**
-     * @param list
-     */
-    public User(List<String> list) {
-        super();
-        this.list = list;
-        construct = "List";
-    }
-
-    /**
-     * @param list
-     */
-    public User(LinkedList<String> list) {
-        super();
-        this.list = list;
-        construct = "LinkedList";
-    }
-
-    /**
-     * @param name
-     * @param age
-     * @param list
-     */
-    public User(String name, Integer age, List<String> list) {
-        super();
-        this.name = name;
-        this.age = age;
-        this.list = list;
-    }
-
-    public String name;
-
-    public Integer age;
-
-    public List<String> list;
-
-    public String construct;
-
-    private boolean locked;
-
-    private Optional<String> optional;
-
-    private Optional<?> obj;
-
-    private Optional<? extends Number> obj1;
-
-    private Optional<? super User> obj2;
-
-    private Optional obj3;
-
-    private Map<String, Integer> map;
-
-    /**
-     * 返回name
+     * get name value
      *
      * @return name
      */
@@ -90,7 +43,7 @@ public class User {
     }
 
     /**
-     * 设置name
+     * set name value
      *
      * @param name name
      */
@@ -99,7 +52,7 @@ public class User {
     }
 
     /**
-     * 返回age
+     * get age value
      *
      * @return age
      */
@@ -108,53 +61,52 @@ public class User {
     }
 
     /**
-     * 设置age
+     * set age value
      *
      * @param age age
      */
-    public User setAge(Integer age) {
+    public void setAge(Integer age) {
         this.age = age;
-        return this;
     }
 
     /**
-     * 返回list
+     * get username value
      *
-     * @return list
+     * @return username
      */
-    public List<String> getList() {
-        return list;
+    public String getUsername() {
+        return username;
     }
 
     /**
-     * 设置list
+     * set username value
      *
-     * @param list list
+     * @param username username
      */
-    public void setList(List<String> list) {
-        this.list = list;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     /**
-     * 返回construct
+     * get gender value
      *
-     * @return construct
+     * @return gender
      */
-    public String getConstruct() {
-        return construct;
+    public String getGender() {
+        return gender;
     }
 
     /**
-     * 设置construct
+     * set gender value
      *
-     * @param construct construct
+     * @param gender gender
      */
-    public void setConstruct(String construct) {
-        this.construct = construct;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     /**
-     * 返回locked
+     * get locked value
      *
      * @return locked
      */
@@ -163,178 +115,11 @@ public class User {
     }
 
     /**
-     * 设置locked
+     * set locked value
      *
      * @param locked locked
      */
     public void setLocked(boolean locked) {
         this.locked = locked;
     }
-
-    public void setObject(Object o) {
-        System.out.println("setObject " + o);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return "User [name=" + name + ", age=" + age + ", list=" + list + ", construct=" + construct + "]";
-    }
-
-    /**
-     * 返回optional
-     *
-     * @return optional
-     */
-    public Optional<String> getOptional() {
-        return optional;
-    }
-
-    /**
-     * 设置optional
-     *
-     * @param optional optional
-     */
-    public void setOptional(Optional<String> optional) {
-        this.optional = optional;
-    }
-
-    /**
-     * 返回obj
-     *
-     * @return obj
-     */
-    public Optional<?> getObj() {
-        return obj;
-    }
-
-    /**
-     * 设置obj
-     *
-     * @param obj obj
-     */
-    public void setObj(Optional<?> obj) {
-        this.obj = obj;
-    }
-
-    /**
-     * 返回obj1
-     *
-     * @return obj1
-     */
-    public Optional<? extends Number> getObj1() {
-        return obj1;
-    }
-
-    /**
-     * 设置obj1
-     *
-     * @param obj1 obj1
-     */
-    public void setObj1(Optional<? extends Number> obj1) {
-        this.obj1 = obj1;
-    }
-
-    /**
-     * 返回obj2
-     *
-     * @return obj2
-     */
-    public Optional<? super User> getObj2() {
-        return obj2;
-    }
-
-    /**
-     * 设置obj2
-     *
-     * @param obj2 obj2
-     */
-    public void setObj2(Optional<? super User> obj2) {
-        this.obj2 = obj2;
-    }
-
-    /**
-     * 返回obj3
-     *
-     * @return obj3
-     */
-    public Optional getObj3() {
-        return obj3;
-    }
-
-    /**
-     * 设置obj3
-     *
-     * @param obj3 obj3
-     */
-    public void setObj3(Optional obj3) {
-        this.obj3 = obj3;
-    }
-
-    /**
-     * 返回map
-     *
-     * @return map
-     */
-    public Map<String, Integer> getMap() {
-        return map;
-    }
-
-    /**
-     * 设置map
-     *
-     * @param map map
-     */
-    public void setMap(Map<String, Integer> map) {
-        this.map = map;
-    }
-
-    public void set(String name, Integer age) {
-        setName(name);
-        setAge(age);
-    }
-
-    public User set2(String name, Integer age) {
-        setName(name);
-        setAge(age);
-        return this;
-    }
-
-    public String get() {
-        return "name = " + name + " age = " + age;
-    }
-
-    public void setDescp(String name, Integer age) {
-        this.name = name;
-        this.age = age;
-    }
-
-    public String getDescp(String name) {
-        this.name = name;
-        return "name = " + name + " age = " + age;
-    }
-
-    public String getDescp2(int age) {
-        this.age = age;
-        return "name = " + name + " age = " + age;
-    }
-
-    public void setAgeInt(int age) {
-        this.age = age;
-    }
-
-    public int getAgeInt() {
-        return age;
-    }
-
-    public static void setStatic(String n) {
-
-    }
-
-    public static String getStatic() {
-        return null;
-    }
-
 }

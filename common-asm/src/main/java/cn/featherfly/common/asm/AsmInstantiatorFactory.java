@@ -78,14 +78,25 @@ public class AsmInstantiatorFactory implements InstantiatorFactory {
     @Override
     @SuppressWarnings("unchecked")
     public <T> Instantiator<T> create(Class<T> type) {
-        Instantiator<T> instantiator = (Instantiator<T>) types.get(type);
-        if (cacheResults && instantiator != null) {
-            return instantiator;
+        if (cacheResults) {
+            // load Instantiator type class from cache, if exists, return, else goto create instantiator type class.
+            Instantiator<T> instantiator = (Instantiator<T>) types.get(type);
+            if (instantiator != null) {
+                return instantiator;
+            }
+        } else {
+            try {
+                // try to load Instantiator type class, if success, the type already created, if expcetion, goto create instantiator type class.
+                Class<Instantiator<
+                    T>> instantiatorType = (Class<Instantiator<T>>) ClassUtils.forName(createClassName(type));
+                return ClassUtils.newInstance(instantiatorType);
+            } catch (Exception e) {
+            }
         }
 
         try {
             Class<Instantiator<T>> newType = create0(type);
-            instantiator = ClassUtils.newInstance(newType);
+            Instantiator<T> instantiator = ClassUtils.newInstance(newType);
             if (cacheResults) {
                 types.put(type, instantiator);
             }
@@ -103,7 +114,7 @@ public class AsmInstantiatorFactory implements InstantiatorFactory {
         String instantiateType = Type.getInternalName(type);
 
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-        String createdClassName = type.getName() + CLASS_NAME_SUFFIX;
+        String createdClassName = createClassName(type);
         String createdClassByteCodeName = Asm.getName(createdClassName);
 
         ClassNode classNode = new ClassNode();
@@ -142,6 +153,10 @@ public class AsmInstantiatorFactory implements InstantiatorFactory {
         return (Class<Instantiator<T>>) ClassLoaderUtils.defineClass(classLoader.get(), createdClassName, code,
             type.getProtectionDomain(),
             () -> bytesClassLoader.defineClass(createdClassName, code, type.getProtectionDomain()));
+    }
+
+    private String createClassName(Class<?> type) {
+        return type.getName() + CLASS_NAME_SUFFIX;
     }
 
     private MethodNode instantiateMethod(String typeInternalName) throws NoSuchMethodException, SecurityException {

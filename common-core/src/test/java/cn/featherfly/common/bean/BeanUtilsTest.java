@@ -27,7 +27,7 @@ public class BeanUtilsTest {
 
     @Test
     public void testC2P() {
-        P p = new P();
+        P2 p = new P2();
         C c = new C();
         c.setName("c->name");
         c.setN("c->n");
@@ -38,7 +38,7 @@ public class BeanUtilsTest {
 
     @Test
     public void testP2C() {
-        P p = new P();
+        P2 p = new P2();
         C c = new C();
 
         p.setName("p->name");
@@ -107,7 +107,7 @@ public class BeanUtilsTest {
     }
 }
 
-class P {
+class P2 {
 
     private String name;
 
@@ -174,7 +174,7 @@ class D {
 
 }
 
-class C extends P {
+class C extends P2 {
     private String n;
 
     /**

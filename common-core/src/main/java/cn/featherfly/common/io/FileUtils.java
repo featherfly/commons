@@ -36,7 +36,7 @@ import cn.featherfly.common.lang.LogUtils;
  *
  * @author zhongj
  */
-public final class FileUtils extends org.apache.commons.io.FileUtils {
+public final class FileUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FileUtils.class);
 
@@ -180,7 +180,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * 清空指定目录中的文件。 这个方法将尽可能删除所有的文件，但是只要有一个文件没有被删除都会返回false。.
      *
      * @param directory 要清空的目录
-     * @param cascade   是否级联删除子目录
+     * @param cascade 是否级联删除子目录
      * @return 目录下的所有文件都被成功删除时返回true，否则返回false.
      */
     public static boolean clearDirectory(File directory, boolean cascade) {
@@ -330,7 +330,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 列出目录中的所有文件和目录，包括其子目录中的文件和目录。.
      *
-     * @param file   要列出的目录
+     * @param file 要列出的目录
      * @param filter 过滤器
      * @return 目录的文件和目录数组。
      */
@@ -348,8 +348,8 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 将目录中的内容添加到列表。
      *
-     * @param list   文件列表
-     * @param file   目录
+     * @param list 文件列表
+     * @param file 目录
      * @param filter 过滤器
      */
     private static void list(ArrayList<File> list, File file, FileFilter filter) {
@@ -569,7 +569,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 得到路径分隔符在文件路径中指定位置后首次出现的位置。 对于DOS或者UNIX风格的分隔符都可以。.
      *
-     * @param fileName  文件路径
+     * @param fileName 文件路径
      * @param fromIndex 开始查找的位置
      * @return 路径分隔符在路径中指定位置后首次出现的位置，没有出现时返回-1。
      */
@@ -604,7 +604,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 得到路径分隔符在文件路径中指定位置前最后出现的位置。 对于DOS或者UNIX风格的分隔符都可以。.
      *
-     * @param fileName  文件路径
+     * @param fileName 文件路径
      * @param fromIndex 开始查找的位置
      * @return 路径分隔符在路径中指定位置前最后出现的位置，没有出现时返回-1。
      */
@@ -653,46 +653,46 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 复制文件夹.
      *
-     * @param srcDir  源文件夹
+     * @param srcDir 源文件夹
      * @param destDir 目标文件夹
      * @throws IOException IOException
      */
     public static void copyDirectory(String srcDir, String destDir) throws IOException {
-        copyDirectory(new File(srcDir), new File(destDir));
+        org.apache.commons.io.FileUtils.copyDirectory(new File(srcDir), new File(destDir));
     }
 
     /**
      * 复制文件夹.
      *
-     * @param srcDir     源文件夹
-     * @param destDir    目标文件夹
+     * @param srcDir 源文件夹
+     * @param destDir 目标文件夹
      * @param fileFilter 过滤器
      * @throws IOException IOException
      */
     public static void copyDirectory(String srcDir, String destDir, FileFilter fileFilter) throws IOException {
-        copyDirectory(new File(srcDir), new File(destDir), fileFilter);
+        org.apache.commons.io.FileUtils.copyDirectory(new File(srcDir), new File(destDir), fileFilter);
     }
 
     /**
      * 移动文件夹.
      *
-     * @param srcDir  源文件夹
+     * @param srcDir 源文件夹
      * @param destDir 目标文件夹
      * @throws IOException IOException
      */
     public static void moveDirectory(String srcDir, String destDir) throws IOException {
-        moveDirectory(new File(srcDir), new File(destDir));
+        org.apache.commons.io.FileUtils.moveDirectory(new File(srcDir), new File(destDir));
     }
 
     /**
      * 复制文件.
      *
-     * @param srcFile  源文件
+     * @param srcFile 源文件
      * @param destFile 目标文件
      * @throws IOException IOException
      */
     public static void copyFile(String srcFile, String destFile) throws IOException {
-        copyFile(new File(srcFile), new File(destFile));
+        org.apache.commons.io.FileUtils.copyFile(new File(srcFile), new File(destFile));
     }
 
     /**
@@ -703,25 +703,25 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * @throws IOException IOException
      */
     public static void copyFileToDirectory(String srcFile, String destDir) throws IOException {
-        copyFileToDirectory(new File(srcFile), new File(destDir));
+        org.apache.commons.io.FileUtils.copyFileToDirectory(new File(srcFile), new File(destDir));
     }
 
     /**
      * 移动文件.
      *
-     * @param srcFile  源文件
+     * @param srcFile 源文件
      * @param destFile 目标文件
      * @throws IOException IOException
      */
     public static void moveFile(String srcFile, String destFile) throws IOException {
-        moveDirectory(new File(srcFile), new File(destFile));
+        org.apache.commons.io.FileUtils.moveDirectory(new File(srcFile), new File(destFile));
     }
 
     /**
      * 读取文档正文.
      *
      * @param filePath 文件路径
-     * @param charset  字符集
+     * @param charset 字符集
      * @return 文档正文
      * @throws IOException IOException
      */
@@ -740,7 +740,7 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
      * 读取文档正文.
      *
      * @param filePath 文件路径
-     * @param charset  字符集
+     * @param charset 字符集
      * @return 文档正文
      * @throws IOException IOException
      */
@@ -874,21 +874,21 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 监控传入目录.
      *
-     * @param dir      目录
+     * @param dir 目录
      * @param listener WatchListener
      * @return Watcher
      */
     public static Watcher watch(File dir, WatchListener listener) {
         return watch(dir, listener, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY,
-                StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.OVERFLOW);
+            StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.OVERFLOW);
     }
 
     /**
      * 监控传入目录.
      *
-     * @param dir      目录
+     * @param dir 目录
      * @param listener WatchListener
-     * @param events   events
+     * @param events events
      * @return Watcher
      */
     public static Watcher watch(File dir, WatchListener listener, WatchEvent.Kind<?>... events) {
@@ -898,21 +898,21 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 监控传入目录及其子目录.
      *
-     * @param dir      目录
+     * @param dir 目录
      * @param listener WatchListener
      * @return Watcher List
      */
     public static List<Watcher> watchAll(File dir, WatchListener listener) {
         return watchAll(dir, listener, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY,
-                StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.OVERFLOW);
+            StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.OVERFLOW);
     }
 
     /**
      * 监控传入目录及其子目录.
      *
-     * @param dir      目录
+     * @param dir 目录
      * @param listener WatchListener
-     * @param events   events
+     * @param events events
      * @return Watcher List
      */
     public static List<Watcher> watchAll(File dir, WatchListener listener, WatchEvent.Kind<?>... events) {
@@ -924,28 +924,28 @@ public final class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * 监控由传入过滤器过滤后的传入目录及其子目录.
      *
-     * @param dir      目录
+     * @param dir 目录
      * @param listener WatchListener
-     * @param filter   FileFilter
+     * @param filter FileFilter
      * @return Watcher List
      */
     public static List<Watcher> watchAll(File dir, WatchListener listener, FileFilter filter) {
         return watchAll(dir, listener, filter, StandardWatchEventKinds.ENTRY_CREATE,
-                StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE,
-                StandardWatchEventKinds.OVERFLOW);
+            StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE,
+            StandardWatchEventKinds.OVERFLOW);
     }
 
     /**
      * 监控由传入过滤器过滤后的传入目录及其子目录.
      *
-     * @param dir      目录
+     * @param dir 目录
      * @param listener WatchListener
-     * @param filter   FileFilter
-     * @param events   events
+     * @param filter FileFilter
+     * @param events events
      * @return Watcher List
      */
     public static List<Watcher> watchAll(File dir, WatchListener listener, FileFilter filter,
-            WatchEvent.Kind<?>... events) {
+        WatchEvent.Kind<?>... events) {
         return watch(Arrays.stream(FileUtils.listAll(dir, v -> {
             return v.isDirectory() && filter.accept(v);
         })).map(d -> {

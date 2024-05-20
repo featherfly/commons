@@ -14,19 +14,20 @@ public interface BeanPropertyFactory {
     /**
      * 创建指定类型指定属性对应的BeanProperty.
      *
-     * @param <T>           the bean generic type
-     * @param <V>           the property generic type
-     * @param propertyName  属性名称
-     * @param field         存取数据的字段
-     * @param propertyType  属性类型
-     * @param setMethod     设置方法
-     * @param getMethod     读取方法
-     * @param ownerType     属性所在的类型
+     * @param <T> the bean generic type
+     * @param <V> the property generic type
+     * @param index the index
+     * @param propertyName 属性名称
+     * @param field 存取数据的字段
+     * @param propertyType 属性类型
+     * @param setMethod 设置方法
+     * @param getMethod 读取方法
+     * @param ownerType 属性所在的类型
      * @param declaringType 定义属性的类型 （可能是ownerType的父类，也可能一样）
      * @return 创建的BeanProperty
      */
-    <T, V> BeanProperty<T, V> create(String propertyName, Field field, Class<V> propertyType, Method setMethod,
-            Method getMethod, Class<T> ownerType, Class<?> declaringType);
+    <T, V> BeanProperty<T, V> create(int index, String propertyName, Field field, Class<V> propertyType,
+        Method setMethod, Method getMethod, Class<T> ownerType, Class<?> declaringType);
 
     // /**
     // * <p>

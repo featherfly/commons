@@ -17,8 +17,10 @@ import cn.featherfly.common.bean.vo.Person;
 import cn.featherfly.common.bean.vo.Result;
 import cn.featherfly.common.bean.vo.Result2;
 import cn.featherfly.common.bean.vo.Student;
+import cn.featherfly.common.bean.vo.Teacher;
 import cn.featherfly.common.bean.vo.User;
 import cn.featherfly.common.bean.vo.Zipcode;
+import cn.featherfly.common.lang.Console;
 import cn.featherfly.common.lang.vo.GenericTest;
 
 public class BeanDescriptorTest {
@@ -238,6 +240,32 @@ public class BeanDescriptorTest {
         BeanProperty<Address, Object> bp = bd.getBeanProperty(pn);
         assertEquals(bp.getName(), "code");
         assertEquals(BeanUtils.getProperty(address, pn), code);
+    }
+
+    @Test
+    public void testPropertyAccessor() {
+        Student s = new Student();
+        s.setName("yufei");
+        Teacher t = new Teacher();
+        t.setName("yi");
+        s.setTeacher(t);
+        BeanDescriptor<Student> bd = BeanDescriptor.getBeanDescriptor(Student.class);
+        PropertyAccessor<Student> ac = bd;
+        assertEquals(ac.getPropertyValue(s, "name"), s.getName());
+        assertEquals(ac.getPropertyValue(s, "teacher", "name"), s.getTeacher().getName());
+
+        System.out.println(bd.getType().getName() + " properties:");
+        for (BeanProperty<Student, ?> bp : bd.getBeanProperties()) {
+            Console.log("  [{}]{}  -  {}", bp.getIndex(), bp.getName(), bp.getType().getName());
+            if (bp.getPropertyAccessor() != null) {
+                for (Property<?, ?> p : bp.getPropertyAccessor().getProperties()) {
+                    Console.log("    [{}]{}  -  {}", p.getIndex(), p.getName(), p.getType().getName());
+                }
+            }
+        }
+
+        assertEquals(ac.getPropertyValue(s, 3), s.getName());
+        assertEquals(ac.getPropertyValue(s, 1, 2), s.getTeacher().getName());
     }
 
 }

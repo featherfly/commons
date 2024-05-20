@@ -63,23 +63,38 @@ public class Asm {
     /** The Constant CONSTRUCT_METHOD. */
     public static final String CONSTRUCT_METHOD = "<init>";
 
-    /** The Constant PRIMITIVE_WRAPPER_METHOD. */
-    public static final String PRIMITIVE_WRAPPER_METHOD = "valueOf";
+    /** The Constant PRIMITIVE_BOXING_METHOD. */
+    public static final String PRIMITIVE_BOXING_METHOD = "valueOf";
+    /**
+     * The Constant PRIMITIVE_WRAPPER_METHOD.
+     *
+     * @deprecated {@link #PRIMITIVE_BOXING_METHOD}
+     */
+    @Deprecated
+    public static final String PRIMITIVE_WRAPPER_METHOD = PRIMITIVE_BOXING_METHOD;
 
     /** The Constant NONE_PARAMETER_DESCRIPTOR. */
     public static final String NONE_PARAMETER_DESCRIPTOR = "()V";
 
     /** The Constant OPCODE_MAP. */
-    public static final Map<Integer, String> OPCODE_MAP = new HashMap<>();
+    private static final Map<Integer, String> OPCODE_MAP = new HashMap<>();
 
-    /** The Constant PRIMITIVE_WRAPPER_METHOD_DESCRIPTOR. */
-    public static final Map<Class<?>, String> PRIMITIVE_WRAPPER_METHOD_DESCRIPTOR = new HashMap<>();
+    /** The Constant PRIMITIVE_UNBOXING_METHOD. */
+    private static final Map<String, String> PRIMITIVE_UNBOXING_METHOD = new HashMap<>();
+
+    /** The Constant PRIMITIVE_UNBOXING_METHOD_DESCRIPTOR. */
+    private static final Map<String, String> PRIMITIVE_UNBOXING_METHOD_DESCRIPTOR = new HashMap<>();
+
+    /** The Constant PRIMITIVE_BOXING_METHOD_DESCRIPTOR. */
+    private static final Map<String, String> PRIMITIVE_BOXING_METHOD_DESCRIPTOR = new HashMap<>();
 
     /** The Constant PRIMITIVE_WRAPPER. */
-    public static final Map<Class<?>, Class<?>> PRIMITIVE_WRAPPER = new HashMap<>();
+    private static final Map<String, Class<?>> PRIMITIVE_WRAPPER = new HashMap<>();
+
+    private static final Map<String, Type> PRIMITIVE_TYPE = new HashMap<>();
 
     /** The Constant WRAPPER_PRIMITIVE. */
-    public static final Map<Class<?>, Class<?>> WRAPPER_PRIMITIVE = new HashMap<>();
+    private static final Map<Class<?>, Class<?>> WRAPPER_PRIMITIVE = new HashMap<>();
 
     static {
         boolean start = false;
@@ -93,33 +108,58 @@ public class Asm {
             }
         }
 
-        String valueOf = "valueOf";
-        PRIMITIVE_WRAPPER_METHOD_DESCRIPTOR.put(Boolean.TYPE,
-                Type.getMethodDescriptor(ClassUtils.getMethod(Boolean.class, valueOf, Boolean.TYPE)));
-        PRIMITIVE_WRAPPER_METHOD_DESCRIPTOR.put(Character.TYPE,
-                Type.getMethodDescriptor(ClassUtils.getMethod(Character.class, valueOf, Character.TYPE)));
-        PRIMITIVE_WRAPPER_METHOD_DESCRIPTOR.put(Byte.TYPE,
-                Type.getMethodDescriptor(ClassUtils.getMethod(Byte.class, valueOf, Byte.TYPE)));
-        PRIMITIVE_WRAPPER_METHOD_DESCRIPTOR.put(Short.TYPE,
-                Type.getMethodDescriptor(ClassUtils.getMethod(Short.class, valueOf, Short.TYPE)));
-        PRIMITIVE_WRAPPER_METHOD_DESCRIPTOR.put(Integer.TYPE,
-                Type.getMethodDescriptor(ClassUtils.getMethod(Integer.class, valueOf, Integer.TYPE)));
-        PRIMITIVE_WRAPPER_METHOD_DESCRIPTOR.put(Long.TYPE,
-                Type.getMethodDescriptor(ClassUtils.getMethod(Long.class, valueOf, Long.TYPE)));
-        PRIMITIVE_WRAPPER_METHOD_DESCRIPTOR.put(Float.TYPE,
-                Type.getMethodDescriptor(ClassUtils.getMethod(Float.class, valueOf, Float.TYPE)));
-        PRIMITIVE_WRAPPER_METHOD_DESCRIPTOR.put(Double.TYPE,
-                Type.getMethodDescriptor(ClassUtils.getMethod(Double.class, valueOf, Double.TYPE)));
+        PRIMITIVE_UNBOXING_METHOD.put(Boolean.TYPE.getName(), "booleanValue");
+        PRIMITIVE_UNBOXING_METHOD.put(Character.TYPE.getName(), "charValue");
+        PRIMITIVE_UNBOXING_METHOD.put(Byte.TYPE.getName(), "byteValue");
+        PRIMITIVE_UNBOXING_METHOD.put(Short.TYPE.getName(), "shortValue");
+        PRIMITIVE_UNBOXING_METHOD.put(Integer.TYPE.getName(), "intValue");
+        PRIMITIVE_UNBOXING_METHOD.put(Long.TYPE.getName(), "longValue");
+        PRIMITIVE_UNBOXING_METHOD.put(Float.TYPE.getName(), "floatValue");
+        PRIMITIVE_UNBOXING_METHOD.put(Double.TYPE.getName(), "doubleValue");
 
-        PRIMITIVE_WRAPPER.put(Boolean.TYPE, Boolean.class);
-        PRIMITIVE_WRAPPER.put(Character.TYPE, Character.class);
-        PRIMITIVE_WRAPPER.put(Byte.TYPE, Byte.class);
-        PRIMITIVE_WRAPPER.put(Short.TYPE, Short.class);
-        PRIMITIVE_WRAPPER.put(Integer.TYPE, Integer.class);
-        PRIMITIVE_WRAPPER.put(Long.TYPE, Long.class);
-        PRIMITIVE_WRAPPER.put(Float.TYPE, Float.class);
-        PRIMITIVE_WRAPPER.put(Double.TYPE, Double.class);
-        PRIMITIVE_WRAPPER.put(Void.TYPE, Void.class);
+        PRIMITIVE_UNBOXING_METHOD_DESCRIPTOR.put(Boolean.TYPE.getName(),
+            Type.getMethodDescriptor(ClassUtils.getMethod(Boolean.class, "booleanValue")));
+        PRIMITIVE_UNBOXING_METHOD_DESCRIPTOR.put(Character.TYPE.getName(),
+            Type.getMethodDescriptor(ClassUtils.getMethod(Character.class, "charValue")));
+        PRIMITIVE_UNBOXING_METHOD_DESCRIPTOR.put(Byte.TYPE.getName(),
+            Type.getMethodDescriptor(ClassUtils.getMethod(Byte.class, "byteValue")));
+        PRIMITIVE_UNBOXING_METHOD_DESCRIPTOR.put(Short.TYPE.getName(),
+            Type.getMethodDescriptor(ClassUtils.getMethod(Short.class, "shortValue")));
+        PRIMITIVE_UNBOXING_METHOD_DESCRIPTOR.put(Integer.TYPE.getName(),
+            Type.getMethodDescriptor(ClassUtils.getMethod(Integer.class, "intValue")));
+        PRIMITIVE_UNBOXING_METHOD_DESCRIPTOR.put(Long.TYPE.getName(),
+            Type.getMethodDescriptor(ClassUtils.getMethod(Long.class, "longValue")));
+        PRIMITIVE_UNBOXING_METHOD_DESCRIPTOR.put(Float.TYPE.getName(),
+            Type.getMethodDescriptor(ClassUtils.getMethod(Float.class, "floatValue")));
+        PRIMITIVE_UNBOXING_METHOD_DESCRIPTOR.put(Double.TYPE.getName(),
+            Type.getMethodDescriptor(ClassUtils.getMethod(Double.class, "doubleValue")));
+
+        PRIMITIVE_BOXING_METHOD_DESCRIPTOR.put(Boolean.TYPE.getName(),
+            Type.getMethodDescriptor(ClassUtils.getMethod(Boolean.class, PRIMITIVE_WRAPPER_METHOD, Boolean.TYPE)));
+        PRIMITIVE_BOXING_METHOD_DESCRIPTOR.put(Character.TYPE.getName(),
+            Type.getMethodDescriptor(ClassUtils.getMethod(Character.class, PRIMITIVE_WRAPPER_METHOD, Character.TYPE)));
+        PRIMITIVE_BOXING_METHOD_DESCRIPTOR.put(Byte.TYPE.getName(),
+            Type.getMethodDescriptor(ClassUtils.getMethod(Byte.class, PRIMITIVE_WRAPPER_METHOD, Byte.TYPE)));
+        PRIMITIVE_BOXING_METHOD_DESCRIPTOR.put(Short.TYPE.getName(),
+            Type.getMethodDescriptor(ClassUtils.getMethod(Short.class, PRIMITIVE_WRAPPER_METHOD, Short.TYPE)));
+        PRIMITIVE_BOXING_METHOD_DESCRIPTOR.put(Integer.TYPE.getName(),
+            Type.getMethodDescriptor(ClassUtils.getMethod(Integer.class, PRIMITIVE_WRAPPER_METHOD, Integer.TYPE)));
+        PRIMITIVE_BOXING_METHOD_DESCRIPTOR.put(Long.TYPE.getName(),
+            Type.getMethodDescriptor(ClassUtils.getMethod(Long.class, PRIMITIVE_WRAPPER_METHOD, Long.TYPE)));
+        PRIMITIVE_BOXING_METHOD_DESCRIPTOR.put(Float.TYPE.getName(),
+            Type.getMethodDescriptor(ClassUtils.getMethod(Float.class, PRIMITIVE_WRAPPER_METHOD, Float.TYPE)));
+        PRIMITIVE_BOXING_METHOD_DESCRIPTOR.put(Double.TYPE.getName(),
+            Type.getMethodDescriptor(ClassUtils.getMethod(Double.class, PRIMITIVE_WRAPPER_METHOD, Double.TYPE)));
+
+        PRIMITIVE_WRAPPER.put(Boolean.TYPE.getName(), Boolean.class);
+        PRIMITIVE_WRAPPER.put(Character.TYPE.getName(), Character.class);
+        PRIMITIVE_WRAPPER.put(Byte.TYPE.getName(), Byte.class);
+        PRIMITIVE_WRAPPER.put(Short.TYPE.getName(), Short.class);
+        PRIMITIVE_WRAPPER.put(Integer.TYPE.getName(), Integer.class);
+        PRIMITIVE_WRAPPER.put(Long.TYPE.getName(), Long.class);
+        PRIMITIVE_WRAPPER.put(Float.TYPE.getName(), Float.class);
+        PRIMITIVE_WRAPPER.put(Double.TYPE.getName(), Double.class);
+        PRIMITIVE_WRAPPER.put(Void.TYPE.getName(), Void.class);
 
         WRAPPER_PRIMITIVE.put(Boolean.class, Boolean.TYPE);
         WRAPPER_PRIMITIVE.put(Character.class, Character.TYPE);
@@ -130,6 +170,15 @@ public class Asm {
         WRAPPER_PRIMITIVE.put(Float.class, Float.TYPE);
         WRAPPER_PRIMITIVE.put(Double.class, Double.TYPE);
         WRAPPER_PRIMITIVE.put(Void.class, Void.TYPE);
+
+        PRIMITIVE_TYPE.put(Boolean.TYPE.getName(), Type.BOOLEAN_TYPE);
+        PRIMITIVE_TYPE.put(Character.TYPE.getName(), Type.CHAR_TYPE);
+        PRIMITIVE_TYPE.put(Byte.TYPE.getName(), Type.BYTE_TYPE);
+        PRIMITIVE_TYPE.put(Short.TYPE.getName(), Type.SHORT_TYPE);
+        PRIMITIVE_TYPE.put(Integer.TYPE.getName(), Type.INT_TYPE);
+        PRIMITIVE_TYPE.put(Long.TYPE.getName(), Type.LONG_TYPE);
+        PRIMITIVE_TYPE.put(Float.TYPE.getName(), Type.FLOAT_TYPE);
+        PRIMITIVE_TYPE.put(Double.TYPE.getName(), Type.DOUBLE_TYPE);
     }
 
     /**
@@ -182,14 +231,14 @@ public class Asm {
             MethodInsnNode node = (MethodInsnNode) abstractInsnNode;
             if (node.itf) {
                 return opcodeName(node.getOpcode(), true) + "// InterfaceMethod " + node.owner + "." + node.name + ":"
-                        + node.desc;
+                    + node.desc;
             } else {
                 return opcodeName(node.getOpcode(), true) + "// Method " + node.owner + "." + node.name + ":"
-                        + node.desc;
+                    + node.desc;
             }
         }
         return abstractInsnNode.getClass().getName() + " " + opcodeName(abstractInsnNode.getOpcode()) + " "
-                + abstractInsnNode.getOpcode();
+            + abstractInsnNode.getOpcode();
     }
 
     /**
@@ -205,6 +254,15 @@ public class Asm {
     /**
      * Gets the constructor descriptor.
      *
+     * @return the constructor descriptor
+     */
+    public static String getConstructorDescriptor() {
+        return NONE_PARAMETER_DESCRIPTOR;
+    }
+
+    /**
+     * Gets the constructor descriptor.
+     *
      * @param paramTypes the param types
      * @return the constructor descriptor
      */
@@ -215,6 +273,23 @@ public class Asm {
         StringBuilder params = new StringBuilder();
         for (Class<?> type : paramTypes) {
             params.append(_getMethodDescriptor(type));
+        }
+        return Strings.format("({0})V", params.toString());
+    }
+
+    /**
+     * Gets the constructor descriptor.
+     *
+     * @param paramTypeDescriptors the param type descriptors
+     * @return the constructor descriptor
+     */
+    public static String getConstructorDescriptor(String... paramTypeDescriptors) {
+        if (Lang.isEmpty(paramTypeDescriptors)) {
+            return NONE_PARAMETER_DESCRIPTOR;
+        }
+        StringBuilder params = new StringBuilder();
+        for (String descriptors : paramTypeDescriptors) {
+            params.append(descriptors);
         }
         return Strings.format("({0})V", params.toString());
     }
@@ -310,13 +385,128 @@ public class Asm {
     }
 
     /**
-     * Gets the primitive wrapper method descriptor.
+     * Gets the primitive unboxing method name.
      *
      * @param type the type
      * @return the primitive wrapper method descriptor
      */
+    public static String getPrimitiveUnboxingMethod(String type) {
+        return PRIMITIVE_UNBOXING_METHOD.get(type);
+    }
+
+    /**
+     * Gets the primitive unboxing method name.
+     *
+     * @param type the type
+     * @return the primitive wrapper method descriptor
+     */
+    public static String getPrimitiveUnboxingMethod(Class<?> type) {
+        return PRIMITIVE_UNBOXING_METHOD.get(type.getName());
+    }
+
+    /**
+     * Gets the primitive unboxing method descriptor.
+     *
+     * @param type the type
+     * @return the primitive wrapper method descriptor
+     */
+    public static String getPrimitiveUnboxingMethodDescriptor(String type) {
+        return PRIMITIVE_UNBOXING_METHOD_DESCRIPTOR.get(type);
+    }
+
+    /**
+     * Gets the primitive unboxing method descriptor.
+     *
+     * @param type the type
+     * @return the primitive wrapper method descriptor
+     */
+    public static String getPrimitiveUnboxingMethodDescriptor(Class<?> type) {
+        return PRIMITIVE_UNBOXING_METHOD_DESCRIPTOR.get(type.getName());
+    }
+
+    /**
+     * Gets the primitive boxing method descriptor.
+     *
+     * @param type the type
+     * @return the primitive wrapper method descriptor
+     */
+    public static String getPrimitiveBoxingMethodDescriptor(String type) {
+        return PRIMITIVE_BOXING_METHOD_DESCRIPTOR.get(type);
+    }
+
+    /**
+     * Gets the primitive boxing method descriptor.
+     *
+     * @param type the type
+     * @return the primitive wrapper method descriptor
+     */
+    public static String getPrimitiveBoxingMethodDescriptor(Class<?> type) {
+        return PRIMITIVE_BOXING_METHOD_DESCRIPTOR.get(type.getName());
+    }
+
+    /**
+     * Gets the primitive wrapper method descriptor.
+     *
+     * @param type the type
+     * @return the primitive wrapper method descriptor
+     * @deprecated {@link #getPrimitiveBoxingMethodDescriptor(String)}
+     */
+    @Deprecated
+    public static String getPrimitiveWrapperMethodDescriptor(String type) {
+        return PRIMITIVE_BOXING_METHOD_DESCRIPTOR.get(type);
+    }
+
+    /**
+     * Gets the primitive wrapper method descriptor.
+     *
+     * @param type the type
+     * @return the primitive wrapper method descriptor
+     * @deprecated {@link #getPrimitiveBoxingMethodDescriptor(Class)}
+     */
+    @Deprecated
     public static String getPrimitiveWrapperMethodDescriptor(Class<?> type) {
-        return PRIMITIVE_WRAPPER_METHOD_DESCRIPTOR.get(type);
+        return PRIMITIVE_BOXING_METHOD_DESCRIPTOR.get(type.getName());
+    }
+
+    public static Type getType(Class<?> type) {
+        Type t = PRIMITIVE_TYPE.get(type.getName());
+        if (t != null) {
+            return t;
+        }
+        return Type.getType(type);
+    }
+
+    public static Type getType(String type) {
+        Type t = PRIMITIVE_TYPE.get(type);
+        if (t != null) {
+            return t;
+        }
+        return Type.getObjectType(type);
+    }
+
+    /**
+     * Checks if is primitive.
+     *
+     * @param type the type
+     * @return true, if is primitive
+     */
+    public static boolean isPrimitive(String type) {
+        return PRIMITIVE_WRAPPER.containsKey(type);
+    }
+
+    /**
+     * Gets the primitive wrapper name.
+     *
+     * @param type the type
+     * @return the primitive wrapper name
+     */
+    public static String getPrimitiveWrapperName(String type) {
+        Class<?> c = PRIMITIVE_WRAPPER.get(type);
+        if (c == null) {
+            return getName(type);
+        } else {
+            return Type.getInternalName(c);
+        }
     }
 
     /**
@@ -326,11 +516,7 @@ public class Asm {
      * @return the primitive wrapper name
      */
     public static String getPrimitiveWrapperName(Class<?> type) {
-        if (type.isPrimitive()) {
-            return Type.getInternalName(PRIMITIVE_WRAPPER.get(type));
-        } else {
-            return Type.getInternalName(type);
-        }
+        return getPrimitiveWrapperName(type.getName());
     }
 
     /**
@@ -429,12 +615,12 @@ public class Asm {
     /**
      * 获取匹配的方法节点
      *
-     * @param classNode  类阶段
+     * @param classNode 类阶段
      * @param methodMeta 方法元信息
      * @return 方法节点
      */
     private static MethodNode getMethodNode(final ClassNode classNode, final String methodDescriptor,
-            final String methodName) {
+        final String methodName) {
         List<MethodNode> methods = classNode.methods;
         for (MethodNode asmMethod : methods) {
             // 验证方法签名
@@ -451,7 +637,7 @@ public class Asm {
      * 获排序后的方法参数
      *
      * @param asmMethod 方法信息
-     * @param isStatic  是否为静态
+     * @param isStatic 是否为静态
      * @return 结果列表
      */
     private static String[] getParamNames(final MethodNode asmMethod, final boolean isStatic) {
@@ -486,7 +672,7 @@ public class Asm {
     /**
      * 如果是引用类型（非静态方法），第一个参数为 this(指代本身)
      *
-     * @param isStatic     是否为静态
+     * @param isStatic 是否为静态
      * @param variableNode 变量节点
      * @return 是否为 this 参数
      */

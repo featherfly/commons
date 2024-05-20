@@ -10,7 +10,7 @@
  */
 package cn.featherfly.common.bean.function;
 
-import cn.featherfly.common.bean.BeanPropertyDescriptor;
+import cn.featherfly.common.bean.PropertyDescriptor;
 import cn.featherfly.common.function.serializable.SerializableBiConsumer;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.LambdaUtils;
@@ -23,7 +23,7 @@ import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
  * @param <T> the generic bean type
  * @param <V> the generic property value type
  */
-public interface BeanPropertySetter<T, V> extends BeanPropertyDescriptor<T, V>, SerializableBiConsumer<T, V> {
+public interface BeanPropertySetter<T, V> extends PropertyDescriptor<T, V>, SerializableBiConsumer<T, V> {
 
     /**
      * Gets the bean type.
@@ -58,5 +58,10 @@ public interface BeanPropertySetter<T, V> extends BeanPropertyDescriptor<T, V>, 
     default String getName() {
         SerializedLambdaInfo info = LambdaUtils.getLambdaInfo(this);
         return info.getPropertyName();
+    }
+
+    @Override
+    default int getIndex() {
+        return -1;
     }
 }

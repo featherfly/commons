@@ -10,7 +10,7 @@
  */
 package cn.featherfly.common.bean.function;
 
-import cn.featherfly.common.bean.BeanPropertyDescriptor;
+import cn.featherfly.common.bean.PropertyDescriptor;
 import cn.featherfly.common.function.serializable.SerializableToDoubleFunction;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.LambdaUtils;
@@ -23,7 +23,7 @@ import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
  * @param <T> the generic bean type
  */
 public interface BeanPropertyGetterDouble<T>
-        extends BeanPropertyDescriptor<T, Double>, SerializableToDoubleFunction<T> {
+        extends PropertyDescriptor<T, Double>, SerializableToDoubleFunction<T> {
 
     /**
      * Gets the bean type.

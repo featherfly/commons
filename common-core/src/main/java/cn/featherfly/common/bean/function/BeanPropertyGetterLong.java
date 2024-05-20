@@ -10,7 +10,7 @@
  */
 package cn.featherfly.common.bean.function;
 
-import cn.featherfly.common.bean.BeanPropertyDescriptor;
+import cn.featherfly.common.bean.PropertyDescriptor;
 import cn.featherfly.common.function.serializable.SerializableToLongFunction;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.LambdaUtils;
@@ -22,7 +22,7 @@ import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
  * @author zhongj
  * @param <T> the generic bean type
  */
-public interface BeanPropertyGetterLong<T> extends BeanPropertyDescriptor<T, Long>, SerializableToLongFunction<T> {
+public interface BeanPropertyGetterLong<T> extends PropertyDescriptor<T, Long>, SerializableToLongFunction<T> {
 
     /**
      * Gets the bean type.

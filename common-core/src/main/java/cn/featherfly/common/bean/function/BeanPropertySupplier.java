@@ -10,7 +10,7 @@
  */
 package cn.featherfly.common.bean.function;
 
-import cn.featherfly.common.bean.BeanPropertyDescriptor;
+import cn.featherfly.common.bean.PropertyDescriptor;
 import cn.featherfly.common.function.serializable.SerializableSupplier;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.LambdaUtils;
@@ -23,7 +23,7 @@ import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
  * @param <T> the generic bean type
  * @param <V> the generic property value type
  */
-public interface BeanPropertySupplier<T, V> extends BeanPropertyDescriptor<T, V>, SerializableSupplier<V> {
+public interface BeanPropertySupplier<T, V> extends PropertyDescriptor<T, V>, SerializableSupplier<V> {
 
     /**
      * Gets the bean type.

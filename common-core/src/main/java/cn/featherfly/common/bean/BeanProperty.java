@@ -28,25 +28,27 @@ import cn.featherfly.common.lang.reflect.Type;
  * @param <V> the property generic type
  * @since 1.0
  */
-public class BeanProperty<T, V> implements Type<V>, BeanPropertyDescriptor<T, V> {
+public class BeanProperty<T, V> implements Type<V>, Property<T, V> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BeanProperty.class);
 
-    private String name;
+    private final int index;
+
+    private final String name;
 
     // 属性类型，支持泛型类型自动探测
-    private Class<V> type;
+    private final Class<V> type;
 
     //    private Class<?>[] genericTypes;
 
-    private Method setter;
+    private final Method setter;
 
-    private Method getter;
+    private final Method getter;
 
-    private Field field;
+    private final Field field;
 
     // 属性所在的类的类型
-    private Class<T> ownerType;
+    private final Class<T> ownerType;
 
     // 属性定义所在的类（可以被子类继承）
 
@@ -57,20 +59,22 @@ public class BeanProperty<T, V> implements Type<V>, BeanPropertyDescriptor<T, V>
     /**
      * Instantiates a new bean property.
      *
-     * @param propertyName  属性名称
-     * @param field         存取数据的字段
-     * @param propertyType  属性类型
-     * @param setter        设置方法
-     * @param getter        读取方法
-     * @param ownerType     属性所在的类型
+     * @param index the index
+     * @param propertyName 属性名称
+     * @param field 存取数据的字段
+     * @param propertyType 属性类型
+     * @param setter 设置方法
+     * @param getter 读取方法
+     * @param ownerType 属性所在的类型
      * @param declaringType 定义属性的类型 （可能是ownerType的父类，也可能一样）
      */
-    protected BeanProperty(String propertyName, Field field, Class<V> propertyType, Method setter, Method getter,
-            Class<T> ownerType, Class<?> declaringType) {
+    protected BeanProperty(int index, String propertyName, Field field, Class<V> propertyType, Method setter,
+        Method getter, Class<T> ownerType, Class<?> declaringType) {
         this.ownerType = ownerType;
         this.declaringType = declaringType;
         this.field = field;
         name = propertyName;
+        this.index = index;
         type = propertyType;
         this.setter = setter;
         this.getter = getter;
@@ -121,7 +125,7 @@ public class BeanProperty<T, V> implements Type<V>, BeanPropertyDescriptor<T, V>
     /**
      * 设置属性 .
      *
-     * @param obj   需要设置属性的对象
+     * @param obj 需要设置属性的对象
      * @param value 属性值
      */
     public void setValue(Object obj, Object value) {
@@ -147,7 +151,7 @@ public class BeanProperty<T, V> implements Type<V>, BeanPropertyDescriptor<T, V>
     /**
      * 强制设置属性,使用field而非setter设置 .
      *
-     * @param obj   设置属性的目标对象
+     * @param obj 设置属性的目标对象
      * @param value 属性值
      */
     public void setValueForce(Object obj, Object value) {
@@ -271,7 +275,7 @@ public class BeanProperty<T, V> implements Type<V>, BeanPropertyDescriptor<T, V>
     /**
      * 返回当前属性是否含有指定注解.
      *
-     * @param <A>             注解类型
+     * @param <A> 注解类型
      * @param annotationClass 注解类型
      * @return 是否含有指定注解
      */
@@ -282,7 +286,7 @@ public class BeanProperty<T, V> implements Type<V>, BeanPropertyDescriptor<T, V>
     /**
      * 返回当前属性的指定类型注解.
      *
-     * @param <A>             注解类型
+     * @param <A> 注解类型
      * @param annotationClass 注解类型
      * @return 注解
      */
@@ -343,7 +347,7 @@ public class BeanProperty<T, V> implements Type<V>, BeanPropertyDescriptor<T, V>
      */
     @Override
     public String toString() {
-        return String.format("%s#%s[%s]", ownerType.getName(), getName(), type.getName());
+        return String.format("%s[%d].%s{%s}", ownerType.getName(), getIndex(), getName(), type.getName());
     }
 
     // 检查类型
@@ -460,5 +464,37 @@ public class BeanProperty<T, V> implements Type<V>, BeanPropertyDescriptor<T, V>
         } else {
             return setter.equals(target.setter);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getIndex() {
+        return index;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void set(T object, V value) {
+        setValue(object, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public V get(T object) {
+        return getValue(object);
+    }
+
+    @Override
+    public PropertyAccessor<V> getPropertyAccessor() {
+        if (type.getPackage().getName().startsWith("java.lang")) { // ignore java lib
+            return null;
+        }
+        return BeanDescriptor.getBeanDescriptor(type);
     }
 }

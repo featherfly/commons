@@ -19,20 +19,25 @@ public class BeanPropertySupplierImpl<T, V> implements BeanPropertySupplier<T, V
 
     private String propertyName;
 
+    private int index;
+
     /**
      * Instantiates a new bean property supplier impl.
      *
-     * @param beanType      the bean type
-     * @param propertyType  the property type
+     * @param beanType the bean type
+     * @param propertyType the property type
      * @param propertyValue the property value
-     * @param propertyName  the property name
+     * @param propertyName the property name
+     * @param index the index
      */
-    public BeanPropertySupplierImpl(Class<T> beanType, Class<V> propertyType, V propertyValue, String propertyName) {
+    public BeanPropertySupplierImpl(Class<T> beanType, Class<V> propertyType, V propertyValue, String propertyName,
+        int index) {
         super();
         this.beanType = beanType;
         this.propertyType = propertyType;
         this.propertyValue = propertyValue;
         this.propertyName = propertyName;
+        this.index = index;
     }
 
     /**
@@ -62,5 +67,13 @@ public class BeanPropertySupplierImpl<T, V> implements BeanPropertySupplier<T, V
     @Override
     public V get() {
         return propertyValue;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getIndex() {
+        return index;
     }
 }

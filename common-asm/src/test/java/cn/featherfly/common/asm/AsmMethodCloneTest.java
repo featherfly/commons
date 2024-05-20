@@ -20,6 +20,7 @@ import org.objectweb.asm.tree.MethodNode;
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.lang.ArrayUtils;
+import cn.featherfly.common.lang.BytesClassLoader;
 
 /**
  * AsmMethodClone.
@@ -208,7 +209,8 @@ public class AsmMethodCloneTest {
         //        fos.write(code);
         //        fos.close();
 
-        new BytesClassLoader().defineClass(typeName, code, this.getClass().getProtectionDomain());
+        new BytesClassLoader(Thread.currentThread().getContextClassLoader()).defineClass(typeName, code,
+            this.getClass().getProtectionDomain());
 
         Class.forName(typeName).newInstance();
     }

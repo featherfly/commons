@@ -13,24 +13,28 @@ public class BeanPropertyGetterImpl<T, V> implements BeanPropertyGetter<T, V> {
 
     private static final long serialVersionUID = -3604947046086702819L;
 
-    private Class<T> beanType;
+    private final int index;
 
-    private Class<V> propertyType;
+    private final Class<T> beanType;
 
-    private String propertyName;
+    private final Class<V> propertyType;
+
+    private final String propertyName;
 
     /**
      * Instantiates a new bean property supplier impl.
      *
-     * @param beanType     the bean type
+     * @param beanType the bean type
      * @param propertyType the property type
      * @param propertyName the property name
+     * @param index the index
      */
-    public BeanPropertyGetterImpl(Class<T> beanType, Class<V> propertyType, String propertyName) {
+    public BeanPropertyGetterImpl(Class<T> beanType, Class<V> propertyType, String propertyName, int index) {
         super();
         this.beanType = beanType;
         this.propertyType = propertyType;
         this.propertyName = propertyName;
+        this.index = index;
     }
 
     /**
@@ -49,6 +53,9 @@ public class BeanPropertyGetterImpl<T, V> implements BeanPropertyGetter<T, V> {
         return propertyName;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Class<V> getType() {
         return propertyType;
@@ -61,5 +68,13 @@ public class BeanPropertyGetterImpl<T, V> implements BeanPropertyGetter<T, V> {
     @Override
     public V apply(T t) {
         return (V) BeanUtils.getProperty(t, propertyName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getIndex() {
+        return index;
     }
 }

@@ -36,7 +36,7 @@ import cn.featherfly.common.lang.reflect.Modifier;
  * @author zhongj
  * @param <T> 描述的类型
  */
-public class BeanDescriptor<T> {
+public class BeanDescriptor<T> extends AbstractPropertyAccessor<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BeanDescriptor.class);
 
@@ -63,8 +63,9 @@ public class BeanDescriptor<T> {
         this.type = type;
 
         initTypeGenericParam(this.type);
-        this.initFromField(this.type);
-        this.initFromMethod(this.type);
+        int index = 0;
+        index = this.initFromField(this.type, index);
+        this.initFromMethod(this.type, index);
     }
 
     /**
@@ -81,9 +82,9 @@ public class BeanDescriptor<T> {
     }
 
     // 从field开始初始化
-    private void initFromField(Class<?> initType) {
+    private int initFromField(Class<?> initType, int index) {
         if (null == initType || initType == Object.class) {
-            return;
+            return index;
         }
         Field[] fields = initType.getDeclaredFields();
         for (Field field : fields) {
@@ -91,20 +92,21 @@ public class BeanDescriptor<T> {
             Method getter = ClassUtils.getGetter(field, type);
             Method setter = ClassUtils.getSetter(field, type);
             if (getter != null || setter != null) {
-                BeanProperty<T, ?> prop = FACTORY.create(field.getName(), field, fieldType, setter, getter, type,
+                BeanProperty<T, ?> prop = FACTORY.create(index, field.getName(), field, fieldType, setter, getter, type,
                     field.getDeclaringClass());
                 beanProperties.put(prop.getName(), prop);
                 if (LOGGER.isTraceEnabled() && initType != type) {
                     LOGGER.trace("类{}从父类{}中继承的属性：[{}]", type.getName(), initType.getName(), prop.getName());
                 }
             }
+            index++;
         }
         // 到父类中查找属性
-        initFromField(initType.getSuperclass());
+        return initFromField(initType.getSuperclass(), index);
     }
 
     // 初始化动态set get方法
-    private void initFromMethod(Class<T> type) {
+    private int initFromMethod(Class<T> type, int index) {
         Map<String, Map<String, Object>> properties = new HashMap<>();
         for (Method method : type.getMethods()) {
             // 忽略Object对象和static method
@@ -171,14 +173,16 @@ public class BeanDescriptor<T> {
                     getGenericType(setter.getGenericParameterTypes()[0], setter.getParameterTypes()[0]));
                 propertyName = Lang.ifNull(propertyName, ClassUtils.getPropertyName(setter));
             }
-            BeanProperty<T,
-                ?> property = FACTORY.create(propertyName, null, propertyType, setter, getter, type, declaringType);
+            BeanProperty<T, ?> property = FACTORY.create(index, propertyName, null, propertyType, setter, getter, type,
+                declaringType);
             beanProperties.put(property.getName(), property);
             if (LOGGER.isTraceEnabled()) {
                 LOGGER.trace("类{}的属性：[{}]， 定义子类{}", property.getOwnerType().getName(), property.getName(),
                     property.getDeclaringType().getName());
             }
+            index++;
         }
+        return index;
     }
 
     private Class<?> getGenericType(Type genericTypeDeclaring, Class<?> genericType) {
@@ -249,6 +253,24 @@ public class BeanDescriptor<T> {
         } else {
             return (BeanProperty<B, E>) beanProperties.get(name);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <B, E> BeanProperty<B, E> getBeanProperty0(String name) {
+        BeanProperty<B, E> bp = (BeanProperty<B, E>) beanProperties.get(name);
+        if (bp == null) {
+            throw new NoSuchPropertyException(type, name);
+        }
+        return bp;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <B, E> BeanProperty<B, E> getBeanProperty0(int index) {
+        BeanProperty<B, E> bp = (BeanProperty<B, E>) beanProperties.getValue(index);
+        if (bp == null) {
+            throw new NoSuchPropertyException(type, index);
+        }
+        return bp;
     }
 
     /**
@@ -587,7 +609,73 @@ public class BeanDescriptor<T> {
      *
      * @return 返回type
      */
+    @Override
     public Class<T> getType() {
         return type;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public T instantiate() {
+        return ClassUtils.newInstance(type);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <V> Property<T, V> getProperty(int index) {
+        return getBeanProperty0(index);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <V> Property<T, V> getProperty(String name) {
+        return getBeanProperty0(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object getPropertyValue(T obj, int index) {
+        return getProperty(index).get(obj);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object getPropertyValue(T bean, String name) {
+        return getProperty(bean, name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setPropertyValue(T obj, int index, Object value) {
+        getProperty(index).set(obj, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setPropertyValue(T bean, String name, Object value) {
+        setProperty(bean, name, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public Property<T, ?>[] getProperties() {
+        return beanProperties.values().toArray(new Property[beanProperties.size()]);
     }
 }

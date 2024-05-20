@@ -2,7 +2,10 @@ package vo;
 
 import java.time.LocalDate;
 
-public class Employee {
+import cn.featherfly.common.bean.PropertyAccessor;
+import cn.featherfly.common.bean.PropertyAccessorHolder;
+
+public class Employee implements PropertyAccessorHolder<Employee> {
 
     private Long id;
 
@@ -36,6 +39,8 @@ public class Employee {
     private String remark7;
     private String remark8;
     private String remark9;
+
+    private User createUser;
 
     /**
      * get id value
@@ -395,6 +400,22 @@ public class Employee {
      */
     public void setRemark9(String remark9) {
         this.remark9 = remark9;
+    }
+
+    public User getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(User createUser) {
+        this.createUser = createUser;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PropertyAccessor<Employee> getHoldingPropertyAccessor() {
+        return EmployeeAccessorSwitchDirect.INSTANCE;
     }
 
 }

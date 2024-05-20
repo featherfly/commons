@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import cn.featherfly.common.exception.LocalizedExceptionUtils;
 import cn.featherfly.common.function.serializable.SerializableNumberSupplier;
@@ -47,7 +48,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      * Instantiates a new localized assert.
      *
      * @param exceptionType the exception type
-     * @param newException  create new exception function
+     * @param newException create new exception function
      */
     public LocalizedAssert(Class<E> exceptionType, Function<String, E> newException) {
         this.exceptionType = exceptionType;
@@ -66,6 +67,14 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
         if (object == null) {
             throwException("#isNotNull", arg);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isNotNull(Object object, Supplier<String> arg) {
+        isNotNull(object, nullSafeGet(arg));
     }
 
     /**
@@ -363,9 +372,124 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
         isNotEmpty(info.getValue(), createDescp(info.getSerializedLambdaInfo()));
     }
 
-    private String createDescp(SerializedLambdaInfo info) {
-        return org.apache.commons.lang3.StringUtils.substringAfterLast(info.getMethodInstanceClassName(), ".") + "."
-                + info.getPropertyName();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isNotBlank(String text, Supplier<String> arguDescp) {
+        isNotBlank(text, nullSafeGet(arguDescp));
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isNotEmpty(Object obj, Supplier<String> arguDescps) {
+        isNotEmpty(obj, nullSafeGet(arguDescps));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isNotEmpty(String text, Supplier<String> arguDescp) {
+        isNotEmpty(text, nullSafeGet(arguDescp));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isNotEmpty(Object[] array, Supplier<String> arguDescp) {
+        isNotEmpty(array, nullSafeGet(arguDescp));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isNotEmpty(Collection<?> collection, Supplier<String> arguDescp) {
+        isNotEmpty(collection, nullSafeGet(arguDescp));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isNotEmpty(Map<?, ?> map, Supplier<String> arguDescp) {
+        isNotEmpty(map, nullSafeGet(arguDescp));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isExists(File file, Supplier<String> arguDescps) {
+        isExists(file, nullSafeGet(arguDescps));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isFile(File file, Supplier<String> arguDescps) {
+        isFile(file, nullSafeGet(arguDescps));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isDirectory(File file, Supplier<String> arguDescps) {
+        isDirectory(file, nullSafeGet(arguDescps));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <N extends Number> void isInRange(N value, N min, N max, Supplier<String> arguDescp) {
+        isInRange(value, min, max, nullSafeGet(arguDescp));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <N extends Number> void isGt(N value, N min, Supplier<String> arguDescp) {
+        isGt(value, min, nullSafeGet(arguDescp));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <N extends Number> void isGe(N value, N min, Supplier<String> arguDescp) {
+        isGe(value, min, nullSafeGet(arguDescp));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <N extends Number> void isLt(N value, N max, Supplier<String> arguDescp) {
+        isLt(value, max, nullSafeGet(arguDescp));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <N extends Number> void isLe(N value, N max, Supplier<String> arguDescp) {
+        isLe(value, max, nullSafeGet(arguDescp));
+    }
+
+    private String createDescp(SerializedLambdaInfo info) {
+        return org.apache.commons.lang3.StringUtils.substringAfterLast(info.getMethodInstanceClassName(), ".") + "."
+            + info.getPropertyName();
+    }
+
+    private static String nullSafeGet(Supplier<String> messageSupplier) {
+        return messageSupplier != null ? messageSupplier.get() : null;
+    }
 }

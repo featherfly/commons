@@ -18,6 +18,7 @@ import org.testng.annotations.Test;
 import cn.featherfly.common.bean.AsmPropertyAccessorFactory;
 import cn.featherfly.common.bean.NoSuchPropertyException;
 import cn.featherfly.common.bean.Property;
+import cn.featherfly.common.bean.PropertyAccessException;
 import cn.featherfly.common.bean.PropertyAccessor;
 import cn.featherfly.common.lang.BytesClassLoader;
 
@@ -88,10 +89,26 @@ public class AsmPropertyAccessorFactoryTest {
         visitor.getPropertyValue(role, 100);
     }
 
+    @Test(expectedExceptions = PropertyAccessException.class)
+    void gePropertyValueByIndexPropertyAccessException() throws Exception {
+        Role role = new Role();
+        role.setId(1);
+        PropertyAccessor<Role> visitor = factory.create(Role.class);
+        visitor.getPropertyValue(role, 0, 0);
+    }
+
     @Test(expectedExceptions = NoSuchPropertyException.class)
     void gePropertyValueByNameNoSuchPropertyException() throws Exception {
         Role role = new Role();
         accessor.getPropertyValue(role, "notExistsProperty");
+    }
+
+    @Test(expectedExceptions = PropertyAccessException.class)
+    void gePropertyValueByNamePropertyAccessException() throws Exception {
+        Role role = new Role();
+        role.setId(1);
+        PropertyAccessor<Role> visitor = factory.create(Role.class);
+        visitor.getPropertyValue(role, "id", "name");
     }
 
     @Test

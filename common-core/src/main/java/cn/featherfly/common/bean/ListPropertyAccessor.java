@@ -15,7 +15,6 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.Strings;
 
 /**
  * ListPropertyAccessor.
@@ -112,7 +111,7 @@ public class ListPropertyAccessor implements PropertyAccessor<List<Object>> {
         }
         @SuppressWarnings("unchecked")
         PropertyAccessor<Object> propertyAccessor = (PropertyAccessor<Object>) manager.get(transitional.getClass());
-        assertPropertyAccessor(propertyAccessor, obj, indexes[0], transitional);
+        assertPropertyAccessor(propertyAccessor, obj, indexes[0], indexes[1], transitional);
         return propertyAccessor.getPropertyValue(transitional, ArrayUtils.subarray(indexes, 1, indexes.length));
     }
 
@@ -143,7 +142,7 @@ public class ListPropertyAccessor implements PropertyAccessor<List<Object>> {
         }
         @SuppressWarnings("unchecked")
         PropertyAccessor<Object> propertyAccessor = (PropertyAccessor<Object>) manager.get(transitional.getClass());
-        assertPropertyAccessor(propertyAccessor, obj, indexes[0], transitional);
+        assertPropertyAccessor(propertyAccessor, obj, indexes[0], indexes[1], transitional);
         propertyAccessor.setPropertyValue(transitional, ArrayUtils.subarray(indexes, 1, indexes.length), value);
     }
 
@@ -218,10 +217,9 @@ public class ListPropertyAccessor implements PropertyAccessor<List<Object>> {
     }
 
     private void assertPropertyAccessor(PropertyAccessor<?> propertyAccessor, Object obj, Object nameOrIndex,
-        Object transitional) {
+        Object nestedNameOrIndex, Object transitional) {
         if (propertyAccessor == null) {
-            throw new IllegalArgumentException(Strings.format("object [{}] property [{}] type [{}] is inaccessible",
-                obj.getClass().getName(), nameOrIndex, transitional.getClass().getName()));
+            throw new PropertyAccessException(obj.getClass(), nameOrIndex, nestedNameOrIndex, transitional.getClass());
         }
     }
 }

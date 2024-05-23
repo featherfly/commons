@@ -10,10 +10,8 @@ package cn.featherfly.common.bean;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.UnaryOperator;
 
 import org.objectweb.asm.ClassWriter;
@@ -44,7 +42,7 @@ import cn.featherfly.common.policy.AllowPolicy;
  */
 public class AsmPropertyAccessorFactory implements PropertyAccessorFactory, Opcodes {
 
-    private final Map<Class<?>, PropertyAccessor<?>> types = new HashMap<>(0);
+    private final PropertyAccessorManagerImpl manager;
 
     /** The Constant CLASS_NAME_SUFFIX. */
     public static final String CLASS_NAME_SUFFIX = "PropertyVisitorCreateByFeatherfly";
@@ -156,17 +154,17 @@ public class AsmPropertyAccessorFactory implements PropertyAccessorFactory, Opco
         propertyFactory = new AsmPropertyFactory(bytesClassLoader);
 
         this.propertyVisitorCascadeCreatePolicy = propertyVisitorCascadeCreatePolicy;
+        manager = new PropertyAccessorManagerImpl();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @SuppressWarnings("unchecked")
     public <T> PropertyAccessor<T> create(Class<T> type) {
         if (cacheResults) {
             // load PropertyVisitor type class from cache, if exists, return, else goto create PropertyVisitor type class.
-            PropertyAccessor<T> propertyAccessor = (PropertyAccessor<T>) types.get(type);
+            PropertyAccessor<T> propertyAccessor = manager.getPropertyAccessor(type);
             if (propertyAccessor != null) {
                 return propertyAccessor;
             }
@@ -181,7 +179,7 @@ public class AsmPropertyAccessorFactory implements PropertyAccessorFactory, Opco
             Class<PropertyAccessor<T>> newType = create0(type);
             PropertyAccessor<T> propertyAccessor = ClassUtils.newInstance(newType);
             if (cacheResults) {
-                types.put(type, propertyAccessor);
+                manager.add(type, propertyAccessor);
             }
             return propertyAccessor;
         } catch (Exception e) {
@@ -197,7 +195,8 @@ public class AsmPropertyAccessorFactory implements PropertyAccessorFactory, Opco
             // TODO 后续来更改异常类型
             throw new AsmException("create PropertyAccessor cascade cacheResults must be true");
         }
-        for (PropertyAccessor<?> propertyAccessor : types.values()) {
+
+        for (PropertyAccessor<?> propertyAccessor : manager.getAll()) {
             createPropertyAccessorRecursion(propertyAccessor);
         }
     }
@@ -210,7 +209,7 @@ public class AsmPropertyAccessorFactory implements PropertyAccessorFactory, Opco
 
     private <V> void createPropertyAccessorRecursion(Property<?, V> property) {
         if (property.getPropertyAccessor() == null && propertyVisitorCascadeCreatePolicy.isAllow(property.getType())) {
-            if (!types.containsKey(property.getType())) {
+            if (!manager.containsType(property.getType())) {
                 PropertyAccessor<V> newPv = create(property.getType());
                 ((AbstractProperty<?, V>) property).setPropertyAccessor(newPv);
                 createPropertyAccessorRecursion(newPv);

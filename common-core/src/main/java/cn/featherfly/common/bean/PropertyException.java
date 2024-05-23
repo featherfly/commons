@@ -3,6 +3,8 @@ package cn.featherfly.common.bean;
 
 import java.util.Locale;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import cn.featherfly.common.exception.LocalizedException;
 
 /**
@@ -17,54 +19,97 @@ public abstract class PropertyException extends LocalizedException {
     private static final String baseName = "@" + PropertyException.class.getSimpleName() + "#";
 
     /**
-     * @param clazz        类型
-     * @param propertyName 属性名
-     * @param key          资源文件key
+     * Instantiates a new property exception.
+     *
+     * @param clazz 类型
+     * @param propertyNameOrIndex the property name or index
+     * @param key 资源文件key
      */
-    public PropertyException(Class<?> clazz, String propertyName, String key) {
-        super(baseName + key, new Object[] { clazz.getName(), propertyName });
-        this.propertyName = propertyName;
+    protected PropertyException(Class<?> clazz, Object propertyNameOrIndex, String key) {
+        super(baseName + key, new Object[] { clazz.getName(), propertyNameOrIndex });
+        this.propertyNameOrIndex = propertyNameOrIndex;
     }
 
     /**
-     * @param clazz        类型
-     * @param propertyName 属性名
-     * @param key          资源文件key
-     * @param locale       locale
+     * Instantiates a new property exception.
+     *
+     * @param clazz 类型
+     * @param propertyNameOrIndex the property name or index
+     * @param key 资源文件key
+     * @param locale locale
      */
-    public PropertyException(Class<?> clazz, String propertyName, String key, Locale locale) {
-        super(baseName + key, new Object[] { clazz.getName(), propertyName }, locale);
-        this.propertyName = propertyName;
+    protected PropertyException(Class<?> clazz, Object propertyNameOrIndex, String key, Locale locale) {
+        super(baseName + key, new Object[] { clazz.getName(), propertyNameOrIndex }, locale);
+        this.propertyNameOrIndex = propertyNameOrIndex;
     }
 
     /**
-     * @param clazz        类型
-     * @param propertyName 属性名
-     * @param key          key
-     * @param cause        异常
+     * Instantiates a new property exception.
+     *
+     * @param clazz 类型
+     * @param propertyNameOrIndex the property name or index
+     * @param key key
+     * @param cause 异常
      */
-    public PropertyException(Class<?> clazz, String propertyName, String key, Throwable cause) {
-        super(baseName + key, new Object[] { clazz.getName(), propertyName }, cause);
-        this.propertyName = propertyName;
+    protected PropertyException(Class<?> clazz, Object propertyNameOrIndex, String key, Throwable cause) {
+        super(baseName + key, new Object[] { clazz.getName(), propertyNameOrIndex }, cause);
+        this.propertyNameOrIndex = propertyNameOrIndex;
+    }
+
+    /**
+     * Instantiates a new property exception.
+     *
+     * @param clazz the clazz
+     * @param propertyNameOrIndex the property name or index
+     * @param key the key
+     * @param args the args
+     */
+    protected PropertyException(Class<?> clazz, Object propertyNameOrIndex, String key, Object[] args) {
+        super(baseName + key, ArrayUtils.addAll(new Object[] { clazz.getName(), propertyNameOrIndex }, args));
+        this.propertyNameOrIndex = propertyNameOrIndex;
+    }
+
+    /**
+     * Instantiates a new property exception.
+     *
+     * @param clazz the clazz
+     * @param propertyNameOrIndex the property name or index
+     * @param key the key
+     * @param locale the locale
+     * @param args the args
+     */
+    protected PropertyException(Class<?> clazz, Object propertyNameOrIndex, String key, Object[] args, Locale locale) {
+        super(baseName + key, ArrayUtils.addAll(new Object[] { clazz.getName(), propertyNameOrIndex }, args), locale);
+        this.propertyNameOrIndex = propertyNameOrIndex;
+    }
+
+    /**
+     * Instantiates a new property exception.
+     *
+     * @param clazz the clazz
+     * @param propertyNameOrIndex the property name or index
+     * @param key the key
+     * @param cause the cause
+     * @param args the args
+     */
+    protected PropertyException(Class<?> clazz, Object propertyNameOrIndex, String key, Object[] args,
+        Throwable cause) {
+        super(baseName + key, ArrayUtils.addAll(new Object[] { clazz.getName(), propertyNameOrIndex }, args), cause);
+        this.propertyNameOrIndex = propertyNameOrIndex;
     }
 
     // ********************************************************************
     // property
     // ********************************************************************
 
-    private String propertyName;
+    private final Object propertyNameOrIndex;
 
     /**
+     * Gets the property name.
+     *
      * @return 返回propertyName
      */
-    public String getPropertyName() {
-        return propertyName;
-    }
-
-    /**
-     * @param propertyName 设置propertyName
-     */
-    public void setPropertyName(String propertyName) {
-        this.propertyName = propertyName;
+    public Object getPropertyName() {
+        return propertyNameOrIndex;
     }
 }

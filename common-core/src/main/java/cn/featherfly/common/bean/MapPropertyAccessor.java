@@ -14,7 +14,6 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.Strings;
 
 /**
  * MapPropertyAccessor.
@@ -113,7 +112,7 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
         @SuppressWarnings("unchecked")
         PropertyAccessor<
             Object> propertyAccessor = (PropertyAccessor<Object>) manager.getPropertyAccessor(transitional.getClass());
-        assertPropertyAccessor(propertyAccessor, obj, indexes[0], transitional);
+        assertPropertyAccessor(propertyAccessor, obj, indexes[0], indexes[1], transitional);
         return propertyAccessor.getPropertyValue(transitional, ArrayUtils.subarray(indexes, 1, indexes.length));
     }
 
@@ -133,7 +132,7 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
         @SuppressWarnings("unchecked")
         PropertyAccessor<
             Object> propertyAccessor = (PropertyAccessor<Object>) manager.getPropertyAccessor(transitional.getClass());
-        assertPropertyAccessor(propertyAccessor, obj, names[0], transitional);
+        assertPropertyAccessor(propertyAccessor, obj, names[0], names[1], transitional);
         return propertyAccessor.getPropertyValue(transitional, ArrayUtils.subarray(names, 1, names.length));
     }
 
@@ -156,7 +155,7 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
         @SuppressWarnings("unchecked")
         PropertyAccessor<
             Object> propertyAccessor = (PropertyAccessor<Object>) manager.getPropertyAccessor(transitional.getClass());
-        assertPropertyAccessor(propertyAccessor, obj, indexes[0], transitional);
+        assertPropertyAccessor(propertyAccessor, obj, indexes[0], indexes[1], transitional);
         propertyAccessor.setPropertyValue(transitional, ArrayUtils.subarray(indexes, 1, indexes.length), value);
     }
 
@@ -178,7 +177,7 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
         @SuppressWarnings("unchecked")
         PropertyAccessor<
             Object> propertyAccessor = (PropertyAccessor<Object>) manager.getPropertyAccessor(transitional.getClass());
-        assertPropertyAccessor(propertyAccessor, obj, names[0], transitional);
+        assertPropertyAccessor(propertyAccessor, obj, names[0], names[1], transitional);
         propertyAccessor.setPropertyValue(transitional, ArrayUtils.subarray(names, 1, names.length), value);
     }
 
@@ -244,10 +243,9 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
     }
 
     private void assertPropertyAccessor(PropertyAccessor<?> propertyAccessor, Object obj, Object nameOrIndex,
-        Object transitional) {
+        Object nestedNameOrIndex, Object transitional) {
         if (propertyAccessor == null) {
-            throw new IllegalArgumentException(Strings.format("object [{}] property [{}] type [{}] is inaccessible",
-                obj.getClass().getName(), nameOrIndex, transitional.getClass().getName()));
+            throw new PropertyAccessException(obj.getClass(), nameOrIndex, nestedNameOrIndex, transitional.getClass());
         }
     }
 }

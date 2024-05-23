@@ -8,6 +8,7 @@
  */
 package cn.featherfly.common.lang.pool;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,6 +53,63 @@ public class ObjectPool<O, P extends ObjectPool<O, P>> implements Pool<Class<?>,
     public P add(Class<?> type, O obj) {
         objects.put(type, obj);
         return (P) this;
+    }
+
+    /**
+     * Gets the all.
+     *
+     * @return the all
+     */
+    public Collection<O> getAll() {
+        return objects.values();
+    }
+
+    /**
+     * Contains type.
+     *
+     * @param type the type
+     * @return true, if successful
+     */
+    public boolean containsType(Class<?> type) {
+        return objects.containsKey(type);
+    }
+
+    /**
+     * Contains object.
+     *
+     * @param obj the obj
+     * @return true, if successful
+     */
+    public boolean containsObject(Object obj) {
+        return objects.containsValue(obj);
+    }
+
+    /**
+     * Removes the.
+     *
+     * @param key the key
+     * @return the o
+     */
+    public O remove(Object key) {
+        return objects.remove(key);
+    }
+
+    /**
+     * Removes the.
+     *
+     * @param key the key
+     * @param value the value
+     * @return true, if successful
+     */
+    public boolean remove(Object key, Object value) {
+        return objects.remove(key, value);
+    }
+
+    /**
+     * Clear.
+     */
+    public void clear() {
+        objects.clear();
     }
 
     /**

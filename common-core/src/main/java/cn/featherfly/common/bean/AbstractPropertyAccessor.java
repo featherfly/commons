@@ -11,7 +11,6 @@ package cn.featherfly.common.bean;
 import org.apache.commons.lang3.ArrayUtils;
 
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.Strings;
 
 /**
  * AbstractPropertyAccessor.
@@ -30,16 +29,13 @@ public abstract class AbstractPropertyAccessor<T> implements PropertyAccessor<T>
             return getPropertyValue(obj, names[0]);
         }
         Property<T, Object> property = getProperty(names[0]);
-        Object value = property.get(obj);
-        if (value == null) {
+        Object transitional = property.get(obj);
+        if (transitional == null) {
             return null;
         }
-        PropertyAccessor<Object> visitor = property.getPropertyAccessor();
-        if (visitor == null) {
-            throw new IllegalArgumentException(Strings.format("object {} property {} type {} can not be visit property",
-                obj.getClass().getName(), "后续来加入名称", "后续来加入类型"));
-        }
-        return visitor.getPropertyValue(value, ArrayUtils.subarray(names, 1, names.length));
+        PropertyAccessor<Object> propertyAccessor = property.getPropertyAccessor();
+        assertPropertyAccessor(propertyAccessor, names[0], names[1], property.getType());
+        return propertyAccessor.getPropertyValue(transitional, ArrayUtils.subarray(names, 1, names.length));
     }
 
     /**
@@ -52,16 +48,13 @@ public abstract class AbstractPropertyAccessor<T> implements PropertyAccessor<T>
             return getPropertyValue(obj, indexes[0]);
         }
         Property<T, Object> property = getProperty(indexes[0]);
-        Object value = property.get(obj);
-        if (value == null) {
+        Object transitional = property.get(obj);
+        if (transitional == null) {
             return null;
         }
-        PropertyAccessor<Object> visitor = property.getPropertyAccessor();
-        if (visitor == null) {
-            throw new IllegalArgumentException(Strings.format("object {} property {} type {} can not be visit property",
-                obj.getClass().getName(), "后续来加入名称", "后续来加入类型"));
-        }
-        return visitor.getPropertyValue(value, ArrayUtils.subarray(indexes, 1, indexes.length));
+        PropertyAccessor<Object> propertyAccessor = property.getPropertyAccessor();
+        assertPropertyAccessor(propertyAccessor, indexes[0], indexes[1], property.getType());
+        return propertyAccessor.getPropertyValue(transitional, ArrayUtils.subarray(indexes, 1, indexes.length));
     }
 
     /**
@@ -74,13 +67,10 @@ public abstract class AbstractPropertyAccessor<T> implements PropertyAccessor<T>
             return new int[] { getProperty(names[0]).getIndex() };
         }
         Property<T, Object> property = getProperty(names[0]);
-        PropertyAccessor<Object> visitor = property.getPropertyAccessor();
-        if (visitor == null) {
-            throw new IllegalArgumentException(
-                Strings.format("object {} property {} type {} can not be visit property", "后续来加入名称", "后续来加入类型"));
-        }
+        PropertyAccessor<Object> propertyAccessor = property.getPropertyAccessor();
+        assertPropertyAccessor(propertyAccessor, names[0], names[1], property.getType());
         return ArrayUtils.addAll(new int[] { property.getIndex() },
-            visitor.getPropertyIndexes(ArrayUtils.subarray(names, 1, names.length)));
+            propertyAccessor.getPropertyIndexes(ArrayUtils.subarray(names, 1, names.length)));
     }
 
     /**
@@ -103,10 +93,8 @@ public abstract class AbstractPropertyAccessor<T> implements PropertyAccessor<T>
         }
         Property<T, Object> property = getProperty(indexes[0]);
         PropertyAccessor<Object> visitor = property.getPropertyAccessor();
-        if (visitor == null) {
-            throw new IllegalArgumentException(Strings.format("object {} property {} type {} can not be visit property",
-                obj.getClass().getName(), "后续来加入名称", "后续来加入类型"));
-        }
+
+        assertPropertyAccessor(visitor, indexes[0], indexes[1], property.getType());
         Object transitional = property.get(obj);
         if (transitional == null) {
             transitional = visitor.instantiate();
@@ -127,11 +115,7 @@ public abstract class AbstractPropertyAccessor<T> implements PropertyAccessor<T>
         }
         Property<T, Object> property = getProperty(names[0]);
         PropertyAccessor<Object> visitor = property.getPropertyAccessor();
-        if (visitor == null) {
-            throw new IllegalArgumentException(
-                Strings.format("can not be visit property object {} property {} type {} ", obj.getClass().getName(),
-                    "后续来加入名称", "后续来加入类型"));
-        }
+        assertPropertyAccessor(visitor, names[0], names[1], property.getType());
         Object transitional = property.get(obj);
         if (transitional == null) {
             transitional = visitor.instantiate();
@@ -140,5 +124,10 @@ public abstract class AbstractPropertyAccessor<T> implements PropertyAccessor<T>
         visitor.setPropertyValue(transitional, ArrayUtils.subarray(names, 1, names.length), value);
     }
 
-    //    protected abstract <V> PropertyVisitor<V> getPropertyVisitor(int index);
+    private void assertPropertyAccessor(PropertyAccessor<?> propertyAccessor, Object nameOrIndex,
+        Object nestedNameOrIndex, Class<?> propType) {
+        if (propertyAccessor == null) {
+            throw new PropertyAccessException(getType(), nameOrIndex, nestedNameOrIndex, propType);
+        }
+    }
 }

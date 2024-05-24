@@ -1,22 +1,23 @@
 package impl;
 
 import cn.featherfly.common.bean.AbstractProperty;
+import cn.featherfly.common.bean.PropertyAccessException;
 import cn.featherfly.common.bean.PropertyAccessor;
 
 /**
- * The Class RolePropertyVisitor1AgeProperty.
+ * The Class RolePropertyAccessor1ReadProperty.
  *
  * @author zhongj
  */
-public class RolePropertyAccessor1AgeProperty extends AbstractProperty<Role, Integer> {
+public class RolePropertyAccessor1ReadProperty extends AbstractProperty<Role, Integer> {
 
     /**
-     * Instantiates a new role property visitor 1 age property.
+     * Instantiates a new role property accessor 1 read property.
      *
      * @param propertyVisitor the property visitor
      */
-    public RolePropertyAccessor1AgeProperty(PropertyAccessor<Integer> propertyVisitor) {
-        super(Role.class, Integer.TYPE, "id", 3, propertyVisitor);
+    public RolePropertyAccessor1ReadProperty(PropertyAccessor<Integer> propertyVisitor) {
+        super(Role.class, Integer.TYPE, "read", 5, propertyVisitor);
     }
 
     /**
@@ -24,7 +25,7 @@ public class RolePropertyAccessor1AgeProperty extends AbstractProperty<Role, Int
      */
     @Override
     public void set(Role object, Integer value) {
-        object.setAge(value);
+        throw PropertyAccessException.propertyNoSetter(instanceType, name);
     }
 
     /**
@@ -32,7 +33,7 @@ public class RolePropertyAccessor1AgeProperty extends AbstractProperty<Role, Int
      */
     @Override
     public Integer get(Role object) {
-        return object.getAge();
+        return object.getRead();
     }
 
     /**
@@ -48,7 +49,7 @@ public class RolePropertyAccessor1AgeProperty extends AbstractProperty<Role, Int
      */
     @Override
     public boolean isWritable() {
-        return true;
+        return false;
     }
 
 }

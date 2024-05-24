@@ -25,7 +25,7 @@ public class InstantiatorFactorTest {
 
     @BeforeClass
     void before() {
-        factor = new AsmInstantiatorFactory(() -> Thread.currentThread().getContextClassLoader());
+        factor = new AsmInstantiatorFactory(Thread.currentThread().getContextClassLoader());
     }
 
     @Test

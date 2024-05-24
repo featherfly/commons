@@ -12,6 +12,10 @@ public class Role {
 
     private boolean available;
 
+    private Integer read = 0;
+
+    private Integer write = 0;
+
     //    private String descp;
 
     public Integer getId() {
@@ -62,4 +66,17 @@ public class Role {
         this.available = available;
     }
 
+    public Integer getRead() {
+        return read;
+    }
+
+    public void setWrite(Integer write) {
+        this.write = write;
+    }
+
+    @Override
+    public String toString() {
+        return "Role [id=" + id + ", name=" + name + ", group=" + group + ", age=" + age + ", available=" + available
+            + ", read=" + read + ", write=" + write + "]";
+    }
 }

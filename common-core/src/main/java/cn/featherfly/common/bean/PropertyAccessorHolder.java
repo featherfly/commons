@@ -13,6 +13,7 @@ package cn.featherfly.common.bean;
  *
  * @author zhongj
  * @param <T> the generic type
+ * @since 1.13.0
  */
 public interface PropertyAccessorHolder<T> {
 

@@ -16,8 +16,41 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
  * AbstractPropertyAccessor.
  *
  * @author zhongj
+ * @since 1.13.0
  */
 public abstract class AbstractPropertyAccessor<T> implements PropertyAccessor<T> {
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T1, V> Property<T1, V> getProperty(String... names) {
+        AssertIllegalArgument.isNotEmpty(names, "names");
+        if (names.length == 1) {
+            return (Property<T1, V>) getProperty(names[0]);
+        }
+        Property<T, Object> property = getProperty(names[0]);
+        PropertyAccessor<Object> propertyAccessor = property.getPropertyAccessor();
+        assertPropertyAccessor(propertyAccessor, names[0], names[1], property.getType());
+        return propertyAccessor.getProperty(ArrayUtils.subarray(names, 1, names.length));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T1, V> Property<T1, V> getProperty(int... indexes) {
+        AssertIllegalArgument.isNotEmpty(indexes, "indexes");
+        if (indexes.length == 1) {
+            return (Property<T1, V>) getProperty(indexes[0]);
+        }
+        Property<T, Object> property = getProperty(indexes[0]);
+        PropertyAccessor<Object> propertyAccessor = property.getPropertyAccessor();
+        assertPropertyAccessor(propertyAccessor, indexes[0], indexes[1], property.getType());
+        return propertyAccessor.getProperty(ArrayUtils.subarray(indexes, 1, indexes.length));
+    }
 
     /**
      * {@inheritDoc}

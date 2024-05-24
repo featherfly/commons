@@ -14,6 +14,7 @@ package cn.featherfly.common.bean;
  * @author zhongj
  * @param <T> the bean type
  * @param <V> the set value type
+ * @since 1.13.0
  */
 public interface Setter<T, V> {
 

@@ -95,11 +95,11 @@ public class BeanDescriptor<T> extends AbstractPropertyAccessor<T> {
                 BeanProperty<T, ?> prop = FACTORY.create(index, field.getName(), field, fieldType, setter, getter, type,
                     field.getDeclaringClass());
                 beanProperties.put(prop.getName(), prop);
+                index++;
                 if (LOGGER.isTraceEnabled() && initType != type) {
                     LOGGER.trace("类{}从父类{}中继承的属性：[{}]", type.getName(), initType.getName(), prop.getName());
                 }
             }
-            index++;
         }
         // 到父类中查找属性
         return initFromField(initType.getSuperclass(), index);
@@ -176,11 +176,11 @@ public class BeanDescriptor<T> extends AbstractPropertyAccessor<T> {
             BeanProperty<T, ?> property = FACTORY.create(index, propertyName, null, propertyType, setter, getter, type,
                 declaringType);
             beanProperties.put(property.getName(), property);
+            index++;
             if (LOGGER.isTraceEnabled()) {
                 LOGGER.trace("类{}的属性：[{}]， 定义子类{}", property.getOwnerType().getName(), property.getName(),
                     property.getDeclaringType().getName());
             }
-            index++;
         }
         return index;
     }

@@ -31,4 +31,19 @@ public class RolePropertyAccessor1IdProperty extends AbstractProperty<Role, Inte
         return object.getId();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isReadable() {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isWritable() {
+        return true;
+    }
 }

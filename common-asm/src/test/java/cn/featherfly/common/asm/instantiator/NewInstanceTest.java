@@ -41,8 +41,7 @@ public class NewInstanceTest {
         cons = User.class.getConstructor(ArrayUtils.EMPTY_CLASS_ARRAY);
         create = () -> new User();
 
-        AsmInstantiatorFactory factor = new AsmInstantiatorFactory(
-            () -> Thread.currentThread().getContextClassLoader());
+        AsmInstantiatorFactory factor = new AsmInstantiatorFactory(Thread.currentThread().getContextClassLoader());
         instantiator = factor.create(User.class);
     }
 

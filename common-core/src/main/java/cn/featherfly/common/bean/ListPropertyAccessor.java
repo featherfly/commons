@@ -20,6 +20,7 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
  * ListPropertyAccessor.
  *
  * @author zhongj
+ * @since 1.13.0
  */
 public class ListPropertyAccessor implements PropertyAccessor<List<Object>> {
 
@@ -161,7 +162,7 @@ public class ListPropertyAccessor implements PropertyAccessor<List<Object>> {
     @Override
     public int getPropertyIndex(String name) {
         throw new UnsupportedException(
-            "unsupport method getPropertyIndex(String name), because list does not have property metadata");
+            "unsupport method getPropertyIndex(String), because list does not have property metadata");
     }
 
     /**
@@ -170,7 +171,7 @@ public class ListPropertyAccessor implements PropertyAccessor<List<Object>> {
     @Override
     public int[] getPropertyIndexes(String... names) {
         throw new UnsupportedException(
-            "unsupport method getPropertyIndexes(String... names), because list does not have property metadata");
+            "unsupport method getPropertyIndexes(String...), because list does not have property metadata");
     }
 
     /**
@@ -179,7 +180,16 @@ public class ListPropertyAccessor implements PropertyAccessor<List<Object>> {
     @Override
     public <V> Property<List<Object>, V> getProperty(int index) {
         throw new UnsupportedException(
-            "unsupport method getProperty(int index), because list does not have property metadata");
+            "unsupport method getProperty(int), because list does not have property metadata");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T1, V> Property<T1, V> getProperty(int... indexes) {
+        throw new UnsupportedException(
+            "unsupport method getProperty(int...), because list does not have property metadata");
     }
 
     /**
@@ -188,7 +198,16 @@ public class ListPropertyAccessor implements PropertyAccessor<List<Object>> {
     @Override
     public <V> Property<List<Object>, V> getProperty(String name) {
         throw new UnsupportedException(
-            "unsupport method getProperty(String index), because list does not have property metadata");
+            "unsupport method getProperty(String...), because list does not have property metadata");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T1, V> Property<T1, V> getProperty(String... names) {
+        throw new UnsupportedException(
+            "unsupport method getProperty(String...), because list does not have property metadata");
     }
 
     /**
@@ -197,7 +216,7 @@ public class ListPropertyAccessor implements PropertyAccessor<List<Object>> {
     @Override
     public Property<List<Object>, ?>[] getProperties() {
         throw new UnsupportedException(
-            "unsupport method getProperty(String index), because list does not have property metadata");
+            "unsupport method getProperties(), because list does not have property metadata");
     }
 
     /**
@@ -222,4 +241,5 @@ public class ListPropertyAccessor implements PropertyAccessor<List<Object>> {
             throw new PropertyAccessException(obj.getClass(), nameOrIndex, nestedNameOrIndex, transitional.getClass());
         }
     }
+
 }

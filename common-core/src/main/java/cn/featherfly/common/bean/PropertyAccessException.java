@@ -14,6 +14,10 @@ public class PropertyAccessException extends PropertyException {
 
     private static final String PROPERTY_NESTED_ACCESS = "property_nested_access";
 
+    private static final String PROPERTY_NO_GETTER = "property_no_getter";
+
+    private static final String PROPERTY_NO_SETTER = "property_no_setter";
+
     private static final long serialVersionUID = -8041655239720325546L;
 
     /**
@@ -37,6 +41,7 @@ public class PropertyAccessException extends PropertyException {
      * @param propertyNameOrIndex the property name or index
      * @param nestedNameOrIndex the nested name or index
      * @param propertyType the property type
+     * @param locale the locale
      */
     public PropertyAccessException(Class<?> clazz, Object propertyNameOrIndex, Object nestedNameOrIndex,
         Class<?> propertyType, Locale locale) {
@@ -44,36 +49,83 @@ public class PropertyAccessException extends PropertyException {
             new Object[] { nestedNameOrIndex, propertyType.getName() }, locale);
     }
 
+    private PropertyAccessException(Class<?> clazz, Object propertyNameOrIndex, String key, Locale locale) {
+        super(clazz, propertyNameOrIndex, key, locale);
+    }
+
+    private PropertyAccessException(Class<?> clazz, Object propertyNameOrIndex, String key) {
+        super(clazz, propertyNameOrIndex, key);
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------
+
     /**
-     * Instantiates a new property access exception.
+     * Throw property access.
      *
-     * @param clazz 类型
-     * @param propertyName 属性名
+     * @param type the type
+     * @param propertyName the property name
+     * @return the property access exception
      */
-    public PropertyAccessException(Class<?> clazz, String propertyName) {
-        super(clazz, propertyName, PROPERTY_ACCESS);
+    public static PropertyAccessException propertyAccess(Class<?> type, String propertyName) {
+        return new PropertyAccessException(type, propertyName, PROPERTY_ACCESS);
     }
 
     /**
-     * Instantiates a new property access exception.
+     * Throw property access.
      *
-     * @param clazz 类型
-     * @param propertyName 属性名
-     * @param locale locale
+     * @param type the type
+     * @param propertyName the property name
+     * @param locale the locale
+     * @return the property access exception
      */
-    public PropertyAccessException(Class<?> clazz, String propertyName, Locale locale) {
-        super(clazz, propertyName, PROPERTY_ACCESS, locale);
+    public static PropertyAccessException propertyAccess(Class<?> type, String propertyName, Locale locale) {
+        return new PropertyAccessException(type, propertyName, PROPERTY_ACCESS, locale);
     }
 
     /**
-     * Instantiates a new property access exception.
+     * Throw property no setter.
      *
-     * @param clazz 类型
-     * @param propertyName 属性名
-     * @param cause 异常
+     * @param type the type
+     * @param propertyName the property name
+     * @return the property access exception
      */
-    public PropertyAccessException(Class<?> clazz, String propertyName, Throwable cause) {
-        super(clazz, propertyName, PROPERTY_ACCESS, cause);
+    public static PropertyAccessException propertyNoSetter(Class<?> type, String propertyName) {
+        return new PropertyAccessException(type, propertyName, PROPERTY_NO_SETTER);
+    }
+
+    /**
+     * Throw property no setter.
+     *
+     * @param type the type
+     * @param propertyName the property name
+     * @param locale the locale
+     * @return the property access exception
+     */
+    public static PropertyAccessException propertyNoSetter(Class<?> type, String propertyName, Locale locale) {
+        return new PropertyAccessException(type, propertyName, PROPERTY_NO_SETTER, locale);
+    }
+
+    /**
+     * Throw property no getter.
+     *
+     * @param type the type
+     * @param propertyName the property name
+     * @return the property access exception
+     */
+    public static PropertyAccessException propertyNoGetter(Class<?> type, String propertyName) {
+        return new PropertyAccessException(type, propertyName, PROPERTY_NO_GETTER);
+    }
+
+    /**
+     * Throw property no getter.
+     *
+     * @param type the type
+     * @param propertyName the property name
+     * @param locale the locale
+     * @return the property access exception
+     */
+    public static PropertyAccessException propertyNoGetter(Class<?> type, String propertyName, Locale locale) {
+        return new PropertyAccessException(type, propertyName, PROPERTY_NO_GETTER, locale);
     }
 
     // ********************************************************************

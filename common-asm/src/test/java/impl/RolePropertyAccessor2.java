@@ -63,6 +63,21 @@ public class RolePropertyAccessor2 extends AbstractPropertyAccessor<Role> {
             return object.getId();
         }
 
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isReadable() {
+            return true;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isWritable() {
+            return true;
+        }
     }
 
     /**
@@ -98,6 +113,22 @@ public class RolePropertyAccessor2 extends AbstractPropertyAccessor<Role> {
         @Override
         public void set(Role object, String value) {
             object.setName(value);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isReadable() {
+            return true;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean isWritable() {
+            return true;
         }
     }
 

@@ -22,30 +22,46 @@ import cn.featherfly.common.db.mapping.pojo.UserRole;
  */
 public interface ClassMappingSupport {
 
+    default String getUserProperty1() {
+        return "id";
+    }
+
+    default String getUserProperty2() {
+        return "name";
+    }
+
+    default String getUserProperty3() {
+        return "descp";
+    }
+
+    default String getUserProperty4() {
+        return "pwd";
+    }
+
     default JdbcClassMapping<User> getUserClassMapping() {
         JdbcClassMapping<User> mapping = new JdbcClassMapping<>(User.class, "user");
         JdbcPropertyMapping pm = new JdbcPropertyMapping();
         pm.setPrimaryKey(true);
         pm.setRepositoryFieldName("id");
-        pm.setPropertyName("id");
+        pm.setPropertyName(getUserProperty1());
         pm.setPropertyType(Long.class);
 
         JdbcPropertyMapping pm2 = new JdbcPropertyMapping();
         pm2.setPrimaryKey(false);
         pm2.setRepositoryFieldName("name");
-        pm2.setPropertyName("name");
+        pm2.setPropertyName(getUserProperty2());
         pm2.setPropertyType(String.class);
 
         JdbcPropertyMapping pm3 = new JdbcPropertyMapping();
         pm3.setPrimaryKey(false);
         pm3.setRepositoryFieldName("descp");
-        pm3.setPropertyName("descp");
+        pm3.setPropertyName(getUserProperty3());
         pm3.setPropertyType(String.class);
 
         JdbcPropertyMapping pm4 = new JdbcPropertyMapping();
         pm4.setPrimaryKey(false);
         pm4.setRepositoryFieldName("password");
-        pm4.setPropertyName("pwd");
+        pm4.setPropertyName(getUserProperty4());
         pm4.setPropertyType(String.class);
 
         mapping.addPropertyMapping(pm);

@@ -1,6 +1,7 @@
 
 package cn.featherfly.common.bean;
 
+import static org.junit.Assert.assertTrue;
 import static org.testng.Assert.assertEquals;
 
 import java.lang.reflect.ParameterizedType;
@@ -14,6 +15,7 @@ import org.testng.annotations.Test;
 import cn.featherfly.common.bean.vo.Address;
 import cn.featherfly.common.bean.vo.ClassRoom;
 import cn.featherfly.common.bean.vo.Person;
+import cn.featherfly.common.bean.vo.Pt;
 import cn.featherfly.common.bean.vo.Result;
 import cn.featherfly.common.bean.vo.Result2;
 import cn.featherfly.common.bean.vo.Student;
@@ -24,6 +26,34 @@ import cn.featherfly.common.lang.Console;
 import cn.featherfly.common.lang.vo.GenericTest;
 
 public class BeanDescriptorTest {
+
+    public static void main(String[] args) {
+        User user = new User();
+        BeanDescriptor<User> bd = BeanDescriptor.getBeanDescriptor(User.class);
+
+        System.out.println(bd.getBeanProperty("addresses").getType());
+        System.out.println(bd.getBeanProperty("addresses").getField().getGenericType().getClass());
+        System.out.println(bd.getBeanProperty("addresses").getField().getGenericType());
+        if (bd.getBeanProperty("addresses").getField().getGenericType() instanceof ParameterizedType) {
+            ParameterizedType pt = (ParameterizedType) bd.getBeanProperty("addresses").getField().getGenericType();
+            System.out.println(pt.getRawType());
+            System.out.println(pt.getOwnerType());
+            System.out.println(pt.getActualTypeArguments()[0]);
+        }
+        //      bd.setProperty(user, "addresses.name", "成都市");
+
+        //      System.out.println(user.getAddresses());
+    }
+
+    @Test
+    public void testPrimitiveBoolean() {
+        BeanDescriptor<Pt> bd = BeanDescriptor.getBeanDescriptor(Pt.class);
+        BeanProperty<Pt, Boolean> bp = bd.getBeanProperty("available");
+
+        assertTrue(bp.isReadable());
+        assertTrue(bp.isWritable());
+    }
+
     @Test
     public void test1() {
         User user = new User();
@@ -125,24 +155,6 @@ public class BeanDescriptorTest {
 
         assertEquals(user.getAddresses().size(), 2);
         System.out.println(user.getAddresses());
-    }
-
-    public static void main(String[] args) {
-        User user = new User();
-        BeanDescriptor<User> bd = BeanDescriptor.getBeanDescriptor(User.class);
-
-        System.out.println(bd.getBeanProperty("addresses").getType());
-        System.out.println(bd.getBeanProperty("addresses").getField().getGenericType().getClass());
-        System.out.println(bd.getBeanProperty("addresses").getField().getGenericType());
-        if (bd.getBeanProperty("addresses").getField().getGenericType() instanceof ParameterizedType) {
-            ParameterizedType pt = (ParameterizedType) bd.getBeanProperty("addresses").getField().getGenericType();
-            System.out.println(pt.getRawType());
-            System.out.println(pt.getOwnerType());
-            System.out.println(pt.getActualTypeArguments()[0]);
-        }
-        //		bd.setProperty(user, "addresses.name", "成都市");
-
-        //		System.out.println(user.getAddresses());
     }
 
     @Test(expectedExceptions = NoSuchPropertyException.class)

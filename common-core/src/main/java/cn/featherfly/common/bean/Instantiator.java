@@ -17,7 +17,7 @@ import cn.featherfly.common.lang.reflect.Type;
  *
  * @author zhongj
  * @param <T> the generic type
- * @since 1.12.1
+ * @since 1.13.0
  */
 public interface Instantiator<T> extends Supplier<T>, Type<T> {
 

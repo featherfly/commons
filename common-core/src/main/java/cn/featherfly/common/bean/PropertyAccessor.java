@@ -13,6 +13,7 @@ package cn.featherfly.common.bean;
  *
  * @author zhongj
  * @param <T> the generic type
+ * @since 1.13.0
  */
 public interface PropertyAccessor<T> extends Instantiator<T> {
 
@@ -151,11 +152,31 @@ public interface PropertyAccessor<T> extends Instantiator<T> {
     /**
      * Gets the property.
      *
+     * @param <T1> the generic type
+     * @param <V> the value type
+     * @param indexes the indexes
+     * @return the property
+     */
+    <T1, V> Property<T1, V> getProperty(int... indexes);
+
+    /**
+     * Gets the property.
+     *
      * @param <V> the value type
      * @param name the name
      * @return the property
      */
     <V> Property<T, V> getProperty(String name);
+
+    /**
+     * Gets the property.
+     *
+     * @param <T1> the generic type
+     * @param <V> the value type
+     * @param names the names
+     * @return the property
+     */
+    <T1, V> Property<T1, V> getProperty(String... names);
 
     /**
      * Gets the properties.

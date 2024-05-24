@@ -14,7 +14,6 @@ import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import cn.featherfly.common.bean.AbstractProperty;
 import cn.featherfly.common.bean.Property;
 import cn.featherfly.common.bean.PropertyAccessor;
 import cn.featherfly.common.lang.AssertIllegalArgument;
@@ -36,7 +35,7 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
     public EmployeeAccessor() {
         properties = new Property[21];
 
-        properties[0] = new AbstractProperty<Employee, Long>(Employee.class, Long.class, "id", 0, null) {
+        properties[0] = new AbstractReadWriteProperty<Employee, Long>(Employee.class, Long.class, "id", 0, null) {
             @Override
             public void set(Employee object, Long value) {
                 object.setId(value);
@@ -48,7 +47,7 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
             }
         };
 
-        properties[1] = new AbstractProperty<Employee, String>(Employee.class, String.class, "name", 1, null) {
+        properties[1] = new AbstractReadWriteProperty<Employee, String>(Employee.class, String.class, "name", 1, null) {
             @Override
             public void set(Employee object, String value) {
                 object.setName(value);
@@ -60,8 +59,8 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
             }
         };
 
-        properties[2] = new AbstractProperty<Employee, LocalDate>(Employee.class, LocalDate.class, "birthDate", 2,
-            null) {
+        properties[2] = new AbstractReadWriteProperty<Employee, LocalDate>(Employee.class, LocalDate.class, "birthDate",
+            2, null) {
             @Override
             public void set(Employee object, LocalDate value) {
                 object.setBirthDate(value);
@@ -73,7 +72,8 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
             }
         };
 
-        properties[3] = new AbstractProperty<Employee, String>(Employee.class, String.class, "gender", 3, null) {
+        properties[3] = new AbstractReadWriteProperty<Employee, String>(Employee.class, String.class, "gender", 3,
+            null) {
             @Override
             public void set(Employee object, String value) {
                 object.setGender(value);
@@ -85,8 +85,8 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
             }
         };
 
-        properties[4] = new AbstractProperty<Employee, Integer>(Employee.class, Integer.class, "departmentId", 4,
-            null) {
+        properties[4] = new AbstractReadWriteProperty<Employee, Integer>(Employee.class, Integer.class, "departmentId",
+            4, null) {
             @Override
             public void set(Employee object, Integer value) {
                 object.setDepartmentId(value);
@@ -98,7 +98,8 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
             }
         };
 
-        properties[5] = new AbstractProperty<Employee, Integer>(Employee.class, Integer.class, "organId", 5, null) {
+        properties[5] = new AbstractReadWriteProperty<Employee, Integer>(Employee.class, Integer.class, "organId", 5,
+            null) {
             @Override
             public void set(Employee object, Integer value) {
                 object.setOrganId(value);
@@ -109,7 +110,8 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
                 return object.getOrganId();
             }
         };
-        properties[6] = new AbstractProperty<Employee, String>(Employee.class, String.class, "identityCard", 6, null) {
+        properties[6] = new AbstractReadWriteProperty<Employee, String>(Employee.class, String.class, "identityCard", 6,
+            null) {
             @Override
             public void set(Employee object, String value) {
                 object.setIdentityCard(value);
@@ -120,7 +122,8 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
                 return object.getIdentityCard();
             }
         };
-        properties[7] = new AbstractProperty<Employee, String>(Employee.class, String.class, "mobile", 7, null) {
+        properties[7] = new AbstractReadWriteProperty<Employee, String>(Employee.class, String.class, "mobile", 7,
+            null) {
             @Override
             public void set(Employee object, String value) {
                 object.setMobile(value);
@@ -131,7 +134,8 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
                 return object.getMobile();
             }
         };
-        properties[8] = new AbstractProperty<Employee, String>(Employee.class, String.class, "email", 8, null) {
+        properties[8] = new AbstractReadWriteProperty<Employee, String>(Employee.class, String.class, "email", 8,
+            null) {
             @Override
             public void set(Employee object, String value) {
                 object.setEmail(value);
@@ -142,7 +146,7 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
                 return object.getEmail();
             }
         };
-        properties[9] = new AbstractProperty<Employee, String>(Employee.class, String.class, "fax", 9, null) {
+        properties[9] = new AbstractReadWriteProperty<Employee, String>(Employee.class, String.class, "fax", 9, null) {
             @Override
             public void set(Employee object, String value) {
                 object.setFax(value);
@@ -153,7 +157,8 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
                 return object.getFax();
             }
         };
-        properties[10] = new AbstractProperty<Employee, String>(Employee.class, String.class, "remark0", 10, null) {
+        properties[10] = new AbstractReadWriteProperty<Employee, String>(Employee.class, String.class, "remark0", 10,
+            null) {
             @Override
             public void set(Employee object, String value) {
                 object.setRemark0(value);
@@ -164,7 +169,8 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
                 return object.getRemark0();
             }
         };
-        properties[11] = new AbstractProperty<Employee, String>(Employee.class, String.class, "remark1", 11, null) {
+        properties[11] = new AbstractReadWriteProperty<Employee, String>(Employee.class, String.class, "remark1", 11,
+            null) {
             @Override
             public void set(Employee object, String value) {
                 object.setRemark1(value);
@@ -175,7 +181,8 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
                 return object.getRemark1();
             }
         };
-        properties[12] = new AbstractProperty<Employee, String>(Employee.class, String.class, "remark2", 12, null) {
+        properties[12] = new AbstractReadWriteProperty<Employee, String>(Employee.class, String.class, "remark2", 12,
+            null) {
             @Override
             public void set(Employee object, String value) {
                 object.setRemark2(value);
@@ -186,7 +193,8 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
                 return object.getRemark2();
             }
         };
-        properties[13] = new AbstractProperty<Employee, String>(Employee.class, String.class, "remark3", 13, null) {
+        properties[13] = new AbstractReadWriteProperty<Employee, String>(Employee.class, String.class, "remark3", 13,
+            null) {
             @Override
             public void set(Employee object, String value) {
                 object.setRemark3(value);
@@ -198,7 +206,8 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
             }
         };
 
-        properties[14] = new AbstractProperty<Employee, String>(Employee.class, String.class, "remark4", 14, null) {
+        properties[14] = new AbstractReadWriteProperty<Employee, String>(Employee.class, String.class, "remark4", 14,
+            null) {
             @Override
             public void set(Employee object, String value) {
                 object.setRemark4(value);
@@ -210,7 +219,8 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
             }
         };
 
-        properties[15] = new AbstractProperty<Employee, String>(Employee.class, String.class, "remark5", 15, null) {
+        properties[15] = new AbstractReadWriteProperty<Employee, String>(Employee.class, String.class, "remark5", 15,
+            null) {
             @Override
             public void set(Employee object, String value) {
                 object.setRemark5(value);
@@ -222,7 +232,8 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
             }
         };
 
-        properties[16] = new AbstractProperty<Employee, String>(Employee.class, String.class, "remark6", 16, null) {
+        properties[16] = new AbstractReadWriteProperty<Employee, String>(Employee.class, String.class, "remark6", 16,
+            null) {
             @Override
             public void set(Employee object, String value) {
                 object.setRemark6(value);
@@ -234,7 +245,8 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
             }
         };
 
-        properties[17] = new AbstractProperty<Employee, String>(Employee.class, String.class, "remark7", 17, null) {
+        properties[17] = new AbstractReadWriteProperty<Employee, String>(Employee.class, String.class, "remark7", 17,
+            null) {
             @Override
             public void set(Employee object, String value) {
                 object.setRemark7(value);
@@ -246,7 +258,8 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
             }
         };
 
-        properties[18] = new AbstractProperty<Employee, String>(Employee.class, String.class, "remark8", 18, null) {
+        properties[18] = new AbstractReadWriteProperty<Employee, String>(Employee.class, String.class, "remark8", 18,
+            null) {
             @Override
             public void set(Employee object, String value) {
                 object.setRemark8(value);
@@ -258,7 +271,8 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
             }
         };
 
-        properties[19] = new AbstractProperty<Employee, String>(Employee.class, String.class, "remark9", 19, null) {
+        properties[19] = new AbstractReadWriteProperty<Employee, String>(Employee.class, String.class, "remark9", 19,
+            null) {
             @Override
             public void set(Employee object, String value) {
                 object.setRemark9(value);
@@ -270,7 +284,7 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
             }
         };
 
-        properties[20] = new AbstractProperty<Employee, User>(Employee.class, User.class, "createUser", 20,
+        properties[20] = new AbstractReadWriteProperty<Employee, User>(Employee.class, User.class, "createUser", 20,
             UserAccessor2.INSTANCE) {
             @Override
             public void set(Employee object, User value) {
@@ -462,6 +476,24 @@ public class EmployeeAccessor implements PropertyAccessor<Employee> {
     @Override
     public Property<Employee, ?>[] getProperties() {
         return map.values().toArray(new Property[map.size()]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T1, V> Property<T1, V> getProperty(int... indexes) {
+        // YUFEI_TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T1, V> Property<T1, V> getProperty(String... names) {
+        // YUFEI_TODO Auto-generated method stub
+        return null;
     }
 }
 //private Long id;

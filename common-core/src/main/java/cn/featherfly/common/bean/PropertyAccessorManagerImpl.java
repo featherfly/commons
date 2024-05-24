@@ -14,6 +14,7 @@ import cn.featherfly.common.lang.pool.ObjectPool;
  * property accessor manager .
  *
  * @author zhongj
+ * @since 1.13.0
  */
 public class PropertyAccessorManagerImpl extends ObjectPool<PropertyAccessor<?>, PropertyAccessorManagerImpl>
     implements PropertyAccessorManager {

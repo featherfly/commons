@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  * create instantiator by proxy, if error happen, create a ReflectionInstantiator.
  *
  * @author zhongj
- * @since 1.12.1
+ * @since 1.13.0
  */
 public class ProxyAndReflectionInstantiatorFactory implements InstantiatorFactory {
 
@@ -37,7 +37,7 @@ public class ProxyAndReflectionInstantiatorFactory implements InstantiatorFactor
      * {@inheritDoc}
      */
     @Override
-    public <T> Instantiator<T> create(Class<T> type) {
+    public <T> Instantiator<T> create(Class<T> type, ClassLoader classLoader) {
         try {
             return instantiatorFactory.create(type);
         } catch (Exception e) {

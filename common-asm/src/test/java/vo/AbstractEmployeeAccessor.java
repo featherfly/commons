@@ -1,4 +1,3 @@
-
 /*
  * All rights Reserved, Designed By zhongj
  * @Description:
@@ -10,7 +9,6 @@ package vo;
 
 import java.time.LocalDate;
 
-import cn.featherfly.common.bean.AbstractProperty;
 import cn.featherfly.common.bean.AbstractPropertyAccessor;
 import cn.featherfly.common.bean.PropertyAccessor;
 
@@ -92,7 +90,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
     //        return getProperty(name).getIndex();
     //    }
 
-    public static class EmployeeIdProperty extends AbstractProperty<Employee, Long> {
+    public static class EmployeeIdProperty extends AbstractReadWriteProperty<Employee, Long> {
 
         /**
          * @param instanceType
@@ -123,7 +121,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
 
     }
 
-    public static class EmployeeNameProperty extends AbstractProperty<Employee, String> {
+    public static class EmployeeNameProperty extends AbstractReadWriteProperty<Employee, String> {
         public EmployeeNameProperty() {
             super(Employee.class, String.class, "name", 1, null);
         }
@@ -139,7 +137,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeBirthDateProperty extends AbstractProperty<Employee, LocalDate> {
+    public static class EmployeeBirthDateProperty extends AbstractReadWriteProperty<Employee, LocalDate> {
         public EmployeeBirthDateProperty() {
             super(Employee.class, LocalDate.class, "birthDate", 2, null);
         }
@@ -155,7 +153,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeGenderProperty extends AbstractProperty<Employee, String> {
+    public static class EmployeeGenderProperty extends AbstractReadWriteProperty<Employee, String> {
         public EmployeeGenderProperty() {
             super(Employee.class, String.class, "gender", 3, null);
         }
@@ -171,7 +169,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeDepartmentIdProperty extends AbstractProperty<Employee, Integer> {
+    public static class EmployeeDepartmentIdProperty extends AbstractReadWriteProperty<Employee, Integer> {
         public EmployeeDepartmentIdProperty() {
             super(Employee.class, Integer.class, "departmentId", 4, null);
         }
@@ -187,7 +185,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeOrganIdProperty extends AbstractProperty<Employee, Integer> {
+    public static class EmployeeOrganIdProperty extends AbstractReadWriteProperty<Employee, Integer> {
         public EmployeeOrganIdProperty() {
             super(Employee.class, Integer.class, "organId", 5, null);
         }
@@ -203,7 +201,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeIdentityCardProperty extends AbstractProperty<Employee, String> {
+    public static class EmployeeIdentityCardProperty extends AbstractReadWriteProperty<Employee, String> {
         public EmployeeIdentityCardProperty() {
             super(Employee.class, String.class, "identityCard", 6, null);
         }
@@ -219,7 +217,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeMobileProperty extends AbstractProperty<Employee, String> {
+    public static class EmployeeMobileProperty extends AbstractReadWriteProperty<Employee, String> {
         public EmployeeMobileProperty() {
             super(Employee.class, String.class, "mobile", 7, null);
         }
@@ -235,7 +233,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeEmailProperty extends AbstractProperty<Employee, String> {
+    public static class EmployeeEmailProperty extends AbstractReadWriteProperty<Employee, String> {
         public EmployeeEmailProperty() {
             super(Employee.class, String.class, "email", 8, null);
         }
@@ -251,7 +249,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeFaxProperty extends AbstractProperty<Employee, String> {
+    public static class EmployeeFaxProperty extends AbstractReadWriteProperty<Employee, String> {
         public EmployeeFaxProperty() {
             super(Employee.class, String.class, "fax", 9, null);
         }
@@ -267,7 +265,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeRemark0Property extends AbstractProperty<Employee, String> {
+    public static class EmployeeRemark0Property extends AbstractReadWriteProperty<Employee, String> {
         public EmployeeRemark0Property() {
             super(Employee.class, String.class, "remark0", 10, null);
         }
@@ -283,7 +281,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeRemark1Property extends AbstractProperty<Employee, String> {
+    public static class EmployeeRemark1Property extends AbstractReadWriteProperty<Employee, String> {
         public EmployeeRemark1Property() {
             super(Employee.class, String.class, "remark1", 11, null);
         }
@@ -299,7 +297,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeRemark2Property extends AbstractProperty<Employee, String> {
+    public static class EmployeeRemark2Property extends AbstractReadWriteProperty<Employee, String> {
         public EmployeeRemark2Property() {
             super(Employee.class, String.class, "remark2", 12, null);
         }
@@ -315,7 +313,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeRemark3Property extends AbstractProperty<Employee, String> {
+    public static class EmployeeRemark3Property extends AbstractReadWriteProperty<Employee, String> {
         public EmployeeRemark3Property() {
             super(Employee.class, String.class, "remark3", 13, null);
         }
@@ -331,7 +329,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeRemark4Property extends AbstractProperty<Employee, String> {
+    public static class EmployeeRemark4Property extends AbstractReadWriteProperty<Employee, String> {
         public EmployeeRemark4Property() {
             super(Employee.class, String.class, "remark4", 14, null);
         }
@@ -347,7 +345,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeRemark5Property extends AbstractProperty<Employee, String> {
+    public static class EmployeeRemark5Property extends AbstractReadWriteProperty<Employee, String> {
         public EmployeeRemark5Property() {
             super(Employee.class, String.class, "remark5", 15, null);
         }
@@ -363,7 +361,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeRemark6Property extends AbstractProperty<Employee, String> {
+    public static class EmployeeRemark6Property extends AbstractReadWriteProperty<Employee, String> {
         public EmployeeRemark6Property() {
             super(Employee.class, String.class, "remark6", 16, null);
         }
@@ -379,7 +377,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeRemark7Property extends AbstractProperty<Employee, String> {
+    public static class EmployeeRemark7Property extends AbstractReadWriteProperty<Employee, String> {
         public EmployeeRemark7Property() {
             super(Employee.class, String.class, "remark7", 17, null);
         }
@@ -395,7 +393,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeRemark8Property extends AbstractProperty<Employee, String> {
+    public static class EmployeeRemark8Property extends AbstractReadWriteProperty<Employee, String> {
         public EmployeeRemark8Property() {
             super(Employee.class, String.class, "remark8", 18, null);
         }
@@ -411,7 +409,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeRemark9Property extends AbstractProperty<Employee, String> {
+    public static class EmployeeRemark9Property extends AbstractReadWriteProperty<Employee, String> {
         public EmployeeRemark9Property() {
             super(Employee.class, String.class, "remark9", 19, null);
         }
@@ -427,7 +425,7 @@ public abstract class AbstractEmployeeAccessor extends AbstractPropertyAccessor<
         }
     }
 
-    public static class EmployeeCreateUserProperty extends AbstractProperty<Employee, User> {
+    public static class EmployeeCreateUserProperty extends AbstractReadWriteProperty<Employee, User> {
         public EmployeeCreateUserProperty(PropertyAccessor<User> propertyVisitor) {
             super(Employee.class, User.class, "createUser", 20, propertyVisitor);
         }

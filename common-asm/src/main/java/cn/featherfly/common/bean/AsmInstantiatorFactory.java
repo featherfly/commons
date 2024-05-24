@@ -13,7 +13,6 @@ import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -27,16 +26,18 @@ import cn.featherfly.common.asm.Asm;
 import cn.featherfly.common.asm.AsmException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.BytesClassLoader;
+import cn.featherfly.common.lang.ClassLoaderUtils;
 import cn.featherfly.common.lang.ClassUtils;
+import cn.featherfly.common.lang.ReloadableClassloader;
 
 /**
  * asm instantiator factory.
  *
  * @author zhongj
  */
-public class AsmInstantiatorFactory implements InstantiatorFactory {
+public class AsmInstantiatorFactory extends ReloadableClassloader implements InstantiatorFactory {
 
-    private final Map<Class<?>, Instantiator<?>> types = new HashMap<>(0);
+    private final Map<Class<?>, Instantiator<?>> typeInstances = new HashMap<>(0);
 
     /** The Constant CLASS_NAME_SUFFIX. */
     public static final String CLASS_NAME_SUFFIX = "InstantiatorByFeatherfly";
@@ -46,28 +47,14 @@ public class AsmInstantiatorFactory implements InstantiatorFactory {
 
     private final BytesClassLoader bytesClassLoader;
 
-    private boolean cacheResults;
-
-    /**
-     * Instantiates a new asm instantiator factory.
-     *
-     * @param classLoader the class loader
-     */
-    public AsmInstantiatorFactory(Supplier<ClassLoader> classLoader) {
-        this(classLoader, true);
-    }
-
     /**
      * Instantiates a new instantiator factor.
      *
      * @param classLoader the class loader
-     * @param cacheResults the cache results
      */
-    public AsmInstantiatorFactory(Supplier<ClassLoader> classLoader, boolean cacheResults) {
+    public AsmInstantiatorFactory(ClassLoader classLoader) {
         super();
-        //        this.classLoader = classLoader;
-        this.cacheResults = cacheResults;
-        bytesClassLoader = new BytesClassLoader(classLoader.get());
+        bytesClassLoader = new BytesClassLoader(classLoader);
     }
 
     /**
@@ -75,29 +62,17 @@ public class AsmInstantiatorFactory implements InstantiatorFactory {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <T> Instantiator<T> create(Class<T> type) {
-        if (cacheResults) {
-            // load Instantiator type class from cache, if exists, return, else goto create instantiator type class.
-            Instantiator<T> instantiator = (Instantiator<T>) types.get(type);
-            if (instantiator != null) {
-                return instantiator;
-            }
-        } else {
-            try {
-                // try to load Instantiator type class, if success, the type already created, if expcetion, goto create instantiator type class.
-                Class<Instantiator<
-                    T>> instantiatorType = (Class<Instantiator<T>>) ClassUtils.forName(createClassName(type));
-                return ClassUtils.newInstance(instantiatorType);
-            } catch (Exception e) {
-            }
+    public <T> Instantiator<T> create(Class<T> type, ClassLoader classLoader) {
+        // load Instantiator type class from cache, if exists, return, else goto create instantiator type class.
+        Instantiator<T> instantiator = (Instantiator<T>) typeInstances.get(type);
+        if (instantiator != null) {
+            return instantiator;
         }
 
         try {
-            Class<Instantiator<T>> newType = create0(type);
-            Instantiator<T> instantiator = ClassUtils.newInstance(newType);
-            if (cacheResults) {
-                types.put(type, instantiator);
-            }
+            Class<Instantiator<T>> newType = create0(type, classLoader);
+            instantiator = ClassUtils.newInstance(newType);
+            typeInstances.put(type, instantiator);
             return instantiator;
         } catch (Exception e) {
             throw new AsmException(e);
@@ -105,9 +80,12 @@ public class AsmInstantiatorFactory implements InstantiatorFactory {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> Class<Instantiator<T>> create0(Class<T> type) throws Exception {
+    private <T> Class<Instantiator<T>> create0(Class<T> type, ClassLoader classLoader)
+        throws NoSuchMethodException, SecurityException {
         // check empty argu constructor
         type.getConstructor(ArrayUtils.EMPTY_CLASS_ARRAY);
+
+        classLoader = prepare(classLoader);
 
         String instantiateType = Type.getInternalName(type);
 
@@ -148,8 +126,9 @@ public class AsmInstantiatorFactory implements InstantiatorFactory {
         classNode.accept(cw);
         byte[] code = cw.toByteArray();
 
-        return (Class<Instantiator<T>>) bytesClassLoader.defineClass(createdClassName, code,
-            type.getProtectionDomain());
+        return (Class<Instantiator<T>>) ClassLoaderUtils.defineClass(classLoader, createdClassName, code,
+            type.getProtectionDomain(),
+            () -> bytesClassLoader.defineClass(createdClassName, code, type.getProtectionDomain()));
     }
 
     private String createClassName(Class<?> type) {
@@ -200,5 +179,13 @@ public class AsmInstantiatorFactory implements InstantiatorFactory {
         methodNode.visitMaxs(1, 1);
         methodNode.visitEnd();
         return methodNode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void doClassLoaderReload() {
+        typeInstances.clear();
     }
 }

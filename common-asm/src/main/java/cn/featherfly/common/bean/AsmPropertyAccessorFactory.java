@@ -28,8 +28,10 @@ import cn.featherfly.common.asm.Asm;
 import cn.featherfly.common.asm.AsmException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.BytesClassLoader;
+import cn.featherfly.common.lang.ClassLoaderUtils;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.lang.ReloadableClassloader;
 import cn.featherfly.common.lang.WordUtils;
 import cn.featherfly.common.policy.AllowDenyListPolicy;
 import cn.featherfly.common.policy.AllowDenyListPolicy.Strategy;
@@ -40,7 +42,7 @@ import cn.featherfly.common.policy.AllowPolicy;
  *
  * @author zhongj
  */
-public class AsmPropertyAccessorFactory implements PropertyAccessorFactory, Opcodes {
+public class AsmPropertyAccessorFactory extends ReloadableClassloader implements PropertyAccessorFactory, Opcodes {
 
     private final PropertyAccessorManagerImpl manager;
 
@@ -74,8 +76,6 @@ public class AsmPropertyAccessorFactory implements PropertyAccessorFactory, Opco
 
     private final BytesClassLoader bytesClassLoader;
 
-    private boolean cacheResults;
-
     private final AsmPropertyFactory propertyFactory;
 
     private final AllowPolicy<java.lang.reflect.Type> propertyVisitorCascadeCreatePolicy;
@@ -103,17 +103,7 @@ public class AsmPropertyAccessorFactory implements PropertyAccessorFactory, Opco
      * @param classLoader the class loader
      */
     public AsmPropertyAccessorFactory(ClassLoader classLoader) {
-        this(classLoader, true);
-    }
-
-    /**
-     * Instantiates a new instantiator factor.
-     *
-     * @param classLoader the class loader
-     * @param cacheResults the cache results
-     */
-    public AsmPropertyAccessorFactory(ClassLoader classLoader, boolean cacheResults) {
-        this(classLoader, cacheResults, defaultPolicy());
+        this(classLoader, defaultPolicy());
     }
 
     /**
@@ -124,32 +114,18 @@ public class AsmPropertyAccessorFactory implements PropertyAccessorFactory, Opco
      */
     public AsmPropertyAccessorFactory(ClassLoader classLoader,
         UnaryOperator<AllowDenyListPolicy<java.lang.reflect.Type>> unary) {
-        this(classLoader, true, unary);
+        this(classLoader, unary.apply(defaultPolicy()));
     }
 
     /**
      * Instantiates a new instantiator factor.
      *
      * @param classLoader the class loader
-     * @param cacheResults the cache results
-     * @param unary the unary
-     */
-    public AsmPropertyAccessorFactory(ClassLoader classLoader, boolean cacheResults,
-        UnaryOperator<AllowDenyListPolicy<java.lang.reflect.Type>> unary) {
-        this(classLoader, cacheResults, unary.apply(defaultPolicy()));
-    }
-
-    /**
-     * Instantiates a new instantiator factor.
-     *
-     * @param classLoader the class loader
-     * @param cacheResults the cache results
      * @param propertyVisitorCascadeCreatePolicy the property visitor cascade create policy
      */
-    public AsmPropertyAccessorFactory(ClassLoader classLoader, boolean cacheResults,
+    public AsmPropertyAccessorFactory(ClassLoader classLoader,
         AllowPolicy<java.lang.reflect.Type> propertyVisitorCascadeCreatePolicy) {
         super();
-        this.cacheResults = cacheResults;
         bytesClassLoader = new BytesClassLoader(classLoader);
         propertyFactory = new AsmPropertyFactory(bytesClassLoader);
 
@@ -161,26 +137,17 @@ public class AsmPropertyAccessorFactory implements PropertyAccessorFactory, Opco
      * {@inheritDoc}
      */
     @Override
-    public <T> PropertyAccessor<T> create(Class<T> type) {
-        if (cacheResults) {
-            // load PropertyVisitor type class from cache, if exists, return, else goto create PropertyVisitor type class.
-            PropertyAccessor<T> propertyAccessor = manager.getPropertyAccessor(type);
-            if (propertyAccessor != null) {
-                return propertyAccessor;
-            }
-        } else {
-            try {
-                return loadPropertyVisitor(type);
-            } catch (ClassNotFoundException e) {
-            }
+    public <T> PropertyAccessor<T> create(Class<T> type, ClassLoader classLoader) {
+        // load PropertyVisitor type class from cache, if exists, return, else goto create PropertyVisitor type class.
+        PropertyAccessor<T> propertyAccessor = manager.getPropertyAccessor(type);
+        if (propertyAccessor != null) {
+            return propertyAccessor;
         }
 
         try {
-            Class<PropertyAccessor<T>> newType = create0(type);
-            PropertyAccessor<T> propertyAccessor = ClassUtils.newInstance(newType);
-            if (cacheResults) {
-                manager.add(type, propertyAccessor);
-            }
+            Class<PropertyAccessor<T>> newType = create0(type, classLoader);
+            propertyAccessor = ClassUtils.newInstance(newType);
+            manager.add(type, propertyAccessor);
             return propertyAccessor;
         } catch (Exception e) {
             throw new AsmException(e);
@@ -191,11 +158,6 @@ public class AsmPropertyAccessorFactory implements PropertyAccessorFactory, Opco
      * Creates a new AsmPropertyAccessor object.
      */
     public void createPropertyAccessorCascade() {
-        if (!cacheResults) {
-            // TODO 后续来更改异常类型
-            throw new AsmException("create PropertyAccessor cascade cacheResults must be true");
-        }
-
         for (PropertyAccessor<?> propertyAccessor : manager.getAll()) {
             createPropertyAccessorRecursion(propertyAccessor);
         }
@@ -218,29 +180,12 @@ public class AsmPropertyAccessorFactory implements PropertyAccessorFactory, Opco
     }
 
     @SuppressWarnings("unchecked")
-    private <T> PropertyAccessor<T> loadPropertyVisitor(Class<T> type) throws ClassNotFoundException {
-        Class<PropertyAccessor<
-            T>> instantiatorType = (Class<PropertyAccessor<T>>) bytesClassLoader.loadClass(createClassName(type));
-        return ClassUtils.newInstance(instantiatorType);
-        /*
-         * if (classLoader.get() == null) {
-         * Class<PropertyVisitor<
-         * T>> instantiatorType = (Class<PropertyVisitor<T>>)
-         * bytesClassLoader.loadClass(createClassName(type));
-         * return ClassUtils.newInstance(instantiatorType);
-         * } else {
-         * Class<PropertyVisitor<
-         * T>> instantiatorType = (Class<PropertyVisitor<T>>)
-         * classLoader.get().loadClass(createClassName(type));
-         * return ClassUtils.newInstance(instantiatorType);
-         * }
-         */
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> Class<PropertyAccessor<T>> create0(Class<T> type) throws NoSuchMethodException, SecurityException {
+    private <T> Class<PropertyAccessor<T>> create0(Class<T> type, ClassLoader classLoader)
+        throws NoSuchMethodException, SecurityException {
         // check empty argu constructor
         type.getConstructor(ArrayUtils.EMPTY_CLASS_ARRAY);
+
+        classLoader = prepare(classLoader);
 
         String instantiateType = Type.getInternalName(type);
 
@@ -282,7 +227,7 @@ public class AsmPropertyAccessorFactory implements PropertyAccessorFactory, Opco
         List<Class<?>> newPropertyTypes = new ArrayList<>();
         for (BeanProperty<T, ?> beanProperty : bd.getBeanProperties()) {
             Class<?> propertyType = propertyFactory.create(createdClassName, type, beanProperty.getType(),
-                beanProperty.getName(), i);
+                beanProperty.getName(), i, classLoader);
             i++;
 
             newPropertyTypes.add(propertyType);
@@ -321,8 +266,9 @@ public class AsmPropertyAccessorFactory implements PropertyAccessorFactory, Opco
         //        os.flush();
         //        os.close();
 
-        return (Class<PropertyAccessor<T>>) bytesClassLoader.defineClass(createdClassName, code,
-            type.getProtectionDomain());
+        return (Class<PropertyAccessor<T>>) ClassLoaderUtils.defineClass(classLoader, createdClassByteCodeName, code,
+            type.getProtectionDomain(),
+            () -> bytesClassLoader.defineClass(createdClassName, code, type.getProtectionDomain()));
     }
 
     private MethodNode constructor(ClassNode classNode, List<Class<?>> propertyTypes) {
@@ -674,5 +620,13 @@ public class AsmPropertyAccessorFactory implements PropertyAccessorFactory, Opco
 
     private String createClassName(Class<?> type) {
         return type.getName() + CLASS_NAME_SUFFIX;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void doClassLoaderReload() {
+        manager.clear();
     }
 }

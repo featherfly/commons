@@ -14,6 +14,7 @@ package cn.featherfly.common.bean;
  * @author zhongj
  * @param <T> the generic type
  * @param <V> the value type
+ * @since 1.13.0
  */
 public abstract class AbstractProperty<T, V> extends AbstractPropertyDescriptor<T, V> implements Property<T, V> {
 
@@ -28,7 +29,7 @@ public abstract class AbstractProperty<T, V> extends AbstractPropertyDescriptor<
      * @param index the index
      * @param propertyAccessor the property accessor
      */
-    public AbstractProperty(Class<T> instanceType, Class<V> propertyType, String name, int index,
+    protected AbstractProperty(Class<T> instanceType, Class<V> propertyType, String name, int index,
         PropertyAccessor<V> propertyAccessor) {
         super(instanceType, propertyType, name, index);
         this.propertyAccessor = propertyAccessor;

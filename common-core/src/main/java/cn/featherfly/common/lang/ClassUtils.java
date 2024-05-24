@@ -554,7 +554,7 @@ public final class ClassUtils {
                 throw new NoSuchMethodException("method is static, not a java bean getter");
             }
         } catch (Exception e) {
-            if (type != Boolean.TYPE) {
+            if (field.getType() != Boolean.TYPE) {
                 return method;
             }
             LOGGER.trace("没有找到get{}方法, 使用is{}查找", field.getName(), field.getName());

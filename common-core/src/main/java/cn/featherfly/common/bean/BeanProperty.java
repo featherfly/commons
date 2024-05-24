@@ -220,19 +220,17 @@ public class BeanProperty<T, V> implements Type<V>, Property<T, V> {
     }
 
     /**
-     * 当前属性是否是可读属性，拥有getter .
-     *
-     * @return 是否可读
+     * {@inheritDoc}
      */
+    @Override
     public boolean isReadable() {
         return getter != null;
     }
 
     /**
-     * 当前属性是否是可写属性，拥有setter .
-     *
-     * @return 是否可写
+     * {@inheritDoc}
      */
+    @Override
     public boolean isWritable() {
         return setter != null;
     }

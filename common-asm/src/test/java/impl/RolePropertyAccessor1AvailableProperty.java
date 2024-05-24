@@ -35,4 +35,19 @@ public class RolePropertyAccessor1AvailableProperty extends AbstractProperty<Rol
         return object.isAvailable();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isReadable() {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isWritable() {
+        return true;
+    }
 }

@@ -22,6 +22,7 @@ import cn.featherfly.common.function.serializable.SerializableSupplier;
  *
  * @author zhongj
  * @param <T> the generic type
+ * @since 1.13.0
  */
 public interface IBeanDescriptor<T> extends PropertyAccessor<T> {
 

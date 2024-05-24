@@ -29,9 +29,9 @@ public class ClassMappingUtilsTest2 extends JdbcTestBase {
     @BeforeClass
     public void setup() {
         factory = new CompatibleJdbcMappingFactory(DatabaseMetadataManager.getDefaultManager().create(dataSource),
-                dialect);
+            dialect);
         factory2 = new StrictJdbcMappingFactory(DatabaseMetadataManager.getDefaultManager().create(dataSource),
-                dialect);
+            dialect);
     }
 
     @Test
@@ -49,14 +49,14 @@ public class ClassMappingUtilsTest2 extends JdbcTestBase {
     @Test
     void testSelectWithManyToOne() {
         String result = "`id` `id`, `user_id` `user.id`, `name` `name`";
-        String selectSql = ClassMappingUtils.getSelectColumnsSql(factory.getClassMapping(UserInfo.class), null,
-                dialect);
+        String selectSql = ClassMappingUtils.getSelectColumnsSql(factory.getClassMapping(UserInfo.class), null, dialect)
+            .get0();
         System.out.println(selectSql);
 
         assertEquals(selectSql, result);
 
-        String selectSql2 = ClassMappingUtils.getSelectColumnsSql(factory2.getClassMapping(UserInfo.class), null,
-                dialect);
+        String selectSql2 = ClassMappingUtils
+            .getSelectColumnsSql(factory2.getClassMapping(UserInfo.class), null, dialect).get0();
         System.out.println(selectSql2);
 
         String result2 = "`id` `id`, `name` `name`, `user_id` `user.id`";
@@ -65,14 +65,14 @@ public class ClassMappingUtilsTest2 extends JdbcTestBase {
 
     @Test
     void testSelectWithManyToOne2() {
-        String selectSql = ClassMappingUtils.getSelectColumnsSql(factory.getClassMapping(UserInfo2.class), null,
-                dialect);
+        String selectSql = ClassMappingUtils
+            .getSelectColumnsSql(factory.getClassMapping(UserInfo2.class), null, dialect).get0();
         System.out.println(selectSql);
 
         assertEquals(selectSql, "`ID` `id`, `USER` `user.id`, `name` `name`");
 
-        String selectSql2 = ClassMappingUtils.getSelectColumnsSql(factory2.getClassMapping(UserInfo2.class), null,
-                dialect);
+        String selectSql2 = ClassMappingUtils
+            .getSelectColumnsSql(factory2.getClassMapping(UserInfo2.class), null, dialect).get0();
         System.out.println(selectSql2);
 
         assertEquals(selectSql2, "`id` `id`, `name` `name`, `user` `user.id`");

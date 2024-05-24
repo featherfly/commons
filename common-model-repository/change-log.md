@@ -1,3 +1,6 @@
+# 0.4.1
+1.
+
 # 0.4.0 2024-05-05
 1. ClassMapping, PropertyMapping, MappingFactory加入泛型
 2. PropertyMapping加入mode

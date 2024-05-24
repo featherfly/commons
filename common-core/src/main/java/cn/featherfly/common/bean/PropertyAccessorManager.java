@@ -12,8 +12,16 @@ package cn.featherfly.common.bean;
  * PropertyAccessorManager.
  *
  * @author zhongj
+ * @since 1.13.0
  */
 public interface PropertyAccessorManager {
 
+    /**
+     * Gets the property accessor.
+     *
+     * @param <T> the generic type
+     * @param type the type
+     * @return the property accessor
+     */
     <T> PropertyAccessor<T> getPropertyAccessor(Class<T> type);
 }

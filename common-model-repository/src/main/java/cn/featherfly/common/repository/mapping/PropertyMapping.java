@@ -5,28 +5,44 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 /**
- * <p>
- * 属性与列的映射对象
- * </p>
- * .
+ * entity property map to
+ * 属性与列的映射对象.
  *
  * @author zhongj
  * @version 0.1.0
+ * @param <P> the generic type
  * @since 0.1.0
  */
 public class PropertyMapping<P extends PropertyMapping<P>> {
 
+    /**
+     * The Enum Mode.
+     *
+     * @author zhongj
+     */
     public enum Mode {
-        SINGLE, EMBEDDED, MANY_TO_ONE, ONE_TO_MANY
+
+        /** The single. */
+        SINGLE,
+        /** The embedded. */
+        EMBEDDED,
+        /** The many to one. */
+        MANY_TO_ONE,
+        /** The one to many. */
+        ONE_TO_MANY
     }
 
     /**
      * Instantiates a new property mapping.
      */
     public PropertyMapping() {
-
+        super();
     }
+
+    private int propertyIndex;
 
     private String propertyName;
 
@@ -40,6 +56,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
 
     private Map<String, P> propertyMappings = new HashMap<>(0);
 
+    /** The parent. */
     protected P parent;
 
     private int size;
@@ -64,6 +81,37 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
     private boolean autoincrement;
 
     private int index = 0;
+
+    /**
+     * Sets the property index.
+     *
+     * @param propertyIndex the new property index
+     */
+    public void setPropertyIndex(int propertyIndex) {
+        this.propertyIndex = propertyIndex;
+    }
+
+    /**
+     * Gets the property index.
+     *
+     * @return the property index
+     */
+    public int getPropertyIndex() {
+        return propertyIndex;
+    }
+
+    /**
+     * Gets the property full name.
+     *
+     * @return the property full name
+     */
+    public int[] getPropertyIndexes() {
+        if (parent != null) {
+            return ArrayUtils.addAll(parent.getPropertyIndexes(), getPropertyIndex());
+        } else {
+            return new int[] { getPropertyIndex() };
+        }
+    }
 
     /**
      * 返回index.
@@ -277,6 +325,19 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
      *
      * @return the property full name
      */
+    public String[] getPropertyNames() {
+        if (parent != null) {
+            return ArrayUtils.addAll(parent.getPropertyNames(), getPropertyName());
+        } else {
+            return new String[] { getPropertyName() };
+        }
+    }
+
+    /**
+     * Gets the property full name.
+     *
+     * @return the property full name
+     */
     public String getPropertyFullName() {
         if (parent != null) {
             return parent.getPropertyFullName() + "." + getPropertyName();
@@ -324,7 +385,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
     }
 
     /**
-     * get mode value
+     * get mode value.
      *
      * @return mode
      */
@@ -333,7 +394,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
     }
 
     /**
-     * set mode value
+     * set mode value.
      *
      * @param mode mode
      */
@@ -425,8 +486,8 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
     @Override
     public String toString() {
         return "PropertyMapping [propertyName=" + propertyName + ", repositoryFieldName=" + repositoryFieldName
-                + ", propertyType=" + propertyType + ", primaryKey=" + primaryKey + ", defaultValue=" + defaultValue
-                + ", mode=" + mode + ", propertyMappings=" + propertyMappings + ", parent="
-                + (parent == null ? "" : parent.getPropertyName()) + "]";
+            + ", propertyType=" + propertyType + ", primaryKey=" + primaryKey + ", defaultValue=" + defaultValue
+            + ", mode=" + mode + ", propertyMappings=" + propertyMappings + ", parent="
+            + (parent == null ? "" : parent.getPropertyName()) + "]";
     }
 }

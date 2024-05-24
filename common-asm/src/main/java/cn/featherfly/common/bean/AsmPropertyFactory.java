@@ -20,9 +20,12 @@ import org.objectweb.asm.tree.MethodNode;
 
 import cn.featherfly.common.asm.Asm;
 import cn.featherfly.common.asm.AsmException;
+import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.BytesClassLoader;
+import cn.featherfly.common.lang.ClassLoaderUtils;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.lang.ReloadableClassloader;
 import cn.featherfly.common.lang.WordUtils;
 
 /**
@@ -30,13 +33,15 @@ import cn.featherfly.common.lang.WordUtils;
  *
  * @author zhongj
  */
-public class AsmPropertyFactory implements Opcodes {
+public class AsmPropertyFactory extends ReloadableClassloader implements Opcodes {
 
     /** The Constant CLASS_NAME_SUFFIX. */
     public static final String CLASS_NAME_SUFFIX = "Property";
 
     private static final String GET_METHOD_NAME = "get";
     private static final String SET_METHOD_NAME = "set";
+    private static final String IS_READABLE_METHOD_NAME = "isReadable";
+    private static final String IS_WRITABLE_METHOD_NAME = "isWritable";
 
     private final BytesClassLoader bytesClassLoader;
 
@@ -44,7 +49,6 @@ public class AsmPropertyFactory implements Opcodes {
      * Instantiates a new asm instantiator factory.
      *
      * @param bytesClassLoader the bytes class loader
-     * @param classLoader the class loader
      */
     public AsmPropertyFactory(BytesClassLoader bytesClassLoader) {
         this.bytesClassLoader = bytesClassLoader;
@@ -68,19 +72,21 @@ public class AsmPropertyFactory implements Opcodes {
      *
      * @param <T> the generic type
      * @param <V> the value type
+     * @param propertyVisitorName the property visitor name
      * @param instanceType the instance class name
      * @param propertyType the property type
      * @param propertyName the property name
      * @param propertyIndex the property index
-     * @return the class< property< t, v>>
-     * @throws SecurityException
-     * @throws NoSuchMethodException
-     * @throws Exception the exception
+     * @param classLoader the class loader
+     * @return the class&lt;Property&lt;T,V&gt;&gt;
+     * @throws SecurityException the security exception
      */
     @SuppressWarnings("unchecked")
     public <T, V> Class<Property<T, V>> create(String propertyVisitorName, Class<T> instanceType, Class<V> propertyType,
-        String propertyName, int propertyIndex) {
+        String propertyName, int propertyIndex, ClassLoader classLoader) {
         try {
+            classLoader = prepare(classLoader);
+
             String createdClassName = createInnerClassName(propertyVisitorName, propertyName);
             // bcf byte code format
             String createdClassNameBcf = Asm.getName(createdClassName);
@@ -112,10 +118,16 @@ public class AsmPropertyFactory implements Opcodes {
             // constructor
             classNode.methods.add(constract(instanceType, propertyType, propertyName, propertyIndex));
             // instantiate method
+            BeanProperty<T, V> beanProperty = (BeanProperty<T, V>) BeanDescriptor.getBeanDescriptor(instanceType)
+                .getProperty(propertyName);
             // get
-            classNode.methods.addAll(methodGet(createdClassNameBcf, instanceType, propertyClassNameBcf, propertyName));
+            classNode.methods.addAll(get(createdClassNameBcf, instanceType, propertyClassNameBcf, beanProperty));
             // set
-            classNode.methods.addAll(methodSet(createdClassNameBcf, instanceType, propertyClassNameBcf, propertyName));
+            classNode.methods.addAll(set(createdClassNameBcf, instanceType, propertyClassNameBcf, beanProperty));
+            // isReadable
+            classNode.methods.add(isReadable(beanProperty.isReadable()));
+            // isWritable
+            classNode.methods.add(isWritable(beanProperty.isWritable()));
 
             classNode.accept(cw);
             byte[] code = cw.toByteArray();
@@ -126,8 +138,9 @@ public class AsmPropertyFactory implements Opcodes {
             //            os.flush();
             //            os.close();
 
-            return (Class<Property<T, V>>) bytesClassLoader.defineClass(createdClassName, code,
-                instanceType.getProtectionDomain());
+            return (Class<Property<T, V>>) ClassLoaderUtils.defineClass(classLoader, createdClassName, code,
+                instanceType.getProtectionDomain(),
+                () -> bytesClassLoader.defineClass(createdClassName, code, instanceType.getProtectionDomain()));
         } catch (Exception e) {
             throw new AsmException(e);
         }
@@ -184,8 +197,8 @@ public class AsmPropertyFactory implements Opcodes {
         return methodNode;
     }
 
-    private List<MethodNode> methodGet(String createdClassNameBcf, Class<?> instanceType, String propertyClassNameBcf,
-        String propertyName) throws NoSuchMethodException, SecurityException {
+    private List<MethodNode> get(String createdClassNameBcf, Class<?> instanceType, String propertyClassNameBcf,
+        BeanProperty<?, ?> beanProperty) throws NoSuchMethodException, SecurityException {
         String instanceClassNameBcf = Type.getInternalName(instanceType);
 
         final boolean primitive = Asm.isPrimitive(propertyClassNameBcf);
@@ -199,16 +212,29 @@ public class AsmPropertyFactory implements Opcodes {
 
         MethodNode methodNode = new MethodNode(Opcodes.ACC_PUBLIC, GET_METHOD_NAME, Type.getMethodDescriptor(
             Type.getObjectType(warrperPropertyClassNameBcf), Type.getObjectType(instanceClassNameBcf)), null, null);
-        methodNode.visitVarInsn(ALOAD, 1);
-        methodNode.visitMethodInsn(INVOKEVIRTUAL, instanceClassNameBcf, prefix + WordUtils.upperCaseFirst(propertyName),
-            Type.getMethodDescriptor(Asm.getType(propertyClassNameBcf)), false);
+        if (beanProperty.isReadable()) {
+            methodNode.visitVarInsn(ALOAD, 1);
+            methodNode.visitMethodInsn(INVOKEVIRTUAL, instanceClassNameBcf,
+                prefix + WordUtils.upperCaseFirst(beanProperty.getName()),
+                Type.getMethodDescriptor(Asm.getType(propertyClassNameBcf)), false);
 
-        if (primitive) { // auto wrapper primitive type
-            methodNode.visitMethodInsn(INVOKESTATIC, warrperPropertyClassNameBcf, Asm.PRIMITIVE_BOXING_METHOD,
-                Asm.getPrimitiveBoxingMethodDescriptor(propertyClassNameBcf), false);
+            if (primitive) { // auto wrapper primitive type
+                methodNode.visitMethodInsn(INVOKESTATIC, warrperPropertyClassNameBcf, Asm.PRIMITIVE_BOXING_METHOD,
+                    Asm.getPrimitiveBoxingMethodDescriptor(propertyClassNameBcf), false);
+            }
+
+            methodNode.visitInsn(ARETURN);
+        } else {
+            methodNode.visitVarInsn(ALOAD, 0);
+            methodNode.visitFieldInsn(GETFIELD, createdClassNameBcf, "instanceType", Type.getDescriptor(Class.class));
+            methodNode.visitVarInsn(ALOAD, 0);
+            methodNode.visitFieldInsn(GETFIELD, createdClassNameBcf, "name", Type.getDescriptor(String.class));
+            methodNode.visitMethodInsn(INVOKESTATIC, Type.getInternalName(PropertyAccessException.class),
+                "propertyNoGetter", Type.getMethodDescriptor(Type.getType(PropertyAccessException.class),
+                    Asm.getType(Class.class), Type.getType(String.class)),
+                false);
+            methodNode.visitInsn(ATHROW);
         }
-
-        methodNode.visitInsn(ARETURN);
         //methodNode.visitMaxs(1, 2); // user ClassWriter.COMPUTE_MAXS instead
         methodNode.visitEnd();
 
@@ -228,8 +254,8 @@ public class AsmPropertyFactory implements Opcodes {
         return Lang.list(methodNode, methodNode2);
     }
 
-    private List<MethodNode> methodSet(String createdClassNameBcf, Class<?> instanceType, String propertyClassNameBcf,
-        String propertyName) throws NoSuchMethodException, SecurityException {
+    private List<MethodNode> set(String createdClassNameBcf, Class<?> instanceType, String propertyClassNameBcf,
+        BeanProperty<?, ?> beanProperty) throws NoSuchMethodException, SecurityException {
         String instanceClassNameBcf = Type.getInternalName(instanceType);
 
         final boolean primitive = Asm.isPrimitive(propertyClassNameBcf);
@@ -244,16 +270,29 @@ public class AsmPropertyFactory implements Opcodes {
             Type.getObjectType(instanceClassNameBcf), Type.getObjectType(warrperPropertyClassNameBcf));
 
         MethodNode methodNode = new MethodNode(Opcodes.ACC_PUBLIC, SET_METHOD_NAME, setMethodDescptor, null, null);
-        methodNode.visitVarInsn(ALOAD, 1);
-        methodNode.visitVarInsn(ALOAD, 2);
-        if (primitive) { // auto wrapper primitive type
-            methodNode.visitMethodInsn(INVOKEVIRTUAL, warrperPropertyClassNameBcf,
-                Asm.getPrimitiveUnboxingMethod(propertyClassNameBcf),
-                Asm.getPrimitiveUnboxingMethodDescriptor(propertyClassNameBcf), false);
+        if (beanProperty.isWritable()) {
+            methodNode.visitVarInsn(ALOAD, 1);
+            methodNode.visitVarInsn(ALOAD, 2);
+            if (primitive) { // auto wrapper primitive type
+                methodNode.visitMethodInsn(INVOKEVIRTUAL, warrperPropertyClassNameBcf,
+                    Asm.getPrimitiveUnboxingMethod(propertyClassNameBcf),
+                    Asm.getPrimitiveUnboxingMethodDescriptor(propertyClassNameBcf), false);
+            }
+            methodNode.visitMethodInsn(INVOKEVIRTUAL, instanceClassNameBcf,
+                "set" + WordUtils.upperCaseFirst(beanProperty.getName()),
+                Type.getMethodDescriptor(Type.getType(Void.TYPE), Asm.getType(propertyClassNameBcf)), false);
+            methodNode.visitInsn(RETURN);
+        } else {
+            methodNode.visitVarInsn(ALOAD, 0);
+            methodNode.visitFieldInsn(GETFIELD, createdClassNameBcf, "instanceType", Type.getDescriptor(Class.class));
+            methodNode.visitVarInsn(ALOAD, 0);
+            methodNode.visitFieldInsn(GETFIELD, createdClassNameBcf, "name", Type.getDescriptor(String.class));
+            methodNode.visitMethodInsn(INVOKESTATIC, Type.getInternalName(PropertyAccessException.class),
+                "propertyNoSetter", Type.getMethodDescriptor(Type.getType(PropertyAccessException.class),
+                    Asm.getType(Class.class), Type.getType(String.class)),
+                false);
+            methodNode.visitInsn(ATHROW);
         }
-        methodNode.visitMethodInsn(INVOKEVIRTUAL, instanceClassNameBcf, "set" + WordUtils.upperCaseFirst(propertyName),
-            Type.getMethodDescriptor(Type.getType(Void.TYPE), Asm.getType(propertyClassNameBcf)), false);
-        methodNode.visitInsn(RETURN);
         //methodNode.visitMaxs(2, 3); // user ClassWriter.COMPUTE_MAXS instead
         methodNode.visitEnd();
 
@@ -275,14 +314,48 @@ public class AsmPropertyFactory implements Opcodes {
         return Lang.list(methodNode, methodNode2);
     }
 
+    private MethodNode isReadable(boolean readable) throws NoSuchMethodException, SecurityException {
+        MethodNode methodNode = new MethodNode(ACC_PUBLIC, IS_READABLE_METHOD_NAME,
+            Type.getMethodDescriptor(Property.class.getMethod(IS_READABLE_METHOD_NAME, ArrayUtils.EMPTY_CLASS_ARRAY)),
+            null, null);
+        if (readable) {
+            methodNode.visitInsn(ICONST_1);
+        } else {
+            methodNode.visitInsn(ICONST_0);
+        }
+        methodNode.visitInsn(IRETURN);
+        methodNode.visitEnd();
+        return methodNode;
+    }
+
+    private MethodNode isWritable(boolean writable) throws NoSuchMethodException, SecurityException {
+        MethodNode methodNode = new MethodNode(ACC_PUBLIC, IS_WRITABLE_METHOD_NAME,
+            Type.getMethodDescriptor(Property.class.getMethod(IS_WRITABLE_METHOD_NAME, ArrayUtils.EMPTY_CLASS_ARRAY)),
+            null, null);
+        if (writable) {
+            methodNode.visitInsn(ICONST_1);
+        } else {
+            methodNode.visitInsn(ICONST_0);
+        }
+        methodNode.visitInsn(IRETURN);
+        methodNode.visitEnd();
+        return methodNode;
+    }
+
     private String createClassName(String propertyName) {
         // inner class
         return WordUtils.upperCaseFirst(propertyName) + CLASS_NAME_SUFFIX;
     }
 
     private String createInnerClassName(String outerClassName, String propertyName) {
-        // inner class
-        //        return outerClassName + "$" + createClassName(propertyName);
         return outerClassName + createClassName(propertyName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void doClassLoaderReload() {
+        // no cache need to clear
     }
 }

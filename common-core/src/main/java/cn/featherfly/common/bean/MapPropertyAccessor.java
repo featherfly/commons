@@ -19,6 +19,7 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
  * MapPropertyAccessor.
  *
  * @author zhongj
+ * @since 1.13.0
  */
 public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>> {
 
@@ -212,9 +213,27 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
      * {@inheritDoc}
      */
     @Override
+    public <T1, V> Property<T1, V> getProperty(int... indexes) {
+        throw new UnsupportedException(
+            "unsupport method getProperty(int...), because map does not have property metadata");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public <V> Property<Map<Object, Object>, V> getProperty(String name) {
         throw new UnsupportedException(
             "unsupport method getProperty(String), because map does not have property metadata");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T1, V> Property<T1, V> getProperty(String... names) {
+        throw new UnsupportedException(
+            "unsupport method getProperty(String...), because map does not have property metadata");
     }
 
     /**

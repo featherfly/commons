@@ -6,7 +6,7 @@
  * @date: 2024-05-21 19:06:21
  * @Copyright: 2024 www.featherfly.cn Inc. All rights reserved.
  */
-package impl;
+package cn.featherfly.common.bean;
 
 import static org.junit.Assert.assertNull;
 import static org.testng.Assert.assertEquals;
@@ -14,9 +14,9 @@ import static org.testng.Assert.assertEquals;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import cn.featherfly.common.bean.AsmPropertyFactory;
-import cn.featherfly.common.bean.Property;
 import cn.featherfly.common.lang.BytesClassLoader;
+import impl.Role;
+import impl.RolePropertyAccessor1;
 
 /**
  * AsmPropertyFactoryTest.
@@ -27,9 +27,12 @@ public class AsmPropertyFactoryTest {
 
     AsmPropertyFactory factory;
 
+    ClassLoader classLoader;
+
     @BeforeClass
     void bc() {
         factory = new AsmPropertyFactory(new BytesClassLoader(Thread.currentThread().getContextClassLoader()));
+        classLoader = Thread.currentThread().getContextClassLoader();
     }
 
     @Test
@@ -38,7 +41,7 @@ public class AsmPropertyFactoryTest {
         Role role = new Role();
         Property<Role,
             String> nameProperty = factory.newInstance(
-                factory.create(RolePropertyAccessor1.class.getName(), Role.class, String.class, "name", 1),
+                factory.create(RolePropertyAccessor1.class.getName(), Role.class, String.class, "name", 1, classLoader),
                 new RolePropertyAccessor1());
 
         assertNull(role.getName());
@@ -86,7 +89,7 @@ public class AsmPropertyFactoryTest {
         role.setAge(18);
         Property<Role,
             Integer> ageProperty = factory.newInstance(
-                factory.create(RolePropertyAccessor1.class.getName(), Role.class, int.class, "age", 3),
+                factory.create(RolePropertyAccessor1.class.getName(), Role.class, int.class, "age", 3, classLoader),
                 new RolePropertyAccessor1());
 
         assertEquals(ageProperty.get(role), Integer.valueOf(role.getAge()));
@@ -98,10 +101,33 @@ public class AsmPropertyFactoryTest {
         Role role = new Role();
         role.setAvailable(false);
         Property<Role,
-            Boolean> availableProperty = factory.newInstance(
-                factory.create(RolePropertyAccessor1.class.getName(), Role.class, boolean.class, "available", 4),
-                new RolePropertyAccessor1());
+            Boolean> availableProperty = factory.newInstance(factory.create(RolePropertyAccessor1.class.getName(),
+                Role.class, boolean.class, "available", 4, classLoader), new RolePropertyAccessor1());
 
         assertEquals(availableProperty.get(role), Boolean.valueOf(role.isAvailable()));
+    }
+
+    @Test(expectedExceptions = PropertyAccessException.class)
+    void testPropertyNoSetter() throws Exception {
+        //       String outerClassName, Class<T> instanceType, Class<V> propertyType, String propertyName, int propertyIndex
+        Role role = new Role();
+        Property<Role, Integer> readProperty = factory.newInstance(
+            factory.create(RolePropertyAccessor1.class.getName(), Role.class, Integer.class, "read", 5, classLoader),
+            new RolePropertyAccessor1());
+
+        readProperty.set(role, 123);
+
+        assertEquals(readProperty.get(role), role.getRead());
+    }
+
+    @Test(expectedExceptions = PropertyAccessException.class)
+    void testPropertyNoGetter() throws Exception {
+        //       String outerClassName, Class<T> instanceType, Class<V> propertyType, String propertyName, int propertyIndex
+        Role role = new Role();
+        Property<Role, Integer> writeProperty = factory.newInstance(
+            factory.create(RolePropertyAccessor1.class.getName(), Role.class, Integer.class, "write", 6, classLoader),
+            new RolePropertyAccessor1());
+
+        writeProperty.get(role);
     }
 }

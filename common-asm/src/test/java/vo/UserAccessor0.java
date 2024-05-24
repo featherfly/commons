@@ -8,8 +8,6 @@
  */
 package vo;
 
-import cn.featherfly.common.bean.AbstractProperty;
-
 /**
  * UserProperties.
  *
@@ -22,7 +20,7 @@ public class UserAccessor0 {
      *
      * @author zhongj
      */
-    public static class UserNameProperty extends AbstractProperty<User, String> {
+    public static class UserNameProperty extends AbstractReadWriteProperty<User, String> {
 
         /**
          * Instantiates a new user name property.
@@ -51,7 +49,7 @@ public class UserAccessor0 {
     /**
      * @author zhongj
      */
-    public static class UserAgeProperty extends AbstractProperty<User, Integer> {
+    public static class UserAgeProperty extends AbstractReadWriteProperty<User, Integer> {
 
         /**
          * Instantiates a new user age property.
@@ -74,7 +72,7 @@ public class UserAccessor0 {
     /**
      * @author zhongj
      */
-    public static class UserUsernameProperty extends AbstractProperty<User, String> {
+    public static class UserUsernameProperty extends AbstractReadWriteProperty<User, String> {
 
         /**
          * Instantiates a new user name property.
@@ -103,7 +101,7 @@ public class UserAccessor0 {
     /**
      * @author zhongj
      */
-    public static class UserGenderProperty extends AbstractProperty<User, String> {
+    public static class UserGenderProperty extends AbstractReadWriteProperty<User, String> {
 
         /**
          * Instantiates a new user name property.

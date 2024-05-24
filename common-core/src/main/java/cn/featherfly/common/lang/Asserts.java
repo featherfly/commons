@@ -11,7 +11,7 @@ import java.util.function.Supplier;
  * 断言工具类，对于满足断言的情况，抛出IllegalArgumentException异常,一般用于检查传入参数是否合法.
  *
  * @author zhongj
- * @since 1.12.1
+ * @since 1.13.0
  */
 public final class Asserts {
 

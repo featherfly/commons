@@ -408,6 +408,24 @@ public class EmployeeAccessorSwitchDirect implements PropertyAccessor<Employee> 
         return map.values().toArray(new Property[map.size()]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T1, V> Property<T1, V> getProperty(int... indexes) {
+        // YUFEI_TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T1, V> Property<T1, V> getProperty(String... names) {
+        // YUFEI_TODO Auto-generated method stub
+        return null;
+    }
+
     //    /**
     //     * {@inheritDoc}
     //     */

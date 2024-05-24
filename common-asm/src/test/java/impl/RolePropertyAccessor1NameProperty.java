@@ -37,4 +37,20 @@ public class RolePropertyAccessor1NameProperty extends AbstractProperty<Role, St
     public void set(Role object, String value) {
         object.setName(value);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isReadable() {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isWritable() {
+        return true;
+    }
 }

@@ -14,6 +14,7 @@ package cn.featherfly.common.bean;
  * @author zhongj
  * @param <T> the bean type
  * @param <V> the get value type
+ * @since 1.13.0
  */
 public interface Getter<T, V> {
 

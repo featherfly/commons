@@ -11,7 +11,6 @@ package vo;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.featherfly.common.bean.AbstractProperty;
 import cn.featherfly.common.bean.AbstractPropertyAccessor;
 import cn.featherfly.common.bean.Property;
 import cn.featherfly.common.exception.UnsupportedException;
@@ -183,7 +182,7 @@ public class UserAccessorSwitchDirect extends AbstractPropertyAccessor<User> {
      *
      * @author zhongj
      */
-    public static class UserNameProperty extends AbstractProperty<User, String> {
+    public static class UserNameProperty extends AbstractReadWriteProperty<User, String> {
 
         /**
          * Instantiates a new user name property.
@@ -212,7 +211,7 @@ public class UserAccessorSwitchDirect extends AbstractPropertyAccessor<User> {
     /**
      * @author zhongj
      */
-    public static class UserAgeProperty extends AbstractProperty<User, Integer> {
+    public static class UserAgeProperty extends AbstractReadWriteProperty<User, Integer> {
 
         /**
          * Instantiates a new user age property.
@@ -235,7 +234,7 @@ public class UserAccessorSwitchDirect extends AbstractPropertyAccessor<User> {
     /**
      * @author zhongj
      */
-    public static class UserUsernameProperty extends AbstractProperty<User, String> {
+    public static class UserUsernameProperty extends AbstractReadWriteProperty<User, String> {
 
         /**
          * Instantiates a new user name property.
@@ -264,7 +263,7 @@ public class UserAccessorSwitchDirect extends AbstractPropertyAccessor<User> {
     /**
      * @author zhongj
      */
-    public static class UserGenderProperty extends AbstractProperty<User, String> {
+    public static class UserGenderProperty extends AbstractReadWriteProperty<User, String> {
 
         /**
          * Instantiates a new user name property.

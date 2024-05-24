@@ -38,7 +38,7 @@ public abstract class AbstractStore implements Store {
      *
      * @return the java sql type mappers
      */
-    protected abstract Collection<JavaSqlTypeMapper<?>> getJavaSqlTypeMappers();
+    protected abstract Collection<JavaSqlTypeMapper<Object>> getJavaSqlTypeMappers();
 
     /**
      * {@inheritDoc}
@@ -48,9 +48,8 @@ public abstract class AbstractStore implements Store {
         ClassType<?> type = new ClassType<>(register.getJavaType());
         JavaToSqlTypeRegister<?> oldRegister = javaToSqlTypeRegisterMap.get(type);
         if (oldRegister != null) {
-            throw new JdbcMappingException("#java.type.registed",
-                    new Object[] { type.getType().getName(), oldRegister.getClass().getName(),
-                            oldRegister.getSqlType().getName(), register.getClass().getName() });
+            throw new JdbcMappingException("#java.type.registed", new Object[] { type.getType().getName(),
+                oldRegister.getClass().getName(), oldRegister.getSqlType().getName(), register.getClass().getName() });
         }
         javaToSqlTypeRegisterMap.put(type, register);
         logger.debug("regist java type {} with sql type {}", type.getType().getName(), register.getSqlType().getName());
@@ -63,19 +62,18 @@ public abstract class AbstractStore implements Store {
     public void add(SqlTypeToJavaRegister<?> register) {
         SqlTypeToJavaRegister<?> oldRegister = sqlTypeToJavaRegisterMap.get(register.getSqlType());
         if (oldRegister != null) {
-            throw new JdbcMappingException("#sql.type.registed",
-                    new Object[] { oldRegister.getSqlType().getName(), oldRegister.getClass().getName(),
-                            oldRegister.getJavaType().getName(), register.getClass().getName() });
+            throw new JdbcMappingException("#sql.type.registed", new Object[] { oldRegister.getSqlType().getName(),
+                oldRegister.getClass().getName(), oldRegister.getJavaType().getName(), register.getClass().getName() });
         }
         sqlTypeToJavaRegisterMap.put(register.getSqlType(), register);
         logger.debug("regist java type {} with sql type {}", register.getJavaType().getName(),
-                register.getSqlType().getName());
+            register.getSqlType().getName());
     }
 
     /**
      * Gets the sql type.
      *
-     * @param <E>      the element type
+     * @param <E> the element type
      * @param javaType the java type
      * @return the sql type
      */
@@ -87,7 +85,7 @@ public abstract class AbstractStore implements Store {
     /**
      * Gets the sql type.
      *
-     * @param <E>      the element type
+     * @param <E> the element type
      * @param javaType the java type
      * @return the sql type
      */
@@ -135,8 +133,8 @@ public abstract class AbstractStore implements Store {
     /**
      * Sets the.
      *
-     * @param <E>         the element type
-     * @param prep        the prep
+     * @param <E> the element type
+     * @param prep the prep
      * @param columnIndex the column index
      * @param columnValue the column value
      * @return true, if successful
@@ -173,7 +171,7 @@ public abstract class AbstractStore implements Store {
         for (JavaSqlTypeMapper<?> javaSqlTypeMapper : getJavaSqlTypeMappers()) {
             if (javaSqlTypeMapper.support((Type) javaType)) {
                 logger.debug("set value valueType[{}] type[{}] with mapper {}", javaType.getClass().getSimpleName(),
-                        javaType.getType().getName(), javaSqlTypeMapper.getClass().getName());
+                    javaType.getType().getName(), javaSqlTypeMapper.getClass().getName());
                 ((JavaSqlTypeMapper<Object>) javaSqlTypeMapper).set(prep, columnIndex, columnValue);
                 return true;
             }
@@ -224,9 +222,9 @@ public abstract class AbstractStore implements Store {
             String tableName = JdbcUtils.getTableName(rs, columnIndex);
             String columnName = JdbcUtils.getColumnName(rs, columnIndex);
             if (sqlTypeToJavaMapper.support(sqlType, tableName, columnName)
-                    && sqlTypeToJavaMapper.support((Type) javaType)) {
+                && sqlTypeToJavaMapper.support((Type) javaType)) {
                 logger.debug("get value from {}.{} [{}] with mapper {}", tableName, columnName, sqlType,
-                        sqlTypeToJavaMapper.getClass().getName());
+                    sqlTypeToJavaMapper.getClass().getName());
                 return Optional.ofNullable((E) sqlTypeToJavaMapper.get(rs, columnIndex));
             }
         }

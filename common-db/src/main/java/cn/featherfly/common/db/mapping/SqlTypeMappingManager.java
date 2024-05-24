@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import cn.featherfly.common.bean.BeanProperty;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
+import cn.featherfly.common.lang.reflect.ClassType;
 
 /**
  * SqlTypeMappingManager.
@@ -122,7 +123,7 @@ public class SqlTypeMappingManager {
     /**
      * Regist javaSqlTypeMapper for entityType.
      *
-     * @param entityType        the java entity type
+     * @param entityType the java entity type
      * @param javaSqlTypeMapper the java sql type mapper
      * @return SqlTypeMappingManager
      */
@@ -152,7 +153,7 @@ public class SqlTypeMappingManager {
     /**
      * Regist javaSqlTypeMapper for entityType.
      *
-     * @param beanProperty      the bean property
+     * @param beanProperty the bean property
      * @param javaSqlTypeMapper the java sql type mapper
      * @return SqlTypeMappingManager
      */
@@ -171,12 +172,21 @@ public class SqlTypeMappingManager {
      * @param property the property
      * @return the java sql type mapper
      */
+    @SuppressWarnings("unchecked")
     public JavaSqlTypeMapper<?> getJavaSqlTypeMapper(BeanProperty<?, ?> property) {
         TypeStore store = getStore(property);
-        if (store == null) {
-            return null;
+        if (store != null) {
+            return store.getJavaSqlTypeMapper(property);
         }
-        return store.getJavaSqlTypeMapper(property);
+        SimpleStore simpleStore = getStore(property.getInstanceType());
+        if (simpleStore != null) {
+            for (JavaSqlTypeMapper<Object> javaSqlTypeMapper : simpleStore.getJavaSqlTypeMappers()) {
+                if (javaSqlTypeMapper.support(new ClassType<>((Class<Object>) property.getType()))) {
+                    return javaSqlTypeMapper;
+                }
+            }
+        }
+        return null;
     }
 
     //    public JavaSqlTypeMapper<?> getJavaSqlTypeMapper(Class<?> type) {
@@ -187,7 +197,7 @@ public class SqlTypeMappingManager {
     /**
      * Gets the sql type.
      *
-     * @param <T>      the generic type
+     * @param <T> the generic type
      * @param javaType the java type
      * @return the sql type
      */
@@ -204,10 +214,10 @@ public class SqlTypeMappingManager {
     /**
      * Gets the sql type.
      *
-     * @param <E>        the element type
-     * @param <T>        the generic type
+     * @param <E> the element type
+     * @param <T> the generic type
      * @param entityType the entity type
-     * @param javaType   the java type
+     * @param javaType the java type
      * @return the sql type
      */
     public <E, T> SQLType getSqlType(Class<E> entityType, Class<T> javaType) {
@@ -228,7 +238,7 @@ public class SqlTypeMappingManager {
     /**
      * Gets the sql type.
      *
-     * @param <T>          the generic type
+     * @param <T> the generic type
      * @param beanProperty the bean property
      * @return the sql type
      */
@@ -239,7 +249,7 @@ public class SqlTypeMappingManager {
     /**
      * Gets the java type.
      *
-     * @param <T>     the generic type
+     * @param <T> the generic type
      * @param sqlType the sql type
      * @return the java type
      */
@@ -256,9 +266,9 @@ public class SqlTypeMappingManager {
     /**
      * Gets the java type.
      *
-     * @param <E>        the element type
+     * @param <E> the element type
      * @param entityType the entity type
-     * @param sqlType    the sql type
+     * @param sqlType the sql type
      * @return the java type
      */
     public <E> Class<E> getJavaType(Class<E> entityType, SQLType sqlType) {
@@ -279,8 +289,8 @@ public class SqlTypeMappingManager {
     /**
      * Sets the.
      *
-     * @param <E>         the element type
-     * @param prep        the prep
+     * @param <E> the element type
+     * @param prep the prep
      * @param columnIndex the column index
      * @param columnValue the column value
      */
@@ -311,12 +321,12 @@ public class SqlTypeMappingManager {
     /**
      * Sets the.
      *
-     * @param <V>         the value type
-     * @param <E>         the element type
-     * @param prep        the prep
+     * @param <V> the value type
+     * @param <E> the element type
+     * @param prep the prep
      * @param columnIndex the column index
      * @param columnValue the column value
-     * @param entityType  the entity type
+     * @param entityType the entity type
      */
     public <V, E> void set(PreparedStatement prep, int columnIndex, V columnValue, Class<E> entityType) {
         if (entityType == null) {
@@ -337,11 +347,11 @@ public class SqlTypeMappingManager {
     /**
      * Sets the.
      *
-     * @param <E>         the element type
-     * @param prep        the prep
+     * @param <E> the element type
+     * @param prep the prep
      * @param columnIndex the column index
      * @param columnValue the column value
-     * @param javaType    the java type
+     * @param javaType the java type
      */
     public <E> void set(PreparedStatement prep, int columnIndex, E columnValue, BeanProperty<?, E> javaType) {
         AssertIllegalArgument.isNotNull(javaType, "javaType");
@@ -350,7 +360,7 @@ public class SqlTypeMappingManager {
         // bean property 一定是注册在 bean class 对应的store内的，如果没有使用BeanProperty注册
         // 则使用bean property的类型去匹配该类型空间下注册的类型
         if (store != null
-                && (store.set(prep, columnIndex, columnValue, javaType) || store.set(prep, columnIndex, columnValue))) {
+            && (store.set(prep, columnIndex, columnValue, javaType) || store.set(prep, columnIndex, columnValue))) {
             return;
         }
         // 再查找属性拥有者对象的存储空间对应的属性类型
@@ -368,10 +378,10 @@ public class SqlTypeMappingManager {
     /**
      * Gets the produce param.
      *
-     * @param <E>        the element type
-     * @param call       the call
+     * @param <E> the element type
+     * @param call the call
      * @param paramIndex the param index
-     * @param javaType   the java type
+     * @param javaType the java type
      * @return the e
      */
     @SuppressWarnings("unchecked")
@@ -398,10 +408,10 @@ public class SqlTypeMappingManager {
     /**
      * Gets the.
      *
-     * @param <E>         the element type
-     * @param rs          the rs
+     * @param <E> the element type
+     * @param rs the rs
      * @param columnIndex the column index
-     * @param javaType    the java type
+     * @param javaType the java type
      * @return the e
      */
     @SuppressWarnings("unchecked")
@@ -429,9 +439,9 @@ public class SqlTypeMappingManager {
     /**
      * Gets the.
      *
-     * @param <E>          the element type
-     * @param rs           the rs
-     * @param columnIndex  the column index
+     * @param <E> the element type
+     * @param rs the rs
+     * @param columnIndex the column index
      * @param beanProperty the bean property
      * @return the e
      */
@@ -457,10 +467,10 @@ public class SqlTypeMappingManager {
     }
 
     /*
-    
-    //    /*
-    //     * Gets the store.
-    //     */
+     * // /*
+     * // * Gets the store.
+     * //
+     */
     //    private <E> GroupableStore getStore(Type<E> entityType) {
     //        return getStore(entityType.getType());
     //    }

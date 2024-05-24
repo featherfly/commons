@@ -1067,7 +1067,7 @@ public final class ClassMappingUtils {
     public static Tuple2<String, JdbcPropertyMapping[]> getSelectSqlAndMappings(JdbcClassMapping<?> classMapping,
         String alias, Dialect dialect) {
         StringBuilder selectSql = new StringBuilder();
-        Tuple2<String, JdbcPropertyMapping[]> tuple = getSelectColumnsSql(classMapping, alias, dialect);
+        Tuple2<String, JdbcPropertyMapping[]> tuple = getSelectColumnsSqlAndMappings(classMapping, alias, dialect);
         BuilderUtils.link(selectSql, dialect.getKeywords().select(), tuple.get0(), dialect.getKeywords().from(),
             dialect.wrapName(classMapping.getRepositoryName()));
         return Tuples.of(selectSql.toString(), tuple.get1());
@@ -1081,9 +1081,9 @@ public final class ClassMappingUtils {
      * @param dialect the dialect
      * @return the select columns sql
      */
-    public static Tuple2<String, JdbcPropertyMapping[]> getSelectColumnsSql(JdbcClassMapping<?> classMapping,
+    public static Tuple2<String, JdbcPropertyMapping[]> getSelectColumnsSqlAndMappings(JdbcClassMapping<?> classMapping,
         String tableAlias, Dialect dialect) {
-        return getSelectColumnsSql(classMapping, tableAlias, "", dialect);
+        return getSelectColumnsSqlAndMappings(classMapping, tableAlias, "", dialect);
     }
 
     /**
@@ -1095,9 +1095,10 @@ public final class ClassMappingUtils {
      * @param dialect the dialect
      * @return the select columns sql
      */
-    public static Tuple2<String, JdbcPropertyMapping[]> getSelectColumnsSql(JdbcClassMapping<?> classMapping,
+    public static Tuple2<String, JdbcPropertyMapping[]> getSelectColumnsSqlAndMappings(JdbcClassMapping<?> classMapping,
         String tableAlias, String prefixPropertyName, Dialect dialect) {
-        return getSelectColumnsSql(classMapping, tableAlias, prefixPropertyName, dialect, null, new HashMap<>(0));
+        return getSelectColumnsSqlAndMappings(classMapping, tableAlias, prefixPropertyName, dialect, null,
+            new HashMap<>(0));
     }
 
     /**
@@ -1110,10 +1111,10 @@ public final class ClassMappingUtils {
      * @param fetchProperties the fetch properties
      * @return the select columns sql
      */
-    public static Tuple2<String, JdbcPropertyMapping[]> getSelectColumnsSql(JdbcClassMapping<?> classMapping,
+    public static Tuple2<String, JdbcPropertyMapping[]> getSelectColumnsSqlAndMappings(JdbcClassMapping<?> classMapping,
         String tableAlias, Dialect dialect, MappingFactory<JdbcPropertyMapping> mappingFactory,
         Map<String, String> fetchProperties) {
-        return getSelectColumnsSql(classMapping, tableAlias, null, dialect, mappingFactory, fetchProperties);
+        return getSelectColumnsSqlAndMappings(classMapping, tableAlias, null, dialect, mappingFactory, fetchProperties);
     }
 
     /**
@@ -1127,8 +1128,8 @@ public final class ClassMappingUtils {
      * @param fetchProperties the fetch properties
      * @return the select columns sql
      */
-    private static Tuple2<String, JdbcPropertyMapping[]> getSelectColumnsSql(JdbcClassMapping<?> classMapping,
-        String tableAlias, String prefixPropertyName, Dialect dialect,
+    private static Tuple2<String, JdbcPropertyMapping[]> getSelectColumnsSqlAndMappings(
+        JdbcClassMapping<?> classMapping, String tableAlias, String prefixPropertyName, Dialect dialect,
         MappingFactory<JdbcPropertyMapping> mappingFactory, Map<String, String> fetchProperties) {
         List<JdbcPropertyMapping> jdbcPropertyMappings = new ArrayList<>();
         StringBuilder selectSql = new StringBuilder();
@@ -1173,6 +1174,105 @@ public final class ClassMappingUtils {
         }
         return Tuples.of(selectSql.toString(),
             jdbcPropertyMappings.toArray(new JdbcPropertyMapping[jdbcPropertyMappings.size()]));
+    }
+
+    /**
+     * Gets the select columns sql.
+     *
+     * @param classMapping the class mapping
+     * @param tableAlias the table alias
+     * @param dialect the dialect
+     * @return the select columns sql
+     */
+    public static String getSelectColumnsSql(JdbcClassMapping<?> classMapping, String tableAlias, Dialect dialect) {
+        return getSelectColumnsSql(classMapping, tableAlias, "", dialect);
+    }
+
+    /**
+     * Gets the select columns sql.
+     *
+     * @param classMapping the class mapping
+     * @param tableAlias the table alias
+     * @param prefixPropertyName the prefix property name
+     * @param dialect the dialect
+     * @return the select columns sql
+     */
+    public static String getSelectColumnsSql(JdbcClassMapping<?> classMapping, String tableAlias,
+        String prefixPropertyName, Dialect dialect) {
+        return getSelectColumnsSql(classMapping, tableAlias, prefixPropertyName, dialect, null, new HashMap<>(0));
+    }
+
+    /**
+     * Gets the select columns sql.
+     *
+     * @param classMapping the class mapping
+     * @param tableAlias the table alias
+     * @param dialect the dialect
+     * @param mappingFactory the mapping factory
+     * @param fetchProperties the fetch properties
+     * @return the select columns sql
+     */
+    public static String getSelectColumnsSql(JdbcClassMapping<?> classMapping, String tableAlias, Dialect dialect,
+        MappingFactory<JdbcPropertyMapping> mappingFactory, Map<String, String> fetchProperties) {
+        return getSelectColumnsSql(classMapping, tableAlias, null, dialect, mappingFactory, fetchProperties);
+    }
+
+    /**
+     * Gets the select columns sql.
+     *
+     * @param classMapping the class mapping
+     * @param tableAlias the table alias
+     * @param prefixPropertyName the prefix property name
+     * @param dialect the dialect
+     * @param mappingFactory the mapping factory
+     * @param fetchProperties the fetch properties
+     * @return the select columns sql
+     */
+    private static String getSelectColumnsSql(JdbcClassMapping<?> classMapping, String tableAlias,
+        String prefixPropertyName, Dialect dialect, MappingFactory<JdbcPropertyMapping> mappingFactory,
+        Map<String, String> fetchProperties) {
+        int columnNum = 0;
+        StringBuilder selectSql = new StringBuilder();
+        for (JdbcPropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
+            if (Lang.isEmpty(propertyMapping.getPropertyMappings())) {
+                selectSql.append(
+                    getSelectColumnsSql(classMapping, tableAlias, propertyMapping, prefixPropertyName, dialect));
+                columnNum++;
+            } else {
+                boolean fetchAble = false;
+                String fetchPropertyTableAlia = null;
+                if (Lang.isNotEmpty(fetchProperties)) {
+                    for (Entry<String, String> fetchPropertyEntry : fetchProperties.entrySet()) {
+                        fetchPropertyTableAlia = fetchPropertyEntry.getValue();
+                        if (propertyMapping.getPropertyName().equals(fetchPropertyEntry.getKey())) {
+                            fetchAble = true;
+                            break;
+                        }
+                    }
+                }
+                if (fetchAble) {
+                    ClassMapping<?,
+                        JdbcPropertyMapping> pcm = mappingFactory.getClassMapping(propertyMapping.getPropertyType());
+                    for (JdbcPropertyMapping pm : pcm.getPropertyMappings()) {
+                        selectSql.append(
+                            getSelectColumnsSql(classMapping, fetchPropertyTableAlia, pm, propertyMapping, dialect));
+                        columnNum++;
+                    }
+
+                } else {
+                    for (JdbcPropertyMapping pm : propertyMapping.getPropertyMappings()) {
+                        selectSql
+                            .append(getSelectColumnsSql(classMapping, tableAlias, pm, prefixPropertyName, dialect));
+                        columnNum++;
+                    }
+                }
+                fetchAble = false;
+            }
+        }
+        if (columnNum > 0) {
+            selectSql.delete(selectSql.length() - 2, selectSql.length());
+        }
+        return selectSql.toString();
     }
 
     /**

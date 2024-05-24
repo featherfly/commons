@@ -35,10 +35,7 @@ import cn.featherfly.common.repository.mapping.PropertyNameJpaConversion;
 import cn.featherfly.common.repository.mapping.PropertyNameUnderscoreConversion;
 
 /**
- * <p>
- * AbstractMappingFactory
- * </p>
- * .
+ * AbstractMappingFactory.
  *
  * @author zhongj
  */
@@ -69,7 +66,7 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      * Instantiates a new abstract mapping factory.
      *
      * @param metadata the metadata
-     * @param dialect  the dialect
+     * @param dialect the dialect
      */
     protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect) {
         this(metadata, dialect, null);
@@ -78,40 +75,40 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
     /**
      * Instantiates a new abstract mapping factory.
      *
-     * @param metadata              the metadata
-     * @param dialect               the dialect
+     * @param metadata the metadata
+     * @param dialect the dialect
      * @param sqlTypeMappingManager the sql type mapping manager
      */
     protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-            SqlTypeMappingManager sqlTypeMappingManager) {
+        SqlTypeMappingManager sqlTypeMappingManager) {
         this(metadata, dialect, sqlTypeMappingManager, null, null);
     }
 
     /**
      * Instantiates a new abstract mapping factory.
      *
-     * @param metadata                the metadata
-     * @param dialect                 the dialect
-     * @param classNameConversions    the class name conversions
+     * @param metadata the metadata
+     * @param dialect the dialect
+     * @param classNameConversions the class name conversions
      * @param propertyNameConversions the property name conversions
      */
     protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-            List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions) {
+        List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions) {
         this(metadata, dialect, new SqlTypeMappingManager(), classNameConversions, propertyNameConversions);
     }
 
     /**
      * Instantiates a new abstract mapping factory.
      *
-     * @param metadata                DatabaseMetadata
-     * @param dialect                 dialect
-     * @param sqlTypeMappingManager   the sql type mapping manager
-     * @param classNameConversions    classNameConversions
+     * @param metadata DatabaseMetadata
+     * @param dialect dialect
+     * @param sqlTypeMappingManager the sql type mapping manager
+     * @param classNameConversions classNameConversions
      * @param propertyNameConversions propertyNameConversions
      */
     protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-            SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
-            List<PropertyNameConversion> propertyNameConversions) {
+        SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
+        List<PropertyNameConversion> propertyNameConversions) {
         super();
         this.metadata = metadata;
         this.dialect = dialect;
@@ -139,7 +136,7 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
     /**
      * Sets the column mapping.
      *
-     * @param mapping      the mapping
+     * @param mapping the mapping
      * @param beanProperty the bean property
      */
     protected void setColumnMapping(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty) {
@@ -147,7 +144,7 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
         Column column = beanProperty.getAnnotation(Column.class);
         if (column != null) {
             mapping.setSize(
-                    ClassUtils.isParent(Number.class, beanProperty.getType()) ? column.precision() : column.length());
+                ClassUtils.isParent(Number.class, beanProperty.getType()) ? column.precision() : column.length());
             mapping.setDecimalDigits(column.scale());
             mapping.setInsertable(column.insertable());
             mapping.setUpdatable(column.updatable());
@@ -158,8 +155,8 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
             if (beanProperty.getType() == String.class) {
                 mapping.setSize(255);
             } else if (beanProperty.getType() == Double.class || beanProperty.getType() == Double.TYPE
-                    || beanProperty.getType() == Float.class || beanProperty.getType() == Float.TYPE
-                    || beanProperty.getType() == BigDecimal.class) {
+                || beanProperty.getType() == Float.class || beanProperty.getType() == Float.TYPE
+                || beanProperty.getType() == BigDecimal.class) {
                 mapping.setSize(12);
                 mapping.setDecimalDigits(2);
             }
@@ -187,7 +184,7 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
             GeneratedValue generatedValue = beanProperty.getAnnotation(GeneratedValue.class);
             if (generatedValue != null) {
                 if (generatedValue.strategy() == GenerationType.IDENTITY
-                        || generatedValue.strategy() == GenerationType.AUTO) {
+                    || generatedValue.strategy() == GenerationType.AUTO) {
                     mapping.setAutoincrement(true);
                 } else {
                     // TODO 其他实现，后续慢慢添加-_-
@@ -199,6 +196,12 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
         }
     }
 
+    /**
+     * Sets the java sql type mapper.
+     *
+     * @param mapping the mapping
+     * @param beanProperty the bean property
+     */
     protected void setJavaSqlTypeMapper(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty) {
         JavaSqlTypeMapper<?> mapper = sqlTypeMappingManager.getJavaSqlTypeMapper(beanProperty);
         if (mapper != null) {
@@ -225,21 +228,21 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      * Checks if is transient.
      *
      * @param beanProperty the bean property
-     * @param logInfo      the log info
+     * @param logInfo the log info
      * @return true, if is transient
      */
     protected boolean isTransient(BeanProperty<?, ?> beanProperty, StringBuilder logInfo) {
         boolean result = beanProperty.hasAnnotation(java.beans.Transient.class)
-                || beanProperty.hasAnnotation(javax.persistence.Transient.class);
+            || beanProperty.hasAnnotation(javax.persistence.Transient.class);
         if (result && logger.isDebugEnabled()) {
             logInfo.append(String.format("%s###\t%s is annotated with @Transient, ignore",
-                    SystemPropertyUtils.getLineSeparator(), beanProperty.getName()));
+                SystemPropertyUtils.getLineSeparator(), beanProperty.getName()));
         }
         return result;
     }
 
     /**
-     * 检查tableMapping是否有问题
+     * 检查tableMapping是否有问题.
      *
      * @param tableMapping tableMapping
      */
@@ -252,8 +255,8 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
                     if (columns.containsKey(pm.getRepositoryFieldName())) {
                         //                        throw new JdbcMappingException("duplicate mapping column name " + pm.getRepositoryFieldName());
                         JdbcPropertyMapping _pm = columns.get(pm.getRepositoryFieldName());
-                        throw new JdbcMappingException("#column.name.mapped", new Object[] {
-                                pm.getRepositoryFieldName(), _pm.getPropertyName(), pm.getPropertyName() });
+                        throw new JdbcMappingException("#column.name.mapped",
+                            new Object[] { pm.getRepositoryFieldName(), _pm.getPropertyName(), pm.getPropertyName() });
                     }
                     columns.put(pm.getRepositoryFieldName(), pm);
                 }
@@ -265,7 +268,7 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
                             //                                    "duplicate mapping column name " + pm.getRepositoryFieldName());
                             JdbcPropertyMapping _pm = columns.get(subPm.getRepositoryFieldName());
                             throw new JdbcMappingException("#column.name.mapped", new Object[] {
-                                    subPm.getRepositoryFieldName(), _pm.getPropertyName(), subPm.getPropertyName() });
+                                subPm.getRepositoryFieldName(), _pm.getPropertyName(), subPm.getPropertyName() });
                         }
                         columns.put(subPm.getRepositoryFieldName(), subPm);
                     }

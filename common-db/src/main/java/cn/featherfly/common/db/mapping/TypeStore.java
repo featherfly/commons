@@ -14,16 +14,17 @@ import cn.featherfly.common.lang.reflect.Type;
 public class TypeStore extends AbstractStore {
 
     /** The java to sql type mappers with type. */
-    private Map<Type<?>, JavaSqlTypeMapper<?>> javaSqlTypeMappers = new HashMap<>(0);
+    private Map<Type<?>, JavaSqlTypeMapper<Object>> javaSqlTypeMappers = new HashMap<>(0);
 
     /**
      * put mapper with type.
      *
-     * @param type   the type
+     * @param type the type
      * @param mapper the mapper
      */
+    @SuppressWarnings("unchecked")
     public void put(Type<?> type, JavaSqlTypeMapper<?> mapper) {
-        javaSqlTypeMappers.put(type, mapper);
+        javaSqlTypeMappers.put(type, (JavaSqlTypeMapper<Object>) mapper);
     }
 
     /**
@@ -40,7 +41,7 @@ public class TypeStore extends AbstractStore {
      * {@inheritDoc}
      */
     @Override
-    protected Collection<JavaSqlTypeMapper<?>> getJavaSqlTypeMappers() {
+    protected Collection<JavaSqlTypeMapper<Object>> getJavaSqlTypeMappers() {
         return javaSqlTypeMappers.values();
     }
 }

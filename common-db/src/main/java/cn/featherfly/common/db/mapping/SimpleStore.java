@@ -12,22 +12,23 @@ import java.util.Set;
 public class SimpleStore extends AbstractStore {
 
     /** The java to sql type mappers. */
-    private Set<JavaSqlTypeMapper<?>> javaSqlTypeMappers = new LinkedHashSet<>(0);
+    private Set<JavaSqlTypeMapper<Object>> javaSqlTypeMappers = new LinkedHashSet<>(0);
 
     /**
      * Adds the.
      *
      * @param mapper the mapper
      */
+    @SuppressWarnings("unchecked")
     public void add(JavaSqlTypeMapper<?> mapper) {
-        javaSqlTypeMappers.add(mapper);
+        javaSqlTypeMappers.add((JavaSqlTypeMapper<Object>) mapper);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected Collection<JavaSqlTypeMapper<?>> getJavaSqlTypeMappers() {
+    protected Collection<JavaSqlTypeMapper<Object>> getJavaSqlTypeMappers() {
         return javaSqlTypeMappers;
     }
 }

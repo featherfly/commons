@@ -157,24 +157,29 @@ public class AsmPropertyAccessorFactory extends ReloadableClassloader implements
     /**
      * Creates a new AsmPropertyAccessor object.
      */
-    public void createPropertyAccessorCascade() {
-        for (PropertyAccessor<?> propertyAccessor : manager.getAll()) {
-            createPropertyAccessorRecursion(propertyAccessor);
+    @Override
+    public void createPropertyAccessorCascade(ClassLoader classLoader) {
+        for (PropertyAccessor<?> propertyAccessor : new ArrayList<>(manager.getAll())) {
+            createPropertyAccessorRecursion(propertyAccessor, classLoader);
         }
     }
 
-    private void createPropertyAccessorRecursion(PropertyAccessor<?> propertyAccessor) {
+    private void createPropertyAccessorRecursion(PropertyAccessor<?> propertyAccessor, ClassLoader classLoader) {
         for (Property<?, ?> property : propertyAccessor.getProperties()) {
-            createPropertyAccessorRecursion(property);
+            createPropertyAccessorRecursion(property, classLoader);
         }
     }
 
-    private <V> void createPropertyAccessorRecursion(Property<?, V> property) {
+    @SuppressWarnings("unchecked")
+    private <V> void createPropertyAccessorRecursion(Property<?, V> property, ClassLoader classLoader) {
         if (property.getPropertyAccessor() == null && propertyVisitorCascadeCreatePolicy.isAllow(property.getType())) {
-            if (!manager.containsType(property.getType())) {
-                PropertyAccessor<V> newPv = create(property.getType());
+            if (manager.containsType(property.getType())) {
+                ((AbstractProperty<?, V>) property)
+                    .setPropertyAccessor((PropertyAccessor<V>) manager.get(property.getType()));
+            } else {
+                PropertyAccessor<V> newPv = create(property.getType(), classLoader);
                 ((AbstractProperty<?, V>) property).setPropertyAccessor(newPv);
-                createPropertyAccessorRecursion(newPv);
+                createPropertyAccessorRecursion(newPv, classLoader);
             }
         }
     }

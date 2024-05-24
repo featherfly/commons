@@ -38,4 +38,18 @@ public interface PropertyAccessorFactory extends InstantiatorFactory {
      */
     @Override
     <T> PropertyAccessor<T> create(Class<T> type, ClassLoader classLoader);
+
+    /**
+     * cascade creation PropertyAccessor for Property which is in already created PropertyAccessor.
+     */
+    default void createPropertyAccessorCascade() {
+        createPropertyAccessorCascade(Thread.currentThread().getContextClassLoader());
+    }
+
+    /**
+     * cascade creation PropertyAccessor for Property which is in already created PropertyAccessor.
+     *
+     * @param classLoader the class loader
+     */
+    void createPropertyAccessorCascade(ClassLoader classLoader);
 }

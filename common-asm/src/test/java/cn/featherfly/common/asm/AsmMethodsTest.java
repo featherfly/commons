@@ -1,13 +1,8 @@
 
 package cn.featherfly.common.asm;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-
 /**
- * <p>
- * AsmTest
- * </p>
+ * AsmTest.
  *
  * @author zhongj
  */
@@ -29,12 +24,12 @@ public class AsmMethodsTest {
 
     }
 
-    private static void paramName(Method method) {
-        for (Parameter param : method.getParameters()) {
-            System.out.println(param.getName());
-        }
-    }
-
+    //    private static void paramName(Method method) {
+    //        for (Parameter param : method.getParameters()) {
+    //            System.out.println(param.getName());
+    //        }
+    //    }
+    //
     //    public static void main(String[] args) throws Exception {
     //        Method method = AsmTest.class.getMethod("set", String.class);
     //        paramName(method);

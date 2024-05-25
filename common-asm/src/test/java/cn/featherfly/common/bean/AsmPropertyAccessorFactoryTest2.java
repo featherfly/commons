@@ -6,36 +6,33 @@
  * @date: 2024-05-21 19:06:21
  * @Copyright: 2024 www.featherfly.cn Inc. All rights reserved.
  */
-package impl;
+package cn.featherfly.common.bean;
 
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import cn.featherfly.common.bean.AsmPropertyAccessorFactory;
-import cn.featherfly.common.bean.NoSuchPropertyException;
-import cn.featherfly.common.bean.Property;
-import cn.featherfly.common.bean.PropertyAccessException;
-import cn.featherfly.common.bean.PropertyAccessor;
 import cn.featherfly.common.lang.BytesClassLoader;
+import impl.Role;
+import vo.Employee;
 
 /**
  * AsmPropertyFactoryTest.
  *
  * @author zhongj
  */
-public class AsmPropertyAccessorFactoryTest {
+public class AsmPropertyAccessorFactoryTest2 {
 
     AsmPropertyAccessorFactory factory;
-    PropertyAccessor<Role> accessor;
+
+    PropertyAccessor<Employee> visitor;
 
     @BeforeClass
     void bc() {
         factory = new AsmPropertyAccessorFactory(new BytesClassLoader(Thread.currentThread().getContextClassLoader()));
-        accessor = factory.create(Role.class);
+        visitor = factory.create(Employee.class);
     }
 
     @Test
@@ -44,6 +41,8 @@ public class AsmPropertyAccessorFactoryTest {
         Role role = new Role();
         role.setId(123);
 
+        PropertyAccessor<Role> visitor = factory.create(Role.class);
+
         assertNull(role.getName());
 
         final String name = "admin";
@@ -52,7 +51,7 @@ public class AsmPropertyAccessorFactoryTest {
 
         assertEquals(role.getName(), name);
 
-        assertEquals(accessor.getPropertyValue(role, 1), name);
+        assertEquals(visitor.getPropertyValue(role, 1), name);
     }
 
     @Test
@@ -61,6 +60,8 @@ public class AsmPropertyAccessorFactoryTest {
         Role role = new Role();
         role.setId(123);
 
+        PropertyAccessor<Role> visitor = factory.create(Role.class);
+
         assertNull(role.getName());
 
         final String name = "admin";
@@ -69,17 +70,7 @@ public class AsmPropertyAccessorFactoryTest {
 
         assertEquals(role.getName(), name);
 
-        assertEquals(accessor.getPropertyValue(role, "name"), name);
-    }
-
-    @Test
-    void getPropertyValuePrimitive() throws Exception {
-        Role role = new Role();
-        role.setAge(18);
-        role.setAvailable(true);
-        assertEquals(accessor.getPropertyValue(role, "age"), 18);
-
-        assertEquals(accessor.getPropertyValue(role, "available"), true);
+        assertEquals(visitor.getPropertyValue(role, "name"), name);
     }
 
     @Test(expectedExceptions = NoSuchPropertyException.class)
@@ -89,26 +80,11 @@ public class AsmPropertyAccessorFactoryTest {
         visitor.getPropertyValue(role, 100);
     }
 
-    @Test(expectedExceptions = PropertyAccessException.class)
-    void gePropertyValueByIndexPropertyAccessException() throws Exception {
-        Role role = new Role();
-        role.setId(1);
-        PropertyAccessor<Role> visitor = factory.create(Role.class);
-        visitor.getPropertyValue(role, 0, 0);
-    }
-
     @Test(expectedExceptions = NoSuchPropertyException.class)
     void gePropertyValueByNameNoSuchPropertyException() throws Exception {
         Role role = new Role();
-        accessor.getPropertyValue(role, "notExistsProperty");
-    }
-
-    @Test(expectedExceptions = PropertyAccessException.class)
-    void gePropertyValueByNamePropertyAccessException() throws Exception {
-        Role role = new Role();
-        role.setId(1);
         PropertyAccessor<Role> visitor = factory.create(Role.class);
-        visitor.getPropertyValue(role, "id", "name");
+        visitor.getPropertyValue(role, "notExistsProperty");
     }
 
     @Test
@@ -119,7 +95,9 @@ public class AsmPropertyAccessorFactoryTest {
 
         assertNull(role.getId());
 
-        accessor.setPropertyValue(role, 0, id);
+        PropertyAccessor<Role> visitor = factory.create(Role.class);
+
+        visitor.setPropertyValue(role, 0, id);
 
         assertEquals(role.getId(), new Integer(id));
 
@@ -127,7 +105,7 @@ public class AsmPropertyAccessorFactoryTest {
 
         assertNull(role.getName());
 
-        accessor.setPropertyValue(role, 1, name);
+        visitor.setPropertyValue(role, 1, name);
 
         assertEquals(role.getName(), name);
     }
@@ -140,7 +118,9 @@ public class AsmPropertyAccessorFactoryTest {
 
         assertNull(role.getId());
 
-        accessor.setPropertyValue(role, "id", id);
+        PropertyAccessor<Role> visitor = factory.create(Role.class);
+
+        visitor.setPropertyValue(role, "id", id);
 
         assertEquals(role.getId(), new Integer(id));
 
@@ -148,41 +128,23 @@ public class AsmPropertyAccessorFactoryTest {
 
         assertNull(role.getName());
 
-        accessor.setPropertyValue(role, "name", name);
+        visitor.setPropertyValue(role, "name", name);
 
         assertEquals(role.getName(), name);
-    }
-
-    @Test
-    void setPropertyValuePrimitive() throws Exception {
-        Role role = new Role();
-        final int age = 18;
-        final boolean available = true;
-        accessor.setPropertyValue(role, "age", 18);
-        accessor.setPropertyValue(role, "available", true);
-
-        assertEquals(role.getAge(), age);
-        assertEquals(role.isAvailable(), available);
-
     }
 
     @Test(expectedExceptions = NoSuchPropertyException.class)
     void setPropertyValueByIndexNoSuchPropertyException() throws Exception {
         Role role = new Role();
-        accessor.setPropertyValue(role, 100, "");
+        PropertyAccessor<Role> visitor = factory.create(Role.class);
+        visitor.setPropertyValue(role, 100, "");
     }
 
     @Test(expectedExceptions = NoSuchPropertyException.class)
     void setPropertyValueByNameNoSuchPropertyException() throws Exception {
         Role role = new Role();
-        accessor.setPropertyValue(role, "notExistsProperty", "");
-    }
-
-    @Test
-    void getProperties() {
-        for (int i = 0; i < accessor.getProperties().length; i++) {
-            assertTrue(accessor.getProperties()[i].getIndex() == i);
-        }
+        PropertyAccessor<Role> visitor = factory.create(Role.class);
+        visitor.setPropertyValue(role, "notExistsProperty", "");
     }
 
     @Test
@@ -190,7 +152,9 @@ public class AsmPropertyAccessorFactoryTest {
         Role role = new Role();
         role.setId(123);
 
-        Property<Role, Integer> id = accessor.getProperty(0);
+        PropertyAccessor<Role> visitor = factory.create(Role.class);
+
+        Property<Role, Integer> id = visitor.getProperty(0);
 
         assertEquals(id.get(role), role.getId());
     }
@@ -200,7 +164,9 @@ public class AsmPropertyAccessorFactoryTest {
         Role role = new Role();
         role.setId(123);
 
-        Property<Role, Integer> id = accessor.getProperty(100);
+        PropertyAccessor<Role> visitor = factory.create(Role.class);
+
+        Property<Role, Integer> id = visitor.getProperty(100);
 
         assertEquals(id.get(role), role.getId());
     }
@@ -210,7 +176,9 @@ public class AsmPropertyAccessorFactoryTest {
         Role role = new Role();
         role.setId(123);
 
-        Property<Role, Integer> id = accessor.getProperty("notExistsProperty");
+        PropertyAccessor<Role> visitor = factory.create(Role.class);
+
+        Property<Role, Integer> id = visitor.getProperty("notExistsProperty");
 
         assertEquals(id.get(role), role.getId());
     }

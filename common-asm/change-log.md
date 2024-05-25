@@ -1,6 +1,7 @@
 # 0.3.0
 1. 实现BytesClassLoader
 2. 实现InstantiatorFactor
+3. 实现PropertyAccessorFactory
 
 # 0.2.1 2024-05-09
 1. 升级ASM支持JDK17,JDK21

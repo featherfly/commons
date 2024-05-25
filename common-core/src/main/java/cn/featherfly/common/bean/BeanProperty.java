@@ -488,6 +488,24 @@ public class BeanProperty<T, V> implements Type<V>, Property<T, V> {
         return getValue(object);
     }
 
+    /**
+     * get setter value
+     *
+     * @return setter
+     */
+    public Method getSetter() {
+        return setter;
+    }
+
+    /**
+     * get getter value
+     *
+     * @return getter
+     */
+    public Method getGetter() {
+        return getter;
+    }
+
     @Override
     public PropertyAccessor<V> getPropertyAccessor() {
         if (type.getPackage().getName().startsWith("java.lang")) { // ignore java lib

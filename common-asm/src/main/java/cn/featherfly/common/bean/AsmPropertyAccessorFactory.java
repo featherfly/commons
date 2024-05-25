@@ -453,7 +453,9 @@ public class AsmPropertyAccessorFactory extends ReloadableClassloader implements
             }
             methodNode.visitMethodInsn(INVOKEVIRTUAL, Type.getInternalName(bd.getType()),
                 "set" + WordUtils.upperCaseFirst(bp.getName()),
-                Type.getMethodDescriptor(Type.getType(void.class), Type.getType(bp.getType())), false);
+                bp.getSetter() != null ? Type.getMethodDescriptor(bp.getSetter())
+                    : Type.getMethodDescriptor(Type.getType(void.class), Type.getType(bp.getType())),
+                false);
             methodNode.visitInsn(RETURN);
         }
         String exceptionBcnf = Type.getInternalName(NoSuchPropertyException.class);

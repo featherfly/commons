@@ -216,7 +216,7 @@ public class AsmPropertyFactory extends ReloadableClassloader implements Opcodes
             methodNode.visitVarInsn(ALOAD, 1);
             methodNode.visitMethodInsn(INVOKEVIRTUAL, instanceClassNameBcf,
                 prefix + WordUtils.upperCaseFirst(beanProperty.getName()),
-                Type.getMethodDescriptor(Asm.getType(propertyClassNameBcf)), false);
+                Type.getMethodDescriptor(beanProperty.getGetter()), false);
 
             if (primitive) { // auto wrapper primitive type
                 methodNode.visitMethodInsn(INVOKESTATIC, warrperPropertyClassNameBcf, Asm.PRIMITIVE_BOXING_METHOD,
@@ -280,7 +280,7 @@ public class AsmPropertyFactory extends ReloadableClassloader implements Opcodes
             }
             methodNode.visitMethodInsn(INVOKEVIRTUAL, instanceClassNameBcf,
                 "set" + WordUtils.upperCaseFirst(beanProperty.getName()),
-                Type.getMethodDescriptor(Type.getType(Void.TYPE), Asm.getType(propertyClassNameBcf)), false);
+                Type.getMethodDescriptor(beanProperty.getSetter()), false);
             methodNode.visitInsn(RETURN);
         } else {
             methodNode.visitVarInsn(ALOAD, 0);

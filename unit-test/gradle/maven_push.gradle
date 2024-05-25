@@ -19,20 +19,28 @@ if (isReleaseBuild()) {
 }
 
 def getRepositoryUsername() {
-    return hasProperty('nexusUsername') ? nexusUsername : ""
+    if (hasProperty('localNexusUsername')) {
+        return hasProperty('localNexusUsername') ? localNexusUsername : ""
+    } else {
+        return hasProperty('nexusUsername') ? nexusUsername : ""
+    }
 }
 
 def getRepositoryPassword() {
-    return hasProperty('nexusPassword') ? nexusPassword : ""
+    if (hasProperty('localNexusPassword')) {
+        return hasProperty('localNexusPassword') ? localNexusPassword : ""
+    } else {
+        hasProperty('nexusPassword') ? nexusPassword : ""
+    }
 }
 
 task sourcesJar(type: Jar) {
-    classifier = 'sources'
+    archiveClassifier.set("sources")
     from sourceSets.main.java.srcDirs
 }
 
 task javadocJar(type: Jar, dependsOn:javadoc) {
-    classifier = 'javadoc'
+    archiveClassifier.set("javadoc")
     from javadoc.destinationDir
 }
 
@@ -88,7 +96,7 @@ publishing {
 }
 
 signing {
-    //required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
-    //sign configurations.archives
+    required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
     sign publishing.publications.mavenJava
 }
+

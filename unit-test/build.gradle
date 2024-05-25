@@ -1,3 +1,4 @@
+/*
 buildscript {
   repositories {
     maven {
@@ -8,18 +9,18 @@ buildscript {
     classpath "net.ltgt.gradle:gradle-apt-plugin:0.21"
   }
 }
-
 apply plugin: "net.ltgt.apt-eclipse"
-/*
+*/
+
 plugins {
   id "net.ltgt.apt-eclipse" version "0.21"
 }
-*/
+
 apply from: './gradle/java_base.gradle'  
-apply from: './gradle/maven_push.gradle'
+// apply from: './gradle/maven_push.gradle'
 
 ext {
-    commonValidation = 'cn.featherfly.common:common-validation:0.1.1'
+    commonValidation = 'cn.featherfly.common:common-validation:0.1.2'
 }
 
 sourceSets {
@@ -28,12 +29,20 @@ sourceSets {
 dependencies {
 
     implementation commonValidation
+    
+    //compileOnly group: 'com.perfma.wrapped', name: 'com.sun.tools', version: '1.8.0_jdk8u275-b01_linux_x64'
+    //annotationProcessor group: 'com.perfma.wrapped', name: 'com.sun.tools', version: '1.8.0_jdk8u275-b01_linux_x64'
+    //annotationProcessor files("C:/Users/zhongj/scoop/apps/graalvm20-jdk8/current/lib/tools.jar")
+    //annotationProcessor files(System.getProperty("java.home") + "/../lib/tools.jar")
     annotationProcessor commonValidation
     
-    implementation commonValidation
-        
     //implementation "net.ltgt.gradle:gradle-apt-plugin:0.21"
     
+    
+
+    //testAnnotationProcessor files(System.getProperty("java.home") + "/../lib/tools.jar")
+    //testAnnotationProcessor files("C:/Users/zhongj/scoop/apps/graalvm20-jdk8/current/lib/tools.jar")    
+    //testAnnotationProcessor group: 'com.perfma.wrapped', name: 'com.sun.tools', version: '1.8.0_jdk8u275-b01_linux_x64'
     testAnnotationProcessor commonValidation
     
     testImplementation (
@@ -52,9 +61,11 @@ dependencies {
     testImplementation 'log4j:log4j:1.2.16'
     
 }
+
 compileJava.options.compilerArgs << "-processor" << "cn.featherfly.common.validation.apt.Jsr305Processor" << "-Alog=info"
 //compileJava.options.compilerArgs << "-processor" << "cn.featherfly.common.validation.apt.ValidationProcessor"
 
 test {
+    //jvmArgs "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED"
     useTestNG()
 }

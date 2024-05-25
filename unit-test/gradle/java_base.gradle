@@ -1,31 +1,35 @@
-apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8  
+import java.io.File;
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 tasks.withType(Javadoc) {
     options.encoding = "UTF-8"
+    options.locale = "en"
+    File overview = new File(getProjectDir().getAbsolutePath() + '/src/main/javadoc/overview.html'); 
+    //println overview.getAbsolutePath() + " exits " + overview.exists()
+    if (overview.exists()) {
+        options.overview = overview.getAbsolutePath()
+    }
 }
 
 repositories {
     mavenLocal()
     maven {
-        url  "http://maven.aliyun.com/nexus/content/groups/public/"
-    }
-    maven {
-      url "https://plugins.gradle.org/m2/"
+        url "https://maven.aliyun.com/repository/central"
     }
     mavenCentral()
 }
 
 jar {
+    archiveBaseName = archivesBaseName
     manifest.attributes 'Build-Name': archivesBaseName
     manifest.attributes 'Build-By': "zhong ji"
     manifest.attributes 'Build-Tool' : "gradle " + gradle.gradleVersion
     manifest.attributes 'Build-Jdk' : ant.properties['java.runtime.version']
     manifest.attributes 'Bundle-License': 'http://www.apache.org/licenses/LICENSE-2.0'
 }
+

@@ -8,13 +8,15 @@
  */
 package cn.featherfly.common.bean;
 
+import cn.featherfly.common.lang.reflect.Type;
+
 /**
  * BeanPropertyDescriptor.
  *
  * @author zhongj
  * @param <T> the generic type
  */
-public interface PropertyDescriptor<T, V> {
+public interface PropertyDescriptor<T, V> extends Type<V> {
 
     /**
      * Gets the instance type.
@@ -22,13 +24,6 @@ public interface PropertyDescriptor<T, V> {
      * @return the instance type
      */
     Class<T> getInstanceType();
-
-    /**
-     * Gets the property type.
-     *
-     * @return the property type
-     */
-    Class<V> getType();
 
     /**
      * Gets the property name.
@@ -43,13 +38,4 @@ public interface PropertyDescriptor<T, V> {
      * @return the property index
      */
     int getIndex();
-
-    //    /**
-    //     * Gets the value.
-    //     *
-    //     * @param obj the obj
-    //     * @return the value
-    //     */
-    //    <TS extends T> V getValue(TS obj);
-
 }

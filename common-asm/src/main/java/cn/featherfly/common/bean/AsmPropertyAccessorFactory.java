@@ -42,6 +42,7 @@ import cn.featherfly.common.policy.AllowPolicy;
  *
  * @author zhongj
  */
+// ENHANCE 生成类的引用以ClassLoader未key,这样多个AsmPropertyAccessorFactory实例，只要是同一个classloader，就不会重复创建了
 public class AsmPropertyAccessorFactory extends ReloadableClassloader implements PropertyAccessorFactory, Opcodes {
 
     private final PropertyAccessorManagerImpl manager;

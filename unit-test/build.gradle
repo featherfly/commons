@@ -12,15 +12,15 @@ buildscript {
 apply plugin: "net.ltgt.apt-eclipse"
 */
 
-plugins {
-  id "net.ltgt.apt-eclipse" version "0.21"
-}
+//plugins {
+//  id "net.ltgt.apt-eclipse" version "0.21"
+//}
 
 apply from: './gradle/java_base.gradle'  
-// apply from: './gradle/maven_push.gradle'
+apply from: './gradle/maven_push.gradle'
 
 ext {
-    commonValidation = 'cn.featherfly.common:common-validation:0.1.2'
+    commonValidation = 'cn.featherfly.common:common-validation:0.1.1'
 }
 
 sourceSets {
@@ -45,11 +45,9 @@ dependencies {
     //testAnnotationProcessor group: 'com.perfma.wrapped', name: 'com.sun.tools', version: '1.8.0_jdk8u275-b01_linux_x64'
     testAnnotationProcessor commonValidation
     
-    testImplementation (
-    	'org.testng:testng:7.1.0',
-    	'org.slf4j:slf4j-log4j12:1.7.30'
-    )
-    testImplementation group: 'com.google.inject', name: 'guice', version: '4.2.3'
+    testImplementation 'org.testng:testng:7.1.0'
+    testImplementation 'org.slf4j:slf4j-log4j12:1.7.30'
+//    testImplementation group: 'com.google.inject', name: 'guice', version: '4.2.3'
     
     testImplementation 'cn.featherfly.common:common-core:1.8.32'
     testImplementation 'cn.featherfly.common:common-db-mapping-model:0.1.0'

@@ -1,4 +1,4 @@
-package cn.featherfly.common.repository.mapping;
+package cn.featherfly.common.repository.mapper;
 
 /**
  * 记录行映射接口.

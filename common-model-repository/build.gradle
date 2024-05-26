@@ -4,6 +4,7 @@ ext {
 dependencies {
     api project(":common-core")
     api group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: '1.0.2.Final'
+    api group: 'com.speedment.common', name: 'tuple', version: '3.2.10'
     
     implementation group: 'cn.featherfly.common', name: 'common-gentool', version: '0.1.5'
     implementation 'log4j:log4j:1.2.17'

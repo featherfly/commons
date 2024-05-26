@@ -1,5 +1,8 @@
-# 0.4.1
-1.
+# 0.5.0 
+1. 加入tuple mapper相关的接口
+2. 加入query executor和paramed execution executor相关的接口
+3. PropertyMapping加入Property property属性用于直接访问映射对象属性的数据
+4. Params改为class,原来的枚举改为其内部类ParamType
 
 # 0.4.0 2024-05-05
 1. ClassMapping, PropertyMapping, MappingFactory加入泛型

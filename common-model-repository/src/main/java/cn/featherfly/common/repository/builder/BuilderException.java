@@ -2,18 +2,17 @@
 package cn.featherfly.common.repository.builder;
 
 /**
- * <p>
- * BuilderException
- * </p>
- * 
+ * BuilderException.
+ *
  * @author zhongj
  */
-public class BuilderException extends cn.featherfly.common.exception.LocalizedCodeException{
+public class BuilderException extends cn.featherfly.common.exception.LocalizedCodeException {
 
     private static final long serialVersionUID = -1;
 
-    
     /**
+     * Instantiates a new builder exception.
+     *
      * @param exceptionCode exceptionCode
      */
     public BuilderException(BuilderExceptionCode exceptionCode) {
@@ -21,6 +20,8 @@ public class BuilderException extends cn.featherfly.common.exception.LocalizedCo
     }
 
     /**
+     * Instantiates a new builder exception.
+     *
      * @param exceptionCode exceptionCode
      * @param ex ex
      */

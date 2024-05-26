@@ -1,8 +1,10 @@
 package cn.featherfly.common.repository;
 
-/*
- * package cn.featherfly.common.repository; /** RepositoryField.
+/**
+ * RepositoryField.
+ *
  * @author zhongj
+ * @param <R> the generic type
  */
 public interface RepositoryAwareField<R extends Repository> extends Field {
 

@@ -1,5 +1,5 @@
 
-package cn.featherfly.common.db.mapping;
+package cn.featherfly.common.db.mapper;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -8,6 +8,7 @@ import java.sql.Types;
 import java.util.Date;
 
 import cn.featherfly.common.db.JdbcException;
+import cn.featherfly.common.db.mapping.SqlTypeMappingManager;
 import cn.featherfly.common.lang.Lang;
 
 /**
@@ -17,7 +18,7 @@ import cn.featherfly.common.lang.Lang;
  *
  * @author zhongj
  */
-public class SqlResultSet implements cn.featherfly.common.repository.mapping.ResultSet {
+public class SqlResultSet implements cn.featherfly.common.repository.mapper.ResultSet {
 
     private ResultSet proxy;
 
@@ -34,7 +35,7 @@ public class SqlResultSet implements cn.featherfly.common.repository.mapping.Res
     /**
      * Instantiates a new sql result set.
      *
-     * @param proxy   java.sql.ResultSet
+     * @param proxy java.sql.ResultSet
      * @param manager the manager
      */
     public SqlResultSet(ResultSet proxy, SqlTypeMappingManager manager) {
@@ -326,11 +327,11 @@ public class SqlResultSet implements cn.featherfly.common.repository.mapping.Res
     public <T extends Enum<T>> T getEnum(int index, Class<T> type) {
         try {
             if (proxy.getType() == Types.INTEGER || proxy.getType() == Types.TINYINT
-                    || proxy.getType() == Types.SMALLINT) {
+                || proxy.getType() == Types.SMALLINT) {
                 return Lang.toEnum(type, proxy.getInt(index));
             } else if (proxy.getType() == Types.VARCHAR || proxy.getType() == Types.NVARCHAR
-                    || proxy.getType() == Types.CHAR || proxy.getType() == Types.NCHAR
-                    || proxy.getType() == Types.LONGVARCHAR || proxy.getType() == Types.LONGNVARCHAR) {
+                || proxy.getType() == Types.CHAR || proxy.getType() == Types.NCHAR
+                || proxy.getType() == Types.LONGVARCHAR || proxy.getType() == Types.LONGNVARCHAR) {
                 return Lang.toEnum(type, proxy.getString(index));
             }
             // TODO 标准化
@@ -347,11 +348,11 @@ public class SqlResultSet implements cn.featherfly.common.repository.mapping.Res
     public <T extends Enum<T>> T getEnum(String name, Class<T> type) {
         try {
             if (proxy.getType() == Types.INTEGER || proxy.getType() == Types.TINYINT
-                    || proxy.getType() == Types.SMALLINT) {
+                || proxy.getType() == Types.SMALLINT) {
                 return Lang.toEnum(type, proxy.getInt(name));
             } else if (proxy.getType() == Types.VARCHAR || proxy.getType() == Types.NVARCHAR
-                    || proxy.getType() == Types.CHAR || proxy.getType() == Types.NCHAR
-                    || proxy.getType() == Types.LONGVARCHAR || proxy.getType() == Types.LONGNVARCHAR) {
+                || proxy.getType() == Types.CHAR || proxy.getType() == Types.NCHAR
+                || proxy.getType() == Types.LONGVARCHAR || proxy.getType() == Types.LONGNVARCHAR) {
                 return Lang.toEnum(type, proxy.getString(name));
             }
             // TODO 标准化

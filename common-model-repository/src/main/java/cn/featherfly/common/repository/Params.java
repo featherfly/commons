@@ -10,14 +10,52 @@
  */
 package cn.featherfly.common.repository;
 
+import java.util.HashMap;
+
 /**
  * Params.
  *
  * @author zhongj
  */
-public enum Params {
+public class Params extends HashMap<String, Object> {
+
+    private static final long serialVersionUID = -5375023636015964291L;
+
     /**
-     * 没有参数
+     * Instantiates a new params.
      */
-    NONE
+    public Params() {
+    }
+
+    /**
+     * Sets the param.
+     *
+     * @param name the name
+     * @param value the value
+     * @return the params
+     */
+    public static final Params setParam(String name, Object value) {
+        return new Params().set(name, value);
+    }
+
+    /**
+     * Sets the.
+     *
+     * @param name the name
+     * @param value the value
+     * @return the params
+     */
+    public Params set(String name, Object value) {
+        put(name, value);
+        return this;
+    }
+
+    /**
+     * The Enum ParamType.
+     */
+    public enum ParamType {
+
+        /** 没有参数. */
+        NONE
+    }
 }

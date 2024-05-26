@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -72,6 +74,10 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
     private boolean unique;
 
     private Mode mode = Mode.SINGLE;
+
+    private Function<Object, Object> getter;
+
+    private BiConsumer<Object, Object> setter;
 
     /**
      * 小数位数
@@ -273,6 +279,42 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
      */
     public void setAutoincrement(boolean autoincrement) {
         this.autoincrement = autoincrement;
+    }
+
+    /**
+     * get getter value
+     *
+     * @return getter
+     */
+    public Function<Object, Object> getGetter() {
+        return getter;
+    }
+
+    /**
+     * set getter value
+     *
+     * @param getter getter
+     */
+    public void setGetter(Function<Object, Object> getter) {
+        this.getter = getter;
+    }
+
+    /**
+     * get setter value
+     *
+     * @return setter
+     */
+    public BiConsumer<Object, Object> getSetter() {
+        return setter;
+    }
+
+    /**
+     * set setter value
+     *
+     * @param setter setter
+     */
+    public void setSetter(BiConsumer<Object, Object> setter) {
+        this.setter = setter;
     }
 
     /**

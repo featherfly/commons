@@ -3,6 +3,7 @@ package cn.featherfly.common.db.mapping;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import cn.featherfly.common.bean.AsmPropertyAccessorFactory;
 import cn.featherfly.common.db.JdbcTestBase;
 import cn.featherfly.common.db.dialect.Dialects;
 import cn.featherfly.common.db.mapping.pojo.order.Order;
@@ -23,7 +24,8 @@ public class ClassMappingMulityEmbeddedTest extends JdbcTestBase {
     @BeforeClass
     public void init() {
         DatabaseMetadata metadata = DatabaseMetadataManager.getDefaultManager().create(dataSource);
-        factory = new CompatibleJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager);
+        factory = new CompatibleJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager,
+            new AsmPropertyAccessorFactory(Thread.currentThread().getContextClassLoader()));
     }
 
     @Test(expectedExceptions = JdbcMappingException.class)
@@ -32,7 +34,7 @@ public class ClassMappingMulityEmbeddedTest extends JdbcTestBase {
 
         //        String insertSql = "INSERT INTO `order` (`wx_package`,`wx_package_expire_time`,`app_id`,`alipay_trade_no`,`id`,`no`,`app_key`) VALUES (?,?,?,?,?,?,?)";
 
-        String result = ClassMappingUtils.getInsertSqlAndParamPositions(mapping, Dialects.mysql()).get0();
+        String result = ClassMappingUtils.getInsertSqlAndMappings(mapping, Dialects.mysql()).get0();
 
         System.out.println(result);
 

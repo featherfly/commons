@@ -8,6 +8,7 @@ import java.util.Set;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import cn.featherfly.common.bean.AsmPropertyAccessorFactory;
 import cn.featherfly.common.db.JdbcTestBase;
 import cn.featherfly.common.db.mapping.JdbcClassMapping;
 import cn.featherfly.common.db.mapping.SqlTypeMappingManager;
@@ -39,7 +40,8 @@ public class VersionManagerTest extends JdbcTestBase {
     public void init() {
         sqlTypeMappingManager = new SqlTypeMappingManager();
         DatabaseMetadata metadata = DatabaseMetadataManager.getDefaultManager().create(dataSource);
-        factory = new StrictJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager);
+        factory = new StrictJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager,
+            new AsmPropertyAccessorFactory(Thread.currentThread().getContextClassLoader()));
         migrator = new Migrator(dataSource, dialect, sqlTypeMappingManager, true);
         factory.setCheckMapping(false);
         sqlTypeMappingManager.setEnumWithOrdinal(true);

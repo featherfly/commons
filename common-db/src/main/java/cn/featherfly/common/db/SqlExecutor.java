@@ -24,13 +24,10 @@ import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.Execution;
-import cn.featherfly.common.repository.mapping.RowMapper;
+import cn.featherfly.common.repository.mapper.RowMapper;
 
 /**
- * <p>
- * SqlExecutor
- * </p>
- * .
+ * SqlExecutor.
  *
  * @author zhongj
  */
@@ -109,7 +106,7 @@ public class SqlExecutor {
      * read sql from file with assgin encoding and execute.
      *
      * @param sqlResource sqlResource
-     * @param charset     charset
+     * @param charset charset
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public void execute(InputStream sqlResource, Charset charset) throws IOException {
@@ -136,7 +133,7 @@ public class SqlExecutor {
      */
     public void execute(String[] sqls) {
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                StatementWrapper statement = connection.createStatement()) {
+            StatementWrapper statement = connection.createStatement()) {
             for (String sql : sqls) {
                 sql = sql.trim();
                 if (Lang.isNotEmpty(sql)) {
@@ -151,7 +148,7 @@ public class SqlExecutor {
     /**
      * sql execute.
      *
-     * @param sql    sql
+     * @param sql sql
      * @param params params
      * @return exuecute success amount
      */
@@ -159,7 +156,7 @@ public class SqlExecutor {
         if (Lang.isNotEmpty(sql)) {
             sql = sql.trim();
             try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                    PreparedStatementWrapper prep = connection.prepareStatement(sql)) {
+                PreparedStatementWrapper prep = connection.prepareStatement(sql)) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("execute sql -> {} , params -> {}", sql, ArrayUtils.toString(params));
                 }
@@ -173,7 +170,7 @@ public class SqlExecutor {
     /**
      * sql execute.
      *
-     * @param sql    named param sql.
+     * @param sql named param sql.
      * @param params map params
      * @return exuecute success amount
      */
@@ -213,8 +210,8 @@ public class SqlExecutor {
     /**
      * sql query.
      *
-     * @param <E>    the element type
-     * @param query  query
+     * @param <E> the element type
+     * @param query query
      * @param mapper the mapper
      * @return query result list
      */
@@ -228,8 +225,8 @@ public class SqlExecutor {
     /**
      * sql query.
      *
-     * @param <E>    the element type
-     * @param sql    sql
+     * @param <E> the element type
+     * @param sql sql
      * @param mapper the mapper
      * @param params params
      * @return query result list
@@ -241,8 +238,8 @@ public class SqlExecutor {
     /**
      * sql query.
      *
-     * @param <E>    the element type
-     * @param sql    sql
+     * @param <E> the element type
+     * @param sql sql
      * @param mapper the mapper
      * @param params params
      * @return query result list
@@ -251,7 +248,7 @@ public class SqlExecutor {
         if (Lang.isNotEmpty(sql)) {
             sql = sql.trim();
             try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                    PreparedStatementWrapper prep = connection.prepareStatement(sql)) {
+                PreparedStatementWrapper prep = connection.prepareStatement(sql)) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("execute sql -> {} , params -> {}", sql, ArrayUtils.toString(params));
                 }
@@ -279,7 +276,7 @@ public class SqlExecutor {
     /**
      * Query.
      *
-     * @param sql    the sql
+     * @param sql the sql
      * @param params the params
      * @return the list
      */
@@ -290,7 +287,7 @@ public class SqlExecutor {
     /**
      * sql query.
      *
-     * @param sql    sql
+     * @param sql sql
      * @param params params
      * @return query result list
      */
@@ -298,7 +295,7 @@ public class SqlExecutor {
         if (Lang.isNotEmpty(sql)) {
             sql = sql.trim();
             try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                    PreparedStatementWrapper prep = connection.prepareStatement(sql)) {
+                PreparedStatementWrapper prep = connection.prepareStatement(sql)) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("execute sql -> {} , params -> {}", sql, ArrayUtils.toString(params));
                 }
@@ -326,7 +323,7 @@ public class SqlExecutor {
     /**
      * Query list array.
      *
-     * @param sql    the sql
+     * @param sql the sql
      * @param params the params
      * @return the list
      */
@@ -337,7 +334,7 @@ public class SqlExecutor {
     /**
      * sql query.
      *
-     * @param sql    sql
+     * @param sql sql
      * @param params params
      * @return query result list
      */
@@ -345,7 +342,7 @@ public class SqlExecutor {
         if (Lang.isNotEmpty(sql)) {
             sql = sql.trim();
             try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                    PreparedStatementWrapper prep = connection.prepareStatement(sql)) {
+                PreparedStatementWrapper prep = connection.prepareStatement(sql)) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("execute sql -> {} , params -> {}", sql, ArrayUtils.toString(params));
                 }

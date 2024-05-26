@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.bean.BeanProperty;
+import cn.featherfly.common.bean.PropertyAccessorFactory;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.jpa.ColumnDefault;
 import cn.featherfly.common.db.jpa.Comment;
@@ -60,16 +61,21 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
     protected List<PropertyNameConversion> propertyNameConversions = new ArrayList<>();
 
     /** The sql type mapping manager. */
-    protected SqlTypeMappingManager sqlTypeMappingManager;
+    protected final SqlTypeMappingManager sqlTypeMappingManager;
+
+    /** The property accessor factory. */
+    protected final PropertyAccessorFactory propertyAccessorFactory;
 
     /**
      * Instantiates a new abstract mapping factory.
      *
      * @param metadata the metadata
      * @param dialect the dialect
+     * @param propertyAccessorFactory the property accessor factory
      */
-    protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect) {
-        this(metadata, dialect, null);
+    protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
+        PropertyAccessorFactory propertyAccessorFactory) {
+        this(metadata, dialect, null, propertyAccessorFactory);
     }
 
     /**
@@ -78,10 +84,11 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      * @param metadata the metadata
      * @param dialect the dialect
      * @param sqlTypeMappingManager the sql type mapping manager
+     * @param propertyAccessorFactory the property accessor factory
      */
     protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-        SqlTypeMappingManager sqlTypeMappingManager) {
-        this(metadata, dialect, sqlTypeMappingManager, null, null);
+        SqlTypeMappingManager sqlTypeMappingManager, PropertyAccessorFactory propertyAccessorFactory) {
+        this(metadata, dialect, sqlTypeMappingManager, null, null, propertyAccessorFactory);
     }
 
     /**
@@ -91,10 +98,13 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      * @param dialect the dialect
      * @param classNameConversions the class name conversions
      * @param propertyNameConversions the property name conversions
+     * @param propertyAccessorFactory the property accessor factory
      */
     protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-        List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions) {
-        this(metadata, dialect, new SqlTypeMappingManager(), classNameConversions, propertyNameConversions);
+        List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions,
+        PropertyAccessorFactory propertyAccessorFactory) {
+        this(metadata, dialect, new SqlTypeMappingManager(), classNameConversions, propertyNameConversions,
+            propertyAccessorFactory);
     }
 
     /**
@@ -105,13 +115,15 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      * @param sqlTypeMappingManager the sql type mapping manager
      * @param classNameConversions classNameConversions
      * @param propertyNameConversions propertyNameConversions
+     * @param propertyAccessorFactory the property accessor factory
      */
     protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
         SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
-        List<PropertyNameConversion> propertyNameConversions) {
+        List<PropertyNameConversion> propertyNameConversions, PropertyAccessorFactory propertyAccessorFactory) {
         super();
         this.metadata = metadata;
         this.dialect = dialect;
+        this.propertyAccessorFactory = propertyAccessorFactory;
 
         if (Lang.isEmpty(classNameConversions)) {
             this.classNameConversions.add(new ClassNameJpaConversion());

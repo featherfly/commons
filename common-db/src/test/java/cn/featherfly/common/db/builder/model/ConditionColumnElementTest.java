@@ -13,7 +13,7 @@ import cn.featherfly.common.db.dialect.Dialects;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.operator.ComparisonOperator;
 import cn.featherfly.common.repository.IgnoreStrategy;
-import cn.featherfly.common.repository.Params;
+import cn.featherfly.common.repository.Params.ParamType;
 
 /**
  * ConditionColumnElementTest.
@@ -57,7 +57,7 @@ public class ConditionColumnElementTest {
         assertEquals(c.getParam(), username);
 
         c = new ConditionColumnElement(dialect, "username", "yufei", ComparisonOperator.EQ, userTableAlias,
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         assertEquals(c.toSql(), "u.`username` = ?");
         assertEquals(c.getParam(), username);
         print(c);
@@ -175,86 +175,86 @@ public class ConditionColumnElementTest {
         print(c);
         assertEquals(c.toSql(), "`mobile` IS NULL");
         //        assertEquals(c.getParam(), null);
-        assertEquals(c.getParam(), Params.NONE);
+        assertEquals(c.getParam(), ParamType.NONE);
         c = new ConditionColumnElement(dialect, "mobile", value, ComparisonOperator.ISN, "u", IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "u.`mobile` IS NULL");
         //        assertEquals(c.getParam(), null);
-        assertEquals(c.getParam(), Params.NONE);
+        assertEquals(c.getParam(), ParamType.NONE);
 
         c = new ConditionColumnElement(dialect, "mobile", value, ComparisonOperator.INN, IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "`mobile` IS NOT NULL");
         //        assertEquals(c.getParam(), null);
-        assertEquals(c.getParam(), Params.NONE);
+        assertEquals(c.getParam(), ParamType.NONE);
         c = new ConditionColumnElement(dialect, "mobile", value, ComparisonOperator.INN, "u", IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "u.`mobile` IS NOT NULL");
         //        assertEquals(c.getParam(), null);
-        assertEquals(c.getParam(), Params.NONE);
+        assertEquals(c.getParam(), ParamType.NONE);
 
         value = false;
         c = new ConditionColumnElement(dialect, "mobile", value, ComparisonOperator.ISN, IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "`mobile` IS NOT NULL");
-        assertEquals(c.getParam(), Params.NONE);
+        assertEquals(c.getParam(), ParamType.NONE);
         c = new ConditionColumnElement(dialect, "mobile", value, ComparisonOperator.ISN, "u", IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "u.`mobile` IS NOT NULL");
-        assertEquals(c.getParam(), Params.NONE);
+        assertEquals(c.getParam(), ParamType.NONE);
 
         c = new ConditionColumnElement(dialect, "mobile", value, ComparisonOperator.INN, IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "`mobile` IS NULL");
-        assertEquals(c.getParam(), Params.NONE);
+        assertEquals(c.getParam(), ParamType.NONE);
         c = new ConditionColumnElement(dialect, "mobile", value, ComparisonOperator.INN, "u", IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "u.`mobile` IS NULL");
-        assertEquals(c.getParam(), Params.NONE);
+        assertEquals(c.getParam(), ParamType.NONE);
 
         value = null;
         c = new ConditionColumnElement(dialect, "mobile", value, ComparisonOperator.ISN, IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "");
         //        assertEquals(c.getParam(), value);
-        assertEquals(c.getParam(), Params.NONE);
+        assertEquals(c.getParam(), ParamType.NONE);
         c = new ConditionColumnElement(dialect, "mobile", value, ComparisonOperator.ISN, "u", IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "");
         //        assertEquals(c.getParam(), value);
-        assertEquals(c.getParam(), Params.NONE);
+        assertEquals(c.getParam(), ParamType.NONE);
 
         c = new ConditionColumnElement(dialect, "mobile", value, ComparisonOperator.INN, IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "");
         //        assertEquals(c.getParam(), value);
-        assertEquals(c.getParam(), Params.NONE);
+        assertEquals(c.getParam(), ParamType.NONE);
         c = new ConditionColumnElement(dialect, "mobile", value, ComparisonOperator.INN, "u", IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "");
         //        assertEquals(c.getParam(), value);
-        assertEquals(c.getParam(), Params.NONE);
+        assertEquals(c.getParam(), ParamType.NONE);
 
         Object[] tags = new Object[] { "a", "b" };
         c = new ConditionColumnElement(dialect, "tag", ArrayUtils.toList(tags), ComparisonOperator.IN,
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "`tag` IN (?,?)");
         assertEquals(((List<Object>) c.getParam()).toArray(), tags);
         c = new ConditionColumnElement(dialect, "tag", ArrayUtils.toList(tags), ComparisonOperator.IN, "u",
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "u.`tag` IN (?,?)");
         assertEquals(((List<Object>) c.getParam()).toArray(), tags);
 
         tags = new Object[] { "c", "d" };
         c = new ConditionColumnElement(dialect, "tag", ArrayUtils.toList(tags), ComparisonOperator.NI,
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "`tag` NOT IN (?,?)");
         assertEquals(((List<Object>) c.getParam()).toArray(), tags);
         c = new ConditionColumnElement(dialect, "tag", ArrayUtils.toList(tags), ComparisonOperator.NI, "u",
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "u.`tag` NOT IN (?,?)");
         assertEquals(((List<Object>) c.getParam()).toArray(), tags);
@@ -281,7 +281,7 @@ public class ConditionColumnElementTest {
         // between and
         Object[] btParams = new Object[] { 18, 22 };
         c = new ConditionColumnElement(dialect, "age", new Object[] { 18, 22 }, ComparisonOperator.BA,
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "`age` BETWEEN ? AND ?");
         assertEquals(c.getParam(), btParams);
@@ -292,7 +292,7 @@ public class ConditionColumnElementTest {
         assertEquals(c.getParam(), name);
 
         c = new ConditionColumnElement(dialect, "age", new Object[] { 18, 22 }, ComparisonOperator.NBA,
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "`age` NOT BETWEEN ? AND ?");
         assertEquals(c.getParam(), btParams);
@@ -308,14 +308,14 @@ public class ConditionColumnElementTest {
         Dialect dialect = Dialects.mysql();
         SqlElement se = new ColumnElement(dialect, usernameColumn, userTableAlias2);
         c = new ConditionColumnElement(dialect, usernameColumn, se, ComparisonOperator.EQ, userTableAlias,
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "u.`username` = u2.`username`");
         assertEquals(c.getParam(), se);
 
         se = () -> "(select name from `user_info` where id = 1)";
         c = new ConditionColumnElement(dialect, usernameColumn, se, ComparisonOperator.EQ, userTableAlias,
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "u.`username` = (select name from `user_info` where id = 1)");
         assertEquals(c.getParam(), se);
@@ -326,7 +326,7 @@ public class ConditionColumnElementTest {
     void postgresql() {
         Dialect dialect = Dialects.postgresql();
         ConditionColumnElement c = new ConditionColumnElement(dialect, "username", username, ComparisonOperator.EQ,
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "\"username\" = ?");
         assertEquals(c.getParam(), username);
@@ -476,24 +476,24 @@ public class ConditionColumnElementTest {
 
         Object[] tags = new Object[] { "a", "b" };
         c = new ConditionColumnElement(dialect, "tag", ArrayUtils.toList(tags), ComparisonOperator.IN,
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "\"tag\" IN (?,?)");
         assertEquals(((List<Object>) c.getParam()).toArray(), tags);
         c = new ConditionColumnElement(dialect, "tag", ArrayUtils.toList(tags), ComparisonOperator.IN, "u",
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "u.\"tag\" IN (?,?)");
         assertEquals(((List<Object>) c.getParam()).toArray(), tags);
 
         tags = new Object[] { "c", "d" };
         c = new ConditionColumnElement(dialect, "tag", ArrayUtils.toList(tags), ComparisonOperator.NI,
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "\"tag\" NOT IN (?,?)");
         assertEquals(((List<Object>) c.getParam()).toArray(), tags);
         c = new ConditionColumnElement(dialect, "tag", ArrayUtils.toList(tags), ComparisonOperator.NI, "u",
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "u.\"tag\" NOT IN (?,?)");
         assertEquals(((List<Object>) c.getParam()).toArray(), tags);
@@ -516,7 +516,7 @@ public class ConditionColumnElementTest {
         String username = "yufei";
         Integer age = 18;
         ConditionColumnElement c = new ConditionColumnElement(dialect, "username", username, ComparisonOperator.EQ,
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "'username' = ?");
         assertEquals(c.getParam(), username);
@@ -666,24 +666,24 @@ public class ConditionColumnElementTest {
 
         Object[] tags = new Object[] { "a", "b" };
         c = new ConditionColumnElement(dialect, "tag", ArrayUtils.toList(tags), ComparisonOperator.IN,
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "'tag' IN (?,?)");
         assertEquals(((List<Object>) c.getParam()).toArray(), tags);
         c = new ConditionColumnElement(dialect, "tag", ArrayUtils.toList(tags), ComparisonOperator.IN, "u",
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "u.'tag' IN (?,?)");
         assertEquals(((List<Object>) c.getParam()).toArray(), tags);
 
         tags = new Object[] { "c", "d" };
         c = new ConditionColumnElement(dialect, "tag", ArrayUtils.toList(tags), ComparisonOperator.NI,
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "'tag' NOT IN (?,?)");
         assertEquals(((List<Object>) c.getParam()).toArray(), tags);
         c = new ConditionColumnElement(dialect, "tag", ArrayUtils.toList(tags), ComparisonOperator.NI, "u",
-                IgnoreStrategy.EMPTY);
+            IgnoreStrategy.EMPTY);
         print(c);
         assertEquals(c.toSql(), "u.'tag' NOT IN (?,?)");
         assertEquals(((List<Object>) c.getParam()).toArray(), tags);

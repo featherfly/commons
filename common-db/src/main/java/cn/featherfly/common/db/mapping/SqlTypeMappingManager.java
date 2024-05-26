@@ -12,7 +12,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.featherfly.common.bean.BeanProperty;
+import cn.featherfly.common.bean.Property;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.reflect.ClassType;
@@ -157,7 +157,7 @@ public class SqlTypeMappingManager {
      * @param javaSqlTypeMapper the java sql type mapper
      * @return SqlTypeMappingManager
      */
-    public SqlTypeMappingManager regist(BeanProperty<?, ?> beanProperty, JavaSqlTypeMapper<?> javaSqlTypeMapper) {
+    public SqlTypeMappingManager regist(Property<?, ?> beanProperty, JavaSqlTypeMapper<?> javaSqlTypeMapper) {
         AssertIllegalArgument.isNotNull(beanProperty, "beanProperty");
         AssertIllegalArgument.isNotNull(javaSqlTypeMapper, "mapper");
         // 属性从属与类型，所有用属性定义的类型组
@@ -173,7 +173,7 @@ public class SqlTypeMappingManager {
      * @return the java sql type mapper
      */
     @SuppressWarnings("unchecked")
-    public JavaSqlTypeMapper<?> getJavaSqlTypeMapper(BeanProperty<?, ?> property) {
+    public JavaSqlTypeMapper<?> getJavaSqlTypeMapper(Property<?, ?> property) {
         TypeStore store = getStore(property);
         if (store != null) {
             return store.getJavaSqlTypeMapper(property);
@@ -242,8 +242,8 @@ public class SqlTypeMappingManager {
      * @param beanProperty the bean property
      * @return the sql type
      */
-    public <T> SQLType getSqlType(BeanProperty<?, T> beanProperty) {
-        return getSqlType(beanProperty.getOwnerType(), beanProperty.getType());
+    public <T> SQLType getSqlType(Property<?, T> beanProperty) {
+        return getSqlType(beanProperty.getInstanceType(), beanProperty.getType());
     }
 
     /**
@@ -353,18 +353,18 @@ public class SqlTypeMappingManager {
      * @param columnValue the column value
      * @param javaType the java type
      */
-    public <E> void set(PreparedStatement prep, int columnIndex, E columnValue, BeanProperty<?, E> javaType) {
+    public <E> void set(PreparedStatement prep, int columnIndex, E columnValue, Property<?, E> javaType) {
         AssertIllegalArgument.isNotNull(javaType, "javaType");
         AssertIllegalArgument.isNotNull(prep, "PreparedStatement");
         Store store = getStore(javaType);
-        // bean property 一定是注册在 bean class 对应的store内的，如果没有使用BeanProperty注册
+        // bean property 一定是注册在 bean class 对应的store内的，如果没有使用Property注册
         // 则使用bean property的类型去匹配该类型空间下注册的类型
         if (store != null
             && (store.set(prep, columnIndex, columnValue, javaType) || store.set(prep, columnIndex, columnValue))) {
             return;
         }
         // 再查找属性拥有者对象的存储空间对应的属性类型
-        store = getStore(javaType.getOwnerType());
+        store = getStore(javaType.getInstanceType());
         if (store != null && store.set(prep, columnIndex, columnValue)) {
             return;
         }
@@ -445,7 +445,7 @@ public class SqlTypeMappingManager {
      * @param beanProperty the bean property
      * @return the e
      */
-    public <E> E get(ResultSet rs, int columnIndex, BeanProperty<?, E> beanProperty) {
+    public <E> E get(ResultSet rs, int columnIndex, Property<?, E> beanProperty) {
         AssertIllegalArgument.isNotNull(beanProperty, "beanProperty");
         AssertIllegalArgument.isNotNull(rs, "ResultSet");
         Store store = getStore(beanProperty);
@@ -454,7 +454,7 @@ public class SqlTypeMappingManager {
             return e.orElse(null);
         }
         // 再查找属性拥有者对象的存储空间对应的属性类型
-        store = getStore(beanProperty.getOwnerType());
+        store = getStore(beanProperty.getInstanceType());
         if (store != null && (e = store.get(rs, columnIndex, beanProperty.getType())) != null) {
             return e.orElse(null);
         }
@@ -476,8 +476,8 @@ public class SqlTypeMappingManager {
     //    }
 
     //    private <E> TypeStore getStore(Type<E> javaType) {
-    //        if (javaType instanceof BeanProperty) {
-    //            return getStore((BeanProperty<E>) javaType);
+    //        if (javaType instanceof Property) {
+    //            return getStore((Property<E>) javaType);
     //        } else {
     //            return getStore(javaType.getType());
     //        }
@@ -496,17 +496,17 @@ public class SqlTypeMappingManager {
         return entityStoreMap.get(entityType);
     }
 
-    private <E> TypeStore getStoreForRegist(BeanProperty<?, E> entityType) {
+    private <E> TypeStore getStoreForRegist(Property<?, E> entityType) {
         TypeStore store = getStore(entityType);
         if (store == null) {
             store = new TypeStore();
-            entityTypeStoreMap.put(entityType.getOwnerType(), store);
+            entityTypeStoreMap.put(entityType.getInstanceType(), store);
         }
         return store;
     }
 
-    private <E> TypeStore getStore(BeanProperty<?, E> property) {
-        return entityTypeStoreMap.get(property.getOwnerType());
+    private <E> TypeStore getStore(Property<?, E> property) {
+        return entityTypeStoreMap.get(property.getInstanceType());
     }
 
     //    /**

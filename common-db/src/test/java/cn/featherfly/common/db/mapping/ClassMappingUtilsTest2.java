@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 
 import com.speedment.common.tuple.Tuple2;
 
+import cn.featherfly.common.bean.AsmPropertyAccessorFactory;
 import cn.featherfly.common.db.JdbcTestBase;
 import cn.featherfly.common.db.mapping.pojo.UserInfo;
 import cn.featherfly.common.db.mapping.pojo.UserInfo2;
@@ -29,9 +30,9 @@ public class ClassMappingUtilsTest2 extends JdbcTestBase {
     @BeforeClass
     public void setup() {
         factory = new CompatibleJdbcMappingFactory(DatabaseMetadataManager.getDefaultManager().create(dataSource),
-            dialect);
-        factory2 = new StrictJdbcMappingFactory(DatabaseMetadataManager.getDefaultManager().create(dataSource),
-            dialect);
+            dialect, new AsmPropertyAccessorFactory(Thread.currentThread().getContextClassLoader()));
+        factory2 = new StrictJdbcMappingFactory(DatabaseMetadataManager.getDefaultManager().create(dataSource), dialect,
+            new AsmPropertyAccessorFactory(Thread.currentThread().getContextClassLoader()));
     }
 
     @Test

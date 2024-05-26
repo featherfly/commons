@@ -1,4 +1,4 @@
-# 0.6.1
+# 0.7.0
 
 1. 优化NamedParamSql逻辑，提升性能
 2. JdbcUtils加入BigInteger的支持
@@ -6,7 +6,8 @@
 4. SqlUtils加入多个处理in参数占位符的方法
 5. SqlSelectBasicBuilder删除buildWithFrom属性，加入带boolean buildWithFrom参数的build方法
 5. 重构Dialect,把ddl和dml相关的操作都分类放入，即dialect.ddl().drop..., dialect.dml().insert..
-6. ClassMappingUtils加入getInsertSqlAndMappings
+6. ClassMappingUtils加入一些列getXxxSqlAndMappings方法
+7. CompatibleJdbcMappingFactory基于ProprerAccessor实现了PropertyMapping的setter,getter
 
 # 0.6.0 2024-05-05
 

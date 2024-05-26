@@ -12,7 +12,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.featherfly.common.bean.BeanProperty;
+import cn.featherfly.common.bean.Property;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.lang.reflect.ClassType;
 import cn.featherfly.common.lang.reflect.Type;
@@ -154,7 +154,7 @@ public abstract class AbstractStore implements Store {
      * {@inheritDoc}
      */
     @Override
-    public <E> boolean set(PreparedStatement prep, int columnIndex, E columnValue, BeanProperty<?, E> javaType) {
+    public <E> boolean set(PreparedStatement prep, int columnIndex, E columnValue, Property<?, E> javaType) {
         return _set(prep, columnIndex, columnValue, javaType);
     }
 
@@ -199,7 +199,7 @@ public abstract class AbstractStore implements Store {
      * {@inheritDoc}
      */
     @Override
-    public <E> Optional<E> get(ResultSet rs, int columnIndex, BeanProperty<?, E> javaType) {
+    public <E> Optional<E> get(ResultSet rs, int columnIndex, Property<?, E> javaType) {
         return _get(rs, columnIndex, javaType);
     }
 

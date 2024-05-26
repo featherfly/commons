@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLType;
 import java.util.Optional;
 
-import cn.featherfly.common.bean.BeanProperty;
+import cn.featherfly.common.bean.Property;
 import cn.featherfly.common.lang.reflect.Type;
 
 /**
@@ -37,7 +37,7 @@ public interface Store {
      * @param valueType the value type
      * @return true, if successful
      */
-    <E> boolean set(PreparedStatement prep, int columnIndex, E columnValue, BeanProperty<?, E> valueType);
+    <E> boolean set(PreparedStatement prep, int columnIndex, E columnValue, Property<?, E> valueType);
 
     /**
      * Gets the.
@@ -70,7 +70,7 @@ public interface Store {
      * @param valueType the value type
      * @return the e
      */
-    <E> Optional<E> get(ResultSet rs, int columnIndex, BeanProperty<?, E> valueType);
+    <E> Optional<E> get(ResultSet rs, int columnIndex, Property<?, E> valueType);
 
     /**
      * Gets the sql type.

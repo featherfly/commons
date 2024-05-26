@@ -24,11 +24,11 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
     /**
      * Instantiates a new sql select join on basic builder.
      *
-     * @param selectBuilder            the select builder
+     * @param selectBuilder the select builder
      * @param joinSelectColumnsBuilder the join select columns builder
      */
     public SqlSelectJoinOnBasicBuilder(SqlSelectBasicBuilder selectBuilder,
-            SqlSelectColumnsBuilder<?> joinSelectColumnsBuilder) {
+        SqlSelectColumnsBuilder<?> joinSelectColumnsBuilder) {
         super();
         this.selectBuilder = selectBuilder;
         this.joinSelectColumnsBuilder = joinSelectColumnsBuilder;
@@ -37,7 +37,7 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
     /**
      * add column.
      *
-     * @param column            column
+     * @param column column
      * @param aggregateFunction aggregateFunction
      * @return the sql select join on basic builder
      * @deprecated {@link #addColumn(AggregateFunction, String)}
@@ -50,9 +50,9 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
     /**
      * add column.
      *
-     * @param column            column
+     * @param column column
      * @param aggregateFunction aggregateFunction
-     * @param asName            alias name
+     * @param asName alias name
      * @return this
      * @deprecated {@link #addColumn(AggregateFunction, String, String)}
      */
@@ -65,7 +65,7 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
      * add column.
      *
      * @param aggregateFunction aggregateFunction
-     * @param column            column
+     * @param column column
      * @return this
      */
     public SqlSelectJoinOnBasicBuilder addColumn(AggregateFunction aggregateFunction, String column) {
@@ -78,8 +78,8 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
      * add column.
      *
      * @param aggregateFunction aggregateFunction
-     * @param column            column
-     * @param asName            alias name
+     * @param column column
+     * @param asName alias name
      * @return this
      */
     public SqlSelectJoinOnBasicBuilder addColumn(AggregateFunction aggregateFunction, String column, String asName) {
@@ -92,13 +92,13 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
      * add column.
      *
      * @param aggregateFunction aggregateFunction
-     * @param distinct          the distinct
-     * @param column            column
-     * @param asName            alias name
+     * @param distinct the distinct
+     * @param column column
+     * @param asName alias name
      * @return this
      */
     public SqlSelectJoinOnBasicBuilder addColumn(AggregateFunction aggregateFunction, boolean distinct, String column,
-            String asName) {
+        String asName) {
         joinSelectColumnsBuilder.addColumn(aggregateFunction, distinct, column, asName);
         addJoinSelectColumnsBuilder();
         return this;
@@ -133,8 +133,8 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
      * add column.
      *
      * @param distinct the distinct
-     * @param column   column
-     * @param asName   asName
+     * @param column column
+     * @param asName asName
      * @return this
      */
     public SqlSelectJoinOnBasicBuilder addColumn(boolean distinct, String column, String asName) {
@@ -190,10 +190,10 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
      * Fetch.
      *
      * @param columnAliasProcessor the column alias processor .
-     *                             <p>
-     *                             arguments see
-     *                             {@link SqlSelectColumnsBuilder#setColumnAliasPrefixProcessor(BiFunction)}
-     *                             </p>
+     *        <p>
+     *        arguments see
+     *        {@link SqlSelectColumnsBuilder#setColumnAliasPrefixProcessor(BiFunction)}
+     *        </p>
      * @return the sql select basic builder
      */
     public SqlSelectBasicBuilder fetch(BiFunction<Boolean, String, String> columnAliasProcessor) {
@@ -217,14 +217,56 @@ public class SqlSelectJoinOnBasicBuilder implements SqlBuilder {
     /**
      * Fetch.
      *
-     * @param fetchColumn      the fetch column
+     * @param fetchColumn the fetch column
      * @param fetchColumnAlias the fetch column alias
      * @return the sql select basic builder
      */
     public SqlSelectBasicBuilder fetch(String fetchColumn, String fetchColumnAlias) {
+        return fetch(false, fetchColumn, fetchColumnAlias);
+    }
+
+    /**
+     * Fetch.
+     *
+     * @param distinct the distinct
+     * @param fetchColumn the fetch column
+     * @param fetchColumnAlias the fetch column alias
+     * @return the sql select basic builder
+     */
+    public SqlSelectBasicBuilder fetch(boolean distinct, String fetchColumn, String fetchColumnAlias) {
         if (!fetched) {
-            //            selectBuilder.addSelectProperty(fetchProperty, fetchPropertyAlias);
-            selectBuilder.addColumn(fetchColumn, fetchColumnAlias);
+            selectBuilder.addColumn(distinct, fetchColumn, fetchColumnAlias);
+            fetched = true;
+        }
+        return endJoin();
+    }
+
+    /**
+     * Fetch.
+     *
+     * @param aggregateFunction the aggregate function
+     * @param fetchColumn the fetch column
+     * @param fetchColumnAlias the fetch column alias
+     * @return the sql select basic builder
+     */
+    public SqlSelectBasicBuilder fetch(AggregateFunction aggregateFunction, String fetchColumn,
+        String fetchColumnAlias) {
+        return fetch(aggregateFunction, false, fetchColumn, fetchColumnAlias);
+    }
+
+    /**
+     * Fetch.
+     *
+     * @param aggregateFunction the aggregate function
+     * @param distinct the distinct
+     * @param fetchColumn the fetch column
+     * @param fetchColumnAlias the fetch column alias
+     * @return the sql select basic builder
+     */
+    public SqlSelectBasicBuilder fetch(AggregateFunction aggregateFunction, boolean distinct, String fetchColumn,
+        String fetchColumnAlias) {
+        if (!fetched) {
+            selectBuilder.addColumn(distinct, fetchColumn, fetchColumnAlias);
             fetched = true;
         }
         return endJoin();

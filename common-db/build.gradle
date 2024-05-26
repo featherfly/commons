@@ -6,10 +6,12 @@ dependencies {
     //api project(":common-core")
     //api project(":common-model-repository")
     api group: 'cn.featherfly.common', name: 'common-core', version: '1.12.1'
-    api group: 'cn.featherfly.common', name: 'common-model-repository', version: '0.4.1'
+    api group: 'cn.featherfly.common', name: 'common-model-repository', version: '0.5.0'
     api group: 'com.speedment.common', name: 'tuple', version: '3.2.10'
     api group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.3'
         
+    
+    testImplementation group: 'cn.featherfly.common', name: 'common-asm', version: '0.3.0'
     //api group: 'org.freemarker', name: 'freemarker', version: '2.3.28'
     testImplementation fileTree(dir:'libs',include:['*.jar'])
     testImplementation 'log4j:log4j:1.2.17'

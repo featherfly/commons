@@ -7,6 +7,7 @@ import java.util.Set;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import cn.featherfly.common.bean.AsmPropertyAccessorFactory;
 import cn.featherfly.common.db.JdbcTestBase;
 import cn.featherfly.common.db.mapping.JdbcClassMapping;
 import cn.featherfly.common.db.mapping.SqlTypeMappingManager;
@@ -39,7 +40,8 @@ public class MigratorTest extends JdbcTestBase {
     public void init() {
         sqlTypeMappingManager = new SqlTypeMappingManager();
         DatabaseMetadata metadata = DatabaseMetadataManager.getDefaultManager().create(dataSource);
-        factory = new StrictJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager);
+        factory = new StrictJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager,
+            new AsmPropertyAccessorFactory(Thread.currentThread().getContextClassLoader()));
         migrator = new Migrator(dataSource, dialect, sqlTypeMappingManager);
         factory.setCheckMapping(false);
         sqlTypeMappingManager.setEnumWithOrdinal(true);
@@ -89,16 +91,16 @@ public class MigratorTest extends JdbcTestBase {
         System.err.println(migrator.updateSql(mappings, ModifyType.MODIFY, false, ModifyType.MODIFY, false, false));
         System.out.println("******************************************");
         System.out.println(
-                "migrator.updateSql(classMappings(), ModifyType.DROP_AND_CREATE, true,ModifyType.DROP_AND_CREATE, true)");
+            "migrator.updateSql(classMappings(), ModifyType.DROP_AND_CREATE, true,ModifyType.DROP_AND_CREATE, true)");
         System.out.println("******************************************");
         System.err.println(
-                migrator.updateSql(mappings, ModifyType.DROP_AND_CREATE, true, ModifyType.DROP_AND_CREATE, true, true));
+            migrator.updateSql(mappings, ModifyType.DROP_AND_CREATE, true, ModifyType.DROP_AND_CREATE, true, true));
         System.out.println("******************************************");
         System.out.println(
-                "migrator.updateSql(classMappings(), ModifyType.DROP_AND_CREATE, false, ModifyType.DROP_AND_CREATE, false)");
+            "migrator.updateSql(classMappings(), ModifyType.DROP_AND_CREATE, false, ModifyType.DROP_AND_CREATE, false)");
         System.out.println("******************************************");
-        System.err.println(migrator.updateSql(mappings, ModifyType.DROP_AND_CREATE, false, ModifyType.DROP_AND_CREATE,
-                false, false));
+        System.err.println(
+            migrator.updateSql(mappings, ModifyType.DROP_AND_CREATE, false, ModifyType.DROP_AND_CREATE, false, false));
     }
 
     @Test

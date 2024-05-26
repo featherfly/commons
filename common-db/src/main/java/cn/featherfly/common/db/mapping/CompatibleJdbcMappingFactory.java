@@ -14,6 +14,8 @@ import javax.persistence.OneToOne;
 
 import cn.featherfly.common.bean.BeanDescriptor;
 import cn.featherfly.common.bean.BeanProperty;
+import cn.featherfly.common.bean.PropertyAccessor;
+import cn.featherfly.common.bean.PropertyAccessorFactory;
 import cn.featherfly.common.bean.matcher.BeanPropertyAnnotationMatcher;
 import cn.featherfly.common.bean.matcher.BeanPropertyNameRegexMatcher;
 import cn.featherfly.common.constant.Chars;
@@ -36,53 +38,60 @@ import cn.featherfly.common.repository.mapping.PropertyNameConversion;
 public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
 
     /**
-     * Instantiates a new object db mixed mapping factory.
+     * Instantiates a new compatible jdbc mapping factory.
      *
-     * @param metadata DatabaseMetadata
-     * @param dialect dialect
-     */
-    public CompatibleJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect) {
-        super(metadata, dialect);
-    }
-
-    /**
-     * Instantiates a new object db mixed mapping factory.
-     *
-     * @param metadata DatabaseMetadata
-     * @param dialect dialect
-     * @param sqlTypeMappingManager the sql type mapping manager
+     * @param metadata the metadata
+     * @param dialect the dialect
+     * @param classNameConversions the class name conversions
+     * @param propertyNameConversions the property name conversions
+     * @param propertyAccessorFactory the property accessor factory
      */
     public CompatibleJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-        SqlTypeMappingManager sqlTypeMappingManager) {
-        super(metadata, dialect, sqlTypeMappingManager);
+        List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions,
+        PropertyAccessorFactory propertyAccessorFactory) {
+        super(metadata, dialect, classNameConversions, propertyNameConversions, propertyAccessorFactory);
     }
 
     /**
-     * Instantiates a new object db mixed mapping factory.
+     * Instantiates a new compatible jdbc mapping factory.
      *
-     * @param metadata DatabaseMetadata
-     * @param dialect dialect
-     * @param classNameConversions classNameConversions
-     * @param propertyNameConversions propertyNameConversions
+     * @param metadata the metadata
+     * @param dialect the dialect
+     * @param propertyAccessorFactory the property accessor factory
      */
     public CompatibleJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-        List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions) {
-        super(metadata, dialect, classNameConversions, propertyNameConversions);
+        PropertyAccessorFactory propertyAccessorFactory) {
+        super(metadata, dialect, propertyAccessorFactory);
     }
 
     /**
-     * Instantiates a new object db mixed mapping factory.
+     * Instantiates a new compatible jdbc mapping factory.
      *
-     * @param metadata DatabaseMetadata
-     * @param dialect dialect
+     * @param metadata the metadata
+     * @param dialect the dialect
      * @param sqlTypeMappingManager the sql type mapping manager
-     * @param classNameConversions classNameConversions
-     * @param propertyNameConversions propertyNameConversions
+     * @param classNameConversions the class name conversions
+     * @param propertyNameConversions the property name conversions
+     * @param propertyAccessorFactory the property accessor factory
      */
     public CompatibleJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
         SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
-        List<PropertyNameConversion> propertyNameConversions) {
-        super(metadata, dialect, sqlTypeMappingManager, classNameConversions, propertyNameConversions);
+        List<PropertyNameConversion> propertyNameConversions, PropertyAccessorFactory propertyAccessorFactory) {
+        super(metadata, dialect, sqlTypeMappingManager, classNameConversions, propertyNameConversions,
+            propertyAccessorFactory);
+    }
+
+    /**
+     * Instantiates a new compatible jdbc mapping factory.
+     *
+     * @param metadata the metadata
+     * @param dialect the dialect
+     * @param sqlTypeMappingManager the sql type mapping manager
+     * @param propertyAccessorFactory the property accessor factory
+     */
+    public CompatibleJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
+        SqlTypeMappingManager sqlTypeMappingManager, PropertyAccessorFactory propertyAccessorFactory) {
+        super(metadata, dialect, sqlTypeMappingManager, propertyAccessorFactory);
     }
 
     /**
@@ -106,6 +115,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param type the type
      * @return the class mapping< t>
      */
+    @SuppressWarnings("unchecked")
     private <T> JdbcClassMapping<T> createClassMapping(Class<T> type) {
         Map<String, JdbcPropertyMapping> tableMapping = new HashMap<>();
 
@@ -125,12 +135,17 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
             throw new JdbcMappingException("#table.not.exists", new Object[] { tableName });
         }
 
+        // YUFEI_TEST 需要测试看classLoader是否正常
+        PropertyAccessor<
+            T> propertyAccessor = propertyAccessorFactory.create(type, Thread.currentThread().getContextClassLoader());
+
         Collection<BeanProperty<?, ?>> bps = bd.findBeanPropertys(
             new BeanPropertyAnnotationMatcher(LogicOperator.OR, Id.class, Column.class, Embedded.class));
 
         boolean findPk = false;
         for (BeanProperty<?, ?> beanProperty : bps) {
-            if (mappingWithJpa(beanProperty, tableMapping, logInfo, tm)) {
+            if (mappingWithJpa((BeanProperty<Object, ?>) beanProperty, tableMapping, logInfo, tm,
+                (PropertyAccessor<Object>) propertyAccessor)) {
                 findPk = true;
             }
         }
@@ -139,7 +154,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
         }
 
         for (cn.featherfly.common.db.Column cmd : tm.getColumns()) {
-            mappingFromColumnMetadata(bd, tableMapping, cmd, logInfo);
+            mappingFromColumnMetadata(bd, tableMapping, cmd, logInfo, (PropertyAccessor<Object>) propertyAccessor);
         }
         if (logger.isDebugEnabled()) {
             logger.debug(logInfo.toString());
@@ -168,8 +183,8 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param tableMetadata the table metadata
      * @return true, if successful
      */
-    private boolean mappingWithJpa(BeanProperty<?, ?> beanProperty, Map<String, JdbcPropertyMapping> tableMapping,
-        StringBuilder logInfo, Table tableMetadata) {
+    private boolean mappingWithJpa(BeanProperty<Object, ?> beanProperty, Map<String, JdbcPropertyMapping> tableMapping,
+        StringBuilder logInfo, Table tableMetadata, PropertyAccessor<Object> propertyAccessor) {
         if (isTransient(beanProperty, logInfo)) {
             return false;
         }
@@ -179,7 +194,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
 
         Embedded embedded = beanProperty.getAnnotation(Embedded.class);
         if (embedded != null) {
-            mappinEmbedded(mapping, beanProperty, logInfo, tableMetadata);
+            mappinEmbedded(mapping, beanProperty, logInfo, tableMetadata, propertyAccessor);
             tableMapping.put(mapping.getRepositoryFieldName(), mapping);
         } else {
             String columnName = getMappingColumnName(beanProperty);
@@ -188,12 +203,14 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
                 mapping.setPropertyName(beanProperty.getName());
                 mapping.setPropertyIndex(beanProperty.getIndex());
                 mapping.setPropertyType(beanProperty.getType());
+                mapping.setSetter(propertyAccessor.getProperty(beanProperty.getIndex())::set);
+                mapping.setGetter(propertyAccessor.getProperty(beanProperty.getIndex())::get);
                 mapping.setPrimaryKey(isPk);
                 ManyToOne manyToOne = beanProperty.getAnnotation(ManyToOne.class);
                 OneToOne oneToOne = beanProperty.getAnnotation(OneToOne.class);
                 if (manyToOne != null || oneToOne != null) {
                     mapping.setRepositoryFieldName(columnName);
-                    mappingFk(mapping, beanProperty, columnName, isPk, logInfo);
+                    mappingFk(mapping, beanProperty, columnName, isPk, logInfo, propertyAccessor);
                 } else {
                     mapping.setRepositoryFieldName(columnName);
                     setColumnMapping(mapping, beanProperty);
@@ -217,15 +234,14 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param tableMetadata the table metadata
      */
     private void mappinEmbedded(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty, StringBuilder logInfo,
-        Table tableMetadata) {
+        Table tableMetadata, PropertyAccessor<Object> propertyAccessor) {
         mapping.setMode(Mode.EMBEDDED);
         mapping.setPropertyName(beanProperty.getName());
         mapping.setPropertyIndex(beanProperty.getIndex());
         mapping.setPropertyType(beanProperty.getType());
+        mapping.setSetter(propertyAccessor.getProperty(beanProperty.getIndex())::set);
+        mapping.setGetter(propertyAccessor.getProperty(beanProperty.getIndex())::get);
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
-        // Collection<BeanProperty<?,?>> bps = bd.findBeanPropertys(new
-        // BeanPropertyAnnotationMatcher(Column.class));
-        //        Collection<BeanProperty<?, ?>> bps = bd.getBeanProperties();
         for (BeanProperty<?, ?> bp : bd.getBeanProperties()) {
             String columnName = getMappingColumnName(bp);
             columnName = dialect.convertTableOrColumnName(columnName);
@@ -235,6 +251,10 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
             columnMapping.setPropertyType(bp.getType());
             columnMapping.setPropertyName(bp.getName());
             columnMapping.setPropertyIndex(bp.getIndex());
+            columnMapping.setSetter((obj, value) -> propertyAccessor.setPropertyValue(obj,
+                new int[] { mapping.getPropertyIndex(), columnMapping.getPropertyIndex() }, value));
+            columnMapping.setGetter(obj -> propertyAccessor.getPropertyValue(obj,
+                new int[] { mapping.getPropertyIndex(), columnMapping.getPropertyIndex() }));
 
             Column column = bp.getAnnotation(Column.class);
             if (column != null) {
@@ -272,7 +292,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param logInfo the log info
      */
     private void mappingFk(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty, String columnName,
-        boolean hasPk, StringBuilder logInfo) {
+        boolean hasPk, StringBuilder logInfo, PropertyAccessor<Object> propertyAccessor) {
         mapping.setMode(Mode.MANY_TO_ONE);
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
         Collection<BeanProperty<?, ?>> bps = bd.findBeanPropertys(new BeanPropertyAnnotationMatcher(Id.class));
@@ -283,20 +303,23 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
             if (isTransient(bp, logInfo)) {
                 continue;
             }
-            JdbcPropertyMapping columnMpping = new JdbcPropertyMapping();
-            setJavaSqlTypeMapper(columnMpping, bp);
-            columnMpping.setRepositoryFieldName(columnName);
-            columnMpping.setPropertyType(bp.getType());
-            columnMpping.setPropertyName(bp.getName());
-            columnMpping.setPropertyIndex(bp.getIndex());
-            // + "." + bp.getName()));
-            columnMpping.setPrimaryKey(hasPk);
+            JdbcPropertyMapping columnMapping = new JdbcPropertyMapping();
+            setJavaSqlTypeMapper(columnMapping, bp);
+            columnMapping.setRepositoryFieldName(columnName);
+            columnMapping.setPropertyType(bp.getType());
+            columnMapping.setPropertyName(bp.getName());
+            columnMapping.setPropertyIndex(bp.getIndex());
+            columnMapping.setSetter((obj, value) -> propertyAccessor.setPropertyValue(obj,
+                new int[] { mapping.getPropertyIndex(), columnMapping.getPropertyIndex() }, value));
+            columnMapping.setGetter(obj -> propertyAccessor.getPropertyValue(obj,
+                new int[] { mapping.getPropertyIndex(), columnMapping.getPropertyIndex() }));
+            columnMapping.setPrimaryKey(hasPk);
             if (logger.isDebugEnabled()) {
                 logInfo.append(String.format("%s###\t%s -> %s", SystemPropertyUtils.getLineSeparator(),
-                    mapping.getPropertyName() + "." + columnMpping.getPropertyName(),
-                    columnMpping.getRepositoryFieldName()));
+                    mapping.getPropertyName() + "." + columnMapping.getPropertyName(),
+                    columnMapping.getRepositoryFieldName()));
             }
-            mapping.add(columnMpping);
+            mapping.add(columnMapping);
         }
     }
 
@@ -310,7 +333,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param logInfo the log info
      */
     private <T> void mappingFromColumnMetadata(BeanDescriptor<T> bd, Map<String, JdbcPropertyMapping> tableMapping,
-        cn.featherfly.common.db.Column cmd, StringBuilder logInfo) {
+        cn.featherfly.common.db.Column cmd, StringBuilder logInfo, PropertyAccessor<Object> propertyAccessor) {
         Map<String, JdbcPropertyMapping> nameSet = new HashMap<>();
         tableMapping.forEach((column, propertyMapping) -> {
             if (Lang.isNotEmpty(column)) {
@@ -336,6 +359,8 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
                 mapping.setPropertyType(beanProperty.getType());
                 mapping.setPropertyName(beanProperty.getName());
                 mapping.setPropertyIndex(beanProperty.getIndex());
+                mapping.setSetter(propertyAccessor.getProperty(beanProperty.getIndex())::set);
+                mapping.setGetter(propertyAccessor.getProperty(beanProperty.getIndex())::get);
 
                 setMappingColumnValue(mapping, cmd, false);
 

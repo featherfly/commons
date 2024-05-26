@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import cn.featherfly.common.db.FieldValueOperator;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.repository.Params;
+import cn.featherfly.common.repository.Params.ParamType;
 
 /**
  * ParamedColumnElement .
@@ -25,9 +25,9 @@ public abstract class ParamedColumnElement extends ColumnElement {
     /**
      * Instantiates a new paramed column element.
      *
-     * @param dialect        dialect
-     * @param name           name
-     * @param param          param
+     * @param dialect dialect
+     * @param name name
+     * @param param param
      * @param ignoreStrategy the ignore strategy
      */
     protected ParamedColumnElement(Dialect dialect, String name, Object param, Predicate<?> ignoreStrategy) {
@@ -37,10 +37,10 @@ public abstract class ParamedColumnElement extends ColumnElement {
     /**
      * Instantiates a new paramed column element.
      *
-     * @param dialect        dialect
-     * @param name           name
-     * @param param          param
-     * @param tableAlias     tableAlias
+     * @param dialect dialect
+     * @param name name
+     * @param param param
+     * @param tableAlias tableAlias
      * @param ignoreStrategy the ignore strategy
      */
     protected ParamedColumnElement(Dialect dialect, String name, Object param, String tableAlias,
@@ -59,7 +59,7 @@ public abstract class ParamedColumnElement extends ColumnElement {
         if (param instanceof ParamedColumnElement) {
             return ((ParamedColumnElement) param).getParam();
         } else if (param instanceof SqlElement) {
-            return Params.NONE;
+            return ParamType.NONE;
         }
         return param;
     }

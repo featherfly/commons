@@ -4,6 +4,7 @@ package cn.featherfly.common.db.mapping;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import cn.featherfly.common.bean.AsmPropertyAccessorFactory;
 import cn.featherfly.common.db.JdbcTestBase;
 import cn.featherfly.common.db.mapping.pojo.Entity;
 import cn.featherfly.common.db.mapping.pojo.Role;
@@ -28,7 +29,8 @@ public class ObjectToDbMappingFactoryMysqlTest extends JdbcTestBase {
     @BeforeClass
     public void init() {
         DatabaseMetadata metadata = DatabaseMetadataManager.getDefaultManager().create(dataSource);
-        factory = new StrictJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager);
+        factory = new StrictJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager,
+            new AsmPropertyAccessorFactory(Thread.currentThread().getContextClassLoader()));
     }
 
     @Test

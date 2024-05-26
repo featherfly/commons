@@ -17,12 +17,14 @@ import javax.persistence.UniqueConstraint;
 
 import cn.featherfly.common.bean.BeanDescriptor;
 import cn.featherfly.common.bean.BeanProperty;
+import cn.featherfly.common.bean.PropertyAccessorFactory;
 import cn.featherfly.common.bean.matcher.BeanPropertyAnnotationMatcher;
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.jpa.Comment;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
+import cn.featherfly.common.exception.NotImplementedException;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.SystemPropertyUtils;
 import cn.featherfly.common.repository.Index;
@@ -40,45 +42,60 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
     private boolean checkMapping = true;
 
     /**
+     * Instantiates a new strict jdbc mapping factory.
+     *
      * @param metadata the metadata
-     * @param dialect  the dialect
+     * @param dialect the dialect
+     * @param classNameConversions the class name conversions
+     * @param propertyNameConversions the property name conversions
+     * @param propertyAccessorFactory the property accessor factory
      */
-    public StrictJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect) {
-        super(metadata, dialect);
+    public StrictJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
+        List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions,
+        PropertyAccessorFactory propertyAccessorFactory) {
+        super(metadata, dialect, classNameConversions, propertyNameConversions, propertyAccessorFactory);
     }
 
     /**
-     * @param metadata              the metadata
-     * @param dialect               the dialect
+     * Instantiates a new strict jdbc mapping factory.
+     *
+     * @param metadata the metadata
+     * @param dialect the dialect
+     * @param propertyAccessorFactory the property accessor factory
+     */
+    public StrictJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
+        PropertyAccessorFactory propertyAccessorFactory) {
+        super(metadata, dialect, propertyAccessorFactory);
+    }
+
+    /**
+     * Instantiates a new strict jdbc mapping factory.
+     *
+     * @param metadata the metadata
+     * @param dialect the dialect
      * @param sqlTypeMappingManager the sql type mapping manager
+     * @param classNameConversions the class name conversions
+     * @param propertyNameConversions the property name conversions
+     * @param propertyAccessorFactory the property accessor factory
      */
     public StrictJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-            SqlTypeMappingManager sqlTypeMappingManager) {
-        super(metadata, dialect, sqlTypeMappingManager);
+        SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
+        List<PropertyNameConversion> propertyNameConversions, PropertyAccessorFactory propertyAccessorFactory) {
+        super(metadata, dialect, sqlTypeMappingManager, classNameConversions, propertyNameConversions,
+            propertyAccessorFactory);
     }
 
     /**
-     * @param metadata                DatabaseMetadata
-     * @param dialect                 dialect
-     * @param classNameConversions    classNameConversions
-     * @param propertyNameConversions propertyNameConversions
+     * Instantiates a new strict jdbc mapping factory.
+     *
+     * @param metadata the metadata
+     * @param dialect the dialect
+     * @param sqlTypeMappingManager the sql type mapping manager
+     * @param propertyAccessorFactory the property accessor factory
      */
     public StrictJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-            List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions) {
-        super(metadata, dialect, classNameConversions, propertyNameConversions);
-    }
-
-    /**
-     * @param metadata                DatabaseMetadata
-     * @param dialect                 dialect
-     * @param sqlTypeMappingManager   the sql type mapping manager
-     * @param classNameConversions    classNameConversions
-     * @param propertyNameConversions propertyNameConversions
-     */
-    public StrictJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-            SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
-            List<PropertyNameConversion> propertyNameConversions) {
-        super(metadata, dialect, sqlTypeMappingManager, classNameConversions, propertyNameConversions);
+        SqlTypeMappingManager sqlTypeMappingManager, PropertyAccessorFactory propertyAccessorFactory) {
+        super(metadata, dialect, sqlTypeMappingManager, propertyAccessorFactory);
     }
 
     /**
@@ -86,6 +103,11 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
      */
     @Override
     public <T> JdbcClassMapping<T> getClassMapping(Class<T> type) {
+        if (true) {
+            // IMPLSOON 后续来实现未实现的功能
+            throw new NotImplementedException();
+        }
+
         @SuppressWarnings("unchecked")
         JdbcClassMapping<T> classMapping = (JdbcClassMapping<T>) mappedTypes.get(type);
         if (classMapping == null) {
@@ -131,7 +153,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         //        }
         if (logger.isDebugEnabled()) {
             logInfo.append(
-                    String.format("###%s类%s映射到表%s", SystemPropertyUtils.getLineSeparator(), type.getName(), tableName));
+                String.format("###%s类%s映射到表%s", SystemPropertyUtils.getLineSeparator(), type.getName(), tableName));
         }
 
         //        Collection<BeanProperty<?, ?>> bps = bd.getBeanProperties();
@@ -162,7 +184,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         classMapping.addIndexs(createIndexs(table));
 
         classMapping.addPropertyMappings(tableMapping.values().stream()
-                .sorted((p1, p2) -> p1.getIndex() < p2.getIndex() ? -1 : 1).collect(Collectors.toList()));
+            .sorted((p1, p2) -> p1.getIndex() < p2.getIndex() ? -1 : 1).collect(Collectors.toList()));
         if (pkNo > 1) {
             classMapping.getPropertyMappings().forEach(pm -> {
                 if (pm.isPrimaryKey()) {
@@ -175,7 +197,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
     }
 
     private boolean mappingWithJpa(BeanProperty<?, ?> beanProperty, Map<String, JdbcPropertyMapping> tableMapping,
-            StringBuilder logInfo) {
+        StringBuilder logInfo) {
         if (isTransient(beanProperty, logInfo)) {
             return false;
         }
@@ -207,7 +229,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
                 tableMapping.put(mapping.getRepositoryFieldName(), mapping);
                 if (logger.isDebugEnabled()) {
                     logInfo.append(String.format("%s###\t%s -> %s", SystemPropertyUtils.getLineSeparator(),
-                            mapping.getPropertyName(), mapping.getRepositoryFieldName()));
+                        mapping.getPropertyName(), mapping.getRepositoryFieldName()));
                 }
             }
         }
@@ -233,8 +255,8 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
             columnMpping.setPropertyName(bp.getName());
             if (logger.isDebugEnabled()) {
                 logInfo.append(String.format("%s###\t%s -> %s", SystemPropertyUtils.getLineSeparator(),
-                        mapping.getPropertyName() + "." + columnMpping.getPropertyName(),
-                        columnMpping.getRepositoryFieldName()));
+                    mapping.getPropertyName() + "." + columnMpping.getPropertyName(),
+                    columnMpping.getRepositoryFieldName()));
             }
             setColumnMapping(columnMpping, bp);
             mapping.add(columnMpping);
@@ -242,7 +264,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
     }
 
     private void mappingFk(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty, String columnName,
-            boolean hasPk, StringBuilder logInfo) {
+        boolean hasPk, StringBuilder logInfo) {
         mapping.setMode(Mode.MANY_TO_ONE);
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
         Collection<BeanProperty<?, ?>> bps = bd.findBeanPropertys(new BeanPropertyAnnotationMatcher(Id.class));
@@ -258,8 +280,8 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
             columnMpping.setPrimaryKey(hasPk);
             if (logger.isDebugEnabled()) {
                 logInfo.append(String.format("%s###\t%s -> %s", SystemPropertyUtils.getLineSeparator(),
-                        mapping.getPropertyName() + "." + columnMpping.getPropertyName(),
-                        columnMpping.getRepositoryFieldName()));
+                    mapping.getPropertyName() + "." + columnMpping.getPropertyName(),
+                    columnMpping.getRepositoryFieldName()));
             }
             setColumnMapping(columnMpping, bp);
             mapping.add(columnMpping);
@@ -271,7 +293,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         fieldPropertyMap.forEach((fieldName, property) -> {
             if (!table.hasColumn(fieldName)) {
                 throw new JdbcMappingException("#field.not.exists",
-                        new Object[] { bd.getType().getName(), property.getPropertyName(), fieldName });
+                    new Object[] { bd.getType().getName(), property.getPropertyName(), fieldName });
             }
         });
     }
@@ -323,7 +345,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
     }
 
     /**
-     * 返回checkMapping
+     * 返回checkMapping.
      *
      * @return checkMapping
      */
@@ -332,7 +354,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
     }
 
     /**
-     * 设置checkMapping
+     * 设置checkMapping.
      *
      * @param checkMapping checkMapping
      */

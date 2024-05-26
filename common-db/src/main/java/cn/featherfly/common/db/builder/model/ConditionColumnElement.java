@@ -19,7 +19,7 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.operator.ComparisonOperator;
 import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
-import cn.featherfly.common.repository.Params;
+import cn.featherfly.common.repository.Params.ParamType;
 
 /**
  * condition column element .
@@ -128,12 +128,12 @@ public class ConditionColumnElement extends ParamedColumnElement {
     @Override
     public Object getParam() {
         if (ComparisonOperator.ISN == comparisonOperator || ComparisonOperator.INN == comparisonOperator) {
-            return Params.NONE;
+            return ParamType.NONE;
         } else {
             if (param instanceof SqlElement) {
                 return super.getParam();
             } else if (ignore(param)) {
-                return Params.NONE;
+                return ParamType.NONE;
             } else {
                 return param;
             }

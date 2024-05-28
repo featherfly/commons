@@ -26,7 +26,7 @@ import cn.featherfly.common.repository.mapper.TupleMapperBuilder;
  * @author zhongj
  */
 public interface ParamedQueryExecutor
-    extends ParamedQuerySingleExecutor, ParamedQueryUniqueExecutor, ParamedQueryListExecutor {
+    extends ParamedQuerySingleExecutor, ParamedQueryUniqueExecutor, ParamedQueryListExecutor, ParamedQueryEachExecutor {
 
     /**
      * Mapper.

@@ -19,6 +19,7 @@ import com.speedment.common.tuple.Tuple4;
 import com.speedment.common.tuple.Tuple5;
 import com.speedment.common.tuple.Tuple6;
 
+import cn.featherfly.common.lang.AutoCloseableIterable;
 import cn.featherfly.common.repository.mapper.RowMapper;
 import cn.featherfly.common.structure.page.Limit;
 import cn.featherfly.common.structure.page.Page;
@@ -1420,6 +1421,789 @@ public interface ArrayParamsQueryExecutor<E0> {
         Page page) {
         Limit limit = new Limit(page);
         return list(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
+            prefixes, params, limit.getOffset(), limit.getLimit());
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * query each, use query str in template find with executeId.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @return map list
+     */
+    AutoCloseableIterable<Map<String, Object>> each(E0 execution, Object... params);
+
+    /**
+     * query each, use query str in template find with executeId.
+     *
+     * @param <T> the element type
+     * @param execution the execution
+     * @param mappingType mapping type
+     * @param params the params
+     * @return entity list
+     */
+    <T> AutoCloseableIterable<T> each(E0 execution, Class<T> mappingType, Object... params);
+
+    /**
+     * query each, use query str in template find with executeId.
+     *
+     * @param <T> the generic type
+     * @param execution the execution
+     * @param rowMapper the row mapper
+     * @param params the params
+     * @return entity list
+     */
+    <T> AutoCloseableIterable<T> each(E0 execution, RowMapper<T> rowMapper, Object... params);
+
+    /**
+     * query each, use query str in template find with executeId.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @param offset the offset
+     * @param limit the limit
+     * @return map list
+     */
+    AutoCloseableIterable<Map<String, Object>> each(E0 execution, Object[] params, int offset, int limit);
+
+    /**
+     * query each, use query str in template find with executeId.
+     *
+     * @param <T> the element type
+     * @param execution the execution
+     * @param mappingType mapping type
+     * @param params the params
+     * @param offset the offset
+     * @param limit the limit
+     * @return entity list
+     */
+    <T> AutoCloseableIterable<T> each(E0 execution, Class<T> mappingType, Object[] params, int offset, int limit);
+
+    /**
+     * query each, use query str in template find with executeId.
+     *
+     * @param <T> the element type
+     * @param execution the execution
+     * @param rowMapper the row mapper
+     * @param params the params
+     * @param offset the offset
+     * @param limit the limit
+     * @return entity list
+     */
+    <T> AutoCloseableIterable<T> each(E0 execution, RowMapper<T> rowMapper, Object[] params, int offset, int limit);
+
+    /**
+     * query each, use query str in template find with executeId.
+     *
+     * @param <T> the element type
+     * @param execution the execution
+     * @param mappingType mapping type
+     * @param params the params
+     * @param page the page
+     * @return entity list
+     */
+    default <T> AutoCloseableIterable<T> each(E0 execution, Class<T> mappingType, Object[] params, Page page) {
+        Limit limit = new Limit(page);
+        return each(execution, mappingType, params, limit.getOffset(), limit.getLimit());
+    }
+
+    /**
+     * query each, use query str in template find with executeId.
+     *
+     * @param <T> the element type
+     * @param execution the execution
+     * @param rowMapper the row mapper
+     * @param params the params
+     * @param page the page
+     * @return entity list
+     */
+    default <T> AutoCloseableIterable<T> each(E0 execution, RowMapper<T> rowMapper, Object[] params, Page page) {
+        Limit limit = new Limit(page);
+        return each(execution, rowMapper, params, limit.getOffset(), limit.getLimit());
+    }
+
+    /**
+     * query each, use query str in template find with executeId.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @param page the page
+     * @return map list
+     */
+    default AutoCloseableIterable<Map<String, Object>> each(E0 execution, Object[] params, Page page) {
+        Limit limit = new Limit(page);
+        return each(execution, params, limit.getOffset(), limit.getLimit());
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param params the params
+     * @return tuple2 list
+     */
+    default <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Object... params) {
+        return each(execution, mappingType1, mappingType2, (Tuple2<String, String>) null, params);
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param params the params
+     * @param offset the offset
+     * @param limit the limit
+     * @return tuple2 list
+     */
+    default <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Object[] params, int offset, int limit) {
+        return each(execution, mappingType1, mappingType2, (Tuple2<String, String>) null, params, offset, limit);
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param params the params
+     * @param page the page
+     * @return tuple2 list
+     */
+    default <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Object[] params, Page page) {
+        Limit limit = new Limit(page);
+        return each(execution, mappingType1, mappingType2, params, limit.getOffset(), limit.getLimit());
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param prefixes the prefixes
+     * @param params the params
+     * @return tuple2 list
+     */
+    <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
+        Tuple2<String, String> prefixes, Object... params);
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param prefixes the prefixes
+     * @param params the params
+     * @param offset the offset
+     * @param limit the limit
+     * @return tuple2 list
+     */
+    <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
+        Tuple2<String, String> prefixes, Object[] params, int offset, int limit);
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param prefixes the prefixes
+     * @param params the params
+     * @param page the page
+     * @return tuple2 list
+     */
+    default <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Tuple2<String, String> prefixes, Object[] params, Page page) {
+        Limit limit = new Limit(page);
+        return each(execution, mappingType1, mappingType2, prefixes, params, limit.getOffset(), limit.getLimit());
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param params the params
+     * @return tuple3 list
+     */
+    default <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Object... params) {
+        return each(execution, mappingType1, mappingType2, mappingType3, (Tuple3<String, String, String>) null, params);
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param params the params
+     * @param offset the offset
+     * @param limit the limit
+     * @return tuple3 list
+     */
+    default <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Object[] params, int offset, int limit) {
+        return each(execution, mappingType1, mappingType2, mappingType3, (Tuple3<String, String, String>) null, params,
+            offset, limit);
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param params the params
+     * @param page the page
+     * @return tuple3 list
+     */
+    default <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Object[] params, Page page) {
+        Limit limit = new Limit(page);
+        return each(execution, mappingType1, mappingType2, mappingType3, params, limit.getOffset(), limit.getLimit());
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param prefixes the prefixes
+     * @param params the params
+     * @return tuple3 list
+     */
+    <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Tuple3<String, String, String> prefixes, Object... params);
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param prefixes the prefixes
+     * @param params the params
+     * @param offset the offset
+     * @param limit the limit
+     * @return tuple3 list
+     */
+    <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Tuple3<String, String, String> prefixes, Object[] params,
+        int offset, int limit);
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param prefixes the prefixes
+     * @param params the params
+     * @param page the page
+     * @return tuple3 list
+     */
+    default <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Tuple3<String, String, String> prefixes, Object[] params,
+        Page page) {
+        Limit limit = new Limit(page);
+        return each(execution, mappingType1, mappingType2, mappingType3, prefixes, params, limit.getOffset(),
+            limit.getLimit());
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param params the params
+     * @return tuple4 list
+     */
+    default <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Object... params) {
+        return each(execution, mappingType1, mappingType2, mappingType3, mappingType4,
+            (Tuple4<String, String, String, String>) null, params);
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param params the params
+     * @param offset the offset
+     * @param limit the limit
+     * @return tuple4 list
+     */
+    default <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Object[] params, int offset,
+        int limit) {
+        return each(execution, mappingType1, mappingType2, mappingType3, mappingType4,
+            (Tuple4<String, String, String, String>) null, params, offset, limit);
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param params the params
+     * @param page the page
+     * @return tuple4 list
+     */
+    default <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Object[] params, Page page) {
+        Limit limit = new Limit(page);
+        return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, params, limit.getOffset(),
+            limit.getLimit());
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param prefixes the prefixes
+     * @param params the params
+     * @return tuple4 list
+     */
+    <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
+        Tuple4<String, String, String, String> prefixes, Object... params);
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param prefixes the prefixes
+     * @param params the params
+     * @param offset the offset
+     * @param limit the limit
+     * @return tuple4 list
+     */
+    <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
+        Tuple4<String, String, String, String> prefixes, Object[] params, int offset, int limit);
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param prefixes the prefixes
+     * @param params the params
+     * @param page the page
+     * @return tuple4 list
+     */
+    default <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
+        Tuple4<String, String, String, String> prefixes, Object[] params, Page page) {
+        Limit limit = new Limit(page);
+        return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, prefixes, params,
+            limit.getOffset(), limit.getLimit());
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param <T5> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param mappingType5 mapping type 5
+     * @param params the params
+     * @return tuple5 list
+     */
+    default <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution,
+        Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
+        Class<T5> mappingType5, Object... params) {
+        return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5,
+            (Tuple5<String, String, String, String, String>) null, params);
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param <T5> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param mappingType5 mapping type 5
+     * @param prefixes the prefixes
+     * @param params the params
+     * @return tuple5 list
+     */
+    <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
+        Tuple5<String, String, String, String, String> prefixes, Object... params);
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param <T5> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param mappingType5 mapping type 5
+     * @param params the params
+     * @param offset the offset
+     * @param limit the limit
+     * @return tuple5 list
+     */
+    default <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution,
+        Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
+        Class<T5> mappingType5, Object[] params, int offset, int limit) {
+        return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5,
+            (Tuple5<String, String, String, String, String>) null, params, offset, limit);
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param <T5> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param mappingType5 mapping type 5
+     * @param params the params
+     * @param page the page
+     * @return tuple5 list
+     */
+    default <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution,
+        Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
+        Class<T5> mappingType5, Object[] params, Page page) {
+        Limit limit = new Limit(page);
+        return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, params,
+            limit.getOffset(), limit.getLimit());
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param <T5> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param mappingType5 mapping type 5
+     * @param prefixes the prefixes
+     * @param params the params
+     * @param offset the offset
+     * @param limit the limit
+     * @return tuple5 list
+     */
+    <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
+        Tuple5<String, String, String, String, String> prefixes, Object[] params, int offset, int limit);
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param <T5> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param mappingType5 mapping type 5
+     * @param prefixes the prefixes
+     * @param params the params
+     * @param page the page
+     * @return tuple5 list
+     */
+    default <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution,
+        Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
+        Class<T5> mappingType5, Tuple5<String, String, String, String, String> prefixes, Object[] params, Page page) {
+        Limit limit = new Limit(page);
+        return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, prefixes, params,
+            limit.getOffset(), limit.getLimit());
+    }
+
+    /**
+     * query each.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param <T5> the generic type
+     * @param <T6> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param mappingType5 mapping type 5
+     * @param mappingType6 mapping type 6
+     * @param params the params
+     * @return LogicExpressionist
+     */
+    default <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
+        Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
+        Class<T5> mappingType5, Class<T6> mappingType6, Object... params) {
+        return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
+            (Tuple6<String, String, String, String, String, String>) null, params);
+    }
+
+    /**
+     * query each.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param <T5> the generic type
+     * @param <T6> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param mappingType5 mapping type 5
+     * @param mappingType6 mapping type 6
+     * @param params the params
+     * @param offset the offset
+     * @param limit the limit
+     * @return LogicExpressionist
+     */
+    default <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
+        Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
+        Class<T5> mappingType5, Class<T6> mappingType6, Object[] params, int offset, int limit) {
+        return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
+            (Tuple6<String, String, String, String, String, String>) null, params, offset, limit);
+    }
+
+    /**
+     * query each.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param <T5> the generic type
+     * @param <T6> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param mappingType5 mapping type 5
+     * @param mappingType6 mapping type 6
+     * @param params the params
+     * @param page the page
+     * @return LogicExpressionist
+     */
+    default <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
+        Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
+        Class<T5> mappingType5, Class<T6> mappingType6, Object[] params, Page page) {
+        Limit limit = new Limit(page);
+        return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
+            params, limit.getOffset(), limit.getLimit());
+    }
+
+    /**
+     * query each.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param <T5> the generic type
+     * @param <T6> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param mappingType5 mapping type 5
+     * @param mappingType6 mapping type 6
+     * @param prefixes the prefixes
+     * @param params the params
+     * @return LogicExpressionist
+     */
+    <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
+        Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
+        Class<T5> mappingType5, Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes,
+        Object... params);
+
+    /**
+     * query each.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param <T5> the generic type
+     * @param <T6> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param mappingType5 mapping type 5
+     * @param mappingType6 mapping type 6
+     * @param prefixes the prefixes
+     * @param params the params
+     * @param offset the offset
+     * @param limit the limit
+     * @return LogicExpressionist
+     */
+    <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
+        Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
+        Class<T5> mappingType5, Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes,
+        Object[] params, int offset, int limit);
+
+    /**
+     * query each.
+     *
+     * @param <T1> the generic type
+     * @param <T2> the generic type
+     * @param <T3> the generic type
+     * @param <T4> the generic type
+     * @param <T5> the generic type
+     * @param <T6> the generic type
+     * @param execution the execution
+     * @param mappingType1 mapping type 1
+     * @param mappingType2 mapping type 2
+     * @param mappingType3 mapping type 3
+     * @param mappingType4 mapping type 4
+     * @param mappingType5 mapping type 5
+     * @param mappingType6 mapping type 6
+     * @param prefixes the prefixes
+     * @param params the params
+     * @param page the page
+     * @return LogicExpressionist
+     */
+    default <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
+        Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
+        Class<T5> mappingType5, Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes,
+        Object[] params, Page page) {
+        Limit limit = new Limit(page);
+        return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
             prefixes, params, limit.getOffset(), limit.getLimit());
     }
 

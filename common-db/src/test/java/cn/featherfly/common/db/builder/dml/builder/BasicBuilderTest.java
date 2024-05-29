@@ -20,6 +20,7 @@ import cn.featherfly.common.db.builder.dml.basic.SqlSelectColumnsBasicBuilder;
 import cn.featherfly.common.db.builder.dml.basic.SqlSelectColumnsClassMappingBuilder;
 import cn.featherfly.common.db.builder.dml.basic.SqlSelectJoinOnBasicBuilder;
 import cn.featherfly.common.db.builder.dml.basic.SqlUpdateSetBasicBuilder;
+import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.Dialects;
 import cn.featherfly.common.db.dialect.Join;
 import cn.featherfly.common.db.mapping.JdbcClassMapping;
@@ -41,13 +42,15 @@ public class BasicBuilderTest implements ClassMappingSupport, MetadataSupport {
 
     AliasManager aliasManager = new AliasManager();
 
+    Dialect dialect = Dialects.mysql();
+
     String name = "featherfly";
     String pwd = "2222";
     String sex = "male";
     Integer age = 18;
 
     String sql = null;
-    JdbcClassMapping<User> ucm = getUserClassMapping();
+    JdbcClassMapping<User> ucm = getUserClassMapping(dialect);
     JdbcClassMapping<UserRole> urcm = getUserRoleClassMapping();
 
     TableMetadata umd = getUserMetadata();
@@ -73,7 +76,7 @@ public class BasicBuilderTest implements ClassMappingSupport, MetadataSupport {
 
     @Test
     void testSqlSelectColumnsClassMappingBuilder() {
-        JdbcClassMapping<User> cm = getUserClassMapping();
+        JdbcClassMapping<User> cm = getUserClassMapping(dialect);
         String sql = null;
 
         SqlSelectColumnsClassMappingBuilder builder = new SqlSelectColumnsClassMappingBuilder(Dialects.mysql(), cm);

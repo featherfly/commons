@@ -123,18 +123,32 @@ public class PostgresqlDialectTest extends DialectTest {
     void testBuildInsertBatchSql() {
         String sql = null;
 
-        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 1);
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 1, false);
         assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?)");
 
-        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 2);
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 2, false);
         assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?),(?, ?, ?)");
 
-        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 3);
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 3, false);
         assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?)");
 
-        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 5);
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 5, false);
         assertEquals(sql,
-                "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?)");
+            "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?)");
+
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 1, true);
+        assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (DEFAULT, ?, ?)");
+
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 2, true);
+        assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (DEFAULT, ?, ?),(DEFAULT, ?, ?)");
+
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 3, true);
+        assertEquals(sql,
+            "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (DEFAULT, ?, ?),(DEFAULT, ?, ?),(DEFAULT, ?, ?)");
+
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 5, true);
+        assertEquals(sql,
+            "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (DEFAULT, ?, ?),(DEFAULT, ?, ?),(DEFAULT, ?, ?),(DEFAULT, ?, ?),(DEFAULT, ?, ?)");
     }
 
     /**
@@ -178,10 +192,15 @@ public class PostgresqlDialectTest extends DialectTest {
     @Override
     @Test
     void testUpsert() {
-        String sql = dialect.dml().upsert("user", new String[] { "id", "name", "age" }, "id");
+        String sql = dialect.dml().upsert("user", new String[] { "id", "name", "age" }, "id", false);
         System.out.println(sql);
         assertEquals(sql,
-                "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"age\"=EXCLUDED.\"age\"");
+            "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"age\"=EXCLUDED.\"age\"");
+
+        sql = dialect.dml().upsert("user", "id", new String[] { "id", "name", "age" }, "id", true);
+        System.out.println(sql);
+        assertEquals(sql,
+            "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (DEFAULT, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"age\"=EXCLUDED.\"age\"");
     }
 
     /**
@@ -190,10 +209,15 @@ public class PostgresqlDialectTest extends DialectTest {
     @Override
     @Test
     void testUpsertBatch() {
-        String sql = dialect.dml().upsertBatch("user", new String[] { "id", "name", "age" }, "id", 2);
+        String sql = dialect.dml().upsertBatch("user", new String[] { "id", "name", "age" }, "id", 2, false);
         System.out.println(sql);
         assertEquals(sql,
-                "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (?, ?, ?),(?, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"age\"=EXCLUDED.\"age\"");
+            "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (?, ?, ?),(?, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"age\"=EXCLUDED.\"age\"");
+
+        sql = dialect.dml().upsertBatch("user", "id", new String[] { "id", "name", "age" }, "id", 2, true);
+        System.out.println(sql);
+        assertEquals(sql,
+            "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (DEFAULT, ?, ?),(DEFAULT, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"age\"=EXCLUDED.\"age\"");
     }
 
     /**
@@ -202,9 +226,13 @@ public class PostgresqlDialectTest extends DialectTest {
     @Override
     @Test
     void testInsert() {
-        String sql = dialect.dml().insert("user", new String[] { "id", "name", "age" });
+        String sql = dialect.dml().insert("user", new String[] { "id", "name", "age" }, false);
         System.out.println(sql);
         assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (?, ?, ?)");
+
+        sql = dialect.dml().insert("user", "id", new String[] { "id", "name", "age" }, true);
+        System.out.println(sql);
+        assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (DEFAULT, ?, ?)");
     }
 
     /**
@@ -213,9 +241,13 @@ public class PostgresqlDialectTest extends DialectTest {
     @Test
     @Override
     void testInsertBatch() {
-        String sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "age" }, 2);
+        String sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "age" }, 2, false);
         System.out.println(sql);
         assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (?, ?, ?),(?, ?, ?)");
+
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "age" }, 2, true);
+        System.out.println(sql);
+        assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (DEFAULT, ?, ?),(DEFAULT, ?, ?)");
     }
 
     /**

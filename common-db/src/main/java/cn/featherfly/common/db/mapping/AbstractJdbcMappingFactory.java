@@ -19,18 +19,21 @@ import org.slf4j.LoggerFactory;
 import cn.featherfly.common.bean.BeanProperty;
 import cn.featherfly.common.bean.PropertyAccessorFactory;
 import cn.featherfly.common.db.dialect.Dialect;
+import cn.featherfly.common.db.dialect.PostgreSQLDialect;
 import cn.featherfly.common.db.jpa.ColumnDefault;
 import cn.featherfly.common.db.jpa.Comment;
 import cn.featherfly.common.db.mapping.operator.BasicOperators;
 import cn.featherfly.common.db.mapping.operator.DefaultTypesSqlTypeOperator;
 import cn.featherfly.common.db.mapping.operator.EnumSqlTypeOperator;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
+import cn.featherfly.common.exception.NotImplementedException;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.SystemPropertyUtils;
 import cn.featherfly.common.repository.mapping.ClassNameConversion;
 import cn.featherfly.common.repository.mapping.ClassNameJpaConversion;
 import cn.featherfly.common.repository.mapping.ClassNameUnderscoreConversion;
+import cn.featherfly.common.repository.mapping.PrimaryKey;
 import cn.featherfly.common.repository.mapping.PropertyNameConversion;
 import cn.featherfly.common.repository.mapping.PropertyNameJpaConversion;
 import cn.featherfly.common.repository.mapping.PropertyNameUnderscoreConversion;
@@ -251,6 +254,29 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
                 SystemPropertyUtils.getLineSeparator(), beanProperty.getName()));
         }
         return result;
+    }
+
+    protected void setIdGenerator(JdbcPropertyMapping propertyMapping, BeanProperty<?, ?> bp, String tableName,
+        String columnName) {
+        GeneratedValue generatedValue = bp.getAnnotation(GeneratedValue.class);
+        if (generatedValue == null) {
+            //没有指定IdGenerator，手动设置，框架不管
+            return;
+        }
+
+        if (generatedValue.strategy() == GenerationType.AUTO) {
+            // 使用dialect提供的默认IdGenerator
+            PrimaryKey primaryKey = new PrimaryKey(dialect.getIdGenerator(tableName, columnName));
+            propertyMapping.setPrimaryKey(primaryKey);
+
+            if (propertyMapping.isAutoincrement() && dialect instanceof PostgreSQLDialect) {
+                propertyMapping.setIgnoreAtInsert(true);
+            }
+
+            return;
+        }
+        // IMPLSOON 后续来实现指定的IdGenerator获取
+        throw new NotImplementedException();
     }
 
     /**

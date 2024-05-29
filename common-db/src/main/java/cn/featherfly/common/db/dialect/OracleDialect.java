@@ -11,6 +11,7 @@ import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.repository.id.IdGenerator;
 
 /**
  * Oracle Dialect.
@@ -111,7 +112,7 @@ public class OracleDialect extends AbstractDialect {
         if (isParamNamed) {
             if (start > 0) {
                 pagingSelect.append(Strings.format(" ) row_ ) where rownum_ > {0}{1} and rownum_ <= {0}{2} ",
-                        startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME));
+                    startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME));
             } else {
                 pagingSelect.append(Strings.format(") where rownum <= {0}{1}", startSymbol, LIMIT_PARAM_NAME));
             }
@@ -163,7 +164,7 @@ public class OracleDialect extends AbstractDialect {
                 case Types.TIMESTAMP:
                     if (value instanceof Date) {
                         sqlPart.append("to_date('").append(Dates.formatTime((Date) value))
-                                .append("' , 'yyyy-mm-dd hh24:mi:ss')");
+                            .append("' , 'yyyy-mm-dd hh24:mi:ss')");
                     } else {
                         sqlPart.append("to_date('").append(value).append("' , 'yyyy-mm-dd hh24:mi:ss')");
                         break;
@@ -206,5 +207,15 @@ public class OracleDialect extends AbstractDialect {
     @Override
     public boolean supportUpsertBatch() {
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public IdGenerator getIdGenerator(String table, String column) {
+        // NOIMPL 未实现
+        // 不确定oracle是否实现了postgresql serial 这样自动创建序列的能力
+        throw new UnsupportedException();
     }
 }

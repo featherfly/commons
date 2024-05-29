@@ -104,7 +104,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
     @Override
     public <T> JdbcClassMapping<T> getClassMapping(Class<T> type) {
         if (true) {
-            // IMPLSOON 后续来实现未实现的功能
+            // IMPLSOON 版本更新，有一些功能可能没有及时更新，需要后续来测试，先抛出异常
             throw new NotImplementedException();
         }
 
@@ -160,7 +160,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         boolean findPk = false;
         int pkNo = 0;
         for (BeanProperty<?, ?> beanProperty : bd.getBeanProperties()) {
-            if (mappingWithJpa(beanProperty, tableMapping, logInfo)) {
+            if (mappingWithJpa(tableName, beanProperty, tableMapping, logInfo)) {
                 findPk = true;
                 pkNo++;
             }
@@ -196,8 +196,8 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         return classMapping;
     }
 
-    private boolean mappingWithJpa(BeanProperty<?, ?> beanProperty, Map<String, JdbcPropertyMapping> tableMapping,
-        StringBuilder logInfo) {
+    private boolean mappingWithJpa(String tableName, BeanProperty<?, ?> beanProperty,
+        Map<String, JdbcPropertyMapping> tableMapping, StringBuilder logInfo) {
         if (isTransient(beanProperty, logInfo)) {
             return false;
         }
@@ -215,12 +215,12 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
                 columnName = dialect.convertTableOrColumnName(columnName);
                 mapping.setPropertyName(beanProperty.getName());
                 mapping.setPropertyType(beanProperty.getType());
-                mapping.setPrimaryKey(isPk);
+                setIdGenerator(mapping, beanProperty, tableName, columnName);
                 ManyToOne manyToOne = beanProperty.getAnnotation(ManyToOne.class);
                 OneToOne oneToOne = beanProperty.getAnnotation(OneToOne.class);
                 if (manyToOne != null || oneToOne != null) {
                     mapping.setRepositoryFieldName(columnName);
-                    mappingFk(mapping, beanProperty, columnName, isPk, logInfo);
+                    mappingFk(mapping, beanProperty, columnName, logInfo);
                 } else {
                     mapping.setRepositoryFieldName(columnName);
                     setColumnMapping(mapping, beanProperty);
@@ -264,7 +264,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
     }
 
     private void mappingFk(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty, String columnName,
-        boolean hasPk, StringBuilder logInfo) {
+        StringBuilder logInfo) {
         mapping.setMode(Mode.MANY_TO_ONE);
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
         Collection<BeanProperty<?, ?>> bps = bd.findBeanPropertys(new BeanPropertyAnnotationMatcher(Id.class));
@@ -277,7 +277,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
             columnMpping.setRepositoryFieldName(columnName);
             columnMpping.setPropertyType(bp.getType());
             columnMpping.setPropertyName(bp.getName());
-            columnMpping.setPrimaryKey(hasPk);
+            columnMpping.setPrimaryKey(mapping.getPrimaryKey());
             if (logger.isDebugEnabled()) {
                 logInfo.append(String.format("%s###\t%s -> %s", SystemPropertyUtils.getLineSeparator(),
                     mapping.getPropertyName() + "." + columnMpping.getPropertyName(),

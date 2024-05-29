@@ -13,6 +13,7 @@ import cn.featherfly.common.db.dialect.ddl.MysqlDDLFeature;
 import cn.featherfly.common.db.dialect.dml.MysqlDMLFeature;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.repository.id.IdGenerator;
 
 /**
  * MySQL Dialect.
@@ -105,8 +106,8 @@ public class MySQLDialect extends AbstractDialect {
         pagingSelect.append(sql);
         if (isParamNamed) {
             if (start > 0) {
-                pagingSelect.append(
-                        Strings.format(" LIMIT {0}{1},{0}{2}", startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME));
+                pagingSelect
+                    .append(Strings.format(" LIMIT {0}{1},{0}{2}", startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME));
             } else {
                 pagingSelect.append(Strings.format(" LIMIT {0}{1}", startSymbol, LIMIT_PARAM_NAME));
             }
@@ -222,7 +223,7 @@ public class MySQLDialect extends AbstractDialect {
     protected String getKeywordLikeCaseInsensitive(boolean reverse) {
         if (reverse) {
             return getKeyword(Keywords.COLLATE) + " " + collateCaseInsensitive + " " + getKeyword(Keywords.NOT) + " "
-                    + getKeyword(Keywords.LIKE);
+                + getKeyword(Keywords.LIKE);
         } else {
             return getKeyword(Keywords.COLLATE) + " " + collateCaseInsensitive + " " + getKeyword(Keywords.LIKE);
         }
@@ -235,7 +236,7 @@ public class MySQLDialect extends AbstractDialect {
     protected String getKeywordLikeCaseSensitive(boolean reverse) {
         if (reverse) {
             return getKeyword(Keywords.NOT) + Chars.SPACE + getKeyword(Keywords.LIKE) + Chars.SPACE
-                    + getKeyword(Keywords.BINARY);
+                + getKeyword(Keywords.BINARY);
 
         } else {
             return getKeyword(Keywords.LIKE) + Chars.SPACE + getKeyword(Keywords.BINARY);
@@ -245,5 +246,13 @@ public class MySQLDialect extends AbstractDialect {
     @Override
     public boolean supportBatchUpdates(DatabaseMetaData metaData) throws SQLException {
         return metaData.supportsBatchUpdates() && metaData.getURL().contains("rewriteBatchedStatements=true");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public IdGenerator getIdGenerator(String table, String column) {
+        return DEFAULT_ID_GENERATOR;
     }
 }

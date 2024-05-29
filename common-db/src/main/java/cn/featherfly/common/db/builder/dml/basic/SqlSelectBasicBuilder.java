@@ -71,7 +71,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Instantiates a new sql select basic builder.
      *
-     * @param dialect   dialect
+     * @param dialect dialect
      * @param tableName tableName
      */
     public SqlSelectBasicBuilder(Dialect dialect, String tableName) {
@@ -81,8 +81,8 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Instantiates a new sql select basic builder.
      *
-     * @param dialect      dialect
-     * @param tableName    tableName
+     * @param dialect dialect
+     * @param tableName tableName
      * @param aliasManager the alias manager
      */
     public SqlSelectBasicBuilder(Dialect dialect, String tableName, AliasManager aliasManager) {
@@ -92,8 +92,8 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Instantiates a new sql select basic builder.
      *
-     * @param dialect    dialect
-     * @param tableName  tableName
+     * @param dialect dialect
+     * @param tableName tableName
      * @param tableAlias alias
      */
     public SqlSelectBasicBuilder(Dialect dialect, String tableName, String tableAlias) {
@@ -103,9 +103,9 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Instantiates a new sql select basic builder.
      *
-     * @param dialect      dialect
-     * @param tableName    tableName
-     * @param tableAlias   alias
+     * @param dialect dialect
+     * @param tableName tableName
+     * @param tableAlias alias
      * @param aliasManager the alias manager
      */
     public SqlSelectBasicBuilder(Dialect dialect, String tableName, String tableAlias, AliasManager aliasManager) {
@@ -122,7 +122,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Instantiates a new sql select basic builder.
      *
-     * @param dialect    the dialect
+     * @param dialect the dialect
      * @param tableNames the table names, alias is key, value is name
      */
     public SqlSelectBasicBuilder(Dialect dialect, Map<String, String> tableNames) {
@@ -132,8 +132,8 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Instantiates a new sql select basic builder.
      *
-     * @param dialect      the dialect
-     * @param tableNames   the table names, alias is key, value is name
+     * @param dialect the dialect
+     * @param tableNames the table names, alias is key, value is name
      * @param aliasManager the alias manager
      */
     public SqlSelectBasicBuilder(Dialect dialect, Map<String, String> tableNames, AliasManager aliasManager) {
@@ -149,8 +149,8 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Instantiates a new sql select basic builder.
      *
-     * @param dialect    the dialect
-     * @param table      the table
+     * @param dialect the dialect
+     * @param table the table
      * @param tableAlias the table alias
      */
     public SqlSelectBasicBuilder(Dialect dialect, Table table, String tableAlias) {
@@ -160,9 +160,9 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Instantiates a new sql select basic builder.
      *
-     * @param dialect      dialect
-     * @param table        the table
-     * @param tableAlias   alias
+     * @param dialect dialect
+     * @param table the table
+     * @param tableAlias alias
      * @param aliasManager the alias manager
      */
     public SqlSelectBasicBuilder(Dialect dialect, Table table, String tableAlias, AliasManager aliasManager) {
@@ -179,15 +179,15 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
             aliasManager.put(table.name(), tableAlias);
         }
         selectColumnsBasicBuilders.put(tableAlias,
-                new SqlSelectColumnsTableMetadataBuilder(dialect, table, tableAlias));
+            new SqlSelectColumnsTableMetadataBuilder(dialect, table, tableAlias));
     }
 
     /**
      * Instantiates a new sql select basic builder.
      *
-     * @param dialect      the dialect
+     * @param dialect the dialect
      * @param classMapping the class mapping
-     * @param tableAlias   the table alias
+     * @param tableAlias the table alias
      */
     public SqlSelectBasicBuilder(Dialect dialect, JdbcClassMapping<?> classMapping, String tableAlias) {
         this(dialect, classMapping, tableAlias, new AliasManager());
@@ -196,13 +196,13 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Instantiates a new sql select basic builder.
      *
-     * @param dialect      dialect
+     * @param dialect dialect
      * @param classMapping classMapping
-     * @param tableAlias   alias
+     * @param tableAlias alias
      * @param aliasManager the alias manager
      */
     public SqlSelectBasicBuilder(Dialect dialect, JdbcClassMapping<?> classMapping, String tableAlias,
-            AliasManager aliasManager) {
+        AliasManager aliasManager) {
         AssertIllegalArgument.isNotNull(dialect, "dialect");
         AssertIllegalArgument.isNotNull(classMapping, "classMapping");
 
@@ -216,7 +216,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
             aliasManager.put(classMapping.getRepositoryName(), tableAlias);
         }
         selectColumnsBasicBuilders.put(tableAlias,
-                new SqlSelectColumnsClassMappingBuilder(dialect, classMapping, tableAlias));
+            new SqlSelectColumnsClassMappingBuilder(dialect, classMapping, tableAlias));
     }
 
     //    /**
@@ -283,7 +283,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      */
     @Override
     public SqlSelectBasicBuilder addColumn(AggregateFunction aggregateFunction, boolean distinct, String column,
-            String alias) {
+        String alias) {
         getDefaultBuilder().addColumn(aggregateFunction, distinct, column, alias);
         return this;
     }
@@ -327,7 +327,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Adds the table column.
      *
-     * @param tableName   the table name
+     * @param tableName the table name
      * @param tableSelect the table select
      * @return the sql select basic builder
      */
@@ -339,7 +339,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Adds the table column.
      *
-     * @param tableIndex  the table index
+     * @param tableIndex the table index
      * @param tableSelect the table select
      * @return the sql select basic builder
      */
@@ -351,14 +351,14 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Join.
      *
-     * @param conditionColumn     the condition column
-     * @param joinTableName       the join table name
-     * @param joinTableAlias      the join table alias
+     * @param conditionColumn the condition column
+     * @param joinTableName the join table name
+     * @param joinTableAlias the join table alias
      * @param joinTableColumnName the join table column name
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(String conditionColumn, String joinTableName, String joinTableAlias,
-            String joinTableColumnName) {
+        String joinTableColumnName) {
         return join(Join.INNER_JOIN, conditionColumn, joinTableName, joinTableAlias, joinTableColumnName);
     }
 
@@ -366,60 +366,60 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      * Join.
      *
      * @param conditionTableAlias the condition table alias
-     * @param conditionColumn     the condition column
-     * @param joinTableName       the join table name
-     * @param joinTableAlias      the join table alias
+     * @param conditionColumn the condition column
+     * @param joinTableName the join table name
+     * @param joinTableAlias the join table alias
      * @param joinTableColumnName the join table column name
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(String conditionTableAlias, String conditionColumn, String joinTableName,
-            String joinTableAlias, String joinTableColumnName) {
+        String joinTableAlias, String joinTableColumnName) {
         return join(Join.INNER_JOIN, conditionTableAlias, conditionColumn, joinTableName, joinTableAlias,
-                joinTableColumnName);
+            joinTableColumnName);
     }
 
     /**
      * Join.
      *
-     * @param join                the join
-     * @param conditionColumn     the condition column
-     * @param joinTableName       the join table name
-     * @param joinTableAlias      the join table alias
+     * @param join the join
+     * @param conditionColumn the condition column
+     * @param joinTableName the join table name
+     * @param joinTableAlias the join table alias
      * @param joinTableColumnName the join table column name
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(Join join, String conditionColumn, String joinTableName,
-            String joinTableAlias, String joinTableColumnName) {
+        String joinTableAlias, String joinTableColumnName) {
         return join(join, getDefaultTableAlias(), conditionColumn, joinTableName, joinTableAlias, joinTableColumnName);
     }
 
     /**
      * Join.
      *
-     * @param join                the join
+     * @param join the join
      * @param conditionTableAlias the condition table alias
-     * @param conditionColumn     the condition column
-     * @param joinTableName       the join table name
-     * @param joinTableAlias      the join table alias
+     * @param conditionColumn the condition column
+     * @param joinTableName the join table name
+     * @param joinTableAlias the join table alias
      * @param joinTableColumnName the join table column name
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(Join join, String conditionTableAlias, String conditionColumn,
-            String joinTableName, String joinTableAlias, String joinTableColumnName) {
+        String joinTableName, String joinTableAlias, String joinTableColumnName) {
         SqlJoinOnBasicBuilder joinOnBuilder = new SqlJoinOnBasicBuilder(dialect, join, joinTableName, joinTableAlias,
-                joinTableColumnName, conditionTableAlias, conditionColumn);
+            joinTableColumnName, conditionTableAlias, conditionColumn);
         sqlJoinOnBasicBuilders.add(joinOnBuilder);
         SqlSelectColumnsBasicBuilder joinSelectColumnsBuilder = new SqlSelectColumnsBasicBuilder(dialect,
-                joinTableAlias);
+            joinTableAlias);
         return new SqlSelectJoinOnBasicBuilder(this, joinSelectColumnsBuilder);
     }
 
     /**
      * Join.
      *
-     * @param joinTableName  the join table name
+     * @param joinTableName the join table name
      * @param joinTableAlias the join table alias
-     * @param onSql          the on sql
+     * @param onSql the on sql
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(String joinTableName, String joinTableAlias, String onSql) {
@@ -429,27 +429,27 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Join.
      *
-     * @param join           the join
-     * @param joinTableName  the join table name
+     * @param join the join
+     * @param joinTableName the join table name
      * @param joinTableAlias the join table alias
-     * @param onSql          the on sql
+     * @param onSql the on sql
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(Join join, String joinTableName, String joinTableAlias, String onSql) {
         SqlJoinOnBasicBuilder2 joinOnBuilder = new SqlJoinOnBasicBuilder2(dialect, join, joinTableName, joinTableAlias,
-                onSql);
+            onSql);
         sqlJoinOnBasicBuilders.add(joinOnBuilder);
         SqlSelectColumnsBasicBuilder joinSelectColumnsBuilder = new SqlSelectColumnsBasicBuilder(dialect,
-                joinTableAlias);
+            joinTableAlias);
         return new SqlSelectJoinOnBasicBuilder(this, joinSelectColumnsBuilder);
     }
 
     /**
      * Join.
      *
-     * @param joinTable      the join table
+     * @param joinTable the join table
      * @param joinTableAlias the join table alias
-     * @param onSql          the on sql
+     * @param onSql the on sql
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(Table joinTable, String joinTableAlias, String onSql) {
@@ -459,83 +459,83 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Join.
      *
-     * @param join           the join
-     * @param joinTable      the join table metadata
+     * @param join the join
+     * @param joinTable the join table metadata
      * @param joinTableAlias the join table alias
-     * @param onSql          the on sql
+     * @param onSql the on sql
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(Join join, Table joinTable, String joinTableAlias, String onSql) {
         SqlJoinOnBasicBuilder2 joinOnBuilder = new SqlJoinOnBasicBuilder2(dialect, join, joinTable.getName(),
-                joinTableAlias, onSql);
+            joinTableAlias, onSql);
         sqlJoinOnBasicBuilders.add(joinOnBuilder);
         SqlSelectColumnsTableMetadataBuilder joinSelectColumnsBuilder = new SqlSelectColumnsTableMetadataBuilder(
-                dialect, joinTable, joinTableAlias);
+            dialect, joinTable, joinTableAlias);
         return new SqlSelectJoinOnBasicBuilder(this, joinSelectColumnsBuilder);
     }
 
     /**
      * Join.
      *
-     * @param joinTable           the join table metadata
-     * @param joinTableAlias      the join table alias
+     * @param joinTable the join table metadata
+     * @param joinTableAlias the join table alias
      * @param joinTableColumnName the join table column name
-     * @param sourceColumn        the source column
+     * @param sourceColumn the source column
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(Table joinTable, String joinTableAlias, String joinTableColumnName,
-            String sourceColumn) {
+        String sourceColumn) {
         return join(Join.INNER_JOIN, joinTable, joinTableAlias, joinTableColumnName, sourceColumn);
     }
 
     /**
      * Join.
      *
-     * @param joinTable           the join table metadata
-     * @param joinTableAlias      the join table alias
+     * @param joinTable the join table metadata
+     * @param joinTableAlias the join table alias
      * @param joinTableColumnName the join table column name
-     * @param sourceTableAlias    the source table alias
-     * @param sourceColumn        the source column
+     * @param sourceTableAlias the source table alias
+     * @param sourceColumn the source column
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(Table joinTable, String joinTableAlias, String joinTableColumnName,
-            String sourceTableAlias, String sourceColumn) {
+        String sourceTableAlias, String sourceColumn) {
         return join(Join.INNER_JOIN, joinTable, joinTableAlias, joinTableColumnName, sourceTableAlias, sourceColumn);
     }
 
     /**
      * Join.
      *
-     * @param join                the join
-     * @param joinTable           the join table metadata
-     * @param joinTableAlias      the join table alias
+     * @param join the join
+     * @param joinTable the join table metadata
+     * @param joinTableAlias the join table alias
      * @param joinTableColumnName the join table column name
-     * @param sourceColumn        the source column
+     * @param sourceColumn the source column
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(Join join, Table joinTable, String joinTableAlias,
-            String joinTableColumnName, String sourceColumn) {
+        String joinTableColumnName, String sourceColumn) {
         return join(join, joinTable, joinTableAlias, joinTableColumnName, getDefaultTableAlias(), sourceColumn);
     }
 
     /**
      * Join.
      *
-     * @param join                the join
-     * @param joinTable           the join table metadata
-     * @param joinTableAlias      the join table alias
+     * @param join the join
+     * @param joinTable the join table metadata
+     * @param joinTableAlias the join table alias
      * @param joinTableColumnName the join table column name
-     * @param sourceTableAlias    the source table alias
-     * @param sourceColumn        the source column
+     * @param sourceTableAlias the source table alias
+     * @param sourceColumn the source column
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(Join join, Table joinTable, String joinTableAlias,
-            String joinTableColumnName, String sourceTableAlias, String sourceColumn) {
+        String joinTableColumnName, String sourceTableAlias, String sourceColumn) {
         SqlJoinOnBasicBuilder joinOnBuilder = new SqlJoinOnBasicBuilder(dialect, join, joinTable.name(), joinTableAlias,
-                joinTableColumnName, sourceTableAlias, sourceColumn);
+            joinTableColumnName, sourceTableAlias, sourceColumn);
         sqlJoinOnBasicBuilders.add(joinOnBuilder);
         SqlSelectColumnsTableMetadataBuilder joinSelectColumnsBuilder = new SqlSelectColumnsTableMetadataBuilder(
-                dialect, joinTable, joinTableAlias);
+            dialect, joinTable, joinTableAlias);
         return new SqlSelectJoinOnBasicBuilder(this, joinSelectColumnsBuilder);
     }
 
@@ -556,27 +556,27 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Join.
      *
-     * @param joinClassMapping    the join class mapping
-     * @param joinTableAlias      the join table alias
+     * @param joinClassMapping the join class mapping
+     * @param joinTableAlias the join table alias
      * @param joinTableColumnName the join table column name
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(JdbcClassMapping<?> joinClassMapping, String joinTableAlias,
-            String joinTableColumnName) {
+        String joinTableColumnName) {
         return join(Join.INNER_JOIN, joinClassMapping, joinTableAlias, joinTableColumnName);
     }
 
     /**
      * Join.
      *
-     * @param conditionColumn     the condition column
-     * @param joinClassMapping    the join class mapping
-     * @param joinTableAlias      the join table alias
+     * @param conditionColumn the condition column
+     * @param joinClassMapping the join class mapping
+     * @param joinTableAlias the join table alias
      * @param joinTableColumnName the join table column name
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(String conditionColumn, JdbcClassMapping<?> joinClassMapping,
-            String joinTableAlias, String joinTableColumnName) {
+        String joinTableAlias, String joinTableColumnName) {
         return join(Join.INNER_JOIN, conditionColumn, joinClassMapping, joinTableAlias, joinTableColumnName);
     }
 
@@ -584,16 +584,16 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      * Join.
      *
      * @param conditionTableAlias the condition table alias
-     * @param conditionColumn     the condition column
-     * @param joinClassMapping    the join class mapping
-     * @param joinTableAlias      the join table alias
+     * @param conditionColumn the condition column
+     * @param joinClassMapping the join class mapping
+     * @param joinTableAlias the join table alias
      * @param joinTableColumnName the join table column name
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(String conditionTableAlias, String conditionColumn,
-            JdbcClassMapping<?> joinClassMapping, String joinTableAlias, String joinTableColumnName) {
+        JdbcClassMapping<?> joinClassMapping, String joinTableAlias, String joinTableColumnName) {
         return join(Join.INNER_JOIN, conditionTableAlias, conditionColumn, joinClassMapping, joinTableAlias,
-                joinTableColumnName);
+            joinTableColumnName);
     }
 
     //    /**
@@ -615,59 +615,59 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Join.
      *
-     * @param join                the join
-     * @param joinClassMapping    the join class mapping
-     * @param joinTableAlias      the join table alias
+     * @param join the join
+     * @param joinClassMapping the join class mapping
+     * @param joinTableAlias the join table alias
      * @param joinTableColumnName the join table column name
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(Join join, JdbcClassMapping<?> joinClassMapping, String joinTableAlias,
-            String joinTableColumnName) {
-        return join(join, classMapping.getPrivaryKeyPropertyMappings().get(0).getRepositoryFieldName(),
-                joinClassMapping, joinTableAlias, joinTableColumnName);
+        String joinTableColumnName) {
+        return join(join, classMapping.getPrimaryKeyPropertyMappings().get(0).getRepositoryFieldName(),
+            joinClassMapping, joinTableAlias, joinTableColumnName);
     }
 
     /**
      * Join.
      *
-     * @param join                the join
-     * @param conditionColumn     the condition column
-     * @param joinClassMapping    the join class mapping
-     * @param joinTableAlias      the join table alias
+     * @param join the join
+     * @param conditionColumn the condition column
+     * @param joinClassMapping the join class mapping
+     * @param joinTableAlias the join table alias
      * @param joinTableColumnName the join table column name
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(Join join, String conditionColumn, JdbcClassMapping<?> joinClassMapping,
-            String joinTableAlias, String joinTableColumnName) {
+        String joinTableAlias, String joinTableColumnName) {
         //        return join(join, getDefaultTableAlias(), conditionColumn, joinTableColumnName, joinTableAlias,
         //                joinTableColumnName);
         return join(join, getDefaultTableAlias(), conditionColumn, joinClassMapping, joinTableAlias,
-                joinTableColumnName);
+            joinTableColumnName);
     }
 
     /**
      * Join.
      *
-     * @param join                the join
+     * @param join the join
      * @param conditionTableAlias the condition table alias
-     * @param conditionColumn     the condition column
-     * @param joinClassMapping    the join class mapping
-     * @param joinTableAlias      the join table alias
+     * @param conditionColumn the condition column
+     * @param joinClassMapping the join class mapping
+     * @param joinTableAlias the join table alias
      * @param joinTableColumnName the join table column name
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join(Join join, String conditionTableAlias, String conditionColumn,
-            JdbcClassMapping<?> joinClassMapping, String joinTableAlias, String joinTableColumnName) {
+        JdbcClassMapping<?> joinClassMapping, String joinTableAlias, String joinTableColumnName) {
 
         SqlJoinOnBasicBuilder joinOnBuilder = new SqlJoinOnBasicBuilder(dialect, join,
-                joinClassMapping.getRepositoryName(), joinTableAlias, joinTableColumnName, conditionTableAlias,
-                conditionColumn);
+            joinClassMapping.getRepositoryName(), joinTableAlias, joinTableColumnName, conditionTableAlias,
+            conditionColumn);
         sqlJoinOnBasicBuilders.add(joinOnBuilder);
 
         //        SqlSelectColumnsBasicBuilder joinSelectColumnsBuilder = new SqlSelectColumnsBasicBuilder(dialect, classMapping,
         //                tableAlias, mappingFactory);
         SqlSelectColumnsClassMappingBuilder joinSelectColumnsBuilder = new SqlSelectColumnsClassMappingBuilder(dialect,
-                joinClassMapping, joinTableAlias);
+            joinClassMapping, joinTableAlias);
         return new SqlSelectJoinOnBasicBuilder(this, joinSelectColumnsBuilder);
         // return join(join, conditionTableAlias, conditionColumn, classMapping,
         // tableAlias, joinTableColumnName, null);
@@ -677,30 +677,30 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
      * Join.
      *
      * @param joinClassMapping the join class mapping
-     * @param joinTableAlias   the join table alias
-     * @param onSql            the on sql
+     * @param joinTableAlias the join table alias
+     * @param onSql the on sql
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join2(JdbcClassMapping<?> joinClassMapping, String joinTableAlias,
-            String onSql) {
+        String onSql) {
         return join2(Join.INNER_JOIN, joinClassMapping, joinTableAlias, onSql);
     }
 
     /**
      * Join.
      *
-     * @param join             the join
+     * @param join the join
      * @param joinClassMapping the join class mapping
-     * @param joinTableAlias   the join table alias
-     * @param onSql            the on sql
+     * @param joinTableAlias the join table alias
+     * @param onSql the on sql
      * @return the sql select join on basic builder
      */
     public SqlSelectJoinOnBasicBuilder join2(Join join, JdbcClassMapping<?> joinClassMapping, String joinTableAlias,
-            String onSql) {
+        String onSql) {
         sqlJoinOnBasicBuilders.add(
-                new SqlJoinOnBasicBuilder2(dialect, join, joinClassMapping.getRepositoryName(), joinTableAlias, onSql));
+            new SqlJoinOnBasicBuilder2(dialect, join, joinClassMapping.getRepositoryName(), joinTableAlias, onSql));
         SqlSelectColumnsClassMappingBuilder joinSelectColumnsBuilder = new SqlSelectColumnsClassMappingBuilder(dialect,
-                joinClassMapping, joinTableAlias);
+            joinClassMapping, joinTableAlias);
         return new SqlSelectJoinOnBasicBuilder(this, joinSelectColumnsBuilder);
     }
 
@@ -753,7 +753,7 @@ public class SqlSelectBasicBuilder implements SqlSelectColumnsBuilder<SqlSelectB
     /**
      * Builds the.
      *
-     * @param filter        the filter
+     * @param filter the filter
      * @param buildWithFrom the build with from
      * @return the string
      */

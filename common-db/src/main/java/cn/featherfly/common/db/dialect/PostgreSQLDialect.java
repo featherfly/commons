@@ -13,6 +13,7 @@ import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.repository.id.IdGenerator;
 
 /**
  * PostgreSQL Dialect.
@@ -112,7 +113,7 @@ public class PostgreSQLDialect extends AbstractDialect {
         if (isParamNamed) {
             if (start > 0) {
                 pagingSelect.append(
-                        Strings.format(" LIMIT {0}{1} OFFSET {0}{2}", startSymbol, LIMIT_PARAM_NAME, START_PARAM_NAME));
+                    Strings.format(" LIMIT {0}{1} OFFSET {0}{2}", startSymbol, LIMIT_PARAM_NAME, START_PARAM_NAME));
             } else {
                 pagingSelect.append(Strings.format(" LIMIT {0}{1}", startSymbol, LIMIT_PARAM_NAME));
             }
@@ -243,5 +244,16 @@ public class PostgreSQLDialect extends AbstractDialect {
         } else {
             return getKeyword(Keywords.LIKE);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public IdGenerator getIdGenerator(String table, String name) {
+        // 使用Serial类型，会自动创建序列
+        // 使用Serial类型时，不需要传入参数，即不把id字段的值放入执行sql的参数数组中，insert xxx (id, name) values(DEFAULT, 'your name')
+        // 不确定传入null会不会出现问题，后续测试
+        return DEFAULT_ID_GENERATOR;
     }
 }

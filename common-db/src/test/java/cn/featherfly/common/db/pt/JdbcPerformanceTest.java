@@ -57,13 +57,13 @@ public class JdbcPerformanceTest extends JdbcTestBase {
         }
         conn.close();
         System.out.println(Strings.format("testInsertBatch use {0} time with insertBatch[{1}] times {2}", timer.stop(),
-                batchSize, batchTimes));
+            batchSize, batchTimes));
     }
 
     @Test
     public void testInsertBatch2() {
         String insertSql = Dialects.mysql().dml().insertBatch("user_info",
-                new String[] { "id", "user_id", "name", "descp", "province", "city", "district" }, batchSize);
+            new String[] { "id", "user_id", "name", "descp", "province", "city", "district" }, batchSize, true);
         Timer timer = Timer.start();
         ConnectionWrapper conn = JdbcUtils.getConnectionWrapper(dataSource);
         //        int total = 0;
@@ -86,6 +86,6 @@ public class JdbcPerformanceTest extends JdbcTestBase {
         }
         conn.close();
         System.out.println(Strings.format("testInsertBatch2 use {0} time with insertBatch[{1}] times {2}", timer.stop(),
-                batchSize, batchTimes));
+            batchSize, batchTimes));
     }
 }

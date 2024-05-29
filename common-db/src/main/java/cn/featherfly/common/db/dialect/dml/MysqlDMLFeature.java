@@ -45,10 +45,10 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
     public String deleteFrom(String tableName, String tableAlias) {
         if (Lang.isEmpty(tableAlias)) {
             return BuilderUtils.link(dialect.getKeyword(Keywords.DELETE), dialect.getKeyword(Keywords.FROM),
-                    dialect.wrapName(tableName));
+                dialect.wrapName(tableName));
         } else {
             return BuilderUtils.link(dialect.getKeyword(Keywords.DELETE), dialect.wrapName(tableAlias),
-                    dialect.getKeyword(Keywords.FROM), dialect.wrapName(tableName), dialect.wrapName(tableAlias));
+                dialect.getKeyword(Keywords.FROM), dialect.wrapName(tableName), dialect.wrapName(tableAlias));
         }
     }
 
@@ -56,8 +56,9 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
      * {@inheritDoc}
      */
     @Override
-    public String upsertBatch(String tableName, String[] columnNames, String[] uniqueColumns, int insertAmount) {
-        String sql = insertBatch(tableName, columnNames, insertAmount);
+    public String upsertBatch(String tableName, String pkColumnName, String[] columnNames, String[] uniqueColumns,
+        int insertAmount, boolean autoIncrement) {
+        String sql = insertBatch(tableName, pkColumnName, columnNames, insertAmount, autoIncrement);
         sql = BuilderUtils.link(sql, "ON DUPLICATE KEY UPDATE");
 
         List<String> columns = ArrayUtils.toList(columnNames);
@@ -94,7 +95,7 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
                 condition.append(name).append(Chars.SPACE).append(dialect.getKeyword(Keywords.COLLATE))
-                        .append(Chars.SPACE).append(dialect.getCollateCaseInsensitive());
+                    .append(Chars.SPACE).append(dialect.getCollateCaseInsensitive());
                 break;
             case CASE_SENSITIVE:
                 condition.append(dialect.getKeyword(Keywords.BINARY)).append(Chars.SPACE).append(name);
@@ -104,7 +105,7 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
                 break;
         }
         condition.append(Chars.SPACE).append(isIn ? dialect.getKeywords().in() : dialect.getKeywords().notIn())
-                .append(" (");
+            .append(" (");
         for (int i = 0; i < length; i++) {
             if (i > 0) {
                 condition.append(Chars.COMMA);
@@ -120,7 +121,7 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
      */
     @Override
     public String betweenOrNotBetweenExpression(boolean isBetween, String name, Object values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         boolean caseSensitive = false;
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
@@ -136,13 +137,13 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
             condition.append(dialect.getKeyword(Keywords.BINARY)).append(Chars.SPACE).append(name);
         } else {
             condition.append(name).append(Chars.SPACE).append(dialect.getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
-                    .append(dialect.getCollateCaseInsensitive());
+                .append(dialect.getCollateCaseInsensitive());
         }
         condition.append(Chars.SPACE).append(!isBetween ? dialect.getKeyword(Keywords.NOT) + Chars.SPACE : "") //
-                .append(dialect.getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
-                .append(Chars.QUESTION).append(Chars.SPACE) //
-                .append(dialect.getKeyword(Keywords.AND)).append(Chars.SPACE) //
-                .append(Chars.QUESTION);
+            .append(dialect.getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
+            .append(Chars.QUESTION).append(Chars.SPACE) //
+            .append(dialect.getKeyword(Keywords.AND)).append(Chars.SPACE) //
+            .append(Chars.QUESTION);
         return condition.toString();
     }
 
@@ -151,7 +152,7 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
      */
     @Override
     public String betweenOrNotBetweenExpression(boolean isBetween, String name, SqlElement min, SqlElement max,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         boolean caseSensitive = false;
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
@@ -167,13 +168,13 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
             condition.append(dialect.getKeyword(Keywords.BINARY)).append(Chars.SPACE).append(name);
         } else {
             condition.append(name).append(Chars.SPACE).append(dialect.getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
-                    .append(dialect.getCollateCaseInsensitive());
+                .append(dialect.getCollateCaseInsensitive());
         }
         condition.append(Chars.SPACE).append(!isBetween ? dialect.getKeyword(Keywords.NOT) + Chars.SPACE : "") //
-                .append(dialect.getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
-                .append(min.toSql()).append(Chars.SPACE) //
-                .append(dialect.getKeyword(Keywords.AND)).append(Chars.SPACE) //
-                .append(max.toSql());
+            .append(dialect.getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
+            .append(min.toSql()).append(Chars.SPACE) //
+            .append(dialect.getKeyword(Keywords.AND)).append(Chars.SPACE) //
+            .append(max.toSql());
         return condition.toString();
     }
 
@@ -182,7 +183,7 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
      */
     @Override
     protected String compareExpression0(ComparisonOperator comparisonOperator, String name, Object values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         switch (comparisonOperator) {
             case EQ:
             case NE:
@@ -207,7 +208,7 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
                 condition.append(name).append(Chars.SPACE).append(dialect.getKeyword(Keywords.COLLATE))
-                        .append(Chars.SPACE).append(dialect.getCollateCaseInsensitive());
+                    .append(Chars.SPACE).append(dialect.getCollateCaseInsensitive());
                 break;
             case CASE_SENSITIVE:
                 condition.append(dialect.getKeyword("BINARY")).append(Chars.SPACE).append(name);
@@ -217,18 +218,18 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
                 break;
         }
         condition.append(Chars.SPACE).append(dialect.getOperator(comparisonOperator)).append(Chars.SPACE)
-                .append(Chars.QUESTION);
+            .append(Chars.QUESTION);
         return condition.toString();
     }
 
     @Override
     protected String compareExpression0(ComparisonOperator comparisonOperator, String name, SqlElement values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         StringBuilder condition = new StringBuilder();
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
                 condition.append(name).append(Chars.SPACE).append(dialect.getKeyword(Keywords.COLLATE))
-                        .append(Chars.SPACE).append(dialect.getCollateCaseInsensitive());
+                    .append(Chars.SPACE).append(dialect.getCollateCaseInsensitive());
                 break;
             case CASE_SENSITIVE:
                 condition.append(dialect.getKeyword("BINARY")).append(Chars.SPACE).append(name);
@@ -238,8 +239,15 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
                 break;
         }
         condition.append(Chars.SPACE).append(dialect.getOperator(comparisonOperator)).append(Chars.SPACE)
-                .append(values.toSql());
+            .append(values.toSql());
         return condition.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String preparePrimaryKeyColumnForInsert(String tableName, String columnName, boolean autoIncrement) {
+        return Chars.QUESTION;
+    }
 }

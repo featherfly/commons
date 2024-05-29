@@ -18,13 +18,14 @@ import cn.featherfly.common.repository.Index;
  *
  * @author zhongj
  * @param <T> 类型
+ * @param <P> the generic type
  */
 public class ClassMapping<T, P extends PropertyMapping<P>> {
 
     /**
      * Instantiates a new class mapping.
      *
-     * @param type           类型
+     * @param type 类型
      * @param repositoryName 存储名
      */
     public ClassMapping(Class<T> type, String repositoryName) {
@@ -34,9 +35,9 @@ public class ClassMapping<T, P extends PropertyMapping<P>> {
     /**
      * Instantiates a new class mapping.
      *
-     * @param type           类型
+     * @param type 类型
      * @param repositoryName 存储名
-     * @param schema         the schema
+     * @param schema the schema
      */
     public ClassMapping(Class<T> type, String repositoryName, String schema) {
         this(type, repositoryName, schema, null);
@@ -45,10 +46,10 @@ public class ClassMapping<T, P extends PropertyMapping<P>> {
     /**
      * Instantiates a new class mapping.
      *
-     * @param type           类型
+     * @param type 类型
      * @param repositoryName 存储名
-     * @param schema         the schema
-     * @param remark         remark
+     * @param schema the schema
+     * @param remark remark
      */
     public ClassMapping(Class<T> type, String repositoryName, String schema, String remark) {
         this.type = type;
@@ -118,14 +119,11 @@ public class ClassMapping<T, P extends PropertyMapping<P>> {
     }
 
     /**
-     * <p>
-     * 返回所有主键属性映射
-     * </p>
-     * .
+     * 返回所有主键属性映射.
      *
      * @return 所有属性映射
      */
-    public List<P> getPrivaryKeyPropertyMappings() {
+    public List<P> getPrimaryKeyPropertyMappings() {
         List<P> pks = new ArrayList<>();
         for (P pk : propertyMappings.values().stream().filter(p -> p.isPrimaryKey()).collect(Collectors.toList())) {
             if (Lang.isEmpty(pk.getPropertyMappings())) {
@@ -206,7 +204,7 @@ public class ClassMapping<T, P extends PropertyMapping<P>> {
     @Override
     public String toString() {
         return "ClassMapping [repositoryName=" + repositoryName + ", remark=" + remark + ", schema=" + schema
-                + ", type=" + type + ", indexs=" + indexs + "propertyMappings=" + propertyMappings + "]";
+            + ", type=" + type + ", indexs=" + indexs + "propertyMappings=" + propertyMappings + "]";
     }
 
     // ********************************************************************
@@ -264,5 +262,28 @@ public class ClassMapping<T, P extends PropertyMapping<P>> {
      */
     public String getSchema() {
         return schema;
+    }
+
+    /**
+     * Checks if is autoincrement.
+     *
+     * @return true, if is autoincrement
+     */
+    public boolean isPrimaryKeyAutoincrement() {
+        return getPrimaryKeyPropertyMappings().get(0).isAutoincrement();
+    }
+
+    /**
+     * Checks if is autoincrement.
+     *
+     * @return true, if is autoincrement
+     */
+    public boolean isPrimaryKeyOrdered() {
+        for (P pkm : getPrimaryKeyPropertyMappings()) {
+            if (!pkm.getPrimaryKey().isOrdered()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

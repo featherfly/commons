@@ -13,6 +13,7 @@ import cn.featherfly.common.db.dialect.dml.SQLiteDMLFeature;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.repository.id.IdGenerator;
 
 /**
  * SQLite Dialect .
@@ -88,8 +89,8 @@ public class SQLiteDialect extends AbstractDialect {
         pagingSelect.append(sql);
         if (isParamNamed) {
             if (start > 0) {
-                pagingSelect.append(
-                        Strings.format(" LIMIT {0}{1},{0}{2}", startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME));
+                pagingSelect
+                    .append(Strings.format(" LIMIT {0}{1},{0}{2}", startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME));
             } else {
                 pagingSelect.append(Strings.format(" LIMIT {0}{1}", startSymbol, LIMIT_PARAM_NAME));
             }
@@ -214,5 +215,13 @@ public class SQLiteDialect extends AbstractDialect {
     public String getInitSqlFooter() {
         // FIXME 未实现
         throw new UnsupportedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public IdGenerator getIdGenerator(String table, String column) {
+        return DEFAULT_ID_GENERATOR;
     }
 }

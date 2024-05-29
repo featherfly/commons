@@ -41,24 +41,37 @@ public class SQLiteDMLFeature extends AbstractDMLFeature<SQLiteDialect> {
      * {@inheritDoc}
      */
     @Override
-    public String insertBatch(String tableName, String[] columnNames, int insertAmount) {
+    public String insertBatch(String tableName, String pkColumnName, String[] columnNames, int insertAmount,
+        boolean autoIncrement) {
         if (insertAmount == 1) {
-            return insert(tableName, columnNames);
+            return insert(tableName, pkColumnName, columnNames, autoIncrement);
         }
         StringBuilder sql = new StringBuilder();
         BuilderUtils.link(sql, dialect.getKeyword(Keywords.INSERT), dialect.getKeyword(Keywords.INTO),
-                dialect.wrapName(tableName), dialect.getKeyword(Keywords.SELECT));
+            dialect.wrapName(tableName), dialect.getKeyword(Keywords.SELECT));
 
         for (int i = 0; i < columnNames.length; i++) {
             BuilderUtils.link(sql, Chars.QUESTION, dialect.getKeyword(Keywords.AS),
-                    dialect.wrapName(columnNames[i]) + Chars.COMMA);
+                dialect.wrapName(columnNames[i]) + Chars.COMMA);
         }
         sql.deleteCharAt(sql.length() - 1);
         for (int index = 1; index < insertAmount; index++) {
             BuilderUtils.link(sql, dialect.getKeyword(Keywords.UNION), dialect.getKeyword(Keywords.SELECT));
-            for (int j = 0; j < columnNames.length; j++) {
-                BuilderUtils.link(sql, Chars.QUESTION + Chars.COMMA);
-            }
+            sql.append(Chars.SPACE_CHAR);
+            insertValues(sql, tableName, pkColumnName, columnNames, autoIncrement);
+            //            if (pkColumnName == null) {
+            //                for (int j = 0; j < columnNames.length; j++) {
+            //                    BuilderUtils.link(sql, Chars.QUESTION + Chars.COMMA);
+            //                }
+            //            } else {
+            //                for (int j = 0; j < columnNames.length; j++) {
+            //                    if (pkColumnName.equals(columnNames[j])) {
+            //                        BuilderUtils.link(sql, preparePrimaryKeyColumnForInsert(pkColumnName) + Chars.COMMA);
+            //                    } else {
+            //                        BuilderUtils.link(sql, Chars.QUESTION + Chars.COMMA);
+            //                    }
+            //                }
+            //            }
             sql.deleteCharAt(sql.length() - 1);
         }
         return sql.toString();
@@ -81,18 +94,18 @@ public class SQLiteDMLFeature extends AbstractDMLFeature<SQLiteDialect> {
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
                 condition.append(name).append(Chars.SPACE).append(dialect.getKeyword(Keywords.COLLATE))
-                        .append(Chars.SPACE).append(dialect.getKeyword("NOCASE"));
+                    .append(Chars.SPACE).append(dialect.getKeyword("NOCASE"));
                 break;
             case CASE_SENSITIVE:
                 condition.append(name).append(Chars.SPACE).append(dialect.getKeyword(Keywords.COLLATE))
-                        .append(Chars.SPACE).append(dialect.getKeywords().binary());
+                    .append(Chars.SPACE).append(dialect.getKeywords().binary());
                 break;
             default:
                 condition.append(name);
                 break;
         }
         condition.append(Chars.SPACE).append(isIn ? dialect.getKeywords().in() : dialect.getKeywords().notIn())
-                .append(" (");
+            .append(" (");
         for (int i = 0; i < length; i++) {
             if (i > 0) {
                 condition.append(Chars.COMMA);
@@ -108,7 +121,7 @@ public class SQLiteDMLFeature extends AbstractDMLFeature<SQLiteDialect> {
      */
     @Override
     public String betweenOrNotBetweenExpression(boolean isBetween, String name, Object values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         boolean caseSensitive = false;
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
@@ -122,16 +135,16 @@ public class SQLiteDMLFeature extends AbstractDMLFeature<SQLiteDialect> {
         StringBuilder condition = new StringBuilder();
         if (caseSensitive) {
             condition.append(name).append(Chars.SPACE).append(dialect.getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
-                    .append(dialect.getKeywords().binary());
+                .append(dialect.getKeywords().binary());
         } else {
             condition.append(name).append(Chars.SPACE).append(dialect.getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
-                    .append(dialect.getKeyword("NOCASE"));
+                .append(dialect.getKeyword("NOCASE"));
         }
         condition.append(!isBetween ? dialect.getKeyword(Keywords.NOT) + Chars.SPACE : "") //
-                .append(dialect.getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
-                .append(Chars.QUESTION).append(Chars.SPACE) //
-                .append(dialect.getKeyword(Keywords.AND)).append(Chars.SPACE) //
-                .append(Chars.QUESTION);
+            .append(dialect.getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
+            .append(Chars.QUESTION).append(Chars.SPACE) //
+            .append(dialect.getKeyword(Keywords.AND)).append(Chars.SPACE) //
+            .append(Chars.QUESTION);
         return condition.toString();
     }
 
@@ -140,7 +153,7 @@ public class SQLiteDMLFeature extends AbstractDMLFeature<SQLiteDialect> {
      */
     @Override
     public String betweenOrNotBetweenExpression(boolean isBetween, String name, SqlElement min, SqlElement max,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         boolean caseSensitive = false;
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
@@ -154,16 +167,16 @@ public class SQLiteDMLFeature extends AbstractDMLFeature<SQLiteDialect> {
         StringBuilder condition = new StringBuilder();
         if (caseSensitive) {
             condition.append(name).append(Chars.SPACE).append(dialect.getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
-                    .append(dialect.getKeywords().binary());
+                .append(dialect.getKeywords().binary());
         } else {
             condition.append(name).append(Chars.SPACE).append(dialect.getKeyword(Keywords.COLLATE)).append(Chars.SPACE)
-                    .append(dialect.getKeyword("NOCASE"));
+                .append(dialect.getKeyword("NOCASE"));
         }
         condition.append(!isBetween ? dialect.getKeyword(Keywords.NOT) + Chars.SPACE : "") //
-                .append(dialect.getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
-                .append(min.toSql()).append(Chars.SPACE) //
-                .append(dialect.getKeyword(Keywords.AND)).append(Chars.SPACE) //
-                .append(max.toSql());
+            .append(dialect.getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
+            .append(min.toSql()).append(Chars.SPACE) //
+            .append(dialect.getKeyword(Keywords.AND)).append(Chars.SPACE) //
+            .append(max.toSql());
         return condition.toString();
     }
 
@@ -172,7 +185,7 @@ public class SQLiteDMLFeature extends AbstractDMLFeature<SQLiteDialect> {
      */
     @Override
     protected String compareExpression0(ComparisonOperator comparisonOperator, String name, Object values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         switch (comparisonOperator) {
             case EQ:
             case NE:
@@ -197,18 +210,18 @@ public class SQLiteDMLFeature extends AbstractDMLFeature<SQLiteDialect> {
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
                 condition.append(name).append(Chars.SPACE).append(dialect.getKeyword(Keywords.COLLATE))
-                        .append(Chars.SPACE).append(dialect.getKeyword("NOCASE"));
+                    .append(Chars.SPACE).append(dialect.getKeyword("NOCASE"));
                 break;
             case CASE_SENSITIVE:
                 condition.append(name).append(Chars.SPACE).append(dialect.getKeyword(Keywords.COLLATE))
-                        .append(Chars.SPACE).append(dialect.getKeywords().binary());
+                    .append(Chars.SPACE).append(dialect.getKeywords().binary());
                 break;
             default:
                 condition.append(name);
                 break;
         }
         condition.append(Chars.SPACE).append(dialect.getOperator(comparisonOperator)).append(Chars.SPACE)
-                .append(Chars.QUESTION);
+            .append(Chars.QUESTION);
         return condition.toString();
     }
 
@@ -217,23 +230,31 @@ public class SQLiteDMLFeature extends AbstractDMLFeature<SQLiteDialect> {
      */
     @Override
     protected String compareExpression0(ComparisonOperator comparisonOperator, String name, SqlElement values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         StringBuilder condition = new StringBuilder();
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
                 condition.append(name).append(Chars.SPACE).append(dialect.getKeyword(Keywords.COLLATE))
-                        .append(Chars.SPACE).append(dialect.getKeyword("NOCASE"));
+                    .append(Chars.SPACE).append(dialect.getKeyword("NOCASE"));
                 break;
             case CASE_SENSITIVE:
                 condition.append(name).append(Chars.SPACE).append(dialect.getKeyword(Keywords.COLLATE))
-                        .append(Chars.SPACE).append(dialect.getKeywords().binary());
+                    .append(Chars.SPACE).append(dialect.getKeywords().binary());
                 break;
             default:
                 condition.append(name);
                 break;
         }
         condition.append(Chars.SPACE).append(dialect.getOperator(comparisonOperator)).append(Chars.SPACE)
-                .append(values.toSql());
+            .append(values.toSql());
         return condition.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String preparePrimaryKeyColumnForInsert(String tableName, String columnName, boolean autoIncrement) {
+        return Chars.QUESTION;
     }
 }

@@ -27,6 +27,7 @@ import cn.featherfly.common.lang.SystemPropertyUtils;
 import cn.featherfly.common.lang.WordUtils;
 import cn.featherfly.common.operator.LogicOperator;
 import cn.featherfly.common.repository.mapping.ClassNameConversion;
+import cn.featherfly.common.repository.mapping.PrimaryKey;
 import cn.featherfly.common.repository.mapping.PropertyMapping.Mode;
 import cn.featherfly.common.repository.mapping.PropertyNameConversion;
 
@@ -205,12 +206,14 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
                 mapping.setPropertyType(beanProperty.getType());
                 mapping.setSetter(propertyAccessor.getProperty(beanProperty.getIndex())::set);
                 mapping.setGetter(propertyAccessor.getProperty(beanProperty.getIndex())::get);
-                mapping.setPrimaryKey(isPk);
+                if (isPk) {
+                    setIdGenerator(mapping, beanProperty, tableMetadata.getName(), columnName);
+                }
                 ManyToOne manyToOne = beanProperty.getAnnotation(ManyToOne.class);
                 OneToOne oneToOne = beanProperty.getAnnotation(OneToOne.class);
                 if (manyToOne != null || oneToOne != null) {
                     mapping.setRepositoryFieldName(columnName);
-                    mappingFk(mapping, beanProperty, columnName, isPk, logInfo, propertyAccessor);
+                    mappingFk(mapping, beanProperty, columnName, propertyAccessor, logInfo);
                 } else {
                     mapping.setRepositoryFieldName(columnName);
                     setColumnMapping(mapping, beanProperty);
@@ -292,7 +295,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param logInfo the log info
      */
     private void mappingFk(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty, String columnName,
-        boolean hasPk, StringBuilder logInfo, PropertyAccessor<Object> propertyAccessor) {
+        PropertyAccessor<Object> propertyAccessor, StringBuilder logInfo) {
         mapping.setMode(Mode.MANY_TO_ONE);
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
         Collection<BeanProperty<?, ?>> bps = bd.findBeanPropertys(new BeanPropertyAnnotationMatcher(Id.class));
@@ -313,7 +316,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
                 new int[] { mapping.getPropertyIndex(), columnMapping.getPropertyIndex() }, value));
             columnMapping.setGetter(obj -> propertyAccessor.getPropertyValue(obj,
                 new int[] { mapping.getPropertyIndex(), columnMapping.getPropertyIndex() }));
-            columnMapping.setPrimaryKey(hasPk);
+            columnMapping.setPrimaryKey(mapping.getPrimaryKey());
             if (logger.isDebugEnabled()) {
                 logInfo.append(String.format("%s###\t%s -> %s", SystemPropertyUtils.getLineSeparator(),
                     mapping.getPropertyName() + "." + columnMapping.getPropertyName(),
@@ -391,7 +394,10 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
         mapping.setDecimalDigits(cmd.getDecimalDigits());
         mapping.setAutoincrement(cmd.isAutoincrement());
         mapping.setSize(cmd.getSize());
-        mapping.setPrimaryKey(cmd.isPrimaryKey());
+        if (cmd.isPrimaryKey()) {
+            PrimaryKey primaryKey = new PrimaryKey(dialect.getIdGenerator(cmd.getTable().getName(), cmd.getName()));
+            mapping.setPrimaryKey(primaryKey);
+        }
         mapping.setDefaultValue(cmd.getDefaultValue());
         mapping.setIndex(cmd.getColumnIndex());
         if (convertColumnName) {

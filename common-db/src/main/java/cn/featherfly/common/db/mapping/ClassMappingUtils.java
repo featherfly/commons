@@ -133,13 +133,19 @@ public final class ClassMappingUtils {
      */
     public static Tuple2<String, JdbcPropertyMapping[]> getInsertBatchSqlAndMappings(int insertAmount,
         JdbcClassMapping<?> classMapping, Dialect dialect) {
+        String pkColumn = null;
+        if (classMapping.isPrimaryKeyAutoincrement()) {
+            pkColumn = classMapping.getPrimaryKeyPropertyMappings().get(0).getRepositoryFieldName();
+        }
         if (insertAmount == 1) {
             Tuple2<JdbcPropertyMapping[], String[]> tuple = getInsertMappingsAndColumns(classMapping, dialect);
-            String sql = dialect.dml().insert(classMapping.getRepositoryName(), tuple.get1());
+            String sql = dialect.dml().insert(classMapping.getRepositoryName(), pkColumn, tuple.get1(),
+                classMapping.isPrimaryKeyAutoincrement());
             return Tuples.of(sql, tuple.get0());
         } else if (insertAmount > 1) {
             Tuple2<JdbcPropertyMapping[], String[]> tuple = getInsertMappingsAndColumns(classMapping, dialect);
-            String sql = dialect.dml().insertBatch(classMapping.getRepositoryName(), tuple.get1(), insertAmount);
+            String sql = dialect.dml().insertBatch(classMapping.getRepositoryName(), pkColumn, tuple.get1(),
+                insertAmount, classMapping.isPrimaryKeyAutoincrement());
             return Tuples.of(sql, tuple.get0());
         } else {
             throw new JdbcMappingException("insertAmount can not < 1, current value is " + insertAmount);
@@ -158,15 +164,21 @@ public final class ClassMappingUtils {
     @Deprecated
     public static Tuple2<String, Map<Integer, JdbcPropertyMapping>> getInsertBatchSqlAndParamPositions(int insertAmount,
         JdbcClassMapping<?> classMapping, Dialect dialect) {
+        String pkColumn = null;
+        if (classMapping.isPrimaryKeyAutoincrement()) {
+            pkColumn = classMapping.getPrimaryKeyPropertyMappings().get(0).getRepositoryFieldName();
+        }
         if (insertAmount == 1) {
             Tuple2<Map<Integer, JdbcPropertyMapping>,
                 String[]> tuple = getInsertParamPositionsAndColumns(classMapping, dialect);
-            String sql = dialect.dml().insert(classMapping.getRepositoryName(), tuple.get1());
+            String sql = dialect.dml().insert(classMapping.getRepositoryName(), pkColumn, tuple.get1(),
+                classMapping.isPrimaryKeyAutoincrement());
             return Tuples.of(sql, tuple.get0());
         } else if (insertAmount > 1) {
             Tuple2<Map<Integer, JdbcPropertyMapping>,
                 String[]> tuple = getInsertParamPositionsAndColumns(classMapping, dialect);
-            String sql = dialect.dml().insertBatch(classMapping.getRepositoryName(), tuple.get1(), insertAmount);
+            String sql = dialect.dml().insertBatch(classMapping.getRepositoryName(), pkColumn, tuple.get1(),
+                insertAmount, classMapping.isPrimaryKeyAutoincrement());
             return Tuples.of(sql, tuple.get0());
         } else {
             throw new JdbcMappingException("insertAmount can not < 1, current value is " + insertAmount);
@@ -207,7 +219,12 @@ public final class ClassMappingUtils {
     public static Tuple2<String, JdbcPropertyMapping[]> getInsertSqlAndMappings(JdbcClassMapping<?> classMapping,
         Dialect dialect) {
         Tuple2<JdbcPropertyMapping[], String[]> tuple = getInsertMappingsAndColumns(classMapping, dialect);
-        String sql = dialect.dml().insert(classMapping.getRepositoryName(), tuple.get1());
+        String pkColumn = null;
+        if (classMapping.isPrimaryKeyAutoincrement()) {
+            pkColumn = classMapping.getPrimaryKeyPropertyMappings().get(0).getRepositoryFieldName();
+        }
+        String sql = dialect.dml().insert(classMapping.getRepositoryName(), pkColumn, tuple.get1(),
+            classMapping.isPrimaryKeyAutoincrement());
         return Tuples.of(sql, tuple.get0());
     }
 
@@ -217,13 +234,13 @@ public final class ClassMappingUtils {
         List<String> columns = new ArrayList<>();
         for (JdbcPropertyMapping pm : classMapping.getPropertyMappings()) {
             if (Lang.isEmpty(pm.getPropertyMappings())) {
-                if (pm.isInsertable()) {
+                if (pm.isInsertable() && !pm.isIgnoreAtInsert()) {
                     columns.add(pm.getRepositoryFieldName());
                     mappings.add(pm);
                 }
             } else {
                 for (JdbcPropertyMapping subPm : pm.getPropertyMappings()) {
-                    if (subPm.isInsertable()) {
+                    if (subPm.isInsertable() && !pm.isIgnoreAtInsert()) {
                         columns.add(subPm.getRepositoryFieldName());
                         mappings.add(subPm);
                     }
@@ -247,7 +264,12 @@ public final class ClassMappingUtils {
         JdbcClassMapping<?> classMapping, Dialect dialect) {
         Tuple2<Map<Integer, JdbcPropertyMapping>,
             String[]> tuple = getInsertParamPositionsAndColumns(classMapping, dialect);
-        String sql = dialect.dml().insert(classMapping.getRepositoryName(), tuple.get1());
+        String pkColumn = null;
+        if (classMapping.isPrimaryKeyAutoincrement()) {
+            pkColumn = classMapping.getPrimaryKeyPropertyMappings().get(0).getRepositoryFieldName();
+        }
+        String sql = dialect.dml().insert(classMapping.getRepositoryName(), pkColumn, tuple.get1(),
+            classMapping.isPrimaryKeyAutoincrement());
         return Tuples.of(sql, tuple.get0());
     }
 
@@ -262,8 +284,12 @@ public final class ClassMappingUtils {
     public static Tuple2<String, JdbcPropertyMapping[]> getUpsertBatchSqlAndMappings(int upsertAmount,
         JdbcClassMapping<?> classMapping, Dialect dialect) {
         Tuple3<JdbcPropertyMapping[], String[], String[]> tuple = getUpsertMappingsColumnsAndIds(classMapping);
-        String sql = dialect.dml().upsertBatch(classMapping.getRepositoryName(), tuple.get1(), tuple.get2(),
-            upsertAmount);
+        String pkColumn = null;
+        if (classMapping.isPrimaryKeyAutoincrement()) {
+            pkColumn = classMapping.getPrimaryKeyPropertyMappings().get(0).getRepositoryFieldName();
+        }
+        String sql = dialect.dml().upsertBatch(classMapping.getRepositoryName(), pkColumn, tuple.get1(), tuple.get2(),
+            upsertAmount, classMapping.isPrimaryKeyAutoincrement());
         return Tuples.of(sql, tuple.get0());
     }
 
@@ -281,8 +307,12 @@ public final class ClassMappingUtils {
         JdbcClassMapping<?> classMapping, Dialect dialect) {
         Tuple3<Map<Integer, JdbcPropertyMapping>, String[],
             String[]> tuple = getUpsertSqlAndParamPositionsColumnsAndIdsAnd(classMapping, dialect);
-        String sql = dialect.dml().upsertBatch(classMapping.getRepositoryName(), tuple.get1(), tuple.get2(),
-            upsertAmount);
+        String pkColumn = null;
+        if (classMapping.isPrimaryKeyAutoincrement()) {
+            pkColumn = classMapping.getPrimaryKeyPropertyMappings().get(0).getRepositoryFieldName();
+        }
+        String sql = dialect.dml().upsertBatch(classMapping.getRepositoryName(), pkColumn, tuple.get1(), tuple.get2(),
+            upsertAmount, classMapping.isPrimaryKeyAutoincrement());
         return Tuples.of(sql, tuple.get0());
     }
 
@@ -295,9 +325,13 @@ public final class ClassMappingUtils {
      */
     public static Tuple2<String, JdbcPropertyMapping[]> getUpsertSqlAndMappings(JdbcClassMapping<?> classMapping,
         Dialect dialect) {
-
         Tuple3<JdbcPropertyMapping[], String[], String[]> tuple = getUpsertMappingsColumnsAndIds(classMapping);
-        String upsert = dialect.dml().upsertBatch(classMapping.getRepositoryName(), tuple.get1(), tuple.get2(), 1);
+        String pkColumn = null;
+        if (classMapping.isPrimaryKeyAutoincrement()) {
+            pkColumn = classMapping.getPrimaryKeyPropertyMappings().get(0).getRepositoryFieldName();
+        }
+        String upsert = dialect.dml().upsertBatch(classMapping.getRepositoryName(), pkColumn, tuple.get1(),
+            tuple.get2(), 1, classMapping.isPrimaryKeyAutoincrement());
         return Tuples.of(upsert, tuple.get0());
     }
 
@@ -352,7 +386,12 @@ public final class ClassMappingUtils {
         JdbcClassMapping<?> classMapping, Dialect dialect) {
         Tuple3<Map<Integer, JdbcPropertyMapping>, String[],
             String[]> tuple = getUpsertSqlAndParamPositionsColumnsAndIdsAnd(classMapping, dialect);
-        String upsert = dialect.dml().upsertBatch(classMapping.getRepositoryName(), tuple.get1(), tuple.get2(), 1);
+        String pkColumn = null;
+        if (classMapping.isPrimaryKeyAutoincrement()) {
+            pkColumn = classMapping.getPrimaryKeyPropertyMappings().get(0).getRepositoryFieldName();
+        }
+        String upsert = dialect.dml().upsertBatch(classMapping.getRepositoryName(), pkColumn, tuple.get1(),
+            tuple.get2(), 1, classMapping.isPrimaryKeyAutoincrement());
         return Tuples.of(upsert, tuple.get0());
     }
 
@@ -566,7 +605,7 @@ public final class ClassMappingUtils {
         deleteSql.append(dialect.getKeywords().delete()).append(Chars.SPACE).append(dialect.getKeywords().from())
             .append(Chars.SPACE).append(dialect.wrapName(classMapping.getRepositoryName())).append(Chars.SPACE)
             .append(dialect.getKeywords().where()).append(Chars.SPACE).append(
-                deleteCondition(batchSize, dialect, propertyPositions, classMapping.getPrivaryKeyPropertyMappings()));
+                deleteCondition(batchSize, dialect, propertyPositions, classMapping.getPrimaryKeyPropertyMappings()));
         return Tuples.of(deleteSql.toString().trim(),
             propertyPositions.toArray(new JdbcPropertyMapping[propertyPositions.size()]));
     }
@@ -605,7 +644,7 @@ public final class ClassMappingUtils {
         deleteSql.append(dialect.getKeywords().delete()).append(Chars.SPACE).append(dialect.getKeywords().from())
             .append(Chars.SPACE).append(dialect.wrapName(classMapping.getRepositoryName())).append(Chars.SPACE)
             .append(dialect.getKeywords().where()).append(Chars.SPACE).append(
-                deleteCondition(batchSize, dialect, propertyPositions, classMapping.getPrivaryKeyPropertyMappings()));
+                deleteCondition(batchSize, dialect, propertyPositions, classMapping.getPrimaryKeyPropertyMappings()));
         return Tuples.of(deleteSql.toString().trim(), propertyPositions);
     }
 

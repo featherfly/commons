@@ -52,7 +52,7 @@ public class PostgreSQLDMLFeature extends AbstractDMLFeature<PostgreSQLDialect> 
      */
     @Override
     public String betweenOrNotBetweenExpression(boolean isBetween, String name, Object values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
             case CASE_SENSITIVE:
@@ -67,7 +67,7 @@ public class PostgreSQLDMLFeature extends AbstractDMLFeature<PostgreSQLDialect> 
      */
     @Override
     public String betweenOrNotBetweenExpression(boolean isBetween, String name, SqlElement min, SqlElement max,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
             case CASE_SENSITIVE:
@@ -82,7 +82,7 @@ public class PostgreSQLDMLFeature extends AbstractDMLFeature<PostgreSQLDialect> 
      */
     @Override
     protected String compareExpression0(ComparisonOperator comparisonOperator, String name, Object values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         switch (comparisonOperator) {
             case EQ:
             case NE:
@@ -108,13 +108,13 @@ public class PostgreSQLDMLFeature extends AbstractDMLFeature<PostgreSQLDialect> 
             case CASE_INSENSITIVE:
             case CASE_SENSITIVE:
                 throw new DialectException(
-                        Strings.format("{} operator unsupported {}", comparisonOperator, matchStrategy));
+                    Strings.format("{} operator unsupported {}", comparisonOperator, matchStrategy));
             default:
                 condition.append(name);
                 break;
         }
         condition.append(Chars.SPACE).append(dialect.getOperator(comparisonOperator)).append(Chars.SPACE)
-                .append(Chars.QUESTION);
+            .append(Chars.QUESTION);
         return condition.toString();
     }
 
@@ -123,20 +123,32 @@ public class PostgreSQLDMLFeature extends AbstractDMLFeature<PostgreSQLDialect> 
      */
     @Override
     protected String compareExpression0(ComparisonOperator comparisonOperator, String name, SqlElement values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         StringBuilder condition = new StringBuilder();
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
             case CASE_SENSITIVE:
                 throw new DialectException(
-                        Strings.format("{} operator unsupported {}", comparisonOperator, matchStrategy));
+                    Strings.format("{} operator unsupported {}", comparisonOperator, matchStrategy));
             default:
                 condition.append(name);
                 break;
         }
         condition.append(Chars.SPACE).append(dialect.getOperator(comparisonOperator)).append(Chars.SPACE)
-                .append(values.toSql());
+            .append(values.toSql());
         return condition.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String preparePrimaryKeyColumnForInsert(String tableName, String columnName, boolean autoIncrement) {
+        if (autoIncrement) {
+            return "DEFAULT";
+        } else {
+            return Chars.QUESTION;
+        }
     }
 
 }

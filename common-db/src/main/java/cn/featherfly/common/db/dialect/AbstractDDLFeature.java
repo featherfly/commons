@@ -42,16 +42,16 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
 
     private boolean defineNeedSize(SQLType sqlType) {
         return sqlType == JDBCType.VARCHAR || sqlType == JDBCType.NVARCHAR || sqlType == JDBCType.CHAR
-                || sqlType == JDBCType.NCHAR || sqlType == JDBCType.LONGVARCHAR || sqlType == JDBCType.LONGNVARCHAR
-                || sqlType == JDBCType.FLOAT || sqlType == JDBCType.DOUBLE || sqlType == JDBCType.DECIMAL
-                || sqlType == JDBCType.NUMERIC;
+            || sqlType == JDBCType.NCHAR || sqlType == JDBCType.LONGVARCHAR || sqlType == JDBCType.LONGNVARCHAR
+            || sqlType == JDBCType.FLOAT || sqlType == JDBCType.DOUBLE || sqlType == JDBCType.DECIMAL
+            || sqlType == JDBCType.NUMERIC;
     }
 
     @Override
     public String createDataBase(String dataBaseName) {
         AssertIllegalArgument.isNotEmpty(dataBaseName, "dataBaseName");
         return BuilderUtils.link(dialect.getKeyword(Keywords.CREATE), dialect.getKeyword(Keywords.DATABASE),
-                dialect.wrapName(dataBaseName)) + Chars.SEMI;
+            dialect.wrapName(dataBaseName)) + Chars.SEMI;
     }
 
     @Override
@@ -59,11 +59,11 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
         AssertIllegalArgument.isNotEmpty(dataBaseName, "dataBaseName");
         if (ifExists) {
             return BuilderUtils.link(dialect.getKeyword(Keywords.DROP), dialect.getKeyword(Keywords.DATABASE),
-                    dialect.getKeyword(Keywords.IF), dialect.getKeyword(Keywords.EXISTS),
-                    dialect.wrapName(dataBaseName)) + Chars.SEMI;
+                dialect.getKeyword(Keywords.IF), dialect.getKeyword(Keywords.EXISTS), dialect.wrapName(dataBaseName))
+                + Chars.SEMI;
         } else {
             return BuilderUtils.link(dialect.getKeyword(Keywords.DROP), dialect.getKeyword(Keywords.DATABASE),
-                    dialect.wrapName(dataBaseName)) + Chars.SEMI;
+                dialect.wrapName(dataBaseName)) + Chars.SEMI;
         }
     }
 
@@ -71,7 +71,7 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
     public String createSchema(String schemaName) {
         AssertIllegalArgument.isNotEmpty(schemaName, "schemaName");
         return BuilderUtils.link(dialect.getKeyword(Keywords.CREATE), dialect.getKeyword(Keywords.SCHEMA),
-                dialect.wrapName(schemaName)) + Chars.SEMI;
+            dialect.wrapName(schemaName)) + Chars.SEMI;
     }
 
     @Override
@@ -79,32 +79,32 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
         AssertIllegalArgument.isNotEmpty(schemaName, "dataBaseName");
         if (ifExists) {
             return BuilderUtils.link(dialect.getKeyword(Keywords.DROP), dialect.getKeyword(Keywords.SCHEMA),
-                    dialect.getKeyword(Keywords.IF), dialect.getKeyword(Keywords.EXISTS), dialect.wrapName(schemaName))
-                    + Chars.SEMI;
+                dialect.getKeyword(Keywords.IF), dialect.getKeyword(Keywords.EXISTS), dialect.wrapName(schemaName))
+                + Chars.SEMI;
         } else {
             return BuilderUtils.link(dialect.getKeyword(Keywords.DROP), dialect.getKeyword(Keywords.SCHEMA),
-                    dialect.wrapName(schemaName)) + Chars.SEMI;
+                dialect.wrapName(schemaName)) + Chars.SEMI;
         }
     }
 
     /**
      * Builds the drop table sql.
      *
-     * @param schema    the database schema
+     * @param schema the database schema
      * @param tableName the table name
-     * @param ifExists  the if exists
-     * @param cascade   the cascade
+     * @param ifExists the if exists
+     * @param cascade the cascade
      * @return the string
      */
     @Override
     public String dropTable(String schema, String tableName, boolean ifExists, boolean cascade) {
         AssertIllegalArgument.isNotEmpty(tableName, "tableName");
         String tn = Lang.isEmpty(schema) ? dialect.wrapName(tableName)
-                : dialect.wrapName(schema) + Chars.DOT + dialect.wrapName(tableName);
+            : dialect.wrapName(schema) + Chars.DOT + dialect.wrapName(tableName);
         String ddl = "";
         if (ifExists) {
             ddl = BuilderUtils.link(dialect.getKeyword(Keywords.DROP), dialect.getKeyword(Keywords.TABLE),
-                    dialect.getKeyword(Keywords.IF), dialect.getKeyword(Keywords.EXISTS), tn);
+                dialect.getKeyword(Keywords.IF), dialect.getKeyword(Keywords.EXISTS), tn);
         } else {
             ddl = BuilderUtils.link(dialect.getKeyword(Keywords.DROP), dialect.getKeyword(Keywords.TABLE), tn);
         }
@@ -119,10 +119,10 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
         AssertIllegalArgument.isNotEmpty(tableName, "tableName");
         if (Lang.isEmpty(schema)) {
             return BuilderUtils.link(dialect.getKeyword(Keywords.ALTER), dialect.getKeyword(Keywords.TABLE),
-                    dialect.wrapName(tableName));
+                dialect.wrapName(tableName));
         } else {
             return BuilderUtils.link(dialect.getKeyword(Keywords.ALTER), dialect.getKeyword(Keywords.TABLE),
-                    dialect.wrapName(schema) + Chars.DOT + dialect.wrapName(tableName));
+                dialect.wrapName(schema) + Chars.DOT + dialect.wrapName(tableName));
         }
     }
 
@@ -137,10 +137,10 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
         AssertIllegalArgument.isNotEmpty(name, "name");
         AssertIllegalArgument.isNotEmpty(type, "type");
         String tn = Lang.isEmpty(schema) ? dialect.wrapName(name)
-                : dialect.wrapName(schema) + Chars.DOT + dialect.wrapName(name);
+            : dialect.wrapName(schema) + Chars.DOT + dialect.wrapName(name);
         if (ifExists) {
             return BuilderUtils.link(dialect.getKeyword(Keywords.DROP), dialect.getKeyword(type),
-                    dialect.getKeyword(Keywords.IF), dialect.getKeyword(Keywords.EXISTS), tn) + Chars.SEMI;
+                dialect.getKeyword(Keywords.IF), dialect.getKeyword(Keywords.EXISTS), tn) + Chars.SEMI;
         } else {
             return BuilderUtils.link(dialect.getKeyword(Keywords.DROP), dialect.getKeyword(type), tn) + Chars.SEMI;
         }
@@ -151,7 +151,7 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
         AssertIllegalArgument.isNotEmpty(columns, "columns");
         StringBuilder ddl = new StringBuilder();
         String tn = Lang.isEmpty(schema) ? dialect.wrapName(tableName)
-                : dialect.wrapName(schema) + Chars.DOT + dialect.wrapName(tableName);
+            : dialect.wrapName(schema) + Chars.DOT + dialect.wrapName(tableName);
         StringBuilder cols = new StringBuilder();
         cols.append(Chars.PAREN_L);
         for (String column : columns) {
@@ -160,10 +160,10 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
         cols.deleteCharAt(cols.length() - 1);
         cols.append(Chars.PAREN_R);
         String indexKeyWords = unique
-                ? dialect.getKeyword(Keywords.UNIQUE) + Chars.SPACE + dialect.getKeyword(Keywords.INDEX)
-                : dialect.getKeyword(Keywords.INDEX);
+            ? dialect.getKeyword(Keywords.UNIQUE) + Chars.SPACE + dialect.getKeyword(Keywords.INDEX)
+            : dialect.getKeyword(Keywords.INDEX);
         BuilderUtils.link(ddl, dialect.getKeyword(Keywords.CREATE), indexKeyWords, indexName,
-                dialect.getKeyword(Keywords.ON), tn + cols.toString());
+            dialect.getKeyword(Keywords.ON), tn + cols.toString());
         return ddl.toString() + Chars.SEMI;
     }
 
@@ -171,13 +171,13 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
     public String dropIndex(String schema, String tableName, String indexName, boolean ifExists) {
         AssertIllegalArgument.isNotEmpty(indexName, "indexName");
         String name = Lang.isEmpty(schema) ? dialect.wrapName(indexName)
-                : dialect.wrapName(schema) + Chars.DOT + dialect.wrapName(indexName);
+            : dialect.wrapName(schema) + Chars.DOT + dialect.wrapName(indexName);
         if (ifExists) {
             return BuilderUtils.link(dialect.getKeyword(Keywords.DROP), dialect.getKeyword(Keywords.INDEX),
-                    dialect.getKeyword(Keywords.IF), dialect.getKeyword(Keywords.EXISTS), name) + Chars.SEMI;
+                dialect.getKeyword(Keywords.IF), dialect.getKeyword(Keywords.EXISTS), name) + Chars.SEMI;
         } else {
             return BuilderUtils.link(dialect.getKeyword(Keywords.DROP), dialect.getKeyword(Keywords.INDEX), name)
-                    + Chars.SEMI;
+                + Chars.SEMI;
         }
     }
 
@@ -186,7 +186,7 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
      */
     @Override
     public String alterTable(String schema, String tableName, Column[] addColumns, Column[] modifyColumns,
-            Column[] dropColumns) {
+        Column[] dropColumns) {
         if (Lang.isEmpty(addColumns) && Lang.isEmpty(modifyColumns) && Lang.isEmpty(dropColumns)) {
             return "";
         }
@@ -262,9 +262,9 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
         String schema = table.getSchema();
         StringBuilder sql = new StringBuilder();
         String tableName = Lang.isEmpty(schema) ? dialect.wrapName(table.getName())
-                : dialect.wrapName(schema) + Chars.DOT + dialect.wrapName(table.getName());
+            : dialect.wrapName(schema) + Chars.DOT + dialect.wrapName(table.getName());
         BuilderUtils.link(sql, dialect.getKeyword(Keywords.CREATE), dialect.getKeyword(Keywords.TABLE), tableName,
-                Chars.PAREN_L);
+            Chars.PAREN_L);
         sql.append(Chars.NEW_LINE);
         BuilderUtils.link(sql, tableColumns(table));
         sql.append(Chars.NEW_LINE);
@@ -274,7 +274,7 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
             sql.append(Chars.SEMI).append(Chars.NEW_LINE);
             for (Index index : table.getIndexs()) {
                 sql.append(createIndex(schema, table.getName(), index.getName(), index.getColumns(), index.isUnique()))
-                        .append(Chars.NEW_LINE);
+                    .append(Chars.NEW_LINE);
             }
             sql.deleteCharAt(sql.length() - 1);
         } else {
@@ -295,7 +295,7 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
      */
     protected String columnComment(Column column) {
         return Lang.isEmpty(column.getRemark()) ? ""
-                : BuilderUtils.link(dialect.getKeyword(Keywords.COMMENT), "'" + column.getRemark() + "'");
+            : BuilderUtils.link(dialect.getKeyword(Keywords.COMMENT), "'" + column.getRemark() + "'");
     }
 
     /**
@@ -344,7 +344,7 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
         StringBuilder ddl = new StringBuilder(Chars.SPACE);
         for (Column column : columns) {
             BuilderUtils.link(ddl, dialect.getKeyword(Keywords.ADD), dialect.getKeyword(Keywords.COLUMN),
-                    column(column));
+                column(column));
             ddl.append(Chars.COMMA);
             ddl.append(Chars.NEW_LINE);
         }
@@ -362,7 +362,7 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
         StringBuilder ddl = new StringBuilder(Chars.SPACE);
         for (Column column : columns) {
             BuilderUtils.link(ddl, dialect.getKeyword(Keywords.MODIFY), dialect.getKeyword(Keywords.COLUMN),
-                    column(column));
+                column(column));
             ddl.append(Chars.COMMA);
             ddl.append(Chars.NEW_LINE);
         }
@@ -394,7 +394,7 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
         StringBuilder ddl = new StringBuilder(Chars.SPACE);
         for (String columnName : columnNames) {
             BuilderUtils.link(ddl, dialect.getKeyword(Keywords.DROP), dialect.getKeyword(Keywords.COLUMN),
-                    dialect.wrapName(columnName));
+                dialect.wrapName(columnName));
             ddl.append(Chars.COMMA);
             ddl.append(Chars.NEW_LINE);
         }
@@ -410,7 +410,7 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
      */
     protected String tableComment(Table table) {
         return Lang.isEmpty(table.getRemark()) ? ""
-                : BuilderUtils.link(dialect.getKeyword(Keywords.COMMENT), "'" + table.getRemark() + "'");
+            : BuilderUtils.link(dialect.getKeyword(Keywords.COMMENT), "'" + table.getRemark() + "'");
     }
 
     /**
@@ -438,7 +438,7 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
      */
     protected String column(Column column) {
         return BuilderUtils.link(dialect.wrapName(column.getName()), columnType(column), columnNotNull(column),
-                defaultValue(column), autoIncrement(column), columnComment(column));
+            defaultValue(column), autoIncrement(column), columnComment(column));
     }
 
     /**
@@ -457,7 +457,7 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
         result.deleteCharAt(result.length() - 1);
         result.append(Chars.PAREN_R);
         return BuilderUtils.link(dialect.getKeyword(Keywords.PRIMARY), dialect.getKeyword(Keywords.KEY),
-                result.toString());
+            result.toString());
     }
 
     /**
@@ -474,7 +474,7 @@ public abstract class AbstractDDLFeature<D extends Dialect> implements DDLFeatur
      * Gets the column type DDL.
      *
      * @param column the column
-     * @param extra  the extra
+     * @param extra the extra
      * @return the column type DDL
      */
     protected String columnType(Column column, String extra) {

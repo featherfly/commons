@@ -4,6 +4,7 @@ import cn.featherfly.common.db.dialect.ddl.SQLServerDDLFeature;
 import cn.featherfly.common.db.dialect.dml.SQLServerDMLFeature;
 import cn.featherfly.common.exception.NotImplementedException;
 import cn.featherfly.common.exception.UnsupportedException;
+import cn.featherfly.common.repository.id.IdGenerator;
 
 /**
  * SQLServer Dialect.
@@ -113,6 +114,14 @@ public class SQLServerDialect extends AbstractDialect {
     @Override
     public String getRightWrapSymbol() {
         return "]";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public IdGenerator getIdGenerator(String table, String column) {
+        return DEFAULT_ID_GENERATOR;
     }
 
 }

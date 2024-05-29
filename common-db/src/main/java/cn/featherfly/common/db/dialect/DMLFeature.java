@@ -34,7 +34,7 @@ public interface DMLFeature {
     /**
      * Builds the insert sql.
      *
-     * @param tableName  the table name
+     * @param tableName the table name
      * @param tableAlias the table alias
      * @return the delete from sql
      */
@@ -43,74 +43,173 @@ public interface DMLFeature {
     /**
      * Builds the insert sql.
      *
-     * @param tableName   the table name
+     * @param tableName the table name
      * @param columnNames the column names
+     * @param autoIncrement the auto increment
      * @return the string
      */
-    String insert(String tableName, String[] columnNames);
+    default String insert(String tableName, String[] columnNames, boolean autoIncrement) {
+        return insert(tableName, null, columnNames, autoIncrement);
+    }
+
+    /**
+     * Builds the insert sql.
+     *
+     * @param tableName the table name
+     * @param pkColumnName the pk column name
+     * @param columnNames the column names
+     * @param autoIncrement the auto increment
+     * @return the string
+     */
+    String insert(String tableName, String pkColumnName, String[] columnNames, boolean autoIncrement);
 
     /**
      * dialect for database supports batch insert.
      *
-     * @param tableName    the table name
-     * @param columnNames  the column names
+     * @param tableName the table name
+     * @param columnNames the column names
      * @param insertAmount the insert amount
+     * @param autoIncrement the auto increment
      * @return sql of batch insert
      */
-    String insertBatch(String tableName, String[] columnNames, int insertAmount);
+    default String insertBatch(String tableName, String[] columnNames, int insertAmount, boolean autoIncrement) {
+        return insertBatch(tableName, null, columnNames, insertAmount, autoIncrement);
+    }
+
+    /**
+     * dialect for database supports batch insert.
+     *
+     * @param tableName the table name
+     * @param pkColumnName the pk column name
+     * @param columnNames the column names
+     * @param insertAmount the insert amount
+     * @param autoIncrement the auto increment
+     * @return sql of batch insert
+     */
+    String insertBatch(String tableName, String pkColumnName, String[] columnNames, int insertAmount,
+        boolean autoIncrement);
 
     /**
      * Builds the upsert sql.
      *
-     * @param tableName    the table name
-     * @param columnNames  the column names
+     * @param tableName the table name
+     * @param columnNames the column names
      * @param uniqueColumn the unique column
+     * @param autoIncrement the auto increment
      * @return sql of upsert
      */
-    default String upsert(String tableName, String[] columnNames, String uniqueColumn) {
-        return upsert(tableName, columnNames, new String[] { uniqueColumn });
+    default String upsert(String tableName, String[] columnNames, String uniqueColumn, boolean autoIncrement) {
+        return upsert(tableName, columnNames, new String[] { uniqueColumn }, autoIncrement);
+    }
+
+    /**
+     * Builds the upsert sql.
+     *
+     * @param tableName the table name
+     * @param pkColumnName the pk column name
+     * @param columnNames the column names
+     * @param uniqueColumn the unique column
+     * @param autoIncrement the auto increment
+     * @return sql of upsert
+     */
+    default String upsert(String tableName, String pkColumnName, String[] columnNames, String uniqueColumn,
+        boolean autoIncrement) {
+        return upsert(tableName, pkColumnName, columnNames, new String[] { uniqueColumn }, autoIncrement);
     }
 
     /**
      * Builds the sql of upsert.
      *
-     * @param tableName     the table name
-     * @param columnNames   the column names
+     * @param tableName the table name
+     * @param columnNames the column names
      * @param uniqueColumns the unique columns
+     * @param autoIncrement the auto increment
      * @return sql of upsert
      */
-    default String upsert(String tableName, String[] columnNames, String[] uniqueColumns) {
-        return upsertBatch(tableName, columnNames, uniqueColumns, 1);
+    default String upsert(String tableName, String[] columnNames, String[] uniqueColumns, boolean autoIncrement) {
+        return upsertBatch(tableName, columnNames, uniqueColumns, 1, autoIncrement);
+    }
+
+    /**
+     * Builds the sql of upsert.
+     *
+     * @param tableName the table name
+     * @param pkColumnName the pk column name
+     * @param columnNames the column names
+     * @param uniqueColumns the unique columns
+     * @param autoIncrement the auto increment
+     * @return sql of upsert
+     */
+    default String upsert(String tableName, String pkColumnName, String[] columnNames, String[] uniqueColumns,
+        boolean autoIncrement) {
+        return upsertBatch(tableName, pkColumnName, columnNames, uniqueColumns, 1, autoIncrement);
     }
 
     /**
      * Builds the sql of batch upsert.
      *
-     * @param tableName    the table name
-     * @param columnNames  the column names
+     * @param tableName the table name
+     * @param columnNames the column names
      * @param uniqueColumn the unique column
      * @param insertAmount the insert amount
+     * @param autoIncrement the auto increment
      * @return sql of batch upsert
      */
-    default String upsertBatch(String tableName, String[] columnNames, String uniqueColumn, int insertAmount) {
-        return upsertBatch(tableName, columnNames, new String[] { uniqueColumn }, insertAmount);
+    default String upsertBatch(String tableName, String[] columnNames, String uniqueColumn, int insertAmount,
+        boolean autoIncrement) {
+        return upsertBatch(tableName, null, columnNames, uniqueColumn, insertAmount, autoIncrement);
     }
 
     /**
      * Builds the sql of batch upsert.
      *
-     * @param tableName     the table name
-     * @param columnNames   the column names
-     * @param uniqueColumns the unique columns
-     * @param insertAmount  the insert amount
+     * @param tableName the table name
+     * @param pkColumnName the pk column name
+     * @param columnNames the column names
+     * @param uniqueColumn the unique column
+     * @param insertAmount the insert amount
+     * @param autoIncrement the auto increment
      * @return sql of batch upsert
      */
-    String upsertBatch(String tableName, String[] columnNames, String[] uniqueColumns, int insertAmount);
+    default String upsertBatch(String tableName, String pkColumnName, String[] columnNames, String uniqueColumn,
+        int insertAmount, boolean autoIncrement) {
+        return upsertBatch(tableName, pkColumnName, columnNames, new String[] { uniqueColumn }, insertAmount,
+            autoIncrement);
+    }
+
+    /**
+     * Builds the sql of batch upsert.
+     *
+     * @param tableName the table name
+     * @param columnNames the column names
+     * @param uniqueColumns the unique columns
+     * @param insertAmount the insert amount
+     * @param autoIncrement the auto increment
+     * @return sql of batch upsert
+     */
+    default String upsertBatch(String tableName, String[] columnNames, String[] uniqueColumns, int insertAmount,
+        boolean autoIncrement) {
+        return upsertBatch(tableName, null, columnNames, uniqueColumns, insertAmount, autoIncrement);
+    }
+
+    /**
+     * Builds the sql of batch upsert.
+     *
+     * @param tableName the table name
+     * @param pkColumnName the pk column name
+     * @param columnNames the column names
+     * @param uniqueColumns the unique columns
+     * @param insertAmount the insert amount
+     * @param autoIncrement the auto increment
+     * @return sql of batch upsert
+     */
+    String upsertBatch(String tableName, String pkColumnName, String[] columnNames, String[] uniqueColumns,
+        int insertAmount, boolean autoIncrement);
 
     /**
      * build sql for column with aggregate function.
      *
-     * @param function   function
+     * @param function function
      * @param columnName columnName
      * @return sql of column part
      */
@@ -122,7 +221,7 @@ public interface DMLFeature {
      * build sql for column with aggregate function.
      *
      * @param aggregateFunction aggregateFunction
-     * @param columnName        columnName
+     * @param columnName columnName
      * @return sql of column part
      */
     default String column(AggregateFunction aggregateFunction, String columnName) {
@@ -143,8 +242,8 @@ public interface DMLFeature {
     /**
      * build sql for column with aggregate function.
      *
-     * @param tableAlias  tableAlias
-     * @param columnName  the column name
+     * @param tableAlias tableAlias
+     * @param columnName the column name
      * @param columnAlias the column alias
      * @return sql of column part
      */
@@ -167,15 +266,15 @@ public interface DMLFeature {
     /**
      * build sql for column with tableAlias and aggregate function.
      *
-     * @param function    the function
-     * @param distinct    the distinct
-     * @param tableAlias  tableAlias
-     * @param columnName  columnName
+     * @param function the function
+     * @param distinct the distinct
+     * @param tableAlias tableAlias
+     * @param columnName columnName
      * @param columnAlias the column alias
      * @return sql of column part
      */
     default String column(Function function, boolean distinct, String tableAlias, String columnName,
-            String columnAlias) {
+        String columnAlias) {
         if (function instanceof AggregateFunction) {
             return column(function, distinct, tableAlias, columnName, columnAlias);
         }
@@ -186,9 +285,9 @@ public interface DMLFeature {
     /**
      * build sql for column with tableAlias and aggregate function.
      *
-     * @param distinct    the distinct
-     * @param tableAlias  tableAlias
-     * @param columnName  columnName
+     * @param distinct the distinct
+     * @param tableAlias tableAlias
+     * @param columnName columnName
      * @param columnAlias the column alias
      * @return sql of column part
      */
@@ -200,13 +299,13 @@ public interface DMLFeature {
      * build sql for column with tableAlias and aggregate function.
      *
      * @param aggregateFunction aggregateFunction
-     * @param tableAlias        tableAlias
-     * @param columnName        columnName
-     * @param columnAlias       the column alias
+     * @param tableAlias tableAlias
+     * @param columnName columnName
+     * @param columnAlias the column alias
      * @return sql of column part
      */
     default String column(AggregateFunction aggregateFunction, String tableAlias, String columnName,
-            String columnAlias) {
+        String columnAlias) {
         return column(aggregateFunction, false, tableAlias, columnName, columnAlias);
     }
 
@@ -214,14 +313,14 @@ public interface DMLFeature {
      * build sql for column with tableAlias and aggregate function.
      *
      * @param aggregateFunction aggregateFunction
-     * @param distinct          the distinct
-     * @param tableAlias        tableAlias
-     * @param columnName        columnName
-     * @param columnAlias       the column alias
+     * @param distinct the distinct
+     * @param tableAlias tableAlias
+     * @param columnName columnName
+     * @param columnAlias the column alias
      * @return sql of column part
      */
     String column(AggregateFunction aggregateFunction, boolean distinct, String tableAlias, String columnName,
-            String columnAlias);
+        String columnAlias);
 
     //    /**
     //     * build sql for column with tableAlias and aggregate function.
@@ -262,7 +361,7 @@ public interface DMLFeature {
     /**
      * build sql for table with tableAlias.
      *
-     * @param tableName  tableName
+     * @param tableName tableName
      * @param tableAlias tableAlias
      * @return sql of table part
      */
@@ -272,8 +371,8 @@ public interface DMLFeature {
      * the compare expression.
      *
      * @param operator the operator
-     * @param name     the name
-     * @param values   the values
+     * @param name the name
+     * @param values the values
      * @return the compare expression
      */
     default String compareExpression(ComparisonOperator operator, String name, Object values) {
@@ -283,9 +382,9 @@ public interface DMLFeature {
     /**
      * the compare expression.
      *
-     * @param operator   the operator
+     * @param operator the operator
      * @param columnName the column name
-     * @param values     the values
+     * @param values the values
      * @param tableAlias the table alias
      * @return the compare expression
      */
@@ -294,9 +393,9 @@ public interface DMLFeature {
     /**
      * the compare expression.
      *
-     * @param operator      the operator
-     * @param name          the name
-     * @param values        the values
+     * @param operator the operator
+     * @param name the name
+     * @param values the values
      * @param matchStrategy the match strategy
      * @return the compare expression
      */
@@ -305,9 +404,9 @@ public interface DMLFeature {
     /**
      * the compare expression.
      *
-     * @param operator      the operator
-     * @param name          the name
-     * @param values        the values
+     * @param operator the operator
+     * @param name the name
+     * @param values the values
      * @param matchStrategy the match strategy
      * @return the compare expression
      */
@@ -316,21 +415,21 @@ public interface DMLFeature {
     /**
      * Gets the compare expression.
      *
-     * @param operator      the operator
-     * @param columnName    the column name
-     * @param values        the values
-     * @param tableAlias    the table alias
+     * @param operator the operator
+     * @param columnName the column name
+     * @param values the values
+     * @param tableAlias the table alias
      * @param matchStrategy the match strategy
      * @return the compare expression
      */
     String compareExpression(ComparisonOperator operator, String columnName, Object values, String tableAlias,
-            MatchStrategy matchStrategy);
+        MatchStrategy matchStrategy);
 
     /**
      * Gets the checks if is null or not is null expression.
      *
      * @param isNull the is null
-     * @param name   the name
+     * @param name the name
      * @return the checks if is null or not is null expression
      */
     String isNullOrNotIsNullExpression(boolean isNull, String name);
@@ -338,7 +437,7 @@ public interface DMLFeature {
     /**
      * Gets the checks if is null or not is null expression.
      *
-     * @param isNull     the is null
+     * @param isNull the is null
      * @param columnName the column name
      * @param tableAlias the table alias
      * @return the checks if is null or not is null expression
@@ -351,8 +450,8 @@ public interface DMLFeature {
      * Gets the between or not between expression.
      *
      * @param isBetween the is between
-     * @param name      the name
-     * @param value     the value
+     * @param name the name
+     * @param value the value
      * @return the between or not between expression
      */
     String betweenOrNotBetweenExpression(boolean isBetween, String name, Object value);
@@ -360,23 +459,23 @@ public interface DMLFeature {
     /**
      * Gets the between or not between expression.
      *
-     * @param isBetween  the is between
+     * @param isBetween the is between
      * @param columnName the column name
-     * @param values     the values
+     * @param values the values
      * @param tableAlias the table alias
      * @return the between or not between expression
      */
     default String betweenOrNotBetweenExpression(boolean isBetween, String columnName, Object values,
-            String tableAlias) {
+        String tableAlias) {
         return betweenOrNotBetweenExpression(isBetween, column(tableAlias, columnName), values);
     }
 
     /**
      * Gets the between or not between expression.
      *
-     * @param isBetween     the is between
-     * @param name          the name
-     * @param values        the values
+     * @param isBetween the is between
+     * @param name the name
+     * @param values the values
      * @param matchStrategy the match strategy
      * @return the between or not between expression
      */
@@ -385,15 +484,15 @@ public interface DMLFeature {
     /**
      * Gets the between or not between expression.
      *
-     * @param isBetween     the is between
-     * @param columnName    the column name
-     * @param values        the values
-     * @param tableAlias    the table alias
+     * @param isBetween the is between
+     * @param columnName the column name
+     * @param values the values
+     * @param tableAlias the table alias
      * @param matchStrategy the match strategy
      * @return the between or not between expression
      */
     default String betweenOrNotBetweenExpression(boolean isBetween, String columnName, Object values, String tableAlias,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         return betweenOrNotBetweenExpression(isBetween, column(tableAlias, columnName), values, matchStrategy);
     }
 
@@ -401,9 +500,9 @@ public interface DMLFeature {
      * Gets the between or not between expression.
      *
      * @param isBetween the is between
-     * @param name      the name
-     * @param min       the min
-     * @param max       the max
+     * @param name the name
+     * @param min the min
+     * @param max the max
      * @return the between or not between expression
      */
     String betweenOrNotBetweenExpression(boolean isBetween, String name, SqlElement min, SqlElement max);
@@ -411,21 +510,21 @@ public interface DMLFeature {
     /**
      * Gets the between or not between expression.
      *
-     * @param isBetween     the is between
-     * @param columnName    the column name
-     * @param min           the min
-     * @param max           the max
+     * @param isBetween the is between
+     * @param columnName the column name
+     * @param min the min
+     * @param max the max
      * @param matchStrategy the match strategy
      * @return the between or not between expression
      */
     String betweenOrNotBetweenExpression(boolean isBetween, String columnName, SqlElement min, SqlElement max,
-            MatchStrategy matchStrategy);
+        MatchStrategy matchStrategy);
 
     /**
      * Gets the in or not in expression.
      *
-     * @param isIn   the is in
-     * @param name   the name
+     * @param isIn the is in
+     * @param name the name
      * @param values the values
      * @return the in or not in expression
      */
@@ -434,9 +533,9 @@ public interface DMLFeature {
     /**
      * Gets the in or not in expression.
      *
-     * @param isIn       the is in
+     * @param isIn the is in
      * @param columnName the column name
-     * @param values     the values
+     * @param values the values
      * @param tableAlias the table alias
      * @return the in or not in expression
      */
@@ -447,9 +546,9 @@ public interface DMLFeature {
     /**
      * Gets the in or not in expression.
      *
-     * @param isIn          the is in
-     * @param name          the name
-     * @param values        the values
+     * @param isIn the is in
+     * @param name the name
+     * @param values the values
      * @param matchStrategy the match strategy
      * @return the in or not in expression
      */
@@ -458,15 +557,15 @@ public interface DMLFeature {
     /**
      * Gets the in or not in expression.
      *
-     * @param isIn          the is in
-     * @param columnName    the column name
-     * @param values        the values
-     * @param tableAlias    the table alias
+     * @param isIn the is in
+     * @param columnName the column name
+     * @param values the values
+     * @param tableAlias the table alias
      * @param matchStrategy the match strategy
      * @return the in or not in expression
      */
     default String inOrNotInExpression(boolean isIn, String columnName, Object values, String tableAlias,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         return inOrNotInExpression(isIn, column(tableAlias, columnName), values, matchStrategy);
     }
 }

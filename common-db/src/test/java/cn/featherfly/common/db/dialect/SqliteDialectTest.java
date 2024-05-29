@@ -68,9 +68,9 @@ public class SqliteDialectTest extends DialectTest {
         String sql = dialect.ddl().createTable(getTableModel());
         System.out.println(sql);
         String s = "CREATE TABLE `db_test`.`user` (\n" + " `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, -- id主键\n"
-                + " `name` TEXT(255) NOT NULL , -- name名称\n" + " `money` REAL(11,2) NOT NULL , -- money金额\n"
-                + " `state` INTEGER NOT NULL DEFAULT '0' , -- state状态：0禁用，1启用\n" + " `descp` TEXT(255) -- descp描述\n"
-                + " ) -- user用户表;";
+            + " `name` TEXT(255) NOT NULL , -- name名称\n" + " `money` REAL(11,2) NOT NULL , -- money金额\n"
+            + " `state` INTEGER NOT NULL DEFAULT '0' , -- state状态：0禁用，1启用\n" + " `descp` TEXT(255) -- descp描述\n"
+            + " ) -- user用户表;";
         assertEquals(sql, s);
     }
 
@@ -80,8 +80,8 @@ public class SqliteDialectTest extends DialectTest {
         String sql = dialect.ddl().createTable(getMultiKeyTableModel());
         System.out.println(sql);
         String s = "CREATE TABLE `user_role` (\n" + " `user_id` INTEGER NOT NULL, -- user id\n"
-                + " `role_id` INTEGER NOT NULL, -- role id\n" + " `descp` TEXT(255), -- descp描述\n"
-                + " PRIMARY KEY (`user_id`,`role_id`)\n" + " ) -- user role 关系表;";
+            + " `role_id` INTEGER NOT NULL, -- role id\n" + " `descp` TEXT(255), -- descp描述\n"
+            + " PRIMARY KEY (`user_id`,`role_id`)\n" + " ) -- user role 关系表;";
         assertEquals(sql, s);
     }
 
@@ -126,18 +126,19 @@ public class SqliteDialectTest extends DialectTest {
     void testBuildInsertBatchSql() {
         String sql = null;
 
-        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 1);
+        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 1, true);
         assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?)");
 
-        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 2);
+        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 2, true);
         assertEquals(sql, "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp` UNION SELECT ?, ?, ?");
-        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 3);
-        assertEquals(sql,
-                "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp` UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
 
-        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 5);
+        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 3, true);
         assertEquals(sql,
-                "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp` UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
+            "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp` UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
+
+        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 5, true);
+        assertEquals(sql,
+            "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `descp` UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
 
     }
 
@@ -182,10 +183,10 @@ public class SqliteDialectTest extends DialectTest {
     @Override
     @Test
     void testUpsert() {
-        String sql = dialect.dml().upsert("user", new String[] { "id", "name", "age" }, "id");
+        String sql = dialect.dml().upsert("user", new String[] { "id", "name", "age" }, "id", true);
         System.out.println(sql);
         assertEquals(sql,
-                "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET `name`=EXCLUDED.`name`, `age`=EXCLUDED.`age`");
+            "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET `name`=EXCLUDED.`name`, `age`=EXCLUDED.`age`");
     }
 
     /**
@@ -194,10 +195,10 @@ public class SqliteDialectTest extends DialectTest {
     @Override
     @Test
     void testUpsertBatch() {
-        String sql = dialect.dml().upsertBatch("user", new String[] { "id", "name", "age" }, "id", 2);
+        String sql = dialect.dml().upsertBatch("user", new String[] { "id", "name", "age" }, "id", 2, true);
         System.out.println(sql);
         assertEquals(sql,
-                "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `age` UNION SELECT ?, ?, ? ON CONFLICT (id) DO UPDATE SET `name`=EXCLUDED.`name`, `age`=EXCLUDED.`age`");
+            "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `age` UNION SELECT ?, ?, ? ON CONFLICT (id) DO UPDATE SET `name`=EXCLUDED.`name`, `age`=EXCLUDED.`age`");
     }
 
     /**
@@ -206,7 +207,7 @@ public class SqliteDialectTest extends DialectTest {
     @Test
     @Override
     void testInsert() {
-        String sql = dialect.dml().insert("user", new String[] { "id", "name", "age" });
+        String sql = dialect.dml().insert("user", new String[] { "id", "name", "age" }, true);
         System.out.println(sql);
         assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?)");
     }
@@ -217,9 +218,17 @@ public class SqliteDialectTest extends DialectTest {
     @Test
     @Override
     void testInsertBatch() {
-        String sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "age" }, 2);
+        String sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "age" }, 2, true);
         System.out.println(sql);
         assertEquals(sql, "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `age` UNION SELECT ?, ?, ?");
+        //INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `age` UNION SELECT ?, ?, ?
+        //INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `age` UNION SELECT ?, ?, ?
+
+        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "age" }, 3, true);
+        System.out.println(sql);
+        assertEquals(sql,
+            "INSERT INTO `user` SELECT ? AS `id`, ? AS `name`, ? AS `age` UNION SELECT ?, ?, ? UNION SELECT ?, ?, ?");
+
     }
 
     /**

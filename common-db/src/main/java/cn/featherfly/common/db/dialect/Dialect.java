@@ -13,6 +13,7 @@ import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
 import cn.featherfly.common.operator.Function;
 import cn.featherfly.common.operator.LogicOperator;
 import cn.featherfly.common.operator.SortOperator;
+import cn.featherfly.common.repository.id.IdGenerator;
 
 /**
  * database dialect.
@@ -253,8 +254,8 @@ public interface Dialect {
     /**
      * get converted keywords.
      *
-     * @see #getKeywords()
      * @return sql key words
+     * @see #getKeywords()
      */
     default Keyworld keywords() {
         return getKeywords();
@@ -519,6 +520,15 @@ public interface Dialect {
     default String getRightWrapSymbol() {
         return getWrapSymbol();
     }
+
+    /**
+     * Gets the default id generator.
+     *
+     * @param table the table
+     * @param column the column
+     * @return the id generator
+     */
+    IdGenerator getIdGenerator(String table, String column);
 
     /**
      * The Class Keyworld.

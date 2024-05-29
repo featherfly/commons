@@ -26,6 +26,7 @@ import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
  * abstract DML feature.
  *
  * @author zhongj
+ * @param <D> the generic type
  */
 public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeature {
 
@@ -42,66 +43,70 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
         this.dialect = dialect;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String deleteFrom(String tableName, String tableAlias) {
         return BuilderUtils.link(dialect.getKeyword(Keywords.DELETE), dialect.getKeyword(Keywords.FROM),
-                dialect.wrapName(tableName), Lang.isEmpty(tableAlias) ? null : dialect.wrapName(tableAlias));
-    }
-
-    @Override
-    public String insert(String tableName, String[] columnNames) {
-        String sql = BuilderUtils.link(dialect.getKeyword(Keywords.INSERT), dialect.getKeyword(Keywords.INTO),
-                dialect.wrapName(tableName), Chars.PAREN_L);
-        StringBuilder names = new StringBuilder();
-        for (String column : columnNames) {
-            BuilderUtils.link(names, dialect.wrapName(column) + Chars.COMMA);
-        }
-        names.deleteCharAt(names.length() - 1).append(Chars.PAREN_R);
-        sql += names.toString();
-        sql = BuilderUtils.link(sql, dialect.getKeyword(Keywords.VALUES), Chars.PAREN_L);
-        StringBuilder ques = new StringBuilder();
-        for (int i = 0; i < columnNames.length; i++) {
-            BuilderUtils.link(ques, Chars.QUESTION + Chars.COMMA);
-        }
-        ques.deleteCharAt(ques.length() - 1).append(Chars.PAREN_R);
-        sql += ques.toString();
-        return sql;
-    }
-
-    @Override
-    public String insertBatch(String tableName, String[] columnNames, int insertAmount) {
-        String sql = BuilderUtils.link(dialect.getKeyword(Keywords.INSERT), dialect.getKeyword(Keywords.INTO),
-                dialect.wrapName(tableName), Chars.PAREN_L);
-        StringBuilder names = new StringBuilder();
-        for (String column : columnNames) {
-            BuilderUtils.link(names, dialect.wrapName(column) + Chars.COMMA);
-        }
-        names.deleteCharAt(names.length() - 1).append(Chars.PAREN_R);
-        sql += names.toString();
-        sql = BuilderUtils.link(sql, dialect.getKeyword(Keywords.VALUES), Chars.PAREN_L);
-        StringBuilder ques = new StringBuilder();
-        for (int i = 0; i < columnNames.length; i++) {
-            BuilderUtils.link(ques, Chars.QUESTION + Chars.COMMA);
-        }
-        ques.deleteCharAt(ques.length() - 1).append(Chars.PAREN_R);
-        sql += ques.toString();
-        for (int index = 1; index < insertAmount; index++) {
-            ques = new StringBuilder();
-            for (int j = 0; j < columnNames.length; j++) {
-                BuilderUtils.link(ques, Chars.QUESTION + Chars.COMMA);
-            }
-            ques.deleteCharAt(ques.length() - 1).append(Chars.PAREN_R);
-            sql += Chars.COMMA + Chars.PAREN_L + ques.toString();
-        }
-        return sql;
+            dialect.wrapName(tableName), Lang.isEmpty(tableAlias) ? null : dialect.wrapName(tableAlias));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String upsertBatch(String tableName, String[] columnNames, String[] uniqueColumns, int insertAmount) {
-        String sql = insertBatch(tableName, columnNames, insertAmount);
+    public String insert(String tableName, String pkColumnName, String[] columnNames, boolean autoIncrement) {
+        StringBuilder sql = new StringBuilder();
+        BuilderUtils.link(sql, dialect.getKeyword(Keywords.INSERT), dialect.getKeyword(Keywords.INTO),
+            dialect.wrapName(tableName), Chars.PAREN_L);
+        if (Lang.isNotEmpty(columnNames)) {
+            sql.append(dialect.wrapName(columnNames[0])).append(Chars.COMMA);
+            for (int i = 1; i < columnNames.length; i++) {
+                sql.append(Chars.SPACE).append(dialect.wrapName(columnNames[i])).append(Chars.COMMA);
+            }
+            sql.deleteCharAt(sql.length() - 1).append(Chars.PAREN_R);
+        }
+        BuilderUtils.link(sql, dialect.getKeyword(Keywords.VALUES), Chars.PAREN_L);
+        insertValues(sql, tableName, pkColumnName, columnNames, autoIncrement);
+        sql.deleteCharAt(sql.length() - 1).append(Chars.PAREN_R);
+        return sql.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String insertBatch(String tableName, String pkColumnName, String[] columnNames, int insertAmount,
+        boolean autoIncrement) {
+        StringBuilder sql = new StringBuilder();
+        BuilderUtils.link(sql, dialect.getKeyword(Keywords.INSERT), dialect.getKeyword(Keywords.INTO),
+            dialect.wrapName(tableName), Chars.PAREN_L);
+        if (Lang.isNotEmpty(columnNames)) {
+            sql.append(dialect.wrapName(columnNames[0])).append(Chars.COMMA);
+            for (int i = 1; i < columnNames.length; i++) {
+                sql.append(Chars.SPACE).append(dialect.wrapName(columnNames[i])).append(Chars.COMMA);
+            }
+            sql.deleteCharAt(sql.length() - 1).append(Chars.PAREN_R);
+        }
+        BuilderUtils.link(sql, dialect.getKeyword(Keywords.VALUES), Chars.PAREN_L);
+        insertValues(sql, tableName, pkColumnName, columnNames, autoIncrement);
+        sql.deleteCharAt(sql.length() - 1).append(Chars.PAREN_R);
+        for (int index = 1; index < insertAmount; index++) {
+            sql.append(Chars.COMMA).append(Chars.PAREN_L);
+            insertValues(sql, tableName, pkColumnName, columnNames, autoIncrement);
+            sql.deleteCharAt(sql.length() - 1).append(Chars.PAREN_R);
+        }
+        return sql.toString();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String upsertBatch(String tableName, String pkColumnName, String[] columnNames, String[] uniqueColumns,
+        int insertAmount, boolean autoIncrement) {
+        String sql = insertBatch(tableName, pkColumnName, columnNames, insertAmount, autoIncrement);
         StringBuilder conflict = new StringBuilder();
         List<String> columns = ArrayUtils.toList(columnNames);
         for (String uc : uniqueColumns) {
@@ -126,9 +131,12 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
         return BuilderUtils.link(sql, columnsSql.toString());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String column(AggregateFunction aggregateFunction, boolean distinct, String tableAlias, String columnName,
-            String columnAlias) {
+        String columnAlias) {
         String column = columnName;
         if (!Chars.STAR.equals(columnName)) {
             column = dialect.wrapName(dialect.convertTableOrColumnName(columnName));
@@ -148,6 +156,9 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
         return column;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String table(String tableName, String tableAlias) {
         String result = dialect.wrapName(dialect.convertTableOrColumnName(tableName));
@@ -157,19 +168,25 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String compareExpression(ComparisonOperator operator, String columnName, Object values, String tableAlias) {
         return compareExpression(operator, column(tableAlias, columnName), values);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String compareExpression(ComparisonOperator comparisonOperator, String name, Object values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         if (ComparisonOperator.IN == comparisonOperator || ComparisonOperator.NI == comparisonOperator) {
             return inOrNotInExpression(comparisonOperator == ComparisonOperator.IN, name, values, matchStrategy);
         } else if (ComparisonOperator.BA == comparisonOperator || ComparisonOperator.NBA == comparisonOperator) {
             return betweenOrNotBetweenExpression(comparisonOperator == ComparisonOperator.BA, name, values,
-                    matchStrategy);
+                matchStrategy);
         } else {
             if (ComparisonOperator.ISN == comparisonOperator) {
                 return isNullOrNotIsNullExpression(values == null || (Boolean) values, name);
@@ -181,14 +198,17 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String compareExpression(ComparisonOperator comparisonOperator, String name, SqlElement values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         switch (comparisonOperator) {
             case ISN:
             case INN:
                 throw new DialectException(
-                        Strings.format("unspport for {} with {} ", values.getClass().getName(), comparisonOperator));
+                    Strings.format("unspport for {} with {} ", values.getClass().getName(), comparisonOperator));
             default:
                 break;
         }
@@ -196,18 +216,42 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
         return compareExpression0(comparisonOperator, name, values, matchStrategy);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String compareExpression(ComparisonOperator operator, String columnName, Object values, String tableAlias,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         return compareExpression(operator, column(tableAlias, columnName), values, matchStrategy);
     }
 
+    /**
+     * Compare expression 0.
+     *
+     * @param comparisonOperator the comparison operator
+     * @param columnName the column name
+     * @param values the values
+     * @param matchStrategy the match strategy
+     * @return the string
+     */
     protected abstract String compareExpression0(ComparisonOperator comparisonOperator, String columnName,
-            Object values, MatchStrategy matchStrategy);
+        Object values, MatchStrategy matchStrategy);
 
+    /**
+     * Compare expression 0.
+     *
+     * @param comparisonOperator the comparison operator
+     * @param columnName the column name
+     * @param values the values
+     * @param matchStrategy the match strategy
+     * @return the string
+     */
     protected abstract String compareExpression0(ComparisonOperator comparisonOperator, String columnName,
-            SqlElement values, MatchStrategy matchStrategy);
+        SqlElement values, MatchStrategy matchStrategy);
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String isNullOrNotIsNullExpression(boolean isNull, String name) {
         StringBuilder condition = new StringBuilder();
@@ -220,30 +264,39 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
         return condition.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String betweenOrNotBetweenExpression(boolean isBetween, String name, Object value) {
         StringBuilder condition = new StringBuilder();
         condition.append(name).append(Chars.SPACE) //
-                .append(!isBetween ? dialect.getKeyword(Keywords.NOT) + Chars.SPACE : "") //
-                .append(dialect.getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
-                .append(Chars.QUESTION).append(Chars.SPACE) //
-                .append(dialect.getKeyword(Keywords.AND)).append(Chars.SPACE) //
-                .append(Chars.QUESTION);
+            .append(!isBetween ? dialect.getKeyword(Keywords.NOT) + Chars.SPACE : "") //
+            .append(dialect.getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
+            .append(Chars.QUESTION).append(Chars.SPACE) //
+            .append(dialect.getKeyword(Keywords.AND)).append(Chars.SPACE) //
+            .append(Chars.QUESTION);
         return condition.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String betweenOrNotBetweenExpression(boolean isBetween, String name, SqlElement min, SqlElement max) {
         StringBuilder condition = new StringBuilder();
         condition.append(name).append(Chars.SPACE) //
-                .append(!isBetween ? dialect.getKeyword(Keywords.NOT) + Chars.SPACE : "") //
-                .append(dialect.getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
-                .append(min.toSql()).append(Chars.SPACE) //
-                .append(dialect.getKeyword(Keywords.AND)).append(Chars.SPACE) //
-                .append(max.toSql());
+            .append(!isBetween ? dialect.getKeyword(Keywords.NOT) + Chars.SPACE : "") //
+            .append(dialect.getKeyword(Keywords.BETWEEN)).append(Chars.SPACE) //
+            .append(min.toSql()).append(Chars.SPACE) //
+            .append(dialect.getKeyword(Keywords.AND)).append(Chars.SPACE) //
+            .append(max.toSql());
         return condition.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String inOrNotInExpression(boolean isIn, String name, Object values) {
         StringBuilder condition = new StringBuilder();
@@ -256,7 +309,7 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
             }
         }
         condition.append(name).append(Chars.SPACE)
-                .append(isIn ? dialect.getKeywords().in() : dialect.getKeywords().notIn()).append(" (");
+            .append(isIn ? dialect.getKeywords().in() : dialect.getKeywords().notIn()).append(" (");
         for (int i = 0; i < length; i++) {
             if (i > 0) {
                 condition.append(Chars.COMMA);
@@ -266,4 +319,60 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
         condition.append(")");
         return condition.toString();
     }
+
+    // ****************************************************************************************************************
+    //
+    // ****************************************************************************************************************
+
+    /**
+     * Insert values.
+     *
+     * @param ques the ques
+     * @param tableName the table name
+     * @param pkColumnName the pk column name
+     * @param columnNames the column names
+     * @param autoIncrement the auto increment
+     */
+    protected void insertValues(StringBuilder ques, String tableName, String pkColumnName, String[] columnNames,
+        boolean autoIncrement) {
+        if (Lang.isEmpty(columnNames)) {
+            return;
+        }
+        if (pkColumnName == null) {
+            ques.append(Chars.QUESTION).append(Chars.COMMA);
+            for (int i = 1; i < columnNames.length; i++) {
+                ques.append(Chars.SPACE).append(Chars.QUESTION).append(Chars.COMMA);
+            }
+            ques.deleteCharAt(ques.length() - 1).append(Chars.PAREN_R);
+        } else {
+            ques.append(getPkColumnValueForInsert(tableName, pkColumnName, columnNames[0], autoIncrement))
+                .append(Chars.COMMA);
+            for (int i = 1; i < columnNames.length; i++) {
+                ques.append(Chars.SPACE)
+                    .append(getPkColumnValueForInsert(tableName, pkColumnName, columnNames[i], autoIncrement))
+                    .append(Chars.COMMA);
+            }
+            ques.deleteCharAt(ques.length() - 1).append(Chars.PAREN_R);
+        }
+    }
+
+    private String getPkColumnValueForInsert(String tableName, String pkColumnName, String columnName,
+        boolean autoIncrement) {
+        if (pkColumnName.equals(columnName)) {
+            return preparePrimaryKeyColumnForInsert(tableName, columnName, autoIncrement);
+        } else {
+            return Chars.QUESTION;
+        }
+    }
+
+    /**
+     * Prepare primary key column for insert.
+     *
+     * @param tableName the table name
+     * @param columnName the column name
+     * @param autoIncrement the auto increment
+     * @return the string
+     */
+    protected abstract String preparePrimaryKeyColumnForInsert(String tableName, String columnName,
+        boolean autoIncrement);
 }

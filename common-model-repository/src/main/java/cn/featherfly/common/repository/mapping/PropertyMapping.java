@@ -52,7 +52,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
 
     private Class<?> propertyType;
 
-    private boolean primaryKey;
+    private PrimaryKey primaryKey;
 
     private String defaultValue;
 
@@ -72,6 +72,8 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
     private boolean updatable = true;
 
     private boolean unique;
+
+    private boolean ignoreAtInsert;
 
     private Mode mode = Mode.SINGLE;
 
@@ -282,7 +284,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
     }
 
     /**
-     * get getter value
+     * get getter value.
      *
      * @return getter
      */
@@ -291,7 +293,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
     }
 
     /**
-     * set getter value
+     * set getter value.
      *
      * @param getter getter
      */
@@ -300,7 +302,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
     }
 
     /**
-     * get setter value
+     * get setter value.
      *
      * @return setter
      */
@@ -309,7 +311,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
     }
 
     /**
-     * set setter value
+     * set setter value.
      *
      * @param setter setter
      */
@@ -341,7 +343,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
      * @return 返回primaryKey
      */
     public boolean isPrimaryKey() {
-        return primaryKey;
+        return primaryKey != null;
     }
 
     /**
@@ -349,8 +351,17 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
      *
      * @param primaryKey 设置primaryKey
      */
-    public void setPrimaryKey(boolean primaryKey) {
+    public void setPrimaryKey(PrimaryKey primaryKey) {
         this.primaryKey = primaryKey;
+    }
+
+    /**
+     * Gets the primary key.
+     *
+     * @return the primary key
+     */
+    public PrimaryKey getPrimaryKey() {
+        return primaryKey;
     }
 
     /**
@@ -520,6 +531,24 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
         propertyMapping.parent = (P) this;
         propertyMappings.put(propertyMapping.getRepositoryFieldName(), propertyMapping);
         return (P) this;
+    }
+
+    /**
+     * Checks if is ignore at insert.
+     *
+     * @return true, if is ignore at insert
+     */
+    public boolean isIgnoreAtInsert() {
+        return ignoreAtInsert;
+    }
+
+    /**
+     * Sets the ignore at insert.
+     *
+     * @param ignoreAtInsert the new ignore at insert
+     */
+    public void setIgnoreAtInsert(boolean ignoreAtInsert) {
+        this.ignoreAtInsert = ignoreAtInsert;
     }
 
     /**

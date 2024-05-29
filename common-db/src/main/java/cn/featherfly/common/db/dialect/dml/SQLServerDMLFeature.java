@@ -8,6 +8,7 @@
  */
 package cn.featherfly.common.db.dialect.dml;
 
+import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.builder.model.SqlElement;
 import cn.featherfly.common.db.dialect.AbstractDMLFeature;
 import cn.featherfly.common.db.dialect.SQLServerDialect;
@@ -35,7 +36,8 @@ public class SQLServerDMLFeature extends AbstractDMLFeature<SQLServerDialect> {
      * {@inheritDoc}
      */
     @Override
-    public String upsertBatch(String tableName, String[] columnNames, String[] uniqueColumns, int insertAmount) {
+    public String upsertBatch(String tableName, String pkColumnName, String[] columnNames, String[] uniqueColumns,
+        int insertAmount, boolean autoIncrement) {
         // NOIMPL 未实现
         throw new NotImplementedException();
     }
@@ -54,7 +56,7 @@ public class SQLServerDMLFeature extends AbstractDMLFeature<SQLServerDialect> {
      */
     @Override
     public String betweenOrNotBetweenExpression(boolean isBetween, String name, Object values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         // NOIMPL 未实现
         throw new NotImplementedException();
     }
@@ -64,7 +66,7 @@ public class SQLServerDMLFeature extends AbstractDMLFeature<SQLServerDialect> {
      */
     @Override
     public String betweenOrNotBetweenExpression(boolean isBetween, String name, SqlElement min, SqlElement max,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         // NOIMPL 未实现
         throw new NotImplementedException();
     }
@@ -74,16 +76,24 @@ public class SQLServerDMLFeature extends AbstractDMLFeature<SQLServerDialect> {
      */
     @Override
     protected String compareExpression0(ComparisonOperator comparisonOperator, String name, Object values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         // NOIMPL 未实现
         throw new NotImplementedException();
     }
 
     @Override
     protected String compareExpression0(ComparisonOperator comparisonOperator, String name, SqlElement values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         // NOIMPL 未实现
         throw new NotImplementedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String preparePrimaryKeyColumnForInsert(String tableName, String columnName, boolean autoIncrement) {
+        return Chars.QUESTION;
     }
 
 }

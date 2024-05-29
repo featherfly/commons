@@ -39,7 +39,7 @@ public class OracleDMLFeature extends AbstractDMLFeature<OracleDialect> {
      */
     @Override
     public String betweenOrNotBetweenExpression(boolean isBetween, String name, Object values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         //        boolean caseSensitive = false;
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
@@ -59,7 +59,7 @@ public class OracleDMLFeature extends AbstractDMLFeature<OracleDialect> {
      */
     @Override
     public String betweenOrNotBetweenExpression(boolean isBetween, String name, SqlElement min, SqlElement max,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         //        boolean caseSensitive = false;
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
@@ -79,7 +79,7 @@ public class OracleDMLFeature extends AbstractDMLFeature<OracleDialect> {
      */
     @Override
     protected String compareExpression0(ComparisonOperator comparisonOperator, String name, Object values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         switch (comparisonOperator) {
             case EQ:
             case NE:
@@ -113,13 +113,13 @@ public class OracleDMLFeature extends AbstractDMLFeature<OracleDialect> {
                 break;
         }
         condition.append(Chars.SPACE).append(dialect.getOperator(comparisonOperator)).append(Chars.SPACE)
-                .append(Chars.QUESTION);
+            .append(Chars.QUESTION);
         return condition.toString();
     }
 
     @Override
     protected String compareExpression0(ComparisonOperator comparisonOperator, String name, SqlElement values,
-            MatchStrategy matchStrategy) {
+        MatchStrategy matchStrategy) {
         StringBuilder condition = new StringBuilder();
         switch (matchStrategy) {
             case CASE_INSENSITIVE:
@@ -133,7 +133,7 @@ public class OracleDMLFeature extends AbstractDMLFeature<OracleDialect> {
                 break;
         }
         condition.append(Chars.SPACE).append(dialect.getOperator(comparisonOperator)).append(Chars.SPACE)
-                .append(values.toSql());
+            .append(values.toSql());
         return condition.toString();
 
     }
@@ -145,6 +145,14 @@ public class OracleDMLFeature extends AbstractDMLFeature<OracleDialect> {
     public String inOrNotInExpression(boolean isIn, String name, Object values, MatchStrategy matchStrategy) {
         // NOIMPL 未实现
         throw new NotImplementedException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String preparePrimaryKeyColumnForInsert(String tableName, String columnName, boolean autoIncrement) {
+        return Chars.QUESTION;
     }
 
 }

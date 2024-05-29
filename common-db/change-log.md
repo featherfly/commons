@@ -8,6 +8,7 @@
 5. 重构Dialect,把ddl和dml相关的操作都分类放入，即dialect.ddl().drop..., dialect.dml().insert..
 6. ClassMappingUtils加入一些列getXxxSqlAndMappings方法
 7. CompatibleJdbcMappingFactory基于ProprerAccessor实现了PropertyMapping的setter,getter
+8. 加入IdGenerator相关的逻辑（dialect,mapping）
 
 # 0.6.0 2024-05-05
 

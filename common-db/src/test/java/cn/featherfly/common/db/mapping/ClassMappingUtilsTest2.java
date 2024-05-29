@@ -45,6 +45,10 @@ public class ClassMappingUtilsTest2 extends JdbcTestBase {
         assertEquals(t.get0(), "DELETE FROM `user_role` WHERE `user_id` = ? AND `role_id` = ?");
         assertEquals(t.get1().get(1).getPropertyFullName(), "user.id");
         assertEquals(t.get1().get(2).getPropertyFullName(), "role.id");
+
+        //DELETE FROM `user_role` WHERE `user_id` = ? AND `role_id` = ?
+        //DELETE FROM `user_role` WHERE `user_id` = ? AND `role_id` = ? AND `descp` = ?]
+
     }
 
     @Test

@@ -12,12 +12,12 @@ public interface Page {
      *
      * @return 每页数量
      */
-    Integer getSize();
+    int getSize();
 
     /**
      * 获取当前页数（第几页）.
      *
      * @return 当前页数（第几页）
      */
-    Integer getNumber();
+    int getNumber();
 }

@@ -24,7 +24,7 @@ public class SimplePaginationResults<E> extends SimplePagination implements Pagi
 
     /**
      * @param offset offset
-     * @param limit  limit
+     * @param limit limit
      */
     public SimplePaginationResults(int offset, int limit) {
         super(offset, limit);
@@ -46,7 +46,7 @@ public class SimplePaginationResults<E> extends SimplePagination implements Pagi
      * @return resultSize
      */
     @Override
-    public Integer getResultSize() {
+    public int getResultSize() {
         if (pageResults != null) {
             return pageResults.size();
         } else {

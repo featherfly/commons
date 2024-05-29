@@ -26,18 +26,18 @@ public class SimplePagination implements Pagination {
      * Instantiates a new simple pagination.
      *
      * @param offset offset
-     * @param limit  limit
+     * @param limit limit
      */
     public SimplePagination(int offset, int limit) {
         size = limit;
         number = (offset + limit) / limit;
     }
 
-    private Integer total;
+    private long total;
 
-    private Integer size;
+    private int size;
 
-    private Integer number;
+    private int number;
 
     /**
      * 设置总数 .
@@ -45,7 +45,7 @@ public class SimplePagination implements Pagination {
      * @param total 总数
      * @return the simple pagination
      */
-    public SimplePagination setTotal(Integer total) {
+    public SimplePagination setTotal(long total) {
         this.total = total;
         return this;
     }
@@ -54,7 +54,7 @@ public class SimplePagination implements Pagination {
      * {@inheritDoc}
      */
     @Override
-    public Integer getTotalPage() {
+    public long getTotalPage() {
         return (getTotal() + size - 1) / size;
     }
 
@@ -62,7 +62,7 @@ public class SimplePagination implements Pagination {
      * {@inheritDoc}
      */
     @Override
-    public Integer getTotal() {
+    public long getTotal() {
         return total;
     }
 
@@ -72,7 +72,7 @@ public class SimplePagination implements Pagination {
      * @param size 每页数量
      * @return the simple pagination
      */
-    public SimplePagination setSize(Integer size) {
+    public SimplePagination setSize(int size) {
         this.size = size;
         return this;
     }
@@ -83,7 +83,7 @@ public class SimplePagination implements Pagination {
      * @param number 当前页数（第几页）
      * @return the simple pagination
      */
-    public SimplePagination setNumber(Integer number) {
+    public SimplePagination setNumber(int number) {
         this.number = number;
         return this;
     }
@@ -92,7 +92,7 @@ public class SimplePagination implements Pagination {
      * {@inheritDoc}
      */
     @Override
-    public Integer getSize() {
+    public int getSize() {
         return size;
     }
 
@@ -100,7 +100,7 @@ public class SimplePagination implements Pagination {
      * {@inheritDoc}
      */
     @Override
-    public Integer getNumber() {
+    public int getNumber() {
         return number;
     }
 }

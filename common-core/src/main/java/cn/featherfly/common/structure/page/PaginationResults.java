@@ -30,5 +30,5 @@ public interface PaginationResults<E> extends Pagination {
      *
      * @return 结果数量
      */
-    Integer getResultSize();
+    int getResultSize();
 }

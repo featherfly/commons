@@ -12,14 +12,14 @@ public interface Pagination extends Page {
      *
      * @return 总页数
      */
-    Integer getTotalPage();
+    long getTotalPage();
 
     /**
      * 获取总数.
      *
      * @return 总数
      */
-    Integer getTotal();
+    long getTotal();
 
     //    /**
     //     * <p>

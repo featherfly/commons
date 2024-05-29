@@ -10,22 +10,22 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
  */
 public class Limit {
 
-    private Integer offset;
+    private int offset;
 
-    private Integer limit;
+    private int limit;
 
     /**
      * @param offset offset
-     * @param limit  limit
+     * @param limit limit
      */
-    public Limit(Integer offset, Integer limit) {
+    public Limit(Integer offset, int limit) {
         super();
         if (offset == null) {
             this.offset = 0;
         } else {
             this.offset = offset;
         }
-        AssertIllegalArgument.isNotNull(limit, "Integer limit");
+        AssertIllegalArgument.isGe(limit, 0, "limit");
         this.limit = limit;
     }
 
@@ -35,14 +35,12 @@ public class Limit {
     public Limit(Page page) {
         super();
         AssertIllegalArgument.isNotNull(page, "Page page");
-        Integer pageNumber = page.getNumber();
-        Integer pageSize = page.getSize();
-        if (pageNumber == null) {
-            pageNumber = 1;
-        } else if (pageNumber < 1) {
+        int pageNumber = page.getNumber();
+        int pageSize = page.getSize();
+        if (pageNumber < 1) {
             pageNumber = 1;
         }
-        AssertIllegalArgument.isNotNull(pageSize, "page.pageSize");
+        AssertIllegalArgument.isGt(pageSize, 0, "page.pageSize");
         limit = pageSize;
         offset = (pageNumber - 1) * pageSize;
     }
@@ -52,7 +50,7 @@ public class Limit {
      *
      * @return offset
      */
-    public Integer getOffset() {
+    public int getOffset() {
         return offset;
     }
 
@@ -61,7 +59,7 @@ public class Limit {
      *
      * @return limit
      */
-    public Integer getLimit() {
+    public int getLimit() {
         return limit;
     }
 }

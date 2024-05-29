@@ -8,9 +8,9 @@ package cn.featherfly.common.structure.page;
  */
 public class SimplePage implements Page {
 
-    private Integer size;
+    private int size;
 
-    private Integer number;
+    private int number;
 
     /**
      * Instantiates a new simple page.
@@ -22,10 +22,10 @@ public class SimplePage implements Page {
     /**
      * Instantiates a new simple page.
      *
-     * @param size   the size
+     * @param size the size
      * @param number the number
      */
-    public SimplePage(Integer size, Integer number) {
+    public SimplePage(int size, int number) {
         super();
         this.size = size;
         this.number = number;
@@ -37,7 +37,7 @@ public class SimplePage implements Page {
      * @param size size
      * @return the simple page
      */
-    public SimplePage setSize(Integer size) {
+    public SimplePage setSize(int size) {
         this.size = size;
         return this;
     }
@@ -48,7 +48,7 @@ public class SimplePage implements Page {
      * @param number number
      * @return the simple page
      */
-    public SimplePage setNumber(Integer number) {
+    public SimplePage setNumber(int number) {
         this.number = number;
         return this;
     }
@@ -57,7 +57,7 @@ public class SimplePage implements Page {
      * {@inheritDoc}
      */
     @Override
-    public Integer getSize() {
+    public int getSize() {
         return size;
     }
 
@@ -65,7 +65,7 @@ public class SimplePage implements Page {
      * {@inheritDoc}
      */
     @Override
-    public Integer getNumber() {
+    public int getNumber() {
         return number;
     }
 }

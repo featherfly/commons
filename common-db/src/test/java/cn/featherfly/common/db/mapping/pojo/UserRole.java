@@ -4,6 +4,8 @@ package cn.featherfly.common.db.mapping.pojo;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import cn.featherfly.common.repository.id.IdGeneratorManager;
+
 /**
  * UserRole
  *
@@ -11,11 +13,11 @@ import javax.persistence.Id;
  */
 public class UserRole {
     @Id
-    @GeneratedValue(generator = "assign")
+    @GeneratedValue(generator = IdGeneratorManager.ASSIGN)
     private Integer userId;
 
     @Id
-    @GeneratedValue(generator = "assign")
+    @GeneratedValue(generator = IdGeneratorManager.ASSIGN)
     private Integer roleId;
 
     private String descp;

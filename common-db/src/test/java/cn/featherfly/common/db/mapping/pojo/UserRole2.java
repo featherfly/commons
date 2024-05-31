@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import cn.featherfly.common.repository.id.IdGeneratorManager;
+
 /**
  * UserRole2
  *
@@ -16,13 +18,13 @@ import javax.persistence.Table;
 public class UserRole2 {
 
     @Id
-    @GeneratedValue(generator = "assign")
+    @GeneratedValue(generator = IdGeneratorManager.ASSIGN)
     @ManyToOne
     @Column(name = "user_id")
     private User user;
 
     @Id
-    @GeneratedValue(generator = "assign")
+    @GeneratedValue(generator = IdGeneratorManager.ASSIGN)
     @ManyToOne
     @Column(name = "role_id")
     private Role role;

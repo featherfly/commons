@@ -16,12 +16,20 @@ import java.io.Serializable;
  * @author zhongj
  */
 public interface IdGenerator {
+
     /**
      * Checks if is ordered.
      *
      * @return true, if is ordered
      */
     boolean isOrdered();
+
+    /**
+     * Checks if is database generation.
+     *
+     * @return true, if is database generation
+     */
+    boolean isDatabaseGeneration();
 
     /**
      * Generate.

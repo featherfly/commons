@@ -25,8 +25,6 @@ import cn.featherfly.common.bean.matcher.BeanPropertyAnnotationMatcher;
 import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.PostgreSQLDialect;
-import cn.featherfly.common.db.id.AssignGenerator;
-import cn.featherfly.common.db.id.AssignOrderedGenerator;
 import cn.featherfly.common.db.jpa.ColumnDefault;
 import cn.featherfly.common.db.jpa.Comment;
 import cn.featherfly.common.db.mapping.operator.BasicOperators;
@@ -39,7 +37,6 @@ import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.lang.SystemPropertyUtils;
 import cn.featherfly.common.repository.id.IdGenerator;
 import cn.featherfly.common.repository.id.IdGeneratorManager;
-import cn.featherfly.common.repository.id.UUIDGenerator;
 import cn.featherfly.common.repository.mapping.ClassNameConversion;
 import cn.featherfly.common.repository.mapping.ClassNameJpaConversion;
 import cn.featherfly.common.repository.mapping.ClassNameUnderscoreConversion;
@@ -139,16 +136,6 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
             this.sqlTypeMappingManager = new SqlTypeMappingManager();
         } else {
             this.sqlTypeMappingManager = sqlTypeMappingManager;
-        }
-
-        if (!idGeneratorManager.containsKey("uuid")) {
-            idGeneratorManager.add("uuid", new UUIDGenerator());
-        }
-        if (!idGeneratorManager.containsKey("assign")) {
-            idGeneratorManager.add("assign", new AssignGenerator());
-        }
-        if (!idGeneratorManager.containsKey("assignOrdered")) {
-            idGeneratorManager.add("assignOrdered", new AssignOrderedGenerator());
         }
     }
 

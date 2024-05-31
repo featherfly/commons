@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import cn.featherfly.common.repository.id.IdGeneratorManager;
+
 /**
  * UserInfo.
  *
@@ -14,7 +16,7 @@ import javax.persistence.Table;
 @Table
 public class UuidTable {
 
-    @GeneratedValue(generator = "uuid")
+    @GeneratedValue(generator = IdGeneratorManager.UUID)
     @Id
     private String id;
 

@@ -6,11 +6,9 @@
  * @date: 2024-05-31 19:02:31
  * @Copyright: 2024 www.featherfly.cn Inc. All rights reserved.
  */
-package cn.featherfly.common.db.id;
+package cn.featherfly.common.repository.id;
 
 import java.io.Serializable;
-
-import cn.featherfly.common.repository.id.IdGenerator;
 
 /**
  * AssignGenerator.

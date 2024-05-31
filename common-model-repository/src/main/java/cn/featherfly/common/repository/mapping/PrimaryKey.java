@@ -19,14 +19,18 @@ public class PrimaryKey {
 
     private final IdGenerator idGenerator;
 
+    private final boolean databaseGeneration;
+
     /**
      * Instantiates a new primary key.
      *
      * @param idGenerator the id generator
+     * @param databaseGeneration the generated
      */
-    public PrimaryKey(IdGenerator idGenerator) {
+    public PrimaryKey(IdGenerator idGenerator, boolean databaseGeneration) {
         super();
         this.idGenerator = idGenerator;
+        this.databaseGeneration = databaseGeneration;
     }
 
     /**
@@ -45,5 +49,14 @@ public class PrimaryKey {
      */
     public IdGenerator getIdGenerator() {
         return idGenerator;
+    }
+
+    /**
+     * Checks if is database generation.
+     *
+     * @return true, if is database generation
+     */
+    public boolean isDatabaseGeneration() {
+        return databaseGeneration;
     }
 }

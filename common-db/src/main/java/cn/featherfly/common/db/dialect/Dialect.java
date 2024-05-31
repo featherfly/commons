@@ -38,6 +38,13 @@ public interface Dialect {
     int DEFAULT_LIMIT = 10;
 
     /**
+     * Gets the database name.
+     *
+     * @return the database name
+     */
+    String getDatabaseName();
+
+    /**
      * ddl feature.
      *
      * @return the DDL feature

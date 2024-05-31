@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.constant.Chars;
-import cn.featherfly.common.db.id.DoNothingIdGenerator;
+import cn.featherfly.common.db.id.DatabaseGenerationIdGenerator;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
 import cn.featherfly.common.repository.id.IdGenerator;
@@ -19,7 +19,7 @@ import cn.featherfly.common.repository.id.IdGenerator;
 public abstract class AbstractDialect implements Dialect {
 
     /** The Constant DEFAULT_ID_GENERATOR. */
-    protected static final IdGenerator DEFAULT_ID_GENERATOR = new DoNothingIdGenerator(true);
+    protected static final IdGenerator DEFAULT_ID_GENERATOR = new DatabaseGenerationIdGenerator(true);
 
     /** The logger. */
     protected Logger logger = LoggerFactory.getLogger(this.getClass());

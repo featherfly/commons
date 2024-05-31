@@ -9,6 +9,7 @@ import cn.featherfly.common.db.dialect.Dialects;
 import cn.featherfly.common.db.mapping.pojo.order.Order;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
+import cn.featherfly.common.repository.id.IdGeneratorManager;
 
 /**
  * ClassMappingMulityEmbeddedTest.
@@ -24,7 +25,7 @@ public class ClassMappingMulityEmbeddedTest extends JdbcTestBase {
     @BeforeClass
     public void init() {
         DatabaseMetadata metadata = DatabaseMetadataManager.getDefaultManager().create(dataSource);
-        factory = new CompatibleJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager,
+        factory = new CompatibleJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager, new IdGeneratorManager(),
             new AsmPropertyAccessorFactory(Thread.currentThread().getContextClassLoader()));
     }
 

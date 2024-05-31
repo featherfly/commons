@@ -165,3 +165,14 @@ CREATE TABLE "cms_article" (
   "content4" varchar(2000) DEFAULT NULL,
   CONSTRAINT "cms_article_pkey" PRIMARY KEY ("id")
 );
+
+-- ----------------------------
+-- Table structure for uuid_table
+-- ----------------------------
+
+DROP TABLE IF EXISTS "uuid_table";
+CREATE TABLE "uuid_table" (
+  "id" varchar(36) NOT NULL,
+  "descp" varchar(255) DEFAULT NULL,
+  CONSTRAINT "uuid_table_pkey" PRIMARY KEY ("id")
+);

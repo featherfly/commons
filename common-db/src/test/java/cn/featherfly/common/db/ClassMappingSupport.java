@@ -43,7 +43,7 @@ public interface ClassMappingSupport {
     default JdbcClassMapping<User> getUserClassMapping(Dialect dialect) {
         JdbcClassMapping<User> mapping = new JdbcClassMapping<>(User.class, "user");
         JdbcPropertyMapping pm = new JdbcPropertyMapping();
-        pm.setPrimaryKey(new PrimaryKey(dialect.getIdGenerator("user", "id")));
+        pm.setPrimaryKey(new PrimaryKey(dialect.getIdGenerator("user", "id"), true));
         pm.setRepositoryFieldName("id");
         pm.setPropertyName(getUserProperty1());
         pm.setPropertyType(Long.class);
@@ -77,13 +77,13 @@ public interface ClassMappingSupport {
     default JdbcClassMapping<UserRole> getUserRoleClassMapping() {
         JdbcClassMapping<UserRole> mapping = new JdbcClassMapping<>(UserRole.class, "user_role");
         JdbcPropertyMapping pm = new JdbcPropertyMapping();
-        pm.setPrimaryKey(new PrimaryKey(null));
+        pm.setPrimaryKey(new PrimaryKey(null, false));
         pm.setRepositoryFieldName("user_id");
         pm.setPropertyName("userId");
         pm.setPropertyType(Long.class);
 
         JdbcPropertyMapping pm2 = new JdbcPropertyMapping();
-        pm2.setPrimaryKey(new PrimaryKey(null));
+        pm2.setPrimaryKey(new PrimaryKey(null, false));
         pm2.setRepositoryFieldName("role_id");
         pm2.setPropertyName("roleId");
         pm2.setPropertyType(Long.class);

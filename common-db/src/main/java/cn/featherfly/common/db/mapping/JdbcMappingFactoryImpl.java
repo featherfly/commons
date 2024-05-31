@@ -5,6 +5,7 @@ import java.util.List;
 import cn.featherfly.common.bean.PropertyAccessorFactory;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
+import cn.featherfly.common.repository.id.IdGeneratorManager;
 import cn.featherfly.common.repository.mapping.ClassNameConversion;
 import cn.featherfly.common.repository.mapping.PropertyNameConversion;
 
@@ -27,8 +28,9 @@ public class JdbcMappingFactoryImpl implements JdbcMappingFactory {
      * @param propertyAccessorFactory the property accessor factory
      */
     public JdbcMappingFactoryImpl(DatabaseMetadata metadata, Dialect dialect,
-        SqlTypeMappingManager sqlTypeMappingManager, PropertyAccessorFactory propertyAccessorFactory) {
-        this(metadata, dialect, sqlTypeMappingManager, null, null, propertyAccessorFactory);
+        SqlTypeMappingManager sqlTypeMappingManager, IdGeneratorManager idGeneratorManager,
+        PropertyAccessorFactory propertyAccessorFactory) {
+        this(metadata, dialect, sqlTypeMappingManager, idGeneratorManager, null, null, propertyAccessorFactory);
     }
 
     /**
@@ -42,10 +44,11 @@ public class JdbcMappingFactoryImpl implements JdbcMappingFactory {
      * @param propertyAccessorFactory the property accessor factory
      */
     public JdbcMappingFactoryImpl(DatabaseMetadata metadata, Dialect dialect,
-        SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
-        List<PropertyNameConversion> propertyNameConversions, PropertyAccessorFactory propertyAccessorFactory) {
-        this(MappingMode.COMPATIBLE_MODE, metadata, dialect, sqlTypeMappingManager, classNameConversions,
-            propertyNameConversions, propertyAccessorFactory);
+        SqlTypeMappingManager sqlTypeMappingManager, IdGeneratorManager idGeneratorManager,
+        List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions,
+        PropertyAccessorFactory propertyAccessorFactory) {
+        this(MappingMode.COMPATIBLE_MODE, metadata, dialect, sqlTypeMappingManager, idGeneratorManager,
+            classNameConversions, propertyNameConversions, propertyAccessorFactory);
     }
 
     /**
@@ -58,8 +61,10 @@ public class JdbcMappingFactoryImpl implements JdbcMappingFactory {
      * @param propertyAccessorFactory the property accessor factory
      */
     public JdbcMappingFactoryImpl(MappingMode mappingMode, DatabaseMetadata metadata, Dialect dialect,
-        SqlTypeMappingManager sqlTypeMappingManager, PropertyAccessorFactory propertyAccessorFactory) {
-        this(mappingMode, metadata, dialect, sqlTypeMappingManager, null, null, propertyAccessorFactory);
+        SqlTypeMappingManager sqlTypeMappingManager, IdGeneratorManager idGeneratorManager,
+        PropertyAccessorFactory propertyAccessorFactory) {
+        this(mappingMode, metadata, dialect, sqlTypeMappingManager, idGeneratorManager, null, null,
+            propertyAccessorFactory);
     }
 
     /**
@@ -74,15 +79,16 @@ public class JdbcMappingFactoryImpl implements JdbcMappingFactory {
      * @param propertyAccessorFactory the property accessor factory
      */
     public JdbcMappingFactoryImpl(MappingMode mappingMode, DatabaseMetadata metadata, Dialect dialect,
-        SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
-        List<PropertyNameConversion> propertyNameConversions, PropertyAccessorFactory propertyAccessorFactory) {
+        SqlTypeMappingManager sqlTypeMappingManager, IdGeneratorManager idGeneratorManager,
+        List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions,
+        PropertyAccessorFactory propertyAccessorFactory) {
         super();
         if (mappingMode == MappingMode.STRICT_MODE) {
-            factory = new StrictJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager, classNameConversions,
-                propertyNameConversions, propertyAccessorFactory);
+            factory = new StrictJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager, idGeneratorManager,
+                classNameConversions, propertyNameConversions, propertyAccessorFactory);
         } else {
-            factory = new CompatibleJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager, classNameConversions,
-                propertyNameConversions, propertyAccessorFactory);
+            factory = new CompatibleJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager, idGeneratorManager,
+                classNameConversions, propertyNameConversions, propertyAccessorFactory);
         }
     }
 

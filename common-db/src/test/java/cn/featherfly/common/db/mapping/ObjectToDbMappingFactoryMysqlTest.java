@@ -11,6 +11,7 @@ import cn.featherfly.common.db.mapping.pojo.Role;
 import cn.featherfly.common.db.mapping.pojo.User2;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
+import cn.featherfly.common.repository.id.IdGeneratorManager;
 
 /**
  * <p>
@@ -29,7 +30,7 @@ public class ObjectToDbMappingFactoryMysqlTest extends JdbcTestBase {
     @BeforeClass
     public void init() {
         DatabaseMetadata metadata = DatabaseMetadataManager.getDefaultManager().create(dataSource);
-        factory = new StrictJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager,
+        factory = new StrictJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager, new IdGeneratorManager(),
             new AsmPropertyAccessorFactory(Thread.currentThread().getContextClassLoader()));
     }
 

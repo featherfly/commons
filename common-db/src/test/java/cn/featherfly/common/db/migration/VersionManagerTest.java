@@ -18,6 +18,7 @@ import cn.featherfly.common.db.mapping.pojo.User;
 import cn.featherfly.common.db.mapping.pojo.UserRole;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
+import cn.featherfly.common.repository.id.IdGeneratorManager;
 
 /**
  * <p>
@@ -40,7 +41,7 @@ public class VersionManagerTest extends JdbcTestBase {
     public void init() {
         sqlTypeMappingManager = new SqlTypeMappingManager();
         DatabaseMetadata metadata = DatabaseMetadataManager.getDefaultManager().create(dataSource);
-        factory = new StrictJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager,
+        factory = new StrictJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager, new IdGeneratorManager(),
             new AsmPropertyAccessorFactory(Thread.currentThread().getContextClassLoader()));
         migrator = new Migrator(dataSource, dialect, sqlTypeMappingManager, true);
         factory.setCheckMapping(false);

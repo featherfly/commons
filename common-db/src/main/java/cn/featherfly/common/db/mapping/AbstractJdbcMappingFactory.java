@@ -25,16 +25,21 @@ import cn.featherfly.common.bean.matcher.BeanPropertyAnnotationMatcher;
 import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.PostgreSQLDialect;
+import cn.featherfly.common.db.id.AssignGenerator;
+import cn.featherfly.common.db.id.AssignOrderedGenerator;
 import cn.featherfly.common.db.jpa.ColumnDefault;
 import cn.featherfly.common.db.jpa.Comment;
 import cn.featherfly.common.db.mapping.operator.BasicOperators;
 import cn.featherfly.common.db.mapping.operator.DefaultTypesSqlTypeOperator;
 import cn.featherfly.common.db.mapping.operator.EnumSqlTypeOperator;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
-import cn.featherfly.common.exception.NotImplementedException;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.lang.SystemPropertyUtils;
+import cn.featherfly.common.repository.id.IdGenerator;
+import cn.featherfly.common.repository.id.IdGeneratorManager;
+import cn.featherfly.common.repository.id.UUIDGenerator;
 import cn.featherfly.common.repository.mapping.ClassNameConversion;
 import cn.featherfly.common.repository.mapping.ClassNameJpaConversion;
 import cn.featherfly.common.repository.mapping.ClassNameUnderscoreConversion;
@@ -78,6 +83,8 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
     /** The check mapping. */
     protected boolean checkMapping;
 
+    protected final IdGeneratorManager idGeneratorManager;
+
     /**
      * Instantiates a new abstract mapping factory.
      *
@@ -87,8 +94,9 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      * @param propertyAccessorFactory the property accessor factory
      */
     protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-        SqlTypeMappingManager sqlTypeMappingManager, PropertyAccessorFactory propertyAccessorFactory) {
-        this(metadata, dialect, sqlTypeMappingManager, null, null, propertyAccessorFactory);
+        SqlTypeMappingManager sqlTypeMappingManager, IdGeneratorManager idGeneratorManager,
+        PropertyAccessorFactory propertyAccessorFactory) {
+        this(metadata, dialect, sqlTypeMappingManager, idGeneratorManager, null, null, propertyAccessorFactory);
     }
 
     /**
@@ -102,12 +110,14 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      * @param propertyAccessorFactory the property accessor factory
      */
     protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-        SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
-        List<PropertyNameConversion> propertyNameConversions, PropertyAccessorFactory propertyAccessorFactory) {
+        SqlTypeMappingManager sqlTypeMappingManager, IdGeneratorManager idGeneratorManager,
+        List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions,
+        PropertyAccessorFactory propertyAccessorFactory) {
         super();
         this.metadata = metadata;
         this.dialect = dialect;
         this.propertyAccessorFactory = propertyAccessorFactory;
+        this.idGeneratorManager = idGeneratorManager;
 
         if (Lang.isEmpty(classNameConversions)) {
             this.classNameConversions.add(new ClassNameJpaConversion());
@@ -127,6 +137,16 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
         } else {
             this.sqlTypeMappingManager = sqlTypeMappingManager;
         }
+
+        if (!idGeneratorManager.containsKey("uuid")) {
+            idGeneratorManager.add("uuid", new UUIDGenerator());
+        }
+        if (!idGeneratorManager.containsKey("assign")) {
+            idGeneratorManager.add("assign", new AssignGenerator());
+        }
+        if (!idGeneratorManager.containsKey("assignOrdered")) {
+            idGeneratorManager.add("assignOrdered", new AssignOrderedGenerator());
+        }
     }
 
     /**
@@ -136,8 +156,10 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      * @param beanProperty the bean property
      */
     protected void setColumnMapping(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty) {
-        boolean isPk = beanProperty.hasAnnotation(Id.class);
+        //        boolean isPk = beanProperty.hasAnnotation(Id.class);
         Column column = beanProperty.getAnnotation(Column.class);
+        setPropertyMapping(mapping, beanProperty);
+        setJavaSqlTypeMapper(mapping, beanProperty);
         if (column != null) {
             mapping.setSize(
                 ClassUtils.isParent(Number.class, beanProperty.getType()) ? column.precision() : column.length());
@@ -175,21 +197,21 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
             }
         }
 
-        if (isPk) {
-            mapping.setNullable(false);
-            GeneratedValue generatedValue = beanProperty.getAnnotation(GeneratedValue.class);
-            if (generatedValue != null) {
-                if (generatedValue.strategy() == GenerationType.IDENTITY
-                    || generatedValue.strategy() == GenerationType.AUTO) {
-                    mapping.setAutoincrement(true);
-                } else {
-                    // TODO 其他实现，后续慢慢添加-_-
-                    throw new JdbcMappingException("只实现了IDENTITY, AUTO时使用数据库的自增长的策略");
-                }
-            } else {
-                mapping.setAutoincrement(true);
-            }
-        }
+        //        if (isPk) {
+        //            mapping.setNullable(false);
+        //            GeneratedValue generatedValue = beanProperty.getAnnotation(GeneratedValue.class);
+        //            if (generatedValue != null) {
+        //                if (generatedValue.strategy() == GenerationType.IDENTITY
+        //                    || generatedValue.strategy() == GenerationType.AUTO) {
+        //                    mapping.setAutoincrement(true);
+        //                } else {
+        //                    // TODO 其他实现，后续慢慢添加-_-
+        //                    throw new JdbcMappingException("只实现了IDENTITY, AUTO时使用数据库的自增长的策略");
+        //                }
+        //            } else {
+        //                mapping.setAutoincrement(true);
+        //            }
+        //        }
     }
 
     /**
@@ -220,24 +242,30 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
     protected void setIdGenerator(JdbcPropertyMapping propertyMapping, BeanProperty<?, ?> bp, String tableName,
         String columnName) {
         GeneratedValue generatedValue = bp.getAnnotation(GeneratedValue.class);
-        if (generatedValue == null) {
-            //没有指定IdGenerator，手动设置，框架不管
-            return;
-        }
 
-        if (generatedValue.strategy() == GenerationType.AUTO) {
+        IdGenerator idGenerator = null;
+        if (generatedValue == null
+            || Lang.isEmpty(generatedValue.generator()) && generatedValue.strategy() == GenerationType.AUTO) {
+            // 没有指定IdGenerator，默认为AUTO
             // 使用dialect提供的默认IdGenerator
-            PrimaryKey primaryKey = new PrimaryKey(dialect.getIdGenerator(tableName, columnName));
-            propertyMapping.setPrimaryKey(primaryKey);
-
-            if (propertyMapping.isAutoincrement() && dialect instanceof PostgreSQLDialect) {
-                propertyMapping.setIgnoreAtInsert(true);
+            idGenerator = dialect.getIdGenerator(tableName, columnName);
+            if (idGenerator == null) {
+                throw new JdbcMappingException(
+                    Strings.format("database {} not supported GenerationType.AUTO", dialect.getDatabaseName()));
             }
-
-            return;
+        } else {
+            String generatorName = generatedValue.generator();
+            idGenerator = idGeneratorManager.get(generatorName);
+            if (idGenerator == null) {
+                throw new JdbcMappingException(Strings.format("No IdGenerator named {} was found", generatorName));
+            }
         }
-        // IMPLSOON 后续来实现指定的IdGenerator获取
-        throw new NotImplementedException();
+        PrimaryKey primaryKey = new PrimaryKey(idGenerator, idGenerator.isDatabaseGeneration());
+        propertyMapping.setPrimaryKey(primaryKey);
+
+        if (propertyMapping.isAutoincrement() && dialect instanceof PostgreSQLDialect) {
+            propertyMapping.setIgnoreAtInsert(true);
+        }
     }
 
     /**
@@ -376,6 +404,10 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
     protected void mappingForeignKey(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty, String columnName,
         PropertyAccessor<Object> propertyAccessor, StringBuilder logInfo) {
         mapping.setMode(Mode.MANY_TO_ONE);
+        mapping.setRepositoryFieldName(columnName);
+        setPropertyMapping(mapping, beanProperty);
+        mapping.setSetter(propertyAccessor.getProperty(beanProperty.getIndex())::set);
+        mapping.setGetter(propertyAccessor.getProperty(beanProperty.getIndex())::get);
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
         Collection<BeanProperty<?, ?>> bps = bd.findBeanPropertys(new BeanPropertyAnnotationMatcher(Id.class));
         if (Lang.isEmpty(bps)) {
@@ -384,8 +416,8 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
         for (BeanProperty<?, ?> bp : bps) {
             JdbcPropertyMapping columnMapping = new JdbcPropertyMapping();
             columnMapping.setRepositoryFieldName(columnName);
-            setJavaSqlTypeMapper(columnMapping, bp);
-            setPropertyMapping(columnMapping, bp);
+            //            setJavaSqlTypeMapper(columnMapping, bp);
+            //            setPropertyMapping(columnMapping, bp);
             columnMapping.setSetter((obj, value) -> propertyAccessor.setPropertyValue(obj,
                 new int[] { mapping.getPropertyIndex(), columnMapping.getPropertyIndex() }, value));
             columnMapping.setGetter(obj -> propertyAccessor.getPropertyValue(obj,

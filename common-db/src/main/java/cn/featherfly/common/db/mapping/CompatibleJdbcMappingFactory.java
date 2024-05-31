@@ -26,6 +26,8 @@ import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.SystemPropertyUtils;
 import cn.featherfly.common.lang.WordUtils;
 import cn.featherfly.common.operator.LogicOperator;
+import cn.featherfly.common.repository.id.IdGenerator;
+import cn.featherfly.common.repository.id.IdGeneratorManager;
 import cn.featherfly.common.repository.mapping.ClassNameConversion;
 import cn.featherfly.common.repository.mapping.PrimaryKey;
 import cn.featherfly.common.repository.mapping.PropertyMapping.Mode;
@@ -38,6 +40,7 @@ import cn.featherfly.common.repository.mapping.PropertyNameConversion;
  */
 public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
 
+    /** The compatible table names. */
     protected Map<String, String> compatibleTableNames = new HashMap<>();
 
     /**
@@ -46,11 +49,13 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param metadata the metadata
      * @param dialect the dialect
      * @param sqlTypeMappingManager the sql type mapping manager
+     * @param idGeneratorManager the id generator manager
      * @param propertyAccessorFactory the property accessor factory
      */
     public CompatibleJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-        SqlTypeMappingManager sqlTypeMappingManager, PropertyAccessorFactory propertyAccessorFactory) {
-        this(metadata, dialect, sqlTypeMappingManager, null, null, propertyAccessorFactory);
+        SqlTypeMappingManager sqlTypeMappingManager, IdGeneratorManager idGeneratorManager,
+        PropertyAccessorFactory propertyAccessorFactory) {
+        this(metadata, dialect, sqlTypeMappingManager, idGeneratorManager, null, null, propertyAccessorFactory);
     }
 
     /**
@@ -59,15 +64,17 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param metadata the metadata
      * @param dialect the dialect
      * @param sqlTypeMappingManager the sql type mapping manager
+     * @param idGeneratorManager the id generator manager
      * @param classNameConversions the class name conversions
      * @param propertyNameConversions the property name conversions
      * @param propertyAccessorFactory the property accessor factory
      */
     public CompatibleJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-        SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
-        List<PropertyNameConversion> propertyNameConversions, PropertyAccessorFactory propertyAccessorFactory) {
-        super(metadata, dialect, sqlTypeMappingManager, classNameConversions, propertyNameConversions,
-            propertyAccessorFactory);
+        SqlTypeMappingManager sqlTypeMappingManager, IdGeneratorManager idGeneratorManager,
+        List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions,
+        PropertyAccessorFactory propertyAccessorFactory) {
+        super(metadata, dialect, sqlTypeMappingManager, idGeneratorManager, classNameConversions,
+            propertyNameConversions, propertyAccessorFactory);
 
         for (Table table : metadata.getTables()) {
             String name = table.getName().toLowerCase();
@@ -236,8 +243,8 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
             String columnName = getMappingColumnName(beanProperty);
             if (Lang.isNotEmpty(columnName)) {
                 columnName = dialect.convertTableOrColumnName(columnName);
-                setJavaSqlTypeMapper(mapping, beanProperty);
-                setPropertyMapping(mapping, beanProperty);
+                //                setJavaSqlTypeMapper(mapping, beanProperty);
+                //                setPropertyMapping(mapping, beanProperty);
                 mapping.setSetter(propertyAccessor.getProperty(beanProperty.getIndex())::set);
                 mapping.setGetter(propertyAccessor.getProperty(beanProperty.getIndex())::get);
                 if (isPk) {
@@ -246,7 +253,6 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
                 ManyToOne manyToOne = beanProperty.getAnnotation(ManyToOne.class);
                 OneToOne oneToOne = beanProperty.getAnnotation(OneToOne.class);
                 if (manyToOne != null || oneToOne != null) {
-                    mapping.setRepositoryFieldName(columnName);
                     mappingForeignKey(mapping, beanProperty, columnName, propertyAccessor, logInfo);
                 } else {
                     mapping.setRepositoryFieldName(columnName);
@@ -331,8 +337,20 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
         mapping.setAutoincrement(cmd.isAutoincrement());
         mapping.setSize(cmd.getSize());
         if (cmd.isPrimaryKey()) {
-            PrimaryKey primaryKey = new PrimaryKey(dialect.getIdGenerator(cmd.getTable().getName(), cmd.getName()));
-            mapping.setPrimaryKey(primaryKey);
+            if (mapping.getPrimaryKey() == null) {
+                IdGenerator idGenerator = dialect.getIdGenerator(cmd.getTable().getName(), cmd.getName());
+                if (idGenerator.isDatabaseGeneration() != cmd.isAutoincrement()) {
+                    throw new JdbcMappingException(
+                        "IdGenerator is databaseGeneration but primary key column is not autoincrement");
+                }
+                PrimaryKey primaryKey = new PrimaryKey(idGenerator, cmd.isAutoincrement());
+                mapping.setPrimaryKey(primaryKey);
+            } else {
+                if (mapping.getPrimaryKey().getIdGenerator().isDatabaseGeneration() != cmd.isAutoincrement()) {
+                    throw new JdbcMappingException(
+                        "IdGenerator is databaseGeneration but primary key column is not autoincrement");
+                }
+            }
         }
         mapping.setDefaultValue(cmd.getDefaultValue());
         mapping.setIndex(cmd.getColumnIndex());

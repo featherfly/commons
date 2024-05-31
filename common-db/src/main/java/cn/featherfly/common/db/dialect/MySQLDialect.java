@@ -255,4 +255,12 @@ public class MySQLDialect extends AbstractDialect {
     public IdGenerator getIdGenerator(String table, String column) {
         return DEFAULT_ID_GENERATOR;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDatabaseName() {
+        return "MySQL";
+    }
 }

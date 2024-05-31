@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import javax.persistence.Embedded;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.UniqueConstraint;
 
@@ -26,6 +27,7 @@ import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.SystemPropertyUtils;
 import cn.featherfly.common.repository.Index;
+import cn.featherfly.common.repository.id.IdGeneratorManager;
 import cn.featherfly.common.repository.mapping.ClassNameConversion;
 import cn.featherfly.common.repository.mapping.PropertyMapping.Mode;
 import cn.featherfly.common.repository.mapping.PropertyNameConversion;
@@ -46,8 +48,9 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param propertyAccessorFactory the property accessor factory
      */
     public StrictJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-        SqlTypeMappingManager sqlTypeMappingManager, PropertyAccessorFactory propertyAccessorFactory) {
-        this(metadata, dialect, sqlTypeMappingManager, null, null, propertyAccessorFactory);
+        SqlTypeMappingManager sqlTypeMappingManager, IdGeneratorManager idGeneratorManager,
+        PropertyAccessorFactory propertyAccessorFactory) {
+        this(metadata, dialect, sqlTypeMappingManager, idGeneratorManager, null, null, propertyAccessorFactory);
     }
 
     /**
@@ -61,10 +64,11 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param propertyAccessorFactory the property accessor factory
      */
     public StrictJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-        SqlTypeMappingManager sqlTypeMappingManager, List<ClassNameConversion> classNameConversions,
-        List<PropertyNameConversion> propertyNameConversions, PropertyAccessorFactory propertyAccessorFactory) {
-        super(metadata, dialect, sqlTypeMappingManager, classNameConversions, propertyNameConversions,
-            propertyAccessorFactory);
+        SqlTypeMappingManager sqlTypeMappingManager, IdGeneratorManager idGeneratorManager,
+        List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions,
+        PropertyAccessorFactory propertyAccessorFactory) {
+        super(metadata, dialect, sqlTypeMappingManager, idGeneratorManager, classNameConversions,
+            propertyNameConversions, propertyAccessorFactory);
         setCheckMapping(true);
     }
 
@@ -169,8 +173,8 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
             String columnName = getMappingColumnName(beanProperty);
             if (Lang.isNotEmpty(columnName)) {
                 columnName = dialect.convertTableOrColumnName(columnName);
-                setJavaSqlTypeMapper(mapping, beanProperty);
-                setPropertyMapping(mapping, beanProperty);
+                //                setJavaSqlTypeMapper(mapping, beanProperty);
+                //                setPropertyMapping(mapping, beanProperty);
                 mapping.setSetter(propertyAccessor.getProperty(beanProperty.getIndex())::set);
                 mapping.setGetter(propertyAccessor.getProperty(beanProperty.getIndex())::get);
                 if (isPk) {
@@ -178,9 +182,12 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
                 }
                 ManyToOne manyToOne = beanProperty.getAnnotation(ManyToOne.class);
                 OneToOne oneToOne = beanProperty.getAnnotation(OneToOne.class);
+                OneToMany oneToMany = beanProperty.getAnnotation(OneToMany.class);
                 if (manyToOne != null || oneToOne != null) {
-                    mapping.setRepositoryFieldName(columnName);
                     mappingForeignKey(mapping, beanProperty, columnName, propertyAccessor, logInfo);
+                } else if (oneToMany != null) {
+                    // IMPLSOON 一对多还未实现
+                    throw new JdbcMappingException("unimplemented");
                 } else {
                     mapping.setRepositoryFieldName(columnName);
                     setColumnMapping(mapping, beanProperty);
@@ -211,8 +218,8 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
             columnName = dialect.convertTableOrColumnName(columnName);
             JdbcPropertyMapping columnMapping = new JdbcPropertyMapping();
             columnMapping.setRepositoryFieldName(columnName);
-            setJavaSqlTypeMapper(columnMapping, bp);
-            setPropertyMapping(columnMapping, bp);
+            //            setJavaSqlTypeMapper(columnMapping, bp);
+            //            setPropertyMapping(columnMapping, bp);
             columnMapping.setSetter((obj, value) -> propertyAccessor.setPropertyValue(obj,
                 new int[] { mapping.getPropertyIndex(), columnMapping.getPropertyIndex() }, value));
             columnMapping.setGetter(obj -> propertyAccessor.getPropertyValue(obj,

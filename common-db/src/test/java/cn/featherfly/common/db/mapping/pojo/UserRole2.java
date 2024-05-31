@@ -2,14 +2,13 @@
 package cn.featherfly.common.db.mapping.pojo;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * <p>
- * User
- * </p>
+ * UserRole2
  *
  * @author zhongj
  */
@@ -17,11 +16,13 @@ import javax.persistence.Table;
 public class UserRole2 {
 
     @Id
+    @GeneratedValue(generator = "assign")
     @ManyToOne
     @Column(name = "user_id")
     private User user;
 
     @Id
+    @GeneratedValue(generator = "assign")
     @ManyToOne
     @Column(name = "role_id")
     private Role role;

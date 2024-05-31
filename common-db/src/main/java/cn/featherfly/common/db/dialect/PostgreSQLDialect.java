@@ -256,4 +256,13 @@ public class PostgreSQLDialect extends AbstractDialect {
         // 不确定传入null会不会出现问题，后续测试
         return DEFAULT_ID_GENERATOR;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDatabaseName() {
+        // YUFEI_TODO Auto-generated method stub
+        return "PostgreSQL";
+    }
 }

@@ -1,20 +1,21 @@
 
 package cn.featherfly.common.db.mapping.pojo;
 
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * <p>
  * UserRole
- * </p>
  *
  * @author zhongj
  */
 public class UserRole {
     @Id
+    @GeneratedValue(generator = "assign")
     private Integer userId;
 
     @Id
+    @GeneratedValue(generator = "assign")
     private Integer roleId;
 
     private String descp;
@@ -77,7 +78,7 @@ public class UserRole {
 
     /**
      * 返回descp2
-     * 
+     *
      * @return descp2
      */
     public String getDescp2() {
@@ -86,7 +87,7 @@ public class UserRole {
 
     /**
      * 设置descp2
-     * 
+     *
      * @param descp2 descp2
      */
     public void setDescp2(String descp2) {

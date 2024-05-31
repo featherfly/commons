@@ -159,3 +159,14 @@ CREATE TABLE `cms_article` (
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
+
+-- ----------------------------
+-- Table structure for uuid_table
+-- ----------------------------
+
+DROP TABLE IF EXISTS `uuid_table`;
+CREATE TABLE `uuid_table` (
+  `id` varchar(36) NOT NULL COMMENT '主键ID，UUID',
+  `descp` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='测试UUID主键';

@@ -218,4 +218,12 @@ public class OracleDialect extends AbstractDialect {
         // 不确定oracle是否实现了postgresql serial 这样自动创建序列的能力
         throw new UnsupportedException();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDatabaseName() {
+        return "Oracle";
+    }
 }

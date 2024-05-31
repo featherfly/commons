@@ -124,4 +124,12 @@ public class SQLServerDialect extends AbstractDialect {
         return DEFAULT_ID_GENERATOR;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDatabaseName() {
+        return "SQLServer";
+    }
+
 }

@@ -19,6 +19,7 @@ import cn.featherfly.common.db.mapping.pojo.UserInfo3;
 import cn.featherfly.common.db.mapping.pojo.UserInfo32;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
+import cn.featherfly.common.repository.id.IdGeneratorManager;
 
 /**
  * CompatibleJdbcMappingFactoryTest.
@@ -34,7 +35,7 @@ public class CompatibleJdbcMappingFactoryTest extends JdbcTestBase {
     @BeforeClass
     public void beforeClass() {
         DatabaseMetadata metadata = DatabaseMetadataManager.getDefaultManager().create(dataSource);
-        factory = new CompatibleJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager,
+        factory = new CompatibleJdbcMappingFactory(metadata, dialect, sqlTypeMappingManager, new IdGeneratorManager(),
             new AsmPropertyAccessorFactory(Thread.currentThread().getContextClassLoader()));
     }
 

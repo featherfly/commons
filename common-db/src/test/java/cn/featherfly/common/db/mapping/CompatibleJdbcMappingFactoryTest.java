@@ -17,6 +17,7 @@ import cn.featherfly.common.bean.AsmPropertyAccessorFactory;
 import cn.featherfly.common.db.JdbcTestBase;
 import cn.featherfly.common.db.mapping.pojo.UserInfo3;
 import cn.featherfly.common.db.mapping.pojo.UserInfo32;
+import cn.featherfly.common.db.mapping.pojo.UserRole2;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
 import cn.featherfly.common.repository.id.IdGeneratorManager;
@@ -53,5 +54,15 @@ public class CompatibleJdbcMappingFactoryTest extends JdbcTestBase {
         assertEquals(mapping.getPropertyMappingLeafNodes().size(), 3);
         assertEquals(mapping.getRepositoryName(), "user_info_3");
         assertEquals(mapping.getPropertyMapping("userName3").getRepositoryFieldName(), "user_name_3");
+    }
+
+    @Test
+    public void mappingManyToOne() {
+        JdbcClassMapping<UserRole2> mapping = factory.getClassMapping(UserRole2.class);
+        assertEquals(mapping.getPropertyMappingLeafNodes().size(), 3);
+
+        String sql = ClassMappingUtils.getSelectByPkSql(mapping, dialect);
+
+        System.err.println(sql);
     }
 }

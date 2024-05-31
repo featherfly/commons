@@ -301,9 +301,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
             if (beanProperty != null && !isTransient(beanProperty, logInfo)) {
                 JdbcPropertyMapping mapping = new JdbcPropertyMapping();
                 setJavaSqlTypeMapper(mapping, beanProperty);
-                mapping.setPropertyType(beanProperty.getType());
-                mapping.setPropertyName(beanProperty.getName());
-                mapping.setPropertyIndex(beanProperty.getIndex());
+                setPropertyMapping(mapping, beanProperty);
                 mapping.setSetter(propertyAccessor.getProperty(beanProperty.getIndex())::set);
                 mapping.setGetter(propertyAccessor.getProperty(beanProperty.getIndex())::get);
 

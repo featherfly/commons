@@ -40,6 +40,17 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
     }
 
     @Test
+    void testSelectSql2() {
+
+        String sql = ClassMappingUtils.getSelectSql(getUserRoleClassMapping2(), mysqlDialect);
+
+        System.out.println(sql);
+
+        assertEquals(sql,
+            "SELECT `user_id` `user.id`, `role_id` `role.id`, `descp` `descp`, `descp2` `descp2` FROM `user_role`");
+    }
+
+    @Test
     void testSelectByIdSql() {
         String sql = ClassMappingUtils.getSelectByPkSql(getUserClassMapping(mysqlDialect), mysqlDialect);
 
@@ -53,6 +64,15 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
         assertEquals(sql,
             "SELECT `user_id` `userId`, `role_id` `roleId`, `descp` `descp`, `descp2` `descp2` FROM `user_role` WHERE `user_id` = ? AND `role_id` = ?");
 
+    }
+
+    @Test
+    void testSelectByIdSql2() {
+        String sql = ClassMappingUtils.getSelectByPkSql(getUserRoleClassMapping2(), mysqlDialect);
+
+        System.out.println(sql);
+        assertEquals(sql,
+            "SELECT `user_id` `user.id`, `role_id` `role.id`, `descp` `descp`, `descp2` `descp2` FROM `user_role` WHERE `user_id` = ? AND `role_id` = ?");
     }
 
     @Test

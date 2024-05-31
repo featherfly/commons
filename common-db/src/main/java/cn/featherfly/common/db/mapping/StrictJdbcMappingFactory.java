@@ -1,6 +1,7 @@
 
 package cn.featherfly.common.db.mapping;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -124,7 +125,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         boolean findPk = false;
         int pkNo = 0;
         for (BeanProperty<?, ?> beanProperty : bd.getBeanProperties()) {
-            if (mappingWithJpa(tableName, (BeanProperty<Object, ?>) beanProperty, tableMapping,
+            if (mappingWithJpa(tableName, (BeanProperty<Object, Serializable>) beanProperty, tableMapping,
                 (PropertyAccessor<Object>) propertyAccessor, logInfo)) {
                 findPk = true;
                 pkNo++;
@@ -161,7 +162,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         return classMapping;
     }
 
-    private boolean mappingWithJpa(String tableName, BeanProperty<Object, ?> beanProperty,
+    private boolean mappingWithJpa(String tableName, BeanProperty<Object, Serializable> beanProperty,
         Map<String, JdbcPropertyMapping> tableMapping, PropertyAccessor<Object> propertyAccessor,
         StringBuilder logInfo) {
         if (isTransient(beanProperty, logInfo)) {
@@ -180,8 +181,9 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
                 columnName = dialect.convertTableOrColumnName(columnName);
                 //                setJavaSqlTypeMapper(mapping, beanProperty);
                 //                setPropertyMapping(mapping, beanProperty);
-                mapping.setSetter(propertyAccessor.getProperty(beanProperty.getIndex())::set);
-                mapping.setGetter(propertyAccessor.getProperty(beanProperty.getIndex())::get);
+                mapping.setProperty(propertyAccessor.getProperty(beanProperty.getIndex()));
+                mapping.setSetter(mapping.getProperty()::set);
+                mapping.setGetter(mapping.getProperty()::get);
                 if (isPk) {
                     setIdGenerator(mapping, beanProperty, tableName, columnName);
                 }
@@ -208,27 +210,32 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         return isPk;
     }
 
-    private void mappinEmbedded(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty,
+    private void mappinEmbedded(JdbcPropertyMapping mapping, BeanProperty<?, ? extends Serializable> beanProperty,
         PropertyAccessor<Object> propertyAccessor, StringBuilder logInfo) {
         mapping.setMode(Mode.EMBEDDED);
         setPropertyMapping(mapping, beanProperty);
-        mapping.setSetter(propertyAccessor.getProperty(beanProperty.getIndex())::set);
-        mapping.setGetter(propertyAccessor.getProperty(beanProperty.getIndex())::get);
+        mapping.setProperty(propertyAccessor.getProperty(beanProperty.getIndex()));
+        mapping.setSetter(mapping.getProperty()::set);
+        mapping.setGetter(mapping.getProperty()::get);
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
-        for (BeanProperty<?, ?> bp : bd.getBeanProperties()) {
-            if (isTransient(bp, logInfo)) {
+        for (BeanProperty<?, ?> obp : bd.getBeanProperties()) {
+            if (isTransient(obp, logInfo)) {
                 continue;
             }
+            @SuppressWarnings("unchecked")
+            BeanProperty<?, Serializable> bp = (BeanProperty<?, Serializable>) obp;
             String columnName = getMappingColumnName(bp);
             columnName = dialect.convertTableOrColumnName(columnName);
             JdbcPropertyMapping columnMapping = new JdbcPropertyMapping();
             columnMapping.setRepositoryFieldName(columnName);
             //            setJavaSqlTypeMapper(columnMapping, bp);
             //            setPropertyMapping(columnMapping, bp);
+            mapping.setProperty(
+                propertyAccessor.getProperty(mapping.getPropertyIndex(), columnMapping.getPropertyIndex()));
             columnMapping.setSetter((obj, value) -> propertyAccessor.setPropertyValue(obj,
                 new int[] { mapping.getPropertyIndex(), columnMapping.getPropertyIndex() }, value));
-            columnMapping.setGetter(obj -> propertyAccessor.getPropertyValue(obj,
-                new int[] { mapping.getPropertyIndex(), columnMapping.getPropertyIndex() }));
+            columnMapping.setGetter(obj -> (Serializable) propertyAccessor.getPropertyValue(obj,
+                mapping.getPropertyIndex(), columnMapping.getPropertyIndex()));
             if (logger.isDebugEnabled()) {
                 logInfo.append(String.format("%s###\t%s -> %s", SystemPropertyUtils.getLineSeparator(),
                     mapping.getPropertyName() + "." + columnMapping.getPropertyName(),

@@ -1,5 +1,6 @@
 package cn.featherfly.common.repository.mapping;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.ArrayUtils;
+
+import cn.featherfly.common.bean.Property;
 
 /**
  * entity property map to
@@ -50,7 +53,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
 
     private String repositoryFieldName;
 
-    private Class<?> propertyType;
+    private Class<? extends Serializable> propertyType;
 
     private PrimaryKey primaryKey;
 
@@ -77,9 +80,11 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
 
     private Mode mode = Mode.SINGLE;
 
-    private Function<Object, Object> getter;
+    private Property<Object, Serializable> property;
 
-    private BiConsumer<Object, Object> setter;
+    private Function<Object, Serializable> getter;
+
+    private BiConsumer<Object, Serializable> setter;
 
     /**
      * 小数位数
@@ -288,7 +293,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
      *
      * @return getter
      */
-    public Function<Object, Object> getGetter() {
+    public Function<Object, Serializable> getGetter() {
         return getter;
     }
 
@@ -297,7 +302,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
      *
      * @param getter getter
      */
-    public void setGetter(Function<Object, Object> getter) {
+    public void setGetter(Function<Object, Serializable> getter) {
         this.getter = getter;
     }
 
@@ -306,7 +311,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
      *
      * @return setter
      */
-    public BiConsumer<Object, Object> getSetter() {
+    public BiConsumer<Object, Serializable> getSetter() {
         return setter;
     }
 
@@ -315,7 +320,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
      *
      * @param setter setter
      */
-    public void setSetter(BiConsumer<Object, Object> setter) {
+    public void setSetter(BiConsumer<Object, Serializable> setter) {
         this.setter = setter;
     }
 
@@ -324,7 +329,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
      *
      * @return 返回propertyType
      */
-    public Class<?> getPropertyType() {
+    public Class<? extends Serializable> getPropertyType() {
         return propertyType;
     }
 
@@ -333,7 +338,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
      *
      * @param propertyType 设置propertyType
      */
-    public void setPropertyType(Class<?> propertyType) {
+    public void setPropertyType(Class<? extends Serializable> propertyType) {
         this.propertyType = propertyType;
     }
 
@@ -549,6 +554,24 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
      */
     public void setIgnoreAtInsert(boolean ignoreAtInsert) {
         this.ignoreAtInsert = ignoreAtInsert;
+    }
+
+    /**
+     * Gets the property.
+     *
+     * @return the property
+     */
+    public Property<Object, Serializable> getProperty() {
+        return property;
+    }
+
+    /**
+     * Sets the property.
+     *
+     * @param property the property
+     */
+    public void setProperty(Property<Object, Serializable> property) {
+        this.property = property;
     }
 
     /**

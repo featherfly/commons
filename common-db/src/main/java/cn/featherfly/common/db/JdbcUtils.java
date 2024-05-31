@@ -1,5 +1,6 @@
 package cn.featherfly.common.db;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Blob;
@@ -936,7 +937,8 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value 参数
      */
-    public static <E> void setParameter(PreparedStatement prep, int position, FieldValueOperator<E> value) {
+    public static <E extends Serializable> void setParameter(PreparedStatement prep, int position,
+        FieldValueOperator<E> value) {
         if (value == null) {
             setParameterNull(prep, position);
         } else {
@@ -1617,7 +1619,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value 参数
      */
-    public static <E> void setParameter(ResultSet res, int position, FieldValueOperator<E> value) {
+    public static <E extends Serializable> void setParameter(ResultSet res, int position, FieldValueOperator<E> value) {
         if (value == null) {
             setParameterNull(res, position);
         } else {
@@ -1759,7 +1761,8 @@ public final class JdbcUtils {
      * @param name the parameter name
      * @param value the value
      */
-    public static <E> void setParameter(CallableStatement call, String name, FieldValueOperator<E> value) {
+    public static <E extends Serializable> void setParameter(CallableStatement call, String name,
+        FieldValueOperator<E> value) {
         if (value == null) {
             setParameterNull(call, name);
         } else {
@@ -2312,7 +2315,7 @@ public final class JdbcUtils {
             Map<String, Object> resultMap = new HashMap<>();
             ResultSetMetaData metaData = rs.getMetaData();
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                Class<?> type = manager.getJavaType(JDBCType.valueOf(metaData.getColumnType(i)));
+                Class<? extends Serializable> type = manager.getJavaType(JDBCType.valueOf(metaData.getColumnType(i)));
                 Object value = null;
                 if (type != null) {
                     value = manager.get(rs, i, type);

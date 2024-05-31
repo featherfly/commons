@@ -1,5 +1,6 @@
 package cn.featherfly.common.db.mapping;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -12,23 +13,24 @@ import java.util.Set;
 public class SimpleStore extends AbstractStore {
 
     /** The java to sql type mappers. */
-    private Set<JavaSqlTypeMapper<Object>> javaSqlTypeMappers = new LinkedHashSet<>(0);
+    private Set<JavaSqlTypeMapper<Serializable>> javaSqlTypeMappers = new LinkedHashSet<>(0);
 
     /**
      * Adds the.
      *
+     * @param <E> the element type
      * @param mapper the mapper
      */
     @SuppressWarnings("unchecked")
-    public void add(JavaSqlTypeMapper<?> mapper) {
-        javaSqlTypeMappers.add((JavaSqlTypeMapper<Object>) mapper);
+    public <E extends Serializable> void add(JavaSqlTypeMapper<E> mapper) {
+        javaSqlTypeMappers.add((JavaSqlTypeMapper<Serializable>) mapper);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected Collection<JavaSqlTypeMapper<Object>> getJavaSqlTypeMappers() {
+    protected Collection<JavaSqlTypeMapper<Serializable>> getJavaSqlTypeMappers() {
         return javaSqlTypeMappers;
     }
 }

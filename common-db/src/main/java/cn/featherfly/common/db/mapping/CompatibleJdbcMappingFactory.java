@@ -1,5 +1,6 @@
 package cn.featherfly.common.db.mapping;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -121,7 +122,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
 
         boolean findPk = false;
         for (BeanProperty<?, ?> beanProperty : bps) {
-            if (mappingWithJpa(tm, (BeanProperty<Object, ?>) beanProperty, tableMapping,
+            if (mappingWithJpa(tm, (BeanProperty<Object, Serializable>) beanProperty, tableMapping,
                 (PropertyAccessor<Object>) propertyAccessor, logInfo)) {
                 findPk = true;
             }
@@ -150,27 +151,32 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
         return classMapping;
     }
 
-    private void mappinEmbedded(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty, Table tableMetadata,
-        PropertyAccessor<Object> propertyAccessor, StringBuilder logInfo) {
+    private void mappinEmbedded(JdbcPropertyMapping mapping, BeanProperty<?, ? extends Serializable> beanProperty,
+        Table tableMetadata, PropertyAccessor<Object> propertyAccessor, StringBuilder logInfo) {
         mapping.setMode(Mode.EMBEDDED);
         setPropertyMapping(mapping, beanProperty);
-        mapping.setSetter(propertyAccessor.getProperty(beanProperty.getIndex())::set);
-        mapping.setGetter(propertyAccessor.getProperty(beanProperty.getIndex())::get);
+        mapping.setProperty(propertyAccessor.getProperty(beanProperty.getIndex()));
+        mapping.setSetter(mapping.getProperty()::set);
+        mapping.setGetter(mapping.getProperty()::get);
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
-        for (BeanProperty<?, ?> bp : bd.getBeanProperties()) {
-            if (isTransient(bp, logInfo)) {
+        for (BeanProperty<?, ?> obp : bd.getBeanProperties()) {
+            if (isTransient(obp, logInfo)) {
                 continue;
             }
+            @SuppressWarnings("unchecked")
+            BeanProperty<?, Serializable> bp = (BeanProperty<?, Serializable>) obp;
             String columnName = getMappingColumnName(bp);
             columnName = dialect.convertTableOrColumnName(columnName);
             JdbcPropertyMapping columnMapping = new JdbcPropertyMapping();
             columnMapping.setRepositoryFieldName(columnName);
             setJavaSqlTypeMapper(columnMapping, bp);
             setPropertyMapping(columnMapping, bp);
+            columnMapping.setProperty(
+                propertyAccessor.getProperty(mapping.getPropertyIndex(), columnMapping.getPropertyIndex()));
             columnMapping.setSetter((obj, value) -> propertyAccessor.setPropertyValue(obj,
                 new int[] { mapping.getPropertyIndex(), columnMapping.getPropertyIndex() }, value));
-            columnMapping.setGetter(obj -> propertyAccessor.getPropertyValue(obj,
-                new int[] { mapping.getPropertyIndex(), columnMapping.getPropertyIndex() }));
+            columnMapping.setGetter(obj -> (Serializable) propertyAccessor.getPropertyValue(obj,
+                mapping.getPropertyIndex(), columnMapping.getPropertyIndex()));
 
             Column column = bp.getAnnotation(Column.class);
             if (column != null) {
@@ -226,7 +232,7 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
     //        }
     //    }
 
-    private boolean mappingWithJpa(Table tableMetadata, BeanProperty<Object, ?> beanProperty,
+    private boolean mappingWithJpa(Table tableMetadata, BeanProperty<Object, Serializable> beanProperty,
         Map<String, JdbcPropertyMapping> tableMapping, PropertyAccessor<Object> propertyAccessor,
         StringBuilder logInfo) {
         if (isTransient(beanProperty, logInfo)) {
@@ -245,8 +251,9 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
                 columnName = dialect.convertTableOrColumnName(columnName);
                 //                setJavaSqlTypeMapper(mapping, beanProperty);
                 //                setPropertyMapping(mapping, beanProperty);
-                mapping.setSetter(propertyAccessor.getProperty(beanProperty.getIndex())::set);
-                mapping.setGetter(propertyAccessor.getProperty(beanProperty.getIndex())::get);
+                mapping.setProperty(propertyAccessor.getProperty(beanProperty.getIndex()));
+                mapping.setSetter(mapping.getProperty()::set);
+                mapping.setGetter(mapping.getProperty()::get);
                 if (isPk) {
                     setIdGenerator(mapping, beanProperty, tableMetadata.getName(), columnName);
                 }
@@ -297,13 +304,16 @@ public class CompatibleJdbcMappingFactory extends AbstractJdbcMappingFactory {
         if (!nameSet.containsKey(columnNameLowerCase)) {
             // 转换下划线，并使用驼峰
             String propertyName = WordUtils.parseToUpperFirst(columnNameLowerCase, Chars.UNDER_LINE_CHAR);
-            BeanProperty<?, ?> beanProperty = bd.findBeanProperty(new BeanPropertyNameRegexMatcher(propertyName));
+            @SuppressWarnings("unchecked")
+            BeanProperty<?, Serializable> beanProperty = (BeanProperty<?, Serializable>) bd
+                .findBeanProperty(new BeanPropertyNameRegexMatcher(propertyName));
             if (beanProperty != null && !isTransient(beanProperty, logInfo)) {
                 JdbcPropertyMapping mapping = new JdbcPropertyMapping();
                 setJavaSqlTypeMapper(mapping, beanProperty);
                 setPropertyMapping(mapping, beanProperty);
-                mapping.setSetter(propertyAccessor.getProperty(beanProperty.getIndex())::set);
-                mapping.setGetter(propertyAccessor.getProperty(beanProperty.getIndex())::get);
+                mapping.setProperty(propertyAccessor.getProperty(beanProperty.getIndex()));
+                mapping.setSetter(mapping.getProperty()::set);
+                mapping.setGetter(mapping.getProperty()::get);
 
                 setMappingColumnValue(mapping, cmd, false);
 

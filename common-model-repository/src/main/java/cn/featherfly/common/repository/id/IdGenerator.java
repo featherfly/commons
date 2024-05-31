@@ -10,6 +10,8 @@ package cn.featherfly.common.repository.id;
 
 import java.io.Serializable;
 
+import cn.featherfly.common.repository.mapping.PropertyMapping;
+
 /**
  * id generator.
  *
@@ -36,7 +38,8 @@ public interface IdGenerator {
      *
      * @param <E> the element type
      * @param entity the entity
+     * @param idPropertyMapping the id property mapping
      * @return the serializable
      */
-    <E> Serializable generate(E entity);
+    <E> Serializable generate(E entity, PropertyMapping<?> idPropertyMapping);
 }

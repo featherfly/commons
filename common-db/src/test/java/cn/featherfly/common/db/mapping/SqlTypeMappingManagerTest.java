@@ -139,6 +139,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         assertEquals(manager.getSqlType(Long[].class), JDBCType.VARCHAR);
 
         assertEquals(manager.getJavaType(JDBCType.DOUBLE), BigDecimal.class);
+
         manager.regist(new SqlTypeToJavaRegister<Double>() {
             @Override
             public Class<Double> getJavaType() {
@@ -239,7 +240,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         String insert = "INSERT INTO `db_test`.`cms_article` (`ID`, `title`, `content`) VALUES (null, ?, ?)";
         Long[] contentArray = new Long[] { 1L, 2L, 3L };
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
+            PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
             manager.set(prep.getPreparedStatement(), 1, Randoms.getString(6));
             manager.set(prep.getPreparedStatement(), 2, contentArray);
             boolean res = prep.execute();
@@ -248,7 +249,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
         String select = "select * from cms_article";
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                PreparedStatementWrapper prep = connection.prepareStatement(select)) {
+            PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
             Class<Long[]> gc = Long[].class;
             Class<String> gts = String.class;
@@ -281,7 +282,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         content.setImg("c_img");
 
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
+            PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
             manager.set(prep.getPreparedStatement(), 1, Randoms.getString(6));
             //            manager.set(prep.getPreparedStatement(), 2, content);
             manager.set(prep.getPreparedStatement(), 2, content, contentProperty);
@@ -292,7 +293,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
         String select = "select * from cms_article";
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                PreparedStatementWrapper prep = connection.prepareStatement(select)) {
+            PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
             while (rs.next()) {
                 String title = manager.get(rs.getResultSet(), 2, String.class);
@@ -323,7 +324,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         content.setImg("c_img");
 
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
+            PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
             manager.set(prep.getPreparedStatement(), 1, Randoms.getString(6));
             //            manager.set(prep.getPreparedStatement(), 2, content);
             manager.set(prep.getPreparedStatement(), 2, content, contentProperty);
@@ -334,7 +335,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
         String select = "select * from cms_article";
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                PreparedStatementWrapper prep = connection.prepareStatement(select)) {
+            PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
             while (rs.next()) {
                 String title = manager.get(rs.getResultSet(), 2, String.class);
@@ -357,7 +358,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         Class<Content> type = Content.class;
 
         manager.regist(
-                new ObjectToJsonMapper<>(type).addAllow("cms_article", "content2").addAllow("cms_article", "content3"));
+            new ObjectToJsonMapper<>(type).addAllow("cms_article", "content2").addAllow("cms_article", "content3"));
 
         String insert = "INSERT INTO `db_test`.`cms_article` (`ID`, `title`, `content2`, `content3`) VALUES (null, ?, ?, ?)";
         Content content3 = new Content();
@@ -368,7 +369,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         content2.setImg("c2_img");
 
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
+            PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
             manager.set(prep.getPreparedStatement(), 1, Randoms.getString(6));
             manager.set(prep.getPreparedStatement(), 2, content2, type);
             manager.set(prep.getPreparedStatement(), 3, content3, type);
@@ -379,7 +380,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
         String select = "select * from cms_article";
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                PreparedStatementWrapper prep = connection.prepareStatement(select)) {
+            PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
             //            ClassType<String> gts = new ClassType<>(String.class);
             Class<String> gts = String.class;
@@ -421,7 +422,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         content2.setImg("c2_img");
 
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
+            PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
             manager.set(prep.getPreparedStatement(), 1, Randoms.getString(6));
             manager.set(prep.getPreparedStatement(), 2, content2, type);
             manager.set(prep.getPreparedStatement(), 3, content3, type);
@@ -432,7 +433,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
         String select = "select * from cms_article";
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                PreparedStatementWrapper prep = connection.prepareStatement(select)) {
+            PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
             Class<String> gts = String.class;
             while (rs.next()) {
@@ -473,7 +474,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         BeanDescriptor<Article> bd = BeanDescriptor.getBeanDescriptor(Article.class);
 
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
+            PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
             manager.set(prep.getPreparedStatement(), 1, Randoms.getString(6));
             manager.set(prep.getPreparedStatement(), 2, content2, bd.getBeanProperty(Article::getContent2));
             manager.set(prep.getPreparedStatement(), 3, content3, bd.getBeanProperty(Article::getContent3));
@@ -484,7 +485,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
         String select = "select * from cms_article";
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                PreparedStatementWrapper prep = connection.prepareStatement(select)) {
+            PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
             //            ClassType<String> gts = new ClassType<>(String.class);
             Class<String> gts = String.class;
@@ -536,12 +537,12 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
         Content[] contentArray = new Content[] { content1, content2, content3 };
         List<Content> content2List = ArrayUtils.toList(content3, content2, content1);
         Map<String, Content> content3Map = new ChainMapImpl<String, Content>(new LinkedHashMap<>())
-                .putChain("content2", content2).putChain("content1", content1).putChain("content3", content3);
+            .putChain("content2", content2).putChain("content1", content1).putChain("content3", content3);
 
         System.out.println("content3Map -> " + content3Map.toString());
 
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
+            PreparedStatementWrapper prep = connection.prepareStatement(insert)) {
             manager.set(prep.getPreparedStatement(), 1, Randoms.getString(6));
             manager.set(prep.getPreparedStatement(), 2, contentArray, bd.getBeanProperty(Article2::getContent));
             manager.set(prep.getPreparedStatement(), 3, content2List, bd.getBeanProperty(Article2::getContent2));
@@ -553,7 +554,7 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
         String select = "select * from cms_article";
         try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
-                PreparedStatementWrapper prep = connection.prepareStatement(select)) {
+            PreparedStatementWrapper prep = connection.prepareStatement(select)) {
             ResultSetWrapper rs = prep.executeQuery();
             //            ClassType<String> gts = new ClassType<>(String.class);
             Class<String> gts = String.class;
@@ -566,12 +567,12 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
                 assertEquals(contentArray, contentResult);
 
                 List<Content> content2Result = manager.get(rs.getResultSet(), 4,
-                        bd.getBeanProperty(Article2::getContent2));
+                    bd.getBeanProperty(Article2::getContent2));
                 System.out.println("content2 -> " + content2Result);
                 assertEquals(content2List, content2Result);
 
                 Map<String, Content> content3Result = manager.get(rs.getResultSet(), 5,
-                        bd.getBeanProperty(Article2::getContent3));
+                    bd.getBeanProperty(Article2::getContent3));
                 System.out.println("content3 -> " + content3Result);
                 assertEquals(content3Map, content3Result);
             }

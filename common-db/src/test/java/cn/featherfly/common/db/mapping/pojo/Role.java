@@ -1,18 +1,18 @@
 
 package cn.featherfly.common.db.mapping.pojo;
 
+import java.io.Serializable;
+
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * <p>
  * Role
- * </p>
  *
  * @author zhongj
  */
 @Table
-public class Role {
+public class Role implements Serializable {
 
     @Id
     private Long id;

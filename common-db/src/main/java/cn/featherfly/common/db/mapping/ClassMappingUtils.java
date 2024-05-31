@@ -114,7 +114,7 @@ public final class ClassMappingUtils {
         column.setSize(pm.getSize());
         column.setColumnIndex(index);
         // pm.getPropertyType()是对象，所以使用propertyMapping.getPropertyType()
-        SQLType sqlType = sqlTypeMappingManager.getSqlType((Class<? extends Object>) propertyMapping.getPropertyType());
+        SQLType sqlType = sqlTypeMappingManager.getSqlType(propertyMapping.getPropertyType());
         if (sqlType == null) {
             throw new JdbcMappingException("no SqlType found for type " + propertyMapping.getPropertyType());
         }

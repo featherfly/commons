@@ -8,8 +8,6 @@
  */
 package cn.featherfly.common.repository.id;
 
-import java.io.Serializable;
-
 import cn.featherfly.common.lang.UUIDGenerator.Type;
 
 /**
@@ -24,14 +22,5 @@ public class GUIDGenerator extends UUIDGenerator {
      */
     public GUIDGenerator() {
         super(Type.UUID36);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <E> Serializable generate(E entity) {
-        // YUFEI_TODO Auto-generated method stub
-        return null;
     }
 }

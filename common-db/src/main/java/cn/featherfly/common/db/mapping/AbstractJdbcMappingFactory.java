@@ -1,6 +1,7 @@
 
 package cn.featherfly.common.db.mapping;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.SQLType;
 import java.util.ArrayList;
@@ -142,10 +143,12 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
     /**
      * Sets the column mapping.
      *
+     * @param <E> the element type
      * @param mapping the mapping
      * @param beanProperty the bean property
      */
-    protected void setColumnMapping(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty) {
+    protected <E extends Serializable> void setColumnMapping(JdbcPropertyMapping mapping,
+        BeanProperty<?, E> beanProperty) {
         //        boolean isPk = beanProperty.hasAnnotation(Id.class);
         Column column = beanProperty.getAnnotation(Column.class);
         setPropertyMapping(mapping, beanProperty);
@@ -264,7 +267,8 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      * @param mapping the mapping
      * @param beanProperty the bean property
      */
-    protected void setPropertyMapping(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty) {
+    protected void setPropertyMapping(JdbcPropertyMapping mapping,
+        BeanProperty<?, ? extends Serializable> beanProperty) {
         mapping.setPropertyName(beanProperty.getName());
         mapping.setPropertyIndex(beanProperty.getIndex());
         mapping.setPropertyType(beanProperty.getType());
@@ -273,22 +277,26 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
     /**
      * Sets the java sql type mapper.
      *
+     * @param <E> the element type
      * @param mapping the mapping
      * @param beanProperty the bean property
      */
-    protected void setJavaSqlTypeMapper(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty) {
-        JavaSqlTypeMapper<?> mapper = sqlTypeMappingManager.getJavaSqlTypeMapper(beanProperty);
+    protected <E extends Serializable> void setJavaSqlTypeMapper(JdbcPropertyMapping mapping,
+        BeanProperty<?, E> beanProperty) {
+        @SuppressWarnings("unchecked")
+        JavaSqlTypeMapper<Serializable> mapper = sqlTypeMappingManager
+            .getJavaSqlTypeMapper((BeanProperty<?, Serializable>) beanProperty);
         if (mapper != null) {
             mapping.setJavaTypeSqlTypeOperator(mapper);
         } else {
-            if (beanProperty.getClass().isEnum()) {
+            if (beanProperty.getType().isEnum()) {
                 @SuppressWarnings({ "rawtypes", "unchecked" })
-                Class<? extends Enum<?>> t = (Class) beanProperty.getClass();
-                mapping.setJavaTypeSqlTypeOperator(new EnumSqlTypeOperator<>(t));
+                Class<Enum> enumType = ((BeanProperty<?, Enum>) beanProperty).getType();
+                mapping.setJavaTypeSqlTypeOperator(new EnumSqlTypeOperator<>(enumType));
             } else {
                 // YUFEI_TODO 后续来优化打开检查，主要是现在父JdbcPropertyMapping（非具体映射）也调用了此方法，造成检查不通过
                 //                mapping.setJavaTypeSqlTypeOperator(new DefaultTypesSqlTypeOperator<>(beanProperty.getType(), true));
-                JavaTypeSqlTypeOperator<?> operator = BasicOperators.get(beanProperty.getType());
+                JavaTypeSqlTypeOperator<E> operator = BasicOperators.get(beanProperty.getType());
                 if (operator != null) {
                     mapping.setJavaTypeSqlTypeOperator(operator);
                 } else {
@@ -385,19 +393,23 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
     /**
      * Mapping foreign key.
      *
+     * @param <E> the element type
      * @param mapping the mapping
      * @param beanProperty the bean property
      * @param columnName the column name
      * @param propertyAccessor the property accessor
      * @param logInfo the log info
      */
-    protected void mappingForeignKey(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty, String columnName,
-        PropertyAccessor<Object> propertyAccessor, StringBuilder logInfo) {
+    @SuppressWarnings("unchecked")
+    protected <E extends Serializable> void mappingForeignKey(JdbcPropertyMapping mapping,
+        BeanProperty<?, E> beanProperty, String columnName, PropertyAccessor<Object> propertyAccessor,
+        StringBuilder logInfo) {
         mapping.setMode(Mode.MANY_TO_ONE);
         mapping.setRepositoryFieldName(columnName);
         setPropertyMapping(mapping, beanProperty);
-        mapping.setSetter(propertyAccessor.getProperty(beanProperty.getIndex())::set);
-        mapping.setGetter(propertyAccessor.getProperty(beanProperty.getIndex())::get);
+        mapping.setProperty(propertyAccessor.getProperty(beanProperty.getIndex()));
+        mapping.setSetter(mapping.getProperty()::set);
+        mapping.setGetter(mapping.getProperty()::get);
         BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
         Collection<BeanProperty<?, ?>> bps = bd.findBeanPropertys(new BeanPropertyAnnotationMatcher(Id.class));
         if (Lang.isEmpty(bps)) {
@@ -408,17 +420,19 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
             columnMapping.setRepositoryFieldName(columnName);
             //            setJavaSqlTypeMapper(columnMapping, bp);
             //            setPropertyMapping(columnMapping, bp);
+            columnMapping.setProperty(
+                propertyAccessor.getProperty(mapping.getPropertyIndex(), columnMapping.getPropertyIndex()));
             columnMapping.setSetter((obj, value) -> propertyAccessor.setPropertyValue(obj,
                 new int[] { mapping.getPropertyIndex(), columnMapping.getPropertyIndex() }, value));
-            columnMapping.setGetter(obj -> propertyAccessor.getPropertyValue(obj,
-                new int[] { mapping.getPropertyIndex(), columnMapping.getPropertyIndex() }));
+            columnMapping.setGetter(obj -> (Serializable) propertyAccessor.getPropertyValue(obj,
+                mapping.getPropertyIndex(), columnMapping.getPropertyIndex()));
             columnMapping.setPrimaryKey(mapping.getPrimaryKey());
             if (logger.isDebugEnabled()) {
                 logInfo.append(String.format("%s###\t%s -> %s", SystemPropertyUtils.getLineSeparator(),
                     mapping.getPropertyName() + "." + columnMapping.getPropertyName(),
                     columnMapping.getRepositoryFieldName()));
             }
-            setColumnMapping(columnMapping, bp);
+            setColumnMapping(columnMapping, (BeanProperty<?, Serializable>) bp);
             mapping.add(columnMapping);
         }
     }

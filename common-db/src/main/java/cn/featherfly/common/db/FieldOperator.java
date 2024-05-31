@@ -1,5 +1,6 @@
 package cn.featherfly.common.db;
 
+import java.io.Serializable;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,7 +11,7 @@ import java.sql.ResultSet;
  * @author zhongj
  * @param <T> the field value type
  */
-public interface FieldOperator<T> {
+public interface FieldOperator<T extends Serializable> {
 
     /**
      * Gets the type.
@@ -22,7 +23,7 @@ public interface FieldOperator<T> {
     /**
      * set the field value.
      *
-     * @param prep           the prep
+     * @param prep the prep
      * @param parameterIndex the parameter index
      */
     void set(PreparedStatement prep, int parameterIndex);
@@ -30,7 +31,7 @@ public interface FieldOperator<T> {
     /**
      * set the field value.
      *
-     * @param prep          the prep
+     * @param prep the prep
      * @param parameterName the parameter name
      */
     void set(CallableStatement prep, String parameterName);
@@ -38,7 +39,7 @@ public interface FieldOperator<T> {
     /**
      * update the field value with ResultSet.
      *
-     * @param rs             the rs
+     * @param rs the rs
      * @param parameterIndex the parameter index
      */
     void update(ResultSet rs, int parameterIndex);
@@ -46,7 +47,7 @@ public interface FieldOperator<T> {
     /**
      * get the field value.
      *
-     * @param rs             the rs
+     * @param rs the rs
      * @param parameterIndex the parameter index
      * @return the v
      */

@@ -10,6 +10,8 @@ package cn.featherfly.common.repository.id;
 
 import java.io.Serializable;
 
+import cn.featherfly.common.repository.mapping.PropertyMapping;
+
 /**
  * AssignGenerator.
  *
@@ -48,8 +50,8 @@ public class AssignGenerator implements IdGenerator {
      * {@inheritDoc}
      */
     @Override
-    public <E> Serializable generate(E entity) {
-        return null;
+    public <E> Serializable generate(E entity, PropertyMapping<?> idPropertyMapping) {
+        return (Serializable) idPropertyMapping.getGetter().apply(entity);
     }
 
     /**

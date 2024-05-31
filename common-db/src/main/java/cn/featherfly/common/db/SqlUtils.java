@@ -11,6 +11,7 @@
 
 package cn.featherfly.common.db;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -167,20 +168,22 @@ public final class SqlUtils {
                 } else if (param.getClass() == float[].class) {
                     Array.set(result, i, FieldValueOperator.create(propertyMapping, Array.getFloat(param, i)));
                 } else {
-                    Array.set(result, i, FieldValueOperator.create(propertyMapping, Array.get(param, i)));
+                    Array.set(result, i,
+                        FieldValueOperator.create(propertyMapping, (Serializable) Array.get(param, i)));
                 }
             }
         } else if (param instanceof Collection) {
             result = new ArrayList<>();
-            for (Object op : (Collection<?>) param) {
+            for (Serializable op : (Collection<Serializable>) param) {
                 if (op instanceof FieldValueOperator) {
-                    ((Collection<FieldValueOperator<?>>) result).add((FieldValueOperator<?>) op);
+                    ((Collection<FieldValueOperator<? extends Serializable>>) result).add((FieldValueOperator<?>) op);
                 } else {
-                    ((Collection<FieldValueOperator<?>>) result).add(FieldValueOperator.create(propertyMapping, op));
+                    ((Collection<FieldValueOperator<? extends Serializable>>) result)
+                        .add(FieldValueOperator.create(propertyMapping, op));
                 }
             }
         } else if (!(param instanceof FieldValueOperator)) {
-            result = FieldValueOperator.create(propertyMapping, param);
+            result = FieldValueOperator.create(propertyMapping, (Serializable) param);
         } else {
             result = param;
         }
@@ -208,7 +211,7 @@ public final class SqlUtils {
             if (p instanceof FieldValueOperator) {
                 paramList.add((FieldValueOperator<?>) p);
             } else {
-                paramList.add(FieldValueOperator.create(p));
+                paramList.add(FieldValueOperator.create((Serializable) p));
             }
         });
         if (paramList.isEmpty()) {
@@ -242,7 +245,7 @@ public final class SqlUtils {
                 if (p instanceof FieldValueOperator) {
                     paramList.add((FieldValueOperator<?>) p);
                 } else {
-                    paramList.add(FieldValueOperator.create(p));
+                    paramList.add(FieldValueOperator.create((Serializable) p));
                 }
             });
         }

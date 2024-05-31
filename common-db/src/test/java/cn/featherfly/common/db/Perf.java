@@ -37,7 +37,7 @@ public class Perf {
     private static final String SELECT = "select";
 
     private static final char[] SELECT_CHARS = new char[] { 's', 'e', 'l', 'e', 'c', 't', 'S', 'E', 'L', 'E', 'C',
-            'T' };
+        'T' };
 
     private static final int SELECT_LEN = SELECT.length();
 
@@ -154,5 +154,4 @@ public class Perf {
 
         }
     }
-
 }

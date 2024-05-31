@@ -1,6 +1,8 @@
 
 package cn.featherfly.common.db.mapping;
 
+import java.io.Serializable;
+
 /**
  * <p>
  * JavaToSqlTypeRegister
@@ -10,6 +12,6 @@ package cn.featherfly.common.db.mapping;
  * @author zhongj
  * @param <E> to regist java type
  */
-public interface JavaToSqlTypeRegister<E extends Object> extends TypeRegister<E> {
+public interface JavaToSqlTypeRegister<E extends Serializable> extends TypeRegister<E> {
 
 }

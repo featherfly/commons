@@ -25,7 +25,7 @@ import cn.featherfly.common.lang.Strings;
  * @author zhongj
  * @param <E> the element type
  */
-public class EnumSqlTypeOperator<E extends Enum<?>> implements JavaTypeSqlTypeOperator<E> {
+public class EnumSqlTypeOperator<E extends Enum<E>> implements JavaTypeSqlTypeOperator<E> {
 
     private Class<E> type;
 
@@ -43,7 +43,7 @@ public class EnumSqlTypeOperator<E extends Enum<?>> implements JavaTypeSqlTypeOp
     /**
      * Instantiates a new default java sql type operator.
      *
-     * @param type           the type
+     * @param type the type
      * @param enumUseOrdinal the enum use ordinal
      */
     public EnumSqlTypeOperator(Class<E> type, boolean enumUseOrdinal) {
@@ -53,9 +53,9 @@ public class EnumSqlTypeOperator<E extends Enum<?>> implements JavaTypeSqlTypeOp
     /**
      * Instantiates a new default java sql type operator.
      *
-     * @param type           the type
+     * @param type the type
      * @param enumUseOrdinal the enum use ordinal
-     * @param checkType      the check type
+     * @param checkType the check type
      */
     public EnumSqlTypeOperator(Class<E> type, boolean enumUseOrdinal, boolean checkType) {
         super();

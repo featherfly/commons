@@ -11,6 +11,7 @@ package cn.featherfly.common.db.id;
 import java.io.Serializable;
 
 import cn.featherfly.common.repository.id.IdGenerator;
+import cn.featherfly.common.repository.mapping.PropertyMapping;
 
 /**
  * The Class DoNothingIdGenerator.
@@ -43,7 +44,7 @@ public class DatabaseGenerationIdGenerator implements IdGenerator {
      * {@inheritDoc}
      */
     @Override
-    public <E> Serializable generate(E entity) {
+    public <E> Serializable generate(E entity, PropertyMapping<?> idPropertyMapping) {
         return null;
     }
 

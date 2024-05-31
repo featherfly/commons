@@ -1,5 +1,6 @@
 package cn.featherfly.common.db;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -20,7 +21,7 @@ import cn.featherfly.common.lang.vt.Value;
  * @author zhongj
  * @param <T> the value type
  */
-public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
+public class FieldValueOperator<T extends Serializable> implements FieldOperator<T>, Value<T> {
 
     /** The Constant EMPTY_ARRAY. */
     public static final FieldValueOperator<?>[] EMPTY_ARRAY = new FieldValueOperator[0];
@@ -176,6 +177,7 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
      * @return FieldValueOperator or FieldValueOperator[] or
      *         List&lt;FieldValueOperator&gt;
      */
+    @SuppressWarnings("unchecked")
     protected Object createAll(JdbcPropertyMapping pm, Object value) {
         Object param = null;
         if (value != null) {
@@ -183,14 +185,15 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
                 int length = Array.getLength(value);
                 param = Array.newInstance(FieldValueOperator.class, length);
                 for (int i = 0; i < length; i++) {
-                    Array.set(param, i, create(pm, Array.get(value, i)));
+                    Array.set(param, i, create(pm, (Serializable) Array.get(value, i)));
                 }
             } else if (value instanceof Collection) {
-                param = ((Collection<?>) value).stream().map(op -> create(pm, op)).collect(Collectors.toList());
+                param = ((Collection<Serializable>) value).stream().map(op -> create(pm, op))
+                    .collect(Collectors.toList());
             } else if (value instanceof FieldValueOperator) {
                 param = value;
             } else {
-                param = create(pm, value);
+                param = create(pm, (Serializable) value);
             }
         }
         return param;
@@ -205,7 +208,7 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
      * @return the field value operator
      */
     @SuppressWarnings("unchecked")
-    public static <E> FieldValueOperator<E> create(JdbcPropertyMapping pm, E value) {
+    public static <E extends Serializable> FieldValueOperator<E> create(JdbcPropertyMapping pm, E value) {
         return value == null ? null
             : new FieldValueOperator<>((JavaTypeSqlTypeOperator<E>) pm.getJavaTypeSqlTypeOperator(), value);
     }
@@ -217,10 +220,8 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
      * @param value the value
      * @return the field value operator
      */
-    @SuppressWarnings("unchecked")
     public static FieldValueOperator<Integer> create(JdbcPropertyMapping pm, int value) {
-        return new FieldValueOperator<>((JavaTypeSqlTypeOperator<Integer>) pm.getJavaTypeSqlTypeOperator(), value,
-            Integer.TYPE);
+        return new FieldValueOperator<>(pm.getJavaTypeSqlTypeOperator(), value, Integer.TYPE);
     }
 
     /**
@@ -230,10 +231,8 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
      * @param value the value
      * @return the field value operator
      */
-    @SuppressWarnings("unchecked")
     public static FieldValueOperator<Long> create(JdbcPropertyMapping pm, long value) {
-        return new FieldValueOperator<>((JavaTypeSqlTypeOperator<Long>) pm.getJavaTypeSqlTypeOperator(), value,
-            Long.TYPE);
+        return new FieldValueOperator<>(pm.getJavaTypeSqlTypeOperator(), value, Long.TYPE);
     }
 
     /**
@@ -243,10 +242,8 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
      * @param value the value
      * @return the field value operator
      */
-    @SuppressWarnings("unchecked")
     public static FieldValueOperator<Double> create(JdbcPropertyMapping pm, double value) {
-        return new FieldValueOperator<>((JavaTypeSqlTypeOperator<Double>) pm.getJavaTypeSqlTypeOperator(), value,
-            Double.TYPE);
+        return new FieldValueOperator<>(pm.getJavaTypeSqlTypeOperator(), value, Double.TYPE);
     }
 
     /**
@@ -256,10 +253,8 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
      * @param value the value
      * @return the field value operator
      */
-    @SuppressWarnings("unchecked")
     public static FieldValueOperator<Float> create(JdbcPropertyMapping pm, float value) {
-        return new FieldValueOperator<>((JavaTypeSqlTypeOperator<Float>) pm.getJavaTypeSqlTypeOperator(), value,
-            Float.TYPE);
+        return new FieldValueOperator<>(pm.getJavaTypeSqlTypeOperator(), value, Float.TYPE);
     }
 
     /**
@@ -269,10 +264,8 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
      * @param value the value
      * @return the field value operator
      */
-    @SuppressWarnings("unchecked")
     public static FieldValueOperator<Boolean> create(JdbcPropertyMapping pm, boolean value) {
-        return new FieldValueOperator<>((JavaTypeSqlTypeOperator<Boolean>) pm.getJavaTypeSqlTypeOperator(), value,
-            Boolean.TYPE);
+        return new FieldValueOperator<>(pm.getJavaTypeSqlTypeOperator(), value, Boolean.TYPE);
     }
 
     /**
@@ -282,10 +275,8 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
      * @param value the value
      * @return the field value operator
      */
-    @SuppressWarnings("unchecked")
     public static FieldValueOperator<Byte> create(JdbcPropertyMapping pm, byte value) {
-        return new FieldValueOperator<>((JavaTypeSqlTypeOperator<Byte>) pm.getJavaTypeSqlTypeOperator(), value,
-            Byte.TYPE);
+        return new FieldValueOperator<>(pm.getJavaTypeSqlTypeOperator(), value, Byte.TYPE);
     }
 
     /**
@@ -295,10 +286,8 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
      * @param value the value
      * @return the field value operator
      */
-    @SuppressWarnings("unchecked")
     public static FieldValueOperator<Short> create(JdbcPropertyMapping pm, short value) {
-        return new FieldValueOperator<>((JavaTypeSqlTypeOperator<Short>) pm.getJavaTypeSqlTypeOperator(), value,
-            Short.TYPE);
+        return new FieldValueOperator<>(pm.getJavaTypeSqlTypeOperator(), value, Short.TYPE);
     }
 
     /**
@@ -308,7 +297,7 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
      * @param value the value
      * @return the field value operator
      */
-    public static <E> FieldValueOperator<E> create(E value) {
+    public static <E extends Serializable> FieldValueOperator<E> create(E value) {
         if (value == null) {
             return null;
         }
@@ -417,7 +406,7 @@ public class FieldValueOperator<T> implements FieldOperator<T>, Value<T> {
         return throwNoJavaTypeSqlTypeOperatorSupport(Short.TYPE);
     }
 
-    private static <T> FieldValueOperator<T> throwNoJavaTypeSqlTypeOperatorSupport(Class<T> type) {
+    private static <T extends Serializable> FieldValueOperator<T> throwNoJavaTypeSqlTypeOperatorSupport(Class<T> type) {
         throw new JdbcException("no JavaTypeSqlTypeOperator support for " + type.getName());
     }
 

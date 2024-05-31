@@ -8,7 +8,8 @@
 4. 加入Instantiator，ReflectionInstantiator
 5. 加入属性访问相关的功能(PropertyAccessor,PropertyAccessorFactory,Property,Getter,Setter...)
 6. 加入AllowListPolicy,DenyListPolicy,AllowDenyListPolicy
-
+7. UUIDGenerator加入Type枚举
+8. WordUtils加入parseToLowerCamelCase,parseToUpperCamelCase
 
 
 # 1.12.0 2024-05-05

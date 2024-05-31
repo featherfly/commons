@@ -60,6 +60,7 @@ public class ObjectPool<O, P extends ObjectPool<O, P>> implements Pool<Class<?>,
      *
      * @return the all
      */
+    @Override
     public Collection<O> getAll() {
         return objects.values();
     }
@@ -84,30 +85,20 @@ public class ObjectPool<O, P extends ObjectPool<O, P>> implements Pool<Class<?>,
         return objects.containsValue(obj);
     }
 
-    /**
-     * Removes the.
-     *
-     * @param key the key
-     * @return the o
-     */
-    public O remove(Object key) {
+    @Override
+    public O remove(Class<?> key) {
         return objects.remove(key);
     }
 
-    /**
-     * Removes the.
-     *
-     * @param key the key
-     * @param value the value
-     * @return true, if successful
-     */
-    public boolean remove(Object key, Object value) {
+    @Override
+    public boolean remove(Class<?> key, O value) {
         return objects.remove(key, value);
     }
 
     /**
      * Clear.
      */
+    @Override
     public void clear() {
         objects.clear();
     }
@@ -123,5 +114,21 @@ public class ObjectPool<O, P extends ObjectPool<O, P>> implements Pool<Class<?>,
     public P addAll(Map<Class<?>, O> objs) {
         objects.putAll(objs);
         return (P) this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean containsKey(Class<?> type) {
+        return containsType(type);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean containsValue(O value) {
+        return containsObject(value);
     }
 }

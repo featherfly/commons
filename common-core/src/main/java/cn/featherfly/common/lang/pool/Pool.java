@@ -8,6 +8,7 @@
  */
 package cn.featherfly.common.lang.pool;
 
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -44,4 +45,49 @@ public interface Pool<K, V, P extends Pool<K, V, P>> {
      * @return the property accessor manager
      */
     P addAll(Map<K, V> objs);
+
+    /**
+     * Gets the all.
+     *
+     * @return the all
+     */
+    Collection<V> getAll();
+
+    /**
+     * Contains key.
+     *
+     * @param type the type
+     * @return true, if successful
+     */
+    boolean containsKey(K type);
+
+    /**
+     * Contains value.
+     *
+     * @param value the value
+     * @return true, if successful
+     */
+    boolean containsValue(V value);
+
+    /**
+     * Removes the.
+     *
+     * @param key the key
+     * @return the o
+     */
+    V remove(K key);
+
+    /**
+     * Removes the.
+     *
+     * @param key the key
+     * @param value the value
+     * @return true, if successful
+     */
+    boolean remove(K key, V value);
+
+    /**
+     * Clear.
+     */
+    void clear();
 }

@@ -4,23 +4,45 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * <p>
  * UUID生成工具类.<br>
  * 支持生成长度为22,32,36的UUID.<br>
  * 生成性能依次是36&gt;32&gt;22.
- * </p>
  *
  * @author zhongj
  */
 public final class UUIDGenerator {
 
+    /**
+     * The Enum Type.
+     *
+     * @author zhongj
+     */
+    public enum Type {
+        /**
+         * 生成长度为36的UUID.
+         */
+        UUID36,
+        /**
+         * 生成长度为32的UUID.
+         */
+        UUID32,
+        /**
+         * 生成长度为22的UUID.包含字符（ a到z,A到Z,0到9,-_ ）.<br>
+         * 可以用在URL中，但是需要区分大小写，不建议作为数据库主键.
+         */
+        UUID22_LETTERS,
+        /**
+         * 生成长度为22的UUID.包含字符（ a到z,`1234567890-=~!@#$%^&amp;*()_+[]{}\\|;;,./? ）<br>
+         * 包含URL特殊字符，不能在URL中使用，不包含大小写，可以用作数据库主键（优点：短，加速查询；缺点：人眼难识别）.
+         */
+        UUID22_CHARS
+    }
+
     private UUIDGenerator() {
     }
 
     /**
-     * <p>
-     * 生成长度为36的UUID
-     * </p>
+     * 生成长度为36的UUID.
      *
      * @return 长度为36的UUID
      */
@@ -29,9 +51,7 @@ public final class UUIDGenerator {
     }
 
     /**
-     * <p>
-     * 生成长度为32的UUID
-     * </p>
+     * 生成长度为32的UUID.
      *
      * @return 长度为32的UUID
      */
@@ -40,10 +60,8 @@ public final class UUIDGenerator {
     }
 
     /**
-     * <p>
      * 生成长度为22的UUID.包含字符（ a到z,A到Z,0到9,-_ ）.<br>
      * 可以用在URL中，但是需要区分大小写，不建议作为数据库主键。
-     * </p>
      *
      * @return 长度为22的UUID
      */
@@ -54,10 +72,8 @@ public final class UUIDGenerator {
     }
 
     /**
-     * <p>
      * 生成长度为22的UUID.包含字符（ a到z,`1234567890-=~!@#$%^&amp;*()_+[]{}\\|;;,./? ）<br>
      * 包含URL特殊字符，不能在URL中使用，不包含大小写，可以用作数据库主键（优点：短，加速查询；缺点：人眼难识别）
-     * </p>
      *
      * @return 长度为22的UUID
      */
@@ -68,9 +84,7 @@ public final class UUIDGenerator {
     }
 
     /**
-     * <p>
-     * 返回默认的UUID字符串（长度32位）
-     * </p>
+     * 返回默认的UUID字符串（长度32位）.
      *
      * @return 默认的UUID字符串（长度32位）
      */
@@ -78,12 +92,32 @@ public final class UUIDGenerator {
         return generateUUID32();
     }
 
+    /**
+     * 返回指定类型的UUID字符串.
+     *
+     * @param type the type
+     * @return UUID字符串
+     */
+    public static String generateUUID(Type type) {
+        switch (type) {
+            case UUID32:
+                return generateUUID32();
+            case UUID36:
+                return generateUUID36();
+            case UUID22_LETTERS:
+                return generateUUID22Letters();
+            case UUID22_CHARS:
+                return generateUUID22Chars();
+            default:
+                return generateUUID32();
+        }
+    }
+
     // ********************************************************************
     //    private method
     // ********************************************************************
 
     private static String generate() {
-        //        UUID uuid = UUID.randomUUID();
         ThreadLocalRandom random = ThreadLocalRandom.current();
         UUID uuid = new UUID(random.nextInt(), random.nextInt());
         return uuid.toString();

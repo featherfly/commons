@@ -8,9 +8,7 @@ import cn.featherfly.common.constant.Unit;
 import cn.featherfly.common.lang.number.ChineseNumber;
 
 /**
- * <p>
- * 一些单词的处理
- * </p>
+ * 一些单词的处理.
  *
  * @author zhongj
  */
@@ -19,7 +17,7 @@ public final class WordUtils {
     }
 
     /**
-     * 转换第一个字符为大写
+     * 转换第一个字符为大写.
      *
      * @param word 需要转换的字符串
      * @return 转换完成的字符串
@@ -42,7 +40,7 @@ public final class WordUtils {
     }
 
     /**
-     * 转换第一个字符为小写
+     * 转换第一个字符为小写.
      *
      * @param word 需要转换的字符串
      * @return 转换完成的字符串
@@ -65,7 +63,7 @@ public final class WordUtils {
     }
 
     /**
-     * 将传入字符串中含有相应符号后的首个字符转换为大写，并去符号
+     * 将传入字符串中含有相应符号后的首个字符转换为大写，并去符号.
      *
      * @param word 需要转换的字符串
      * @param sign 符号
@@ -76,10 +74,10 @@ public final class WordUtils {
     }
 
     /**
-     * 将传入字符串中含有相应符号后的首个字符转换为大写，并去符号
+     * 将传入字符串中含有相应符号后的首个字符转换为大写，并去符号.
      *
-     * @param word        需要转换的字符串
-     * @param sign        符号
+     * @param word 需要转换的字符串
+     * @param sign 符号
      * @param toLowerCase 不需要大写的字符都转换为小写
      * @return 转换完成的字符串
      */
@@ -113,10 +111,70 @@ public final class WordUtils {
     }
 
     /**
+     * Parses the to lower camel case.
+     *
+     * @param word the word
+     * @param sign the sign
+     * @return the string
+     */
+    public static String parseToLowerCamelCase(String word, char sign) {
+        return parseToCamelCase(word, sign, false);
+    }
+
+    /**
+     * Parses the to upper camel case.
+     *
+     * @param word the word
+     * @param sign the sign
+     * @return the string
+     */
+    public static String parseToUpperCamelCase(String word, char sign) {
+        return parseToCamelCase(word, sign, true);
+    }
+
+    /**
+     * 去除传入字符串中的相应符号，并转换为驼峰命名. aa-bb-cc to aaBbCc or AaBbCc
+     *
+     * @param word 需要转换的字符串
+     * @param sign 符号
+     * @param upperOrLowerCamelCase the upper or lower camel case
+     * @return 转换完成的字符串
+     */
+    private static String parseToCamelCase(String word, char sign, boolean upperOrLowerCamelCase) {
+        if (Lang.isEmpty(word)) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        boolean isSign = false;
+
+        for (int i = 1; i < word.length(); i++) {
+            char c = word.charAt(i);
+            if (c == sign) {
+                isSign = true;
+            } else {
+                if (isSign) {
+                    sb.append(Character.toUpperCase(c));
+                } else {
+                    sb.append(Character.toLowerCase(c));
+                }
+                isSign = false;
+            }
+        }
+        if (sb.length() > 0) {
+            if (upperOrLowerCamelCase) {
+                sb.replace(0, 1, String.valueOf(Character.toUpperCase(sb.charAt(0))));
+            } else {
+                sb.replace(0, 1, String.valueOf(Character.toLowerCase(sb.charAt(0))));
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
      * 将驼峰的单词改为指定符号连接的单词. 如果upperToLower为true，则将大写转换为小写
      *
-     * @param word         需要转换的字符串
-     * @param sign         符号
+     * @param word 需要转换的字符串
+     * @param sign 符号
      * @param upperToLower 是否转换大写为小写
      * @return 转换完成的字符串
      */
@@ -188,8 +246,9 @@ public final class WordUtils {
      * <p>
      * 转换为百分比表示的字符串
      * </p>
+     * .
      *
-     * @param num       待转换的数值
+     * @param num 待转换的数值
      * @param precision 转换后保密几位小数精度
      * @return 转换后的百分比表示字符串
      */

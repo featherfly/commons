@@ -4,6 +4,7 @@ package cn.featherfly.common.db.mapping;
 import java.math.BigDecimal;
 import java.sql.SQLType;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +17,12 @@ import javax.persistence.Id;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cn.featherfly.common.bean.BeanDescriptor;
 import cn.featherfly.common.bean.BeanProperty;
+import cn.featherfly.common.bean.PropertyAccessor;
 import cn.featherfly.common.bean.PropertyAccessorFactory;
+import cn.featherfly.common.bean.matcher.BeanPropertyAnnotationMatcher;
+import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.PostgreSQLDialect;
 import cn.featherfly.common.db.jpa.ColumnDefault;
@@ -34,6 +39,7 @@ import cn.featherfly.common.repository.mapping.ClassNameConversion;
 import cn.featherfly.common.repository.mapping.ClassNameJpaConversion;
 import cn.featherfly.common.repository.mapping.ClassNameUnderscoreConversion;
 import cn.featherfly.common.repository.mapping.PrimaryKey;
+import cn.featherfly.common.repository.mapping.PropertyMapping.Mode;
 import cn.featherfly.common.repository.mapping.PropertyNameConversion;
 import cn.featherfly.common.repository.mapping.PropertyNameJpaConversion;
 import cn.featherfly.common.repository.mapping.PropertyNameUnderscoreConversion;
@@ -69,17 +75,8 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
     /** The property accessor factory. */
     protected final PropertyAccessorFactory propertyAccessorFactory;
 
-    /**
-     * Instantiates a new abstract mapping factory.
-     *
-     * @param metadata the metadata
-     * @param dialect the dialect
-     * @param propertyAccessorFactory the property accessor factory
-     */
-    protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-        PropertyAccessorFactory propertyAccessorFactory) {
-        this(metadata, dialect, null, propertyAccessorFactory);
-    }
+    /** The check mapping. */
+    protected boolean checkMapping;
 
     /**
      * Instantiates a new abstract mapping factory.
@@ -92,22 +89,6 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
     protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
         SqlTypeMappingManager sqlTypeMappingManager, PropertyAccessorFactory propertyAccessorFactory) {
         this(metadata, dialect, sqlTypeMappingManager, null, null, propertyAccessorFactory);
-    }
-
-    /**
-     * Instantiates a new abstract mapping factory.
-     *
-     * @param metadata the metadata
-     * @param dialect the dialect
-     * @param classNameConversions the class name conversions
-     * @param propertyNameConversions the property name conversions
-     * @param propertyAccessorFactory the property accessor factory
-     */
-    protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
-        List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions,
-        PropertyAccessorFactory propertyAccessorFactory) {
-        this(metadata, dialect, new SqlTypeMappingManager(), classNameConversions, propertyNameConversions,
-            propertyAccessorFactory);
     }
 
     /**
@@ -212,6 +193,66 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
     }
 
     /**
+     * Checks if is transient.
+     *
+     * @param beanProperty the bean property
+     * @param logInfo the log info
+     * @return true, if is transient
+     */
+    protected boolean isTransient(BeanProperty<?, ?> beanProperty, StringBuilder logInfo) {
+        boolean result = beanProperty.hasAnnotation(java.beans.Transient.class)
+            || beanProperty.hasAnnotation(javax.persistence.Transient.class);
+        if (result && logger.isDebugEnabled()) {
+            logInfo.append(String.format("%s###\t%s is annotated with @Transient, ignore",
+                SystemPropertyUtils.getLineSeparator(), beanProperty.getName()));
+        }
+        return result;
+    }
+
+    /**
+     * Sets the id generator.
+     *
+     * @param propertyMapping the property mapping
+     * @param bp the bp
+     * @param tableName the table name
+     * @param columnName the column name
+     */
+    protected void setIdGenerator(JdbcPropertyMapping propertyMapping, BeanProperty<?, ?> bp, String tableName,
+        String columnName) {
+        GeneratedValue generatedValue = bp.getAnnotation(GeneratedValue.class);
+        if (generatedValue == null) {
+            //没有指定IdGenerator，手动设置，框架不管
+            return;
+        }
+
+        if (generatedValue.strategy() == GenerationType.AUTO) {
+            // 使用dialect提供的默认IdGenerator
+            PrimaryKey primaryKey = new PrimaryKey(dialect.getIdGenerator(tableName, columnName));
+            propertyMapping.setPrimaryKey(primaryKey);
+
+            if (propertyMapping.isAutoincrement() && dialect instanceof PostgreSQLDialect) {
+                propertyMapping.setIgnoreAtInsert(true);
+            }
+
+            return;
+        }
+        // IMPLSOON 后续来实现指定的IdGenerator获取
+        throw new NotImplementedException();
+    }
+
+    /**
+     * Sets the property mapping.
+     *
+     * @param mapping the mapping
+     * @param beanProperty the bean property
+     */
+    protected void setPropertyMapping(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty) {
+        mapping.setPropertyName(beanProperty.getName());
+        mapping.setPropertyIndex(beanProperty.getIndex());
+        mapping.setPropertyType(beanProperty.getType());
+    }
+
+    /**
      * Sets the java sql type mapper.
      *
      * @param mapping the mapping
@@ -237,46 +278,6 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
                 }
             }
         }
-    }
-
-    /**
-     * Checks if is transient.
-     *
-     * @param beanProperty the bean property
-     * @param logInfo the log info
-     * @return true, if is transient
-     */
-    protected boolean isTransient(BeanProperty<?, ?> beanProperty, StringBuilder logInfo) {
-        boolean result = beanProperty.hasAnnotation(java.beans.Transient.class)
-            || beanProperty.hasAnnotation(javax.persistence.Transient.class);
-        if (result && logger.isDebugEnabled()) {
-            logInfo.append(String.format("%s###\t%s is annotated with @Transient, ignore",
-                SystemPropertyUtils.getLineSeparator(), beanProperty.getName()));
-        }
-        return result;
-    }
-
-    protected void setIdGenerator(JdbcPropertyMapping propertyMapping, BeanProperty<?, ?> bp, String tableName,
-        String columnName) {
-        GeneratedValue generatedValue = bp.getAnnotation(GeneratedValue.class);
-        if (generatedValue == null) {
-            //没有指定IdGenerator，手动设置，框架不管
-            return;
-        }
-
-        if (generatedValue.strategy() == GenerationType.AUTO) {
-            // 使用dialect提供的默认IdGenerator
-            PrimaryKey primaryKey = new PrimaryKey(dialect.getIdGenerator(tableName, columnName));
-            propertyMapping.setPrimaryKey(primaryKey);
-
-            if (propertyMapping.isAutoincrement() && dialect instanceof PostgreSQLDialect) {
-                propertyMapping.setIgnoreAtInsert(true);
-            }
-
-            return;
-        }
-        // IMPLSOON 后续来实现指定的IdGenerator获取
-        throw new NotImplementedException();
     }
 
     /**
@@ -313,6 +314,118 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
                 }
             }
         }
+    }
+
+    /**
+     * Gets the mapping table name.
+     *
+     * @param type the type
+     * @return the mapping table name
+     */
+    protected String getMappingTableName(Class<?> type) {
+        String tableName = null;
+        for (ClassNameConversion classNameConversion : classNameConversions) {
+            tableName = classNameConversion.getMappingName(type);
+            if (Lang.isNotEmpty(tableName)) {
+                return tableName;
+            }
+        }
+        return tableName;
+    }
+
+    /**
+     * Gets the mapping column name.
+     *
+     * @param type the type
+     * @return the mapping column name
+     */
+    protected String getMappingColumnName(BeanProperty<?, ?> type) {
+        String columnName = null;
+        for (PropertyNameConversion propertyNameConversion : propertyNameConversions) {
+            columnName = propertyNameConversion.getMappingName(type);
+            if (Lang.isNotEmpty(columnName)) {
+                return columnName;
+            }
+        }
+        return columnName;
+    }
+
+    /**
+     * Gets the mapping table.
+     *
+     * @param tableName the table name
+     * @return the mapping table
+     */
+    protected Table getMappingTable(String tableName) {
+        Table tm = metadata.getTable(tableName);
+        if (checkMapping && tm == null) {
+            throw new JdbcMappingException("#table.not.exists", new Object[] { tableName });
+        }
+        return tm;
+    }
+
+    /**
+     * Mapping foreign key.
+     *
+     * @param mapping the mapping
+     * @param beanProperty the bean property
+     * @param columnName the column name
+     * @param propertyAccessor the property accessor
+     * @param logInfo the log info
+     */
+    protected void mappingForeignKey(JdbcPropertyMapping mapping, BeanProperty<?, ?> beanProperty, String columnName,
+        PropertyAccessor<Object> propertyAccessor, StringBuilder logInfo) {
+        mapping.setMode(Mode.MANY_TO_ONE);
+        BeanDescriptor<?> bd = BeanDescriptor.getBeanDescriptor(beanProperty.getType());
+        Collection<BeanProperty<?, ?>> bps = bd.findBeanPropertys(new BeanPropertyAnnotationMatcher(Id.class));
+        if (Lang.isEmpty(bps)) {
+            throw new JdbcMappingException("#no.id.property", new Object[] { beanProperty.getType().getName() });
+        }
+        for (BeanProperty<?, ?> bp : bps) {
+            JdbcPropertyMapping columnMapping = new JdbcPropertyMapping();
+            columnMapping.setRepositoryFieldName(columnName);
+            setJavaSqlTypeMapper(columnMapping, bp);
+            setPropertyMapping(columnMapping, bp);
+            columnMapping.setSetter((obj, value) -> propertyAccessor.setPropertyValue(obj,
+                new int[] { mapping.getPropertyIndex(), columnMapping.getPropertyIndex() }, value));
+            columnMapping.setGetter(obj -> propertyAccessor.getPropertyValue(obj,
+                new int[] { mapping.getPropertyIndex(), columnMapping.getPropertyIndex() }));
+            columnMapping.setPrimaryKey(mapping.getPrimaryKey());
+            if (logger.isDebugEnabled()) {
+                logInfo.append(String.format("%s###\t%s -> %s", SystemPropertyUtils.getLineSeparator(),
+                    mapping.getPropertyName() + "." + columnMapping.getPropertyName(),
+                    columnMapping.getRepositoryFieldName()));
+            }
+            setColumnMapping(columnMapping, bp);
+            mapping.add(columnMapping);
+        }
+    }
+
+    /**
+     * Creates a new AbstractJdbcMapping object.
+     *
+     * @param <T> the generic type
+     * @param type the type
+     * @return the jdbc class mapping
+     */
+    protected abstract <T> JdbcClassMapping<T> createClassMapping(Class<T> type);
+
+    // ****************************************************************************************************************
+    //
+    // ****************************************************************************************************************
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T> JdbcClassMapping<T> getClassMapping(Class<T> type) {
+        @SuppressWarnings("unchecked")
+        JdbcClassMapping<T> classMapping = (JdbcClassMapping<T>) mappedTypes.get(type);
+        if (classMapping == null) {
+            classMapping = createClassMapping(type);
+            mappedTypes.put(type, classMapping);
+        }
+        return classMapping;
     }
 
     /**
@@ -379,5 +492,23 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
     @Override
     public DatabaseMetadata getMetadata() {
         return metadata;
+    }
+
+    /**
+     * 返回checkMapping.
+     *
+     * @return checkMapping
+     */
+    public boolean isCheckMapping() {
+        return checkMapping;
+    }
+
+    /**
+     * 设置checkMapping.
+     *
+     * @param checkMapping checkMapping
+     */
+    public void setCheckMapping(boolean checkMapping) {
+        this.checkMapping = checkMapping;
     }
 }

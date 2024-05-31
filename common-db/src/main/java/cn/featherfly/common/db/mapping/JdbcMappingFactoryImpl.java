@@ -23,40 +23,12 @@ public class JdbcMappingFactoryImpl implements JdbcMappingFactory {
      *
      * @param metadata DatabaseMetadata
      * @param dialect dialect
-     * @param propertyAccessorFactory the property accessor factory
-     */
-    public JdbcMappingFactoryImpl(DatabaseMetadata metadata, Dialect dialect,
-        PropertyAccessorFactory propertyAccessorFactory) {
-        this(metadata, dialect, new SqlTypeMappingManager(), propertyAccessorFactory);
-    }
-
-    /**
-     * Instantiates a new jdbc mapping factory.
-     *
-     * @param metadata DatabaseMetadata
-     * @param dialect dialect
      * @param sqlTypeMappingManager the sql type mapping manager
      * @param propertyAccessorFactory the property accessor factory
      */
     public JdbcMappingFactoryImpl(DatabaseMetadata metadata, Dialect dialect,
         SqlTypeMappingManager sqlTypeMappingManager, PropertyAccessorFactory propertyAccessorFactory) {
         this(metadata, dialect, sqlTypeMappingManager, null, null, propertyAccessorFactory);
-    }
-
-    /**
-     * Instantiates a new jdbc mapping factory.
-     *
-     * @param metadata DatabaseMetadata
-     * @param dialect dialect
-     * @param classNameConversions classNameConversions
-     * @param propertyNameConversions propertyNameConversions
-     * @param propertyAccessorFactory the property accessor factory
-     */
-    public JdbcMappingFactoryImpl(DatabaseMetadata metadata, Dialect dialect,
-        List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions,
-        PropertyAccessorFactory propertyAccessorFactory) {
-        this(metadata, dialect, new SqlTypeMappingManager(), classNameConversions, propertyNameConversions,
-            propertyAccessorFactory);
     }
 
     /**
@@ -82,42 +54,12 @@ public class JdbcMappingFactoryImpl implements JdbcMappingFactory {
      * @param mappingMode the mapping mode
      * @param metadata DatabaseMetadata
      * @param dialect dialect
-     * @param propertyAccessorFactory the property accessor factory
-     */
-    public JdbcMappingFactoryImpl(MappingMode mappingMode, DatabaseMetadata metadata, Dialect dialect,
-        PropertyAccessorFactory propertyAccessorFactory) {
-        this(mappingMode, metadata, dialect, new SqlTypeMappingManager(), propertyAccessorFactory);
-    }
-
-    /**
-     * Instantiates a new jdbc mapping factory.
-     *
-     * @param mappingMode the mapping mode
-     * @param metadata DatabaseMetadata
-     * @param dialect dialect
      * @param sqlTypeMappingManager the sql type mapping manager
      * @param propertyAccessorFactory the property accessor factory
      */
     public JdbcMappingFactoryImpl(MappingMode mappingMode, DatabaseMetadata metadata, Dialect dialect,
         SqlTypeMappingManager sqlTypeMappingManager, PropertyAccessorFactory propertyAccessorFactory) {
         this(mappingMode, metadata, dialect, sqlTypeMappingManager, null, null, propertyAccessorFactory);
-    }
-
-    /**
-     * Instantiates a new jdbc mapping factory.
-     *
-     * @param mappingMode the mapping mode
-     * @param metadata DatabaseMetadata
-     * @param dialect dialect
-     * @param classNameConversions classNameConversions
-     * @param propertyNameConversions propertyNameConversions
-     * @param propertyAccessorFactory the property accessor factory
-     */
-    public JdbcMappingFactoryImpl(MappingMode mappingMode, DatabaseMetadata metadata, Dialect dialect,
-        List<ClassNameConversion> classNameConversions, List<PropertyNameConversion> propertyNameConversions,
-        PropertyAccessorFactory propertyAccessorFactory) {
-        this(mappingMode, metadata, dialect, new SqlTypeMappingManager(), classNameConversions, propertyNameConversions,
-            propertyAccessorFactory);
     }
 
     /**

@@ -87,7 +87,7 @@ INSERT INTO `user_role` VALUES ('920', '122', 'descp581');
 
 
 -- ----------------------------
--- Table structure for user_role
+-- Table structure for user_info
 -- ----------------------------
 DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE `user_info` (
@@ -101,12 +101,13 @@ CREATE TABLE `user_info` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户信息';
 
--- ----------------------------
--- Table structure for user_role
--- ----------------------------
 
 INSERT INTO `user_info` (`id`, `user_id`, `name`, `descp`, `province`, `city`, `district`) VALUES ('1', '1', '羽飞', '羽飞描述', '四川', '成都', '金牛');
 INSERT INTO `user_info` (`id`, `user_id`, `name`, `descp`, `province`, `city`, `district`) VALUES ('2', '2', '翼', '翼描述', '广东', '深圳', '罗湖');
+
+-- ----------------------------
+-- Table structure for user_info2
+-- ----------------------------
 
 DROP TABLE IF EXISTS `user_info2`;
 CREATE TABLE `user_info2` (
@@ -120,12 +121,31 @@ CREATE TABLE `user_info2` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户信息';
 
--- ----------------------------
--- Table structure for user_role
--- ----------------------------
-
 INSERT INTO `user_info2` (`ID`, `USER`, `name`, `descp`, `province`, `city`, `district`) VALUES ('1', '1', '羽飞', '羽飞描述', '四川', '成都', '金牛');
 INSERT INTO `user_info2` (`ID`, `USER`, `name`, `descp`, `province`, `city`, `district`) VALUES ('2', '2', '翼', '翼描述', '广东', '深圳', '罗湖');
+
+-- ----------------------------
+-- Table structure for user_info_3
+-- ----------------------------
+
+DROP TABLE IF EXISTS `user_info_3`;
+CREATE TABLE `user_info_3` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID，由于此表数据不用上传，所以直接使用自动递增',
+  `USER` int(10) unsigned NOT NULL,
+  `user_name_3` varchar(255) DEFAULT NULL,
+  `descp` varchar(255) DEFAULT NULL,
+  `province` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `district` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户信息';
+
+INSERT INTO `user_info_3` (`ID`, `USER`, `user_name_3`, `descp`, `province`, `city`, `district`) VALUES ('1', '1', '羽飞', '羽飞描述', '四川', '成都', '金牛');
+INSERT INTO `user_info_3` (`ID`, `USER`, `user_name_3`, `descp`, `province`, `city`, `district`) VALUES ('2', '2', '翼', '翼描述', '广东', '深圳', '罗湖');
+
+-- ----------------------------
+-- Table structure for cms_article
+-- ----------------------------
 
 
 DROP TABLE IF EXISTS `cms_article`;
@@ -138,3 +158,4 @@ CREATE TABLE `cms_article` (
   `content4` varchar(2000) DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+

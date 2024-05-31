@@ -96,7 +96,7 @@ INSERT INTO "user_role" VALUES ('920', '122', 'descp581');
 
 
 -- ----------------------------
--- Table structure for user_role
+-- Table structure for user_info
 -- ----------------------------
 DROP TABLE IF EXISTS "user_info";
 CREATE TABLE "user_info" (
@@ -110,12 +110,50 @@ CREATE TABLE "user_info" (
   CONSTRAINT "user_info_pkey" PRIMARY KEY ("id")
 ) ;
 
--- ----------------------------
--- Table structure for user_role
--- ----------------------------
-
 INSERT INTO "user_info" ("id", "user_id", "name", "descp", "province", "city", "district") VALUES ('1', '1', '羽飞', '羽飞描述', '四川', '成都', '金牛');
 INSERT INTO "user_info" ("id", "user_id", "name", "descp", "province", "city", "district") VALUES ('2', '2', '翼', '翼描述', '广东', '深圳', '罗湖');
+
+-- ----------------------------
+-- Table structure for user_role2
+-- ----------------------------
+DROP TABLE IF EXISTS "user_info2";
+CREATE TABLE "user_info2" (
+  "id" serial NOT NULL ,
+  "user_id" int4 NOT NULL,
+  "name" varchar(255) ,
+  "descp" varchar(255) ,
+  "province" varchar(255) ,
+  "city" varchar(255) ,
+  "district" varchar(255) ,
+  CONSTRAINT "user_info2_pkey" PRIMARY KEY ("id")
+) ;
+
+INSERT INTO "user_info2" ("id", "user_id", "name", "descp", "province", "city", "district") VALUES ('1', '1', '羽飞', '羽飞描述', '四川', '成都', '金牛');
+INSERT INTO "user_info2" ("id", "user_id", "name", "descp", "province", "city", "district") VALUES ('2', '2', '翼', '翼描述', '广东', '深圳', '罗湖');
+
+
+-- ----------------------------
+-- Table structure for user_role_3
+-- ----------------------------
+
+DROP TABLE IF EXISTS "user_info_3";
+CREATE TABLE "user_info_3" (
+  "id" serial NOT NULL ,
+  "user_id" int4 NOT NULL,
+  "user_name_3" varchar(255) ,
+  "descp" varchar(255) ,
+  "province" varchar(255) ,
+  "city" varchar(255) ,
+  "district" varchar(255) ,
+  CONSTRAINT "user_info_3_pkey" PRIMARY KEY ("id")
+) ;
+
+INSERT INTO "user_info_3" ("id", "user_id", "user_name_3", "descp", "province", "city", "district") VALUES ('1', '1', '羽飞', '羽飞描述', '四川', '成都', '金牛');
+INSERT INTO "user_info_3" ("id", "user_id", "user_name_3", "descp", "province", "city", "district") VALUES ('2', '2', '翼', '翼描述', '广东', '深圳', '罗湖');
+
+-- ----------------------------
+-- Table structure for cms_article
+-- ----------------------------
 
 DROP TABLE IF EXISTS "cms_article";
 CREATE TABLE "cms_article" (

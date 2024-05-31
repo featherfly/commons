@@ -29,10 +29,11 @@ public class ClassMappingUtilsTest2 extends JdbcTestBase {
 
     @BeforeClass
     public void setup() {
+        SqlTypeMappingManager manager = new SqlTypeMappingManager();
         factory = new CompatibleJdbcMappingFactory(DatabaseMetadataManager.getDefaultManager().create(dataSource),
-            dialect, new AsmPropertyAccessorFactory(Thread.currentThread().getContextClassLoader()));
+            dialect, manager, new AsmPropertyAccessorFactory(Thread.currentThread().getContextClassLoader()));
         factory2 = new StrictJdbcMappingFactory(DatabaseMetadataManager.getDefaultManager().create(dataSource), dialect,
-            new AsmPropertyAccessorFactory(Thread.currentThread().getContextClassLoader()));
+            manager, new AsmPropertyAccessorFactory(Thread.currentThread().getContextClassLoader()));
     }
 
     @Test

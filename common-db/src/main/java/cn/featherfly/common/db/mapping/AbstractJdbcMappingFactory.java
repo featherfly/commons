@@ -83,6 +83,7 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
     /** The check mapping. */
     protected boolean checkMapping;
 
+    /** The id generator manager. */
     protected final IdGeneratorManager idGeneratorManager;
 
     /**
@@ -91,6 +92,7 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      * @param metadata the metadata
      * @param dialect the dialect
      * @param sqlTypeMappingManager the sql type mapping manager
+     * @param idGeneratorManager the id generator manager
      * @param propertyAccessorFactory the property accessor factory
      */
     protected AbstractJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
@@ -105,6 +107,7 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      * @param metadata DatabaseMetadata
      * @param dialect dialect
      * @param sqlTypeMappingManager the sql type mapping manager
+     * @param idGeneratorManager the id generator manager
      * @param classNameConversions classNameConversions
      * @param propertyNameConversions propertyNameConversions
      * @param propertyAccessorFactory the property accessor factory

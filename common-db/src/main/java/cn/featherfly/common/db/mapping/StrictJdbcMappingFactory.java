@@ -45,6 +45,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param metadata the metadata
      * @param dialect the dialect
      * @param sqlTypeMappingManager the sql type mapping manager
+     * @param idGeneratorManager the id generator manager
      * @param propertyAccessorFactory the property accessor factory
      */
     public StrictJdbcMappingFactory(DatabaseMetadata metadata, Dialect dialect,
@@ -59,6 +60,7 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
      * @param metadata the metadata
      * @param dialect the dialect
      * @param sqlTypeMappingManager the sql type mapping manager
+     * @param idGeneratorManager the id generator manager
      * @param classNameConversions the class name conversions
      * @param propertyNameConversions the property name conversions
      * @param propertyAccessorFactory the property accessor factory
@@ -85,6 +87,9 @@ public class StrictJdbcMappingFactory extends AbstractJdbcMappingFactory {
         return indexs;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     protected <T> JdbcClassMapping<T> createClassMapping(Class<T> type) {

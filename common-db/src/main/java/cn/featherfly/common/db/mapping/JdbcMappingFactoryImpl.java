@@ -25,6 +25,7 @@ public class JdbcMappingFactoryImpl implements JdbcMappingFactory {
      * @param metadata DatabaseMetadata
      * @param dialect dialect
      * @param sqlTypeMappingManager the sql type mapping manager
+     * @param idGeneratorManager the id generator manager
      * @param propertyAccessorFactory the property accessor factory
      */
     public JdbcMappingFactoryImpl(DatabaseMetadata metadata, Dialect dialect,
@@ -39,6 +40,7 @@ public class JdbcMappingFactoryImpl implements JdbcMappingFactory {
      * @param metadata DatabaseMetadata
      * @param dialect dialect
      * @param sqlTypeMappingManager the sql type mapping manager
+     * @param idGeneratorManager the id generator manager
      * @param classNameConversions classNameConversions
      * @param propertyNameConversions propertyNameConversions
      * @param propertyAccessorFactory the property accessor factory
@@ -58,6 +60,7 @@ public class JdbcMappingFactoryImpl implements JdbcMappingFactory {
      * @param metadata DatabaseMetadata
      * @param dialect dialect
      * @param sqlTypeMappingManager the sql type mapping manager
+     * @param idGeneratorManager the id generator manager
      * @param propertyAccessorFactory the property accessor factory
      */
     public JdbcMappingFactoryImpl(MappingMode mappingMode, DatabaseMetadata metadata, Dialect dialect,
@@ -74,6 +77,7 @@ public class JdbcMappingFactoryImpl implements JdbcMappingFactory {
      * @param metadata DatabaseMetadata
      * @param dialect dialect
      * @param sqlTypeMappingManager the sql type mapping manager
+     * @param idGeneratorManager the id generator manager
      * @param classNameConversions classNameConversions
      * @param propertyNameConversions propertyNameConversions
      * @param propertyAccessorFactory the property accessor factory

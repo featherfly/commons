@@ -1,6 +1,7 @@
 
 package cn.featherfly.common.repository;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -12,13 +13,13 @@ public class SimpleExecution implements Execution {
 
     private String execution;
 
-    private Object[] params;
+    private Serializable[] params;
 
     /**
      * @param execution execution
-     * @param params    params
+     * @param params params
      */
-    public SimpleExecution(String execution, Object... params) {
+    public SimpleExecution(String execution, Serializable... params) {
         this.execution = execution;
         this.params = params;
     }
@@ -35,7 +36,7 @@ public class SimpleExecution implements Execution {
      * {@inheritDoc}
      */
     @Override
-    public Object[] getParams() {
+    public Serializable[] getParams() {
         return params;
     }
 

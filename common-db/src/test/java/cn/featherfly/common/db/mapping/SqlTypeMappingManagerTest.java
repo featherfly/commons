@@ -514,13 +514,15 @@ public class SqlTypeMappingManagerTest extends JdbcTestBase {
 
         BeanDescriptor<Article2> bd = BeanDescriptor.getBeanDescriptor(Article2.class);
 
-        BeanProperty<?, ?> bpContent = bd.getBeanProperty(Article2::getContent);
+        BeanProperty<?, Content[]> bpContent = bd.getBeanProperty(Article2::getContent);
         manager.regist(bpContent, new ObjectToJsonMapper<>(bpContent));
 
-        BeanProperty<?, ?> bpContent2 = bd.getBeanProperty(Article2::getContent2);
-        manager.regist(bpContent2, new ObjectToJsonMapper<>(bpContent2));
+        BeanProperty<?, List<Content>> bpContent2 = bd.getBeanProperty(Article2::getContent2);
+        ObjectToJsonMapper<List<Content>> json1 = new ObjectToJsonMapper<>(bpContent2);
+        manager.regist(bpContent2, json1);
+        //        manager.regist(bpContent2, new ObjectToJsonMapper<>(bpContent2));
 
-        BeanProperty<?, ?> bpContent3 = bd.getBeanProperty(Article2::getContent3);
+        BeanProperty<?, Map<String, Content>> bpContent3 = bd.getBeanProperty(Article2::getContent3);
         manager.regist(bpContent3, new ObjectToJsonMapper<>(bpContent3));
 
         String insert = "INSERT INTO `db_test`.`cms_article` (`ID`, `title`, `content`, `content2`, `content3`) VALUES (null, ?, ?, ?, ?)";

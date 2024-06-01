@@ -1,6 +1,7 @@
 
 package cn.featherfly.common.repository;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public interface MulitiQuery extends AutoCloseable {
      *
      * @return the list
      */
-    List<Map<String, Object>> next();
+    List<Map<String, Serializable>> next();
 
     /**
      * Next.

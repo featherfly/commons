@@ -8,7 +8,6 @@
  */
 package cn.featherfly.common.db.mapping.operator;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -68,7 +67,7 @@ public class BasicOperators {
      * @return the operator
      */
     @SuppressWarnings("unchecked")
-    public static <T extends Serializable> JavaTypeSqlTypeOperator<T> get(Class<T> type) {
+    public static <T> JavaTypeSqlTypeOperator<T> get(Class<T> type) {
         return (JavaTypeSqlTypeOperator<T>) OPERATORS.get(type);
     }
 
@@ -80,7 +79,7 @@ public class BasicOperators {
      * @return the operator
      * @throws JdbcException no JavaTypeSqlTypeOperator found for type
      */
-    public static <T extends Serializable> JavaTypeSqlTypeOperator<T> getExist(Class<T> type) {
+    public static <T> JavaTypeSqlTypeOperator<T> getExist(Class<T> type) {
         JavaTypeSqlTypeOperator<T> o = get(type);
         if (o == null) {
             throw new JdbcException("no JavaTypeSqlTypeOperator support for " + type.getName());

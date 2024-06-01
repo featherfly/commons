@@ -112,15 +112,15 @@ public final class SqlUtils {
      * @param params the params
      * @return the flat object[]
      */
-    public static Object[] flatParams(Object... params) {
+    public static Serializable[] flatParams(Object... params) {
         if (params == null) {
-            return ArrayUtils.EMPTY_OBJECT_ARRAY;
+            return ArrayUtils.EMPTY_SERIALIZABLE_ARRAY;
         }
         final List<Object> paramList = new ArrayList<>();
         for (Object param : params) {
             Lang.eachObj(param, (Consumer<Object>) paramList::add);
         }
-        return paramList.toArray();
+        return paramList.toArray(new Serializable[paramList.size()]);
     }
 
     /**
@@ -168,22 +168,20 @@ public final class SqlUtils {
                 } else if (param.getClass() == float[].class) {
                     Array.set(result, i, FieldValueOperator.create(propertyMapping, Array.getFloat(param, i)));
                 } else {
-                    Array.set(result, i,
-                        FieldValueOperator.create(propertyMapping, (Serializable) Array.get(param, i)));
+                    Array.set(result, i, FieldValueOperator.create(propertyMapping, Array.get(param, i)));
                 }
             }
         } else if (param instanceof Collection) {
             result = new ArrayList<>();
             for (Serializable op : (Collection<Serializable>) param) {
                 if (op instanceof FieldValueOperator) {
-                    ((Collection<FieldValueOperator<? extends Serializable>>) result).add((FieldValueOperator<?>) op);
+                    ((Collection<FieldValueOperator<?>>) result).add((FieldValueOperator<?>) op);
                 } else {
-                    ((Collection<FieldValueOperator<? extends Serializable>>) result)
-                        .add(FieldValueOperator.create(propertyMapping, op));
+                    ((Collection<FieldValueOperator<?>>) result).add(FieldValueOperator.create(propertyMapping, op));
                 }
             }
         } else if (!(param instanceof FieldValueOperator)) {
-            result = FieldValueOperator.create(propertyMapping, (Serializable) param);
+            result = FieldValueOperator.create(propertyMapping, param);
         } else {
             result = param;
         }
@@ -211,7 +209,7 @@ public final class SqlUtils {
             if (p instanceof FieldValueOperator) {
                 paramList.add((FieldValueOperator<?>) p);
             } else {
-                paramList.add(FieldValueOperator.create((Serializable) p));
+                paramList.add(FieldValueOperator.create(p));
             }
         });
         if (paramList.isEmpty()) {
@@ -245,7 +243,7 @@ public final class SqlUtils {
                 if (p instanceof FieldValueOperator) {
                     paramList.add((FieldValueOperator<?>) p);
                 } else {
-                    paramList.add(FieldValueOperator.create((Serializable) p));
+                    paramList.add(FieldValueOperator.create(p));
                 }
             });
         }
@@ -304,7 +302,7 @@ public final class SqlUtils {
      * @param params the params
      * @return the execution contains jdbc placeholder sql and params array
      */
-    public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params) {
+    public static Execution convertNamedParamSql(String namedParamSql, Map<String, Serializable> params) {
         return convertNamedParamSql(namedParamSql, params, PARAM_NAME_START_SYMBOL);
     }
 
@@ -316,7 +314,8 @@ public final class SqlUtils {
      * @param startSymbol the start symbol
      * @return the execution contains jdbc placeholder sql and params array
      */
-    public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol) {
+    public static Execution convertNamedParamSql(String namedParamSql, Map<String, Serializable> params,
+        char startSymbol) {
         return convertNamedParamSql(namedParamSql, params, startSymbol, null);
     }
 
@@ -329,9 +328,9 @@ public final class SqlUtils {
      * @param endSymbol the end symbol
      * @return the execution contains jdbc placeholder sql and params array
      */
-    public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol,
-        Character endSymbol) {
-        final MutableTuple1<Object[]> paramsTuple = MutableTuples.create1();
+    public static Execution convertNamedParamSql(String namedParamSql, Map<String, Serializable> params,
+        char startSymbol, Character endSymbol) {
+        final MutableTuple1<Serializable[]> paramsTuple = MutableTuples.create1();
         return new SimpleExecution(convertNamedParamSql(namedParamSql, params, startSymbol, endSymbol,
             paramArray -> paramsTuple.set0(paramArray), null, null), paramsTuple.get0().get());
     }
@@ -409,14 +408,14 @@ public final class SqlUtils {
         return new NamedParamSql(sql, paramNamesTuple.get0().get());
     }
 
-    private static String convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol,
-        Character endSymbol, Consumer<Object[]> paramValuesConsumer, Consumer<NamedParam[]> namedParamsConsumer,
+    private static String convertNamedParamSql(String namedParamSql, Map<String, Serializable> params, char startSymbol,
+        Character endSymbol, Consumer<Serializable[]> paramValuesConsumer, Consumer<NamedParam[]> namedParamsConsumer,
         NamedSqlConvertFeature convertFeature) {
         AssertIllegalArgument.isNotNull(namedParamSql, "namedParamSql");
         AssertIllegalArgument.isNotEmpty(startSymbol, "startSymbol");
 
         StringBuilder sql = new StringBuilder();
-        List<Object> paramList = null;
+        List<Serializable> paramList = null;
         if (paramValuesConsumer != null) {
             paramList = new ArrayList<>(params.size());
         }
@@ -484,7 +483,7 @@ public final class SqlUtils {
             }
         }
         if (paramValuesConsumer != null) {
-            paramValuesConsumer.accept(paramList.toArray());
+            paramValuesConsumer.accept(paramList.toArray(new Serializable[paramList.size()]));
         }
         if (namedParamsConsumer != null) {
             namedParamsConsumer.accept(nameList.toArray(new NamedParam[nameList.size()]));
@@ -538,7 +537,7 @@ public final class SqlUtils {
      * @param name the name
      * @return the named param
      */
-    static Object getNamedParam(Map<String, Object> params, String name) {
+    static Object getNamedParam(Map<String, Serializable> params, String name) {
         if (params.containsKey(name)) {
             return params.get(name);
         } else {
@@ -553,7 +552,7 @@ public final class SqlUtils {
      * @param paramList the param list
      * @return the string
      */
-    static String addParam(Object param, List<Object> paramList) {
+    static String addParam(Object param, List<Serializable> paramList) {
         return addParam(param, paramList, false);
     }
 
@@ -565,26 +564,27 @@ public final class SqlUtils {
      * @param isIn the is in
      * @return the string
      */
-    static String addParam(Object param, List<Object> paramList, boolean isIn) {
+    @SuppressWarnings("unchecked")
+    static String addParam(Object param, List<Serializable> paramList, boolean isIn) {
         if (isIn) {
             if (param == null) {
-                paramList.add(param);
+                paramList.add(null);
                 return convertInParamsPlaceholder(1);
             } else if (param instanceof Collection) {
-                paramList.addAll((Collection<?>) param);
-                return convertInParamsPlaceholder(((Collection<?>) param).size());
+                paramList.addAll((Collection<Serializable>) param);
+                return convertInParamsPlaceholder(((Collection<Serializable>) param).size());
             } else if (param.getClass().isArray()) {
                 int length = Array.getLength(param);
                 for (int i = 0; i < length; i++) {
-                    paramList.add(Array.get(param, i));
+                    paramList.add((Serializable) Array.get(param, i));
                 }
                 return convertInParamsPlaceholder(length);
             } else {
-                paramList.add(param);
+                paramList.add((Serializable) param);
                 return convertInParamsPlaceholder(1);
             }
         }
-        paramList.add(param);
+        paramList.add((Serializable) param);
         return Chars.QUESTION;
     }
 

@@ -8,6 +8,7 @@
  */
 package cn.featherfly.common.repository;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import cn.featherfly.common.lang.AutoCloseableIterable;
@@ -25,7 +26,7 @@ public interface ParamedQueryEachExecutor {
      *
      * @return map
      */
-    AutoCloseableIterable<Map<String, Object>> each();
+    AutoCloseableIterable<Map<String, Serializable>> each();
 
     /**
      * query each.

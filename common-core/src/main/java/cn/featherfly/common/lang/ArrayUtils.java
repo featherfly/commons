@@ -1,5 +1,6 @@
 package cn.featherfly.common.lang;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -31,6 +32,10 @@ public final class ArrayUtils {
      * An empty immutable {@code Class} array.
      */
     public static final Class<?>[] EMPTY_CLASS_ARRAY = new Class[0];
+    /**
+     * An empty immutable {@code Serializable} array.
+     */
+    public static final Serializable[] EMPTY_SERIALIZABLE_ARRAY = new Serializable[0];
     /**
      * An empty immutable {@code String} array.
      */
@@ -144,9 +149,9 @@ public final class ArrayUtils {
     /**
      * Each.
      *
-     * @param <T>      the generic type
+     * @param <T> the generic type
      * @param consumer the consumer
-     * @param array    the array
+     * @param array the array
      */
     public static <T> void each(ObjIntConsumer<T> consumer, @SuppressWarnings("unchecked") T... array) {
         if (array != null) {
@@ -159,7 +164,7 @@ public final class ArrayUtils {
     /**
      * Each.
      *
-     * @param array    the array
+     * @param array the array
      * @param consumer the consumer
      */
     public static void each(Object array, ObjIntConsumer<Object> consumer) {
@@ -177,8 +182,8 @@ public final class ArrayUtils {
     /**
      * 将传入数组进行字符串转换,使用传入的符号作为数组之间的连接符号.
      *
-     * @param <A>        the generic type
-     * @param array      对象数组
+     * @param <A> the generic type
+     * @param array 对象数组
      * @param linkSymbol the link symbol
      * @return 字符串
      */
@@ -240,7 +245,7 @@ public final class ArrayUtils {
      * </p>
      * .
      *
-     * @param <E>     对象类型
+     * @param <E> 对象类型
      * @param objects 对象数组
      * @return 字符串
      */
@@ -266,7 +271,7 @@ public final class ArrayUtils {
     /**
      * To list.
      *
-     * @param <T>    the generic type
+     * @param <T> the generic type
      * @param arrays the arrays
      * @return the list
      */
@@ -277,7 +282,7 @@ public final class ArrayUtils {
     /**
      * To set.
      *
-     * @param <T>    the generic type
+     * @param <T> the generic type
      * @param arrays the arrays
      * @return the sets
      */
@@ -288,7 +293,7 @@ public final class ArrayUtils {
     /**
      * 转换为以数组索引为key,数组值为value的map.
      *
-     * @param <A>    the generic type
+     * @param <A> the generic type
      * @param arrays 数组
      * @return map
      */
@@ -306,7 +311,7 @@ public final class ArrayUtils {
     /**
      * 转换为以数组索引为key(string类型),数组值为value的map.
      *
-     * @param <A>    the generic type
+     * @param <A> the generic type
      * @param arrays 数组
      * @return 列表
      * @deprecated use {@link #toMapStringKey(Object...)} instead
@@ -319,7 +324,7 @@ public final class ArrayUtils {
     /**
      * 转换为以数组索引为key(string类型),数组值为value的map.
      *
-     * @param <A>    the generic type
+     * @param <A> the generic type
      * @param arrays 数组
      * @return 列表
      */
@@ -337,8 +342,8 @@ public final class ArrayUtils {
     /**
      * To number array.
      *
-     * @param <A>   the generic type
-     * @param type  the type
+     * @param <A> the generic type
+     * @param type the type
      * @param array the array
      * @return the a[]
      */
@@ -357,7 +362,7 @@ public final class ArrayUtils {
     /**
      * fill target array with source array .
      *
-     * @param <T>    泛型
+     * @param <T> 泛型
      * @param target fill target
      * @param source fill source
      */
@@ -375,8 +380,8 @@ public final class ArrayUtils {
     /**
      * 判断第一个传入的数组中是否存在第二个参数 .
      *
-     * @param <T>    泛型
-     * @param tSet   源数组
+     * @param <T> 泛型
+     * @param tSet 源数组
      * @param target 查找对象
      * @return 第一个数组中是否存在第二个对象
      */
@@ -395,8 +400,8 @@ public final class ArrayUtils {
     /**
      * 判断第一个传入的字符串数组中是否存在第二个传入的字符串.
      *
-     * @param strSet     源字符串数组
-     * @param strTarget  查找字符串
+     * @param strSet 源字符串数组
+     * @param strTarget 查找字符串
      * @param ignoreCase 忽略大小写
      * @return 第一个数组中是否存在第二个字符串
      */
@@ -424,8 +429,8 @@ public final class ArrayUtils {
     /**
      * 判断第一个传入的字符串数组中是否存在第二个传入的字符串.
      *
-     * @param strSet     源字符串数组
-     * @param strTarget  查找字符串
+     * @param strSet 源字符串数组
+     * @param strTarget 查找字符串
      * @param ignoreCase 忽略大小写
      * @return 第一个数组中是否存在第二个字符串
      * @deprecated use {@link #contain(String[], String, boolean)} instead
@@ -455,7 +460,7 @@ public final class ArrayUtils {
         int len1 = Array.getLength(arr1);
         int len2 = Array.getLength(arr2);
         Class<?> commonComponentType = ClassUtils.parentClass(arr1.getClass().getComponentType(),
-                arr2.getClass().getComponentType());
+            arr2.getClass().getComponentType());
         Object newArray = Array.newInstance(commonComponentType, len1 + len2);
         System.arraycopy(arr1, 0, newArray, 0, len1);
         System.arraycopy(arr2, 0, newArray, len1, len2);
@@ -465,8 +470,8 @@ public final class ArrayUtils {
     /**
      * 创建数组 .
      *
-     * @param <T>    泛型
-     * @param type   类型
+     * @param <T> 泛型
+     * @param type 类型
      * @param length 长度
      * @return 数组
      */
@@ -478,8 +483,8 @@ public final class ArrayUtils {
     /**
      * 创建数组 .
      *
-     * @param <T>    泛型
-     * @param type   类型
+     * @param <T> 泛型
+     * @param type 类型
      * @param length 长度
      * @return 数组
      */
@@ -491,8 +496,8 @@ public final class ArrayUtils {
     /**
      * create array and fill the array with given filler.
      *
-     * @param <T>    the array element type
-     * @param type   the type
+     * @param <T> the array element type
+     * @param type the type
      * @param length the length
      * @param filler the filler
      * @return the array
@@ -511,9 +516,9 @@ public final class ArrayUtils {
     /**
      * create array and fill the array with given argu.
      *
-     * @param <T>     the array element type
-     * @param type    the type
-     * @param length  the length
+     * @param <T> the array element type
+     * @param type the type
+     * @param length the length
      * @param element the element
      * @return the array
      */
@@ -539,9 +544,9 @@ public final class ArrayUtils {
     /**
      * 使用source从startIndex填充target.
      *
-     * @param target     the target
+     * @param target the target
      * @param startIndex the start index
-     * @param source     the source
+     * @param source the source
      */
     public static void fillAll(char[] target, int startIndex, char[] source) {
         int len = target.length - startIndex < source.length ? target.length : source.length;
@@ -563,9 +568,9 @@ public final class ArrayUtils {
     /**
      * 使用source从startIndex填充target.
      *
-     * @param target     the target
+     * @param target the target
      * @param startIndex the start index
-     * @param source     the source
+     * @param source the source
      */
     public static void fillAll(byte[] target, int startIndex, byte[] source) {
         int len = target.length - startIndex < source.length ? target.length : source.length;
@@ -587,9 +592,9 @@ public final class ArrayUtils {
     /**
      * 使用source从startIndex填充target.
      *
-     * @param target     the target
+     * @param target the target
      * @param startIndex the start index
-     * @param source     the source
+     * @param source the source
      */
     public static void fillAll(int[] target, int startIndex, int[] source) {
         int len = target.length - startIndex < source.length ? target.length : source.length;
@@ -611,9 +616,9 @@ public final class ArrayUtils {
     /**
      * 使用source从startIndex填充target.
      *
-     * @param target     the target
+     * @param target the target
      * @param startIndex the start index
-     * @param source     the source
+     * @param source the source
      */
     public static void fillAll(long[] target, int startIndex, long[] source) {
         int len = target.length - startIndex < source.length ? target.length : source.length;
@@ -635,9 +640,9 @@ public final class ArrayUtils {
     /**
      * 使用source从startIndex填充target.
      *
-     * @param target     the target
+     * @param target the target
      * @param startIndex the start index
-     * @param source     the source
+     * @param source the source
      */
     public static void fillAll(double[] target, int startIndex, double[] source) {
         int len = target.length - startIndex < source.length ? target.length : source.length;
@@ -649,7 +654,7 @@ public final class ArrayUtils {
     /**
      * fillAll.
      *
-     * @param <T>    the generic type
+     * @param <T> the generic type
      * @param target the target
      * @param source the source
      */
@@ -660,10 +665,10 @@ public final class ArrayUtils {
     /**
      * 使用source从startIndex填充target.
      *
-     * @param <T>        the generic type
-     * @param target     the target
+     * @param <T> the generic type
+     * @param target the target
      * @param startIndex the start index
-     * @param source     the source
+     * @param source the source
      */
     public static <T> void fillAll(T[] target, int startIndex, T[] source) {
         int len = target.length - startIndex < source.length ? target.length : source.length;

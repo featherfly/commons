@@ -21,7 +21,9 @@ import cn.featherfly.common.lang.vt.Value;
  * @author zhongj
  * @param <T> the value type
  */
-public class FieldValueOperator<T extends Serializable> implements FieldOperator<T>, Value<T> {
+public class FieldValueOperator<T> implements FieldOperator<T>, Value<T>, Serializable {
+
+    private static final long serialVersionUID = -4904525102922653700L;
 
     /** The Constant EMPTY_ARRAY. */
     public static final FieldValueOperator<?>[] EMPTY_ARRAY = new FieldValueOperator[0];
@@ -208,7 +210,7 @@ public class FieldValueOperator<T extends Serializable> implements FieldOperator
      * @return the field value operator
      */
     @SuppressWarnings("unchecked")
-    public static <E extends Serializable> FieldValueOperator<E> create(JdbcPropertyMapping pm, E value) {
+    public static <E> FieldValueOperator<E> create(JdbcPropertyMapping pm, E value) {
         return value == null ? null
             : new FieldValueOperator<>((JavaTypeSqlTypeOperator<E>) pm.getJavaTypeSqlTypeOperator(), value);
     }
@@ -297,7 +299,7 @@ public class FieldValueOperator<T extends Serializable> implements FieldOperator
      * @param value the value
      * @return the field value operator
      */
-    public static <E extends Serializable> FieldValueOperator<E> create(E value) {
+    public static <E> FieldValueOperator<E> create(E value) {
         if (value == null) {
             return null;
         }
@@ -406,7 +408,7 @@ public class FieldValueOperator<T extends Serializable> implements FieldOperator
         return throwNoJavaTypeSqlTypeOperatorSupport(Short.TYPE);
     }
 
-    private static <T extends Serializable> FieldValueOperator<T> throwNoJavaTypeSqlTypeOperatorSupport(Class<T> type) {
+    private static <T> FieldValueOperator<T> throwNoJavaTypeSqlTypeOperatorSupport(Class<T> type) {
         throw new JdbcException("no JavaTypeSqlTypeOperator support for " + type.getName());
     }
 

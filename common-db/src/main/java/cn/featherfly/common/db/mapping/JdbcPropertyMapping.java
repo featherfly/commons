@@ -1,7 +1,5 @@
 package cn.featherfly.common.db.mapping;
 
-import java.io.Serializable;
-
 import cn.featherfly.common.repository.mapping.PropertyMapping;
 
 /**
@@ -11,7 +9,7 @@ import cn.featherfly.common.repository.mapping.PropertyMapping;
  */
 public class JdbcPropertyMapping extends PropertyMapping<JdbcPropertyMapping> {
 
-    private JavaTypeSqlTypeOperator<? extends Serializable> javaTypeSqlTypeOperator;
+    private JavaTypeSqlTypeOperator<?> javaTypeSqlTypeOperator;
 
     /**
      * get javaTypeSqlTypeOperator value.
@@ -20,7 +18,7 @@ public class JdbcPropertyMapping extends PropertyMapping<JdbcPropertyMapping> {
      * @return javaTypeSqlTypeOperator
      */
     @SuppressWarnings("unchecked")
-    public <E extends Serializable> JavaTypeSqlTypeOperator<E> getJavaTypeSqlTypeOperator() {
+    public <E> JavaTypeSqlTypeOperator<E> getJavaTypeSqlTypeOperator() {
         return (JavaTypeSqlTypeOperator<E>) javaTypeSqlTypeOperator;
     }
 
@@ -30,8 +28,7 @@ public class JdbcPropertyMapping extends PropertyMapping<JdbcPropertyMapping> {
      * @param <E> the element type
      * @param javaTypeSqlTypeOperator javaTypeSqlTypeOperator
      */
-    public <
-        E extends Serializable> void setJavaTypeSqlTypeOperator(JavaTypeSqlTypeOperator<E> javaTypeSqlTypeOperator) {
+    public <E> void setJavaTypeSqlTypeOperator(JavaTypeSqlTypeOperator<E> javaTypeSqlTypeOperator) {
         this.javaTypeSqlTypeOperator = javaTypeSqlTypeOperator;
     }
 }

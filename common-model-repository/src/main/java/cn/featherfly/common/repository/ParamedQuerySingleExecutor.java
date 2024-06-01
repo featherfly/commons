@@ -8,6 +8,7 @@
  */
 package cn.featherfly.common.repository;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import cn.featherfly.common.repository.mapper.RowMapper;
@@ -24,7 +25,7 @@ public interface ParamedQuerySingleExecutor {
      *
      * @return map
      */
-    Map<String, Object> single();
+    Map<String, Serializable> single();
 
     /**
      * query single.

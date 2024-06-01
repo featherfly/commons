@@ -1,6 +1,8 @@
 
 package cn.featherfly.common.db.data.query;
 
+import java.io.Serializable;
+
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.repository.Query;
 
@@ -20,22 +22,22 @@ public class SimpleQuery implements Query {
 
     private String sql;
 
-    private Object[] params;
+    private Serializable[] params;
 
     /**
-     * @param sql    sql
+     * @param sql sql
      * @param params params
      */
-    public SimpleQuery(String sql, Object... params) {
+    public SimpleQuery(String sql, Serializable... params) {
         this(null, sql, params);
     }
 
     /**
-     * @param name   name
-     * @param sql    sql
+     * @param name name
+     * @param sql sql
      * @param params params
      */
-    public SimpleQuery(String name, String sql, Object... params) {
+    public SimpleQuery(String name, String sql, Serializable... params) {
         AssertIllegalArgument.isNotEmpty(sql, "sql");
         this.name = name;
         this.sql = sql;
@@ -66,7 +68,7 @@ public class SimpleQuery implements Query {
      * @return params
      */
     @Override
-    public Object[] getParams() {
+    public Serializable[] getParams() {
         return params;
     }
 

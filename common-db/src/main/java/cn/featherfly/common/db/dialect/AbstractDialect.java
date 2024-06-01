@@ -1,5 +1,6 @@
 package cn.featherfly.common.db.dialect;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -165,15 +166,15 @@ public abstract class AbstractDialect implements Dialect {
      * {@inheritDoc}
      */
     @Override
-    public Object[] getPaginationSqlParameter(Object[] params, int start, int limit) {
-        Object[] pagingParams = null;
+    public Serializable[] getPaginationSqlParameter(Serializable[] params, int start, int limit) {
+        Serializable[] pagingParams = null;
         if (start > 0) {
             logger.debug("start > 0 , use start {}", start);
-            pagingParams = new Object[2];
+            pagingParams = new Serializable[2];
             pagingParams[0] = Integer.valueOf(start);
         } else {
             logger.debug("start < 0 , don't use start");
-            pagingParams = new Object[1];
+            pagingParams = new Serializable[1];
         }
         if (limit > Chars.ZERO) {
             logger.debug("limit > 0 , use limit {}", limit);
@@ -185,14 +186,14 @@ public abstract class AbstractDialect implements Dialect {
             limit = Integer.MAX_VALUE;
         }
         pagingParams[pagingParams.length - 1] = limit;
-        return (Object[]) ArrayUtils.concat(params, pagingParams);
+        return (Serializable[]) ArrayUtils.concat(params, pagingParams);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Map<String, Object> getPaginationSqlParameter(Map<String, Object> params, int start, int limit) {
+    public Map<String, Serializable> getPaginationSqlParameter(Map<String, Serializable> params, int start, int limit) {
         if (start > 0) {
             logger.debug("start > 0 , use start {}", start);
             params.put(START_PARAM_NAME, start);

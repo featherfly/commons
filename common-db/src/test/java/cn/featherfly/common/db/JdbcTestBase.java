@@ -42,7 +42,7 @@ public class JdbcTestBase {
         // 初始化数据库
         SqlExecutor sqlExecutor = new SqlExecutor(dataSource);
         sqlExecutor.execute(
-                new File(ClassLoaderUtils.getResource("tpl_test." + dataBase + ".sql", JdbcTestBase.class).getFile()));
+            new File(ClassLoaderUtils.getResource("tpl_test." + dataBase + ".sql", JdbcTestBase.class).getFile()));
     }
 
     public void initDataBase(String dataBase) throws IOException {
@@ -66,7 +66,7 @@ public class JdbcTestBase {
     public void initMysql() throws IOException {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl(
-                "jdbc:mysql://127.0.0.1:3306/db_test?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false");
+            "jdbc:mysql://127.0.0.1:3306/db_test?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false");
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUsername("root");
         dataSource.setPassword("123456");
@@ -91,7 +91,7 @@ public class JdbcTestBase {
     @BeforeGroups(groups = "sqlite")
     public void initSQLite() throws IOException {
         String path = new File(UriUtils.linkUri(this.getClass().getResource("/").getFile(), "db_test.sqlite3.db"))
-                .getPath();
+            .getPath();
         System.out.println(path);
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("org.sqlite.JDBC");
@@ -100,6 +100,6 @@ public class JdbcTestBase {
         //        dataSource.setPassword("123456");
 
         this.dataSource = dataSource;
-        dialect = Dialects.SQLITE;
+        dialect = Dialects.sqlite();
     }
 }

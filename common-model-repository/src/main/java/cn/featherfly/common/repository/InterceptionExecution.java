@@ -10,6 +10,8 @@
  */
 package cn.featherfly.common.repository;
 
+import java.io.Serializable;
+
 /**
  * InterceptionExecution.
  *
@@ -35,12 +37,12 @@ public interface InterceptionExecution extends Execution {
      *
      * @return the original params
      */
-    Object[] getOriginalParams();
+    Serializable[] getOriginalParams();
 
     /**
      * Sets the params.
      *
      * @param params the new params
      */
-    void setParams(Object[] params);
+    void setParams(Serializable[] params);
 }

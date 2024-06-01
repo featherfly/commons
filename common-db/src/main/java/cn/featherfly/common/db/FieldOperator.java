@@ -1,6 +1,5 @@
 package cn.featherfly.common.db;
 
-import java.io.Serializable;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +10,7 @@ import java.sql.ResultSet;
  * @author zhongj
  * @param <T> the field value type
  */
-public interface FieldOperator<T extends Serializable> {
+public interface FieldOperator<T> {
 
     /**
      * Gets the type.

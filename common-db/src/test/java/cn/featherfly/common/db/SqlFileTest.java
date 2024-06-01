@@ -3,6 +3,7 @@ package cn.featherfly.common.db;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
@@ -22,7 +23,7 @@ public class SqlFileTest {
     @Test
     public void testInclude() throws IOException {
         SqlFile sqlFile = SqlFile.read(new File(ClassLoaderUtils.getResource("executor_include.sql").getFile()),
-                StandardCharsets.UTF_8);
+            StandardCharsets.UTF_8);
         System.out.println("\nsqlList:\n");
         for (String sql : sqlFile.getSqlList()) {
             System.out.println(sql);
@@ -34,8 +35,7 @@ public class SqlFileTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testIncludeNotFound() throws IOException {
         SqlFile sqlFile = SqlFile.read(
-                new File(ClassLoaderUtils.getResource("executor_include_not_found.sql").getFile()),
-                StandardCharsets.UTF_8);
+            new File(ClassLoaderUtils.getResource("executor_include_not_found.sql").getFile()), StandardCharsets.UTF_8);
         System.out.println("\nsqlList:\n");
         for (String sql : sqlFile.getSqlList()) {
             System.out.println(sql);
@@ -47,8 +47,8 @@ public class SqlFileTest {
     @Test
     public void testInclude2() throws IOException {
         SqlFile sqlFile = SqlFile.read(
-                new File(ClassLoaderUtils.getResource("executor_sql/executor_include.sql").getFile()),
-                StandardCharsets.UTF_8);
+            new File(ClassLoaderUtils.getResource("executor_sql/executor_include.sql").getFile()),
+            StandardCharsets.UTF_8);
 
         System.out.println("\nsqlList:\n");
         for (String sql : sqlFile.getSqlList()) {
@@ -59,8 +59,8 @@ public class SqlFileTest {
     @Test
     public void testIncludeExistPolicyIgnore() throws IOException {
         SqlFile sqlFile = SqlFile.read(
-                new File(ClassLoaderUtils.getResource("executor_sql/executor_include2.sql").getFile()),
-                StandardCharsets.UTF_8);
+            new File(ClassLoaderUtils.getResource("executor_sql/executor_include2.sql").getFile()),
+            StandardCharsets.UTF_8);
 
         System.out.println("\nsqlList:\n");
         for (String sql : sqlFile.getSqlList()) {
@@ -73,8 +73,8 @@ public class SqlFileTest {
     @Test
     public void testIncludeExistPolicyInclude() throws IOException {
         SqlFile sqlFile = SqlFile.read(
-                new File(ClassLoaderUtils.getResource("executor_sql/executor_include2.sql").getFile()),
-                StandardCharsets.UTF_8, IncludeExistPolicy.INCLUDE);
+            new File(ClassLoaderUtils.getResource("executor_sql/executor_include2.sql").getFile()),
+            StandardCharsets.UTF_8, IncludeExistPolicy.INCLUDE);
 
         System.out.println("\nsqlList:\n");
         for (String sql : sqlFile.getSqlList()) {
@@ -87,8 +87,8 @@ public class SqlFileTest {
     @Test(expectedExceptions = JdbcException.class)
     public void testIncludeExistPolicyException() throws IOException {
         SqlFile sqlFile = SqlFile.read(
-                new File(ClassLoaderUtils.getResource("executor_sql/executor_include2.sql").getFile()),
-                StandardCharsets.UTF_8, IncludeExistPolicy.EXCEPTION);
+            new File(ClassLoaderUtils.getResource("executor_sql/executor_include2.sql").getFile()),
+            StandardCharsets.UTF_8, IncludeExistPolicy.EXCEPTION);
 
         System.out.println("\nsqlList:\n");
         for (String sql : sqlFile.getSqlList()) {
@@ -99,8 +99,8 @@ public class SqlFileTest {
     @Test
     public void testIncludeWithJar() throws IOException {
         SqlFile sqlFile = SqlFile.read(
-                new File(ClassLoaderUtils.getResource("executor_sql/executor_include_with_jar.sql").getFile()),
-                StandardCharsets.UTF_8);
+            new File(ClassLoaderUtils.getResource("executor_sql/executor_include_with_jar.sql").getFile()),
+            StandardCharsets.UTF_8);
         System.out.println("\nsqlList:\n");
         for (String sql : sqlFile.getSqlList()) {
             System.out.println(sql);
@@ -112,8 +112,8 @@ public class SqlFileTest {
     @Test
     public void testIncludeParams() throws IOException {
         SqlFile sqlFile = SqlFile.read(new File(ClassLoaderUtils.getResource("executor_include_params.sql").getFile()),
-                StandardCharsets.UTF_8, new ChainMapImpl<String, Object>().putChain("name", "yufei").putChain("time",
-                        Dates.formatTime(new Date())));
+            StandardCharsets.UTF_8, new ChainMapImpl<String, Serializable>().putChain("name", "yufei").putChain("time",
+                Dates.formatTime(new Date())));
         System.out.println("\nsqlList:\n");
         for (String sql : sqlFile.getSqlList()) {
             System.out.println(sql);
@@ -125,7 +125,7 @@ public class SqlFileTest {
     @Test
     public void testIncludeProcedure() throws IOException {
         SqlFile sqlFile = SqlFile.read(ClassLoaderUtils.getResource("executor_include_procedure.sql"),
-                StandardCharsets.UTF_8);
+            StandardCharsets.UTF_8);
         System.out.println("\nsqlList:\n");
         for (String sql : sqlFile.getSqlList()) {
             System.out.println(sql);

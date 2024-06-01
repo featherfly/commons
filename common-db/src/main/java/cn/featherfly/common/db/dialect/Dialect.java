@@ -1,5 +1,6 @@
 package cn.featherfly.common.db.dialect;
 
+import java.io.Serializable;
 import java.sql.DatabaseMetaData;
 import java.sql.JDBCType;
 import java.sql.SQLException;
@@ -84,49 +85,37 @@ public interface Dialect {
     String getPaginationSql(String sql, int start, int limit);
 
     /**
-     * <p>
-     * 返回分页参数的数组
-     * </p>
-     * .
+     * 返回分页参数的数组.
      *
      * @param params 参数数组
      * @param start 起始数
      * @param limit 数量
      * @return 分页参数的数组
      */
-    Object[] getPaginationSqlParameter(Object[] params, int start, int limit);
+    Serializable[] getPaginationSqlParameter(Serializable[] params, int start, int limit);
 
     /**
-     * <p>
-     * 返回分页参数的MAP
-     * </p>
-     * .
+     * 返回分页参数的MAP.
      *
      * @param params 参数MAP
      * @param start 起始数
      * @param limit 数量
      * @return 分页参数的MAP
      */
-    Map<String, Object> getPaginationSqlParameter(Map<String, Object> params, int start, int limit);
+    Map<String, Serializable> getPaginationSqlParameter(Map<String, Serializable> params, int start, int limit);
 
     /**
-     * <p>
-     * 转换普通命名sql为带分页的sql,此sql为带命名参数sql, 如select * from user where user_name = :username
-     * </p>
-     * .
+     * 转换普通命名sql为带分页的sql,此sql为带命名参数sql, 如select * from user where user_name = :username .
      *
      * @param sql 带转换的sql
      * @param start 起始数
      * @param limit 数量
      * @return 返回转换好的分页sql
      */
-    String getParamNamedPaginationSql(String sql, int start, int limit);
+    String getNamedParamPaginationSql(String sql, int start, int limit);
 
     /**
-     * <p>
-     * 转换普通命名sql为带分页的sql,此sql为带命名参数sql, 如select * from user where user_name = {startSymal}username.
-     * </p>
-     * .
+     * 转换普通命名sql为带分页的sql,此sql为带命名参数sql, 如select * from user where user_name = {startSymal}username..
      *
      * @param sql 带转换的sql
      * @param start 起始数
@@ -134,7 +123,7 @@ public interface Dialect {
      * @param startSymbol 命名参数的起始符号
      * @return 返回转换好的分页sql
      */
-    String getParamNamedPaginationSql(String sql, int start, int limit, char startSymbol);
+    String getNamedParamPaginationSql(String sql, int start, int limit, char startSymbol);
 
     /**
      * 转换为SQL语句中使用的字符串 .

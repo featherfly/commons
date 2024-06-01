@@ -82,15 +82,15 @@ public class MySQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public String getParamNamedPaginationSql(String sql, int start, int limit) {
-        return getParamNamedPaginationSql(sql, start, limit, PARAM_NAME_START_SYMBOL);
+    public String getNamedParamPaginationSql(String sql, int start, int limit) {
+        return getNamedParamPaginationSql(sql, start, limit, PARAM_NAME_START_SYMBOL);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getParamNamedPaginationSql(String sql, int start, int limit, char startSymbol) {
+    public String getNamedParamPaginationSql(String sql, int start, int limit, char startSymbol) {
         return getPaginationSql(sql, start, true, startSymbol);
     }
 

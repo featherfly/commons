@@ -1,5 +1,6 @@
 package cn.featherfly.common.lang;
 
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 如果第一个为有效的字符串(不是null，空串），则返回，否则返回第二个.
      *
-     * @param target        目标字符串
+     * @param target 目标字符串
      * @param defaultTarget 默认字符串
      * @return 第一个为有效的字符串(null，空串），则返回，否则返回第二个
      */
@@ -53,7 +54,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 如果第一个为有效的字符串(不是null，空串，全空白字符组成的字符串），则返回，否则返回第二个.
      *
-     * @param target        目标字符串
+     * @param target 目标字符串
      * @param defaultTarget 默认字符串
      * @return 第一个为有效的字符串(null，空串，全空白字符组成的字符串），则返回，否则返回第二个
      */
@@ -109,7 +110,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 如果为null,空字符串，返回第二个参数，否则返回第一个参数.
      *
-     * @param str      需要判断的字符串
+     * @param str 需要判断的字符串
      * @param defValue 默认值
      * @return 第一个参数或第二个参数
      */
@@ -120,8 +121,8 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 如果为null,空字符串，（当ignoreCaseNullStr为false，还要判断字符串"null"和"NULL"） 返回第二个参数，否则返回第一个参数.
      *
-     * @param str               需要判断的字符串
-     * @param defValue          默认值
+     * @param str 需要判断的字符串
+     * @param defValue 默认值
      * @param ignoreCaseNullStr 是否忽略字符串形式的null和NULL
      * @return 第一个参数或第二个参数
      */
@@ -221,7 +222,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 去除字符串开始和结尾的空白字符, 如果传入的对象为null，则返回defaultValue.
      *
-     * @param str          需要处理的字符串
+     * @param str 需要处理的字符串
      * @param defaultValue 默认值
      * @return 去除开始和结尾空白字符后的字符串
      */
@@ -301,7 +302,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * 去掉起始字符.
      *
      * @param str 源字符串
-     * @param ts  需要去除的字符
+     * @param ts 需要去除的字符
      * @return 去掉起始字符后的字符串
      */
     public static String trimBegin(String str, String ts) {
@@ -318,7 +319,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * 去掉起始字符.
      *
      * @param str 源字符串
-     * @param ts  需要去除的字符
+     * @param ts 需要去除的字符
      * @return 去掉起始字符后的字符串
      * @deprecated {@link #trimBegin(String,String)}
      */
@@ -337,7 +338,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * 去掉尾部字符.
      *
      * @param str 源字符串
-     * @param ts  需要去除的字符
+     * @param ts 需要去除的字符
      * @return 去掉尾部字符后的字符串
      */
     public static String trimEnd(String str, String ts) {
@@ -354,7 +355,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * 去掉首尾字符.
      *
      * @param str 源字符串
-     * @param ts  需要去除的字符
+     * @param ts 需要去除的字符
      * @return 去掉首尾字符后的字符串
      * @deprecated {@link #trimBeginEnd(String,String)}
      */
@@ -387,7 +388,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * 去掉首尾字符.
      *
      * @param str 源字符串
-     * @param ts  需要去除的字符
+     * @param ts 需要去除的字符
      * @return 去掉首尾字符后的字符串
      */
     public static String trimBeginEnd(String str, String ts) {
@@ -425,7 +426,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 判断传入的字符串是否为整数（使用指定进制判断） .
      *
-     * @param str   需要判断的字符串
+     * @param str 需要判断的字符串
      * @param radio 使用的进制
      * @return 传入的字符串是否为整数
      */
@@ -476,7 +477,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      *
      * </blockquote>
      *
-     * @param str  format string
+     * @param str format string
      * @param argu format argu
      * @return formated str
      */
@@ -493,11 +494,28 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      *
      * </blockquote>
      *
-     * @param str  format string
+     * @param str format string
      * @param args format args
      * @return formated str
      */
     public static String format(String str, Object... args) {
+        return FORMATTER.format(str, args);
+    }
+
+    /**
+     * format str. <blockquote>
+     *
+     * <pre>
+     * Strings.format("my name is {0}, i am {1} years old", new Object[] { "yufei", 18 });
+     * </pre>
+     *
+     * </blockquote>
+     *
+     * @param str format string
+     * @param args format args
+     * @return formated str
+     */
+    public static String format(String str, Serializable... args) {
         return FORMATTER.format(str, args);
     }
 
@@ -511,8 +529,8 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * </blockquote>
      *
      * @param content the content
-     * @param args    format args
-     * @param symbol  the symbol
+     * @param args format args
+     * @param symbol the symbol
      * @return formated str
      */
     public static String format(String content, Object[] args, char symbol) {
@@ -528,10 +546,10 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      *
      * </blockquote>
      *
-     * @param content     the content
-     * @param args        format args
+     * @param content the content
+     * @param args format args
      * @param startSymbol the start symbol
-     * @param endSymbol   the end symbol
+     * @param endSymbol the end symbol
      * @return formated str
      */
     public static String format(String content, Object[] args, char startSymbol, char endSymbol) {
@@ -543,16 +561,16 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      *
      * <pre>
      * Strings.format("my name is：{name}, i am {age} years old",
-     *         new HashChainMap&lt;String, String&gt;().putChain("name", "yufei").putChain("age", "18"));
+     *     new HashChainMap&lt;String, String&gt;().putChain("name", "yufei").putChain("age", "18"));
      * </pre>
      *
      * </blockquote>
      *
      * @param content str content
-     * @param args    arg map
+     * @param args arg map
      * @return formated str
      */
-    public static String format(String content, Map<String, Object> args) {
+    public static String format(String content, Map<String, ?> args) {
         return FORMATTER.format(content, args);
     }
 
@@ -561,17 +579,17 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      *
      * <pre>
      * Strings.format("my name is：$name$, i am $age$ years old",
-     *         new HashChainMap&lt;String, String&gt;().putChain("name", "yufei").putChain("age", "18"), '$');
+     *     new HashChainMap&lt;String, String&gt;().putChain("name", "yufei").putChain("age", "18"), '$');
      * </pre>
      *
      * </blockquote>
      *
      * @param content the content
-     * @param args    the args
-     * @param symbol  the symbol
+     * @param args the args
+     * @param symbol the symbol
      * @return the string
      */
-    public static String format(String content, Map<String, Object> args, char symbol) {
+    public static String format(String content, Map<String, ?> args, char symbol) {
         return format(content, args, symbol, symbol);
     }
 
@@ -580,18 +598,18 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      *
      * <pre>
      * Strings.format("my name is：{name}, i am {age} years old",
-     *         new HashChainMap&lt;String, String&gt;().putChain("name", "yufei").putChain("age", "18"), '{', '}');
+     *     new HashChainMap&lt;String, String&gt;().putChain("name", "yufei").putChain("age", "18"), '{', '}');
      * </pre>
      *
      * </blockquote>
      *
-     * @param content     the content
-     * @param args        the args
+     * @param content the content
+     * @param args the args
      * @param startSymbol the start symbol
-     * @param endSymbol   the end symbol
+     * @param endSymbol the end symbol
      * @return the string
      */
-    public static String format(String content, Map<String, Object> args, char startSymbol, char endSymbol) {
+    public static String format(String content, Map<String, ?> args, char startSymbol, char endSymbol) {
         return new StringFormatter(startSymbol, endSymbol).format(content, args);
     }
 
@@ -609,7 +627,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * </blockquote>
      *
      * @param content the content
-     * @param args    format args
+     * @param args format args
      * @return formated str
      */
     public static String format2(String content, Object args) {
@@ -625,8 +643,8 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * </code>
      *
      * @param content the content
-     * @param args    the args
-     * @param symbol  the symbol
+     * @param args the args
+     * @param symbol the symbol
      * @return the string
      */
     public static String format(String content, Object args, char symbol) {
@@ -641,10 +659,10 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * Strings.format("my name is：{name}, i am {age} years old", user, '{', '}');
      * </code>
      *
-     * @param content     the content
-     * @param args        the args
+     * @param content the content
+     * @param args the args
      * @param startSymbol the start symbol
-     * @param endSymbol   the end symbol
+     * @param endSymbol the end symbol
      * @return the string
      */
     public static String format(String content, Object args, char startSymbol, char endSymbol) {
@@ -657,9 +675,9 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * </p>
      * .
      *
-     * @param text         搜索的源
+     * @param text 搜索的源
      * @param searchString 搜索的内容
-     * @param replacement  替换的内容
+     * @param replacement 替换的内容
      * @return 替换完成的文本, 如果传入null返回null
      */
     public static String replace(String text, String searchString, String replacement) {
@@ -714,8 +732,8 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 使用给定的连接符连接传入的字符串, 如果传入的字符串为null或长度为0，则返回"".
      *
-     * @param str   需要连接的字符串
-     * @param num   连接次数
+     * @param str 需要连接的字符串
+     * @param num 连接次数
      * @param delim 集合中的元素的分隔符。(null表示直接连接集合中的元素，不加入分割符)
      * @return String 形式为：str＋delim＋str＋delim＋...
      */
@@ -750,7 +768,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * 连接集合中的所有元素以创建一个String，其中集合中的元素间以指定的delim来分隔, 如果 集合为null或长度为0，则返回"".
      *
      * @param collection 需要连接的String为元素的集合
-     * @param delim      集合中的元素的分隔符。(null表示直接连接集合中的元素，不加入分割符)
+     * @param delim 集合中的元素的分隔符。(null表示直接连接集合中的元素，不加入分割符)
      * @return String 形式为：list的元素＋delim＋list的元素＋delim＋...
      */
     public static String join(Collection<String> collection, String delim) {
@@ -807,7 +825,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * 以指定的delim分隔符分隔String，并将分隔的每一个String作为List的一个元素.
      *
      * @param source 需要分隔的string
-     * @param delim  分隔String的符合 (null表示以空格作为分隔符)
+     * @param delim 分隔String的符合 (null表示以空格作为分隔符)
      * @return 存储了分隔的子串的List
      */
     public static List<String> splitToList(String source, String delim) {
@@ -820,7 +838,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * 此方法将给出的字符串source使用delim划分为单词数组.
      *
      * @param source 需要进行划分的原字符串
-     * @param delim  单词的分隔字符串
+     * @param delim 单词的分隔字符串
      * @return 划分以后的数组，如果source或delim为null的时候返回以source为唯一元素的数组.
      */
     public static String[] split(String source, String delim) {
@@ -897,7 +915,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 判断一个String里是不是包含另一个String.
      *
-     * @param text         源文本
+     * @param text 源文本
      * @param searchString 包含的字符串
      * @return 是否包含
      */
@@ -908,7 +926,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 字符串数组中是否包含指定的字符串.大小写敏感
      *
-     * @param texts        源文本数组
+     * @param texts 源文本数组
      * @param searchString 包含的字符串
      * @return 不包含，返回-1，如果包含，返回数组的下标数
      */
@@ -919,7 +937,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 不区分大小写判定字符串数组中是否包含指定的字符串。.
      *
-     * @param texts        源文本数组
+     * @param texts 源文本数组
      * @param searchString 包含的字符串
      * @return 不包含，返回-1，如果包含，返回数组的下标数
      */
@@ -962,7 +980,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 将一个字符串进行转码处理,使用系统默认字符集[{@link Charset#defaultCharset()}]解码并使用传入字符集进行编码.
      *
-     * @param str     输入字符串
+     * @param str 输入字符串
      * @param charset 输出字符转编码时使用的字符集
      * @return 输出转换后的字符串.
      */
@@ -973,9 +991,9 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 将一个字符串进行转码处理.
      *
-     * @param str                 输入字符串
+     * @param str 输入字符串
      * @param sourceDecodeCharset 输入字符串解码时使用的字符集
-     * @param encodeToCharset     输出字符转编码时使用的字符集
+     * @param encodeToCharset 输出字符转编码时使用的字符集
      * @return 输出转换后的字符串.
      */
     public static String encode(String str, Charset sourceDecodeCharset, Charset encodeToCharset) {
@@ -995,7 +1013,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 将一个字符串进行转码处理.
      *
-     * @param str         输入字符串
+     * @param str 输入字符串
      * @param charsetName 输出字符转编码时使用的字符集
      * @return 输出转换后的字符串.
      */
@@ -1007,9 +1025,9 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 将一个字符串进行转码处理.
      *
-     * @param str                     输入字符串
+     * @param str 输入字符串
      * @param sourceDecodeCharsetName 输入字符串解码时使用的字符集
-     * @param encodeToCharsetName     输出字符转编码时使用的字符集
+     * @param encodeToCharsetName 输出字符转编码时使用的字符集
      * @return 输出转换后的字符串.
      */
     public static String encode(String str, String sourceDecodeCharsetName, String encodeToCharsetName) {
@@ -1065,7 +1083,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * UTF-8编码.
      *
-     * @param str        输入字符串
+     * @param str 输入字符串
      * @param fromEncode 输入字符串解码时使用的字符集
      * @return 输出转换后的字符串.
      */
@@ -1076,7 +1094,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 将字符串转换为整型数.
      *
-     * @param str          输入的字符串
+     * @param str 输入的字符串
      * @param defaultValue 如果转换失败后的默认值
      * @return 字符串转换为的整数
      */
@@ -1091,7 +1109,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 将字符串转换为长整型数.
      *
-     * @param str          输入的字符串
+     * @param str 输入的字符串
      * @param defaultValue 如果转换失败后的默认值
      * @return 字符串转换为的长整型数
      */
@@ -1106,7 +1124,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 将字符串转换为双精度数.
      *
-     * @param str          输入的字符串
+     * @param str 输入的字符串
      * @param defaultValue 如果转换失败后的默认值
      * @return 字符串转换为的双精度数
      */
@@ -1121,7 +1139,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 将字符串转换为单精度数.
      *
-     * @param str          输入的字符串
+     * @param str 输入的字符串
      * @param defaultValue 如果转换失败后的默认值
      * @return 字符串转换为的单精度数
      */
@@ -1146,7 +1164,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 获取传入字符串的长度，null返回0.
      *
-     * @param str             字符串
+     * @param str 字符串
      * @param needDeleteSpace 是否删除传入字符串的空字符串
      * @return 传入字符串的长度，null返回0
      */
@@ -1165,7 +1183,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 取字符串的前X个字符,X为传入参数.
      *
-     * @param str   字符串
+     * @param str 字符串
      * @param index 序号
      * @return 子串.
      */
@@ -1182,7 +1200,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 取字符串从x开始后的字符,X为传入参数.
      *
-     * @param str   字符串
+     * @param str 字符串
      * @param index 序号
      * @return 子串.
      */
@@ -1200,7 +1218,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
     /**
      * 取字符串的后X个字符,X为传入参数.
      *
-     * @param str    字符串
+     * @param str 字符串
      * @param length 长度
      * @return 子串.
      */
@@ -1219,7 +1237,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * 判断字符串是否以指定字符串开始,如果需要判断的源文本为null,返回false.
      *
      * @param sourceString 源文本
-     * @param keyString    判断是否是起始的串
+     * @param keyString 判断是否是起始的串
      * @return 字符串是否以指定字符串开始
      */
     public static boolean startsWith(String sourceString, String keyString) {
@@ -1233,7 +1251,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * 判断字符串是否以指定字符串结束,如果需要判断的源文本为null,返回false.
      *
      * @param sourceString 源文本
-     * @param keyString    判断是否是起始的串
+     * @param keyString 判断是否是起始的串
      * @return 字符串是否以指定字符串结束
      */
     public static boolean endWith(String sourceString, String keyString) {
@@ -1277,7 +1295,8 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * @param prefix 变量前缀字符串
      * @param source 带参数的原字符串
      * @param values 替换用的字符串数组
-     * @return 替换后的字符串。 如果前缀为null则使用“%”作为前缀； 如果source或者values为null或者values的长度为0则返回source； 如果values的长度大于参数的个数，多余的值将被忽略；
+     * @return 替换后的字符串。 如果前缀为null则使用“%”作为前缀； 如果source或者values为null或者values的长度为0则返回source；
+     *         如果values的长度大于参数的个数，多余的值将被忽略；
      *         如果values的长度小于参数的个数，则后面的所有参数都使用最后一个值进行替换。
      */
     public static String getReplaceString(String prefix, String source, String[] values) {
@@ -1359,17 +1378,17 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
             return str;
         }
         return str.replace("&amp;", "&") //
-                .replace("&lt;", "<") //
-                .replace("&gt;", ">") //
-                .replace("&#39;", "'") //
-                .replace("&quot;", "\"");
+            .replace("&lt;", "<") //
+            .replace("&gt;", ">") //
+            .replace("&#39;", "'") //
+            .replace("&quot;", "\"");
     }
 
     /**
      * 为传入URI附加请求参数 .
      *
-     * @param uri   uri
-     * @param name  name
+     * @param uri uri
+     * @param name name
      * @param value value
      * @return 附加请求参数后的URI
      */

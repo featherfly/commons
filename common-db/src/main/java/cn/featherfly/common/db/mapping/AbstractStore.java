@@ -1,6 +1,5 @@
 package cn.featherfly.common.db.mapping;
 
-import java.io.Serializable;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,24 +28,24 @@ public abstract class AbstractStore implements Store {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /** The java to sql type map. */
-    private Map<Type<Serializable>, JavaToSqlTypeRegister<Serializable>> javaToSqlTypeRegisterMap = new HashMap<>(0);
+    private Map<Type<?>, JavaToSqlTypeRegister<?>> javaToSqlTypeRegisterMap = new HashMap<>(0);
 
     /** The sql type to java map. */
-    private Map<SQLType, SqlTypeToJavaRegister<Serializable>> sqlTypeToJavaRegisterMap = new HashMap<>(0);
+    private Map<SQLType, SqlTypeToJavaRegister<?>> sqlTypeToJavaRegisterMap = new HashMap<>(0);
 
     /**
      * Gets the java sql type mappers.
      *
      * @return the java sql type mappers
      */
-    protected abstract Collection<JavaSqlTypeMapper<Serializable>> getJavaSqlTypeMappers();
+    protected abstract Collection<JavaSqlTypeMapper<?>> getJavaSqlTypeMappers();
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void add(JavaToSqlTypeRegister<Serializable> register) {
-        ClassType<Serializable> type = new ClassType<>(register.getJavaType());
+    public void add(JavaToSqlTypeRegister<?> register) {
+        ClassType<?> type = new ClassType<>(register.getJavaType());
         JavaToSqlTypeRegister<?> oldRegister = javaToSqlTypeRegisterMap.get(type);
         if (oldRegister != null) {
             throw new JdbcMappingException("#java.type.registed", new Object[] { type.getType().getName(),
@@ -60,7 +59,7 @@ public abstract class AbstractStore implements Store {
      * {@inheritDoc}
      */
     @Override
-    public void add(SqlTypeToJavaRegister<Serializable> register) {
+    public void add(SqlTypeToJavaRegister<?> register) {
         SqlTypeToJavaRegister<?> oldRegister = sqlTypeToJavaRegisterMap.get(register.getSqlType());
         if (oldRegister != null) {
             throw new JdbcMappingException("#sql.type.registed", new Object[] { oldRegister.getSqlType().getName(),
@@ -79,7 +78,7 @@ public abstract class AbstractStore implements Store {
      * @return the sql type
      */
     @Override
-    public <E extends Serializable> SQLType getSqlType(Class<E> javaType) {
+    public <E> SQLType getSqlType(Class<E> javaType) {
         return getSqlType(new ClassType<>(javaType));
     }
 
@@ -91,7 +90,7 @@ public abstract class AbstractStore implements Store {
      * @return the sql type
      */
     @Override
-    public <E extends Serializable> SQLType getSqlType(Type<E> javaType) {
+    public <E> SQLType getSqlType(Type<E> javaType) {
         //            for (JavaSqlTypeMapper<?> javaSqlTypeMapper : javaSqlTypeMappers) {
         //                JavaSqlTypeMapper<Object> mapper = (JavaSqlTypeMapper<Object>) javaSqlTypeMapper;
         //                if (mapper.support((GenericType<Object>) javaType)) {
@@ -114,7 +113,7 @@ public abstract class AbstractStore implements Store {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <E extends Serializable> Class<E> getJavaType(SQLType sqlType) {
+    public <E> Class<E> getJavaType(SQLType sqlType) {
         // 获取javaType不需要用映射来做
         //            for (JavaSqlTypeMapper<?> sqlTypeToJavaMapper : javaSqlTypeMappers) {
         //                if (sqlTypeToJavaMapper.support(sqlType, null, null)) { // TODO 需要测试是否如此
@@ -142,7 +141,7 @@ public abstract class AbstractStore implements Store {
      */
     @Override
     @SuppressWarnings("unchecked")
-    public <E extends Serializable> boolean set(PreparedStatement prep, int columnIndex, E columnValue) {
+    public <E> boolean set(PreparedStatement prep, int columnIndex, E columnValue) {
         if (columnValue == null) {
             JdbcUtils.setParameter(prep, columnIndex, columnValue);
             return true;
@@ -155,8 +154,7 @@ public abstract class AbstractStore implements Store {
      * {@inheritDoc}
      */
     @Override
-    public <E extends Serializable> boolean set(PreparedStatement prep, int columnIndex, E columnValue,
-        Property<?, E> javaType) {
+    public <E> boolean set(PreparedStatement prep, int columnIndex, E columnValue, Property<?, E> javaType) {
         return _set(prep, columnIndex, columnValue, javaType);
     }
 
@@ -185,7 +183,7 @@ public abstract class AbstractStore implements Store {
      * {@inheritDoc}
      */
     @Override
-    public <E extends Serializable> Optional<E> get(ResultSet rs, int columnIndex, Class<E> javaType) {
+    public <E> Optional<E> get(ResultSet rs, int columnIndex, Class<E> javaType) {
         return _get(rs, columnIndex, new ClassType<>(javaType));
     }
 
@@ -193,7 +191,7 @@ public abstract class AbstractStore implements Store {
      * {@inheritDoc}
      */
     @Override
-    public <E extends Serializable> Optional<E> get(CallableStatement call, int paramIndex, Class<E> javaType) {
+    public <E> Optional<E> get(CallableStatement call, int paramIndex, Class<E> javaType) {
         return _get(call, paramIndex, new ClassType<>(javaType));
     }
 
@@ -201,12 +199,12 @@ public abstract class AbstractStore implements Store {
      * {@inheritDoc}
      */
     @Override
-    public <E extends Serializable> Optional<E> get(ResultSet rs, int columnIndex, Property<?, E> javaType) {
+    public <E> Optional<E> get(ResultSet rs, int columnIndex, Property<?, E> javaType) {
         return _get(rs, columnIndex, javaType);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private <E extends Serializable> Optional<E> _get(CallableStatement call, int paramIndex, Type<E> javaType) {
+    private <E> Optional<E> _get(CallableStatement call, int paramIndex, Type<E> javaType) {
         SQLType sqlType = JdbcUtils.getCallableSQLType(call, paramIndex);
         for (JavaSqlTypeMapper<?> sqlTypeToJavaMapper : getJavaSqlTypeMappers()) {
             if (sqlTypeToJavaMapper.support((Type) javaType)) {
@@ -218,7 +216,7 @@ public abstract class AbstractStore implements Store {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private <E extends Serializable> Optional<E> _get(ResultSet rs, int columnIndex, Type<E> javaType) {
+    private <E> Optional<E> _get(ResultSet rs, int columnIndex, Type<E> javaType) {
         SQLType sqlType = JdbcUtils.getResultSetType(rs, columnIndex);
         for (JavaSqlTypeMapper<?> sqlTypeToJavaMapper : getJavaSqlTypeMappers()) {
             String tableName = JdbcUtils.getTableName(rs, columnIndex);

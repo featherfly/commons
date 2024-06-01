@@ -10,14 +10,17 @@
  */
 package cn.featherfly.common.repository;
 
-import java.util.HashMap;
+import java.io.Serializable;
+import java.util.Map;
+
+import cn.featherfly.common.structure.ChainMapImpl;
 
 /**
  * Params.
  *
  * @author zhongj
  */
-public class Params extends HashMap<String, Object> {
+public class Params extends ChainMapImpl<String, Serializable> {
 
     private static final long serialVersionUID = -5375023636015964291L;
 
@@ -25,6 +28,26 @@ public class Params extends HashMap<String, Object> {
      * Instantiates a new params.
      */
     public Params() {
+        super();
+    }
+
+    /**
+     * Instantiates a new params.
+     *
+     * @param map the map
+     */
+    public Params(Map<String, Serializable> map) {
+        super(map);
+    }
+
+    /**
+     * Sets the param.
+     *
+     * @param params the params
+     * @return the params
+     */
+    public static final Params setParam(Map<String, ?> params) {
+        return new Params().set(params);
     }
 
     /**
@@ -46,7 +69,37 @@ public class Params extends HashMap<String, Object> {
      * @return the params
      */
     public Params set(String name, Object value) {
+        if (value != null && !(value instanceof Serializable)) {
+            throw new IllegalArgumentException("param value type must implements " + Serializable.class.getName());
+        }
+        return set(name, (Serializable) value);
+    }
+
+    /**
+     * Sets the.
+     *
+     * @param name the name
+     * @param value the value
+     * @return the params
+     */
+    public Params set(String name, Serializable value) {
         put(name, value);
+        return this;
+    }
+
+    /**
+     * Sets the.
+     *
+     * @param params the params
+     * @return the params
+     */
+    public Params set(Map<String, ?> params) {
+        if (params == null) {
+            return this;
+        }
+        for (Entry<String, ?> entrySet : params.entrySet()) {
+            set(entrySet.getKey(), entrySet.getValue());
+        }
         return this;
     }
 

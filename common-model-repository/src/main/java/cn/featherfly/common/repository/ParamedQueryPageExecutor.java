@@ -8,6 +8,7 @@
  */
 package cn.featherfly.common.repository;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,7 @@ public interface ParamedQueryPageExecutor {
      * @param limit the limit
      * @return paged map list
      */
-    List<Map<String, Object>> list(int offset, int limit);
+    List<Map<String, Serializable>> list(int offset, int limit);
 
     /**
      * query paged list.
@@ -38,7 +39,7 @@ public interface ParamedQueryPageExecutor {
      * @param page the page
      * @return paged map list
      */
-    default List<Map<String, Object>> list(Page page) {
+    default List<Map<String, Serializable>> list(Page page) {
         Limit limit = new Limit(page);
         return list(limit.getOffset(), limit.getLimit());
     }
@@ -98,7 +99,7 @@ public interface ParamedQueryPageExecutor {
      * @param limit the limit
      * @return map pagination
      */
-    PaginationResults<Map<String, Object>> pagination(int offset, int limit);
+    PaginationResults<Map<String, Serializable>> pagination(int offset, int limit);
 
     /**
      * query page.
@@ -106,7 +107,7 @@ public interface ParamedQueryPageExecutor {
      * @param page the page
      * @return map pagination
      */
-    default PaginationResults<Map<String, Object>> pagination(Page page) {
+    default PaginationResults<Map<String, Serializable>> pagination(Page page) {
         Limit limit = new Limit(page);
         return pagination(limit.getOffset(), limit.getLimit());
     }

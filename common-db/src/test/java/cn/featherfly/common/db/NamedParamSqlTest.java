@@ -10,6 +10,7 @@ package cn.featherfly.common.db;
 
 import static org.testng.Assert.assertEquals;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,7 +43,7 @@ public class NamedParamSqlTest {
 
     private List<Integer> stateList;
 
-    private Map<String, Object> params;
+    private Map<String, Serializable> params;
 
     private final int max = 100000;
 
@@ -73,9 +74,9 @@ public class NamedParamSqlTest {
         }
 
         params = new LinkedHashMap<>();
-        params.put("ids", idList);
+        params.put("ids", (ArrayList) idList);
         params.put("gender", "male");
-        params.put("states", idList);
+        params.put("states", (ArrayList) idList);
     }
 
     @Test

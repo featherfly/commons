@@ -159,7 +159,7 @@ public class SqliteDialectTest extends DialectTest {
     @Override
     @Test
     void testParamNamedPaginationSql() {
-        String pageNamedParamSql = dialect.getParamNamedPaginationSql("select * from user", 11, 10);
+        String pageNamedParamSql = dialect.getNamedParamPaginationSql("select * from user", 11, 10);
         System.out.println(pageNamedParamSql);
         assertEquals(pageNamedParamSql, "select * from user LIMIT :dialect_paging_start,:dialect_paging_limit");
     }

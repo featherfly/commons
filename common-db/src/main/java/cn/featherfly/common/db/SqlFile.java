@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -66,7 +67,7 @@ public class SqlFile {
     public static final String END_SQL_SIGN = ";";
 
     private static final Pattern CREATE_PROCEDURE_PATTERN = Pattern
-            .compile("CREATE[\\s\\r\\n]+(.+[\\s\\r\\n]+)?PROCEDURE[\\s\\r\\n]+([\\w\\W]+)", Pattern.CASE_INSENSITIVE);
+        .compile("CREATE[\\s\\r\\n]+(.+[\\s\\r\\n]+)?PROCEDURE[\\s\\r\\n]+([\\w\\W]+)", Pattern.CASE_INSENSITIVE);
 
     private static final Pattern END_PATTERN = Pattern.compile("[\\w\\W]+END[\\s\\r\\n]*", Pattern.CASE_INSENSITIVE);
 
@@ -83,7 +84,7 @@ public class SqlFile {
     /**
      * Instantiates a new sql file.
      *
-     * @param file    the file
+     * @param file the file
      * @param charset the charset
      */
     private SqlFile(String file, Charset charset) {
@@ -143,13 +144,13 @@ public class SqlFile {
     @Override
     public String toString() {
         return "SqlFile [file=" + file + ", charset=" + charset + ", includeFiles=" + includeFiles + ", sqlList="
-                + sqlList + ", includeExistPolicy=" + includeExistPolicy + "]";
+            + sqlList + ", includeExistPolicy=" + includeExistPolicy + "]";
     }
 
     /**
      * Adds the include.
      *
-     * @param source  the source
+     * @param source the source
      * @param include the include
      * @return true, if successful
      */
@@ -180,7 +181,7 @@ public class SqlFile {
     /**
      * Write.
      *
-     * @param os      the os
+     * @param os the os
      * @param charset the charset
      * @throws IOException Signals that an I/O exception has occurred.
      */
@@ -210,7 +211,7 @@ public class SqlFile {
     /**
      * Write.
      *
-     * @param file    the file
+     * @param file the file
      * @param charset the charset
      * @throws IOException Signals that an I/O exception has occurred.
      */
@@ -246,7 +247,7 @@ public class SqlFile {
     /**
      * Read.
      *
-     * @param file    the file
+     * @param file the file
      * @param charset the charset
      * @return the sql file
      * @throws IOException Signals that an I/O exception has occurred.
@@ -259,7 +260,7 @@ public class SqlFile {
      * Read.
      *
      * @param resource the resource
-     * @param charset  the charset
+     * @param charset the charset
      * @return the sql file
      * @throws IOException Signals that an I/O exception has occurred.
      */
@@ -270,8 +271,8 @@ public class SqlFile {
     /**
      * Read.
      *
-     * @param file               the file
-     * @param charset            the charset
+     * @param file the file
+     * @param charset the charset
      * @param includeExistPolicy the include exist policy
      * @return the sql file
      * @throws IOException Signals that an I/O exception has occurred.
@@ -283,26 +284,26 @@ public class SqlFile {
     /**
      * Read.
      *
-     * @param resource           the resource
-     * @param charset            the charset
+     * @param resource the resource
+     * @param charset the charset
      * @param includeExistPolicy the include exist policy
      * @return the sql file
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public static SqlFile read(URL resource, Charset charset, IncludeExistPolicy includeExistPolicy)
-            throws IOException {
+        throws IOException {
         return read(resource, charset, includeExistPolicy, null);
     }
 
     /**
      * Read.
      *
-     * @param file   the file
+     * @param file the file
      * @param params the params
      * @return the sql file
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public static SqlFile read(File file, Map<String, Object> params) throws IOException {
+    public static SqlFile read(File file, Map<String, Serializable> params) throws IOException {
         return read(file, StandardCharsets.UTF_8, params);
     }
 
@@ -310,24 +311,24 @@ public class SqlFile {
      * Read.
      *
      * @param resource the resource
-     * @param params   the params
+     * @param params the params
      * @return the sql file
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public static SqlFile read(URL resource, Map<String, Object> params) throws IOException {
+    public static SqlFile read(URL resource, Map<String, Serializable> params) throws IOException {
         return read(resource, StandardCharsets.UTF_8, params);
     }
 
     /**
      * Read.
      *
-     * @param file    the file
+     * @param file the file
      * @param charset the charset
-     * @param params  the params
+     * @param params the params
      * @return the sql file
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public static SqlFile read(File file, Charset charset, Map<String, Object> params) throws IOException {
+    public static SqlFile read(File file, Charset charset, Map<String, Serializable> params) throws IOException {
         return read(file, charset, IncludeExistPolicy.IGNORE, params);
     }
 
@@ -335,42 +336,42 @@ public class SqlFile {
      * Read.
      *
      * @param resource the resource
-     * @param charset  the charset
-     * @param params   the params
+     * @param charset the charset
+     * @param params the params
      * @return the sql file
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public static SqlFile read(URL resource, Charset charset, Map<String, Object> params) throws IOException {
+    public static SqlFile read(URL resource, Charset charset, Map<String, Serializable> params) throws IOException {
         return read(resource, charset, IncludeExistPolicy.IGNORE, params);
     }
 
     /**
      * Read.
      *
-     * @param file               the file
-     * @param charset            the charset
+     * @param file the file
+     * @param charset the charset
      * @param includeExistPolicy the include exist policy
-     * @param params             the params
+     * @param params the params
      * @return the sql file
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public static SqlFile read(File file, Charset charset, IncludeExistPolicy includeExistPolicy,
-            Map<String, Object> params) throws IOException {
+        Map<String, Serializable> params) throws IOException {
         return read(file.toURI().toURL(), charset, includeExistPolicy, params);
     }
 
     /**
      * Read.
      *
-     * @param resource           the resource
-     * @param charset            the charset
+     * @param resource the resource
+     * @param charset the charset
      * @param includeExistPolicy the include exist policy
-     * @param params             the params
+     * @param params the params
      * @return the sql file
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public static SqlFile read(URL resource, Charset charset, IncludeExistPolicy includeExistPolicy,
-            Map<String, Object> params) throws IOException {
+        Map<String, Serializable> params) throws IOException {
         SqlFile sqlFile = new SqlFile(resource.getPath(), charset);
         if (includeExistPolicy != null) {
             sqlFile.includeExistPolicy = includeExistPolicy;
@@ -422,7 +423,7 @@ public class SqlFile {
     }
 
     private static void initSqlFile(String sql, final SqlFile sqlFile, final URL resource, final Charset charset,
-            final Map<String, Object> params) throws IOException {
+        final Map<String, Serializable> params) throws IOException {
         sql = sql.trim();
         if (sql.isEmpty()) {
             return;
@@ -448,7 +449,7 @@ public class SqlFile {
 
             if (includeResource == null) {
                 throw new IllegalArgumentException(
-                        Strings.format("can not found {0} in filepath and classpath ", includePath));
+                    Strings.format("can not found {0} in filepath and classpath ", includePath));
             }
 
             sqlFile.getSqlList().add("\n-- include  " + includePath + " start");
@@ -462,7 +463,7 @@ public class SqlFile {
     }
 
     private static void read(final URL resource, Charset charset, final SqlFile sqlFile,
-            final Map<String, Object> params) throws IOException {
+        final Map<String, Serializable> params) throws IOException {
         String content = IOUtils.toString(resource, charset);
         if (Lang.isNotEmpty(params)) {
             content = Strings.format(content, params);

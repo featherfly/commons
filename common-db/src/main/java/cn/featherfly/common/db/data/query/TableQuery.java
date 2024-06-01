@@ -1,6 +1,8 @@
 
 package cn.featherfly.common.db.data.query;
 
+import java.io.Serializable;
+
 import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.Keywords;
@@ -23,7 +25,7 @@ public class TableQuery implements Query {
     /**
      * Instantiates a new table query.
      *
-     * @param dialect   dialect
+     * @param dialect dialect
      * @param tableName tableName
      */
     public TableQuery(Dialect dialect, String tableName) {
@@ -33,8 +35,8 @@ public class TableQuery implements Query {
     /**
      * Instantiates a new table query.
      *
-     * @param dialect          dialect
-     * @param tableName        tableName
+     * @param dialect dialect
+     * @param tableName tableName
      * @param conditionBuilder ConditionBuilder
      */
     public TableQuery(Dialect dialect, String tableName, ConditionBuilder conditionBuilder) {
@@ -44,7 +46,7 @@ public class TableQuery implements Query {
         if (conditionBuilder != null) {
             String condition = conditionBuilder.build();
             // FIXME 这里不能强制类型转换，需要处理
-            params = (Object[]) conditionBuilder.getParamValue();
+            params = (Serializable[]) conditionBuilder.getParamValue();
             if (Lang.isNotEmpty(condition)) {
                 BuilderUtils.link(sql, dialect.getKeyword(Keywords.WHERE), condition);
             }
@@ -57,7 +59,7 @@ public class TableQuery implements Query {
 
     private String sql;
 
-    private Object[] params = ArrayUtils.EMPTY_OBJECT_ARRAY;
+    private Serializable[] params = ArrayUtils.EMPTY_SERIALIZABLE_ARRAY;
 
     /**
      * {@inheritDoc}
@@ -79,7 +81,7 @@ public class TableQuery implements Query {
      * {@inheritDoc}
      */
     @Override
-    public Object[] getParams() {
+    public Serializable[] getParams() {
         return params;
     }
 

@@ -56,7 +56,7 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
     /**
      * Instantiates a new object to json mapper.
      *
-     * @param type         the type
+     * @param type the type
      * @param objectMapper the object mapper
      */
     public ObjectToJsonMapper(Class<E> type, ObjectMapper objectMapper) {
@@ -66,8 +66,8 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
     /**
      * Instantiates a new object to json mapper.
      *
-     * @param type          the type
-     * @param objectMapper  the object mapper
+     * @param type the type
+     * @param objectMapper the object mapper
      * @param storeAsString the store as string
      */
     public ObjectToJsonMapper(Class<E> type, ObjectMapper objectMapper, boolean storeAsString) {
@@ -86,7 +86,7 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
     /**
      * Instantiates a new object to json mapper.
      *
-     * @param type         the type
+     * @param type the type
      * @param objectMapper the object mapper
      */
     public ObjectToJsonMapper(Type<E> type, ObjectMapper objectMapper) {
@@ -96,8 +96,8 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
     /**
      * Instantiates a new object to json mapper.
      *
-     * @param genericType   the generic type
-     * @param objectMapper  the object mapper
+     * @param genericType the generic type
+     * @param objectMapper the object mapper
      * @param storeAsString the store as string
      */
     public ObjectToJsonMapper(Type<E> genericType, ObjectMapper objectMapper, boolean storeAsString) {
@@ -107,14 +107,14 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
     /**
      * Instantiates a new Object to json mapper.
      *
-     * @param genericType   the generic type
-     * @param objectMapper  the object mapper
-     * @param javaType      the java type
+     * @param genericType the generic type
+     * @param objectMapper the object mapper
+     * @param javaType the java type
      * @param storeAsString the store as string
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private ObjectToJsonMapper(Type<E> genericType, ObjectMapper objectMapper, JavaType javaType,
-            boolean storeAsString) {
+        boolean storeAsString) {
         super(genericType);
         this.objectMapper = objectMapper;
         this.storeAsString = storeAsString;
@@ -123,21 +123,21 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
         if (this.javaType == null) {
             if (genericType.getType().isArray()) { // 处理数组
                 this.javaType = objectMapper.getTypeFactory()
-                        .constructArrayType(genericType.getType().getComponentType());
+                    .constructArrayType(genericType.getType().getComponentType());
             } else {
                 if (genericType instanceof BeanProperty) {
                     BeanProperty<?, ?> bp = (BeanProperty<?, ?>) genericType;
                     if (ClassUtils.isParent(Collection.class, bp.getType())) {
-                        this.javaType = objectMapper.getTypeFactory().constructCollectionType(
-                                (Class<? extends Collection>) bp.getType(), bp.getGenericType());
+                        this.javaType = objectMapper.getTypeFactory()
+                            .constructCollectionType((Class<? extends Collection>) bp.getType(), bp.getGenericType());
                     } else if (ClassUtils.isParent(Map.class, bp.getType())) {
                         if (bp.getGenericTypes().size() != 2) {
                             throw new JdbcException(Strings.format(
-                                    "bean property {0} type is Map and generic type size must be 2", bp.toString()));
+                                "bean property {0} type is Map and generic type size must be 2", bp.toString()));
                         }
                         List<Class<?>> genericTypes = bp.getGenericTypes();
                         this.javaType = objectMapper.getTypeFactory().constructMapType(
-                                (Class<? extends Map>) bp.getType(), genericTypes.get(0), genericTypes.get(1));
+                            (Class<? extends Map>) bp.getType(), genericTypes.get(0), genericTypes.get(1));
                     }
                 }
             }
@@ -155,8 +155,8 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
     protected boolean support(SQLType sqlType) {
         if (storeAsString) {
             return sqlType == JDBCType.VARCHAR || sqlType == JDBCType.NVARCHAR || sqlType == JDBCType.LONGVARCHAR
-                    || sqlType == JDBCType.LONGNVARCHAR || sqlType == JDBCType.CLOB || sqlType == JDBCType.NCLOB
-                    || sqlType == JDBCType.JAVA_OBJECT;
+                || sqlType == JDBCType.LONGNVARCHAR || sqlType == JDBCType.CLOB || sqlType == JDBCType.NCLOB
+                || sqlType == JDBCType.JAVA_OBJECT;
         } else {
             return sqlType == JDBCType.BLOB;
         }
@@ -176,7 +176,7 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
                 prep.setString(columnIndex, json);
             } else {
                 ByteArrayInputStream is = new ByteArrayInputStream(
-                        objectMapper.writerFor(getType().getType()).writeValueAsBytes(value));
+                    objectMapper.writerFor(getType().getType()).writeValueAsBytes(value));
                 prep.setBlob(columnIndex, is);
             }
         } catch (JsonProcessingException | SQLException e) {
@@ -199,7 +199,7 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
                 call.setString(parameterName, json);
             } else {
                 ByteArrayInputStream is = new ByteArrayInputStream(
-                        objectMapper.writerFor(getType().getType()).writeValueAsBytes(value));
+                    objectMapper.writerFor(getType().getType()).writeValueAsBytes(value));
                 call.setBlob(parameterName, is);
             }
         } catch (JsonProcessingException | SQLException e) {
@@ -222,7 +222,7 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
                 rs.updateString(parameterIndex, json);
             } else {
                 ByteArrayInputStream is = new ByteArrayInputStream(
-                        objectMapper.writerFor(getType().getType()).writeValueAsBytes(value));
+                    objectMapper.writerFor(getType().getType()).writeValueAsBytes(value));
                 rs.updateBlob(parameterIndex, is);
             }
         } catch (JsonProcessingException | SQLException e) {

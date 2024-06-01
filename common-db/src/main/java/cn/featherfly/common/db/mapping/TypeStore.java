@@ -1,6 +1,5 @@
 package cn.featherfly.common.db.mapping;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +14,7 @@ import cn.featherfly.common.lang.reflect.Type;
 public class TypeStore extends AbstractStore {
 
     /** The java to sql type mappers with type. */
-    private Map<Type<Serializable>, JavaSqlTypeMapper<Serializable>> javaSqlTypeMappers = new HashMap<>(0);
+    private Map<Type<?>, JavaSqlTypeMapper<?>> javaSqlTypeMappers = new HashMap<>(0);
 
     /**
      * put mapper with type.
@@ -23,7 +22,7 @@ public class TypeStore extends AbstractStore {
      * @param type the type
      * @param mapper the mapper
      */
-    public void put(Type<Serializable> type, JavaSqlTypeMapper<Serializable> mapper) {
+    public void put(Type<?> type, JavaSqlTypeMapper<?> mapper) {
         javaSqlTypeMappers.put(type, mapper);
     }
 
@@ -33,7 +32,7 @@ public class TypeStore extends AbstractStore {
      * @param type the type
      * @return the java sql type mapper
      */
-    public JavaSqlTypeMapper<Serializable> getJavaSqlTypeMapper(Type<Serializable> type) {
+    public JavaSqlTypeMapper<?> getJavaSqlTypeMapper(Type<?> type) {
         return javaSqlTypeMappers.get(type);
     }
 
@@ -41,7 +40,7 @@ public class TypeStore extends AbstractStore {
      * {@inheritDoc}
      */
     @Override
-    protected Collection<JavaSqlTypeMapper<Serializable>> getJavaSqlTypeMappers() {
+    protected Collection<JavaSqlTypeMapper<?>> getJavaSqlTypeMappers() {
         return javaSqlTypeMappers.values();
     }
 }

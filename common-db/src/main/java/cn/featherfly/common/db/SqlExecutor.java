@@ -4,6 +4,7 @@ package cn.featherfly.common.db;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -152,7 +153,7 @@ public class SqlExecutor {
      * @param params params
      * @return exuecute success amount
      */
-    public int execute(String sql, Object... params) {
+    public int execute(String sql, Serializable... params) {
         if (Lang.isNotEmpty(sql)) {
             sql = sql.trim();
             try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
@@ -174,7 +175,7 @@ public class SqlExecutor {
      * @param params map params
      * @return exuecute success amount
      */
-    public int execute(String sql, Map<String, Object> params) {
+    public int execute(String sql, Map<String, Serializable> params) {
         return execute(SqlUtils.convertNamedParamSql(sql, params, namedParamStartSymbol, namedParamEndSymbol));
     }
 
@@ -231,7 +232,7 @@ public class SqlExecutor {
      * @param params params
      * @return query result list
      */
-    public <E> List<E> query(String sql, RowMapper<E> mapper, Map<String, Object> params) {
+    public <E> List<E> query(String sql, RowMapper<E> mapper, Map<String, Serializable> params) {
         return query(SqlUtils.convertNamedParamSql(sql, params, namedParamStartSymbol, namedParamEndSymbol), mapper);
     }
 
@@ -244,7 +245,7 @@ public class SqlExecutor {
      * @param params params
      * @return query result list
      */
-    public <E> List<E> query(String sql, RowMapper<E> mapper, Object... params) {
+    public <E> List<E> query(String sql, RowMapper<E> mapper, Serializable... params) {
         if (Lang.isNotEmpty(sql)) {
             sql = sql.trim();
             try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
@@ -266,9 +267,10 @@ public class SqlExecutor {
      * @param query query
      * @return query result list
      */
-    public List<Map<String, Object>> query(Execution query) {
+    public List<Map<String, Serializable>> query(Execution query) {
         if (query != null) {
-            return query(query.getExecution(), query.getParams());
+            Object[] args = query.getParams();
+            return query(query.getExecution(), args);
         }
         return new ArrayList<>();
     }
@@ -280,7 +282,7 @@ public class SqlExecutor {
      * @param params the params
      * @return the list
      */
-    public List<Map<String, Object>> query(String sql, Map<String, Object> params) {
+    public List<Map<String, Serializable>> query(String sql, Map<String, Serializable> params) {
         return query(SqlUtils.convertNamedParamSql(sql, params, namedParamStartSymbol, namedParamEndSymbol));
     }
 
@@ -291,7 +293,7 @@ public class SqlExecutor {
      * @param params params
      * @return query result list
      */
-    public List<Map<String, Object>> query(String sql, Object... params) {
+    public List<Map<String, Serializable>> query(String sql, Object... params) {
         if (Lang.isNotEmpty(sql)) {
             sql = sql.trim();
             try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);
@@ -327,7 +329,7 @@ public class SqlExecutor {
      * @param params the params
      * @return the list
      */
-    public List<Object[]> queryListArray(String sql, Map<String, Object> params) {
+    public List<Object[]> queryListArray(String sql, Map<String, Serializable> params) {
         return queryListArray(SqlUtils.convertNamedParamSql(sql, params, namedParamStartSymbol, namedParamEndSymbol));
     }
 
@@ -338,7 +340,7 @@ public class SqlExecutor {
      * @param params params
      * @return query result list
      */
-    public List<Object[]> queryListArray(String sql, Object... params) {
+    public List<Object[]> queryListArray(String sql, Serializable... params) {
         if (Lang.isNotEmpty(sql)) {
             sql = sql.trim();
             try (ConnectionWrapper connection = JdbcUtils.getConnectionWrapper(dataSource);

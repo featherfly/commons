@@ -8,6 +8,7 @@
  */
 package cn.featherfly.common.db;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +37,7 @@ public class NamedParamSql {
     /**
      * Instantiates a new pattern.
      *
-     * @param sql        the sql
+     * @param sql the sql
      * @param paramNames the param names
      */
     NamedParamSql(String sql, NamedParam[] paramNames) {
@@ -63,7 +64,7 @@ public class NamedParamSql {
      * compile named param sql with startSymbol.
      *
      * @param namedParamSql the named param sql
-     * @param startSymbol   the start symbol
+     * @param startSymbol the start symbol
      * @return NamedParamSql
      * @see SqlUtils#convertNamedParamSql(String,char)
      */
@@ -75,8 +76,8 @@ public class NamedParamSql {
      * compile named param sql with startSymbol and endSymbol.
      *
      * @param namedParamSql the named param sql
-     * @param startSymbol   the start symbol
-     * @param endSymbol     the end symbol
+     * @param startSymbol the start symbol
+     * @param endSymbol the end symbol
      * @return NamedParamSql
      * @see SqlUtils#convertNamedParamSql(String, char, Character)
      */
@@ -90,8 +91,8 @@ public class NamedParamSql {
      * @param params the params
      * @return the Execution
      */
-    public Execution getExecution(Map<String, Object> params) {
-        List<Object> paramList = new ArrayList<>();
+    public Execution getExecution(Map<String, Serializable> params) {
+        List<Serializable> paramList = new ArrayList<>();
         final List<Tuple2<NamedParam, String>> inParams = new ArrayList<>(inParamCount);
         for (NamedParam pn : paramNames) {
             Object param = SqlUtils.getNamedParam(params, pn.name);
@@ -108,9 +109,9 @@ public class NamedParamSql {
                 Tuple2<NamedParam, String> tuple = inParams.get(i);
                 sql.insert(tuple.get0().in, tuple.get1());
             }
-            return new SimpleExecution(sql.toString(), paramList.toArray());
+            return new SimpleExecution(sql.toString(), paramList.toArray(new Serializable[paramList.size()]));
         } else {
-            return new SimpleExecution(sql, paramList.toArray());
+            return new SimpleExecution(sql, paramList.toArray(new Serializable[paramList.size()]));
         }
     }
 
@@ -154,7 +155,7 @@ public class NamedParamSql {
          * Instantiates a new named param.
          *
          * @param name the name
-         * @param in   the in
+         * @param in the in
          */
         public NamedParam(String name, int in) {
             super();

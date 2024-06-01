@@ -8,6 +8,7 @@
  */
 package cn.featherfly.common.repository;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -25,7 +26,7 @@ public interface ExecutionExecutor<E> extends QueryExecutor<E> {
      * @param params the params
      * @return executed success size
      */
-    int execute(E execution, Object... params);
+    int execute(E execution, Serializable... params);
 
     /**
      * execute.
@@ -34,5 +35,16 @@ public interface ExecutionExecutor<E> extends QueryExecutor<E> {
      * @param params the params
      * @return executed success size
      */
-    int execute(E execution, Map<String, Object> params);
+    default int execute(E execution, Params params) {
+        return execute(execution, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * execute.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @return executed success size
+     */
+    int execute(E execution, Map<String, Serializable> params);
 }

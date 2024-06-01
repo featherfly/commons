@@ -57,7 +57,7 @@ public class SQLServerDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public String getParamNamedPaginationSql(String sql, int start, int limit) {
+    public String getNamedParamPaginationSql(String sql, int start, int limit) {
         // NOIMPL 未实现
         throw new NotImplementedException();
     }
@@ -66,7 +66,7 @@ public class SQLServerDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public String getParamNamedPaginationSql(String sql, int start, int limit, char startSymbol) {
+    public String getNamedParamPaginationSql(String sql, int start, int limit, char startSymbol) {
         // NOIMPL 未实现
         throw new NotImplementedException();
     }

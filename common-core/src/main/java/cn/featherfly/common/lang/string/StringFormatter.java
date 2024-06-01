@@ -1,6 +1,7 @@
 
 package cn.featherfly.common.lang.string;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -111,6 +112,24 @@ public class StringFormatter {
      *
      * <pre>
      * StringFormatter formatter = new StringFormatter('{', '}');
+     * formatter.format("my name is {0}, i am {1} years old", new Object[] { "yufei", 18 });
+     * </pre>
+     *
+     * </blockquote>
+     *
+     * @param str the str
+     * @param args the args
+     * @return formated str
+     */
+    public String format(String str, Serializable... args) {
+        return format(str, startSymbol, endSymbol, Lang.toMapStringKey(args));
+    }
+
+    /**
+     * format str. <blockquote>
+     *
+     * <pre>
+     * StringFormatter formatter = new StringFormatter('{', '}');
      * formatter.format("my name is {name}, i am {age} years old",
      *     new HashChainMap&lt;String, Object&gt;().putChain("name", "yufei").putChain("age", 18));
      * </pre>
@@ -121,7 +140,7 @@ public class StringFormatter {
      * @param args the args
      * @return formated str
      */
-    public String format(String str, Map<String, Object> args) {
+    public String format(String str, Map<String, ?> args) {
         return format(str, startSymbol, endSymbol, args);
     }
 

@@ -1,5 +1,6 @@
 package cn.featherfly.common.db.dialect;
 
+import java.io.Serializable;
 import java.sql.JDBCType;
 import java.sql.SQLType;
 import java.sql.Types;
@@ -63,15 +64,15 @@ public class PostgreSQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public String getParamNamedPaginationSql(String sql, int start, int limit) {
-        return getParamNamedPaginationSql(sql, start, limit, PARAM_NAME_START_SYMBOL);
+    public String getNamedParamPaginationSql(String sql, int start, int limit) {
+        return getNamedParamPaginationSql(sql, start, limit, PARAM_NAME_START_SYMBOL);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getParamNamedPaginationSql(String sql, int start, int limit, char startSymbol) {
+    public String getNamedParamPaginationSql(String sql, int start, int limit, char startSymbol) {
         return getPaginationSql(sql, start, true, startSymbol);
     }
 
@@ -79,8 +80,8 @@ public class PostgreSQLDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public Object[] getPaginationSqlParameter(Object[] params, int start, int limit) {
-        Object[] pagingParams = null;
+    public Serializable[] getPaginationSqlParameter(Serializable[] params, int start, int limit) {
+        Serializable[] pagingParams = null;
         if (limit > Chars.ZERO) {
             logger.debug("limit > 0 , use limit {}", limit);
         } else if (limit == Chars.ZERO) {
@@ -92,12 +93,12 @@ public class PostgreSQLDialect extends AbstractDialect {
         }
         if (start > 0) {
             logger.debug("start > 0 , use start {}", start);
-            pagingParams = new Object[] { Integer.valueOf(limit), Integer.valueOf(start) };
+            pagingParams = new Serializable[] { Integer.valueOf(limit), Integer.valueOf(start) };
         } else {
             logger.debug("start < 0 , don't use start");
-            pagingParams = new Object[] { Integer.valueOf(limit) };
+            pagingParams = new Serializable[] { Integer.valueOf(limit) };
         }
-        return (Object[]) ArrayUtils.concat(params, pagingParams);
+        return (Serializable[]) ArrayUtils.concat(params, pagingParams);
     }
 
     private String getPaginationSql(String sql, int start, boolean isParamNamed, char startSymbol) {

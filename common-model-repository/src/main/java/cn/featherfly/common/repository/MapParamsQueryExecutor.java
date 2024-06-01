@@ -8,6 +8,7 @@
  */
 package cn.featherfly.common.repository;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
@@ -40,7 +41,18 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return boolean
      */
-    boolean bool(E0 execution, Map<String, Object> params);
+    default boolean bool(E0 execution, Params params) {
+        return bool(execution, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query boolean value, use query str in template find with executeId.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @return boolean
+     */
+    boolean bool(E0 execution, Map<String, Serializable> params);
 
     /**
      * query int value, use query str in template find with executeId.
@@ -49,7 +61,18 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return int
      */
-    int intValue(E0 execution, Map<String, Object> params);
+    default int intValue(E0 execution, Params params) {
+        return intValue(execution, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query int value, use query str in template find with executeId.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @return int
+     */
+    int intValue(E0 execution, Map<String, Serializable> params);
 
     /**
      * query long value, use query str in template find with executeId.
@@ -58,7 +81,18 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return long
      */
-    long longValue(E0 execution, Map<String, Object> params);
+    default long longValue(E0 execution, Params params) {
+        return longValue(execution, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query long value, use query str in template find with executeId.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @return long
+     */
+    long longValue(E0 execution, Map<String, Serializable> params);
 
     /**
      * query double value, use query str in template find with executeId.
@@ -67,7 +101,18 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return double
      */
-    double doubleValue(E0 execution, Map<String, Object> params);
+    default double doubleValue(E0 execution, Params params) {
+        return doubleValue(execution, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query double value, use query str in template find with executeId.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @return double
+     */
+    double doubleValue(E0 execution, Map<String, Serializable> params);
 
     /**
      * query value, use query str in template find with executeId.
@@ -78,7 +123,20 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return value
      */
-    <V> V value(E0 execution, Class<V> valueType, Map<String, Object> params);
+    default <V> V value(E0 execution, Class<V> valueType, Params params) {
+        return value(execution, valueType, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query value, use query str in template find with executeId.
+     *
+     * @param <V> the value type
+     * @param execution the execution
+     * @param valueType the value type
+     * @param params the params
+     * @return value
+     */
+    <V> V value(E0 execution, Class<V> valueType, Map<String, Serializable> params);
 
     /**
      * query number value, use query str in template find with executeId.
@@ -89,7 +147,20 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return number value
      */
-    default <N extends Number> N number(E0 execution, Class<N> numberType, Map<String, Object> params) {
+    default <N extends Number> N number(E0 execution, Class<N> numberType, Params params) {
+        return value(execution, numberType, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query number value, use query str in template find with executeId.
+     *
+     * @param <N> the number type
+     * @param execution the execution
+     * @param numberType the number type
+     * @param params the params
+     * @return number value
+     */
+    default <N extends Number> N number(E0 execution, Class<N> numberType, Map<String, Serializable> params) {
         return value(execution, numberType, params);
     }
 
@@ -100,7 +171,18 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return Integer
      */
-    default Integer numberInt(E0 execution, Map<String, Object> params) {
+    default Integer numberInt(E0 execution, Params params) {
+        return value(execution, Integer.class, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query int value, use query str in template find with executeId.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @return Integer
+     */
+    default Integer numberInt(E0 execution, Map<String, Serializable> params) {
         return value(execution, Integer.class, params);
     }
 
@@ -111,7 +193,18 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return Long
      */
-    default Long numberLong(E0 execution, Map<String, Object> params) {
+    default Long numberLong(E0 execution, Params params) {
+        return value(execution, Long.class, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query long value, use query str in template find with executeId.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @return Long
+     */
+    default Long numberLong(E0 execution, Map<String, Serializable> params) {
         return value(execution, Long.class, params);
     }
 
@@ -122,8 +215,19 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return BigDecimal
      */
-    default Double numberDouble(E0 execution, Map<String, Object> params) {
+    default Double numberDouble(E0 execution, Map<String, Serializable> params) {
         return value(execution, Double.class, params);
+    }
+
+    /**
+     * query double value, use query str in template find with executeId.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @return BigDecimal
+     */
+    default Double numberDouble(E0 execution, Params params) {
+        return value(execution, Double.class, (Map<String, Serializable>) params);
     }
 
     /**
@@ -133,7 +237,18 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return BigInteger
      */
-    default BigInteger numberBigInteger(E0 execution, Map<String, Object> params) {
+    default BigInteger numberBigInteger(E0 execution, Params params) {
+        return value(execution, BigInteger.class, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query BigInteger value, use query str in template find with executeId.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @return BigInteger
+     */
+    default BigInteger numberBigInteger(E0 execution, Map<String, Serializable> params) {
         return value(execution, BigInteger.class, params);
     }
 
@@ -144,7 +259,18 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return BigDecimal
      */
-    default BigDecimal numberBigDecimal(E0 execution, Map<String, Object> params) {
+    default BigDecimal numberBigDecimal(E0 execution, Params params) {
+        return value(execution, BigDecimal.class, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query BigDecimal value, use query str in template find with executeId.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @return BigDecimal
+     */
+    default BigDecimal numberBigDecimal(E0 execution, Map<String, Serializable> params) {
         return value(execution, BigDecimal.class, params);
     }
 
@@ -155,7 +281,18 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return boolean
      */
-    default Boolean boolType(E0 execution, Map<String, Object> params) {
+    default Boolean boolType(E0 execution, Params params) {
+        return value(execution, Boolean.class, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query boolean value, use query str in template find with executeId.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @return boolean
+     */
+    default Boolean boolType(E0 execution, Map<String, Serializable> params) {
         return value(execution, Boolean.class, params);
     }
 
@@ -166,7 +303,18 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return String
      */
-    default String string(E0 execution, Map<String, Object> params) {
+    default String string(E0 execution, Params params) {
+        return value(execution, String.class, params);
+    }
+
+    /**
+     * query string value, use query str in template find with executeId.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @return String
+     */
+    default String string(E0 execution, Map<String, Serializable> params) {
         return value(execution, String.class, params);
     }
 
@@ -179,7 +327,18 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return map
      */
-    Map<String, Object> single(E0 execution, Map<String, Object> params);
+    default Map<String, Serializable> single(E0 execution, Params params) {
+        return single(execution, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @return map
+     */
+    Map<String, Serializable> single(E0 execution, Map<String, Serializable> params);
 
     /**
      * query single, use query str in template find with executeId.
@@ -190,7 +349,20 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return entity
      */
-    <T> T single(E0 execution, Class<T> mappingType, Map<String, Object> params);
+    default <T> T single(E0 execution, Class<T> mappingType, Params params) {
+        return single(execution, mappingType, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T> the generic type
+     * @param execution the execution
+     * @param mappingType mapping type
+     * @param params the params
+     * @return entity
+     */
+    <T> T single(E0 execution, Class<T> mappingType, Map<String, Serializable> params);
 
     /**
      * query single, use query str in template find with executeId.
@@ -201,7 +373,20 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return entity
      */
-    <T> T single(E0 execution, RowMapper<T> rowMapper, Map<String, Object> params);
+    default <T> T single(E0 execution, RowMapper<T> rowMapper, Params params) {
+        return single(execution, rowMapper, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query single, use query str in template find with executeId.
+     *
+     * @param <T> the generic type
+     * @param execution the execution
+     * @param rowMapper the row mapper
+     * @param params the params
+     * @return entity
+     */
+    <T> T single(E0 execution, RowMapper<T> rowMapper, Map<String, Serializable> params);
 
     /**
      * query single, use query str in template find with executeId.
@@ -215,7 +400,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return the tuple 2
      */
     default <T1, T2> Tuple2<T1, T2> single(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Map<String, Object> params) {
+        Map<String, Serializable> params) {
         return single(execution, mappingType1, mappingType2, (Tuple2<String, String>) null, params);
     }
 
@@ -232,7 +417,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return the tuple 2
      */
     <T1, T2> Tuple2<T1, T2> single(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Tuple2<String, String> prefixes, Map<String, Object> params);
+        Tuple2<String, String> prefixes, Map<String, Serializable> params);
 
     /**
      * query single, use query str in template find with executeId.
@@ -248,7 +433,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return the tuple 3
      */
     default <T1, T2, T3> Tuple3<T1, T2, T3> single(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Class<T3> mappingType3, Map<String, Object> params) {
+        Class<T3> mappingType3, Map<String, Serializable> params) {
         return single(execution, mappingType1, mappingType2, mappingType3, (Tuple3<String, String, String>) null,
             params);
     }
@@ -268,7 +453,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return the tuple 3
      */
     <T1, T2, T3> Tuple3<T1, T2, T3> single(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Class<T3> mappingType3, Tuple3<String, String, String> prefixes, Map<String, Object> params);
+        Class<T3> mappingType3, Tuple3<String, String, String> prefixes, Map<String, Serializable> params);
 
     /**
      * query single, use query str in template find with executeId.
@@ -286,7 +471,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return the tuple 4
      */
     default <T1, T2, T3, T4> Tuple4<T1, T2, T3, T4> single(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Object> params) {
+        Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Serializable> params) {
         return single(execution, mappingType1, mappingType2, mappingType3, mappingType4,
             (Tuple4<String, String, String, String>) null, params);
     }
@@ -309,7 +494,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     <T1, T2, T3, T4> Tuple4<T1, T2, T3, T4> single(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
         Class<T3> mappingType3, Class<T4> mappingType4, Tuple4<String, String, String, String> prefixes,
-        Map<String, Object> params);
+        Map<String, Serializable> params);
 
     /**
      * query single, use query str in template find with executeId.
@@ -330,7 +515,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5> Tuple5<T1, T2, T3, T4, T5> single(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Map<String, Object> params) {
+        Map<String, Serializable> params) {
         return single(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5,
             (Tuple5<String, String, String, String, String>) null, params);
     }
@@ -355,7 +540,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     <T1, T2, T3, T4, T5> Tuple5<T1, T2, T3, T4, T5> single(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
         Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Tuple5<String, String, String, String, String> prefixes, Map<String, Object> params);
+        Tuple5<String, String, String, String, String> prefixes, Map<String, Serializable> params);
 
     /**
      * Single.
@@ -378,7 +563,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5, T6> Tuple6<T1, T2, T3, T4, T5, T6> single(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Class<T6> mappingType6, Map<String, Object> params) {
+        Class<T6> mappingType6, Map<String, Serializable> params) {
         return single(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
             (Tuple6<String, String, String, String, String, String>) null, params);
     }
@@ -406,7 +591,7 @@ public interface MapParamsQueryExecutor<E0> {
     <T1, T2, T3, T4, T5, T6> Tuple6<T1, T2, T3, T4, T5, T6> single(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
         Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes,
-        Map<String, Object> params);
+        Map<String, Serializable> params);
 
     // ----------------------------------------------------------------------------------------------------------------
 
@@ -417,7 +602,18 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return map
      */
-    Map<String, Object> unique(E0 execution, Map<String, Object> params);
+    default Map<String, Serializable> unique(E0 execution, Params params) {
+        return unique(execution, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query unique, use query str in template find with executeId.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @return map
+     */
+    Map<String, Serializable> unique(E0 execution, Map<String, Serializable> params);
 
     /**
      * query unique, use query str in template find with executeId.
@@ -428,7 +624,20 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return entity
      */
-    <T> T unique(E0 execution, Class<T> mappingType, Map<String, Object> params);
+    default <T> T unique(E0 execution, Class<T> mappingType, Params params) {
+        return unique(execution, mappingType, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query unique, use query str in template find with executeId.
+     *
+     * @param <T> the element type
+     * @param execution the execution
+     * @param mappingType mapping type
+     * @param params the params
+     * @return entity
+     */
+    <T> T unique(E0 execution, Class<T> mappingType, Map<String, Serializable> params);
 
     /**
      * query unique, use query str in template find with executeId.
@@ -439,7 +648,20 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return entity
      */
-    <T> T unique(E0 execution, RowMapper<T> rowMapper, Map<String, Object> params);
+    default <T> T unique(E0 execution, RowMapper<T> rowMapper, Params params) {
+        return unique(execution, rowMapper, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query unique, use query str in template find with executeId.
+     *
+     * @param <T> the element type
+     * @param execution the execution
+     * @param rowMapper the row mapper
+     * @param params the params
+     * @return entity
+     */
+    <T> T unique(E0 execution, RowMapper<T> rowMapper, Map<String, Serializable> params);
 
     /**
      * query unique, use query str in template find with executeId.
@@ -453,7 +675,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return the tuple 2
      */
     default <T1, T2> Tuple2<T1, T2> unique(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Map<String, Object> params) {
+        Map<String, Serializable> params) {
         return unique(execution, mappingType1, mappingType2, (Tuple2<String, String>) null, params);
     }
 
@@ -470,7 +692,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return the tuple 2
      */
     <T1, T2> Tuple2<T1, T2> unique(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Tuple2<String, String> prefixes, Map<String, Object> params);
+        Tuple2<String, String> prefixes, Map<String, Serializable> params);
 
     /**
      * query unique, use query str in template find with executeId.
@@ -486,7 +708,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return the tuple 3
      */
     default <T1, T2, T3> Tuple3<T1, T2, T3> unique(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Class<T3> mappingType3, Map<String, Object> params) {
+        Class<T3> mappingType3, Map<String, Serializable> params) {
         return unique(execution, mappingType1, mappingType2, mappingType3, (Tuple3<String, String, String>) null,
             params);
     }
@@ -506,7 +728,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return the tuple 3
      */
     <T1, T2, T3> Tuple3<T1, T2, T3> unique(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Class<T3> mappingType3, Tuple3<String, String, String> prefixes, Map<String, Object> params);
+        Class<T3> mappingType3, Tuple3<String, String, String> prefixes, Map<String, Serializable> params);
 
     /**
      * query unique, use query str in template find with executeId.
@@ -524,7 +746,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return the tuple 4
      */
     default <T1, T2, T3, T4> Tuple4<T1, T2, T3, T4> unique(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Object> params) {
+        Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Serializable> params) {
         return unique(execution, mappingType1, mappingType2, mappingType3, mappingType4,
             (Tuple4<String, String, String, String>) null, params);
     }
@@ -547,7 +769,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     <T1, T2, T3, T4> Tuple4<T1, T2, T3, T4> unique(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
         Class<T3> mappingType3, Class<T4> mappingType4, Tuple4<String, String, String, String> prefixes,
-        Map<String, Object> params);
+        Map<String, Serializable> params);
 
     /**
      * query unique, use query str in template find with executeId.
@@ -568,7 +790,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5> Tuple5<T1, T2, T3, T4, T5> unique(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Map<String, Object> params) {
+        Map<String, Serializable> params) {
         return unique(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5,
             (Tuple5<String, String, String, String, String>) null, params);
     }
@@ -593,7 +815,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     <T1, T2, T3, T4, T5> Tuple5<T1, T2, T3, T4, T5> unique(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
         Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Tuple5<String, String, String, String, String> prefixes, Map<String, Object> params);
+        Tuple5<String, String, String, String, String> prefixes, Map<String, Serializable> params);
 
     /**
      * Unique.
@@ -616,7 +838,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5, T6> Tuple6<T1, T2, T3, T4, T5, T6> unique(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Class<T6> mappingType6, Map<String, Object> params) {
+        Class<T6> mappingType6, Map<String, Serializable> params) {
         return unique(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
             (Tuple6<String, String, String, String, String, String>) null, params);
     }
@@ -644,7 +866,7 @@ public interface MapParamsQueryExecutor<E0> {
     <T1, T2, T3, T4, T5, T6> Tuple6<T1, T2, T3, T4, T5, T6> unique(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
         Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes,
-        Map<String, Object> params);
+        Map<String, Serializable> params);
 
     // ----------------------------------------------------------------------------------------------------------------
 
@@ -655,7 +877,18 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return map list
      */
-    List<Map<String, Object>> list(E0 execution, Map<String, Object> params);
+    default List<Map<String, Serializable>> list(E0 execution, Params params) {
+        return list(execution, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query list, use query str in template find with executeId.
+     *
+     * @param execution the execution
+     * @param params the params
+     * @return map list
+     */
+    List<Map<String, Serializable>> list(E0 execution, Map<String, Serializable> params);
 
     /**
      * query list, use query str in template find with executeId.
@@ -666,7 +899,20 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return entity list
      */
-    <T> List<T> list(E0 execution, Class<T> mappingType, Map<String, Object> params);
+    default <T> List<T> list(E0 execution, Class<T> mappingType, Params params) {
+        return list(execution, mappingType, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query list, use query str in template find with executeId.
+     *
+     * @param <T> the element type
+     * @param execution the execution
+     * @param mappingType mapping type
+     * @param params the params
+     * @return entity list
+     */
+    <T> List<T> list(E0 execution, Class<T> mappingType, Map<String, Serializable> params);
 
     /**
      * query list, use query str in template find with executeId.
@@ -677,7 +923,20 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return entity list
      */
-    <T> List<T> list(E0 execution, RowMapper<T> rowMapper, Map<String, Object> params);
+    default <T> List<T> list(E0 execution, RowMapper<T> rowMapper, Params params) {
+        return list(execution, rowMapper, (Map<String, Serializable>) params);
+    }
+
+    /**
+     * query list, use query str in template find with executeId.
+     *
+     * @param <T> the element type
+     * @param execution the execution
+     * @param rowMapper the row mapper
+     * @param params the params
+     * @return entity list
+     */
+    <T> List<T> list(E0 execution, RowMapper<T> rowMapper, Map<String, Serializable> params);
 
     /**
      * query list, use query str in template find with executeId.
@@ -688,7 +947,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @param limit the limit
      * @return map list
      */
-    List<Map<String, Object>> list(E0 execution, Map<String, Object> params, int offset, int limit);
+    List<Map<String, Serializable>> list(E0 execution, Map<String, Serializable> params, int offset, int limit);
 
     /**
      * query list, use query str in template find with executeId.
@@ -701,7 +960,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @param limit the limit
      * @return entity list
      */
-    <T> List<T> list(E0 execution, Class<T> mappingType, Map<String, Object> params, int offset, int limit);
+    <T> List<T> list(E0 execution, Class<T> mappingType, Map<String, Serializable> params, int offset, int limit);
 
     /**
      * query list, use query str in template find with executeId.
@@ -714,7 +973,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @param limit the limit
      * @return entity list
      */
-    <T> List<T> list(E0 execution, RowMapper<T> rowMapper, Map<String, Object> params, int offset, int limit);
+    <T> List<T> list(E0 execution, RowMapper<T> rowMapper, Map<String, Serializable> params, int offset, int limit);
 
     /**
      * query list, use query str in template find with executeId.
@@ -726,7 +985,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @param page the page
      * @return entity list
      */
-    default <T> List<T> list(E0 execution, Class<T> mappingType, Map<String, Object> params, Page page) {
+    default <T> List<T> list(E0 execution, Class<T> mappingType, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return list(execution, mappingType, params, limit.getOffset(), limit.getLimit());
     }
@@ -741,7 +1000,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @param page the page
      * @return entity list
      */
-    default <T> List<T> list(E0 execution, RowMapper<T> rowMapper, Map<String, Object> params, Page page) {
+    default <T> List<T> list(E0 execution, RowMapper<T> rowMapper, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return list(execution, rowMapper, params, limit.getOffset(), limit.getLimit());
     }
@@ -754,7 +1013,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @param page the page
      * @return map list
      */
-    default List<Map<String, Object>> list(E0 execution, Map<String, Object> params, Page page) {
+    default List<Map<String, Serializable>> list(E0 execution, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return list(execution, params, limit.getOffset(), limit.getLimit());
     }
@@ -771,7 +1030,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple2 list
      */
     default <T1, T2> List<Tuple2<T1, T2>> list(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Map<String, Object> params) {
+        Map<String, Serializable> params) {
         return list(execution, mappingType1, mappingType2, (Tuple2<String, String>) null, params);
     }
 
@@ -789,7 +1048,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple2 list
      */
     default <T1, T2> List<Tuple2<T1, T2>> list(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Map<String, Object> params, int offset, int limit) {
+        Map<String, Serializable> params, int offset, int limit) {
         return list(execution, mappingType1, mappingType2, (Tuple2<String, String>) null, params, offset, limit);
     }
 
@@ -806,7 +1065,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple2 list
      */
     default <T1, T2> List<Tuple2<T1, T2>> list(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Map<String, Object> params, Page page) {
+        Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return list(execution, mappingType1, mappingType2, params, limit.getOffset(), limit.getLimit());
     }
@@ -824,7 +1083,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple2 list
      */
     <T1, T2> List<Tuple2<T1, T2>> list(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Tuple2<String, String> prefixes, Map<String, Object> params);
+        Tuple2<String, String> prefixes, Map<String, Serializable> params);
 
     /**
      * query list, use query str in template find with executeId.
@@ -841,7 +1100,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple2 list
      */
     <T1, T2> List<Tuple2<T1, T2>> list(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Tuple2<String, String> prefixes, Map<String, Object> params, int offset, int limit);
+        Tuple2<String, String> prefixes, Map<String, Serializable> params, int offset, int limit);
 
     /**
      * query list, use query str in template find with executeId.
@@ -857,7 +1116,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple2 list
      */
     default <T1, T2> List<Tuple2<T1, T2>> list(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Tuple2<String, String> prefixes, Map<String, Object> params, Page page) {
+        Tuple2<String, String> prefixes, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return list(execution, mappingType1, mappingType2, prefixes, params, limit.getOffset(), limit.getLimit());
     }
@@ -876,7 +1135,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple3 list
      */
     default <T1, T2, T3> List<Tuple3<T1, T2, T3>> list(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Class<T3> mappingType3, Map<String, Object> params) {
+        Class<T3> mappingType3, Map<String, Serializable> params) {
         return list(execution, mappingType1, mappingType2, mappingType3, (Tuple3<String, String, String>) null, params);
     }
 
@@ -896,7 +1155,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple3 list
      */
     default <T1, T2, T3> List<Tuple3<T1, T2, T3>> list(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Class<T3> mappingType3, Map<String, Object> params, int offset, int limit) {
+        Class<T3> mappingType3, Map<String, Serializable> params, int offset, int limit) {
         return list(execution, mappingType1, mappingType2, mappingType3, (Tuple3<String, String, String>) null, params,
             offset, limit);
     }
@@ -916,7 +1175,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple3 list
      */
     default <T1, T2, T3> List<Tuple3<T1, T2, T3>> list(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Class<T3> mappingType3, Map<String, Object> params, Page page) {
+        Class<T3> mappingType3, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return list(execution, mappingType1, mappingType2, mappingType3, params, limit.getOffset(), limit.getLimit());
     }
@@ -936,7 +1195,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple3 list
      */
     <T1, T2, T3> List<Tuple3<T1, T2, T3>> list(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Class<T3> mappingType3, Tuple3<String, String, String> prefixes, Map<String, Object> params);
+        Class<T3> mappingType3, Tuple3<String, String, String> prefixes, Map<String, Serializable> params);
 
     /**
      * query list, use query str in template find with executeId.
@@ -955,7 +1214,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple3 list
      */
     <T1, T2, T3> List<Tuple3<T1, T2, T3>> list(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Class<T3> mappingType3, Tuple3<String, String, String> prefixes, Map<String, Object> params, int offset,
+        Class<T3> mappingType3, Tuple3<String, String, String> prefixes, Map<String, Serializable> params, int offset,
         int limit);
 
     /**
@@ -974,7 +1233,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple3 list
      */
     default <T1, T2, T3> List<Tuple3<T1, T2, T3>> list(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Class<T3> mappingType3, Tuple3<String, String, String> prefixes, Map<String, Object> params, Page page) {
+        Class<T3> mappingType3, Tuple3<String, String, String> prefixes, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return list(execution, mappingType1, mappingType2, mappingType3, prefixes, params, limit.getOffset(),
             limit.getLimit());
@@ -996,7 +1255,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple4 list
      */
     default <T1, T2, T3, T4> List<Tuple4<T1, T2, T3, T4>> list(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Object> params) {
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Serializable> params) {
         return list(execution, mappingType1, mappingType2, mappingType3, mappingType4,
             (Tuple4<String, String, String, String>) null, params);
     }
@@ -1019,8 +1278,8 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple4 list
      */
     default <T1, T2, T3, T4> List<Tuple4<T1, T2, T3, T4>> list(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Object> params, int offset,
-        int limit) {
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Serializable> params,
+        int offset, int limit) {
         return list(execution, mappingType1, mappingType2, mappingType3, mappingType4,
             (Tuple4<String, String, String, String>) null, params, offset, limit);
     }
@@ -1042,7 +1301,8 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple4 list
      */
     default <T1, T2, T3, T4> List<Tuple4<T1, T2, T3, T4>> list(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Object> params, Page page) {
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Serializable> params,
+        Page page) {
         Limit limit = new Limit(page);
         return list(execution, mappingType1, mappingType2, mappingType3, mappingType4, params, limit.getOffset(),
             limit.getLimit());
@@ -1066,7 +1326,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     <T1, T2, T3, T4> List<Tuple4<T1, T2, T3, T4>> list(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
         Class<T3> mappingType3, Class<T4> mappingType4, Tuple4<String, String, String, String> prefixes,
-        Map<String, Object> params);
+        Map<String, Serializable> params);
 
     /**
      * query list, use query str in template find with executeId.
@@ -1088,7 +1348,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     <T1, T2, T3, T4> List<Tuple4<T1, T2, T3, T4>> list(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
         Class<T3> mappingType3, Class<T4> mappingType4, Tuple4<String, String, String, String> prefixes,
-        Map<String, Object> params, int offset, int limit);
+        Map<String, Serializable> params, int offset, int limit);
 
     /**
      * query list, use query str in template find with executeId.
@@ -1109,7 +1369,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4> List<Tuple4<T1, T2, T3, T4>> list(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Tuple4<String, String, String, String> prefixes, Map<String, Object> params, Page page) {
+        Tuple4<String, String, String, String> prefixes, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return list(execution, mappingType1, mappingType2, mappingType3, mappingType4, prefixes, params,
             limit.getOffset(), limit.getLimit());
@@ -1134,7 +1394,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5> List<Tuple5<T1, T2, T3, T4, T5>> list(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Map<String, Object> params) {
+        Map<String, Serializable> params) {
         return list(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5,
             (Tuple5<String, String, String, String, String>) null, params);
     }
@@ -1159,7 +1419,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     <T1, T2, T3, T4, T5> List<Tuple5<T1, T2, T3, T4, T5>> list(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Tuple5<String, String, String, String, String> prefixes, Map<String, Object> params);
+        Tuple5<String, String, String, String, String> prefixes, Map<String, Serializable> params);
 
     /**
      * query list, use query str in template find with executeId.
@@ -1182,7 +1442,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5> List<Tuple5<T1, T2, T3, T4, T5>> list(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Map<String, Object> params, int offset, int limit) {
+        Map<String, Serializable> params, int offset, int limit) {
         return list(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5,
             (Tuple5<String, String, String, String, String>) null, params, offset, limit);
     }
@@ -1207,7 +1467,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5> List<Tuple5<T1, T2, T3, T4, T5>> list(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Map<String, Object> params, Page page) {
+        Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return list(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, params,
             limit.getOffset(), limit.getLimit());
@@ -1235,7 +1495,8 @@ public interface MapParamsQueryExecutor<E0> {
      */
     <T1, T2, T3, T4, T5> List<Tuple5<T1, T2, T3, T4, T5>> list(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Tuple5<String, String, String, String, String> prefixes, Map<String, Object> params, int offset, int limit);
+        Tuple5<String, String, String, String, String> prefixes, Map<String, Serializable> params, int offset,
+        int limit);
 
     /**
      * query list, use query str in template find with executeId.
@@ -1258,7 +1519,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5> List<Tuple5<T1, T2, T3, T4, T5>> list(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Tuple5<String, String, String, String, String> prefixes, Map<String, Object> params, Page page) {
+        Tuple5<String, String, String, String, String> prefixes, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return list(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, prefixes, params,
             limit.getOffset(), limit.getLimit());
@@ -1285,7 +1546,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5, T6> List<Tuple6<T1, T2, T3, T4, T5, T6>> list(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Class<T6> mappingType6, Map<String, Object> params) {
+        Class<T6> mappingType6, Map<String, Serializable> params) {
         return list(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
             (Tuple6<String, String, String, String, String, String>) null, params);
     }
@@ -1313,7 +1574,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5, T6> List<Tuple6<T1, T2, T3, T4, T5, T6>> list(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Class<T6> mappingType6, Map<String, Object> params, int offset, int limit) {
+        Class<T6> mappingType6, Map<String, Serializable> params, int offset, int limit) {
         return list(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
             (Tuple6<String, String, String, String, String, String>) null, params, offset, limit);
     }
@@ -1340,7 +1601,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5, T6> List<Tuple6<T1, T2, T3, T4, T5, T6>> list(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Class<T6> mappingType6, Map<String, Object> params, Page page) {
+        Class<T6> mappingType6, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return list(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
             params, limit.getOffset(), limit.getLimit());
@@ -1369,7 +1630,7 @@ public interface MapParamsQueryExecutor<E0> {
     <T1, T2, T3, T4, T5, T6> List<Tuple6<T1, T2, T3, T4, T5, T6>> list(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
         Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes,
-        Map<String, Object> params);
+        Map<String, Serializable> params);
 
     /**
      * List.
@@ -1396,7 +1657,7 @@ public interface MapParamsQueryExecutor<E0> {
     <T1, T2, T3, T4, T5, T6> List<Tuple6<T1, T2, T3, T4, T5, T6>> list(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
         Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes,
-        Map<String, Object> params, int offset, int limit);
+        Map<String, Serializable> params, int offset, int limit);
 
     /**
      * List.
@@ -1422,7 +1683,7 @@ public interface MapParamsQueryExecutor<E0> {
     default <T1, T2, T3, T4, T5, T6> List<Tuple6<T1, T2, T3, T4, T5, T6>> list(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
         Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes,
-        Map<String, Object> params, Page page) {
+        Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return list(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
             prefixes, params, limit.getOffset(), limit.getLimit());
@@ -1437,7 +1698,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return map list
      */
-    AutoCloseableIterable<Map<String, Object>> each(E0 execution, Map<String, Object> params);
+    AutoCloseableIterable<Map<String, Serializable>> each(E0 execution, Map<String, Serializable> params);
 
     /**
      * query each, use query str in template find with executeId.
@@ -1448,7 +1709,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return entity list
      */
-    <T> AutoCloseableIterable<T> each(E0 execution, Class<T> mappingType, Map<String, Object> params);
+    <T> AutoCloseableIterable<T> each(E0 execution, Class<T> mappingType, Map<String, Serializable> params);
 
     /**
      * query each, use query str in template find with executeId.
@@ -1459,7 +1720,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @param params the params
      * @return entity list
      */
-    <T> AutoCloseableIterable<T> each(E0 execution, RowMapper<T> rowMapper, Map<String, Object> params);
+    <T> AutoCloseableIterable<T> each(E0 execution, RowMapper<T> rowMapper, Map<String, Serializable> params);
 
     /**
      * query each, use query str in template find with executeId.
@@ -1470,7 +1731,8 @@ public interface MapParamsQueryExecutor<E0> {
      * @param limit the limit
      * @return map list
      */
-    AutoCloseableIterable<Map<String, Object>> each(E0 execution, Map<String, Object> params, int offset, int limit);
+    AutoCloseableIterable<Map<String, Serializable>> each(E0 execution, Map<String, Serializable> params, int offset,
+        int limit);
 
     /**
      * query each, use query str in template find with executeId.
@@ -1483,7 +1745,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @param limit the limit
      * @return entity list
      */
-    <T> AutoCloseableIterable<T> each(E0 execution, Class<T> mappingType, Map<String, Object> params, int offset,
+    <T> AutoCloseableIterable<T> each(E0 execution, Class<T> mappingType, Map<String, Serializable> params, int offset,
         int limit);
 
     /**
@@ -1497,8 +1759,8 @@ public interface MapParamsQueryExecutor<E0> {
      * @param limit the limit
      * @return entity list
      */
-    <T> AutoCloseableIterable<T> each(E0 execution, RowMapper<T> rowMapper, Map<String, Object> params, int offset,
-        int limit);
+    <T> AutoCloseableIterable<T> each(E0 execution, RowMapper<T> rowMapper, Map<String, Serializable> params,
+        int offset, int limit);
 
     /**
      * query each, use query str in template find with executeId.
@@ -1510,7 +1772,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @param page the page
      * @return entity list
      */
-    default <T> AutoCloseableIterable<T> each(E0 execution, Class<T> mappingType, Map<String, Object> params,
+    default <T> AutoCloseableIterable<T> each(E0 execution, Class<T> mappingType, Map<String, Serializable> params,
         Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType, params, limit.getOffset(), limit.getLimit());
@@ -1526,7 +1788,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @param page the page
      * @return entity list
      */
-    default <T> AutoCloseableIterable<T> each(E0 execution, RowMapper<T> rowMapper, Map<String, Object> params,
+    default <T> AutoCloseableIterable<T> each(E0 execution, RowMapper<T> rowMapper, Map<String, Serializable> params,
         Page page) {
         Limit limit = new Limit(page);
         return each(execution, rowMapper, params, limit.getOffset(), limit.getLimit());
@@ -1540,7 +1802,8 @@ public interface MapParamsQueryExecutor<E0> {
      * @param page the page
      * @return map list
      */
-    default AutoCloseableIterable<Map<String, Object>> each(E0 execution, Map<String, Object> params, Page page) {
+    default AutoCloseableIterable<Map<String, Serializable>> each(E0 execution, Map<String, Serializable> params,
+        Page page) {
         Limit limit = new Limit(page);
         return each(execution, params, limit.getOffset(), limit.getLimit());
     }
@@ -1557,7 +1820,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple2 list
      */
     default <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Map<String, Object> params) {
+        Class<T2> mappingType2, Map<String, Serializable> params) {
         return each(execution, mappingType1, mappingType2, (Tuple2<String, String>) null, params);
     }
 
@@ -1575,7 +1838,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple2 list
      */
     default <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Map<String, Object> params, int offset, int limit) {
+        Class<T2> mappingType2, Map<String, Serializable> params, int offset, int limit) {
         return each(execution, mappingType1, mappingType2, (Tuple2<String, String>) null, params, offset, limit);
     }
 
@@ -1592,7 +1855,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple2 list
      */
     default <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Map<String, Object> params, Page page) {
+        Class<T2> mappingType2, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType1, mappingType2, params, limit.getOffset(), limit.getLimit());
     }
@@ -1610,7 +1873,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple2 list
      */
     <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Tuple2<String, String> prefixes, Map<String, Object> params);
+        Tuple2<String, String> prefixes, Map<String, Serializable> params);
 
     /**
      * query each, use query str in template find with executeId.
@@ -1627,7 +1890,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple2 list
      */
     <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Tuple2<String, String> prefixes, Map<String, Object> params, int offset, int limit);
+        Tuple2<String, String> prefixes, Map<String, Serializable> params, int offset, int limit);
 
     /**
      * query each, use query str in template find with executeId.
@@ -1643,7 +1906,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple2 list
      */
     default <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Tuple2<String, String> prefixes, Map<String, Object> params, Page page) {
+        Class<T2> mappingType2, Tuple2<String, String> prefixes, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType1, mappingType2, prefixes, params, limit.getOffset(), limit.getLimit());
     }
@@ -1662,7 +1925,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple3 list
      */
     default <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Class<T3> mappingType3, Map<String, Object> params) {
+        Class<T2> mappingType2, Class<T3> mappingType3, Map<String, Serializable> params) {
         return each(execution, mappingType1, mappingType2, mappingType3, (Tuple3<String, String, String>) null, params);
     }
 
@@ -1682,7 +1945,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple3 list
      */
     default <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Class<T3> mappingType3, Map<String, Object> params, int offset, int limit) {
+        Class<T2> mappingType2, Class<T3> mappingType3, Map<String, Serializable> params, int offset, int limit) {
         return each(execution, mappingType1, mappingType2, mappingType3, (Tuple3<String, String, String>) null, params,
             offset, limit);
     }
@@ -1702,7 +1965,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple3 list
      */
     default <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Class<T3> mappingType3, Map<String, Object> params, Page page) {
+        Class<T2> mappingType2, Class<T3> mappingType3, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType1, mappingType2, mappingType3, params, limit.getOffset(), limit.getLimit());
     }
@@ -1723,7 +1986,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Tuple3<String, String, String> prefixes,
-        Map<String, Object> params);
+        Map<String, Serializable> params);
 
     /**
      * query each, use query str in template find with executeId.
@@ -1743,7 +2006,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Tuple3<String, String, String> prefixes,
-        Map<String, Object> params, int offset, int limit);
+        Map<String, Serializable> params, int offset, int limit);
 
     /**
      * query each, use query str in template find with executeId.
@@ -1762,7 +2025,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Tuple3<String, String, String> prefixes,
-        Map<String, Object> params, Page page) {
+        Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType1, mappingType2, mappingType3, prefixes, params, limit.getOffset(),
             limit.getLimit());
@@ -1784,7 +2047,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple4 list
      */
     default <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Object> params) {
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Serializable> params) {
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4,
             (Tuple4<String, String, String, String>) null, params);
     }
@@ -1807,8 +2070,8 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple4 list
      */
     default <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Object> params, int offset,
-        int limit) {
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Serializable> params,
+        int offset, int limit) {
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4,
             (Tuple4<String, String, String, String>) null, params, offset, limit);
     }
@@ -1830,7 +2093,8 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple4 list
      */
     default <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Object> params, Page page) {
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Serializable> params,
+        Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, params, limit.getOffset(),
             limit.getLimit());
@@ -1854,7 +2118,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Tuple4<String, String, String, String> prefixes, Map<String, Object> params);
+        Tuple4<String, String, String, String> prefixes, Map<String, Serializable> params);
 
     /**
      * query each, use query str in template find with executeId.
@@ -1876,7 +2140,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Tuple4<String, String, String, String> prefixes, Map<String, Object> params, int offset, int limit);
+        Tuple4<String, String, String, String> prefixes, Map<String, Serializable> params, int offset, int limit);
 
     /**
      * query each, use query str in template find with executeId.
@@ -1897,7 +2161,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Tuple4<String, String, String, String> prefixes, Map<String, Object> params, Page page) {
+        Tuple4<String, String, String, String> prefixes, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, prefixes, params,
             limit.getOffset(), limit.getLimit());
@@ -1922,7 +2186,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Map<String, Object> params) {
+        Class<T5> mappingType5, Map<String, Serializable> params) {
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5,
             (Tuple5<String, String, String, String, String>) null, params);
     }
@@ -1947,7 +2211,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Tuple5<String, String, String, String, String> prefixes, Map<String, Object> params);
+        Tuple5<String, String, String, String, String> prefixes, Map<String, Serializable> params);
 
     /**
      * query each, use query str in template find with executeId.
@@ -1970,7 +2234,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Map<String, Object> params, int offset, int limit) {
+        Class<T5> mappingType5, Map<String, Serializable> params, int offset, int limit) {
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5,
             (Tuple5<String, String, String, String, String>) null, params, offset, limit);
     }
@@ -1995,7 +2259,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Map<String, Object> params, Page page) {
+        Class<T5> mappingType5, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, params,
             limit.getOffset(), limit.getLimit());
@@ -2023,7 +2287,8 @@ public interface MapParamsQueryExecutor<E0> {
      */
     <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Tuple5<String, String, String, String, String> prefixes, Map<String, Object> params, int offset, int limit);
+        Tuple5<String, String, String, String, String> prefixes, Map<String, Serializable> params, int offset,
+        int limit);
 
     /**
      * query each, use query str in template find with executeId.
@@ -2046,8 +2311,8 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Tuple5<String, String, String, String, String> prefixes, Map<String, Object> params,
-        Page page) {
+        Class<T5> mappingType5, Tuple5<String, String, String, String, String> prefixes,
+        Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, prefixes, params,
             limit.getOffset(), limit.getLimit());
@@ -2074,7 +2339,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Class<T6> mappingType6, Map<String, Object> params) {
+        Class<T5> mappingType5, Class<T6> mappingType6, Map<String, Serializable> params) {
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
             (Tuple6<String, String, String, String, String, String>) null, params);
     }
@@ -2102,7 +2367,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Class<T6> mappingType6, Map<String, Object> params, int offset, int limit) {
+        Class<T5> mappingType5, Class<T6> mappingType6, Map<String, Serializable> params, int offset, int limit) {
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
             (Tuple6<String, String, String, String, String, String>) null, params, offset, limit);
     }
@@ -2129,7 +2394,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Class<T6> mappingType6, Map<String, Object> params, Page page) {
+        Class<T5> mappingType5, Class<T6> mappingType6, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
             params, limit.getOffset(), limit.getLimit());
@@ -2158,7 +2423,7 @@ public interface MapParamsQueryExecutor<E0> {
     <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
         Class<T5> mappingType5, Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes,
-        Map<String, Object> params);
+        Map<String, Serializable> params);
 
     /**
      * query each.
@@ -2185,7 +2450,7 @@ public interface MapParamsQueryExecutor<E0> {
     <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
         Class<T5> mappingType5, Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes,
-        Map<String, Object> params, int offset, int limit);
+        Map<String, Serializable> params, int offset, int limit);
 
     /**
      * query each.
@@ -2211,7 +2476,7 @@ public interface MapParamsQueryExecutor<E0> {
     default <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
         Class<T5> mappingType5, Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes,
-        Map<String, Object> params, Page page) {
+        Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
             prefixes, params, limit.getOffset(), limit.getLimit());
@@ -2228,7 +2493,8 @@ public interface MapParamsQueryExecutor<E0> {
      * @param limit the limit
      * @return map pagination
      */
-    PaginationResults<Map<String, Object>> pagination(E0 execution, Map<String, Object> params, int offset, int limit);
+    PaginationResults<Map<String, Serializable>> pagination(E0 execution, Map<String, Serializable> params, int offset,
+        int limit);
 
     /**
      * query page, use query str in template find with executeId.
@@ -2238,7 +2504,8 @@ public interface MapParamsQueryExecutor<E0> {
      * @param page the page
      * @return map pagination
      */
-    default PaginationResults<Map<String, Object>> pagination(E0 execution, Map<String, Object> params, Page page) {
+    default PaginationResults<Map<String, Serializable>> pagination(E0 execution, Map<String, Serializable> params,
+        Page page) {
         Limit limit = new Limit(page);
         return pagination(execution, params, limit.getOffset(), limit.getLimit());
     }
@@ -2254,8 +2521,8 @@ public interface MapParamsQueryExecutor<E0> {
      * @param limit the limit
      * @return entity pagination
      */
-    <T> PaginationResults<T> pagination(E0 execution, Class<T> mappingType, Map<String, Object> params, int offset,
-        int limit);
+    <T> PaginationResults<T> pagination(E0 execution, Class<T> mappingType, Map<String, Serializable> params,
+        int offset, int limit);
 
     /**
      * query page, use query str in template find with executeId.
@@ -2268,8 +2535,8 @@ public interface MapParamsQueryExecutor<E0> {
      * @param limit the limit
      * @return entity pagination
      */
-    <T> PaginationResults<T> pagination(E0 execution, RowMapper<T> rowMapper, Map<String, Object> params, int offset,
-        int limit);
+    <T> PaginationResults<T> pagination(E0 execution, RowMapper<T> rowMapper, Map<String, Serializable> params,
+        int offset, int limit);
 
     /**
      * query page, use query str in template find with executeId.
@@ -2281,7 +2548,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @param page the page
      * @return entity pagination
      */
-    default <T> PaginationResults<T> pagination(E0 execution, Class<T> mappingType, Map<String, Object> params,
+    default <T> PaginationResults<T> pagination(E0 execution, Class<T> mappingType, Map<String, Serializable> params,
         Page page) {
         Limit limit = new Limit(page);
         return pagination(execution, mappingType, params, limit.getOffset(), limit.getLimit());
@@ -2297,7 +2564,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @param page the page
      * @return entity pagination
      */
-    default <T> PaginationResults<T> pagination(E0 execution, RowMapper<T> rowMapper, Map<String, Object> params,
+    default <T> PaginationResults<T> pagination(E0 execution, RowMapper<T> rowMapper, Map<String, Serializable> params,
         Page page) {
         Limit limit = new Limit(page);
         return pagination(execution, rowMapper, params, limit.getOffset(), limit.getLimit());
@@ -2317,7 +2584,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple2 pagination
      */
     default <T1, T2> PaginationResults<Tuple2<T1, T2>> pagination(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Map<String, Object> params, int offset, int limit) {
+        Class<T2> mappingType2, Map<String, Serializable> params, int offset, int limit) {
         return pagination(execution, mappingType1, mappingType2, (Tuple2<String, String>) null, params, offset, limit);
     }
 
@@ -2334,7 +2601,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple2 pagination
      */
     default <T1, T2> PaginationResults<Tuple2<T1, T2>> pagination(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Map<String, Object> params, Page page) {
+        Class<T2> mappingType2, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return pagination(execution, mappingType1, mappingType2, params, limit.getOffset(), limit.getLimit());
     }
@@ -2354,7 +2621,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple2 pagination
      */
     <T1, T2> PaginationResults<Tuple2<T1, T2>> pagination(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
-        Tuple2<String, String> prefixes, Map<String, Object> params, int offset, int limit);
+        Tuple2<String, String> prefixes, Map<String, Serializable> params, int offset, int limit);
 
     /**
      * query single, use query str in template find with executeId.
@@ -2370,7 +2637,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple2 pagination
      */
     default <T1, T2> PaginationResults<Tuple2<T1, T2>> pagination(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Tuple2<String, String> prefixes, Map<String, Object> params, Page page) {
+        Class<T2> mappingType2, Tuple2<String, String> prefixes, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return pagination(execution, mappingType1, mappingType2, prefixes, params, limit.getOffset(), limit.getLimit());
     }
@@ -2391,7 +2658,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple3 pagination
      */
     default <T1, T2, T3> PaginationResults<Tuple3<T1, T2, T3>> pagination(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Class<T3> mappingType3, Map<String, Object> params, int offset, int limit) {
+        Class<T2> mappingType2, Class<T3> mappingType3, Map<String, Serializable> params, int offset, int limit) {
         return pagination(execution, mappingType1, mappingType2, mappingType3, (Tuple3<String, String, String>) null,
             params, offset, limit);
     }
@@ -2411,7 +2678,7 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple3 pagination
      */
     default <T1, T2, T3> PaginationResults<Tuple3<T1, T2, T3>> pagination(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Class<T3> mappingType3, Map<String, Object> params, Page page) {
+        Class<T2> mappingType2, Class<T3> mappingType3, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return pagination(execution, mappingType1, mappingType2, mappingType3, params, limit.getOffset(),
             limit.getLimit());
@@ -2435,7 +2702,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     <T1, T2, T3> PaginationResults<Tuple3<T1, T2, T3>> pagination(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Tuple3<String, String, String> prefixes,
-        Map<String, Object> params, int offset, int limit);
+        Map<String, Serializable> params, int offset, int limit);
 
     /**
      * query single, use query str in template find with executeId.
@@ -2454,7 +2721,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3> PaginationResults<Tuple3<T1, T2, T3>> pagination(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Tuple3<String, String, String> prefixes,
-        Map<String, Object> params, Page page) {
+        Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return pagination(execution, mappingType1, mappingType2, mappingType3, prefixes, params, limit.getOffset(),
             limit.getLimit());
@@ -2478,8 +2745,8 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple4 pagination
      */
     default <T1, T2, T3, T4> PaginationResults<Tuple4<T1, T2, T3, T4>> pagination(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Object> params, int offset,
-        int limit) {
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Serializable> params,
+        int offset, int limit) {
         return pagination(execution, mappingType1, mappingType2, mappingType3, mappingType4,
             (Tuple4<String, String, String, String>) null, params, offset, limit);
     }
@@ -2501,7 +2768,8 @@ public interface MapParamsQueryExecutor<E0> {
      * @return tuple4 pagination
      */
     default <T1, T2, T3, T4> PaginationResults<Tuple4<T1, T2, T3, T4>> pagination(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Object> params, Page page) {
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Map<String, Serializable> params,
+        Page page) {
         Limit limit = new Limit(page);
         return pagination(execution, mappingType1, mappingType2, mappingType3, mappingType4, params, limit.getOffset(),
             limit.getLimit());
@@ -2527,7 +2795,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     <T1, T2, T3, T4> PaginationResults<Tuple4<T1, T2, T3, T4>> pagination(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Tuple4<String, String, String, String> prefixes, Map<String, Object> params, int offset, int limit);
+        Tuple4<String, String, String, String> prefixes, Map<String, Serializable> params, int offset, int limit);
 
     /**
      * query single, use query str in template find with executeId.
@@ -2548,7 +2816,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4> PaginationResults<Tuple4<T1, T2, T3, T4>> pagination(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Tuple4<String, String, String, String> prefixes, Map<String, Object> params, Page page) {
+        Tuple4<String, String, String, String> prefixes, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return pagination(execution, mappingType1, mappingType2, mappingType3, mappingType4, prefixes, params,
             limit.getOffset(), limit.getLimit());
@@ -2575,7 +2843,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5> PaginationResults<Tuple5<T1, T2, T3, T4, T5>> pagination(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Map<String, Object> params, int offset, int limit) {
+        Class<T5> mappingType5, Map<String, Serializable> params, int offset, int limit) {
         return pagination(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5,
             (Tuple5<String, String, String, String, String>) null, params, offset, limit);
     }
@@ -2600,7 +2868,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5> PaginationResults<Tuple5<T1, T2, T3, T4, T5>> pagination(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Map<String, Object> params, Page page) {
+        Class<T5> mappingType5, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return pagination(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, params,
             limit.getOffset(), limit.getLimit());
@@ -2628,7 +2896,8 @@ public interface MapParamsQueryExecutor<E0> {
      */
     <T1, T2, T3, T4, T5> PaginationResults<Tuple5<T1, T2, T3, T4, T5>> pagination(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
-        Tuple5<String, String, String, String, String> prefixes, Map<String, Object> params, int offset, int limit);
+        Tuple5<String, String, String, String, String> prefixes, Map<String, Serializable> params, int offset,
+        int limit);
 
     /**
      * query single, use query str in template find with executeId.
@@ -2651,8 +2920,8 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5> PaginationResults<Tuple5<T1, T2, T3, T4, T5>> pagination(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Tuple5<String, String, String, String, String> prefixes, Map<String, Object> params,
-        Page page) {
+        Class<T5> mappingType5, Tuple5<String, String, String, String, String> prefixes,
+        Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return pagination(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, prefixes,
             params, limit.getOffset(), limit.getLimit());
@@ -2681,7 +2950,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5, T6> PaginationResults<Tuple6<T1, T2, T3, T4, T5, T6>> pagination(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Class<T6> mappingType6, Map<String, Object> params, int offset, int limit) {
+        Class<T5> mappingType5, Class<T6> mappingType6, Map<String, Serializable> params, int offset, int limit) {
         return pagination(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
             (Tuple6<String, String, String, String, String, String>) null, params, offset, limit);
     }
@@ -2708,7 +2977,7 @@ public interface MapParamsQueryExecutor<E0> {
      */
     default <T1, T2, T3, T4, T5, T6> PaginationResults<Tuple6<T1, T2, T3, T4, T5, T6>> pagination(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Class<T6> mappingType6, Map<String, Object> params, Page page) {
+        Class<T5> mappingType5, Class<T6> mappingType6, Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return pagination(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
             params, limit.getOffset(), limit.getLimit());
@@ -2739,7 +3008,7 @@ public interface MapParamsQueryExecutor<E0> {
     <T1, T2, T3, T4, T5, T6> PaginationResults<Tuple6<T1, T2, T3, T4, T5, T6>> pagination(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
         Class<T5> mappingType5, Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes,
-        Map<String, Object> params, int offset, int limit);
+        Map<String, Serializable> params, int offset, int limit);
 
     /**
      * Pagination.
@@ -2765,7 +3034,7 @@ public interface MapParamsQueryExecutor<E0> {
     default <T1, T2, T3, T4, T5, T6> PaginationResults<Tuple6<T1, T2, T3, T4, T5, T6>> pagination(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
         Class<T5> mappingType5, Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes,
-        Map<String, Object> params, Page page) {
+        Map<String, Serializable> params, Page page) {
         Limit limit = new Limit(page);
         return pagination(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
             prefixes, params, limit.getOffset(), limit.getLimit());

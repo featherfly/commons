@@ -1,6 +1,8 @@
 
 package cn.featherfly.common.repository;
 
+import java.io.Serializable;
+
 /**
  * execution.
  *
@@ -19,5 +21,5 @@ public interface Execution {
      *
      * @return params
      */
-    Object[] getParams();
+    Serializable[] getParams();
 }

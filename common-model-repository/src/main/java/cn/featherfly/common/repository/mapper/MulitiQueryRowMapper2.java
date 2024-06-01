@@ -8,6 +8,7 @@
  */
 package cn.featherfly.common.repository.mapper;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public interface MulitiQueryRowMapper2<T1, T2> extends MulitiQueryRowMapper<Tupl
      *
      * @return the muliti row mapper 3
      */
-    MulitiQueryRowMapper3<T1, T2, Map<String, Object>> map();
+    MulitiQueryRowMapper3<T1, T2, Map<String, Serializable>> map();
 
     /**
      * Map.

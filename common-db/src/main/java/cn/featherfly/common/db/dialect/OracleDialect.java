@@ -1,5 +1,6 @@
 package cn.featherfly.common.db.dialect;
 
+import java.io.Serializable;
 import java.sql.Types;
 import java.util.Date;
 
@@ -47,15 +48,15 @@ public class OracleDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public Object[] getPaginationSqlParameter(Object[] params, int start, int limit) {
-        Object[] pagingParams = null;
+    public Serializable[] getPaginationSqlParameter(Serializable[] params, int start, int limit) {
+        Serializable[] pagingParams = null;
         if (start > 0) {
             logger.debug("start > 0 , use start {}", start);
-            pagingParams = new Object[2];
+            pagingParams = new Serializable[2];
             pagingParams[0] = Integer.valueOf(start);
         } else {
             logger.debug("start < 0 , don't use start");
-            pagingParams = new Object[1];
+            pagingParams = new Serializable[1];
         }
         if (limit > Chars.ZERO) {
             logger.debug("limit > 0 , use limit {}", limit);
@@ -67,7 +68,7 @@ public class OracleDialect extends AbstractDialect {
             limit = Integer.MAX_VALUE;
         }
         pagingParams[pagingParams.length - 1] = start + limit;
-        return (Object[]) ArrayUtils.concat(params, pagingParams);
+        return (Serializable[]) ArrayUtils.concat(params, pagingParams);
     }
 
     /**
@@ -82,15 +83,15 @@ public class OracleDialect extends AbstractDialect {
      * {@inheritDoc}
      */
     @Override
-    public String getParamNamedPaginationSql(String sql, int start, int limit) {
-        return getParamNamedPaginationSql(sql, start, limit, PARAM_NAME_START_SYMBOL);
+    public String getNamedParamPaginationSql(String sql, int start, int limit) {
+        return getNamedParamPaginationSql(sql, start, limit, PARAM_NAME_START_SYMBOL);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getParamNamedPaginationSql(String sql, int start, int limit, char startSymbol) {
+    public String getNamedParamPaginationSql(String sql, int start, int limit, char startSymbol) {
         return getPaginationSql(sql, start, false, startSymbol);
     }
 

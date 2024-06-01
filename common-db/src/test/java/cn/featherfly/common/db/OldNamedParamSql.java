@@ -8,6 +8,7 @@
  */
 package cn.featherfly.common.db;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,7 +36,7 @@ public class OldNamedParamSql {
     /**
      * Instantiates a new pattern.
      *
-     * @param sql        the sql
+     * @param sql the sql
      * @param paramNames the param names
      */
     OldNamedParamSql(String sql, OldNamedParam[] paramNames) {
@@ -62,7 +63,7 @@ public class OldNamedParamSql {
      * compile named param sql with startSymbol.
      *
      * @param namedParamSql the named param sql
-     * @param startSymbol   the start symbol
+     * @param startSymbol the start symbol
      * @return NamedParamSql
      * @see SqlUtils#convertNamedParamSql(String,char)
      */
@@ -74,8 +75,8 @@ public class OldNamedParamSql {
      * compile named param sql with startSymbol and endSymbol.
      *
      * @param namedParamSql the named param sql
-     * @param startSymbol   the start symbol
-     * @param endSymbol     the end symbol
+     * @param startSymbol the start symbol
+     * @param endSymbol the end symbol
      * @return NamedParamSql
      * @see SqlUtils#convertNamedParamSql(String, char, Character)
      */
@@ -89,8 +90,8 @@ public class OldNamedParamSql {
      * @param params the params
      * @return the Execution
      */
-    public Execution getExecution(Map<String, Object> params) {
-        List<Object> paramList = new ArrayList<>();
+    public Execution getExecution(Map<String, Serializable> params) {
+        List<Serializable> paramList = new ArrayList<>();
         final Map<String, Object> inParamsSqls = new HashMap<>(inParamCount);
         for (OldNamedParam pn : paramNames) {
             Object param = SqlUtils.getNamedParam(params, pn.name);
@@ -148,7 +149,7 @@ public class OldNamedParamSql {
          * Instantiates a new named param.
          *
          * @param name the name
-         * @param in   the in
+         * @param in the in
          */
         public OldNamedParam(String name, boolean in) {
             super();

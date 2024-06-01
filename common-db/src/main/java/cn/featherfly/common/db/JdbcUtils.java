@@ -401,15 +401,40 @@ public final class JdbcUtils {
         }
     }
 
+    //    /**
+    //     * 设置参数 .
+    //     *
+    //     * @param prep PreparedStatementWrapper
+    //     * @param values 参数
+    //     */
+    //    public static void setParameters(PreparedStatementWrapper prep, Object... values) {
+    //        setParameters(prep, true, values);
+    //    }
+
     /**
      * 设置参数 .
      *
      * @param prep PreparedStatementWrapper
      * @param values 参数
      */
-    public static void setParameters(PreparedStatementWrapper prep, Object... values) {
+    public static void setParameters(PreparedStatementWrapper prep, Serializable... values) {
         setParameters(prep, true, values);
     }
+
+    //    /**
+    //     * 设置参数 .
+    //     *
+    //     * @param prep PreparedStatementWrapper
+    //     * @param enumWithOridinal the enum with oridinal
+    //     * @param values 参数
+    //     */
+    //    public static void setParameters(PreparedStatementWrapper prep, boolean enumWithOridinal, Object... values) {
+    //        if (Lang.isNotEmpty(values)) {
+    //            for (int i = 0; i < values.length; i++) {
+    //                setParameter(prep, i + 1, values[i], enumWithOridinal);
+    //            }
+    //        }
+    //    }
 
     /**
      * 设置参数 .
@@ -418,7 +443,7 @@ public final class JdbcUtils {
      * @param enumWithOridinal the enum with oridinal
      * @param values 参数
      */
-    public static void setParameters(PreparedStatementWrapper prep, boolean enumWithOridinal, Object... values) {
+    public static void setParameters(PreparedStatementWrapper prep, boolean enumWithOridinal, Serializable... values) {
         if (Lang.isNotEmpty(values)) {
             for (int i = 0; i < values.length; i++) {
                 setParameter(prep, i + 1, values[i], enumWithOridinal);
@@ -426,13 +451,23 @@ public final class JdbcUtils {
         }
     }
 
+    //    /**
+    //     * 设置参数.
+    //     *
+    //     * @param prep PreparedStatement
+    //     * @param values 参数
+    //     */
+    //    public static void setParameters(PreparedStatement prep, Object... values) {
+    //        setParameters(prep, true, values);
+    //    }
+
     /**
      * 设置参数.
      *
      * @param prep PreparedStatement
      * @param values 参数
      */
-    public static void setParameters(PreparedStatement prep, Object... values) {
+    public static void setParameters(PreparedStatement prep, Serializable... values) {
         setParameters(prep, true, values);
     }
 
@@ -454,11 +489,37 @@ public final class JdbcUtils {
     /**
      * 设置参数.
      *
+     * @param prep PreparedStatement
+     * @param enumWithOridinal the enum with oridinal
+     * @param values 参数
+     */
+    public static void setParameters(PreparedStatement prep, boolean enumWithOridinal, Serializable... values) {
+        if (Lang.isNotEmpty(values)) {
+            for (int i = 0; i < values.length; i++) {
+                setParameter(prep, i + 1, values[i], enumWithOridinal);
+            }
+        }
+    }
+
+    /**
+     * 设置参数.
+     *
      * @param prep PreparedStatementWrapper
      * @param position 占位符位置
      * @param value 参数
      */
     public static void setParameter(PreparedStatementWrapper prep, int position, Object value) {
+        setParameter(prep, position, value, true);
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param prep PreparedStatementWrapper
+     * @param position 占位符位置
+     * @param value 参数
+     */
+    public static void setParameter(PreparedStatementWrapper prep, int position, Serializable value) {
         setParameter(prep, position, value, true);
     }
 
@@ -476,6 +537,19 @@ public final class JdbcUtils {
     }
 
     /**
+     * 设置参数 .
+     *
+     * @param prep PreparedStatementWrapper
+     * @param position 占位符位置
+     * @param value 参数
+     * @param enumWithOridinal enum with oridinal
+     */
+    public static void setParameter(PreparedStatementWrapper prep, int position, Serializable value,
+        boolean enumWithOridinal) {
+        setParameter(prep.getPreparedStatement(), position, value, enumWithOridinal);
+    }
+
+    /**
      * 设置参数.
      *
      * @param prep PreparedStatement
@@ -483,6 +557,17 @@ public final class JdbcUtils {
      * @param value 参数
      */
     public static void setParameter(PreparedStatement prep, int position, Object value) {
+        setParameter(prep, position, value, true);
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param prep PreparedStatement
+     * @param position 占位符位置
+     * @param value 参数
+     */
+    public static void setParameter(PreparedStatement prep, int position, Serializable value) {
         setParameter(prep, position, value, true);
     }
 
@@ -937,8 +1022,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value 参数
      */
-    public static <E extends Serializable> void setParameter(PreparedStatement prep, int position,
-        FieldValueOperator<E> value) {
+    public static <E> void setParameter(PreparedStatement prep, int position, FieldValueOperator<E> value) {
         if (value == null) {
             setParameterNull(prep, position);
         } else {
@@ -1084,16 +1168,39 @@ public final class JdbcUtils {
         System.out.println(new BigInteger(Long.MAX_VALUE + "0"));
     }
 
+    //    /**
+    //     * 设置参数 .
+    //     *
+    //     * @param res ResultSetWrapper
+    //     * @param values 参数
+    //     */
+    //    public static void setParameters(ResultSetWrapper res, Object... values) {
+    //        setParameters(res, true, values);
+    //    }
     /**
      * 设置参数 .
      *
      * @param res ResultSetWrapper
      * @param values 参数
      */
-    public static void setParameters(ResultSetWrapper res, Object... values) {
+    public static void setParameters(ResultSetWrapper res, Serializable... values) {
         setParameters(res, true, values);
     }
 
+    //    /**
+    //     * 设置参数 .
+    //     *
+    //     * @param res ResultSetWrapper
+    //     * @param enumWithOridinal the enum with oridinal
+    //     * @param values 参数
+    //     */
+    //    public static void setParameters(ResultSetWrapper res, boolean enumWithOridinal, Object... values) {
+    //        if (Lang.isNotEmpty(values)) {
+    //            for (int i = 0; i < values.length; i++) {
+    //                setParameter(res, i + 1, values[i], enumWithOridinal);
+    //            }
+    //        }
+    //    }
     /**
      * 设置参数 .
      *
@@ -1101,7 +1208,7 @@ public final class JdbcUtils {
      * @param enumWithOridinal the enum with oridinal
      * @param values 参数
      */
-    public static void setParameters(ResultSetWrapper res, boolean enumWithOridinal, Object... values) {
+    public static void setParameters(ResultSetWrapper res, boolean enumWithOridinal, Serializable... values) {
         if (Lang.isNotEmpty(values)) {
             for (int i = 0; i < values.length; i++) {
                 setParameter(res, i + 1, values[i], enumWithOridinal);
@@ -1115,8 +1222,33 @@ public final class JdbcUtils {
      * @param res the res
      * @param values 参数
      */
-    public static void setParameters(ResultSet res, Object... values) {
+    public static void setParameters(ResultSet res, Serializable... values) {
         setParameters(res, true, values);
+    }
+
+    //    /**
+    //     * 设置参数.
+    //     *
+    //     * @param res the res
+    //     * @param values 参数
+    //     */
+    //    public static void setParameters(ResultSet res, Object... values) {
+    //        setParameters(res, true, values);
+    //    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res the res
+     * @param enumWithOridinal the enum with oridinal
+     * @param values 参数
+     */
+    public static void setParameters(ResultSet res, boolean enumWithOridinal, Serializable... values) {
+        if (Lang.isNotEmpty(values)) {
+            for (int i = 0; i < values.length; i++) {
+                setParameter(res, i + 1, values[i], enumWithOridinal);
+            }
+        }
     }
 
     /**
@@ -1146,6 +1278,17 @@ public final class JdbcUtils {
     }
 
     /**
+     * 设置参数.
+     *
+     * @param res ResultSetWrapper
+     * @param position 占位符位置
+     * @param value 参数
+     */
+    public static void setParameter(ResultSetWrapper res, int position, Serializable value) {
+        setParameter(res, position, value, true);
+    }
+
+    /**
      * 设置参数 .
      *
      * @param res ResultSetWrapper
@@ -1158,6 +1301,18 @@ public final class JdbcUtils {
     }
 
     /**
+     * 设置参数 .
+     *
+     * @param res ResultSetWrapper
+     * @param position 占位符位置
+     * @param value 参数
+     * @param enumWithOridinal enum with oridinal
+     */
+    public static void setParameter(ResultSetWrapper res, int position, Serializable value, boolean enumWithOridinal) {
+        setParameter(res.getResultSet(), position, value, enumWithOridinal);
+    }
+
+    /**
      * 设置参数.
      *
      * @param res the res
@@ -1165,6 +1320,17 @@ public final class JdbcUtils {
      * @param value 参数
      */
     public static void setParameter(ResultSet res, int position, Object value) {
+        setParameter(res, position, value, true);
+    }
+
+    /**
+     * 设置参数.
+     *
+     * @param res the res
+     * @param position 占位符位置
+     * @param value 参数
+     */
+    public static void setParameter(ResultSet res, int position, Serializable value) {
         setParameter(res, position, value, true);
     }
 
@@ -1619,7 +1785,7 @@ public final class JdbcUtils {
      * @param position 占位符位置
      * @param value 参数
      */
-    public static <E extends Serializable> void setParameter(ResultSet res, int position, FieldValueOperator<E> value) {
+    public static <E> void setParameter(ResultSet res, int position, FieldValueOperator<E> value) {
         if (value == null) {
             setParameterNull(res, position);
         } else {
@@ -1761,8 +1927,7 @@ public final class JdbcUtils {
      * @param name the parameter name
      * @param value the value
      */
-    public static <E extends Serializable> void setParameter(CallableStatement call, String name,
-        FieldValueOperator<E> value) {
+    public static <E> void setParameter(CallableStatement call, String name, FieldValueOperator<E> value) {
         if (value == null) {
             setParameterNull(call, name);
         } else {
@@ -1782,6 +1947,17 @@ public final class JdbcUtils {
         } catch (SQLException e) {
             throw new JdbcException(e);
         }
+    }
+
+    /**
+     * set proceduce param.
+     *
+     * @param call CallableStatement
+     * @param name param name
+     * @param value param value
+     */
+    public static void setParameter(CallableStatement call, String name, Serializable value) {
+        setParameter(call, name, value, true);
     }
 
     /**
@@ -1874,9 +2050,21 @@ public final class JdbcUtils {
      * @param values the values
      * @return the out parameter index and class map
      */
-    public static Map<Integer, Class<?>> setParameters(CallableStatement call, Object... values) {
+    public static Map<Integer, Class<? extends Serializable>> setParameters(CallableStatement call,
+        Serializable... values) {
         return setParameters(call, true, values);
     }
+
+    //    /**
+    //     * set proceduce param.
+    //     *
+    //     * @param call the call
+    //     * @param values the values
+    //     * @return the out parameter index and class map
+    //     */
+    //    public static Map<Integer, Class<?>> setParameters(CallableStatement call, Object... values) {
+    //        return setParameters(call, true, values);
+    //    }
 
     /**
      * set proceduce param.
@@ -1886,9 +2074,10 @@ public final class JdbcUtils {
      * @param values the values
      * @return the out parameter index and class map
      */
-    public static Map<Integer, Class<?>> setParameters(CallableStatement call, boolean enumWithOridinal,
-        Object... values) {
-        Map<Integer, Class<?>> outParamMap = new HashMap<>(0);
+    //    public static Map<Integer, Class<?>> setParameters(CallableStatement call, boolean enumWithOridinal, Object... values) {
+    public static Map<Integer, Class<? extends Serializable>> setParameters(CallableStatement call,
+        boolean enumWithOridinal, Serializable... values) {
+        Map<Integer, Class<? extends Serializable>> outParamMap = new HashMap<>(0);
         try {
             ParameterMetaData meta = call.getParameterMetaData();
             if (meta.getParameterCount() != values.length) {
@@ -1898,7 +2087,7 @@ public final class JdbcUtils {
                         meta.getParameterCount(), values.length));
             }
             for (int i = 1; i <= values.length; i++) {
-                Object arg = values[i - 1];
+                Serializable arg = values[i - 1];
                 int mode = meta.getParameterMode(i);
                 if (mode == ParameterMetaData.parameterModeOut) {
                     setOutParamMap(outParamMap, i, arg, meta);
@@ -1924,14 +2113,34 @@ public final class JdbcUtils {
      * @param meta the meta
      * @throws SQLException the SQL exception
      */
-    private static void setOutParamMap(Map<Integer, Class<?>> outParamMap, int index, Object arg,
-        ParameterMetaData meta) throws SQLException {
+    @SuppressWarnings("unchecked")
+    private static void setOutParamMap(Map<Integer, Class<? extends Serializable>> outParamMap, int index,
+        Serializable arg, ParameterMetaData meta) throws SQLException {
         if (arg == null) {
-            outParamMap.put(index, ClassUtils.forName(meta.getParameterClassName(index)));
+            outParamMap.put(index,
+                (Class<? extends Serializable>) ClassUtils.forName(meta.getParameterClassName(index)));
         } else {
             outParamMap.put(index, arg.getClass());
         }
     }
+
+    //    /**
+    //     * Sets the out param map.
+    //     *
+    //     * @param outParamMap the out param map
+    //     * @param index the index
+    //     * @param arg the arg
+    //     * @param meta the meta
+    //     * @throws SQLException the SQL exception
+    //     */
+    //    private static void setOutParamMap(Map<Integer, Class<?>> outParamMap, int index, Object arg,
+    //        ParameterMetaData meta) throws SQLException {
+    //        if (arg == null) {
+    //            outParamMap.put(index, ClassUtils.forName(meta.getParameterClassName(index)));
+    //        } else {
+    //            outParamMap.put(index, arg.getClass());
+    //        }
+    //    }
 
     /**
      * Gets the column name.
@@ -2248,7 +2457,7 @@ public final class JdbcUtils {
      * @see java.sql.Clob
      * @see java.sql.Timestamp
      */
-    public static Object getResultSetValue(ResultSet rs, int index) {
+    public static Serializable getResultSetValue(ResultSet rs, int index) {
         try {
             Object obj = rs.getObject(index);
             String className = null;
@@ -2275,7 +2484,7 @@ public final class JdbcUtils {
                     obj = rs.getTimestamp(index);
                 }
             }
-            return obj;
+            return (Serializable) obj;
         } catch (SQLException e) {
             throw new JdbcException(e);
         }
@@ -2287,9 +2496,9 @@ public final class JdbcUtils {
      * @param rs the rs
      * @return the result set map
      */
-    public static Map<String, Object> getResultSetMap(ResultSet rs) {
+    public static Map<String, Serializable> getResultSetMap(ResultSet rs) {
         try {
-            Map<String, Object> resultMap = new HashMap<>();
+            Map<String, Serializable> resultMap = new HashMap<>();
             ResultSetMetaData metaData = rs.getMetaData();
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 //                Object value = JdbcUtils.getResultSetValue(rs, i);
@@ -2310,13 +2519,13 @@ public final class JdbcUtils {
      * @param manager the manager
      * @return the result set map
      */
-    public static Map<String, Object> getResultSetMap(ResultSet rs, SqlTypeMappingManager manager) {
+    public static Map<String, Serializable> getResultSetMap(ResultSet rs, SqlTypeMappingManager manager) {
         try {
-            Map<String, Object> resultMap = new HashMap<>();
+            Map<String, Serializable> resultMap = new HashMap<>();
             ResultSetMetaData metaData = rs.getMetaData();
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 Class<? extends Serializable> type = manager.getJavaType(JDBCType.valueOf(metaData.getColumnType(i)));
-                Object value = null;
+                Serializable value = null;
                 if (type != null) {
                     value = manager.get(rs, i, type);
                 } else {
@@ -2372,7 +2581,7 @@ public final class JdbcUtils {
      * @param rs the rs
      * @return the result set maps
      */
-    public static List<Map<String, Object>> getResultSetMaps(ResultSetWrapper rs) {
+    public static List<Map<String, Serializable>> getResultSetMaps(ResultSetWrapper rs) {
         return getResultSetMaps(rs.getResultSet());
     }
 
@@ -2382,9 +2591,9 @@ public final class JdbcUtils {
      * @param rs the rs
      * @return the result set maps
      */
-    public static List<Map<String, Object>> getResultSetMaps(ResultSet rs) {
+    public static List<Map<String, Serializable>> getResultSetMaps(ResultSet rs) {
         try {
-            List<Map<String, Object>> list = new ArrayList<>();
+            List<Map<String, Serializable>> list = new ArrayList<>();
             while (rs.next()) {
                 list.add(getResultSetMap(rs));
             }
@@ -2401,9 +2610,9 @@ public final class JdbcUtils {
      * @param manager the manager
      * @return the result set maps
      */
-    public static List<Map<String, Object>> getResultSetMaps(ResultSet rs, SqlTypeMappingManager manager) {
+    public static List<Map<String, Serializable>> getResultSetMaps(ResultSet rs, SqlTypeMappingManager manager) {
         try {
-            List<Map<String, Object>> list = new ArrayList<>();
+            List<Map<String, Serializable>> list = new ArrayList<>();
             while (rs.next()) {
                 list.add(getResultSetMap(rs, manager));
             }

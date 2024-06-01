@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.bean.BeanDescriptor;
 import cn.featherfly.common.bean.BeanProperty;
+import cn.featherfly.common.bean.Property;
 import cn.featherfly.common.bean.PropertyAccessor;
 import cn.featherfly.common.bean.PropertyAccessorFactory;
 import cn.featherfly.common.bean.matcher.BeanPropertyAnnotationMatcher;
@@ -281,17 +282,14 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
      * @param mapping the mapping
      * @param beanProperty the bean property
      */
-    protected <E extends Serializable> void setJavaSqlTypeMapper(JdbcPropertyMapping mapping,
-        BeanProperty<?, E> beanProperty) {
-        @SuppressWarnings("unchecked")
-        JavaSqlTypeMapper<Serializable> mapper = sqlTypeMappingManager
-            .getJavaSqlTypeMapper((BeanProperty<?, Serializable>) beanProperty);
+    protected <E> void setJavaSqlTypeMapper(JdbcPropertyMapping mapping, Property<?, E> beanProperty) {
+        JavaSqlTypeMapper<?> mapper = sqlTypeMappingManager.getJavaSqlTypeMapper(beanProperty);
         if (mapper != null) {
             mapping.setJavaTypeSqlTypeOperator(mapper);
         } else {
             if (beanProperty.getType().isEnum()) {
                 @SuppressWarnings({ "rawtypes", "unchecked" })
-                Class<Enum> enumType = ((BeanProperty<?, Enum>) beanProperty).getType();
+                Class<Enum> enumType = (Class<Enum>) beanProperty.getType();
                 mapping.setJavaTypeSqlTypeOperator(new EnumSqlTypeOperator<>(enumType));
             } else {
                 // YUFEI_TODO 后续来优化打开检查，主要是现在父JdbcPropertyMapping（非具体映射）也调用了此方法，造成检查不通过

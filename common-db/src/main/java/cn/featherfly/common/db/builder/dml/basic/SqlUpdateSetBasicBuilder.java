@@ -1,5 +1,6 @@
 package cn.featherfly.common.db.builder.dml.basic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -39,8 +40,8 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
     /**
      * Instantiates a new sql update set basic builder.
      *
-     * @param dialect        the dialect
-     * @param tableName      the table name
+     * @param dialect the dialect
+     * @param tableName the table name
      * @param ignoreStrategy the ignore strategy
      */
     public SqlUpdateSetBasicBuilder(Dialect dialect, String tableName, Predicate<?> ignoreStrategy) {
@@ -50,9 +51,9 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
     /**
      * Instantiates a new sql update set basic builder.
      *
-     * @param dialect        the dialect
-     * @param tableName      the table name
-     * @param alias          the alias
+     * @param dialect the dialect
+     * @param tableName the table name
+     * @param alias the alias
      * @param ignoreStrategy the ignore strategy
      */
     public SqlUpdateSetBasicBuilder(Dialect dialect, String tableName, String alias, Predicate<?> ignoreStrategy) {
@@ -79,7 +80,7 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
      * Sets the value.
      *
      * @param columnName the column name
-     * @param value      the value
+     * @param value the value
      * @return the sql update set basic builder
      */
     public SqlUpdateSetBasicBuilder setValue(String columnName, Object value) {
@@ -89,8 +90,8 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
     /**
      * Sets the value.
      *
-     * @param columnName        the column name
-     * @param value             the value
+     * @param columnName the column name
+     * @param value the value
      * @param setIgnoreStrategy the set ignore strategy
      * @return the sql update set basic builder
      */
@@ -103,8 +104,8 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
      * Sets the value.
      *
      * @param columnName the column name
-     * @param value      the value
-     * @param setType    the set type
+     * @param value the value
+     * @param setType the set type
      * @return the sql update set basic builder
      */
     public SqlUpdateSetBasicBuilder setValue(String columnName, Object value, SetType setType) {
@@ -114,14 +115,14 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
     /**
      * Sets the value.
      *
-     * @param columnName        the column name
-     * @param value             the value
-     * @param setType           the set type
+     * @param columnName the column name
+     * @param value the value
+     * @param setType the set type
      * @param setIgnoreStrategy the set ignore strategy
      * @return the sql update set basic builder
      */
     public SqlUpdateSetBasicBuilder setValue(String columnName, Object value, SetType setType,
-            Predicate<?> setIgnoreStrategy) {
+        Predicate<?> setIgnoreStrategy) {
         params.add(new UpdateColumnElement(dialect, columnName, value, alias, setType, setIgnoreStrategy));
         return this;
     }
@@ -151,7 +152,7 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
         int len = update.length();
         params.forEach(c -> {
             Lang.ifNotEmpty(c.toSql(),
-                    (Consumer<String>) setValue -> update.append(Chars.SPACE).append(setValue).append(Chars.COMMA));
+                (Consumer<String>) setValue -> update.append(Chars.SPACE).append(setValue).append(Chars.COMMA));
             //            String setValue = c.toSql();
             //            if (Lang.isNotEmpty(setValue)) {
             //                update.append(Chars.SPACE).append(setValue).append(Chars.COMMA);
@@ -169,8 +170,8 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
      *
      * @return the params
      */
-    public List<Object> getParams() {
-        return params.stream().map(ParamedColumnElement::getParam).collect(Collectors.toList());
+    public List<Serializable> getParams() {
+        return params.stream().map(o -> (Serializable) o.getParam()).collect(Collectors.toList());
     }
 
     /**

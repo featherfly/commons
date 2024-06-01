@@ -8,6 +8,7 @@
  */
 package cn.featherfly.common.repository;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public interface ParamedQueryListExecutor {
      *
      * @return map
      */
-    List<Map<String, Object>> list();
+    List<Map<String, Serializable>> list();
 
     /**
      * query list.

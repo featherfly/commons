@@ -3,7 +3,7 @@ ext {
 }
   
 dependencies {
-    api group: 'cn.featherfly.common', name: 'common-core', version: '1.12.1'
+    api group: 'cn.featherfly.common', name: 'common-core', version: '1.13.0'
     
     api group: 'org.ow2.asm', name: 'asm', version: asmv
     api group: 'org.ow2.asm', name: 'asm-tree', version: asmv

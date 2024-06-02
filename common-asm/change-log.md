@@ -1,4 +1,4 @@
-# 0.3.0
+# 0.3.0 2024-06-02
 1. 实现BytesClassLoader
 2. 实现InstantiatorFactor
 3. 实现PropertyAccessorFactory

@@ -1,4 +1,4 @@
-# 0.7.0
+# 0.7.0 2024-06-02
 
 1. 优化NamedParamSql逻辑，提升性能
 2. JdbcUtils加入BigInteger的支持

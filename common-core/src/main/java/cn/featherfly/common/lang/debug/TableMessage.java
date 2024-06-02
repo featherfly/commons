@@ -40,7 +40,7 @@ public class TableMessage {
 
     private String columnDelimiter = "    ";
 
-    private boolean warpAround = true;
+    private boolean wrapAround = true;
 
     /**
      * Instantiates a new table debug message.
@@ -116,22 +116,22 @@ public class TableMessage {
         String format = rowFormat(columnDelimiter);
         StringBuilder dm = new StringBuilder();
         String header = String.format(rowFormat(columnHeaderDelimiter),
-                columns.stream().map(column -> column.title).toArray());
-        String warpLine = "";
-        if (warpAround) {
-            warpLine = Strings.join("=", header.length() - 1) + "\n"; // -1 是去掉\n
+            columns.stream().map(column -> column.title).toArray());
+        String wrapLine = "";
+        if (wrapAround) {
+            wrapLine = Strings.join("=", header.length() - 1) + "\n"; // -1 是去掉\n
         }
-        dm.append(warpLine).append(header);
+        dm.append(wrapLine).append(header);
         for (Map<String, Object> row : rows) {
             dm.append(String.format(format,
-                    columns.stream().map(column -> row.computeIfAbsent(column.title, k -> "")).toArray()));
+                columns.stream().map(column -> row.computeIfAbsent(column.title, k -> "")).toArray()));
         }
-        return dm.append(warpLine).toString();
+        return dm.append(wrapLine).toString();
     }
 
     private String rowFormat(String delimiter) {
         StringBuilder fb = new StringBuilder();
-        if (warpAround) {
+        if (wrapAround) {
             fb.append("| ");
         } else {
             fb.append("  ");
@@ -142,7 +142,7 @@ public class TableMessage {
         if (!columns.isEmpty()) {
             fb.delete(fb.length() - delimiter.length(), fb.length());
         }
-        if (warpAround) {
+        if (wrapAround) {
             fb.append(" |");
         }
         fb.append("\n");
@@ -204,20 +204,20 @@ public class TableMessage {
     }
 
     /**
-     * get warpAround value
+     * Checks if is wrap around.
      *
-     * @return warpAround
+     * @return true, if is wrap around
      */
-    public boolean isWarpAround() {
-        return warpAround;
+    public boolean isWrapAround() {
+        return wrapAround;
     }
 
     /**
-     * set warpAround value
+     * Sets the wrap around.
      *
-     * @param warpAround warpAround
+     * @param wrapAround the new wrap around
      */
-    public void setWarpAround(boolean warpAround) {
-        this.warpAround = warpAround;
+    public void setWrapAround(boolean wrapAround) {
+        this.wrapAround = wrapAround;
     }
 }

@@ -1,6 +1,6 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
-# 1.12.1
+# 1.13.0 2024-06-02
 
 1. Lang加入eachObj方法
 2. StringFormatter加入NotMatchStrategy用于处理占位符没有参数匹配的情况

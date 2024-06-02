@@ -148,7 +148,7 @@ public final class UUIDGenerator {
         LETTERS_MAP[NUMBER_SIXTY_TWO + 1] = '-';
     }
 
-    private static String hexTo64Letters(String hex) {
+    static String hexTo64Letters(String hex) {
         StringBuffer r = new StringBuffer();
         int index = 0;
         int[] buff = new int[NUMBER_THREE];
@@ -183,7 +183,7 @@ public final class UUIDGenerator {
         CHARS_MAP[last] = '|';
     }
 
-    private static String hexTo64CHARS(String hex) {
+    static String hexTo64CHARS(String hex) {
         StringBuffer r = new StringBuffer();
         int index = 0;
         int[] buff = new int[NUMBER_THREE];

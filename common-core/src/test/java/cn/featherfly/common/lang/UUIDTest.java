@@ -4,18 +4,19 @@ package cn.featherfly.common.lang;
 import java.math.BigInteger;
 import java.util.Date;
 
+import org.testng.annotations.Test;
+
 import cn.featherfly.common.lang.number.Radix;
 
 /**
- * <p>
- * UUIDTest
- * </p>
+ * UUIDTest.
  *
  * @author zhongj
  */
 public class UUIDTest {
 
-    public static void main(String[] args) {
+    @Test
+    public void uuid() {
         System.out.println(UUIDGenerator.generateUUID());
         System.out.println(UUIDGenerator.generateUUID32());
         System.out.println(UUIDGenerator.generateUUID36());
@@ -91,5 +92,28 @@ public class UUIDTest {
         System.out.println(i);
         System.out.println(Integer.toOctalString(i));
         System.out.println(Integer.toHexString(i));
+    }
+
+    @Test
+    public void uuidHex() {
+        for (int i = 0; i < 5; i++) {
+            System.out.println(UUIDHexGenerator.generateUUID());
+        }
+        for (int i = 0; i < 5; i++) {
+            System.out.println(UUIDHexGenerator.generateUUID32());
+        }
+        for (int i = 0; i < 5; i++) {
+            System.out.println(UUIDHexGenerator.generateUUID36());
+        }
+        for (int i = 0; i < 5; i++) {
+            System.out.println(UUIDHexGenerator.generateUUID22Letters());
+        }
+        for (int i = 0; i < 5; i++) {
+            System.out.println(UUIDHexGenerator.generateUUID22Chars());
+        }
+    }
+
+    public static void main(String[] args) {
+
     }
 }

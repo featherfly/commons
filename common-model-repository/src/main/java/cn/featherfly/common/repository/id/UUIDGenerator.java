@@ -11,6 +11,7 @@ package cn.featherfly.common.repository.id;
 import java.io.Serializable;
 
 import cn.featherfly.common.lang.UUIDGenerator.Type;
+import cn.featherfly.common.lang.UUIDHexGenerator;
 import cn.featherfly.common.repository.mapping.PropertyMapping;
 
 /**
@@ -43,7 +44,7 @@ public class UUIDGenerator implements IdGenerator {
      */
     @Override
     public <E> Serializable generate(E entity, PropertyMapping<?> idPropertyMapping) {
-        String uuid = cn.featherfly.common.lang.UUIDGenerator.generateUUID(type);
+        String uuid = UUIDHexGenerator.generateUUID(type);
         idPropertyMapping.getSetter().accept(entity, uuid);
         return uuid;
     }

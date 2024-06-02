@@ -1,4 +1,4 @@
-# 0.5.0 
+# 0.5.0 2024-06-02
 1. 加入tuple mapper相关的接口
 2. 加入query executor和paramed execution executor相关的接口
 3. PropertyMapping加入Property property属性用于直接访问映射对象属性的数据

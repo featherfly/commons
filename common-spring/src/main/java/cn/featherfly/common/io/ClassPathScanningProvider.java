@@ -41,6 +41,7 @@ public class ClassPathScanningProvider {
      * 创建一个类路径扫描器
      */
     public ClassPathScanningProvider() {
+        super();
     }
 
     /**
@@ -60,11 +61,11 @@ public class ClassPathScanningProvider {
      * @return 元数据集合
      */
     public Set<MetadataReader> findMetadata(String basePackage) {
-        LOGGER.debug("扫描basePackage: " + basePackage);
+        LOGGER.debug("扫描basePackage: {}", basePackage);
         Set<MetadataReader> metaSet = new LinkedHashSet<>();
         try {
             String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX
-                    + resolveBasePackage(basePackage) + "/" + resourcePattern;
+                + resolveBasePackage(basePackage) + "/" + resourcePattern;
             Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
             for (Resource resource : resources) {
                 MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
@@ -85,7 +86,9 @@ public class ClassPathScanningProvider {
     public Set<MetadataReader> findMetadata(String... basePackages) {
         Set<MetadataReader> metaSet = new LinkedHashSet<>();
         if (Lang.isNotEmpty(basePackages)) {
-            LOGGER.debug("扫描basePackages: " + ArrayUtils.toString(basePackages));
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("扫描basePackages: {}", ArrayUtils.toString(basePackages));
+            }
             for (String basePackage : basePackages) {
                 metaSet.addAll(findMetadata(basePackage));
             }
@@ -96,7 +99,7 @@ public class ClassPathScanningProvider {
     // 查找
     private String resolveBasePackage(String basePackage) {
         return org.springframework.util.ClassUtils.convertClassNameToResourcePath(
-                org.springframework.util.SystemPropertyUtils.resolvePlaceholders(basePackage));
+            org.springframework.util.SystemPropertyUtils.resolvePlaceholders(basePackage));
     }
 
     // ********************************************************************

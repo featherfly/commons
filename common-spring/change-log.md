@@ -1,3 +1,7 @@
+# 0.4.1 2024-06-04
+1. 修复错误的依赖版本
+2. 移除RestartClassLoaderClassDefiner类，SmartClassLoaderClassDefiner已经能够代替了
+
 # 0.4.0 2024-05-16
 
 1. 加入SmartClassLoaderClassDefiner

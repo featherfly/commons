@@ -9,11 +9,10 @@
 package cn.featherfly.common.repository;
 
 /**
- * execution executor.
+ * map params execution executor.
  *
  * @author zhongj
  * @param <E> the element type
  */
-public interface ExecutionExecutor<E> extends ArrayParamsExecutionExecutor<E>, MapParamsExecutionExecutor<E> {
-
+public interface MapParamsExecutionExecutorEx<E> extends MapParamsExecutionExecutor<E>, MapParamsQueryExecutorEx<E> {
 }

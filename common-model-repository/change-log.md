@@ -1,3 +1,6 @@
+# 0.5.1
+1. 
+
 # 0.5.0 2024-06-02
 1. 加入tuple mapper相关的接口
 2. 加入query executor和paramed execution executor相关的接口

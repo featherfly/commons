@@ -14,6 +14,6 @@ package cn.featherfly.common.repository;
  * @author zhongj
  * @param <E> the element type
  */
-public interface ExecutionExecutor<E> extends ArrayParamsExecutionExecutor<E>, MapParamsExecutionExecutor<E> {
-
+public interface ExecutionExecutorEx<E>
+    extends ExecutionExecutor<E>, ArrayParamsExecutionExecutorEx<E>, MapParamsExecutionExecutorEx<E> {
 }

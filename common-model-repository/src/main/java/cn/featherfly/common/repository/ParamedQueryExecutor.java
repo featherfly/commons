@@ -189,6 +189,14 @@ public interface ParamedQueryExecutor
     <V> V value(Class<V> valueType);
 
     /**
+     * query value.
+     *
+     * @param <V> the value type
+     * @return value
+     */
+    <V> V value();
+
+    /**
      * query number value.
      *
      * @param <N> the number type

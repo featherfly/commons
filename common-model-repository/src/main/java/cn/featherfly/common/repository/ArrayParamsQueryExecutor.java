@@ -69,6 +69,16 @@ public interface ArrayParamsQueryExecutor<E0> {
      *
      * @param <V> the value type
      * @param execution the execution
+     * @param params the params
+     * @return value
+     */
+    <V> V value(E0 execution, Serializable... params);
+
+    /**
+     * query value, use query str in template find with executeId.
+     *
+     * @param <V> the value type
+     * @param execution the execution
      * @param valueType the value type
      * @param params the params
      * @return value

@@ -1,3 +1,6 @@
+# 0.4.2 2024-06-07
+1. 修复没有移除RestartClassLoaderClassDefiner在Service loader里的定义
+
 # 0.4.1 2024-06-04
 1. 修复错误的依赖版本
 2. 移除RestartClassLoaderClassDefiner类，SmartClassLoaderClassDefiner已经能够代替了

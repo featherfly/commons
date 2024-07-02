@@ -1,3 +1,6 @@
+# 0.3.1 2024-07-02
+1. PropertyAccessorFactory加入cascade参数用于create进行级联创建
+
 # 0.3.0 2024-06-02
 1. 实现BytesClassLoader
 2. 实现InstantiatorFactor

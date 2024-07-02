@@ -42,10 +42,8 @@ import cn.featherfly.common.policy.AllowPolicy;
  *
  * @author zhongj
  */
-// ENHANCE 生成类的引用以ClassLoader未key,这样多个AsmPropertyAccessorFactory实例，只要是同一个classloader，就不会重复创建了
+// ENHANCE 生成类的引用以ClassLoader为key,这样多个AsmPropertyAccessorFactory实例，只要是同一个classloader，就不会重复创建了
 public class AsmPropertyAccessorFactory extends ReloadableClassloader implements PropertyAccessorFactory, Opcodes {
-
-    private final PropertyAccessorManagerImpl manager;
 
     /** The Constant CLASS_NAME_SUFFIX. */
     public static final String CLASS_NAME_SUFFIX = "PropertyVisitorCreateByFeatherfly";
@@ -79,6 +77,10 @@ public class AsmPropertyAccessorFactory extends ReloadableClassloader implements
 
     private final AsmPropertyFactory propertyFactory;
 
+    private final PropertyAccessorManagerImpl manager;
+
+    private final boolean cascade;
+
     private final AllowPolicy<java.lang.reflect.Type> propertyVisitorCascadeCreatePolicy;
 
     private static AllowDenyListPolicy<java.lang.reflect.Type> defaultPolicy() {
@@ -108,6 +110,16 @@ public class AsmPropertyAccessorFactory extends ReloadableClassloader implements
     }
 
     /**
+     * Instantiates a new asm instantiator factory.
+     *
+     * @param classLoader the class loader
+     * @param cascade the cascade
+     */
+    public AsmPropertyAccessorFactory(ClassLoader classLoader, boolean cascade) {
+        this(classLoader, defaultPolicy(), cascade);
+    }
+
+    /**
      * Instantiates a new instantiator factor.
      *
      * @param classLoader the class loader
@@ -122,15 +134,40 @@ public class AsmPropertyAccessorFactory extends ReloadableClassloader implements
      * Instantiates a new instantiator factor.
      *
      * @param classLoader the class loader
+     * @param unary the unary
+     * @param cascade the cascade
+     */
+    public AsmPropertyAccessorFactory(ClassLoader classLoader,
+        UnaryOperator<AllowDenyListPolicy<java.lang.reflect.Type>> unary, boolean cascade) {
+        this(classLoader, unary.apply(defaultPolicy()), cascade);
+    }
+
+    /**
+     * Instantiates a new instantiator factor.
+     *
+     * @param classLoader the class loader
      * @param propertyVisitorCascadeCreatePolicy the property visitor cascade create policy
      */
     public AsmPropertyAccessorFactory(ClassLoader classLoader,
         AllowPolicy<java.lang.reflect.Type> propertyVisitorCascadeCreatePolicy) {
+        this(classLoader, propertyVisitorCascadeCreatePolicy, true);
+    }
+
+    /**
+     * Instantiates a new instantiator factor.
+     *
+     * @param classLoader the class loader
+     * @param propertyVisitorCascadeCreatePolicy the property visitor cascade create policy
+     * @param cascade the cascade
+     */
+    public AsmPropertyAccessorFactory(ClassLoader classLoader,
+        AllowPolicy<java.lang.reflect.Type> propertyVisitorCascadeCreatePolicy, boolean cascade) {
         super();
         bytesClassLoader = new BytesClassLoader(classLoader);
         propertyFactory = new AsmPropertyFactory(bytesClassLoader);
 
         this.propertyVisitorCascadeCreatePolicy = propertyVisitorCascadeCreatePolicy;
+        this.cascade = cascade;
         manager = new PropertyAccessorManagerImpl();
     }
 
@@ -149,6 +186,9 @@ public class AsmPropertyAccessorFactory extends ReloadableClassloader implements
             Class<PropertyAccessor<T>> newType = create0(type, classLoader);
             propertyAccessor = ClassUtils.newInstance(newType);
             manager.add(type, propertyAccessor);
+            if (cascade) {
+                createPropertyAccessorRecursion(propertyAccessor, classLoader);
+            }
             return propertyAccessor;
         } catch (Exception e) {
             throw new AsmException(e);
@@ -157,6 +197,8 @@ public class AsmPropertyAccessorFactory extends ReloadableClassloader implements
 
     /**
      * Creates a new AsmPropertyAccessor object.
+     *
+     * @param classLoader the class loader
      */
     @Override
     public void createPropertyAccessorCascade(ClassLoader classLoader) {

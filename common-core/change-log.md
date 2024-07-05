@@ -1,5 +1,9 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
+# 1.13.1
+
+1. 加入Str类代替Strings
+
 # 1.13.0 2024-06-02
 
 1. Lang加入eachObj方法

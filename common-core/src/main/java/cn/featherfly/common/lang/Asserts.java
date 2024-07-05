@@ -15,8 +15,7 @@ import java.util.function.Supplier;
  */
 public final class Asserts {
 
-    private static final Assert<
-        IllegalArgumentException> ASSERT = new Assert<>((message) -> new IllegalArgumentException(message));
+    private static final Assert<IllegalArgumentException> ASSERT = new Assert<>(IllegalArgumentException::new);
 
     /**
      */

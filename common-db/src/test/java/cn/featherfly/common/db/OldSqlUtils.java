@@ -10,14 +10,13 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.speedment.common.tuple.MutableTuples;
-import com.speedment.common.tuple.mutable.MutableTuple1;
-
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.Execution;
 import cn.featherfly.common.repository.SimpleExecution;
+import cn.featherfly.common.tuple.MutableTuples;
+import cn.featherfly.common.tuple.mutable.MutableTuple1;
 
 /**
  * Sql的相关工具类.
@@ -31,7 +30,7 @@ public final class OldSqlUtils {
 
     /** The Constant SELECT_PATTERN. */
     private static final Pattern SELECT_PATTERN = Pattern.compile("((select )(distinct [\\w-_.]+)?,?.+)(from .+)",
-            Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+        Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
     //	private static final Pattern SELECT_PATTERN =
     //	        Pattern.compile("((select )(distinct [\\w-_.]+)?,?.+)(from +[\\w-_.]+(( as)? +[\\w-_.&&[^where]]+)?)( +where +[\\w-_.]+ ?\\W ?[\\w-_.]+)?( +order +by +[\\w-_.]+ (desc|asc))?.?"
@@ -86,11 +85,12 @@ public final class OldSqlUtils {
     /**
      * convert named param sql with {@link #PARAM_NAME_START_SYMBOL}.
      * <p>
-     * transfer <code>select * from user where name = :user</code> to <code>select * from user where name = ?</code>
+     * transfer <code>select * from user where name = :user</code> to
+     * <code>select * from user where name = ?</code>
      * <p>
      *
      * @param namedParamSql the named param sql
-     * @param params        the params
+     * @param params the params
      * @return the execution
      */
     public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params) {
@@ -101,8 +101,8 @@ public final class OldSqlUtils {
      * convert named param sql with startSymbol.
      *
      * @param namedParamSql the named param sql
-     * @param params        the params
-     * @param startSymbol   the start symbol
+     * @param params the params
+     * @param startSymbol the start symbol
      * @return the execution
      */
     public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol) {
@@ -113,22 +113,23 @@ public final class OldSqlUtils {
      * convert named param sql startSymbol and endSymbol.
      *
      * @param namedParamSql the named param sql
-     * @param params        the params
-     * @param startSymbol   the start symbol
-     * @param endSymbol     the end symbol
+     * @param params the params
+     * @param startSymbol the start symbol
+     * @param endSymbol the end symbol
      * @return the execution
      */
     public static Execution convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol,
-            Character endSymbol) {
+        Character endSymbol) {
         final MutableTuple1<Object[]> paramsTuple = MutableTuples.create1();
         return new SimpleExecution(convertNamedParamSql(namedParamSql, params, startSymbol, endSymbol,
-                paramArray -> paramsTuple.set0(paramArray), null), paramsTuple.get0().get());
+            paramArray -> paramsTuple.set0(paramArray), null), paramsTuple.get0().get());
     }
 
     /**
      * convert named param sql with {@link #PARAM_NAME_START_SYMBOL}.
      * <p>
-     * transfer <code>select * from user where name = :user</code> to <code>select * from user where name = ?</code>
+     * transfer <code>select * from user where name = :user</code> to
+     * <code>select * from user where name = ?</code>
      * <p>
      *
      * @param namedParamSql the named param sql
@@ -142,7 +143,7 @@ public final class OldSqlUtils {
      * convert named param sql with startSymbol argument.
      *
      * @param namedParamSql the named param sql
-     * @param startSymbol   the start symbol
+     * @param startSymbol the start symbol
      * @return NamedParamSql
      */
     public static OldNamedParamSql convertNamedParamSql(String namedParamSql, char startSymbol) {
@@ -153,21 +154,21 @@ public final class OldSqlUtils {
      * convert named param sql with startSymbol and endSymbol.
      *
      * @param namedParamSql the named param sql
-     * @param startSymbol   the start symbol
-     * @param endSymbol     the end symbol
+     * @param startSymbol the start symbol
+     * @param endSymbol the end symbol
      * @return NamedParamSql
      */
     public static OldNamedParamSql convertNamedParamSql(String namedParamSql, char startSymbol, Character endSymbol) {
-        final MutableTuple1<cn.featherfly.common.db.OldNamedParamSql.OldNamedParam[]> paramNamesTuple = MutableTuples
-                .create1();
+        final MutableTuple1<
+            cn.featherfly.common.db.OldNamedParamSql.OldNamedParam[]> paramNamesTuple = MutableTuples.create1();
         String sql = convertNamedParamSql(namedParamSql, null, startSymbol, endSymbol, null,
-                namedParamArray -> paramNamesTuple.set0(namedParamArray));
+            namedParamArray -> paramNamesTuple.set0(namedParamArray));
         return new OldNamedParamSql(sql, paramNamesTuple.get0().get());
     }
 
     private static String convertNamedParamSql(String namedParamSql, Map<String, Object> params, char startSymbol,
-            Character endSymbol, Consumer<Object[]> paramValuesConsumer,
-            Consumer<cn.featherfly.common.db.OldNamedParamSql.OldNamedParam[]> namedParamsConsumer) {
+        Character endSymbol, Consumer<Object[]> paramValuesConsumer,
+        Consumer<cn.featherfly.common.db.OldNamedParamSql.OldNamedParam[]> namedParamsConsumer) {
         AssertIllegalArgument.isNotNull(namedParamSql, "namedParamSql");
         AssertIllegalArgument.isNotEmpty(startSymbol, "startSymbol");
 
@@ -256,7 +257,7 @@ public final class OldSqlUtils {
         }
         if (namedParamsConsumer != null) {
             namedParamsConsumer
-                    .accept(nameList.toArray(new cn.featherfly.common.db.OldNamedParamSql.OldNamedParam[nameList.size()]));
+                .accept(nameList.toArray(new cn.featherfly.common.db.OldNamedParamSql.OldNamedParam[nameList.size()]));
         }
         return sql.toString();
     }
@@ -307,7 +308,7 @@ public final class OldSqlUtils {
 
     private static boolean isSqlWordSplitChar(char c) {
         return c == Chars.SPACE_CHAR || c == Chars.NEW_LINE_CHAR || c == Chars.COMMA_CHAR || c == Chars.PAREN_R_CHAR
-                || c == Chars.TAB_CHAR;
+            || c == Chars.TAB_CHAR;
         //                || c == ')'
     }
 
@@ -315,7 +316,7 @@ public final class OldSqlUtils {
      * Gets the named param.
      *
      * @param params the params
-     * @param name   the name
+     * @param name the name
      * @return the named param
      */
     static Object getNamedParam(Map<String, Object> params, String name) {

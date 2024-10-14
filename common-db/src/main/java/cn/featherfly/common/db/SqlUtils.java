@@ -22,9 +22,6 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.speedment.common.tuple.MutableTuples;
-import com.speedment.common.tuple.mutable.MutableTuple1;
-
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.NamedParamSql.NamedParam;
 import cn.featherfly.common.db.mapping.JdbcPropertyMapping;
@@ -34,6 +31,8 @@ import cn.featherfly.common.lang.CollectionUtils;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.Execution;
 import cn.featherfly.common.repository.SimpleExecution;
+import cn.featherfly.common.tuple.MutableTuples;
+import cn.featherfly.common.tuple.mutable.MutableTuple1;
 
 /**
  * Sql的相关工具类.

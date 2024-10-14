@@ -14,12 +14,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import com.speedment.common.tuple.Tuple2;
-import com.speedment.common.tuple.Tuples;
-
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.repository.Execution;
 import cn.featherfly.common.repository.SimpleExecution;
+import cn.featherfly.common.tuple.Tuple2;
+import cn.featherfly.common.tuple.Tuples;
 
 /**
  * NamedParamSql.

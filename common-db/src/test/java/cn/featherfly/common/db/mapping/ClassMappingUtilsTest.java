@@ -7,15 +7,14 @@ import java.util.Map;
 
 import org.testng.annotations.Test;
 
-import com.speedment.common.tuple.Tuple2;
-import com.speedment.common.tuple.Tuple3;
-
 import cn.featherfly.common.db.ClassMappingSupport;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.Dialects;
 import cn.featherfly.common.db.mapping.pojo.User;
 import cn.featherfly.common.db.mapping.pojo.UserRole;
 import cn.featherfly.common.lang.ArrayUtils;
+import cn.featherfly.common.tuple.Tuple2;
+import cn.featherfly.common.tuple.Tuple3;
 
 /**
  * ClassMappingUtilsTest.

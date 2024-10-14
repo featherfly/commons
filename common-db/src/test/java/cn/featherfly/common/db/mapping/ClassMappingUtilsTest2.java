@@ -8,8 +8,6 @@ import java.util.Map;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.speedment.common.tuple.Tuple2;
-
 import cn.featherfly.common.bean.AsmPropertyAccessorFactory;
 import cn.featherfly.common.db.JdbcTestBase;
 import cn.featherfly.common.db.mapping.pojo.UserInfo;
@@ -17,6 +15,7 @@ import cn.featherfly.common.db.mapping.pojo.UserInfo2;
 import cn.featherfly.common.db.mapping.pojo.UserRole2;
 import cn.featherfly.common.db.metadata.DatabaseMetadataManager;
 import cn.featherfly.common.repository.id.IdGeneratorManager;
+import cn.featherfly.common.tuple.Tuple2;
 
 /**
  * ClassMappingUtilsTest.

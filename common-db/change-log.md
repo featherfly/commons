@@ -1,3 +1,7 @@
+# 0.7.1
+
+1. 升級依賴common-model-repository
+
 # 0.7.0 2024-06-02
 
 1. 优化NamedParamSql逻辑，提升性能

@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import com.speedment.common.tuple.Tuple5;
+import cn.featherfly.common.tuple.Tuple5;
 
 /**
  * MulitiRowMapper5.

@@ -8,7 +8,7 @@
  */
 package cn.featherfly.common.repository.mapper;
 
-import com.speedment.common.tuple.Tuple;
+import cn.featherfly.common.tuple.Tuple;
 
 /**
  * MulitiQueryRowMapper.

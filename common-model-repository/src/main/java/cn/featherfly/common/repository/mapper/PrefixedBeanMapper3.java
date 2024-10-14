@@ -1,8 +1,7 @@
 package cn.featherfly.common.repository.mapper;
 
-import com.speedment.common.tuple.Tuple3;
-
 import cn.featherfly.common.repository.ParamedMappedExecutor;
+import cn.featherfly.common.tuple.Tuple3;
 
 /**
  * prefixed bean mapper3.
@@ -16,9 +15,9 @@ public interface PrefixedBeanMapper3<T1, T2, T3> extends ParamedMappedExecutor<T
     /**
      * Map.
      *
-     * @param <T4>   the generic type
+     * @param <T4> the generic type
      * @param prefix the prefix
-     * @param type   the type
+     * @param type the type
      * @return the prefix bean property mapper 4
      */
     <T4> PrefixedBeanMapper4<T1, T2, T3, T4> map(String prefix, Class<T4> type);

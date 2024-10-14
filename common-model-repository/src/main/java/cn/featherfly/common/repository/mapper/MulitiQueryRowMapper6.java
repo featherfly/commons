@@ -10,7 +10,7 @@ package cn.featherfly.common.repository.mapper;
 
 import java.util.List;
 
-import com.speedment.common.tuple.Tuple6;
+import cn.featherfly.common.tuple.Tuple6;
 
 /**
  * MulitiRowMapper6.

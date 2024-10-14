@@ -51,7 +51,7 @@ public class AssignGenerator implements IdGenerator {
      */
     @Override
     public <E> Serializable generate(E entity, PropertyMapping<?> idPropertyMapping) {
-        return (Serializable) idPropertyMapping.getGetter().apply(entity);
+        return idPropertyMapping.getGetter().apply(entity);
     }
 
     /**

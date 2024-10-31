@@ -3,6 +3,7 @@
 # 1.13.1
 
 1. 加入Str类代替Strings
+2. 加入ReflectionPropertyAccessorFactory
 
 # 1.13.0 2024-06-02
 

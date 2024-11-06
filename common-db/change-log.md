@@ -1,4 +1,4 @@
-# 0.7.1
+# 0.7.1 2024-11-06
 
 1. 升級依賴common-model-repository
 

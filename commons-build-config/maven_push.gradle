@@ -3,8 +3,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 def isReleaseBuild() {
-    return System.getProperty("snapshot") == null && System.getProperty("SNAPSHOT") == null
-            && getProperties().get("snapshot") == null && getProperties().get("SNAPSHOT") == null 
+    return System.getProperty("snapshot") == null && System.getProperty("SNAPSHOT") == null && getProperties().get("snapshot") == null && getProperties().get("SNAPSHOT") == null 
 }
 
 def getFinalVersion() {

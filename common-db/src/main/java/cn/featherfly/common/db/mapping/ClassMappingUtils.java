@@ -11,12 +11,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import cn.featherfly.common.bean.BeanUtils;
+import cn.featherfly.common.bean.Property;
+import cn.featherfly.common.bean.PropertyAccessor;
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.Table;
 import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.builder.ColumnModel;
 import cn.featherfly.common.db.builder.TableModel;
 import cn.featherfly.common.db.dialect.Dialect;
+import cn.featherfly.common.function.ThPredicate;
 import cn.featherfly.common.lang.CollectionUtils;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Strings;
@@ -25,6 +28,7 @@ import cn.featherfly.common.repository.mapping.ClassMapping;
 import cn.featherfly.common.repository.mapping.MappingFactory;
 import cn.featherfly.common.tuple.Tuple2;
 import cn.featherfly.common.tuple.Tuple3;
+import cn.featherfly.common.tuple.Tuple4;
 import cn.featherfly.common.tuple.Tuples;
 
 /**
@@ -752,6 +756,131 @@ public final class ClassMappingUtils {
     }
 
     /**
+     * Gets the update by primary key sql and parameter positions if parameter is not ignore.
+     *
+     * @param <T> the generic type
+     * @param entity the entity
+     * @param classMapping the class mapping
+     * @param dialect the dialect
+     * @param propertyIgnore the property ignore
+     * @param propertyAccessor the property accessor
+     * @return Tuple4
+     *         <ul>
+     *         <li>the merge sql
+     *         <li>parameter position array
+     *         <li>update set values count
+     *         <li>primary key property value is ignored
+     *         </ul>
+     */
+    public static <T> Tuple4<String, JdbcPropertyMapping[], Integer, Boolean> getUpdateSqlAndMappings(T entity,
+        JdbcClassMapping<T> classMapping, Dialect dialect, ThPredicate<Object, String, T> propertyIgnore,
+        PropertyAccessor<T> propertyAccessor) {
+        List<JdbcPropertyMapping> propertyPositions = new ArrayList<>();
+        List<JdbcPropertyMapping> pkms = new ArrayList<>();
+        List<JdbcPropertyMapping> setms = new ArrayList<>();
+
+        StringBuilder setSql = new StringBuilder();
+        boolean pkIgnore = false;
+        for (JdbcPropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
+            if (propertyMapping.getPropertyMappings().isEmpty()) {
+                // 如果为空忽略 ignore when null
+                if (ignoreProperty(entity, propertyMapping, propertyIgnore, propertyAccessor)) {
+                    pkIgnore = pkIgnore || propertyMapping.isPrimaryKey();
+                    continue;
+                }
+                if (propertyMapping.isPrimaryKey()) {
+                    pkms.add(propertyMapping);
+                } else if (propertyMapping.isUpdatable()) {
+                    setms.add(propertyMapping);
+                    add(propertyMapping, setSql, propertyPositions, dialect);
+                }
+            } else {
+                for (JdbcPropertyMapping subJdbcPropertyMapping : propertyMapping.getPropertyMappings()) {
+                    if (ignoreProperty(entity, propertyMapping, propertyIgnore, propertyAccessor)) {
+                        continue;
+                    }
+                    if (subJdbcPropertyMapping.isPrimaryKey()) {
+                        pkIgnore = pkIgnore || subJdbcPropertyMapping.isPrimaryKey();
+                        pkms.add(subJdbcPropertyMapping);
+                    } else if (propertyMapping.isUpdatable()) {
+                        setms.add(propertyMapping);
+                        add(subJdbcPropertyMapping, setSql, propertyPositions, dialect);
+                    }
+                }
+            }
+        }
+
+        StringBuilder updateSql = new StringBuilder();
+        updateSql.append(dialect.getKeywords().update()).append(Chars.SPACE)
+            .append(dialect.wrapName(classMapping.getRepositoryName()));
+        if (!propertyPositions.isEmpty()) {
+            updateSql.append(Chars.SPACE).append(dialect.getKeywords().set()).append(Chars.SPACE).append(setSql);
+            updateSql.deleteCharAt(updateSql.length() - 1);
+        }
+        // where 后面的主键条件
+        if (!pkms.isEmpty()) {
+            int pkNum = 0;
+            updateSql.append(Chars.SPACE).append(dialect.getKeywords().where()).append(Chars.SPACE);
+            for (JdbcPropertyMapping pm : pkms) {
+                if (pkNum > 0) {
+                    updateSql.append(dialect.getKeywords().and()).append(Chars.SPACE);
+                }
+                updateSql.append(dialect.wrapName(pm.getRepositoryFieldName())).append(" = ? ");
+                pkNum++;
+                propertyPositions.add(pm);
+            }
+        }
+        return Tuples.of(updateSql.toString().trim(),
+            propertyPositions.toArray(new JdbcPropertyMapping[propertyPositions.size()]), setms.size(), pkIgnore);
+    }
+
+    /**
+     * Gets the merge sql and param positions.
+     *
+     * @param <T> the generic type
+     * @param entity the entity
+     * @param classMapping the class mapping
+     * @param propertyIgnore the property ignore
+     * @param dialect the dialect
+     * @param propertyAccessor the property accessor
+     * @return Tuple4
+     *         <ul>
+     *         <li>the merge sql
+     *         <li>parameter position array
+     *         <li>update set values count
+     *         <li>primary key property value is ignored
+     *         </ul>
+     */
+    public static <T> Tuple4<String, JdbcPropertyMapping[], Integer, Boolean> getMergeSqlAndMappings(T entity,
+        JdbcClassMapping<T> classMapping, ThPredicate<Object, String, T> propertyIgnore, Dialect dialect,
+        PropertyAccessor<T> propertyAccessor) {
+        return getUpdateSqlAndMappings(entity, classMapping, dialect, propertyIgnore, propertyAccessor);
+    }
+
+    /**
+     * Gets the merge sql and param positions.
+     *
+     * @param <T> the generic type
+     * @param entity the entity
+     * @param classMapping the class mapping
+     * @param onlyNull ignore set value null or empty(String,Array,Collection)
+     * @param dialect the dialect
+     * @param propertyAccessor the property accessor
+     * @return Tuple4
+     *         <ul>
+     *         <li>the merge sql
+     *         <li>parameter position array
+     *         <li>update set values count
+     *         <li>primary key property value is ignored
+     *         </ul>
+     */
+    public static <T> Tuple4<String, JdbcPropertyMapping[], Integer, Boolean> getMergeSqlAndMappings(T entity,
+        JdbcClassMapping<T> classMapping, boolean onlyNull, Dialect dialect, PropertyAccessor<T> propertyAccessor) {
+        return getUpdateSqlAndMappings(entity, classMapping, dialect,
+            (value, name, property) -> onlyNull ? value == null : Lang.isEmpty(value), propertyAccessor);
+    }
+
+    /**
      * Gets the merge sql and param positions.
      *
      * @param <T> the generic type
@@ -759,8 +888,15 @@ public final class ClassMappingUtils {
      * @param classMapping the class mapping
      * @param onlyNull the only null
      * @param dialect the dialect
-     * @return the merge sql and param positions and set value number
+     * @return Tuple3
+     *         <ul>
+     *         <li>the merge sql
+     *         <li>parameter position array
+     *         <li>update set values count
+     *         </ul>
+     * @deprecated {@link #getMergeSqlAndMappings(Object, JdbcClassMapping, boolean, Dialect, PropertyAccessor)}
      */
+    @Deprecated
     public static <T> Tuple3<String, JdbcPropertyMapping[], Integer> getMergeSqlAndMappings(T entity,
         JdbcClassMapping<?> classMapping, boolean onlyNull, Dialect dialect) {
         List<JdbcPropertyMapping> propertyPositions = new ArrayList<>();
@@ -923,12 +1059,21 @@ public final class ClassMappingUtils {
         }
     }
 
-    //    private static <T> boolean ignoreProperty(T entity, JdbcPropertyMapping propertyMapping,
-    //        BiPredicate<PropertyMapping<?>, Object> ignoreStrategy) {
-    //        String pn = getPropertyAliasName(propertyMapping);
-    //        Object value = BeanUtils.getProperty(entity, pn);
-    //        return ignoreStrategy.test(propertyMapping, value);
-    //    }
+    /**
+     * Check null or empty.
+     *
+     * @param <T> the generic type
+     * @param entity the entity
+     * @param propertyMapping the property mapping
+     * @param onlyNull the only null
+     * @return true, if successful
+     */
+    private static <T> boolean ignoreProperty(T entity, JdbcPropertyMapping propertyMapping,
+        ThPredicate<Object, String, T> propertyIgnore, PropertyAccessor<T> propertyAccessor) {
+        String pn = getPropertyAliasName(propertyMapping);
+        Property<T, Object> property = propertyAccessor.getProperty(pn);
+        return propertyIgnore.test(property.get(entity), pn, entity);
+    }
 
     /**
      * Gets the select by id sql.
@@ -996,7 +1141,6 @@ public final class ClassMappingUtils {
             throw new JdbcMappingException("#table.pk.not.exists", new Object[] { classMapping.getRepositoryName() });
         }
         BuilderUtils.link(getSql, dialect.getKeywords().where(), condition.toString());
-        //        getSql.append(Chars.SPACE).append(dialect.getKeywords().where()).append(Chars.SPACE).append(condition);
         return getSql.toString();
     }
 
@@ -1173,8 +1317,7 @@ public final class ClassMappingUtils {
         StringBuilder selectSql = new StringBuilder();
         for (JdbcPropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
             if (Lang.isEmpty(propertyMapping.getPropertyMappings())) {
-                selectSql.append(
-                    getSelectColumnsSql(classMapping, tableAlias, propertyMapping, prefixPropertyName, dialect));
+                selectSql.append(getSelectColumnsSql(tableAlias, propertyMapping, prefixPropertyName, dialect));
                 jdbcPropertyMappings.add(propertyMapping);
             } else {
                 boolean fetchAble = false;
@@ -1192,19 +1335,16 @@ public final class ClassMappingUtils {
                     ClassMapping<?,
                         JdbcPropertyMapping> pcm = mappingFactory.getClassMapping(propertyMapping.getPropertyType());
                     for (JdbcPropertyMapping pm : pcm.getPropertyMappings()) {
-                        selectSql.append(
-                            getSelectColumnsSql(classMapping, fetchPropertyTableAlia, pm, propertyMapping, dialect));
+                        selectSql.append(getSelectColumnsSql(fetchPropertyTableAlia, pm, propertyMapping, dialect));
                         jdbcPropertyMappings.add(pm);
                     }
 
                 } else {
                     for (JdbcPropertyMapping pm : propertyMapping.getPropertyMappings()) {
-                        selectSql
-                            .append(getSelectColumnsSql(classMapping, tableAlias, pm, prefixPropertyName, dialect));
+                        selectSql.append(getSelectColumnsSql(tableAlias, pm, prefixPropertyName, dialect));
                         jdbcPropertyMappings.add(pm);
                     }
                 }
-                fetchAble = false;
             }
         }
         if (!jdbcPropertyMappings.isEmpty()) {
@@ -1273,8 +1413,7 @@ public final class ClassMappingUtils {
         StringBuilder selectSql = new StringBuilder();
         for (JdbcPropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
             if (Lang.isEmpty(propertyMapping.getPropertyMappings())) {
-                selectSql.append(
-                    getSelectColumnsSql(classMapping, tableAlias, propertyMapping, prefixPropertyName, dialect));
+                selectSql.append(getSelectColumnsSql(tableAlias, propertyMapping, prefixPropertyName, dialect));
                 columnNum++;
             } else {
                 boolean fetchAble = false;
@@ -1292,19 +1431,15 @@ public final class ClassMappingUtils {
                     ClassMapping<?,
                         JdbcPropertyMapping> pcm = mappingFactory.getClassMapping(propertyMapping.getPropertyType());
                     for (JdbcPropertyMapping pm : pcm.getPropertyMappings()) {
-                        selectSql.append(
-                            getSelectColumnsSql(classMapping, fetchPropertyTableAlia, pm, propertyMapping, dialect));
+                        selectSql.append(getSelectColumnsSql(fetchPropertyTableAlia, pm, propertyMapping, dialect));
                         columnNum++;
                     }
-
                 } else {
                     for (JdbcPropertyMapping pm : propertyMapping.getPropertyMappings()) {
-                        selectSql
-                            .append(getSelectColumnsSql(classMapping, tableAlias, pm, prefixPropertyName, dialect));
+                        selectSql.append(getSelectColumnsSql(tableAlias, pm, prefixPropertyName, dialect));
                         columnNum++;
                     }
                 }
-                fetchAble = false;
             }
         }
         if (columnNum > 0) {
@@ -1316,15 +1451,14 @@ public final class ClassMappingUtils {
     /**
      * Gets the select columns sql.
      *
-     * @param classMapping the class mapping
      * @param tableAlias the table alias
      * @param propertyMapping the property mapping
      * @param prefixPropertyName the prefix property name
      * @param dialect the dialect
      * @return the select columns sql
      */
-    private static String getSelectColumnsSql(JdbcClassMapping<?> classMapping, String tableAlias,
-        JdbcPropertyMapping propertyMapping, String prefixPropertyName, Dialect dialect) {
+    private static String getSelectColumnsSql(String tableAlias, JdbcPropertyMapping propertyMapping,
+        String prefixPropertyName, Dialect dialect) {
         StringBuilder selectSql = new StringBuilder();
         if (Strings.isNotBlank(tableAlias)) {
             selectSql.append(tableAlias).append(Chars.DOT);
@@ -1338,15 +1472,14 @@ public final class ClassMappingUtils {
     /**
      * Gets the select columns sql.
      *
-     * @param classMapping the class mapping
      * @param tableAlias the table alias
      * @param propertyMapping the property mapping
      * @param nestedJdbcPropertyMapping the nested property mapping
      * @param dialect the dialect
      * @return the select columns sql
      */
-    private static String getSelectColumnsSql(JdbcClassMapping<?> classMapping, String tableAlias,
-        JdbcPropertyMapping propertyMapping, JdbcPropertyMapping nestedJdbcPropertyMapping, Dialect dialect) {
+    private static String getSelectColumnsSql(String tableAlias, JdbcPropertyMapping propertyMapping,
+        JdbcPropertyMapping nestedJdbcPropertyMapping, Dialect dialect) {
         StringBuilder selectSql = new StringBuilder();
         if (Strings.isNotBlank(tableAlias)) {
             selectSql.append(tableAlias).append(Chars.DOT);
@@ -1515,8 +1648,7 @@ public final class ClassMappingUtils {
      * @return the simple mapping
      */
     private static JdbcPropertyMapping getSimpleMapping(String name, JdbcClassMapping<?> classMapping) {
-        JdbcPropertyMapping pm = classMapping.getPropertyMapping(name);
-        return pm;
+        return classMapping.getPropertyMapping(name);
     }
 
     /**

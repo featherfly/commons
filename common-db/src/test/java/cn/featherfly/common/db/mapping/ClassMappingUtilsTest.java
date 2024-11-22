@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.testng.annotations.Test;
 
+import cn.featherfly.common.bean.BeanDescriptor;
 import cn.featherfly.common.db.ClassMappingSupport;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.Dialects;
@@ -15,6 +16,7 @@ import cn.featherfly.common.db.mapping.pojo.UserRole;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.tuple.Tuple2;
 import cn.featherfly.common.tuple.Tuple3;
+import cn.featherfly.common.tuple.Tuple4;
 
 /**
  * ClassMappingUtilsTest.
@@ -104,22 +106,6 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
 
     @Test
     void testUpdate() {
-        Tuple2<String, Map<Integer, JdbcPropertyMapping>> t = ClassMappingUtils
-            .getUpdateSqlAndParamPositions(getUserClassMapping(mysqlDialect), mysqlDialect);
-        System.out.println(t.get0());
-        System.out.println(t.get1());
-
-        assertEquals(t.get0(), "UPDATE `user` SET `name` = ?, `descp` = ?, `password` = ? WHERE `id` = ?");
-
-        t = ClassMappingUtils.getUpdateSqlAndParamPositions(getUserRoleClassMapping(), mysqlDialect);
-        System.out.println(t.get0());
-        System.out.println(t.get1());
-        assertEquals(t.get0(),
-            "UPDATE `user_role` SET `descp` = ?, `descp2` = ? WHERE `user_id` = ? AND `role_id` = ?");
-    }
-
-    @Test
-    void testUpdate2() {
         Tuple2<String, JdbcPropertyMapping[]> t = ClassMappingUtils
             .getUpdateSqlAndMappings(getUserClassMapping(mysqlDialect), mysqlDialect);
         System.out.println(t.get0());
@@ -133,6 +119,22 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
         System.out.println(t.get0());
         System.out.println(t.get1());
         assertEquals(t.get1()[0].getRepositoryFieldName(), "descp");
+        assertEquals(t.get0(),
+            "UPDATE `user_role` SET `descp` = ?, `descp2` = ? WHERE `user_id` = ? AND `role_id` = ?");
+    }
+
+    @Test
+    void testUpdate_deprecated() {
+        Tuple2<String, Map<Integer, JdbcPropertyMapping>> t = ClassMappingUtils
+            .getUpdateSqlAndParamPositions(getUserClassMapping(mysqlDialect), mysqlDialect);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get0(), "UPDATE `user` SET `name` = ?, `descp` = ?, `password` = ? WHERE `id` = ?");
+
+        t = ClassMappingUtils.getUpdateSqlAndParamPositions(getUserRoleClassMapping(), mysqlDialect);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
         assertEquals(t.get0(),
             "UPDATE `user_role` SET `descp` = ?, `descp2` = ? WHERE `user_id` = ? AND `role_id` = ?");
     }
@@ -191,53 +193,7 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
     }
 
     @Test
-    void testMerge() {
-        User user = new User();
-        user.setId(12L);
-        user.setName("yufei");
-        Tuple3<String, Map<Integer, JdbcPropertyMapping>, Integer> t = ClassMappingUtils
-            .getMergeSqlAndParamPositions(user, getUserClassMapping(mysqlDialect), false, mysqlDialect);
-        System.out.println(t.get0());
-        System.out.println(t.get1());
-
-        assertEquals(t.get0(), "UPDATE `user` SET `name` = ? WHERE `id` = ?");
-
-        user.setDescp("descp");
-        t = ClassMappingUtils.getMergeSqlAndParamPositions(user, getUserClassMapping(mysqlDialect), true, mysqlDialect);
-        System.out.println(t.get0());
-        System.out.println(t.get1());
-
-        assertEquals(t.get0(), "UPDATE `user` SET `name` = ?, `descp` = ? WHERE `id` = ?");
-        UserRole ur = new UserRole();
-        ur.setUserId(1);
-        ur.setRoleId(1);
-        ur.setDescp("d");
-        t = ClassMappingUtils.getMergeSqlAndParamPositions(ur, getUserRoleClassMapping(), true, mysqlDialect);
-        System.out.println(t.get0());
-        System.out.println(t.get1());
-
-        assertEquals(t.get0(), "UPDATE `user_role` SET `descp` = ? WHERE `user_id` = ? AND `role_id` = ?");
-
-        ur.setDescp(null);
-        ur.setDescp2("d2");
-        t = ClassMappingUtils.getMergeSqlAndParamPositions(ur, getUserRoleClassMapping(), true, mysqlDialect);
-        System.out.println(t.get0());
-        System.out.println(t.get1());
-
-        assertEquals(t.get0(), "UPDATE `user_role` SET `descp2` = ? WHERE `user_id` = ? AND `role_id` = ?");
-
-        ur.setDescp("d");
-        ur.setDescp2("d2");
-        t = ClassMappingUtils.getMergeSqlAndParamPositions(ur, getUserRoleClassMapping(), true, mysqlDialect);
-        System.out.println(t.get0());
-        System.out.println(t.get1());
-
-        assertEquals(t.get0(),
-            "UPDATE `user_role` SET `descp` = ?, `descp2` = ? WHERE `user_id` = ? AND `role_id` = ?");
-    }
-
-    @Test
-    void testMerge2() {
+    void testMerge_deprecated() {
         User user = new User();
         user.setId(12L);
         user.setName("yufei");
@@ -283,7 +239,66 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
     }
 
     @Test
-    void testMergeNoColumnChange() {
+    void testMerge2_deprecated() {
+        User user = new User();
+        user.setId(12L);
+        user.setName("yufei");
+        Tuple3<String, Map<Integer, JdbcPropertyMapping>, Integer> t = ClassMappingUtils
+            .getMergeSqlAndParamPositions(user, getUserClassMapping(mysqlDialect), false, mysqlDialect);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get0(), "UPDATE `user` SET `name` = ? WHERE `id` = ?");
+
+        user.setDescp("descp");
+        t = ClassMappingUtils.getMergeSqlAndParamPositions(user, getUserClassMapping(mysqlDialect), true, mysqlDialect);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get0(), "UPDATE `user` SET `name` = ?, `descp` = ? WHERE `id` = ?");
+        UserRole ur = new UserRole();
+        ur.setUserId(1);
+        ur.setRoleId(1);
+        ur.setDescp("d");
+        t = ClassMappingUtils.getMergeSqlAndParamPositions(ur, getUserRoleClassMapping(), true, mysqlDialect);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get0(), "UPDATE `user_role` SET `descp` = ? WHERE `user_id` = ? AND `role_id` = ?");
+
+        ur.setDescp(null);
+        ur.setDescp2("d2");
+        t = ClassMappingUtils.getMergeSqlAndParamPositions(ur, getUserRoleClassMapping(), true, mysqlDialect);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get0(), "UPDATE `user_role` SET `descp2` = ? WHERE `user_id` = ? AND `role_id` = ?");
+
+        ur.setDescp("d");
+        ur.setDescp2("d2");
+        t = ClassMappingUtils.getMergeSqlAndParamPositions(ur, getUserRoleClassMapping(), true, mysqlDialect);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get0(),
+            "UPDATE `user_role` SET `descp` = ?, `descp2` = ? WHERE `user_id` = ? AND `role_id` = ?");
+    }
+
+    @Test
+    void testMergeNoColumnChange_deprecated() {
+        User user = new User();
+        user.setId(12L);
+        Tuple3<String, JdbcPropertyMapping[], Integer> t = ClassMappingUtils.getMergeSqlAndMappings(user,
+            getUserClassMapping(mysqlDialect), false, mysqlDialect);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get2(), new Integer(0));
+        assertEquals(t.get0(), "UPDATE `user` WHERE `id` = ?");
+    }
+
+    @Test
+    void testMergeNoColumnChange2_deprecated() {
         User user = new User();
         user.setId(12L);
         Tuple3<String, Map<Integer, JdbcPropertyMapping>, Integer> t = ClassMappingUtils
@@ -296,16 +311,85 @@ public class ClassMappingUtilsTest implements ClassMappingSupport {
     }
 
     @Test
-    void testMergeNoColumnChange2() {
+    void testMerge() {
+        BeanDescriptor<User> userDescriptor = BeanDescriptor.getBeanDescriptor(User.class);
         User user = new User();
         user.setId(12L);
-        Tuple3<String, JdbcPropertyMapping[], Integer> t = ClassMappingUtils.getMergeSqlAndMappings(user,
-            getUserClassMapping(mysqlDialect), false, mysqlDialect);
+        user.setName("yufei");
+
+        Tuple4<String, JdbcPropertyMapping[], Integer, Boolean> t = ClassMappingUtils.getMergeSqlAndMappings(user,
+            getUserClassMapping(mysqlDialect), false, mysqlDialect, userDescriptor);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get0(), "UPDATE `user` SET `name` = ? WHERE `id` = ?");
+
+        user.setDescp("descp");
+        t = ClassMappingUtils.getMergeSqlAndMappings(user, getUserClassMapping(mysqlDialect), true, mysqlDialect,
+            userDescriptor);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get0(), "UPDATE `user` SET `name` = ?, `descp` = ? WHERE `id` = ?");
+
+        BeanDescriptor<UserRole> userRoleDescriptor = BeanDescriptor.getBeanDescriptor(UserRole.class);
+        UserRole ur = new UserRole();
+        ur.setUserId(1);
+        ur.setRoleId(1);
+        ur.setDescp("d");
+        t = ClassMappingUtils.getMergeSqlAndMappings(ur, getUserRoleClassMapping(), true, mysqlDialect,
+            userRoleDescriptor);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get0(), "UPDATE `user_role` SET `descp` = ? WHERE `user_id` = ? AND `role_id` = ?");
+
+        ur.setDescp(null);
+        ur.setDescp2("d2");
+        t = ClassMappingUtils.getMergeSqlAndMappings(ur, getUserRoleClassMapping(), true, mysqlDialect,
+            userRoleDescriptor);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get0(), "UPDATE `user_role` SET `descp2` = ? WHERE `user_id` = ? AND `role_id` = ?");
+
+        ur.setDescp("d");
+        ur.setDescp2("d2");
+        t = ClassMappingUtils.getMergeSqlAndMappings(ur, getUserRoleClassMapping(), true, mysqlDialect,
+            userRoleDescriptor);
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get0(),
+            "UPDATE `user_role` SET `descp` = ?, `descp2` = ? WHERE `user_id` = ? AND `role_id` = ?");
+    }
+
+    @Test
+    void testMergeNoColumnChange() {
+        User user = new User();
+        user.setId(12L);
+        Tuple4<String, JdbcPropertyMapping[], Integer, Boolean> t = ClassMappingUtils.getMergeSqlAndMappings(user,
+            getUserClassMapping(mysqlDialect), false, mysqlDialect, BeanDescriptor.getBeanDescriptor(User.class));
         System.out.println(t.get0());
         System.out.println(t.get1());
 
         assertEquals(t.get2(), new Integer(0));
         assertEquals(t.get0(), "UPDATE `user` WHERE `id` = ?");
+    }
+
+    @Test
+    void testMergeNullPk() {
+        User user = new User();
+        user.setName("yufei");
+        Tuple4<String, JdbcPropertyMapping[], Integer, Boolean> t = ClassMappingUtils.getMergeSqlAndMappings(user,
+            getUserClassMapping(mysqlDialect), false, mysqlDialect, BeanDescriptor.getBeanDescriptor(User.class));
+        System.out.println(t.get0());
+        System.out.println(t.get1());
+
+        assertEquals(t.get2(), new Integer(1));
+        assertEquals(t.get0(), "UPDATE `user` SET `name` = ?");
+
+        assertEquals(t.get3(), Boolean.TRUE);
     }
 
     @Test

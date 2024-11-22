@@ -1,3 +1,6 @@
+# 0.2.0 2024-11-22
+1. 加入3-9参数Predicate接口
+
 # 0.1.0 2024-05-07
 1. 加入3-9参数Function，Consumer接口
 2. 加入ArraySupplier<E>、ListSupplier<E>、SetSupplier<E>、QueueSupplier<E>、MapSupplier<K, V>等各种容器supplier

@@ -30,6 +30,7 @@ public class EmployeeAccessorTest extends TestBase {
     EmployeeAccessorSwitch2 evSwitch2 = new EmployeeAccessorSwitch2();
     EmployeeAccessorSwitchDirect evSwitchDirect = EmployeeAccessorSwitchDirect.INSTANCE;
     EmployeeAccessorSwitchDirect2 evSwitchDirect2 = new EmployeeAccessorSwitchDirect2();
+    EmployeeAccessorSwitchDirect3 evSwitchDirect3 = new EmployeeAccessorSwitchDirect3();
     PropertyAccessor<Employee> pae;
 
     Employee e = new Employee();
@@ -179,6 +180,32 @@ public class EmployeeAccessorTest extends TestBase {
         }
     }
 
+    @Test(groups = "setEmployee", dependsOnMethods = "setAccessorByName")
+    public void setAccessorByNameWithSwitch() {
+        for (int i = 0; i < total; i++) {
+            evSwitchDirect3.setPropertyValue(e, "id", Long.valueOf(i));
+            evSwitchDirect3.setPropertyValue(e, "name", "name_");
+            evSwitchDirect3.setPropertyValue(e, "birthDate", date);
+            evSwitchDirect3.setPropertyValue(e, "gender", "MALE");
+            evSwitchDirect3.setPropertyValue(e, "departmentId", i);
+            evSwitchDirect3.setPropertyValue(e, "organId", i);
+            evSwitchDirect3.setPropertyValue(e, "identityCard", "idCard_");
+            evSwitchDirect3.setPropertyValue(e, "mobile", "mobile_");
+            evSwitchDirect3.setPropertyValue(e, "email", "email_");
+            evSwitchDirect3.setPropertyValue(e, "fax", "fax_");
+            evSwitchDirect3.setPropertyValue(e, "remark0", "remark0_");
+            evSwitchDirect3.setPropertyValue(e, "remark1", "remark1_");
+            evSwitchDirect3.setPropertyValue(e, "remark2", "remark2_");
+            evSwitchDirect3.setPropertyValue(e, "remark3", "remark3_");
+            evSwitchDirect3.setPropertyValue(e, "remark4", "remark4_");
+            evSwitchDirect3.setPropertyValue(e, "remark5", "remark5_");
+            evSwitchDirect3.setPropertyValue(e, "remark6", "remark6_");
+            evSwitchDirect3.setPropertyValue(e, "remark7", "remark7_");
+            evSwitchDirect3.setPropertyValue(e, "remark8", "remark8_");
+            evSwitchDirect3.setPropertyValue(e, "remark9", "remark9_");
+        }
+    }
+
     @Test(priority = 20, dependsOnGroups = "setEmployee")
     public void getAccessorByName() {
         for (int i = 0; i < total; i++) {
@@ -202,6 +229,32 @@ public class EmployeeAccessorTest extends TestBase {
             ev.getPropertyValue(e, "remark7");
             ev.getPropertyValue(e, "remark8");
             ev.getPropertyValue(e, "remark9");
+        }
+    }
+
+    @Test(priority = 20, dependsOnGroups = "setEmployee")
+    public void getAccessorByNameWithSwitch() {
+        for (int i = 0; i < total; i++) {
+            evSwitchDirect3.getPropertyValue(e, "id");
+            evSwitchDirect3.getPropertyValue(e, "name");
+            evSwitchDirect3.getPropertyValue(e, "birthDate");
+            evSwitchDirect3.getPropertyValue(e, "gender");
+            evSwitchDirect3.getPropertyValue(e, "departmentId");
+            evSwitchDirect3.getPropertyValue(e, "organId");
+            evSwitchDirect3.getPropertyValue(e, "identityCard");
+            evSwitchDirect3.getPropertyValue(e, "mobile");
+            evSwitchDirect3.getPropertyValue(e, "email");
+            evSwitchDirect3.getPropertyValue(e, "fax");
+            evSwitchDirect3.getPropertyValue(e, "remark0");
+            evSwitchDirect3.getPropertyValue(e, "remark1");
+            evSwitchDirect3.getPropertyValue(e, "remark2");
+            evSwitchDirect3.getPropertyValue(e, "remark3");
+            evSwitchDirect3.getPropertyValue(e, "remark4");
+            evSwitchDirect3.getPropertyValue(e, "remark5");
+            evSwitchDirect3.getPropertyValue(e, "remark6");
+            evSwitchDirect3.getPropertyValue(e, "remark7");
+            evSwitchDirect3.getPropertyValue(e, "remark8");
+            evSwitchDirect3.getPropertyValue(e, "remark9");
         }
     }
 

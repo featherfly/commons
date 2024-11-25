@@ -44,4 +44,9 @@ public class Teacher {
         this.user = user;
     }
 
+    public static void main(String[] args) {
+        System.out.println("id".hashCode());
+        System.out.println("no".hashCode());
+        System.out.println("user".hashCode());
+    }
 }

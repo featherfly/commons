@@ -1,3 +1,6 @@
+# 0.3.2 2024-11-25
+1. AsmPropertyAccessorFactory创建的PropetyAccessor，根据name（字符串）查找的方法实现更改为switch实现（同index[int]查找逻辑一致）
+
 # 0.3.1 2024-07-02
 1. PropertyAccessorFactory加入cascade参数用于create进行级联创建
 

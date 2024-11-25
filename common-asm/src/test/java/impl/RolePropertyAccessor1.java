@@ -1,15 +1,10 @@
 package impl;
 
-import java.util.LinkedHashMap;
-
 import cn.featherfly.common.bean.AbstractPropertyAccessor;
 import cn.featherfly.common.bean.NoSuchPropertyException;
 import cn.featherfly.common.bean.Property;
 
 public class RolePropertyAccessor1 extends AbstractPropertyAccessor<Role> {
-
-    @SuppressWarnings("rawtypes")
-    private final LinkedHashMap<String, Property> propertyMap;
 
     private final RolePropertyAccessor1IdProperty id;
 
@@ -21,26 +16,29 @@ public class RolePropertyAccessor1 extends AbstractPropertyAccessor<Role> {
 
     private final RolePropertyAccessor1AvailableProperty available;
 
+    private final Property<Role, ?>[] properties;
+
     /**
      */
+    @SuppressWarnings("unchecked")
     public RolePropertyAccessor1() {
 
-        propertyMap = new LinkedHashMap<>();
+        properties = new Property[5];
 
         id = new RolePropertyAccessor1IdProperty(null);
-        propertyMap.put("id", id);
+        properties[0] = id;
 
         name = new RolePropertyAccessor1NameProperty(null);
-        propertyMap.put("name", name);
+        properties[1] = name;
 
         group = new RolePropertyAccessor1GroupProperty(null);
-        propertyMap.put("group", group);
+        properties[2] = group;
 
         age = new RolePropertyAccessor1AgeProperty(null);
-        propertyMap.put("age", age);
+        properties[3] = age;
 
         available = new RolePropertyAccessor1AvailableProperty(null);
-        propertyMap.put("available", available);
+        properties[4] = available;
     }
 
     /**
@@ -60,12 +58,7 @@ public class RolePropertyAccessor1 extends AbstractPropertyAccessor<Role> {
             case 4:
                 return obj.isAvailable();
             default:
-                //                int i = index;
-                //                Class<Role> type = Role.class;
-                //                throw new NoSuchPropertyException(type, i);
                 throw new NoSuchPropertyException(Role.class, index);
-            //                            return noSuchProperty(obj.getClass(), index);
-            //                return null;
         }
     }
 
@@ -96,7 +89,20 @@ public class RolePropertyAccessor1 extends AbstractPropertyAccessor<Role> {
      */
     @Override
     public Object getPropertyValue(Role bean, String name) {
-        return getProperty(name).get(bean);
+        switch (name) {
+            case "id":
+                return id.get(bean);
+            case "name":
+                return this.name.get(bean);
+            case "group":
+                return group.get(bean);
+            case "age":
+                return age.get(bean);
+            case "available":
+                return available.get(bean);
+            default:
+                throw new NoSuchPropertyException(Role.class, name);
+        }
     }
 
     /**
@@ -105,11 +111,20 @@ public class RolePropertyAccessor1 extends AbstractPropertyAccessor<Role> {
     @SuppressWarnings("unchecked")
     @Override
     public <V> Property<Role, V> getProperty(String name) {
-        Property<Role, V> property = propertyMap.get(name);
-        if (property == null) {
-            throw new NoSuchPropertyException(Role.class, name);
+        switch (name) {
+            case "id":
+                return (Property<Role, V>) id;
+            case "name":
+                return (Property<Role, V>) this.name;
+            case "group":
+                return (Property<Role, V>) group;
+            case "age":
+                return (Property<Role, V>) age;
+            case "available":
+                return (Property<Role, V>) available;
+            default:
+                throw new NoSuchPropertyException(Role.class, name);
         }
-        return property;
     }
 
     /**
@@ -164,9 +179,8 @@ public class RolePropertyAccessor1 extends AbstractPropertyAccessor<Role> {
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
     @Override
     public Property<Role, ?>[] getProperties() {
-        return propertyMap.values().toArray(new Property[propertyMap.size()]);
+        return properties.clone();
     }
 }

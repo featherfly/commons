@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import cn.featherfly.common.bean.BeanUtils;
-import cn.featherfly.common.bean.Property;
 import cn.featherfly.common.bean.PropertyAccessor;
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.Table;
@@ -796,7 +795,7 @@ public final class ClassMappingUtils {
                 }
             } else {
                 for (JdbcPropertyMapping subJdbcPropertyMapping : propertyMapping.getPropertyMappings()) {
-                    if (ignoreProperty(entity, propertyMapping, propertyIgnore, propertyAccessor)) {
+                    if (ignoreProperty(entity, subJdbcPropertyMapping, propertyIgnore, propertyAccessor)) {
                         continue;
                     }
                     if (subJdbcPropertyMapping.isPrimaryKey()) {
@@ -1071,8 +1070,7 @@ public final class ClassMappingUtils {
     private static <T> boolean ignoreProperty(T entity, JdbcPropertyMapping propertyMapping,
         ThPredicate<Object, String, T> propertyIgnore, PropertyAccessor<T> propertyAccessor) {
         String pn = getPropertyAliasName(propertyMapping);
-        Property<T, Object> property = propertyAccessor.getProperty(pn);
-        return propertyIgnore.test(property.get(entity), pn, entity);
+        return propertyIgnore.test(propertyMapping.getGetter().apply(entity), pn, entity);
     }
 
     /**

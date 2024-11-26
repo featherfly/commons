@@ -25,10 +25,10 @@ public class BeanMapper {
         mappingFiles.add(DozerConstants.JAVA8_MAPPING);
         if (sign == 0) {
             mapper = FeatherflyDozerBeanMapperBuilder.create().withMapNull(false).withMappingFiles(mappingFiles)
-                    .build();
+                .build();
         } else if (sign == 1) {
             mapper = FeatherflyDozerBeanMapperBuilder.create().withMapNull(false).withMapEmptyString(false)
-                    .withMappingFiles(mappingFiles).build();
+                .withMappingFiles(mappingFiles).build();
         } else {
             mapper = FeatherflyDozerBeanMapperBuilder.create().withMappingFiles(mappingFiles).build();
         }
@@ -37,9 +37,9 @@ public class BeanMapper {
     /**
      * Copy the value from A to B, use Default DozerBeanMapper.
      *
-     * @param <T>         the generic type
+     * @param <T> the generic type
      * @param destination the destination object
-     * @param source      the source
+     * @param source the source
      * @return the merged destination object
      */
     public <T> T copy(T destination, Object source) {
@@ -52,25 +52,27 @@ public class BeanMapper {
     /**
      * Convert object type.
      *
-     * @param <T>         the type parameter
+     * @param <T> the type parameter
      * @param destination the destination class
-     * @param source      the source
+     * @param source the source
      * @return the merged destination object
      */
     public <T> T copy(Class<T> destination, Object source) {
+        T destinationObject = null;
         try {
-            return copy(destination.newInstance(), source);
+            destinationObject = destination.newInstance();
         } catch (Exception e) {
             return null;
         }
+        return copy(destinationObject, source);
     }
 
     /**
      * Map list list.
      *
-     * @param <T>              the type parameter
+     * @param <T> the type parameter
      * @param destinationClass the destination class
-     * @param sourceList       the source list
+     * @param sourceList the source list
      * @return list
      */
     public <T> List<T> copyList(Class<T> destinationClass, Collection<?> sourceList) {

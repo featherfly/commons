@@ -8,7 +8,9 @@ import java.util.Date;
 import com.github.dozermapper.core.DozerConverter;
 
 /**
- * Created by zj
+ * DateToLocalDateTimeConverter.
+ *
+ * @author zhongj
  */
 public class DateToLocalDateTimeConverter extends DozerConverter<Date, LocalDateTime> {
 

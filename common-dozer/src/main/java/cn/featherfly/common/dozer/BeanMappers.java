@@ -55,11 +55,13 @@ public final class BeanMappers {
      * @return the merged destination object
      */
     public static <T> T copy(Class<T> destinationClass, Object source) {
+        T destinationObject = null;
         try {
-            return copy(destinationClass.newInstance(), source);
+            destinationObject = destinationClass.newInstance();
         } catch (Exception e) {
             return null;
         }
+        return copy(destinationObject, source);
     }
 
     /**

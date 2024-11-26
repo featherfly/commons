@@ -1,21 +1,22 @@
 package cn.featherfly.common.dozer.converter;
 
-import com.github.dozermapper.core.DozerConverter;
-
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+import com.github.dozermapper.core.DozerConverter;
+
 /**
- * Created by zj
+ * TimestampToLocalDateTimeConverter.
+ *
+ * @author zhongj
  */
 public class TimestampToLocalDateTimeConverter extends DozerConverter<Timestamp, LocalDateTime> {
 
     public TimestampToLocalDateTimeConverter() {
         super(Timestamp.class, LocalDateTime.class);
     }
-
 
     @Override
     public LocalDateTime convertTo(Timestamp source, LocalDateTime destination) {

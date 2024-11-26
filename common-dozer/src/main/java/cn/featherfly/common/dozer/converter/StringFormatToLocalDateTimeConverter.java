@@ -1,12 +1,14 @@
 package cn.featherfly.common.dozer.converter;
 
-import com.github.dozermapper.core.DozerConverter;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.github.dozermapper.core.DozerConverter;
+
 /**
- * Created by zj
+ * StringFormatToLocalDateTimeConverter.
+ *
+ * @author zhongj
  */
 public class StringFormatToLocalDateTimeConverter extends DozerConverter<String, LocalDateTime> {
 
@@ -17,7 +19,6 @@ public class StringFormatToLocalDateTimeConverter extends DozerConverter<String,
     public StringFormatToLocalDateTimeConverter() {
         super(String.class, LocalDateTime.class);
     }
-
 
     @Override
     public LocalDateTime convertTo(String source, LocalDateTime destination) {
@@ -30,7 +31,7 @@ public class StringFormatToLocalDateTimeConverter extends DozerConverter<String,
     @Override
     public String convertFrom(LocalDateTime source, String destination) {
         if (source != null) {
-            source.format(DATE_TIME_PATTERN);
+            return source.format(DATE_TIME_PATTERN);
         }
         return null;
     }

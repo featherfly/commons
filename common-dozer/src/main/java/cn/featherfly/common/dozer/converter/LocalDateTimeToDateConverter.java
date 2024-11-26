@@ -7,7 +7,9 @@ import java.util.Date;
 import com.github.dozermapper.core.DozerConverter;
 
 /**
- * Created by zj
+ * LocalDateTimeToDateConverter.
+ *
+ * @author zhongj
  */
 public class LocalDateTimeToDateConverter extends DozerConverter<LocalDateTime, Date> {
 
@@ -17,14 +19,12 @@ public class LocalDateTimeToDateConverter extends DozerConverter<LocalDateTime, 
 
     @Override
     public LocalDateTime convertFrom(Date source, LocalDateTime destination) {
-        LocalDateTime dateTime = LocalDateTime.ofInstant(source.toInstant(), ZoneId.systemDefault());
-        return dateTime;
+        return LocalDateTime.ofInstant(source.toInstant(), ZoneId.systemDefault());
     }
 
     @Override
     public Date convertTo(LocalDateTime source, Date destination) {
-        Date convertToDate = Date.from(source.atZone(ZoneId.systemDefault()).toInstant());
-        return convertToDate;
+        return Date.from(source.atZone(ZoneId.systemDefault()).toInstant());
     }
 
 }

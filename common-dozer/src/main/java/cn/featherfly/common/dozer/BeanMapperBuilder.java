@@ -36,17 +36,27 @@ public class BeanMapperBuilder {
 
     private FeatherflyDozerBeanMapperBuilder builder;
 
+    /**
+     * Instantiates a new bean mapper builder.
+     */
     BeanMapperBuilder() {
         builder = FeatherflyDozerBeanMapperBuilder.create();
     }
 
+    /**
+     * Builds the.
+     *
+     * @return the bean mapper
+     */
     public BeanMapper build() {
         return new BeanMapper(builder.withMappingFiles(DozerConstants.JAVA8_MAPPING).build());
     }
 
     /**
-     * @param isMapNull
-     * @return
+     * With map null.
+     *
+     * @param isMapNull the is map null
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withMapNull(boolean)
      */
     public BeanMapperBuilder withMapNull(boolean isMapNull) {
@@ -55,8 +65,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param isMapEmptyString
-     * @return
+     * With map empty string.
+     *
+     * @param isMapEmptyString the is map empty string
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withMapEmptyString(boolean)
      */
     public BeanMapperBuilder withMapEmptyString(boolean isMapEmptyString) {
@@ -65,8 +77,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param mappingFiles
-     * @return
+     * With mapping files.
+     *
+     * @param mappingFiles the mapping files
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withMappingFiles(java.lang.String[])
      */
     public BeanMapperBuilder withMappingFiles(String... mappingFiles) {
@@ -75,8 +89,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param mappingFiles
-     * @return
+     * With mapping files.
+     *
+     * @param mappingFiles the mapping files
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withMappingFiles(java.util.List)
      */
     public BeanMapperBuilder withMappingFiles(List<String> mappingFiles) {
@@ -85,8 +101,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param classLoader
-     * @return
+     * With class loader.
+     *
+     * @param classLoader the class loader
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withClassLoader(com.github.dozermapper.core.util.DozerClassLoader)
      */
     public BeanMapperBuilder withClassLoader(DozerClassLoader classLoader) {
@@ -95,8 +113,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param classLoader
-     * @return
+     * With class loader.
+     *
+     * @param classLoader the class loader
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withClassLoader(java.lang.ClassLoader)
      */
     public BeanMapperBuilder withClassLoader(ClassLoader classLoader) {
@@ -105,8 +125,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param customConverter
-     * @return
+     * With custom converter.
+     *
+     * @param customConverter the custom converter
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withCustomConverter(com.github.dozermapper.core.CustomConverter)
      */
     public BeanMapperBuilder withCustomConverter(CustomConverter customConverter) {
@@ -115,8 +137,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param customConverters
-     * @return
+     * With custom converters.
+     *
+     * @param customConverters the custom converters
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withCustomConverters(com.github.dozermapper.core.CustomConverter[])
      */
     public BeanMapperBuilder withCustomConverters(CustomConverter... customConverters) {
@@ -125,8 +149,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param customConverters
-     * @return
+     * With custom converters.
+     *
+     * @param customConverters the custom converters
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withCustomConverters(java.util.List)
      */
     public BeanMapperBuilder withCustomConverters(List<CustomConverter> customConverters) {
@@ -135,8 +161,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param xmlMappingSupplier
-     * @return
+     * With xml mapping.
+     *
+     * @param xmlMappingSupplier the xml mapping supplier
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withXmlMapping(java.util.function.Supplier)
      */
     public BeanMapperBuilder withXmlMapping(Supplier<InputStream> xmlMappingSupplier) {
@@ -145,8 +173,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param mappingBuilder
-     * @return
+     * With mapping builder.
+     *
+     * @param mappingBuilder the mapping builder
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withMappingBuilder(com.github.dozermapper.core.loader.api.BeanMappingBuilder)
      */
     public BeanMapperBuilder withMappingBuilder(BeanMappingBuilder mappingBuilder) {
@@ -155,8 +185,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param mappingBuilders
-     * @return
+     * With mapping builders.
+     *
+     * @param mappingBuilders the mapping builders
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withMappingBuilders(com.github.dozermapper.core.loader.api.BeanMappingBuilder[])
      */
     public BeanMapperBuilder withMappingBuilders(BeanMappingBuilder... mappingBuilders) {
@@ -165,8 +197,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param mappingBuilders
-     * @return
+     * With mapping builders.
+     *
+     * @param mappingBuilders the mapping builders
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withMappingBuilders(java.util.List)
      */
     public BeanMapperBuilder withMappingBuilders(List<BeanMappingBuilder> mappingBuilders) {
@@ -175,8 +209,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param beanMappingsBuilder
-     * @return
+     * With bean mappings builders.
+     *
+     * @param beanMappingsBuilder the bean mappings builder
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withBeanMappingsBuilders(com.github.dozermapper.core.builder.BeanMappingsBuilder)
      */
     public BeanMapperBuilder withBeanMappingsBuilders(BeanMappingsBuilder beanMappingsBuilder) {
@@ -185,8 +221,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param beanMappingsBuilder
-     * @return
+     * With bean mappings builders.
+     *
+     * @param beanMappingsBuilder the bean mappings builder
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withBeanMappingsBuilders(com.github.dozermapper.core.builder.BeanMappingsBuilder[])
      */
     public BeanMapperBuilder withBeanMappingsBuilders(BeanMappingsBuilder... beanMappingsBuilder) {
@@ -195,8 +233,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param beanMappingsBuilder
-     * @return
+     * With bean mappings builders.
+     *
+     * @param beanMappingsBuilder the bean mappings builder
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withBeanMappingsBuilders(java.util.List)
      */
     public BeanMapperBuilder withBeanMappingsBuilders(List<BeanMappingsBuilder> beanMappingsBuilder) {
@@ -205,8 +245,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param eventListener
-     * @return
+     * With event listener.
+     *
+     * @param eventListener the event listener
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withEventListener(com.github.dozermapper.core.events.EventListener)
      */
     public BeanMapperBuilder withEventListener(EventListener eventListener) {
@@ -215,8 +257,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param eventListeners
-     * @return
+     * With event listeners.
+     *
+     * @param eventListeners the event listeners
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withEventListeners(com.github.dozermapper.core.events.EventListener[])
      */
     public BeanMapperBuilder withEventListeners(EventListener... eventListeners) {
@@ -225,8 +269,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param eventListeners
-     * @return
+     * With event listeners.
+     *
+     * @param eventListeners the event listeners
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withEventListeners(java.util.List)
      */
     public BeanMapperBuilder withEventListeners(List<EventListener> eventListeners) {
@@ -235,8 +281,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param customFieldMapper
-     * @return
+     * With custom field mapper.
+     *
+     * @param customFieldMapper the custom field mapper
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withCustomFieldMapper(com.github.dozermapper.core.CustomFieldMapper)
      */
     public BeanMapperBuilder withCustomFieldMapper(CustomFieldMapper customFieldMapper) {
@@ -245,9 +293,11 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param converterId
-     * @param converter
-     * @return
+     * With custom converter with id.
+     *
+     * @param converterId the converter id
+     * @param converter the converter
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withCustomConverterWithId(java.lang.String,
      *      com.github.dozermapper.core.CustomConverter)
      */
@@ -257,8 +307,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param customConvertersWithId
-     * @return
+     * With custom converters with ids.
+     *
+     * @param customConvertersWithId the custom converters with id
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withCustomConvertersWithIds(java.util.Map)
      */
     public BeanMapperBuilder withCustomConvertersWithIds(Map<String, CustomConverter> customConvertersWithId) {
@@ -267,9 +319,11 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param factoryName
-     * @param beanFactory
-     * @return
+     * With bean factory.
+     *
+     * @param factoryName the factory name
+     * @param beanFactory the bean factory
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withBeanFactory(java.lang.String,
      *      com.github.dozermapper.core.BeanFactory)
      */
@@ -279,8 +333,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param beanFactories
-     * @return
+     * With bean factorys.
+     *
+     * @param beanFactories the bean factories
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withBeanFactorys(java.util.Map)
      */
     public BeanMapperBuilder withBeanFactorys(Map<String, BeanFactory> beanFactories) {
@@ -289,8 +345,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param processor
-     * @return
+     * With settings processor.
+     *
+     * @param processor the processor
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withSettingsProcessor(com.github.dozermapper.core.config.processors.SettingsProcessor)
      */
     public BeanMapperBuilder withSettingsProcessor(SettingsProcessor processor) {
@@ -299,8 +357,10 @@ public class BeanMapperBuilder {
     }
 
     /**
-     * @param elEngine
-     * @return
+     * With EL engine.
+     *
+     * @param elEngine the el engine
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withELEngine(com.github.dozermapper.core.el.ELEngine)
      */
     public BeanMapperBuilder withELEngine(ELEngine elEngine) {
@@ -319,8 +379,10 @@ public class BeanMapperBuilder {
     //    }
 
     /**
-     * @param cacheManager
-     * @return
+     * With cache manager.
+     *
+     * @param cacheManager the cache manager
+     * @return the bean mapper builder
      * @see com.github.dozermapper.core.FeatherflyDozerBeanMapperBuilder#withCacheManager(com.github.dozermapper.core.cache.CacheManager)
      */
     public BeanMapperBuilder withCacheManager(CacheManager cacheManager) {

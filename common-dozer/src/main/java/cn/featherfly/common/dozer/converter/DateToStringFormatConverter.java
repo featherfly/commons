@@ -8,7 +8,9 @@ import java.util.Date;
 import com.github.dozermapper.core.DozerConverter;
 
 /**
- * Created by zj
+ * DateToStringFormatConverter.
+ *
+ * @author zhongj
  */
 public class DateToStringFormatConverter extends DozerConverter<Date, String> {
 

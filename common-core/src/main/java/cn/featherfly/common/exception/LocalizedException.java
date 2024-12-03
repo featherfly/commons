@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Lang;
+import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.locale.LocalizedMessage;
 import cn.featherfly.common.locale.ResourceBundleUtils;
 
@@ -44,7 +45,7 @@ public abstract class LocalizedException extends BaseException {
      * 构造方法.
      *
      * @param message 信息
-     * @param ex      异常
+     * @param ex 异常
      */
     protected LocalizedException(String message, Throwable ex) {
         this(message, new Object[] {}, ex);
@@ -54,9 +55,9 @@ public abstract class LocalizedException extends BaseException {
      * 构造方法.
      *
      * @param message 信息
-     * @param args    消息绑定参数
-     * @param locale  locale
-     * @param ex      异常
+     * @param args 消息绑定参数
+     * @param locale locale
+     * @param ex 异常
      */
     protected LocalizedException(String message, Object[] args, Locale locale, Throwable ex) {
         super(message, ex);
@@ -68,8 +69,8 @@ public abstract class LocalizedException extends BaseException {
      * 构造方法.
      *
      * @param message 信息
-     * @param locale  locale
-     * @param ex      异常
+     * @param locale locale
+     * @param ex 异常
      */
     protected LocalizedException(String message, Locale locale, Throwable ex) {
         this(message, new Object[] {}, locale, ex);
@@ -79,8 +80,8 @@ public abstract class LocalizedException extends BaseException {
      * 构造方法.
      *
      * @param message 信息
-     * @param args    消息绑定参数
-     * @param ex      异常
+     * @param args 消息绑定参数
+     * @param ex 异常
      */
     protected LocalizedException(String message, Object[] args, Throwable ex) {
         this(message, args, null, ex);
@@ -90,8 +91,8 @@ public abstract class LocalizedException extends BaseException {
      * 构造方法.
      *
      * @param message 信息
-     * @param args    消息绑定参数
-     * @param locale  locale
+     * @param args 消息绑定参数
+     * @param locale locale
      */
     protected LocalizedException(String message, Object[] args, Locale locale) {
         super(message);
@@ -107,7 +108,7 @@ public abstract class LocalizedException extends BaseException {
      * 构造方法.
      *
      * @param message 信息
-     * @param locale  locale
+     * @param locale locale
      */
     protected LocalizedException(String message, Locale locale) {
         this(message, new Object[] {}, locale);
@@ -117,7 +118,7 @@ public abstract class LocalizedException extends BaseException {
      * 构造方法.
      *
      * @param message 信息
-     * @param args    消息绑定参数
+     * @param args 消息绑定参数
      */
     protected LocalizedException(String message, Object[] args) {
         this(message, args, (Locale) null);
@@ -136,7 +137,7 @@ public abstract class LocalizedException extends BaseException {
      * 构造方法.
      *
      * @param message 信息
-     * @param ex      异常
+     * @param ex 异常
      */
     protected LocalizedException(LocalizedMessage message, Throwable ex) {
         this(message, new Object[] {}, ex);
@@ -146,9 +147,9 @@ public abstract class LocalizedException extends BaseException {
      * 构造方法.
      *
      * @param message 信息
-     * @param args    消息绑定参数
-     * @param locale  locale
-     * @param ex      异常
+     * @param args 消息绑定参数
+     * @param locale locale
+     * @param ex 异常
      */
     protected LocalizedException(LocalizedMessage message, Object[] args, Locale locale, Throwable ex) {
         super(message.getMessage(locale, args), ex);
@@ -160,8 +161,8 @@ public abstract class LocalizedException extends BaseException {
      * 构造方法.
      *
      * @param message 信息
-     * @param locale  locale
-     * @param ex      异常
+     * @param locale locale
+     * @param ex 异常
      */
     protected LocalizedException(LocalizedMessage message, Locale locale, Throwable ex) {
         this(message, new Object[] {}, locale, ex);
@@ -171,8 +172,8 @@ public abstract class LocalizedException extends BaseException {
      * 构造方法.
      *
      * @param message 信息
-     * @param args    消息绑定参数
-     * @param ex      异常
+     * @param args 消息绑定参数
+     * @param ex 异常
      */
     protected LocalizedException(LocalizedMessage message, Object[] args, Throwable ex) {
         this(message, args, (Locale) null, ex);
@@ -182,8 +183,8 @@ public abstract class LocalizedException extends BaseException {
      * 构造方法.
      *
      * @param message 信息
-     * @param args    消息绑定参数
-     * @param locale  locale
+     * @param args 消息绑定参数
+     * @param locale locale
      */
     protected LocalizedException(LocalizedMessage message, Object[] args, Locale locale) {
         super(message.getMessage(locale, args));
@@ -195,7 +196,7 @@ public abstract class LocalizedException extends BaseException {
      * 构造方法.
      *
      * @param message 信息
-     * @param locale  locale
+     * @param locale locale
      */
     protected LocalizedException(LocalizedMessage message, Locale locale) {
         this(message, new Object[] {}, locale);
@@ -205,7 +206,7 @@ public abstract class LocalizedException extends BaseException {
      * 构造方法.
      *
      * @param message 信息
-     * @param args    消息绑定参数
+     * @param args 消息绑定参数
      */
     protected LocalizedException(LocalizedMessage message, Object[] args) {
         this(message, args, (Locale) null);
@@ -250,7 +251,7 @@ public abstract class LocalizedException extends BaseException {
                 localizedMessage = ResourceBundleUtils.getString(this.getClass(), message.substring(1), args, locale,
                     charset);
             } else {
-                localizedMessage = message;
+                localizedMessage = Lang.isEmpty(args) ? message : Strings.format(message, args);
             }
         }
         return localizedMessage;
@@ -276,8 +277,8 @@ public abstract class LocalizedException extends BaseException {
     /**
      * 设置charset.
      *
-     * @param  charset charset
-     * @return         the localized exception
+     * @param charset charset
+     * @return the localized exception
      */
     public LocalizedException setCharset(Charset charset) {
         this.charset = charset;

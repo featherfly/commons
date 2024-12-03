@@ -106,20 +106,26 @@ public class StringFormatterTest {
         assertEquals(formatter.format("hello {} at {} from [{0}] at {}", name, year),
             "hello yufei at 2020 from [yufei] at {}");
 
+        assertEquals(formatter.format("hello {} at {} from [{0}] at {3}", name, year),
+            "hello yufei at 2020 from [yufei] at {3}");
+
         actual = formatter.format("hello {} array:{}", new Object[] { name });
         assertEquals(actual, "hello yufei array:{}");
+
+        actual = formatter.format("hello {} array:{1}", new Object[] { name });
+        assertEquals(actual, "hello yufei array:{1}");
 
         // ----------------------------------------------------------------------------------------------------------------
         Map<String, Object> argsMap = new ChainMapImpl<String, Object>().putAllChain(this.argsMap);
         argsMap.remove("time");
 
         actual = formatter.format("hello {name} at {year} from [{name2}] at {time}", argsMap);
-        assertEquals(actual, "hello yufei at 2020 from [yi] at {}");
+        assertEquals(actual, "hello yufei at 2020 from [yi] at {time}");
 
         user = new User();
         user.setName("yufei");
         actual = formatter.format("hello {name} , age is {age2}", user);
-        assertEquals(actual, "hello yufei , age is {}");
+        assertEquals(actual, "hello yufei , age is {age2}");
     }
 
     @Test

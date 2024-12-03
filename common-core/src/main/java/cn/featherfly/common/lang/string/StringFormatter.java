@@ -3,7 +3,7 @@ package cn.featherfly.common.lang.string;
 
 import java.io.Serializable;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 import cn.featherfly.common.bean.BeanDescriptor;
 import cn.featherfly.common.bean.BeanUtils;
@@ -104,7 +104,7 @@ public class StringFormatter {
      * @return formated str
      */
     public String format(String str, Object... args) {
-        return format(str, startSymbol, endSymbol, Lang.toMapStringKey(args));
+        return format(str, startSymbol, endSymbol, Lang.toMapStringKey(args), true);
     }
 
     /**
@@ -122,7 +122,7 @@ public class StringFormatter {
      * @return formated str
      */
     public String format(String str, Serializable... args) {
-        return format(str, startSymbol, endSymbol, Lang.toMapStringKey(args));
+        return format(str, startSymbol, endSymbol, Lang.toMapStringKey(args), true);
     }
 
     /**
@@ -141,7 +141,7 @@ public class StringFormatter {
      * @return formated str
      */
     public String format(String str, Map<String, ?> args) {
-        return format(str, startSymbol, endSymbol, args);
+        return format(str, startSymbol, endSymbol, args, false);
     }
 
     /**
@@ -163,15 +163,15 @@ public class StringFormatter {
      * @return formated str
      */
     public <O extends Object> String format(String str, O args) {
-        return format(str, startSymbol, endSymbol, args);
+        return format(str, startSymbol, endSymbol, args, false);
     }
 
-    private String format(String str, char startSymbol, char endSymbol, Object args) {
+    private String format(String str, char startSymbol, char endSymbol, Object args, boolean arrayParams) {
         if (Lang.isEmpty(str)) {
             return str;
         }
         int autoIndex = 0;
-        Function<String, Object> getParam = getParam(args);
+        BiFunction<String, Boolean, Object> getParam = getParam(args);
         StringBuilder sb = new StringBuilder(str);
         int nameStartIndex = -1;
         int nameEndIndex = -1;
@@ -207,12 +207,14 @@ public class StringFormatter {
                 if (c == endSymbol || isEnd) {
                     nameEndIndex = index;
                     String name = sb.substring(nameStartIndex + 1, nameEndIndex);
+                    boolean namedParam = true;
                     if (placeholderAutoIndex && Lang.isEmpty(name)) {
                         name = autoIndex + "";
                         autoIndex++;
+                        namedParam = false;
                     }
                     nameEndIndex++;
-                    sb.insert(nameEndIndex, getParam.apply(name));
+                    sb.insert(nameEndIndex, getParam.apply(name, namedParam));
                     sb.delete(nameStartIndex, nameEndIndex);
                     index -= nameEndIndex - nameStartIndex - 1;
                     // 查找name完成，start index 重置
@@ -224,36 +226,44 @@ public class StringFormatter {
         return sb.toString();
     }
 
-    private Function<String, Object> getParam(Object args) {
+    private BiFunction<String, Boolean, Object> getParam(Object args) {
         if (args instanceof Map) {
             @SuppressWarnings("unchecked")
             Map<String, Object> argsMap = (Map<String, Object>) args;
-            return (name) -> {
+            return (name, namedParam) -> {
                 if (argsMap.containsKey(name)) {
                     return ArrayUtils.toString(argsMap.get(name));
                 } else {
-                    return getNotMatch(name,
+                    return getNotMatch(name, namedParam,
                         "no parameter was found for the placeholder " + startSymbol + name + endSymbol);
                 }
             };
         } else {
-            return (name) -> {
+            return (name, namedParam) -> {
                 if (BeanDescriptor.getBeanDescriptor(args.getClass()).hasBeanProperty(name)) {
                     return ArrayUtils.toString(BeanUtils.getProperty(args, name));
                 } else {
-                    return getNotMatch(name, "no property[" + name + "] was found in " + args.getClass().getName()
+                    return getNotMatch(name, true, "no property[" + name + "] was found in " + args.getClass().getName()
                         + " for the placeholder " + startSymbol + name + endSymbol);
                 }
             };
         }
     }
 
-    private String getNotMatch(String name, String exceptionMessage) {
+    /**
+     * Gets the not match.
+     *
+     * @param name the name
+     * @param namedParam the named param
+     * @param exceptionMessage the exception message
+     * @return the not match
+     */
+    private String getNotMatch(String name, boolean namedParam, String exceptionMessage) {
         switch (notMatchStrategy) {
             case THROW_EXCEPTION:
                 throw new StringFormatterException(exceptionMessage);
             case KEEP_PLACEHOLDER:
-                return "" + startSymbol + endSymbol;
+                return namedParam ? startSymbol + name + endSymbol : startSymbol + "" + endSymbol;
             case TRIM_PLACEHOLDER:
                 return "";
             default:

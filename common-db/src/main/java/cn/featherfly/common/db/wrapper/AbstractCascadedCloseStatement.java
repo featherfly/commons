@@ -207,7 +207,7 @@ public abstract class AbstractCascadedCloseStatement<S extends Statement> implem
      */
     @Override
     public ResultSet getResultSet() throws SQLException {
-        return stat.getResultSet();
+        return addResultSet(stat.getResultSet());
     }
 
     /**

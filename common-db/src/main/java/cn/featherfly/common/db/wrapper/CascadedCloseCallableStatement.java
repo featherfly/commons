@@ -54,7 +54,7 @@ public class CascadedCloseCallableStatement extends AbstractCascadedCloseStateme
      */
     @Override
     public ResultSet executeQuery() throws SQLException {
-        return stat.executeQuery();
+        return addResultSet(stat.executeQuery());
     }
 
     /**

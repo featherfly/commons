@@ -18,12 +18,12 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * The Class ResultSetCreatable.
+ * The Class AbstractCascadedCloseStatement.
  *
  * @author zhongj
  * @param <S> the generic type
  */
-public abstract class ResultSetCreatable<S extends Statement> implements Statement {
+public abstract class AbstractCascadedCloseStatement<S extends Statement> implements Statement {
 
     /** The stat. */
     protected S stat;
@@ -35,7 +35,7 @@ public abstract class ResultSetCreatable<S extends Statement> implements Stateme
      *
      * @param stat the stat
      */
-    protected ResultSetCreatable(S stat) {
+    protected AbstractCascadedCloseStatement(S stat) {
         super();
         this.stat = stat;
     }

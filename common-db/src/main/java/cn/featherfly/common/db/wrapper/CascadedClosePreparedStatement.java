@@ -32,18 +32,19 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 
 /**
- * The Class AutoClosePreparedStatement.
+ * The Class CascadedClosePreparedStatement.
  *
  * @author zhongj
  */
-public class AutoClosePreparedStatement extends ResultSetCreatable<PreparedStatement> implements PreparedStatement {
+public class CascadedClosePreparedStatement extends AbstractCascadedCloseStatement<PreparedStatement>
+    implements PreparedStatement {
 
     /**
      * Instantiates a new auto close prepared statement.
      *
      * @param prep the prep
      */
-    public AutoClosePreparedStatement(PreparedStatement prep) {
+    public CascadedClosePreparedStatement(PreparedStatement prep) {
         super(prep);
     }
 

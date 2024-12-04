@@ -12,18 +12,18 @@ package cn.featherfly.common.db.wrapper;
 import java.sql.Statement;
 
 /**
- * The Class AutoCloseStatement.
+ * The Class CascadedCloseStatement.
  *
  * @author zhongj
  */
-public class AutoCloseStatement extends ResultSetCreatable<Statement> implements Statement {
+public class CascadedCloseStatement extends AbstractCascadedCloseStatement<Statement> implements Statement {
 
     /**
      * Instantiates a new auto close statement.
      *
      * @param stat the stat
      */
-    public AutoCloseStatement(Statement stat) {
+    public CascadedCloseStatement(Statement stat) {
         super(stat);
     }
 }

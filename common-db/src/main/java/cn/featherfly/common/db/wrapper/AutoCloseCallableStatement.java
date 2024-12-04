@@ -163,6 +163,9 @@ public class AutoCloseCallableStatement extends ResultSetCreatable<CallableState
         stat.setDate(parameterIndex, x);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Deprecated
     @Override
     public BigDecimal getBigDecimal(int parameterIndex, int scale) throws SQLException {
@@ -890,7 +893,7 @@ public class AutoCloseCallableStatement extends ResultSetCreatable<CallableState
 
     @Override
     public void setObject(String parameterName, Object x, SQLType targetSqlType, int scaleOrLength)
-            throws SQLException {
+        throws SQLException {
         stat.setObject(parameterName, x, targetSqlType, scaleOrLength);
     }
 

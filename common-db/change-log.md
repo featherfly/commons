@@ -1,5 +1,6 @@
 # 0.7.3
-1. 
+1. 修复ClassMappingUtils类ignoreProperty方法在属性是内嵌属性（xxx.yyy）时发生错误的问题
+2. AutoCloseConnection,AutoCloseCallableStatement,AutoClosePreparedStatement,AutoCloseStatement重载equals和hashCode方法
 
 # 0.7.2 2024-11-06
 

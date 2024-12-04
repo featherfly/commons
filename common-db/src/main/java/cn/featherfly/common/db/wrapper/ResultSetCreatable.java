@@ -482,6 +482,22 @@ public abstract class ResultSetCreatable<S extends Statement> implements Stateme
         return stat.executeLargeUpdate(sql, columnNames);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object o) {
+        return stat.equals(o);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return stat.hashCode();
+    }
+
     // ****************************************************************************************************************
     //	jdk 17
     // ****************************************************************************************************************

@@ -54,7 +54,7 @@ public class AutoCloseConnection implements Connection {
     /**
      * Adds the statement.
      *
-     * @param <S>  the generic type
+     * @param <S> the generic type
      * @param stat the stat
      * @return the statement
      */
@@ -259,9 +259,9 @@ public class AutoCloseConnection implements Connection {
      */
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency)
-            throws SQLException {
+        throws SQLException {
         return addStatement(
-                new AutoClosePreparedStatement(connection.prepareStatement(sql, resultSetType, resultSetConcurrency)));
+            new AutoClosePreparedStatement(connection.prepareStatement(sql, resultSetType, resultSetConcurrency)));
     }
 
     /**
@@ -270,7 +270,7 @@ public class AutoCloseConnection implements Connection {
     @Override
     public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
         return addStatement(
-                new AutoCloseCallableStatement(connection.prepareCall(sql, resultSetType, resultSetConcurrency)));
+            new AutoCloseCallableStatement(connection.prepareCall(sql, resultSetType, resultSetConcurrency)));
     }
 
     /**
@@ -342,9 +342,9 @@ public class AutoCloseConnection implements Connection {
      */
     @Override
     public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability)
-            throws SQLException {
+        throws SQLException {
         return addStatement(new AutoCloseStatement(
-                connection.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability)));
+            connection.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability)));
     }
 
     /**
@@ -352,9 +352,9 @@ public class AutoCloseConnection implements Connection {
      */
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency,
-            int resultSetHoldability) throws SQLException {
+        int resultSetHoldability) throws SQLException {
         return addStatement(new AutoClosePreparedStatement(
-                connection.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability)));
+            connection.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability)));
     }
 
     /**
@@ -362,9 +362,9 @@ public class AutoCloseConnection implements Connection {
      */
     @Override
     public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency,
-            int resultSetHoldability) throws SQLException {
+        int resultSetHoldability) throws SQLException {
         return addStatement(new AutoCloseCallableStatement(
-                connection.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability)));
+            connection.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability)));
     }
 
     /**
@@ -517,6 +517,22 @@ public class AutoCloseConnection implements Connection {
     @Override
     public int getNetworkTimeout() throws SQLException {
         return connection.getNetworkTimeout();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object o) {
+        return connection.equals(o);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        return connection.hashCode();
     }
 
     // ****************************************************************************************************************

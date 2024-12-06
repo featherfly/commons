@@ -8,6 +8,8 @@
  */
 package cn.featherfly.common.lang;
 
+import cn.featherfly.common.exception.BaseException;
+
 /**
  * AutocloseIterable.
  *
@@ -16,4 +18,9 @@ package cn.featherfly.common.lang;
  */
 public interface AutoCloseableIterable<T> extends Iterable<T>, AutoCloseable {
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    void close() throws BaseException;
 }

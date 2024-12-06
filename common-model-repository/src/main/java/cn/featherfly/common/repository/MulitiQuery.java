@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import cn.featherfly.common.exception.BaseException;
 import cn.featherfly.common.repository.mapper.RowMapper;
 
 /**
@@ -52,4 +53,7 @@ public interface MulitiQuery extends AutoCloseable {
      * @return the index
      */
     int getIndex();
+
+    @Override
+    void close() throws BaseException;
 }

@@ -1,3 +1,7 @@
+# 0.5.2
+1. 加入RowIterable
+2. MulitiQuery重载close方法抛出BaseException异常
+
 # 0.5.1 2024-11-06
 1. 更改tuple接口包 
 

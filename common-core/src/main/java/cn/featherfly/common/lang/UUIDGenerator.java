@@ -149,7 +149,7 @@ public final class UUIDGenerator {
     }
 
     static String hexTo64Letters(String hex) {
-        StringBuffer r = new StringBuffer();
+        StringBuilder r = new StringBuilder();
         int index = 0;
         int[] buff = new int[NUMBER_THREE];
         int l = hex.length();
@@ -184,7 +184,7 @@ public final class UUIDGenerator {
     }
 
     static String hexTo64CHARS(String hex) {
-        StringBuffer r = new StringBuffer();
+        StringBuilder r = new StringBuilder();
         int index = 0;
         int[] buff = new int[NUMBER_THREE];
         int l = hex.length();

@@ -21,9 +21,9 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
  * @author zhongj
  * @since 1.13.0
  */
-public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>> {
+public class MapPropertyAccessor implements PropertyAccessor<Map<String, Object>> {
 
-    private final Instantiator<Map<Object, Object>> instantiator;
+    private final Instantiator<Map<String, Object>> instantiator;
 
     private final PropertyAccessorManager manager;
 
@@ -33,7 +33,7 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
      * @param instantiator the instantiator
      * @param manager the manager
      */
-    public MapPropertyAccessor(Instantiator<Map<Object, Object>> instantiator, PropertyAccessorManager manager) {
+    public MapPropertyAccessor(Instantiator<Map<String, Object>> instantiator, PropertyAccessorManager manager) {
         super();
         AssertIllegalArgument.isParent(Map.class, instantiator.getType());
         this.instantiator = instantiator;
@@ -49,9 +49,12 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
      * {@inheritDoc}
      */
     @Override
-    public Object getPropertyValue(Map<Object, Object> obj, int index) {
-        if (obj == null || index >= obj.size()) {
+    public Object getPropertyValue(Map<String, Object> obj, int index) {
+        if (obj == null) {
             return null;
+        }
+        if (index >= obj.size()) {
+            throw new NoSuchPropertyException(obj.getClass(), index);
         }
         int i = 0;
         for (Object value : obj.values()) {
@@ -67,7 +70,13 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
      * {@inheritDoc}
      */
     @Override
-    public Object getPropertyValue(Map<Object, Object> obj, String name) {
+    public Object getPropertyValue(Map<String, Object> obj, String name) {
+        if (obj == null) {
+            return null;
+        }
+        if (!obj.containsKey(name)) {
+            throw new NoSuchPropertyException(obj.getClass(), name);
+        }
         return obj.get(name);
     }
 
@@ -75,17 +84,18 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
      * {@inheritDoc}
      */
     @Override
-    public void setPropertyValue(Map<Object, Object> obj, int index, Object value) {
-        if (obj == null || index >= obj.size()) {
-            return;
-        }
-        int i = 0;
-        for (Object key : obj.keySet()) {
-            if (index == i) {
-                obj.put(key, value);
-                return;
-            }
-            i++;
+    public void setPropertyValue(Map<String, Object> obj, int index, Object value) {
+        throw new UnsupportedException(
+            "unsupport method setPropertyValue(Map<String, Object>, int, Object), because can't index elements into a Map");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setPropertyValue(Map<String, Object> obj, String name, Object value) {
+        if (obj != null) {
+            obj.put(name, value);
         }
     }
 
@@ -93,15 +103,7 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
      * {@inheritDoc}
      */
     @Override
-    public void setPropertyValue(Map<Object, Object> obj, String name, Object value) {
-        obj.put(name, value);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Object getPropertyValue(Map<Object, Object> obj, int... indexes) {
+    public Object getPropertyValue(Map<String, Object> obj, int... indexes) {
         AssertIllegalArgument.isNotEmpty(indexes, "indexes");
         if (indexes.length == 1) {
             return getPropertyValue(obj, indexes[0]);
@@ -121,7 +123,7 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
      * {@inheritDoc}
      */
     @Override
-    public Object getPropertyValue(Map<Object, Object> obj, String... names) {
+    public Object getPropertyValue(Map<String, Object> obj, String... names) {
         AssertIllegalArgument.isNotEmpty(names, "names");
         if (names.length == 1) {
             return getPropertyValue(obj, names[0]);
@@ -141,7 +143,7 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
      * {@inheritDoc}
      */
     @Override
-    public void setPropertyValue(Map<Object, Object> obj, int[] indexes, Object value) {
+    public void setPropertyValue(Map<String, Object> obj, int[] indexes, Object value) {
         AssertIllegalArgument.isNotEmpty(indexes, "indexes");
         if (indexes.length == 1) {
             setPropertyValue(obj, indexes[0], value);
@@ -164,7 +166,7 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
      * {@inheritDoc}
      */
     @Override
-    public void setPropertyValue(Map<Object, Object> obj, String[] names, Object value) {
+    public void setPropertyValue(Map<String, Object> obj, String[] names, Object value) {
         AssertIllegalArgument.isNotEmpty(names, "names");
         if (names.length == 1) {
             setPropertyValue(obj, names[0], value);
@@ -188,7 +190,7 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
     @Override
     public int getPropertyIndex(String name) {
         throw new UnsupportedException(
-            "unsupport method getPropertyIndex(String), because map does not have property metadata");
+            "unsupport method getPropertyIndex(String), because there is no property metadata for Map");
     }
 
     /**
@@ -197,16 +199,16 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
     @Override
     public int[] getPropertyIndexes(String... names) {
         throw new UnsupportedException(
-            "unsupport method getPropertyIndexes(String...), because map does not have property metadata");
+            "unsupport method getPropertyIndexes(String...), because there is no property metadata for Map");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public <V> Property<Map<Object, Object>, V> getProperty(int index) {
+    public <V> Property<Map<String, Object>, V> getProperty(int index) {
         throw new UnsupportedException(
-            "unsupport method getProperty(int), because map does not have property metadata");
+            "unsupport method getProperty(int), because there is no property metadata for Map");
     }
 
     /**
@@ -215,16 +217,16 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
     @Override
     public <T1, V> Property<T1, V> getProperty(int... indexes) {
         throw new UnsupportedException(
-            "unsupport method getProperty(int...), because map does not have property metadata");
+            "unsupport method getProperty(int...), because there is no property metadata for Map");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public <V> Property<Map<Object, Object>, V> getProperty(String name) {
+    public <V> Property<Map<String, Object>, V> getProperty(String name) {
         throw new UnsupportedException(
-            "unsupport method getProperty(String), because map does not have property metadata");
+            "unsupport method getProperty(String), because there is no property metadata for Map");
     }
 
     /**
@@ -233,23 +235,22 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
     @Override
     public <T1, V> Property<T1, V> getProperty(String... names) {
         throw new UnsupportedException(
-            "unsupport method getProperty(String...), because map does not have property metadata");
+            "unsupport method getProperty(String...), there is no property metadata for Map");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Property<Map<Object, Object>, ?>[] getProperties() {
-        throw new UnsupportedException(
-            "unsupport method getProperty(String), because map does not have property metadata");
+    public Property<Map<String, Object>, ?>[] getProperties() {
+        throw new UnsupportedException("unsupport method getProperty(String), there is no property metadata for Map");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Map<Object, Object> instantiate() {
+    public Map<String, Object> instantiate() {
         return instantiator.instantiate();
     }
 
@@ -257,7 +258,7 @@ public class MapPropertyAccessor implements PropertyAccessor<Map<Object, Object>
      * {@inheritDoc}
      */
     @Override
-    public Class<Map<Object, Object>> getType() {
+    public Class<Map<String, Object>> getType() {
         return instantiator.getType();
     }
 

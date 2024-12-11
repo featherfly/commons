@@ -12,13 +12,12 @@ import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.number.Radix;
 
 /**
- * <p>
- * NumberUtils
- * </p>
- * .
+ * NumberUtils.
  *
  * @author zhongj
+ * @deprecated {@link Num}
  */
+@Deprecated
 public final class NumberUtils {
 
     /** The Constant LETTERS62. */
@@ -112,8 +111,8 @@ public final class NumberUtils {
         //                        'ö', 'ù', 'ú', 'û', 'ü', 'ý', '¯', '®' });
         ArrayUtils.fillAll(LETTERS128, LETTERS93);
         ArrayUtils.fillAll(LETTERS128, Radix.RADIX93.value(),
-                new char[] { '©', 'ß', '¿', '£', '¤', '¥', '¦', '§', 'µ', '¶', 'Â', 'Ä', 'Æ', 'Ê', 'Ë', 'Î', 'Ï', 'Ð',
-                        'Ñ', 'Ô', 'Ö', 'Û', 'Ü', 'Ý', 'â', 'ä', 'æ', 'ê', 'ë', 'î', 'ð', 'ñ', 'ý', '¯', '®' });
+            new char[] { '©', 'ß', '¿', '£', '¤', '¥', '¦', '§', 'µ', '¶', 'Â', 'Ä', 'Æ', 'Ê', 'Ë', 'Î', 'Ï', 'Ð', 'Ñ',
+                'Ô', 'Ö', 'Û', 'Ü', 'Ý', 'â', 'ä', 'æ', 'ê', 'ë', 'î', 'ð', 'ñ', 'ý', '¯', '®' });
 
         for (int i = 0; i < LETTERS128.length; i++) {
             LETTERS128_DIGITS_MAP.put(LETTERS128[i], i);
@@ -132,8 +131,8 @@ public final class NumberUtils {
      * </p>
      * .
      *
-     * @param <T>         转换后的类型
-     * @param number      数字
+     * @param <T> 转换后的类型
+     * @param number 数字
      * @param targetClass 转换目标数字类型
      * @return 转换后的数字对象
      */
@@ -144,7 +143,7 @@ public final class NumberUtils {
     /**
      * Compare.
      *
-     * @param <T>     the generic type
+     * @param <T> the generic type
      * @param number1 the number 1
      * @param number2 the number 2
      * @return the int
@@ -185,7 +184,7 @@ public final class NumberUtils {
      * </p>
      * .
      *
-     * @param <T>    目标类型泛型
+     * @param <T> 目标类型泛型
      * @param number 数字源
      * @param toType 转换目标类型
      * @return 数字
@@ -225,7 +224,7 @@ public final class NumberUtils {
      * </p>
      * .
      *
-     * @param <T>    目标类型泛型
+     * @param <T> 目标类型泛型
      * @param source 转换源字符串
      * @param toType 转换目标类型
      * @return 数字
@@ -265,7 +264,7 @@ public final class NumberUtils {
      * </p>
      * .
      *
-     * @param target       target
+     * @param target target
      * @param defaultValue defaultValue
      * @return Byte
      */
@@ -283,7 +282,7 @@ public final class NumberUtils {
      * </p>
      * .
      *
-     * @param target       target
+     * @param target target
      * @param defaultValue defaultValue
      * @return Integer
      */
@@ -301,7 +300,7 @@ public final class NumberUtils {
      * </p>
      * .
      *
-     * @param target       target
+     * @param target target
      * @param defaultValue defaultValue
      * @return Long
      */
@@ -319,7 +318,7 @@ public final class NumberUtils {
      * </p>
      * .
      *
-     * @param target       target
+     * @param target target
      * @param defaultValue defaultValue
      * @return Double
      */
@@ -337,7 +336,7 @@ public final class NumberUtils {
      * </p>
      * .
      *
-     * @param target       target
+     * @param target target
      * @param defaultValue defaultValue
      * @return Float
      */
@@ -355,10 +354,10 @@ public final class NumberUtils {
      * </p>
      * .
      *
-     * @param <N>       泛型数字类型
-     * @param number    数字
+     * @param <N> 泛型数字类型
+     * @param number 数字
      * @param minLength 最小长度
-     * @param sign      补全使用的字符
+     * @param sign 补全使用的字符
      * @return 补全后的字符串
      */
     public static <N extends Number> String fillingAtStart(N number, int minLength, char sign) {
@@ -486,7 +485,7 @@ public final class NumberUtils {
      * To string.
      *
      * @param number the value
-     * @param radix  the radix
+     * @param radix the radix
      * @return the string
      */
     public static String toString(byte number, Radix radix) {
@@ -497,7 +496,7 @@ public final class NumberUtils {
      * To string.
      *
      * @param number the value
-     * @param radix  the radix
+     * @param radix the radix
      * @return the string
      */
     public static String toString(short number, Radix radix) {
@@ -508,7 +507,7 @@ public final class NumberUtils {
      * To string.
      *
      * @param number the value
-     * @param radix  the radix
+     * @param radix the radix
      * @return the string
      */
     public static String toString(int number, Radix radix) {
@@ -519,7 +518,7 @@ public final class NumberUtils {
      * To string.
      *
      * @param number the value
-     * @param radix  the radix
+     * @param radix the radix
      * @return the string
      */
     public static String toString(long number, Radix radix) {
@@ -530,7 +529,7 @@ public final class NumberUtils {
      * To string.
      *
      * @param number the value
-     * @param radix  the radix
+     * @param radix the radix
      * @return the string
      */
     public static String toString(BigInteger number, Radix radix) {
@@ -882,7 +881,7 @@ public final class NumberUtils {
      * Parses the.
      *
      * @param numberStr the number str
-     * @param radix     the radix
+     * @param radix the radix
      * @return the big integer
      */
     public static BigInteger parse(String numberStr, Radix radix) {
@@ -1135,8 +1134,8 @@ public final class NumberUtils {
     /**
      * Gets the index.
      *
-     * @param s     the s
-     * @param pos   the pos
+     * @param s the s
+     * @param pos the pos
      * @param radix the radix
      * @return the index
      */

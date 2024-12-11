@@ -6,6 +6,7 @@
 2. 加入ReflectionPropertyAccessorFactory
 3. LocalizedException支持字符串格式化
 4. 修复StringFormatter在使用NotMatchStrategy.TRIM_PLACEHOLDER策略时，{name},{1}中的name和1被去除的问题(即只返回{})
+5. 加入Num类代替NumberUtils
 
 # 1.13.0 2024-06-02
 

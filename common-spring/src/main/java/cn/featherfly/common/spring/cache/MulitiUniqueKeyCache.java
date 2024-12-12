@@ -13,13 +13,12 @@ import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
 
 /**
- * <p>
- * MulitiUniqueKeyCache
- * </p>
- * .
+ * MulitiUniqueKeyCache.
  *
  * @author zhongj
  */
+// TODO 加入put(Map<String,Object> cacheable) 用于原子性存入缓存（redis使用lua脚本）
+// 需要把targetCache和targetUniqueKeyCache合并
 public class MulitiUniqueKeyCache implements Cache {
 
     /** The Constant DEFAULT_ID_KEY_PREFIX. */
@@ -50,32 +49,31 @@ public class MulitiUniqueKeyCache implements Cache {
     /**
      * Instantiates a new muliti unique key cache.
      *
-     * @param name                    the name
-     * @param targetCache             the target cache
-     * @param targetUniqueKeyCache    the target unique key cache
+     * @param name the name
+     * @param targetCache the target cache
+     * @param targetUniqueKeyCache the target unique key cache
      * @param uniquePrefixPropertyMap the unique prefix property map
-     * @param targetType              the target type
+     * @param targetType the target type
      */
     public MulitiUniqueKeyCache(String name, Cache targetCache, Cache targetUniqueKeyCache,
-            Map<String, String> uniquePrefixPropertyMap, Class<?> targetType) {
+        Map<String, String> uniquePrefixPropertyMap, Class<?> targetType) {
         this(name, targetCache, targetUniqueKeyCache, uniquePrefixPropertyMap, targetType, DEFAULT_ID_KEY_PREFIX,
-                DEFAULT_ID_PROPERTY_NAME);
+            DEFAULT_ID_PROPERTY_NAME);
     }
 
     /**
      * Instantiates a new muliti unique key cache.
      *
-     * @param name                    the name
-     * @param targetCache             the target cache
-     * @param targetUniqueKeyCache    the target unique key cache
+     * @param name the name
+     * @param targetCache the target cache
+     * @param targetUniqueKeyCache the target unique key cache
      * @param uniquePrefixPropertyMap the unique prefix property map
-     * @param targetType              the target type
-     * @param idKeyPrefix             the id key prefix
-     * @param idPropertyName          the id property name
+     * @param targetType the target type
+     * @param idKeyPrefix the id key prefix
+     * @param idPropertyName the id property name
      */
     public MulitiUniqueKeyCache(String name, Cache targetCache, Cache targetUniqueKeyCache,
-            Map<String, String> uniquePrefixPropertyMap, Class<?> targetType, String idKeyPrefix,
-            String idPropertyName) {
+        Map<String, String> uniquePrefixPropertyMap, Class<?> targetType, String idKeyPrefix, String idPropertyName) {
         this.name = name;
         this.uniquePrefixPropertyMap = uniquePrefixPropertyMap;
         this.targetCache = targetCache;
@@ -167,6 +165,7 @@ public class MulitiUniqueKeyCache implements Cache {
             if (value == null) {
                 targetUniqueKeyCache.put(key, targetNotFoundIdValue);
             } else {
+                // TODO 使用java.util.Function代替反射调用
                 Object id = BeanUtils.getProperty(value, idPropertyName);
                 logger.debug("set id[{}] unique key [{}]", BeanUtils.getProperty(value, idPropertyName), key);
                 putTarget(idKeyPrefix + id, value, id);

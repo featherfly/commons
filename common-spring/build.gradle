@@ -1,5 +1,5 @@
 ext {
-    sv = '5.3.36' 
+    sv = '5.3.39' 
 }
   
 dependencies {

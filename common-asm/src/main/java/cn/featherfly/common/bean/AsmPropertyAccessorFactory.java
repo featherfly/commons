@@ -73,6 +73,8 @@ public class AsmPropertyAccessorFactory extends ReloadableClassloader implements
     private static final String GET_PROPERTY_VALUE_METHOD = "getPropertyValue";
     private static final String SET_PROPERTY_VALUE_METHOD = "setPropertyValue";
 
+    private boolean debug = false;
+
     private final BytesClassLoader bytesClassLoader;
 
     private final AsmPropertyFactory propertyFactory;
@@ -169,6 +171,25 @@ public class AsmPropertyAccessorFactory extends ReloadableClassloader implements
         this.propertyVisitorCascadeCreatePolicy = propertyVisitorCascadeCreatePolicy;
         this.cascade = cascade;
         manager = new PropertyAccessorManagerImpl();
+    }
+
+    // TODO 后续添加build模式
+    /**
+     * get debug value
+     *
+     * @return debug
+     */
+    public boolean isDebug() {
+        return debug;
+    }
+
+    /**
+     * set debug value
+     *
+     * @param debug debug
+     */
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 
     /**
@@ -299,14 +320,15 @@ public class AsmPropertyAccessorFactory extends ReloadableClassloader implements
         classNode.accept(cw);
         byte[] code = cw.toByteArray();
 
-        // YUFEI_TEST 测试用
-        try {
-            FileOutputStream os = new FileOutputStream(new File("bin/" + createdClassName + ".class"));
-            os.write(code);
-            os.flush();
-            os.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (debug) {
+            try {
+                FileOutputStream os = new FileOutputStream(new File("bin/" + createdClassName + ".class"));
+                os.write(code);
+                os.flush();
+                os.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         return (Class<PropertyAccessor<T>>) ClassLoaderUtils.defineClass(classLoader, createdClassByteCodeName, code,

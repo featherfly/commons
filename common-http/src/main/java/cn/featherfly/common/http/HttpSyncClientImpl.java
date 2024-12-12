@@ -31,20 +31,20 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     /**
      * Instantiates a new http client.
      *
-     * @param config        the config
-     * @param headers       the headers
+     * @param config the config
+     * @param headers the headers
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
     public HttpSyncClientImpl(HttpRequestConfig config, Map<String, String> headers, Serialization serialization,
-            MediaType mediaType) {
+        MediaType mediaType) {
         super(config, headers, serialization, mediaType);
     }
 
     /**
      * Instantiates a new http client.
      *
-     * @param config  the config
+     * @param config the config
      * @param headers the headers
      */
     public HttpSyncClientImpl(HttpRequestConfig config, Map<String, String> headers) {
@@ -54,9 +54,9 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     /**
      * Instantiates a new http client.
      *
-     * @param config        the config
+     * @param config the config
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
     public HttpSyncClientImpl(HttpRequestConfig config, Serialization serialization, MediaType mediaType) {
         super(config, serialization, mediaType);
@@ -83,20 +83,20 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     /**
      * Instantiates a new http client.
      *
-     * @param client        the client
-     * @param headers       the headers
+     * @param client the client
+     * @param headers the headers
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
     public HttpSyncClientImpl(OkHttpClient client, Map<String, String> headers, Serialization serialization,
-            MediaType mediaType) {
+        MediaType mediaType) {
         super(client, headers, serialization, mediaType);
     }
 
     /**
      * Instantiates a new http client.
      *
-     * @param client  the client
+     * @param client the client
      * @param headers the headers
      */
     public HttpSyncClientImpl(OkHttpClient client, Map<String, String> headers) {
@@ -106,9 +106,9 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     /**
      * Instantiates a new http client.
      *
-     * @param client        the client
+     * @param client the client
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
     public HttpSyncClientImpl(OkHttpClient client, Serialization serialization, MediaType mediaType) {
         super(client, serialization, mediaType);
@@ -120,7 +120,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     @Override
     public String get(String url, Map<String, Serializable> params, Map<String, String> headers) {
         return request(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
-                .get().build());
+            .get().build());
     }
 
     /**
@@ -129,7 +129,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     @Override
     public <R> R get(String url, Map<String, Serializable> params, Map<String, String> headers, Class<R> responseType) {
         return request(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
-                .get().build(), responseType);
+            .get().build(), responseType);
     }
 
     /**
@@ -138,7 +138,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     @Override
     public String head(String url, Map<String, Serializable> params, Map<String, String> headers) {
         return request(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
-                .head().build());
+            .head().build());
     }
 
     /**
@@ -146,9 +146,9 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
      */
     @Override
     public <R> R head(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return request(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
-                .head().build(), responseType);
+            .head().build(), responseType);
     }
 
     /**
@@ -157,7 +157,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     @Override
     public String post(String url, Map<String, Serializable> params, Map<String, String> headers) {
         return request(new Request.Builder().url(url).headers(createHeaders(headers))
-                .post(HttpUtils.createRequestBody(params)).build());
+            .post(HttpUtils.createRequestBody(params)).build());
     }
 
     /**
@@ -165,9 +165,9 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
      */
     @Override
     public <R> R post(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return request(new Request.Builder().url(url).headers(createHeaders(headers))
-                .post(HttpUtils.createRequestBody(params)).build(), responseType);
+            .post(HttpUtils.createRequestBody(params)).build(), responseType);
     }
 
     /**
@@ -176,7 +176,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     @Override
     public String post(String url, Object requestBody, Map<String, String> headers) {
         return request(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+            .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
     }
 
     /**
@@ -185,9 +185,9 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     @Override
     public <R> R post(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
         return request(
-                new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                        .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
-                responseType);
+            new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
+                .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+            responseType);
     }
 
     /**
@@ -196,7 +196,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     @Override
     public String put(String url, Map<String, Serializable> params, Map<String, String> headers) {
         return request(new Request.Builder().url(url).headers(createHeaders(headers))
-                .put(HttpUtils.createFormBody(params)).build());
+            .put(HttpUtils.createFormBody(params)).build());
     }
 
     /**
@@ -205,7 +205,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     @Override
     public <R> R put(String url, Map<String, Serializable> params, Map<String, String> headers, Class<R> responseType) {
         return request(new Request.Builder().url(url).headers(createHeaders(headers))
-                .put(HttpUtils.createFormBody(params)).build(), responseType);
+            .put(HttpUtils.createFormBody(params)).build(), responseType);
     }
 
     /**
@@ -214,7 +214,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     @Override
     public String put(String url, Object requestBody, Map<String, String> headers) {
         return request(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+            .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
     }
 
     /**
@@ -223,9 +223,9 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     @Override
     public <R> R put(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
         return request(
-                new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                        .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
-                responseType);
+            new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
+                .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+            responseType);
     }
 
     /**
@@ -234,7 +234,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     @Override
     public String patch(String url, Map<String, Serializable> params, Map<String, String> headers) {
         return request(new Request.Builder().url(url).headers(createHeaders(headers))
-                .patch(HttpUtils.createFormBody(params)).build());
+            .patch(HttpUtils.createFormBody(params)).build());
     }
 
     /**
@@ -242,9 +242,9 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
      */
     @Override
     public <R> R patch(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return request(new Request.Builder().url(url).headers(createHeaders(headers))
-                .patch(HttpUtils.createFormBody(params)).build(), responseType);
+            .patch(HttpUtils.createFormBody(params)).build(), responseType);
     }
 
     /**
@@ -253,7 +253,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     @Override
     public String patch(String url, Object requestBody, Map<String, String> headers) {
         return request(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+            .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
     }
 
     /**
@@ -262,9 +262,9 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     @Override
     public <R> R patch(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
         return request(
-                new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                        .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
-                responseType);
+            new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
+                .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+            responseType);
     }
 
     /**
@@ -289,7 +289,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     @Override
     public String delete(String url, Object requestBody, Map<String, String> headers) {
         return request(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+            .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
     }
 
     /**
@@ -298,9 +298,9 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     @Override
     public <R> R delete(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
         return request(
-                new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                        .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
-                responseType);
+            new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
+                .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+            responseType);
     }
 
     /**
@@ -308,9 +308,9 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
      */
     @Override
     public Integer download(String url, Map<String, Serializable> params, Map<String, String> headers,
-            OutputStream output) {
+        OutputStream output) {
         Request request = new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
-                .get().build();
+            .get().build();
         try {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
@@ -319,11 +319,11 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
                 return bs.length;
             } else {
                 throw new HttpErrorResponseException(
-                        Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
-                                response.message()),
-                        new HttpResponse(response.code(), response.body().bytes(),
-                                HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
-                                response.receivedResponseAtMillis() - response.sentRequestAtMillis()));
+                    Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
+                        response.message()),
+                    new HttpResponse(response.code(), response.body().bytes(),
+                        HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
+                        response.receivedResponseAtMillis() - response.sentRequestAtMillis()));
             }
         } catch (IOException e) {
             throw new HttpException(e);
@@ -335,25 +335,25 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
      */
     @Override
     public InputStream stream(HttpMethod httpMethod, String url, Map<String, Serializable> params,
-            Map<String, String> headers) {
+        Map<String, String> headers) {
         switch (httpMethod) {
             case GET:
                 return stream(new Request.Builder().url(HttpUtils.appendParams(url, params))
-                        .headers(createHeaders(headers)).get().build());
+                    .headers(createHeaders(headers)).get().build());
             case POST:
                 return stream(new Request.Builder().url(url).headers(createHeaders(headers))
-                        .post(HttpUtils.createRequestBody(params)).build());
+                    .post(HttpUtils.createRequestBody(params)).build());
             case PUT:
                 return stream(new Request.Builder().url(url).headers(createHeaders(headers))
-                        .put(HttpUtils.createRequestBody(params)).build());
+                    .put(HttpUtils.createRequestBody(params)).build());
             case DELETE:
                 return stream(new Request.Builder().url(url).headers(createHeaders(headers)).delete().build());
             case HEAD:
                 return stream(new Request.Builder().url(HttpUtils.appendParams(url, params))
-                        .headers(createHeaders(headers)).head().build());
+                    .headers(createHeaders(headers)).head().build());
             case PATCH:
                 return stream(new Request.Builder().url(url).headers(createHeaders(headers))
-                        .patch(HttpUtils.createFormBody(params)).build());
+                    .patch(HttpUtils.createFormBody(params)).build());
             default:
                 throw new HttpException("unsupport http method " + httpMethod.toString());
         }
@@ -370,19 +370,18 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
             //                return get(url, new HashMap<>(), headers);
             case POST:
                 return stream(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                        .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+                    .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
             case PUT:
                 return stream(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                        .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+                    .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
             case DELETE:
                 return stream(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                        .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody)))
-                        .build());
+                    .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
             case HEAD:
                 throw new HttpException("http head method can not send request body");
             case PATCH:
                 return stream(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                        .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+                    .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
             default:
                 throw new HttpException("unsupport http method " + httpMethod.toString());
         }

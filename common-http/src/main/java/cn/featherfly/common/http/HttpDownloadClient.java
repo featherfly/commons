@@ -15,7 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 import cn.featherfly.common.io.FileUtils;
@@ -32,55 +32,55 @@ public interface HttpDownloadClient<DS> {
     /**
      * Download.
      *
-     * @param url    the url
+     * @param url the url
      * @param output the output
      * @return the download size result
      */
     default DS download(String url, OutputStream output) {
-        return download(url, new HashMap<>(), output);
+        return download(url, Collections.emptyMap(), output);
     }
 
     /**
      * Download.
      *
-     * @param url       the url
+     * @param url the url
      * @param localFile the local file
      * @return the download size result
      */
     default DS download(String url, File localFile) {
-        return download(url, new HashMap<>(), localFile);
+        return download(url, Collections.emptyMap(), localFile);
     }
 
     /**
      * Download.
      *
-     * @param url    the url
+     * @param url the url
      * @param params the params
      * @param output the output
      * @return the download size result
      */
     default DS download(String url, Map<String, Serializable> params, OutputStream output) {
-        return download(url, params, new HashMap<>(), output);
+        return download(url, params, Collections.emptyMap(), output);
     }
 
     /**
      * Download.
      *
-     * @param url       the url
-     * @param params    the params
+     * @param url the url
+     * @param params the params
      * @param localFile the local file
      * @return the download size result
      */
     default DS download(String url, Map<String, Serializable> params, File localFile) {
-        return download(url, params, new HashMap<>(), localFile);
+        return download(url, params, Collections.emptyMap(), localFile);
     }
 
     /**
      * Download.
      *
-     * @param url       the url
-     * @param params    the params
-     * @param headers   the headers
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param localFile the local file
      * @return the download size result
      */
@@ -97,10 +97,10 @@ public interface HttpDownloadClient<DS> {
     /**
      * Download.
      *
-     * @param url     the url
-     * @param params  the params
+     * @param url the url
+     * @param params the params
      * @param headers the headers
-     * @param output  the output
+     * @param output the output
      * @return the download size result
      */
     DS download(String url, Map<String, Serializable> params, Map<String, String> headers, OutputStream output);

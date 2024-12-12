@@ -11,7 +11,7 @@
 package cn.featherfly.common.http;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -26,32 +26,32 @@ public interface HttpStreamClient<SS> {
      * Stream.
      *
      * @param httpMethod the http method
-     * @param url        the url
+     * @param url the url
      * @return the input stream
      */
     default SS stream(HttpMethod httpMethod, String url) {
-        return stream(httpMethod, url, new HashMap<>());
+        return stream(httpMethod, url, Collections.emptyMap());
     }
 
     /**
      * Stream.
      *
      * @param httpMethod the http method
-     * @param url        the url
-     * @param params     the params
+     * @param url the url
+     * @param params the params
      * @return the input stream
      */
     default SS stream(HttpMethod httpMethod, String url, Map<String, Serializable> params) {
-        return stream(httpMethod, url, params, new HashMap<>());
+        return stream(httpMethod, url, params, Collections.emptyMap());
     }
 
     /**
      * Stream.
      *
      * @param httpMethod the http method
-     * @param url        the url
-     * @param params     the params
-     * @param headers    the headers
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @return the input stream
      */
     SS stream(HttpMethod httpMethod, String url, Map<String, Serializable> params, Map<String, String> headers);
@@ -59,22 +59,22 @@ public interface HttpStreamClient<SS> {
     /**
      * Stream.
      *
-     * @param httpMethod  the http method
-     * @param url         the url
+     * @param httpMethod the http method
+     * @param url the url
      * @param requestBody the request body
      * @return the input stream
      */
     default SS stream(HttpMethod httpMethod, String url, Object requestBody) {
-        return stream(httpMethod, url, requestBody, new HashMap<>());
+        return stream(httpMethod, url, requestBody, Collections.emptyMap());
     }
 
     /**
      * Stream.
      *
-     * @param httpMethod  the http method
-     * @param url         the url
+     * @param httpMethod the http method
+     * @param url the url
      * @param requestBody the request body
-     * @param headers     the headers
+     * @param headers the headers
      * @return the input stream
      */
     SS stream(HttpMethod httpMethod, String url, Object requestBody, Map<String, String> headers);

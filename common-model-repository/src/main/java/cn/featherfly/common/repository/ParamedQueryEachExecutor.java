@@ -11,7 +11,6 @@ package cn.featherfly.common.repository;
 import java.io.Serializable;
 import java.util.Map;
 
-import cn.featherfly.common.lang.AutoCloseableIterable;
 import cn.featherfly.common.repository.mapper.RowMapper;
 
 /**
@@ -26,7 +25,7 @@ public interface ParamedQueryEachExecutor {
      *
      * @return map
      */
-    AutoCloseableIterable<Map<String, Serializable>> each();
+    RowIterable<Map<String, Serializable>> each();
 
     /**
      * query each.
@@ -35,7 +34,7 @@ public interface ParamedQueryEachExecutor {
      * @param mappingType the mapping type
      * @return mapped object
      */
-    <T> AutoCloseableIterable<T> each(Class<T> mappingType);
+    <T> RowIterable<T> each(Class<T> mappingType);
 
     /**
      * query each.
@@ -44,5 +43,5 @@ public interface ParamedQueryEachExecutor {
      * @param rowMapper the row mapper
      * @return mapped object
      */
-    <T> AutoCloseableIterable<T> each(RowMapper<T> rowMapper);
+    <T> RowIterable<T> each(RowMapper<T> rowMapper);
 }

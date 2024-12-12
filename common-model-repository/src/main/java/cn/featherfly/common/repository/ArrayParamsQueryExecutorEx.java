@@ -11,7 +11,6 @@ package cn.featherfly.common.repository;
 import java.io.Serializable;
 import java.util.List;
 
-import cn.featherfly.common.lang.AutoCloseableIterable;
 import cn.featherfly.common.structure.page.Limit;
 import cn.featherfly.common.structure.page.Page;
 import cn.featherfly.common.structure.page.PaginationResults;
@@ -1124,8 +1123,8 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param params the params
      * @return tuple2 list
      */
-    default <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Serializable... params) {
+    default <T1, T2> RowIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
+        Serializable... params) {
         return each(execution, mappingType1, mappingType2, (Tuple2<String, String>) null, params);
     }
 
@@ -1142,8 +1141,8 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param limit the limit
      * @return tuple2 list
      */
-    default <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Serializable[] params, int offset, int limit) {
+    default <T1, T2> RowIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
+        Serializable[] params, int offset, int limit) {
         return each(execution, mappingType1, mappingType2, (Tuple2<String, String>) null, params, offset, limit);
     }
 
@@ -1159,8 +1158,8 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param page the page
      * @return tuple2 list
      */
-    default <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Serializable[] params, Page page) {
+    default <T1, T2> RowIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
+        Serializable[] params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType1, mappingType2, params, limit.getOffset(), limit.getLimit());
     }
@@ -1177,7 +1176,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param params the params
      * @return tuple2 list
      */
-    <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
+    <T1, T2> RowIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
         Tuple2<String, String> prefixes, Serializable... params);
 
     /**
@@ -1194,7 +1193,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param limit the limit
      * @return tuple2 list
      */
-    <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
+    <T1, T2> RowIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
         Tuple2<String, String> prefixes, Serializable[] params, int offset, int limit);
 
     /**
@@ -1210,8 +1209,8 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param page the page
      * @return tuple2 list
      */
-    default <T1, T2> AutoCloseableIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Tuple2<String, String> prefixes, Serializable[] params, Page page) {
+    default <T1, T2> RowIterable<Tuple2<T1, T2>> each(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
+        Tuple2<String, String> prefixes, Serializable[] params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType1, mappingType2, prefixes, params, limit.getOffset(), limit.getLimit());
     }
@@ -1229,7 +1228,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param params the params
      * @return tuple3 list
      */
-    default <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
+    default <T1, T2, T3> RowIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Serializable... params) {
         return each(execution, mappingType1, mappingType2, mappingType3, (Tuple3<String, String, String>) null, params);
     }
@@ -1249,7 +1248,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param limit the limit
      * @return tuple3 list
      */
-    default <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
+    default <T1, T2, T3> RowIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Serializable[] params, int offset, int limit) {
         return each(execution, mappingType1, mappingType2, mappingType3, (Tuple3<String, String, String>) null, params,
             offset, limit);
@@ -1269,7 +1268,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param page the page
      * @return tuple3 list
      */
-    default <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
+    default <T1, T2, T3> RowIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Serializable[] params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType1, mappingType2, mappingType3, params, limit.getOffset(), limit.getLimit());
@@ -1289,9 +1288,8 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param params the params
      * @return tuple3 list
      */
-    <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Class<T3> mappingType3, Tuple3<String, String, String> prefixes,
-        Serializable... params);
+    <T1, T2, T3> RowIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
+        Class<T3> mappingType3, Tuple3<String, String, String> prefixes, Serializable... params);
 
     /**
      * query single, use query str in template find with executeId.
@@ -1309,9 +1307,8 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param limit the limit
      * @return tuple3 list
      */
-    <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
-        Class<T2> mappingType2, Class<T3> mappingType3, Tuple3<String, String, String> prefixes, Serializable[] params,
-        int offset, int limit);
+    <T1, T2, T3> RowIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1, Class<T2> mappingType2,
+        Class<T3> mappingType3, Tuple3<String, String, String> prefixes, Serializable[] params, int offset, int limit);
 
     /**
      * query single, use query str in template find with executeId.
@@ -1328,7 +1325,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param page the page
      * @return tuple3 list
      */
-    default <T1, T2, T3> AutoCloseableIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
+    default <T1, T2, T3> RowIterable<Tuple3<T1, T2, T3>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Tuple3<String, String, String> prefixes, Serializable[] params,
         Page page) {
         Limit limit = new Limit(page);
@@ -1351,7 +1348,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param params the params
      * @return tuple4 list
      */
-    default <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
+    default <T1, T2, T3, T4> RowIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Serializable... params) {
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4,
             (Tuple4<String, String, String, String>) null, params);
@@ -1374,7 +1371,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param limit the limit
      * @return tuple4 list
      */
-    default <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
+    default <T1, T2, T3, T4> RowIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Serializable[] params, int offset,
         int limit) {
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4,
@@ -1397,7 +1394,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param page the page
      * @return tuple4 list
      */
-    default <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
+    default <T1, T2, T3, T4> RowIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Serializable[] params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, params, limit.getOffset(),
@@ -1420,7 +1417,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param params the params
      * @return tuple4 list
      */
-    <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
+    <T1, T2, T3, T4> RowIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
         Tuple4<String, String, String, String> prefixes, Serializable... params);
 
@@ -1442,7 +1439,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param limit the limit
      * @return tuple4 list
      */
-    <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
+    <T1, T2, T3, T4> RowIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
         Tuple4<String, String, String, String> prefixes, Serializable[] params, int offset, int limit);
 
@@ -1463,7 +1460,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param page the page
      * @return tuple4 list
      */
-    default <T1, T2, T3, T4> AutoCloseableIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
+    default <T1, T2, T3, T4> RowIterable<Tuple4<T1, T2, T3, T4>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
         Tuple4<String, String, String, String> prefixes, Serializable[] params, Page page) {
         Limit limit = new Limit(page);
@@ -1488,9 +1485,9 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param params the params
      * @return tuple5 list
      */
-    default <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution,
-        Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Serializable... params) {
+    default <T1, T2, T3, T4, T5> RowIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
+        Serializable... params) {
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5,
             (Tuple5<String, String, String, String, String>) null, params);
     }
@@ -1513,7 +1510,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param params the params
      * @return tuple5 list
      */
-    <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution, Class<T1> mappingType1,
+    <T1, T2, T3, T4, T5> RowIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
         Tuple5<String, String, String, String, String> prefixes, Serializable... params);
 
@@ -1536,9 +1533,9 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param limit the limit
      * @return tuple5 list
      */
-    default <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution,
-        Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Serializable[] params, int offset, int limit) {
+    default <T1, T2, T3, T4, T5> RowIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
+        Serializable[] params, int offset, int limit) {
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5,
             (Tuple5<String, String, String, String, String>) null, params, offset, limit);
     }
@@ -1561,9 +1558,9 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param page the page
      * @return tuple5 list
      */
-    default <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution,
-        Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Serializable[] params, Page page) {
+    default <T1, T2, T3, T4, T5> RowIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
+        Serializable[] params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, params,
             limit.getOffset(), limit.getLimit());
@@ -1589,7 +1586,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param limit the limit
      * @return tuple5 list
      */
-    <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution, Class<T1> mappingType1,
+    <T1, T2, T3, T4, T5> RowIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution, Class<T1> mappingType1,
         Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
         Tuple5<String, String, String, String, String> prefixes, Serializable[] params, int offset, int limit);
 
@@ -1612,10 +1609,9 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param page the page
      * @return tuple5 list
      */
-    default <T1, T2, T3, T4, T5> AutoCloseableIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution,
-        Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Tuple5<String, String, String, String, String> prefixes, Serializable[] params,
-        Page page) {
+    default <T1, T2, T3, T4, T5> RowIterable<Tuple5<T1, T2, T3, T4, T5>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
+        Tuple5<String, String, String, String, String> prefixes, Serializable[] params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, prefixes, params,
             limit.getOffset(), limit.getLimit());
@@ -1640,7 +1636,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param params the params
      * @return LogicExpressionist
      */
-    default <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
+    default <T1, T2, T3, T4, T5, T6> RowIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
         Class<T5> mappingType5, Class<T6> mappingType6, Serializable... params) {
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
@@ -1668,7 +1664,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param limit the limit
      * @return LogicExpressionist
      */
-    default <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
+    default <T1, T2, T3, T4, T5, T6> RowIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
         Class<T5> mappingType5, Class<T6> mappingType6, Serializable[] params, int offset, int limit) {
         return each(execution, mappingType1, mappingType2, mappingType3, mappingType4, mappingType5, mappingType6,
@@ -1695,7 +1691,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param page the page
      * @return LogicExpressionist
      */
-    default <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
+    default <T1, T2, T3, T4, T5, T6> RowIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
         Class<T5> mappingType5, Class<T6> mappingType6, Serializable[] params, Page page) {
         Limit limit = new Limit(page);
@@ -1723,9 +1719,9 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param params the params
      * @return LogicExpressionist
      */
-    <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
-        Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes,
+    <T1, T2, T3, T4, T5, T6> RowIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
+        Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes,
         Serializable... params);
 
     /**
@@ -1750,10 +1746,10 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param limit the limit
      * @return LogicExpressionist
      */
-    <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
-        Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
-        Class<T5> mappingType5, Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes,
-        Serializable[] params, int offset, int limit);
+    <T1, T2, T3, T4, T5, T6> RowIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution, Class<T1> mappingType1,
+        Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4, Class<T5> mappingType5,
+        Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes, Serializable[] params,
+        int offset, int limit);
 
     /**
      * query each.
@@ -1776,7 +1772,7 @@ public interface ArrayParamsQueryExecutorEx<E0> extends ArrayParamsQueryExecutor
      * @param page the page
      * @return LogicExpressionist
      */
-    default <T1, T2, T3, T4, T5, T6> AutoCloseableIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
+    default <T1, T2, T3, T4, T5, T6> RowIterable<Tuple6<T1, T2, T3, T4, T5, T6>> each(E0 execution,
         Class<T1> mappingType1, Class<T2> mappingType2, Class<T3> mappingType3, Class<T4> mappingType4,
         Class<T5> mappingType5, Class<T6> mappingType6, Tuple6<String, String, String, String, String, String> prefixes,
         Serializable[] params, Page page) {

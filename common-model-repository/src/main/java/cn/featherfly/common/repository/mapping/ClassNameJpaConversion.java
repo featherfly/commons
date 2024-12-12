@@ -1,7 +1,6 @@
 
 package cn.featherfly.common.repository.mapping;
 
-import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import cn.featherfly.common.bean.BeanDescriptor;
@@ -15,6 +14,7 @@ import cn.featherfly.common.bean.BeanDescriptor;
  * @since 0.1.0
  * @version 0.1.0
  */
+//TODO 后续把javax. jakarta. 更换为两个附加包
 public class ClassNameJpaConversion implements ClassNameConversion {
 
     /**

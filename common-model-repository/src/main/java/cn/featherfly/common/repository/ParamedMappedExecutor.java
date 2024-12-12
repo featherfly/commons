@@ -10,7 +10,6 @@ package cn.featherfly.common.repository;
 
 import java.util.List;
 
-import cn.featherfly.common.lang.AutoCloseableIterable;
 import cn.featherfly.common.structure.page.Limit;
 import cn.featherfly.common.structure.page.Page;
 import cn.featherfly.common.structure.page.PaginationResults;
@@ -41,7 +40,7 @@ public interface ParamedMappedExecutor<T> {
      *
      * @return mapped object list
      */
-    AutoCloseableIterable<T> each();
+    RowIterable<T> each();
 
     /**
      * query each.
@@ -50,7 +49,7 @@ public interface ParamedMappedExecutor<T> {
      * @param limit the limit
      * @return mapped object list
      */
-    AutoCloseableIterable<T> each(int offset, int limit);
+    RowIterable<T> each(int offset, int limit);
 
     /**
      * query list.

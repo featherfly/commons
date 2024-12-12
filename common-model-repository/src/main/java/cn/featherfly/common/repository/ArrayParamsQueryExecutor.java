@@ -14,7 +14,6 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
-import cn.featherfly.common.lang.AutoCloseableIterable;
 import cn.featherfly.common.repository.mapper.RowMapper;
 import cn.featherfly.common.structure.page.Limit;
 import cn.featherfly.common.structure.page.Page;
@@ -363,7 +362,7 @@ public interface ArrayParamsQueryExecutor<E0> {
      * @param params the params
      * @return map list
      */
-    AutoCloseableIterable<Map<String, Serializable>> each(E0 execution, Serializable... params);
+    RowIterable<Map<String, Serializable>> each(E0 execution, Serializable... params);
 
     /**
      * query each, use query str in template find with executeId.
@@ -374,7 +373,7 @@ public interface ArrayParamsQueryExecutor<E0> {
      * @param params the params
      * @return entity list
      */
-    <T> AutoCloseableIterable<T> each(E0 execution, Class<T> mappingType, Serializable... params);
+    <T> RowIterable<T> each(E0 execution, Class<T> mappingType, Serializable... params);
 
     /**
      * query each, use query str in template find with executeId.
@@ -385,7 +384,7 @@ public interface ArrayParamsQueryExecutor<E0> {
      * @param params the params
      * @return entity list
      */
-    <T> AutoCloseableIterable<T> each(E0 execution, RowMapper<T> rowMapper, Serializable... params);
+    <T> RowIterable<T> each(E0 execution, RowMapper<T> rowMapper, Serializable... params);
 
     /**
      * query each, use query str in template find with executeId.
@@ -396,7 +395,7 @@ public interface ArrayParamsQueryExecutor<E0> {
      * @param limit the limit
      * @return map list
      */
-    AutoCloseableIterable<Map<String, Serializable>> each(E0 execution, Serializable[] params, int offset, int limit);
+    RowIterable<Map<String, Serializable>> each(E0 execution, Serializable[] params, int offset, int limit);
 
     /**
      * query each, use query str in template find with executeId.
@@ -409,7 +408,7 @@ public interface ArrayParamsQueryExecutor<E0> {
      * @param limit the limit
      * @return entity list
      */
-    <T> AutoCloseableIterable<T> each(E0 execution, Class<T> mappingType, Serializable[] params, int offset, int limit);
+    <T> RowIterable<T> each(E0 execution, Class<T> mappingType, Serializable[] params, int offset, int limit);
 
     /**
      * query each, use query str in template find with executeId.
@@ -422,8 +421,7 @@ public interface ArrayParamsQueryExecutor<E0> {
      * @param limit the limit
      * @return entity list
      */
-    <T> AutoCloseableIterable<T> each(E0 execution, RowMapper<T> rowMapper, Serializable[] params, int offset,
-        int limit);
+    <T> RowIterable<T> each(E0 execution, RowMapper<T> rowMapper, Serializable[] params, int offset, int limit);
 
     /**
      * query each, use query str in template find with executeId.
@@ -435,7 +433,7 @@ public interface ArrayParamsQueryExecutor<E0> {
      * @param page the page
      * @return entity list
      */
-    default <T> AutoCloseableIterable<T> each(E0 execution, Class<T> mappingType, Serializable[] params, Page page) {
+    default <T> RowIterable<T> each(E0 execution, Class<T> mappingType, Serializable[] params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, mappingType, params, limit.getOffset(), limit.getLimit());
     }
@@ -450,7 +448,7 @@ public interface ArrayParamsQueryExecutor<E0> {
      * @param page the page
      * @return entity list
      */
-    default <T> AutoCloseableIterable<T> each(E0 execution, RowMapper<T> rowMapper, Serializable[] params, Page page) {
+    default <T> RowIterable<T> each(E0 execution, RowMapper<T> rowMapper, Serializable[] params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, rowMapper, params, limit.getOffset(), limit.getLimit());
     }
@@ -463,7 +461,7 @@ public interface ArrayParamsQueryExecutor<E0> {
      * @param page the page
      * @return map list
      */
-    default AutoCloseableIterable<Map<String, Serializable>> each(E0 execution, Serializable[] params, Page page) {
+    default RowIterable<Map<String, Serializable>> each(E0 execution, Serializable[] params, Page page) {
         Limit limit = new Limit(page);
         return each(execution, params, limit.getOffset(), limit.getLimit());
     }

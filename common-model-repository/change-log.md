@@ -1,3 +1,6 @@
+# 0.5.2 
+1. AutoCloseableIterable替换为RowIterable
+
 # 0.5.1 2024-11-06
 1. 更改tuple接口包 
 

@@ -1,6 +1,7 @@
 
 package cn.featherfly.common.repository.mapping;
 
+import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import cn.featherfly.common.bean.BeanDescriptor;

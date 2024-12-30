@@ -40,7 +40,7 @@ public class StringFormatterTest {
         actual = formatter.format("hello {name} at {year} from [{name2}] at {time}", argsMap);
         assertEquals(actual, expected);
 
-        actual = formatter.format("hello {name} , age is {age}", user);
+        actual = formatter.formatBean("hello {name} , age is {age}", user);
         assertEquals(actual, expectedUser);
 
         formatter = new StringFormatter('$', '$');
@@ -124,7 +124,7 @@ public class StringFormatterTest {
 
         user = new User();
         user.setName("yufei");
-        actual = formatter.format("hello {name} , age is {age2}", user);
+        actual = formatter.formatBean("hello {name} , age is {age2}", user);
         assertEquals(actual, "hello yufei , age is {age2}");
     }
 
@@ -152,7 +152,7 @@ public class StringFormatterTest {
 
         user = new User();
         user.setName("yufei");
-        actual = formatter.format("hello {name} , age is {age2}", user);
+        actual = formatter.formatBean("hello {name} , age is {age2}", user);
         assertEquals(actual, "hello yufei , age is ");
     }
 

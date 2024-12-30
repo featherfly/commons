@@ -14,8 +14,8 @@ import cn.featherfly.common.lang.LambdaUtils;
 import cn.featherfly.common.lang.LambdaUtils.SerializableSupplierLambdaInfo;
 import cn.featherfly.common.lang.LambdaUtils.SerializedLambdaInfo;
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.lang.NumberUtils;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Num;
+import cn.featherfly.common.lang.Str;
 
 /**
  * 断言工具类，对于满足断言的情况，抛出支持国际化消息输出的异常 一般用于检查传入参数是否合法.
@@ -82,7 +82,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
      */
     @Override
     public void isNotBlank(String text, String arg) {
-        if (!Strings.isNotBlank(text)) {
+        if (!Str.isNotBlank(text)) {
             throwException("#isNotBlank", arg);
         }
     }
@@ -238,11 +238,11 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
         isNotNull(min, MIN);
         isNotNull(max, MAX);
         isNotNull(value, VALUE);
-        int result = NumberUtils.compare(value, min);
+        int result = Num.compare(value, min);
         if (result < 0) {
             throwException("#isInRange", value, min, max, arguDescp);
         }
-        result = NumberUtils.compare(value, max);
+        result = Num.compare(value, max);
         if (result > 0) {
             throwException("#isInRange", value, min, max, arguDescp);
         }
@@ -264,7 +264,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     public <N extends Number> void isGt(N value, N min, String arguDescp) {
         isNotNull(min, MIN);
         isNotNull(value, VALUE);
-        int result = NumberUtils.compare(value, min);
+        int result = Num.compare(value, min);
         if (result == -1 || result == 0) {
             throwException("#isGt", value, min, arguDescp);
         }
@@ -286,7 +286,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     public <N extends Number> void isGe(N value, N min, String arguDescp) {
         isNotNull(min, MIN);
         isNotNull(value, VALUE);
-        if (NumberUtils.compare(value, min) == -1) {
+        if (Num.compare(value, min) == -1) {
             throwException("#isGe", value, min, arguDescp);
         }
     }
@@ -307,7 +307,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     public <N extends Number> void isLt(N value, N max, String arguDescp) {
         isNotNull(max, MAX);
         isNotNull(value, VALUE);
-        int result = NumberUtils.compare(value, max);
+        int result = Num.compare(value, max);
         if (result == 0 || result == 1) {
             throwException("#isLt", value, max, arguDescp);
         }
@@ -329,7 +329,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     public <N extends Number> void isLe(N value, N max, String arguDescp) {
         isNotNull(max, MAX);
         isNotNull(value, VALUE);
-        if (NumberUtils.compare(value, max) == 1) {
+        if (Num.compare(value, max) == 1) {
             throwException("#isLe", value, max, arguDescp);
         }
     }

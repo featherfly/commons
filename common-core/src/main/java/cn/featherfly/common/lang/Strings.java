@@ -22,7 +22,9 @@ import cn.featherfly.common.lang.string.StringFormatter;
  *
  * @author zhongj
  * @since 1.8.6
+ * @deprecated use {@link Str} instead
  */
+@Deprecated
 public final class Strings extends org.apache.commons.lang3.StringUtils {
 
     private static final Pattern UNICODE_PATTERN = Pattern.compile("(\\\\u(\\p{XDigit}{4}))");
@@ -472,7 +474,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * format str. <blockquote>
      *
      * <pre>
-     * Strings.format("my name is {0}", "yufei");
+     * Str.format("my name is {0}", "yufei");
      * </pre>
      *
      * </blockquote>
@@ -489,7 +491,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * format str. <blockquote>
      *
      * <pre>
-     * Strings.format("my name is {0}, i am {1} years old", new Object[] { "yufei", 18 });
+     * Str.format("my name is {0}, i am {1} years old", new Object[] { "yufei", 18 });
      * </pre>
      *
      * </blockquote>
@@ -506,7 +508,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * format str. <blockquote>
      *
      * <pre>
-     * Strings.format("my name is {0}, i am {1} years old", new Object[] { "yufei", 18 });
+     * Str.format("my name is {0}, i am {1} years old", new Object[] { "yufei", 18 });
      * </pre>
      *
      * </blockquote>
@@ -523,7 +525,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * format str. <blockquote>
      *
      * <pre>
-     * Strings.format("my name is $0$, i am $1$ years old", '$', new Object[] { "yufei", 18 });
+     * Str.format("my name is $0$, i am $1$ years old", '$', new Object[] { "yufei", 18 });
      * </pre>
      *
      * </blockquote>
@@ -541,7 +543,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * format str. <blockquote>
      *
      * <pre>
-     * Strings.format("my name is {0}, i am {1} years old", '{', '}', new Object[] { "yufei", 18 });
+     * Str.format("my name is {0}, i am {1} years old", '{', '}', new Object[] { "yufei", 18 });
      * </pre>
      *
      * </blockquote>
@@ -560,7 +562,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * format str. <blockquote>
      *
      * <pre>
-     * Strings.format("my name is：{name}, i am {age} years old",
+     * Str.format("my name is：{name}, i am {age} years old",
      *     new HashChainMap&lt;String, String&gt;().putChain("name", "yufei").putChain("age", "18"));
      * </pre>
      *
@@ -578,7 +580,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * format str. <blockquote>
      *
      * <pre>
-     * Strings.format("my name is：$name$, i am $age$ years old",
+     * Str.format("my name is：$name$, i am $age$ years old",
      *     new HashChainMap&lt;String, String&gt;().putChain("name", "yufei").putChain("age", "18"), '$');
      * </pre>
      *
@@ -597,7 +599,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * format str. <blockquote>
      *
      * <pre>
-     * Strings.format("my name is：{name}, i am {age} years old",
+     * Str.format("my name is：{name}, i am {age} years old",
      *     new HashChainMap&lt;String, String&gt;().putChain("name", "yufei").putChain("age", "18"), '{', '}');
      * </pre>
      *
@@ -631,7 +633,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * @return formated str
      */
     public static String format2(String content, Object args) {
-        return FORMATTER.format(content, args);
+        return FORMATTER.formatBean(content, args);
     }
 
     /**
@@ -639,7 +641,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * User user = new User();
      * user.setName("yufei");
      * user.setAge(18);
-     * Strings.format("my name is：$name$, i am $age$ years old", user , '$');
+     * Str.format("my name is：$name$, i am $age$ years old", user , '$');
      * </code>
      *
      * @param content the content
@@ -656,7 +658,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * User user = new User();
      * user.setName("yufei");
      * user.setAge(18);
-     * Strings.format("my name is：{name}, i am {age} years old", user, '{', '}');
+     * Str.format("my name is：{name}, i am {age} years old", user, '{', '}');
      * </code>
      *
      * @param content the content
@@ -666,7 +668,7 @@ public final class Strings extends org.apache.commons.lang3.StringUtils {
      * @return the string
      */
     public static String format(String content, Object args, char startSymbol, char endSymbol) {
-        return new StringFormatter(startSymbol, endSymbol).format(content, args);
+        return new StringFormatter(startSymbol, endSymbol).formatBean(content, args);
     }
 
     /**

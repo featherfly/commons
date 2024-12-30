@@ -239,29 +239,6 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      * @param str 需要处理的字符串
      * @return 去除开始空白字符后的字符串
      */
-    public static String trimBegin(String str) {
-        if (isBlank(str)) {
-            return "";
-        }
-        char[] c = str.toCharArray();
-        int offset = 0;
-        for (int i = 0; i < c.length; i++) {
-            if (!Character.isWhitespace(c[i])) {
-                offset = i;
-                break;
-            }
-        }
-        return new String(c, offset, c.length - offset);
-    }
-
-    /**
-     * 去除字符串开始的空白字符 .
-     *
-     * @param str 需要处理的字符串
-     * @return 去除开始空白字符后的字符串
-     * @deprecated {@link #trimBegin(String)}
-     */
-    @Deprecated
     public static String trimStart(String str) {
         if (isBlank(str)) {
             return "";
@@ -305,25 +282,6 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      * @param ts 需要去除的字符
      * @return 去掉起始字符后的字符串
      */
-    public static String trimBegin(String str, String ts) {
-        if (str == null) {
-            return "";
-        }
-        while (str.startsWith(ts)) {
-            str = str.substring(ts.length(), str.length());
-        }
-        return str;
-    }
-
-    /**
-     * 去掉起始字符.
-     *
-     * @param str 源字符串
-     * @param ts 需要去除的字符
-     * @return 去掉起始字符后的字符串
-     * @deprecated {@link #trimBegin(String,String)}
-     */
-    @Deprecated
     public static String trimStart(String str, String ts) {
         if (str == null) {
             return "";
@@ -357,9 +315,7 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      * @param str 源字符串
      * @param ts 需要去除的字符
      * @return 去掉首尾字符后的字符串
-     * @deprecated {@link #trimBeginEnd(String,String)}
      */
-    @Deprecated
     public static String trimStartEnd(String str, String ts) {
         str = trimStart(str, ts);
         str = trimEnd(str, ts);
@@ -371,9 +327,7 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      *
      * @param str 源字符串
      * @return 去掉首尾空格后的字符串
-     * @deprecated {@link #trimBeginEndBlank(String)}
      */
-    @Deprecated
     public static String trimStartEndBlank(String str) {
         if (str == null) {
             return "";
@@ -382,34 +336,6 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
         //        str = trimStartEnd(str, " ");
         str = trimStartEnd(str, FULL_WIDTH_SPACE); // 全角空格
         return str;
-    }
-
-    /**
-     * 去掉首尾字符.
-     *
-     * @param str 源字符串
-     * @param ts 需要去除的字符
-     * @return 去掉首尾字符后的字符串
-     */
-    public static String trimBeginEnd(String str, String ts) {
-        str = trimBegin(str, ts);
-        return trimEnd(str, ts);
-    }
-
-    /**
-     * 去掉首尾空格，包括全角，半角.
-     *
-     * @param str 源字符串
-     * @return 去掉首尾空格后的字符串
-     */
-    public static String trimBeginEndBlank(String str) {
-        if (str == null) {
-            return "";
-        }
-        str = str.trim();
-        str = trimBeginEnd(str, FULL_WIDTH_SPACE); // 全角空格
-        return str;
-
     }
 
     /**
@@ -472,7 +398,7 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      * format str. <blockquote>
      *
      * <pre>
-     * Strings.format("my name is {0}", "yufei");
+     * Str.format("my name is {0}", "yufei");
      * </pre>
      *
      * </blockquote>
@@ -489,7 +415,7 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      * format str. <blockquote>
      *
      * <pre>
-     * Strings.format("my name is {0}, i am {1} years old", new Object[] { "yufei", 18 });
+     * Str.format("my name is {0}, i am {1} years old", new Object[] { "yufei", 18 });
      * </pre>
      *
      * </blockquote>
@@ -506,7 +432,7 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      * format str. <blockquote>
      *
      * <pre>
-     * Strings.format("my name is {0}, i am {1} years old", new Object[] { "yufei", 18 });
+     * Str.format("my name is {0}, i am {1} years old", new Object[] { "yufei", 18 });
      * </pre>
      *
      * </blockquote>
@@ -523,7 +449,7 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      * format str. <blockquote>
      *
      * <pre>
-     * Strings.format("my name is $0$, i am $1$ years old", '$', new Object[] { "yufei", 18 });
+     * Str.format("my name is $0$, i am $1$ years old", '$', new Object[] { "yufei", 18 });
      * </pre>
      *
      * </blockquote>
@@ -541,7 +467,7 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      * format str. <blockquote>
      *
      * <pre>
-     * Strings.format("my name is {0}, i am {1} years old", '{', '}', new Object[] { "yufei", 18 });
+     * Str.format("my name is {0}, i am {1} years old", '{', '}', new Object[] { "yufei", 18 });
      * </pre>
      *
      * </blockquote>
@@ -560,7 +486,7 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      * format str. <blockquote>
      *
      * <pre>
-     * Strings.format("my name is：{name}, i am {age} years old",
+     * Str.format("my name is：{name}, i am {age} years old",
      *     new HashChainMap&lt;String, String&gt;().putChain("name", "yufei").putChain("age", "18"));
      * </pre>
      *
@@ -578,7 +504,7 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      * format str. <blockquote>
      *
      * <pre>
-     * Strings.format("my name is：$name$, i am $age$ years old",
+     * Str.format("my name is：$name$, i am $age$ years old",
      *     new HashChainMap&lt;String, String&gt;().putChain("name", "yufei").putChain("age", "18"), '$');
      * </pre>
      *
@@ -597,7 +523,7 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      * format str. <blockquote>
      *
      * <pre>
-     * Strings.format("my name is：{name}, i am {age} years old",
+     * Str.format("my name is：{name}, i am {age} years old",
      *     new HashChainMap&lt;String, String&gt;().putChain("name", "yufei").putChain("age", "18"), '{', '}');
      * </pre>
      *
@@ -614,7 +540,7 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * format str. <blockquote>
+     * format str with bean object properties. <blockquote>
      *
      * <pre>
      * User user = new User();
@@ -630,8 +556,8 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      * @param args format args
      * @return formated str
      */
-    public static String format2(String content, Object args) {
-        return FORMATTER.format(content, args);
+    public static String formatBean(String content, Object args) {
+        return FORMATTER.formatBean(content, args);
     }
 
     /**
@@ -639,7 +565,7 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      * User user = new User();
      * user.setName("yufei");
      * user.setAge(18);
-     * Strings.format("my name is：$name$, i am $age$ years old", user , '$');
+     * Str.format("my name is：$name$, i am $age$ years old", user , '$');
      * </code>
      *
      * @param content the content
@@ -647,8 +573,8 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      * @param symbol the symbol
      * @return the string
      */
-    public static String format(String content, Object args, char symbol) {
-        return format(content, args, symbol, symbol);
+    public static String formatBean(String content, Object args, char symbol) {
+        return formatBean(content, args, symbol, symbol);
     }
 
     /**
@@ -656,7 +582,7 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      * User user = new User();
      * user.setName("yufei");
      * user.setAge(18);
-     * Strings.format("my name is：{name}, i am {age} years old", user, '{', '}');
+     * Str.format("my name is：{name}, i am {age} years old", user, '{', '}');
      * </code>
      *
      * @param content the content
@@ -665,8 +591,8 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      * @param endSymbol the end symbol
      * @return the string
      */
-    public static String format(String content, Object args, char startSymbol, char endSymbol) {
-        return new StringFormatter(startSymbol, endSymbol).format(content, args);
+    public static String formatBean(String content, Object args, char startSymbol, char endSymbol) {
+        return new StringFormatter(startSymbol, endSymbol).formatBean(content, args);
     }
 
     /**

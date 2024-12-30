@@ -56,7 +56,7 @@ public final class UUIDGenerator {
      * @return 长度为32的UUID
      */
     public static String generateUUID32() {
-        return Strings.replace(generate().toString(), "-", "");
+        return Str.replace(generate().toString(), "-", "");
     }
 
     /**

@@ -1890,16 +1890,16 @@ public final class ClassUtils {
         AssertIllegalArgument.isNotInterface(clazz);
         //        if (clazz.isInterface()) {
         //            throw new IllegalArgumentException(
-        //                    Strings.format("传入 {0} 是接口 不能实例化", new Object[] { clazz.getName() }));
+        //                    Str.format("传入 {0} 是接口 不能实例化", new Object[] { clazz.getName() }));
         //        }
         try {
             return clazz.newInstance();
         } catch (InstantiationException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
-            throw new ReflectException(Strings.format("{0} 构造器是否为私有", new Object[] { clazz.getName() }));
+            throw new ReflectException(Str.format("{0} 构造器是否为私有", new Object[] { clazz.getName() }));
         } catch (IllegalAccessException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
-            throw new ReflectException(Strings.format("{0} 构造器参数不匹配", new Object[] { clazz.getName() }));
+            throw new ReflectException(Str.format("{0} 构造器参数不匹配", new Object[] { clazz.getName() }));
         }
     }
 
@@ -1940,16 +1940,16 @@ public final class ClassUtils {
         } catch (IllegalArgumentException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
             throw new ReflectException(
-                Strings.format(" {0} 是否定义成抽象类了 不能实例化", constructor.getDeclaringClass().getName()));
+                Str.format(" {0} 是否定义成抽象类了 不能实例化", constructor.getDeclaringClass().getName()));
         } catch (InstantiationException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
-            throw new ReflectException(Strings.format("{0} 构造器是否为私有", constructor.getDeclaringClass().getName()));
+            throw new ReflectException(Str.format("{0} 构造器是否为私有", constructor.getDeclaringClass().getName()));
         } catch (IllegalAccessException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
-            throw new ReflectException(Strings.format("{0} 构造器参数不匹配", constructor.getDeclaringClass().getName()));
+            throw new ReflectException(Str.format("{0} 构造器参数不匹配", constructor.getDeclaringClass().getName()));
         } catch (InvocationTargetException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
-            throw new ReflectException(Strings.format("{0} 构造器抛出异常", constructor.getDeclaringClass().getName()));
+            throw new ReflectException(Str.format("{0} 构造器抛出异常", constructor.getDeclaringClass().getName()));
         }
     }
 
@@ -2014,7 +2014,7 @@ public final class ClassUtils {
             }
         }
         if (matchExecutable == null) {
-            throw new ReflectException(Strings.format("{0}({1}) 此{2}不存在",
+            throw new ReflectException(Str.format("{0}({1}) 此{2}不存在",
                 new Object[] { type.getName(), Arrays.asList(args).toString(), isMethod ? "方法" : "构造器" }));
         }
         return (E) matchExecutable;

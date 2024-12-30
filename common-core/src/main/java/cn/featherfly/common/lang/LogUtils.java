@@ -215,7 +215,7 @@ public class LogUtils {
             return getObjectInfo(target, 1);
         } catch (Exception e) {
             debug(e, LOGGER);
-            return Strings.NULL_STRING;
+            return Str.NULL_STRING;
         }
     }
 
@@ -229,7 +229,7 @@ public class LogUtils {
      */
     private String getObjectInfo(Object target, int level) throws IllegalAccessException {
         if (target == null) {
-            return Strings.NULL_STRING;
+            return Str.NULL_STRING;
         }
         Class<?> tc = target.getClass();
         StringBuilder sb = new StringBuilder();

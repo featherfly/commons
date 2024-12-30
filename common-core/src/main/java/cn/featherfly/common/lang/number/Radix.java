@@ -2,10 +2,7 @@
 package cn.featherfly.common.lang.number;
 
 /**
- * <p>
- * Radixs
- * </p>
- * .
+ * Radixs.
  *
  * @author zhongj
  */
@@ -23,7 +20,10 @@ public enum Radix {
     /** The radix16. */
     RADIX16(16),
 
-    /** The radix10. */
+    /** The radix32. */
+    RADIX32(32),
+
+    /** The radix36. */
     RADIX36(36),
 
     /** The radix62. */

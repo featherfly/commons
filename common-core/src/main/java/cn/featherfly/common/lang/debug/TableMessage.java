@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 
 /**
  * The Class TableMessage.
@@ -119,7 +119,7 @@ public class TableMessage {
             columns.stream().map(column -> column.title).toArray());
         String wrapLine = "";
         if (wrapAround) {
-            wrapLine = Strings.join("=", header.length() - 1) + "\n"; // -1 是去掉\n
+            wrapLine = Str.join("=", header.length() - 1) + "\n"; // -1 是去掉\n
         }
         dm.append(wrapLine).append(header);
         for (Map<String, Object> row : rows) {

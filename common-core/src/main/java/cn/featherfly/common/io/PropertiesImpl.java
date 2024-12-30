@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 
 /**
  * PropertiesImpl.
@@ -292,7 +292,7 @@ public class PropertiesImpl implements Properties {
             if (Chars.SHARP_CHAR == lr.lineBuf[0] || Chars.NOT_L_CHAR == lr.lineBuf[0]) {
                 comment = loadConvert(lr.lineBuf, 0, limit, convtBuf).substring(1);
                 if (Lang.isNotEmpty(comment)) {
-                    comment = Strings.encode(comment, StandardCharsets.ISO_8859_1, charset);
+                    comment = Str.encode(comment, StandardCharsets.ISO_8859_1, charset);
                     CharsetComment cc;
                     if (firstLine && (cc = CharsetComment.createIfCan(comment)) != null) {
                         charset = cc.getCharset();
@@ -338,8 +338,8 @@ public class PropertiesImpl implements Properties {
             }
             String key = loadConvert(lr.lineBuf, 0, keyLen, convtBuf);
             String value = loadConvert(lr.lineBuf, valueStart, limit - valueStart, convtBuf);
-            setProperty(Strings.encode(key, StandardCharsets.ISO_8859_1, charset),
-                    Strings.encode(value, StandardCharsets.ISO_8859_1, charset), comment);
+            setProperty(Str.encode(key, StandardCharsets.ISO_8859_1, charset),
+                    Str.encode(value, StandardCharsets.ISO_8859_1, charset), comment);
             partMap.remove(commentKey);
             comment = null;
         }
@@ -456,7 +456,7 @@ public class PropertiesImpl implements Properties {
                 } else {
                     Comment nc = new Comment();
                     if (charset == null || charset == StandardCharsets.ISO_8859_1) {
-                        nc.setComment(Strings.stringToUnicode(((Comment) part).getComment()));
+                        nc.setComment(Str.stringToUnicode(((Comment) part).getComment()));
                     } else {
                         nc.setComment(((Comment) part).getComment());
                     }

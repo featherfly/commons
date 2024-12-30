@@ -370,7 +370,7 @@ public class LangTest {
     public void testGetInvoker() {
         StackTraceElement e = Lang.getInvoker();
         System.out.println(
-            Strings.format("e.getClassName = {0}     e.getMethodName() = {1}", e.getClassName(), e.getMethodName()));
+            Str.format("e.getClassName = {0}     e.getMethodName() = {1}", e.getClassName(), e.getMethodName()));
         assertEquals(e.getMethodName(), "testGetInvoker");
 
         assertInvoker1("testGetInvoker");
@@ -401,7 +401,7 @@ public class LangTest {
         System.out.println("** assertInvoker1");
         StackTraceElement e = Lang.getInvoker(2);
         assertEquals(e.getClassName(), this.getClass().getName());
-        System.out.println(Strings.format("assertEquals(e.getMethodName(), invokeMethod) = assertEquals({0}, {1})",
+        System.out.println(Str.format("assertEquals(e.getMethodName(), invokeMethod) = assertEquals({0}, {1})",
             e.getMethodName(), invokeMethod));
         //        assertEquals(Lang.getInvoker().getMethodName(), "getInvoker1");
         assertEquals(e.getMethodName(), invokeMethod);

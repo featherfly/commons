@@ -26,7 +26,7 @@ public class Console {
      * @param params        the params
      */
     public static void log(String messageFormat, Object... params) {
-        System.out.println(Strings.format(messageFormat, params));
+        System.out.println(Str.format(messageFormat, params));
     }
 
     /**
@@ -45,7 +45,7 @@ public class Console {
      * @param params        the params
      */
     public static void error(String messageFormat, Object... params) {
-        System.err.println(Strings.format(messageFormat, params));
+        System.err.println(Str.format(messageFormat, params));
     }
 
     /**

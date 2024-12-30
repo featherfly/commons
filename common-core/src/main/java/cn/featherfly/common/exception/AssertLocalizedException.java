@@ -6,7 +6,7 @@ import java.util.Map;
 
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.lang.asserts.LocalizedAssert;
 
 /**
@@ -53,7 +53,7 @@ public class AssertLocalizedException {
      * @param arg  出错时对参数的描述信息，例如：user.id、username等等
      */
     public void isNotBlank(String text, String arg) {
-        if (!Strings.isNotBlank(text)) {
+        if (!Str.isNotBlank(text)) {
             throwException("#isNotBlank", new Object[] { arg });
         }
     }

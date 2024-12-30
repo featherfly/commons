@@ -46,22 +46,22 @@ public class UUIDTest {
 
         String uuid = UUIDGenerator.generateUUID();
         System.out.println("uuid: " + uuid + " length: " + uuid.length());
-        BigInteger bi = NumberUtils.parse(uuid, Radix.RADIX16);
+        BigInteger bi = Num.parse(uuid, Radix.RADIX16);
         System.out.println("int: " + bi);
-        System.out.println("62: " + NumberUtils.toString62Unit(bi));
-        System.out.println("64: " + NumberUtils.toString64Unit(bi));
-        System.out.println("93: " + NumberUtils.toString93Unit(bi));
-        System.out.println("128: " + NumberUtils.toString128Unit(bi));
+        System.out.println("62: " + Num.toString62Unit(bi));
+        System.out.println("64: " + Num.toString64Unit(bi));
+        System.out.println("93: " + Num.toString93Unit(bi));
+        System.out.println("128: " + Num.toString128Unit(bi));
 
         System.out.println();
         uuid = "47E1ABCD371743692000410F";
         System.out.println("uuid: " + uuid + " length: " + uuid.length());
-        bi = NumberUtils.parse(uuid, Radix.RADIX16);
+        bi = Num.parse(uuid, Radix.RADIX16);
         System.out.println("int: " + bi);
-        System.out.println("62: " + NumberUtils.toString62Unit(bi));
-        System.out.println("64: " + NumberUtils.toString64Unit(bi));
-        System.out.println("93: " + NumberUtils.toString93Unit(bi));
-        System.out.println("128: " + NumberUtils.toString128Unit(bi));
+        System.out.println("62: " + Num.toString62Unit(bi));
+        System.out.println("64: " + Num.toString64Unit(bi));
+        System.out.println("93: " + Num.toString93Unit(bi));
+        System.out.println("128: " + Num.toString128Unit(bi));
 
         int i = 0;
         System.out.println();
@@ -76,9 +76,9 @@ public class UUIDTest {
         System.out.println(Integer.toHexString(255));
         System.out.println(Integer.toHexString(256));
 
-        String s = NumberUtils.toString(256, Radix.RADIX16);
+        String s = Num.toString(256, Radix.RADIX16);
         System.out.println(s);
-        System.out.println(NumberUtils.parse(s, Radix.RADIX16));
+        System.out.println(Num.parse(s, Radix.RADIX16));
 
         System.out.println();
         i = Integer.parseInt("555", 8);

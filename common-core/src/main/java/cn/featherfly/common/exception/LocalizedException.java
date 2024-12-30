@@ -5,7 +5,7 @@ import java.util.Locale;
 
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.locale.LocalizedMessage;
 import cn.featherfly.common.locale.ResourceBundleUtils;
 
@@ -251,7 +251,7 @@ public abstract class LocalizedException extends BaseException {
                 localizedMessage = ResourceBundleUtils.getString(this.getClass(), message.substring(1), args, locale,
                     charset);
             } else {
-                localizedMessage = Lang.isEmpty(args) ? message : Strings.format(message, args);
+                localizedMessage = Lang.isEmpty(args) ? message : Str.format(message, args);
             }
         }
         return localizedMessage;

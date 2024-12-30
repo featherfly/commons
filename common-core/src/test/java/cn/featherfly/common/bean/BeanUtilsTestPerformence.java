@@ -10,7 +10,7 @@ import cn.featherfly.common.bean.rule.CopyRules;
 import cn.featherfly.common.bean.vo.Address;
 import cn.featherfly.common.bean.vo.User;
 import cn.featherfly.common.bean.vo.Zipcode;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 
 public class BeanUtilsTestPerformence {
 
@@ -27,7 +27,7 @@ public class BeanUtilsTestPerformence {
 
     @Test
     public void testWithRef() throws Exception {
-        System.out.println(Strings.format("loop {} times", max));
+        System.out.println(Str.format("loop {} times", max));
 
         invokeWithJavaCode();
 

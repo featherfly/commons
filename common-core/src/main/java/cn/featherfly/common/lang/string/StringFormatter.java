@@ -145,7 +145,7 @@ public class StringFormatter {
     }
 
     /**
-     * format str. <blockquote>
+     * format str with bean object properties. <blockquote>
      *
      * <pre>
      * User user = new User();
@@ -162,7 +162,7 @@ public class StringFormatter {
      * @param args the args
      * @return formated str
      */
-    public <O extends Object> String format(String str, O args) {
+    public <O extends Object> String formatBean(String str, O args) {
         return format(str, startSymbol, endSymbol, args, false);
     }
 

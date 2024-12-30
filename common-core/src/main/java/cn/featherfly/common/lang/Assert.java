@@ -144,7 +144,7 @@ public class Assert<E extends RuntimeException> {
      * @param message 断言失败的信息
      */
     public void isNotBlank(String text, String message) {
-        if (!Strings.isNotBlank(text)) {
+        if (!Str.isNotBlank(text)) {
             throwException(message);
         }
     }

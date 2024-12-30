@@ -11,7 +11,7 @@
 package cn.featherfly.common.lang.string;
 
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 
 /**
  * StringLinker.
@@ -40,7 +40,7 @@ public class StringLinker {
     /**
      * Instantiates a new string linker.
      *
-     * @param separator       the separator
+     * @param separator the separator
      * @param ignoreDuplicate the ignore duplicate
      */
     public StringLinker(String separator, boolean ignoreDuplicate) {
@@ -50,9 +50,9 @@ public class StringLinker {
     /**
      * Instantiates a new string linker.
      *
-     * @param separator       the separator
+     * @param separator the separator
      * @param ignoreDuplicate the ignore duplicate
-     * @param ignoreEmpty     the ignore empty
+     * @param ignoreEmpty the ignore empty
      */
     public StringLinker(String separator, boolean ignoreDuplicate, boolean ignoreEmpty) {
         super();
@@ -75,8 +75,8 @@ public class StringLinker {
             if (ignoreEmpty && Lang.isEmpty(values[values.length - 1])) {
                 return this;
             }
-            value.append(separator).append(
-                    ignoreDuplicate ? trimStartSeparator(values[values.length - 1]) : values[values.length - 1]);
+            value.append(separator)
+                .append(ignoreDuplicate ? trimStartSeparator(values[values.length - 1]) : values[values.length - 1]);
         }
         return this;
     }
@@ -91,14 +91,14 @@ public class StringLinker {
     }
 
     private String trimStartSeparator(String str) {
-        return Strings.trimBegin(str, separator);
+        return Str.trimStart(str, separator);
     }
 
     private String trimEndSeparator(String str) {
-        return Strings.trimEnd(str, separator);
+        return Str.trimEnd(str, separator);
     }
 
     private String trimStartAndEndSeparator(String str) {
-        return Strings.trimBeginEnd(str, separator);
+        return Str.trimStartEnd(str, separator);
     }
 }

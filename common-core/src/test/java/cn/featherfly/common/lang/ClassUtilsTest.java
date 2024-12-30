@@ -376,7 +376,7 @@ public class ClassUtilsTest {
     }
 
     static void p(Method method, Class<?> target) throws NoSuchMethodException, SecurityException {
-        System.out.println(Strings.format("target {0}, method {1}, declaringClass {2}",
+        System.out.println(Str.format("target {0}, method {1}, declaringClass {2}",
             new Object[] { target.getName(), method.getName(), method.getDeclaringClass().getName() }));
         System.out.println(method);
         TypeVariable<?> tv = (TypeVariable<?>) method.getGenericReturnType();

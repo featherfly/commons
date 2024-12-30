@@ -1,8 +1,8 @@
 
 package cn.featherfly.common.bean;
 
-import static org.junit.Assert.assertTrue;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;

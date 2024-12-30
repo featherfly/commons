@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import cn.featherfly.common.lang.Randoms.CharType;
+
 /**
  * <p>
  * 随机生成工具类
@@ -33,26 +35,6 @@ public final class RandomUtils {
     private static final int NUMBER = 10;
 
     private static final int NUMBER_START = 48;
-
-    /**
-     * <p>
-     * 字符类型.
-     * </p>
-     */
-    public enum CharType {
-        /**
-         * lowerCase 小写字母
-         */
-        LOWER_CASE,
-        /**
-         * upperCase 大写字母
-         */
-        UPPER_CASE,
-        /**
-         * numberCase 数字
-         */
-        NUMBER_CASE
-    }
 
     private static Random random = new Random();
 
@@ -204,7 +186,7 @@ public final class RandomUtils {
     /**
      * 随机返回一个字符串，包含大写，小写还是数字又传入参数charTypes确定
      *
-     * @param length    返回字符串的长度
+     * @param length 返回字符串的长度
      * @param charTypes 确定字符的类型（大写，小写，数字）
      * @return 一个给定长度的随机字符串
      */
@@ -254,7 +236,7 @@ public final class RandomUtils {
      * 以给定的列表为源，随机抽取其中一个元素返回
      * </p>
      *
-     * @param <T>    集合内的对象类型
+     * @param <T> 集合内的对象类型
      * @param source 随机对象选取的源对象
      * @return 随机选择的对象
      */
@@ -269,7 +251,7 @@ public final class RandomUtils {
      * 以给定的列表为源，随机抽取其中一个元素返回
      * </p>
      *
-     * @param <T>    集合内的对象类型
+     * @param <T> 集合内的对象类型
      * @param source 随机对象选取的源对象
      * @param length 返回字符串的长度
      * @return 随机选择的对象
@@ -288,7 +270,7 @@ public final class RandomUtils {
      * 把传入总数分解为随机的传入份数
      *
      * @param total 总数
-     * @param num   分数
+     * @param num 分数
      * @return 随机数组
      */
     public static double[] getRandomFromTotal(double total, int num) {

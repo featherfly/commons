@@ -484,6 +484,9 @@ public final class Num {
      * @return int
      */
     public static int toInt(byte... bytes) {
+        if (bytes.length > Integer.BYTES) {
+            throw new IllegalArgumentException(Str.format("bytes.length[{}] must <= Integer.BYTES[{}]"));
+        }
         int iOutcome = 0;
         byte bLoop;
         for (int i = 0; i < bytes.length; i++) {

@@ -2,11 +2,25 @@
 
 # 1.13.1
 
-1. 加入Str类代替Strings
+1. 加入Str类代替Strings，删除StringUtils类，标注Strings为废弃
+
 2. 加入ReflectionPropertyAccessorFactory
+
 3. LocalizedException支持字符串格式化
+
 4. 修复StringFormatter在使用NotMatchStrategy.TRIM_PLACEHOLDER策略时，{name},{1}中的name和1被去除的问题(即只返回{})
-5. 加入Num类代替NumberUtils
+
+5. AutoCloseableIterable覆盖close方法，抛出异常BaseException代替抛出异常Exception
+
+6. 加入Num类代替NumberUtils
+
+7. ListPropertyAccessor和MapPropertyAccessor加入检查属性不存在的逻辑，不存在抛出NoSuchPropertyException
+
+8. 添加不可变 list|set|map
+
+   
+
+    
 
 # 1.13.0 2024-06-02
 

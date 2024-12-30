@@ -195,9 +195,11 @@ public final class ArrayUtils {
             } else {
                 sb.append(a);
             }
-            sb.append(linkSymbol);
+            if (linkSymbol != '\0') {
+                sb.append(linkSymbol);
+            }
         }
-        if (sb.length() > 0) {
+        if (linkSymbol != '\0' && sb.length() > 0) {
             sb.deleteCharAt(sb.length() - 1);
         }
         return sb.toString();
@@ -354,7 +356,7 @@ public final class ArrayUtils {
         }
         A[] as = create(type, len);
         each((a, i) -> {
-            as[i] = NumberUtils.parse(a, type);
+            as[i] = Num.parse(a, type);
         }, array);
         return as;
     }

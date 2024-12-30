@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 
 /**
  * <p>
@@ -127,7 +127,7 @@ public class JdkResourceBundleProxy implements cn.featherfly.common.locale.Resou
 
     private String encode(String str) {
         if (Lang.isNotEmpty(str) && charset != null) {
-            return Strings.encode(str, DEFAULT_CHARSET, charset);
+            return Str.encode(str, DEFAULT_CHARSET, charset);
         }
         return str;
     }

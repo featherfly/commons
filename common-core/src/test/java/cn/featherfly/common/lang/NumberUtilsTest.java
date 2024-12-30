@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 /**
  * <p>
- * NumberUtilsTest
+ * NumberUtilsberUtilsTest
  * </p>
  *
  * @author zhongj
@@ -819,7 +819,7 @@ public class NumberUtilsTest {
     }
 
     static char[] cs = new char[] { '©', 'ß', '¿', '£', '¤', '¥', '¦', '§', 'µ', '¶', 'Â', 'Ä', 'Æ', 'Ê', 'Ë', 'Î', 'Ï',
-            'Ð', 'Ñ', 'Ô', 'Ö', 'Û', 'Ü', 'Ý', 'â', 'ä', 'æ', 'ê', 'ë', 'î', 'ð', 'ñ', '¯', '®' };
+        'Ð', 'Ñ', 'Ô', 'Ö', 'Û', 'Ü', 'Ý', 'â', 'ä', 'æ', 'ê', 'ë', 'î', 'ð', 'ñ', '¯', '®' };
 
     public static void main(String[] args) {
         System.out.println("64 : Long.MAX_VALUE");

@@ -16,7 +16,7 @@ import java.util.Scanner;
 
 import org.testng.annotations.Test;
 
-import cn.featherfly.common.lang.NumberUtils;
+import cn.featherfly.common.lang.Num;
 import cn.featherfly.common.lang.Randoms;
 
 /**
@@ -67,20 +67,20 @@ public class T {
         System.out.println(System.currentTimeMillis());
         long v = 2104151544487372415L;
         System.out.println(v);
-        String s62 = NumberUtils.toString62Unit(v);
+        String s62 = Num.toString62Unit(v);
         System.out.println(s62);
-        System.out.println(NumberUtils.parse62UnitToLong(s62));
-        //        System.out.println(NumberUtils.toString64Unit(v));
-        //        System.out.println(NumberUtils.toString93Unit(v));
+        System.out.println(Num.parse62UnitToLong(s62));
+        //        System.out.println(Num.toString64Unit(v));
+        //        System.out.println(Num.toString93Unit(v));
 
         BigInteger b = new BigInteger("202104151544487372415");
         System.out.println(b);
-        s62 = NumberUtils.toString62Unit(b);
+        s62 = Num.toString62Unit(b);
         System.out.println(s62);
-        System.out.println(NumberUtils.parse62Unit(s62));
+        System.out.println(Num.parse62Unit(s62));
         //        System.out.println(b.longValue());
         //        System.out.println(b.longValueExact());
-        //        System.out.println(NumberUtils.toString64Unit(b));
-        //        System.out.println(NumberUtils.toString93Unit(b));
+        //        System.out.println(Num.toString64Unit(b));
+        //        System.out.println(Num.toString93Unit(b));
     }
 }

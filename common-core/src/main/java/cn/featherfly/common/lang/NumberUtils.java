@@ -12,10 +12,10 @@ import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.number.Radix;
 
 /**
- * NumberUtils.
+ * Num.
  *
  * @author zhongj
- * @deprecated {@link Num}
+ * @deprecated use {@link Num} instead
  */
 @Deprecated
 public final class NumberUtils {

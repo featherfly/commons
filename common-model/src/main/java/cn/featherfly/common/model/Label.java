@@ -17,5 +17,10 @@ package cn.featherfly.common.model;
  */
 public interface Label {
 
+    /**
+     * Label.
+     *
+     * @return the string
+     */
     String label();
 }

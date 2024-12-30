@@ -10,12 +10,20 @@
  */
 package cn.featherfly.common.model;
 
+import java.io.Serializable;
+
 /**
  * Value.
  *
  * @author zhongj
+ * @param <V> the value type
  */
-public interface Value<V> {
+public interface Value<V> extends Serializable {
 
+    /**
+     * Value.
+     *
+     * @return the v
+     */
     V value();
 }

@@ -9,14 +9,22 @@ import cn.featherfly.common.model.Property;
  */
 public enum TimeRange implements Property<Integer> {
 
-    DAYS,
+    /** The day. */
+    DAY,
 
-    WEEKS,
+    /** The week. */
+    WEEK,
 
-    MONTHS,
+    /** The month. */
+    MONTH,
 
+    /** The quarter. */
     QUARTER,
 
+    /** The half year. */
+    HALF_YEAR,
+
+    /** The year. */
     YEAR;
 
     /**

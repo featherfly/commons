@@ -14,9 +14,7 @@ import cn.featherfly.common.model.Property;
 
 /**
  * ChineseZodiac.
- * <p>
  * 十二生肖.
- * </p>
  *
  * @author zhongj
  */

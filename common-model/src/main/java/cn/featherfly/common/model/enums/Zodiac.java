@@ -4,9 +4,7 @@ import cn.featherfly.common.model.Property;
 
 /**
  * Zodiac.
- * <p>
  * 十二星座.
- * </p>
  *
  * @author zhongj
  */

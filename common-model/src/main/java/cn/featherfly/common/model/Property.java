@@ -14,8 +14,14 @@ package cn.featherfly.common.model;
  * Property.
  *
  * @author zhongj
+ * @param <V> the value type
  */
 public interface Property<V> extends Value<V> {
 
+    /**
+     * Name.
+     *
+     * @return the string
+     */
     String name();
 }

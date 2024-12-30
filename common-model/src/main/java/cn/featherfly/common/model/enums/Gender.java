@@ -19,7 +19,12 @@ import cn.featherfly.common.model.Property;
  */
 public enum Gender implements Property<Integer> {
 
-    MALE(0), FAMALE(1), UNKNOW(2);
+    /** The male. */
+    MALE(0),
+    /** The famale. */
+    FAMALE(1),
+    /** The unknow. */
+    UNKNOW(2);
 
     private int value;
 

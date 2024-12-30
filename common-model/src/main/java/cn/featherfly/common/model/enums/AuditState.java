@@ -3,9 +3,10 @@ package cn.featherfly.common.model.enums;
 import cn.featherfly.common.model.Property;
 
 /**
- * 审核状态枚举
+ * audit state.
+ * 审核状态枚举.
  */
-public enum AuditStatus implements Property<Integer> {
+public enum AuditState implements Property<Integer> {
     /**
      * 审核中
      */

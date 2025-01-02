@@ -8,8 +8,8 @@
  */
 package cn.featherfly.common.bean;
 
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
+import static org.testng.Assert.assertNotSame;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.BeforeClass;

@@ -8,9 +8,9 @@
  */
 package cn.featherfly.common.bean;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

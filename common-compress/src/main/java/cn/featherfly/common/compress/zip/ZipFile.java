@@ -8,8 +8,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tools.zip.ZipEntry;
 import org.apache.tools.zip.ZipOutputStream;
 import org.slf4j.Logger;
@@ -17,15 +19,11 @@ import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.compress.CompressException;
 import cn.featherfly.common.constant.Chars;
-import cn.featherfly.common.constant.Charset;
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.StringUtils;
 import cn.featherfly.common.lang.UriUtils;
 
 /**
- * <p>
- * ZipFile操作类
- * </p>
+ * ZipFile操作类.
  *
  * @author 钟冀
  */
@@ -33,12 +31,12 @@ public class ZipFile {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ZipFile.class);
 
-    private static final String DEFAULT_ENCODING = Charset.UTF_8;
+    private static final String DEFAULT_ENCODING = StandardCharsets.UTF_8.displayName();
 
     private static final int DEFAULT_BUFFER_SIZE = 1024;
 
     /**
-     * 使用默认编码（UTF-8）
+     * 使用默认编码（UTF-8）.
      *
      * @param file 文件
      */
@@ -47,7 +45,7 @@ public class ZipFile {
     }
 
     /**
-     * 使用默认编码（UTF-8）
+     * 使用默认编码（UTF-8）.
      *
      * @param name 文件名
      * @throws IOException IOException
@@ -57,7 +55,9 @@ public class ZipFile {
     }
 
     /**
-     * @param file     文件
+     * Instantiates a new zip file.
+     *
+     * @param file 文件
      * @param encoding 编码
      */
     public ZipFile(File file, String encoding) {
@@ -70,7 +70,9 @@ public class ZipFile {
     }
 
     /**
-     * @param name     文件名
+     * Instantiates a new zip file.
+     *
+     * @param name 文件名
      * @param encoding 编码
      */
     public ZipFile(String name, String encoding) {
@@ -78,9 +80,7 @@ public class ZipFile {
     }
 
     /**
-     * <p>
-     * 解压缩zip文件
-     * </p>
+     * 解压缩zip文件.
      *
      * @param decompressDir 解压缩到的目录
      * @return this
@@ -111,9 +111,7 @@ public class ZipFile {
     }
 
     /**
-     * <p>
-     * 解压缩zip文件
-     * </p>
+     * 解压缩zip文件.
      *
      * @param decompressDir 解压缩到的目录
      * @return this
@@ -125,11 +123,9 @@ public class ZipFile {
     }
 
     /**
-     * <p>
      * 解压缩zip中的指定文件到指定路径.
-     * </p>
      *
-     * @param filePath      文件在压缩文件内的路径
+     * @param filePath 文件在压缩文件内的路径
      * @param decompressDir 解压缩到的目录
      * @throws IOException IOException
      * @return this
@@ -143,7 +139,7 @@ public class ZipFile {
             ZipEntry zipEntry = getEntry(filePath);
             if (zipEntry != null) {
                 writeFile(getResourceAsStream(filePath),
-                        new File(decompressDir + Chars.DIV + getEntryFileName(zipEntry)));
+                    new File(decompressDir + Chars.DIV + getEntryFileName(zipEntry)));
             }
         } catch (IOException e) {
             throw new CompressException(e);
@@ -152,11 +148,9 @@ public class ZipFile {
     }
 
     /**
-     * <p>
      * 解压缩zip中的指定文件到指定文件.
-     * </p>
      *
-     * @param filePath       文件在压缩文件内的路径
+     * @param filePath 文件在压缩文件内的路径
      * @param decompressFile 解压缩到的文件
      * @return this
      */
@@ -177,9 +171,9 @@ public class ZipFile {
      * 解压缩zip中的指定文件到指定路径.
      * </p>
      *
-     * @param filePath      文件在压缩文件内的路径
+     * @param filePath 文件在压缩文件内的路径
      * @param decompressDir 解压到的目录
-     * @param fileName      解压缩后的文件名
+     * @param fileName 解压缩后的文件名
      * @return this
      */
     public ZipFile decompress(String filePath, String decompressDir, String fileName) {
@@ -190,11 +184,9 @@ public class ZipFile {
     }
 
     /**
-     * <p>
-     * zip压缩给定文件或目录下的所有文件,使用默认编码（UTF-8）
-     * </p>
+     * zip压缩给定文件或目录下的所有文件,使用默认编码（UTF-8）.
      *
-     * @param file   压缩以后的文件
+     * @param file 压缩以后的文件
      * @param target 需要压缩的文件或文件夹,当是文件夹时，压缩文件夹下的所有文件
      * @return 压缩后的ZipFile文件
      */
@@ -203,12 +195,10 @@ public class ZipFile {
     }
 
     /**
-     * <p>
-     * zip压缩给定文件或目录下的所有文件
-     * </p>
+     * zip压缩给定文件或目录下的所有文件.
      *
-     * @param file     压缩以后的文件
-     * @param target   需要压缩的文件或文件夹,当是文件夹时，压缩文件夹下的所有文件
+     * @param file 压缩以后的文件
+     * @param target 需要压缩的文件或文件夹,当是文件夹时，压缩文件夹下的所有文件
      * @param encoding 编码
      * @return 压缩后的ZipFile文件
      */
@@ -229,11 +219,9 @@ public class ZipFile {
     }
 
     /**
-     * <p>
-     * zip压缩给定文件,使用默认编码（UTF-8）
-     * </p>
+     * zip压缩给定文件,使用默认编码（UTF-8）.
      *
-     * @param file  压缩以后的文件
+     * @param file 压缩以后的文件
      * @param files 需要压缩的文件（多个）
      * @return 压缩后的ZipFile文件
      */
@@ -242,12 +230,10 @@ public class ZipFile {
     }
 
     /**
-     * <p>
-     * zip压缩给定文件
-     * </p>
+     * zip压缩给定文件.
      *
-     * @param file     压缩以后的文件
-     * @param files    需要压缩的文件（多个）
+     * @param file 压缩以后的文件
+     * @param files 需要压缩的文件（多个）
      * @param encoding 编码
      * @return 压缩后的ZipFile文件
      */
@@ -270,9 +256,7 @@ public class ZipFile {
     }
 
     /**
-     * <p>
      * 查找Zip压缩文件内指定路径的资源.
-     * </p>
      *
      * @param filePath 文件在压缩文件内的路径
      * @return Zip压缩文件内指定路径的资源.如果没有则返回null.
@@ -389,8 +373,8 @@ public class ZipFile {
         }
         LOGGER.debug("解压 - 创建文件: " + file.getAbsolutePath());
         try (BufferedInputStream bis = new BufferedInputStream(input);
-                FileOutputStream fos = new FileOutputStream(file);
-                BufferedOutputStream bos = new BufferedOutputStream(fos, bufferSize)) {
+            FileOutputStream fos = new FileOutputStream(file);
+            BufferedOutputStream bos = new BufferedOutputStream(fos, bufferSize)) {
             int count;
             byte[] data = new byte[bufferSize];
             while ((count = bis.read(data, 0, bufferSize)) != -1) {

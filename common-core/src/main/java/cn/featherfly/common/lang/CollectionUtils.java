@@ -517,7 +517,6 @@ public final class CollectionUtils {
      * @param <K> type of Map Key
      * @param <V> type of Map Value
      * @param type map type
-     * @param creator if method can not create a new Map use this to create
      * @return Map instance object
      */
     @SuppressWarnings("unchecked")
@@ -532,6 +531,7 @@ public final class CollectionUtils {
      * @param <K> type of Map Key
      * @param <V> type of Map Value
      * @param type map type
+     * @param creator if method can not create a new Map use this to create
      * @return Map instance object
      */
     public static <K, V> Map<K, V> newMap(Class<?> type, Function<Class<?>, Map<K, V>> creator) {

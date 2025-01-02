@@ -2,9 +2,7 @@
 package cn.featherfly.common.operator;
 
 /**
- * <p>
- * AggregateFunctions
- * </p>
+ * AggregateFunctions.
  *
  * @author zhongj
  */
@@ -14,4 +12,12 @@ public enum AggregateFunction implements Function {
     MAX,
     MIN,
     AVG;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getParameterCount() {
+        return 1;
+    }
 }

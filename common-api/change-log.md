@@ -1,5 +1,6 @@
 # 0.5.3
 1. 移除无效依赖
+2. 加入DateFunction
 
 # 0.5.2 2024-05-05
 1. 移除cn.featherfly.common.lang.function包

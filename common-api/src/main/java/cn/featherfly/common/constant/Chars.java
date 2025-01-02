@@ -611,6 +611,11 @@ public interface Chars {
     char SPACE_CHAR = ' ';
 
     /**
+     * 空字符 NUL(null)
+     */
+    char EMPTY_CHAR = '\0';
+
+    /**
      * 大写 A
      */
     char A_UPPER_CHAR = 'A';

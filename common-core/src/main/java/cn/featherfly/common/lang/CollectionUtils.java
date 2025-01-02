@@ -5,23 +5,25 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ConcurrentNavigableMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.function.Function;
 import java.util.function.ObjIntConsumer;
-
-import cn.featherfly.common.structure.ChainMap;
-import cn.featherfly.common.structure.ChainMapImpl;
 
 /**
  * 集合类工具.
@@ -339,66 +341,226 @@ public final class CollectionUtils {
     }
 
     /**
-     * <p>
-     * 根据传入类型创建Collection实例
-     * </p>
-     * .
+     * create Collection with type argument.
+     * 根据传入类型创建Collection实例.
      *
-     * @param <C> 返回Collection实例泛型
-     * @param <E> 返回Collection的泛型
+     * @param <C> type of Collection
+     * @param <E> type of Collection value
+     * @param type 类型
+     * @return Collection实例
+     * @deprecated use {@link #newCollection(Class)} instead
+     */
+    @Deprecated
+    public static <C extends Collection<E>, E> C newInstance(Class<?> type) {
+        return newCollection(type);
+    }
+
+    /**
+     * create Collection with type argument.
+     * 根据传入类型创建Collection实例.
+     *
+     * @param <C> type of Collection
+     * @param <E> type of Collection value
      * @param type 类型
      * @return Collection实例
      */
     @SuppressWarnings("unchecked")
-    public static <C extends Collection<E>, E> C newInstance(Class<?> type) {
-        //        AssertIllegalArgument.isTrue(ClassUtils.isParent(Collection.class, type), "传入类型必须是Collection接口的子接口或实现类");
+    public static <C extends Collection<E>, E> C newCollection(Class<?> type) {
         AssertIllegalArgument.isParent(Collection.class, type);
-        if (ClassUtils.isInstanceClass(type)) {
-            return (C) ClassUtils.newInstance(type);
+        if (type == Collection.class) {
+            return (C) new ArrayList<E>();
+        } else if (ClassUtils.isParent(List.class, type)) {
+            return (C) newList(type);
+        } else if (ClassUtils.isParent(Set.class, type)) {
+            return (C) newSet(type);
+        } else if (ClassUtils.isParent(Queue.class, type)) {
+            return (C) newQueue(type);
         } else {
-            C collection = null;
-            if (type == Collection.class) {
-                collection = (C) new ArrayList<E>();
-            } else if (List.class == type) {
-                collection = (C) new ArrayList<E>();
-            } else if (Set.class == type) {
-                collection = (C) new HashSet<E>();
-            } else if (Queue.class == type || Deque.class == type) {
-                collection = (C) new ArrayDeque<E>();
-            } else {
-                throw new IllegalArgumentException("不支持的类型：" + type.getName());
-            }
-            return collection;
+            throw new IllegalArgumentException("不支持的类型：" + type.getName());
         }
     }
 
     /**
-     * 根据传入的类型生成Map实例 .
+     * create List with type argument.
+     * 根据传入类型创建List实例.
      *
-     * @param <K> Map Key泛型
-     * @param <V> Map Value泛型
-     * @param type 类型
-     * @return Map实例
+     * @param <E> type of List value
+     * @param type List type
+     * @return instance of list
+     */
+    @SuppressWarnings("unchecked")
+    public static <E> List<E> newList(Class<?> type) {
+        return newList(type, t -> (List<E>) ClassUtils.newInstance(t));
+    }
+
+    /**
+     * create List with type argument.
+     * 根据传入类型创建List实例.
+     *
+     * @param <E> type of List value
+     * @param type List type
+     * @param creator if method can not create a new List use this to create
+     * @return instance of list
+     */
+    public static <E> List<E> newList(Class<?> type, Function<Class<?>, List<E>> creator) {
+        AssertIllegalArgument.isParent(List.class, type);
+        switch (type.getName()) {
+            case "java.util.List":
+            case "java.util.ArrayList":
+                return new ArrayList<>();
+            case "java.util.LinkedList":
+                return new LinkedList<>();
+            case "java.util.Vector":
+                return new Vector<>();
+            default:
+                if (ClassUtils.isInstanceClass(type)) {
+                    return creator.apply(type);
+                }
+                throw new IllegalArgumentException("unsupport type：" + type.getName());
+        }
+    }
+
+    /**
+     * create Set with type argument.
+     * 根据传入类型创建Set实例.
+     *
+     * @param <E> type of Set value
+     * @param type Set type
+     * @return Set instance object
+     */
+    @SuppressWarnings("unchecked")
+    public static <E> Set<E> newSet(Class<?> type) {
+        return newSet(type, t -> (Set<E>) ClassUtils.newInstance(t));
+    }
+
+    /**
+     * create Set with type argument.
+     * 根据传入类型创建Set实例.
+     *
+     * @param <E> type of Set value
+     * @param type Set type
+     * @param creator if method can not create a new Set use this to create
+     * @return Set instance object
+     */
+    public static <E> Set<E> newSet(Class<?> type, Function<Class<?>, Set<E>> creator) {
+        AssertIllegalArgument.isParent(Set.class, type);
+        switch (type.getName()) {
+            case "java.util.Set":
+            case "java.util.HashSet":
+                return new HashSet<>();
+
+            case "java.util.LinkedHashSet":
+                return new LinkedHashSet<>();
+
+            case "java.util.SortedSet":
+            case "java.util.NavigableSet":
+            case "java.util.TreeSet":
+                return new TreeSet<>();
+
+            case "java.util.concurrent.ConcurrentSkipListSet":
+                return new ConcurrentSkipListSet<>();
+            default:
+                if (ClassUtils.isInstanceClass(type)) {
+                    return creator.apply(type);
+                }
+                throw new IllegalArgumentException("unsupport type：" + type.getName());
+        }
+    }
+
+    /**
+     * create Queue with type argument.
+     * 根据传入类型创建Queue实例.
+     *
+     * @param <E> type of Queue value
+     * @param type Queue type
+     * @return Queue instance object
+     */
+    @SuppressWarnings("unchecked")
+    public static <E> Queue<E> newQueue(Class<?> type) {
+        return newQueue(type, t -> (Queue<E>) ClassUtils.newInstance(t));
+    }
+
+    /**
+     * create Queue with type argument.
+     * 根据传入类型创建Queue实例.
+     *
+     * @param <E> type of Queue value
+     * @param type Queue type
+     * @param creator if method can not create a new Set use this to create
+     * @return Queue instance object
+     */
+    public static <E> Queue<E> newQueue(Class<?> type, Function<Class<?>, Queue<E>> creator) {
+        AssertIllegalArgument.isParent(Queue.class, type);
+        switch (type.getName()) {
+            case "java.util.Queue":
+            case "java.util.Deque":
+                return new ArrayDeque<>();
+
+            case "java.util.concurrent.ConcurrentLinkedQueue":
+                return new ConcurrentLinkedQueue<>();
+
+            case "java.util.concurrent.ConcurrentLinkedDeque":
+                return new ConcurrentLinkedDeque<>();
+
+            default:
+                if (ClassUtils.isInstanceClass(type)) {
+                    return creator.apply(type);
+                }
+                throw new IllegalArgumentException("unsupport type：" + type.getName());
+        }
+    }
+
+    /**
+     * create Map with type argument.
+     * 根据传入的类型生成Map实例.
+     *
+     * @param <K> type of Map Key
+     * @param <V> type of Map Value
+     * @param type map type
+     * @param creator if method can not create a new Map use this to create
+     * @return Map instance object
      */
     @SuppressWarnings("unchecked")
     public static <K, V> Map<K, V> newMap(Class<?> type) {
-        //        AssertIllegalArgument.isTrue(ClassUtils.isParent(Map.class, type), "传入类型必须是Map接口的子接口或实现类");
+        return newMap(type, t -> (Map<K, V>) ClassUtils.newInstance(t));
+    }
+
+    /**
+     * create Map with type argument.
+     * 根据传入的类型生成Map实例.
+     *
+     * @param <K> type of Map Key
+     * @param <V> type of Map Value
+     * @param type map type
+     * @return Map instance object
+     */
+    public static <K, V> Map<K, V> newMap(Class<?> type, Function<Class<?>, Map<K, V>> creator) {
         AssertIllegalArgument.isParent(Map.class, type);
-        if (ClassUtils.isInstanceClass(type)) {
-            return (Map<K, V>) ClassUtils.newInstance(type);
-        } else {
-            if (type == Map.class) {
+        switch (type.getName()) {
+            case "java.util.Map":
+            case "java.util.HashMap":
                 return new HashMap<>();
-            } else if (type == ConcurrentMap.class) {
-                return new ConcurrentHashMap<>();
-            } else if (type == ConcurrentNavigableMap.class) {
-                return new ConcurrentSkipListMap<>();
-            } else if (type == SortedMap.class) {
+
+            case "java.util.LinkedHashMap":
+                return new LinkedHashMap<>();
+
+            case "java.util.NavigableMap":
+            case "java.util.TreeMap":
                 return new TreeMap<>();
-            } else if (type == ChainMap.class) {
-                return new ChainMapImpl<>();
-            }
-            throw new IllegalArgumentException("不支持的类型：" + type.getName());
+
+            case "java.util.concurrent.ConcurrentMap":
+            case "java.util.concurrent.ConcurrentHashMap":
+                return new ConcurrentHashMap<>();
+
+            case "java.util.concurrent.ConcurrentNavigableMap":
+            case "java.util.concurrent.ConcurrentSkipListMap":
+                return new ConcurrentSkipListMap<>();
+            default:
+                if (ClassUtils.isInstanceClass(type)) {
+                    return creator.apply(type);
+                }
+                throw new IllegalArgumentException("unsupport type：" + type.getName());
+            // throw new IllegalArgumentException("不支持的类型：" + type.getName());
         }
     }
 

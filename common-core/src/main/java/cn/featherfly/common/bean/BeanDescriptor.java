@@ -348,9 +348,7 @@ public class BeanDescriptor<T> extends AbstractPropertyAccessor<T> {
     }
 
     /**
-     * <p>
      * 查找并返回第一个符合条件BeanProperty. 如果没有则返回null.
-     * </p>
      *
      * @param condition 条件判断
      * @return 第一个符合条件BeanProperty
@@ -404,7 +402,7 @@ public class BeanDescriptor<T> extends AbstractPropertyAccessor<T> {
                     if (ClassUtils.isCellection(property.getType())) {
                         LOGGER.trace("类{}的属性[{}]为空，对象为Collection接口实现类，自动创建该属性对象", property.getOwnerType().getName(),
                             property.getName());
-                        propertyValue = CollectionUtils.newInstance(property.getType());
+                        propertyValue = CollectionUtils.newCollection(property.getType());
                     } else if (ClassUtils.isMap(property.getType())) {
                         LOGGER.trace("类{}的属性[{}]为空，对象为MAP接口，自动创建该属性对象", property.getOwnerType().getName(),
                             property.getName());
@@ -435,10 +433,7 @@ public class BeanDescriptor<T> extends AbstractPropertyAccessor<T> {
     }
 
     /**
-     * <p>
-     * 添加属性值（如果添加目标是Collection，则会一直添加，如果是其他类型同setProperty）
-     * </p>
-     * .
+     * 添加属性值（如果添加目标是Collection，则会一直添加，如果是其他类型同setProperty）.
      *
      * @param obj 对象
      * @param name 属性名
@@ -450,7 +445,7 @@ public class BeanDescriptor<T> extends AbstractPropertyAccessor<T> {
             @SuppressWarnings("unchecked")
             Collection<Object> collection = (Collection<Object>) getProperty(obj, name);
             if (collection == null) {
-                collection = CollectionUtils.newInstance(beanProperty.getType());
+                collection = CollectionUtils.newCollection(beanProperty.getType());
                 setProperty(obj, name, collection);
             }
             collection.add(value);

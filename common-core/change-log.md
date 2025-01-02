@@ -18,7 +18,7 @@
 
 8. 添加不可变 list|set|map
 
-   
+9. CollectionUtils加入newList,newSet,newQueue,newCollection, 重构newMap逻辑
 
     
 

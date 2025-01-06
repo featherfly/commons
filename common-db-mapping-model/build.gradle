@@ -2,7 +2,8 @@ ext {
 }
   
 dependencies {
-    api project(":common-db")
-    api project(":common-model")
-
+    //api project(":common-db")
+    //api project(":common-model")
+    api group: 'cn.featherfly.common', name: 'common-db', version: '0.8.0'    
+    api group: 'cn.featherfly.common', name: 'common-model', version: '0.3.0'
 }

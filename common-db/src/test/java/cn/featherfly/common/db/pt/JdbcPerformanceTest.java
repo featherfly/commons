@@ -17,7 +17,7 @@ import cn.featherfly.common.db.dialect.Dialects;
 import cn.featherfly.common.db.wrapper.ConnectionWrapper;
 import cn.featherfly.common.db.wrapper.PreparedStatementWrapper;
 import cn.featherfly.common.lang.ArrayUtils;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.lang.Timer;
 
 /**
@@ -33,7 +33,8 @@ public class JdbcPerformanceTest extends JdbcTestBase {
 
     @Test
     public void testInsertBatch() {
-        String insertSql = "insert into `user_info` (`id`, `user_id`, `name`, `descp`, `province`, `city`, `district`) values(?,?,?,?,?,?,?)";
+        String insertSql =
+            "insert into `user_info` (`id`, `user_id`, `name`, `descp`, `province`, `city`, `district`) values(?,?,?,?,?,?,?)";
         Timer timer = Timer.start();
         ConnectionWrapper conn = JdbcUtils.getConnectionWrapper(dataSource);
         int index = 0;
@@ -56,7 +57,7 @@ public class JdbcPerformanceTest extends JdbcTestBase {
             prep.close();
         }
         conn.close();
-        System.out.println(Strings.format("testInsertBatch use {0} time with insertBatch[{1}] times {2}", timer.stop(),
+        System.out.println(Str.format("testInsertBatch use {0} time with insertBatch[{1}] times {2}", timer.stop(),
             batchSize, batchTimes));
     }
 
@@ -85,7 +86,7 @@ public class JdbcPerformanceTest extends JdbcTestBase {
             prep.close();
         }
         conn.close();
-        System.out.println(Strings.format("testInsertBatch2 use {0} time with insertBatch[{1}] times {2}", timer.stop(),
+        System.out.println(Str.format("testInsertBatch2 use {0} time with insertBatch[{1}] times {2}", timer.stop(),
             batchSize, batchTimes));
     }
 }

@@ -31,7 +31,7 @@ import cn.featherfly.common.db.dialect.creator.PostgreSQLDialectURLCreator;
 import cn.featherfly.common.db.dialect.creator.SQLServerURLCreator;
 import cn.featherfly.common.db.dialect.creator.SQLiteDialectURLCreator;
 import cn.featherfly.common.lang.CollectionUtils;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 
 /**
  * JdbcDialectFactory.
@@ -73,7 +73,7 @@ public class JdbcDialectFactory implements DialectFactory {
      * Instantiates a new jdbc dialect factory.
      *
      * @param exceptionWhenNoDialectCreate the exception when no dialect create
-     * @param dialectCreators              the dialect creators
+     * @param dialectCreators the dialect creators
      */
     public JdbcDialectFactory(boolean exceptionWhenNoDialectCreate, Set<Function<String, Dialect>> dialectCreators) {
         super();
@@ -107,8 +107,8 @@ public class JdbcDialectFactory implements DialectFactory {
     /**
      * Adds the dialect creator.
      *
-     * @param  dialectCreator the dialect creator
-     * @return                the jdbc dialect factory
+     * @param dialectCreator the dialect creator
+     * @return the jdbc dialect factory
      */
     public JdbcDialectFactory addDialectCreator(Function<String, Dialect> dialectCreator) {
         dialectCreators.add(dialectCreator);
@@ -118,8 +118,8 @@ public class JdbcDialectFactory implements DialectFactory {
     /**
      * Adds the dialect creator.
      *
-     * @param  dialectCreators the dialect creators
-     * @return                 the jdbc dialect factory
+     * @param dialectCreators the dialect creators
+     * @return the jdbc dialect factory
      */
     public JdbcDialectFactory addDialectCreator(
         @SuppressWarnings("unchecked") Function<String, Dialect>... dialectCreators) {
@@ -175,7 +175,7 @@ public class JdbcDialectFactory implements DialectFactory {
                 }
             }
             if (exceptionWhenNoDialectCreate) {
-                throw new DialectException(Strings.format("no dialect craete for datasource[{}]", url));
+                throw new DialectException(Str.format("no dialect craete for datasource[{}]", url));
             }
         } catch (SQLException e) {
             throw new JdbcException(e);

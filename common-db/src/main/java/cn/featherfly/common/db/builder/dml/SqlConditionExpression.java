@@ -23,34 +23,34 @@ public class SqlConditionExpression implements ParamedExpression, SqlBuilder {
     /**
      * Instantiates a new sql condition expression.
      *
-     * @param dialect            dialect
-     * @param name               名称
-     * @param value              值
+     * @param dialect dialect
+     * @param name 名称
+     * @param value 值
      * @param comparisonOperator 查询运算符（查询类型）
-     * @param ignoreStrategy     the ignore strategy
+     * @param ignoreStrategy the ignore strategy
      */
     SqlConditionExpression(Dialect dialect, String name, Object value, ComparisonOperator comparisonOperator,
-            Predicate<?> ignoreStrategy) {
+        Predicate<?> ignoreStrategy) {
         this(dialect, name, value, comparisonOperator, null, ignoreStrategy);
     }
 
     /**
      * Instantiates a new sql condition expression.
      *
-     * @param dialect            dialect
-     * @param name               名称
-     * @param value              值
+     * @param dialect dialect
+     * @param name 名称
+     * @param value 值
      * @param comparisonOperator 查询运算符（查询类型）
-     * @param queryAlias         查询别名
-     * @param ignoreStrategy     the ignore strategy
+     * @param queryAlias 查询别名
+     * @param ignoreStrategy the ignore strategy
      */
     SqlConditionExpression(Dialect dialect, String name, Object value, ComparisonOperator comparisonOperator,
-            String queryAlias, Predicate<?> ignoreStrategy) {
+        String queryAlias, Predicate<?> ignoreStrategy) {
         if (comparisonOperator == null) {
             throw new BuilderException(BuilderExceptionCode.createQueryOperatorNullCode());
         }
-        conditionColumnElement = new ConditionColumnElement(dialect, name, value, comparisonOperator, queryAlias,
-                ignoreStrategy);
+        conditionColumnElement = new ConditionColumnElement(dialect, queryAlias, name, value, comparisonOperator,
+            ignoreStrategy);
     }
 
     /**

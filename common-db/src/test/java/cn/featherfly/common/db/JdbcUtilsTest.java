@@ -17,7 +17,7 @@ import java.sql.Statement;
 
 import org.testng.annotations.Test;
 
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 
 /**
  * JdbcUtilsTest.
@@ -32,8 +32,8 @@ public class JdbcUtilsTest extends JdbcTestBase {
         System.err.println("set age " + age.toString());
         System.err.println("mysql bigint unsign 18446744073709551615");
 
-        String updateAge = Strings.format("update {0} set age = ? where id = 1", dialect.wrapName("user"));
-        String selectAge = Strings.format("select age from {0} where id = 1", dialect.wrapName("user"));
+        String updateAge = Str.format("update {0} set age = ? where id = 1", dialect.wrapName("user"));
+        String selectAge = Str.format("select age from {0} where id = 1", dialect.wrapName("user"));
 
         try (Connection conn = dataSource.getConnection();) {
             try (PreparedStatement prep = conn.prepareStatement(updateAge)) {

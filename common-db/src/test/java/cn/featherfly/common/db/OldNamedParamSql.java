@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.repository.Execution;
 import cn.featherfly.common.repository.SimpleExecution;
 
@@ -103,7 +103,7 @@ public class OldNamedParamSql {
         }
 
         if (inParamCount > 0) {
-            return new SimpleExecution(Strings.format(sql, inParamsSqls), paramList.toArray());
+            return new SimpleExecution(Str.format(sql, inParamsSqls), paramList.toArray());
         } else {
             return new SimpleExecution(sql, paramList.toArray());
         }

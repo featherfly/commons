@@ -10,7 +10,7 @@
 package cn.featherfly.common.db.pt;
 
 import cn.featherfly.common.db.JdbcTestBase;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.lang.Timer;
 
 /**
@@ -19,7 +19,7 @@ import cn.featherfly.common.lang.Timer;
  * @author zhongj
  */
 public abstract class AbstractDatabaseOperatingPerformanceTest extends JdbcTestBase
-        implements DatabaseOperatingPerformance {
+    implements DatabaseOperatingPerformance {
 
     @Override
     public void testInsert() {
@@ -27,7 +27,7 @@ public abstract class AbstractDatabaseOperatingPerformanceTest extends JdbcTestB
         for (int i = 0; i < times; i++) {
 
         }
-        System.out.println(Strings.format("testInsert use {0} time with insert times {1}", timer.stop(), times));
+        System.out.println(Str.format("testInsert use {0} time with insert times {1}", timer.stop(), times));
     }
 
     /**
@@ -39,8 +39,8 @@ public abstract class AbstractDatabaseOperatingPerformanceTest extends JdbcTestB
         for (int i = 0; i < batchTime; i++) {
 
         }
-        System.out.println(Strings.format("testInsertBatch use {0} time with insertBatch[{1}] times {2}", timer.stop(),
-                batchSize, batchTime));
+        System.out.println(Str.format("testInsertBatch use {0} time with insertBatch[{1}] times {2}", timer.stop(),
+            batchSize, batchTime));
     }
 
     private long times = 1000;

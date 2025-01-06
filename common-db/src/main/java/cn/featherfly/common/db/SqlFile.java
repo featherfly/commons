@@ -32,7 +32,7 @@ import org.apache.commons.io.IOUtils;
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.lang.ClassLoaderUtils;
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 
 /**
  * SqlFile.
@@ -158,7 +158,7 @@ public class SqlFile {
         if (includeFiles.containsKey(include)) {
             switch (includeExistPolicy) {
                 case EXCEPTION:
-                    throw new JdbcException(Strings.format("file {0} already include", include));
+                    throw new JdbcException(Str.format("file {0} already include", include));
                 case IGNORE:
                     return false;
                 default:
@@ -449,7 +449,7 @@ public class SqlFile {
 
             if (includeResource == null) {
                 throw new IllegalArgumentException(
-                    Strings.format("can not found {0} in filepath and classpath ", includePath));
+                    Str.format("can not found {0} in filepath and classpath ", includePath));
             }
 
             sqlFile.getSqlList().add("\n-- include  " + includePath + " start");
@@ -466,7 +466,7 @@ public class SqlFile {
         final Map<String, Serializable> params) throws IOException {
         String content = IOUtils.toString(resource, charset);
         if (Lang.isNotEmpty(params)) {
-            content = Strings.format(content, params);
+            content = Str.format(content, params);
         }
 
         AtomicInteger index = new AtomicInteger(0);
@@ -498,7 +498,7 @@ public class SqlFile {
         //
         //                if (includeResource == null) {
         //                    throw new IllegalArgumentException(
-        //                            Strings.format("can not found {0} in filepath and classpath ", includePath));
+        //                            Str.format("can not found {0} in filepath and classpath ", includePath));
         //                }
         //
         //                sqlFile.getSqlList().add("\n-- include  " + includePath + " start");

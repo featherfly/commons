@@ -7,12 +7,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * Role
+ * Role.
  *
  * @author zhongj
  */
 @Table
 public class Role implements Serializable {
+
+    private static final long serialVersionUID = 2291141112997009736L;
 
     @Id
     private Long id;

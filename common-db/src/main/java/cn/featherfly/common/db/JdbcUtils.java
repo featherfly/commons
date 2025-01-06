@@ -50,7 +50,7 @@ import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.LogUtils;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.lang.WordUtils;
 import cn.featherfly.common.repository.mapper.RowMapper;
 
@@ -2083,7 +2083,7 @@ public final class JdbcUtils {
             if (meta.getParameterCount() != values.length) {
                 // ENHANCE 后续来优化异常信息
                 throw new JdbcException(
-                    Strings.format("procedure parameter count[{0}] not equals parameter values length[{1}]",
+                    Str.format("procedure parameter count[{0}] not equals parameter values length[{1}]",
                         meta.getParameterCount(), values.length));
             }
             for (int i = 1; i <= values.length; i++) {

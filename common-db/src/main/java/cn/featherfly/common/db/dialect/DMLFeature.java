@@ -209,28 +209,6 @@ public interface DMLFeature {
     /**
      * build sql for column with aggregate function.
      *
-     * @param function function
-     * @param columnName columnName
-     * @return sql of column part
-     */
-    default String column(Function function, String columnName) {
-        return column(function, false, null, columnName, null);
-    }
-
-    /**
-     * build sql for column with aggregate function.
-     *
-     * @param aggregateFunction aggregateFunction
-     * @param columnName columnName
-     * @return sql of column part
-     */
-    default String column(AggregateFunction aggregateFunction, String columnName) {
-        return column(aggregateFunction, false, null, columnName, null);
-    }
-
-    /**
-     * build sql for column with aggregate function.
-     *
      * @param tableAlias tableAlias
      * @param columnName columnName
      * @return sql of column part
@@ -266,25 +244,6 @@ public interface DMLFeature {
     /**
      * build sql for column with tableAlias and aggregate function.
      *
-     * @param function the function
-     * @param distinct the distinct
-     * @param tableAlias tableAlias
-     * @param columnName columnName
-     * @param columnAlias the column alias
-     * @return sql of column part
-     */
-    default String column(Function function, boolean distinct, String tableAlias, String columnName,
-        String columnAlias) {
-        if (function instanceof AggregateFunction) {
-            return column(function, distinct, tableAlias, columnName, columnAlias);
-        }
-        // YUFEI_TODO 后续添加其他实现
-        throw new DialectException("只实现了 AggregateFunction，未实现的 function" + function.getClass().getName());
-    }
-
-    /**
-     * build sql for column with tableAlias and aggregate function.
-     *
      * @param distinct the distinct
      * @param tableAlias tableAlias
      * @param columnName columnName
@@ -293,6 +252,83 @@ public interface DMLFeature {
      */
     default String column(boolean distinct, String tableAlias, String columnName, String columnAlias) {
         return column(null, distinct, tableAlias, columnName, columnAlias);
+    }
+
+    /**
+     * build sql for column with function.
+     *
+     * @param columnName columnName
+     * @param function function
+     * @param argus the argus
+     * @return sql of column part
+     */
+    default String column(String columnName, Function function, Object... argus) {
+        return column(null, columnName, function, argus);
+    }
+
+    /**
+     * build sql for column with function.
+     *
+     * @param tableAlias the table alias
+     * @param columnName columnName
+     * @param function function
+     * @param argus the argus
+     * @return sql of column part
+     */
+    default String column(String tableAlias, String columnName, Function function, Object... argus) {
+        return column(tableAlias, columnName, null, function, argus);
+    }
+
+    /**
+     * build sql for column with tableAlias and function.
+     *
+     * @param tableAlias tableAlias
+     * @param columnName columnName
+     * @param columnAlias the column alias
+     * @param function the function
+     * @param argus the argus
+     * @return sql of column part
+     */
+    default String column(String tableAlias, String columnName,
+        String columnAlias, Function function, Object... argus) {
+        return column(false, tableAlias, columnName, columnAlias, function, argus);
+    }
+
+    /**
+     * build sql for column with tableAlias and function.
+     *
+     * @param distinct the distinct
+     * @param tableAlias tableAlias
+     * @param columnName columnName
+     * @param columnAlias the column alias
+     * @param function the function
+     * @param argus the argus
+     * @return sql of column part
+     */
+    String column(boolean distinct, String tableAlias, String columnName,
+        String columnAlias, Function function, Object... argus);
+
+    /**
+     * build sql for column with aggregate function.
+     *
+     * @param aggregateFunction aggregateFunction
+     * @param columnName columnName
+     * @return sql of column part
+     */
+    default String column(AggregateFunction aggregateFunction, String columnName) {
+        return column(aggregateFunction, false, null, columnName, null);
+    }
+
+    /**
+     * build sql for column with tableAlias and aggregate function.
+     *
+     * @param aggregateFunction aggregateFunction
+     * @param tableAlias tableAlias
+     * @param columnName columnName
+     * @return sql of column part
+     */
+    default String column(AggregateFunction aggregateFunction, String tableAlias, String columnName) {
+        return column(aggregateFunction, tableAlias, columnName, null);
     }
 
     /**

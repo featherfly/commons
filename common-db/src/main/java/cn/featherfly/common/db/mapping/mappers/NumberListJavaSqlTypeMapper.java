@@ -10,7 +10,7 @@ import java.util.List;
 
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.AbstractGenericJavaSqlTypeMapper;
-import cn.featherfly.common.lang.NumberUtils;
+import cn.featherfly.common.lang.Num;
 import cn.featherfly.common.lang.reflect.Type;
 
 /**
@@ -39,7 +39,7 @@ public class NumberListJavaSqlTypeMapper<N extends Number> extends AbstractGener
     @Override
     public boolean support(SQLType sqlType) {
         return JDBCType.VARCHAR == sqlType || JDBCType.NVARCHAR == sqlType || JDBCType.CHAR == sqlType
-                || JDBCType.NCHAR == sqlType;
+            || JDBCType.NCHAR == sqlType;
     }
 
     /**
@@ -117,7 +117,7 @@ public class NumberListJavaSqlTypeMapper<N extends Number> extends AbstractGener
             String[] values = value.split(",");
             List<N> numbers = new ArrayList<>(values.length);
             for (String v : values) {
-                numbers.add(NumberUtils.parse(v, numberType));
+                numbers.add(Num.parse(v, numberType));
             }
             return numbers;
         } else {
@@ -135,7 +135,7 @@ public class NumberListJavaSqlTypeMapper<N extends Number> extends AbstractGener
             String[] values = value.split(",");
             List<N> numbers = new ArrayList<>(values.length);
             for (String v : values) {
-                numbers.add(NumberUtils.parse(v, numberType));
+                numbers.add(Num.parse(v, numberType));
             }
             return numbers;
         } else {

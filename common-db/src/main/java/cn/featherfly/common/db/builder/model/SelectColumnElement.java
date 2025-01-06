@@ -27,14 +27,14 @@ public class SelectColumnElement extends ColumnElement {
      */
     public SelectColumnElement(SelectColumnElement element) {
         this(element.getDialect(), element.getAggregateFunction(), element.isDistinct(), element.getTableAlias(),
-                element.getName(), element.getAlias());
+            element.getName(), element.getAlias());
     }
 
     /**
      * Instantiates a new select column element.
      *
      * @param dialect dialect
-     * @param name    name
+     * @param name name
      */
     public SelectColumnElement(Dialect dialect, String name) {
         this(dialect, false, name);
@@ -43,9 +43,9 @@ public class SelectColumnElement extends ColumnElement {
     /**
      * Instantiates a new select column element.
      *
-     * @param dialect  dialect
+     * @param dialect dialect
      * @param distinct the distinct
-     * @param name     name
+     * @param name name
      */
     public SelectColumnElement(Dialect dialect, boolean distinct, String name) {
         this(dialect, null, false, name);
@@ -54,10 +54,10 @@ public class SelectColumnElement extends ColumnElement {
     /**
      * Instantiates a new select column element.
      *
-     * @param dialect           dialect
+     * @param dialect dialect
      * @param aggregateFunction the aggregate function
-     * @param distinct          the distinct
-     * @param name              name
+     * @param distinct the distinct
+     * @param name name
      */
     public SelectColumnElement(Dialect dialect, AggregateFunction aggregateFunction, boolean distinct, String name) {
         this(dialect, aggregateFunction, distinct, null, name, null);
@@ -77,10 +77,10 @@ public class SelectColumnElement extends ColumnElement {
     /**
      * Instantiates a new select column element.
      *
-     * @param dialect    dialect
+     * @param dialect dialect
      * @param tableAlias table alias
-     * @param name       column name
-     * @param alias      the column alias
+     * @param name column name
+     * @param alias the column alias
      */
     public SelectColumnElement(Dialect dialect, String tableAlias, String name, String alias) {
         this(dialect, null, tableAlias, name, alias);
@@ -101,14 +101,14 @@ public class SelectColumnElement extends ColumnElement {
     /**
      * Instantiates a new select column element.
      *
-     * @param dialect           dialect
+     * @param dialect dialect
      * @param aggregateFunction the aggregate function
-     * @param tableAlias        table alias
-     * @param name              column name
-     * @param alias             the column alias
+     * @param tableAlias table alias
+     * @param name column name
+     * @param alias the column alias
      */
     public SelectColumnElement(Dialect dialect, AggregateFunction aggregateFunction, String tableAlias, String name,
-            String alias) {
+        String alias) {
         this(dialect, aggregateFunction, false, tableAlias, name, alias);
     }
 
@@ -129,11 +129,11 @@ public class SelectColumnElement extends ColumnElement {
     /**
      * Instantiates a new select column element.
      *
-     * @param dialect    dialect
-     * @param distinct   the distinct
+     * @param dialect dialect
+     * @param distinct the distinct
      * @param tableAlias table alias
-     * @param name       column name
-     * @param alias      column alias
+     * @param name column name
+     * @param alias column alias
      */
     public SelectColumnElement(Dialect dialect, boolean distinct, String tableAlias, String name, String alias) {
         this(dialect, null, distinct, tableAlias, name, alias);
@@ -142,16 +142,16 @@ public class SelectColumnElement extends ColumnElement {
     /**
      * Instantiates a new select column element.
      *
-     * @param dialect           dialect
+     * @param dialect dialect
      * @param aggregateFunction the aggregate function
-     * @param distinct          the distinct
-     * @param tableAlias        table alias
-     * @param name              column name
-     * @param alias             column alias
+     * @param distinct the distinct
+     * @param tableAlias table alias
+     * @param name column name
+     * @param alias column alias
      */
     public SelectColumnElement(Dialect dialect, AggregateFunction aggregateFunction, boolean distinct,
-            String tableAlias, String name, String alias) {
-        super(dialect, name, tableAlias);
+        String tableAlias, String name, String alias) {
+        super(dialect, tableAlias, name);
         this.aggregateFunction = aggregateFunction;
         this.alias = alias;
         this.distinct = distinct;

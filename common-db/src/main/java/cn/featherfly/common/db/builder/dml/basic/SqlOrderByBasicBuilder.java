@@ -33,9 +33,9 @@ public class SqlOrderByBasicBuilder implements SqlBuilder {
     /**
      * add property to asc list
      *
-     * @param name       sort property name
+     * @param name sort property name
      * @param tableAlias tableAlias
-     * @param operator   SortOperator
+     * @param operator SortOperator
      * @return this
      */
     public SqlOrderByBasicBuilder addOrder(String name, String tableAlias, SortOperator operator) {
@@ -46,7 +46,7 @@ public class SqlOrderByBasicBuilder implements SqlBuilder {
     /**
      * add property to asc list
      *
-     * @param name       sort column name
+     * @param name sort column name
      * @param tableAlias table alias
      * @return this
      */
@@ -57,7 +57,7 @@ public class SqlOrderByBasicBuilder implements SqlBuilder {
     /**
      * add property to desc list
      *
-     * @param name       sort column name
+     * @param name sort column name
      * @param tableAlias table alias
      * @return this
      */
@@ -168,7 +168,7 @@ public class SqlOrderByBasicBuilder implements SqlBuilder {
                 orderParams.add(orderParam);
             }
         }
-        orderParam.addParam(new ColumnElement(dialect, columnName, tableAlias));
+        orderParam.addParam(new ColumnElement(dialect, tableAlias, columnName));
     }
 
     // ********************************************************************
@@ -185,7 +185,7 @@ public class SqlOrderByBasicBuilder implements SqlBuilder {
     public static class Order {
 
         /**
-         * @param dialect      dialect
+         * @param dialect dialect
          * @param sortOperator sortOperator
          */
         public Order(Dialect dialect, SortOperator sortOperator) {
@@ -239,7 +239,7 @@ public class SqlOrderByBasicBuilder implements SqlBuilder {
             StringBuilder sb = new StringBuilder();
             for (ColumnElement column : params) {
                 sb.append(Chars.SPACE).append(column.toSql()).append(Chars.SPACE)
-                        .append(dialect.getKeyword(sortOrerator)).append(Chars.COMMA);
+                    .append(dialect.getKeyword(sortOrerator)).append(Chars.COMMA);
             }
             if (params.size() > 0) {
                 sb.deleteCharAt(sb.length() - 1);

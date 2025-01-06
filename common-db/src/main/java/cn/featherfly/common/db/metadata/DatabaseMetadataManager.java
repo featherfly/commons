@@ -24,7 +24,7 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.JdbcDialectFactory;
 import cn.featherfly.common.db.wrapper.ConnectionWrapper;
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.repository.Index;
 
 /**
@@ -59,8 +59,8 @@ public class DatabaseMetadataManager {
      * 返回的元数据，首先查找已经受管理的元数据对象， 如果没有找到，则基于传入数据库连接创建并纳入管理.
      * </p>
      *
-     * @param  dataBase 具体库名称
-     * @return          元数据对象
+     * @param dataBase 具体库名称
+     * @return 元数据对象
      */
     public DatabaseMetadata getDatabaseMetadata(String dataBase) {
         return databasemetadataPool.get(dataBase);
@@ -71,8 +71,8 @@ public class DatabaseMetadataManager {
      * 创建数据库元数据，会初始化表和列元数据.
      * </p>
      *
-     * @param  dataSource 数据源
-     * @return            已经初始化的数据库元数据对象
+     * @param dataSource 数据源
+     * @return 已经初始化的数据库元数据对象
      */
     public synchronized DatabaseMetadata create(DataSource dataSource) {
         return create(JdbcUtils.getConnection(dataSource));
@@ -83,8 +83,8 @@ public class DatabaseMetadataManager {
      * 创建数据库元数据，会初始化表和列元数据， 如果元数据对象已经存在，则直接返回.
      * </p>
      *
-     * @param  connection 数据库连接
-     * @return            已经初始化的数据库元数据对象
+     * @param connection 数据库连接
+     * @return 已经初始化的数据库元数据对象
      */
     public synchronized DatabaseMetadata create(Connection connection) {
         return create(connection, getDatabase(connection), true, null, false);
@@ -95,8 +95,8 @@ public class DatabaseMetadataManager {
      * 创建数据库元数据，会初始化表和列元数据， 如果元数据对象已经存在，则直接返回.
      * </p>
      *
-     * @param  connection 数据库连接
-     * @return            已经初始化的数据库元数据对象
+     * @param connection 数据库连接
+     * @return 已经初始化的数据库元数据对象
      */
     public synchronized DatabaseMetadata create(ConnectionWrapper connection) {
         return create(connection.getConnection());
@@ -107,9 +107,9 @@ public class DatabaseMetadataManager {
      * 创建数据库元数据，会初始化表和列元数据， 如果元数据对象已经存在，则直接返回.
      * </p>
      *
-     * @param  connection 数据库连接
-     * @param  dataBase   具体库
-     * @return            已经初始化的数据库元数据对象
+     * @param connection 数据库连接
+     * @param dataBase 具体库
+     * @return 已经初始化的数据库元数据对象
      */
     public DatabaseMetadata create(Connection connection, String dataBase) {
         return create(connection, dataBase, null);
@@ -120,10 +120,10 @@ public class DatabaseMetadataManager {
      * 创建数据库元数据，会初始化表和列元数据， 如果元数据对象已经存在，则直接返回.
      * </p>
      *
-     * @param  connection 数据库连接
-     * @param  dataBase   具体库
-     * @param  schema     the schema
-     * @return            已经初始化的数据库元数据对象
+     * @param connection 数据库连接
+     * @param dataBase 具体库
+     * @param schema the schema
+     * @return 已经初始化的数据库元数据对象
      */
     public DatabaseMetadata create(Connection connection, String dataBase, String schema) {
         return create(connection, dataBase, false, schema);
@@ -132,11 +132,11 @@ public class DatabaseMetadataManager {
     /**
      * Creates the.
      *
-     * @param  connection       the connection
-     * @param  dataBase         the data base
-     * @param  isDefaultCatalog the is default catalog
-     * @param  schema           the schema
-     * @return                  the database metadata
+     * @param connection the connection
+     * @param dataBase the data base
+     * @param isDefaultCatalog the is default catalog
+     * @param schema the schema
+     * @return the database metadata
      */
     public DatabaseMetadata create(Connection connection, String dataBase, boolean isDefaultCatalog, String schema) {
         return create(connection, dataBase, isDefaultCatalog, schema, false);
@@ -147,9 +147,9 @@ public class DatabaseMetadataManager {
      * 创建数据库元数据，会初始化表和列元数据， 如果元数据对象已经存在，则直接返回.
      * </p>
      *
-     * @param  dataSource 数据源
-     * @param  dataBase   具体库
-     * @return            已经初始化的数据库元数据对象
+     * @param dataSource 数据源
+     * @param dataBase 具体库
+     * @return 已经初始化的数据库元数据对象
      */
     public synchronized DatabaseMetadata create(DataSource dataSource, String dataBase) {
         return create(JdbcUtils.getConnection(dataSource), dataBase);
@@ -160,8 +160,8 @@ public class DatabaseMetadataManager {
      * 重新创建数据库元数据，会初始化表和列元数据， 不管元数据对象是否存在，都创建，原来的会被替换.
      * </p>
      *
-     * @param  connection 数据库连接
-     * @return            已经初始化的数据库元数据对象
+     * @param connection 数据库连接
+     * @return 已经初始化的数据库元数据对象
      */
     public synchronized DatabaseMetadata reCreate(Connection connection) {
         return create(connection, getDatabase(connection), true, null, true);
@@ -172,8 +172,8 @@ public class DatabaseMetadataManager {
      * 创建数据库元数据，会初始化表和列元数据， 不管元数据对象是否存在，都创建，原来的会被替换.
      * </p>
      *
-     * @param  dataSource 数据源
-     * @return            已经初始化的数据库元数据对象
+     * @param dataSource 数据源
+     * @return 已经初始化的数据库元数据对象
      */
     public synchronized DatabaseMetadata reCreate(DataSource dataSource) {
         return reCreate(JdbcUtils.getConnection(dataSource));
@@ -184,9 +184,9 @@ public class DatabaseMetadataManager {
      * 创建数据库元数据，会初始化表和列元数据， 不管元数据对象是否存在，都创建，原来的会被替换.
      * </p>
      *
-     * @param  dataSource 数据源
-     * @param  dataBase   具体库
-     * @return            已经初始化的数据库元数据对象
+     * @param dataSource 数据源
+     * @param dataBase 具体库
+     * @return 已经初始化的数据库元数据对象
      */
     public synchronized DatabaseMetadata reCreate(DataSource dataSource, String dataBase) {
         return reCreate(JdbcUtils.getConnection(dataSource), dataBase);
@@ -197,9 +197,9 @@ public class DatabaseMetadataManager {
      * 创建数据库元数据，会初始化表和列元数据， 不管元数据对象是否存在，都创建，原来的会被替换.
      * </p>
      *
-     * @param  connection 数据库连接
-     * @param  dataBase   具体库
-     * @return            已经初始化的数据库元数据对象
+     * @param connection 数据库连接
+     * @param dataBase 具体库
+     * @return 已经初始化的数据库元数据对象
      */
     public synchronized DatabaseMetadata reCreate(Connection connection, String dataBase) {
         return reCreate(connection, dataBase, null);
@@ -210,10 +210,10 @@ public class DatabaseMetadataManager {
      * 创建数据库元数据，会初始化表和列元数据， 不管元数据对象是否存在，都创建，原来的会被替换.
      * </p>
      *
-     * @param  connection 数据库连接
-     * @param  dataBase   具体库
-     * @param  schema     the schema
-     * @return            已经初始化的数据库元数据对象
+     * @param connection 数据库连接
+     * @param dataBase 具体库
+     * @param schema the schema
+     * @return 已经初始化的数据库元数据对象
      */
     public synchronized DatabaseMetadata reCreate(Connection connection, String dataBase, String schema) {
         return reCreate(connection, dataBase, false, schema);
@@ -224,11 +224,11 @@ public class DatabaseMetadataManager {
      * 创建数据库元数据，会初始化表和列元数据， 不管元数据对象是否存在，都创建，原来的会被替换.
      * </p>
      *
-     * @param  connection       数据库连接
-     * @param  dataBase         具体库
-     * @param  isDefaultCatalog the is default catalog
-     * @param  schema           the schema
-     * @return                  已经初始化的数据库元数据对象
+     * @param connection 数据库连接
+     * @param dataBase 具体库
+     * @param isDefaultCatalog the is default catalog
+     * @param schema the schema
+     * @return 已经初始化的数据库元数据对象
      */
     public synchronized DatabaseMetadata reCreate(Connection connection, String dataBase, boolean isDefaultCatalog,
         String schema) {
@@ -239,7 +239,7 @@ public class DatabaseMetadataManager {
      * 重新加载元数据.
      *
      * @param connection 数据库连接
-     * @param metadata   the metadata
+     * @param metadata the metadata
      */
     public synchronized void reload(Connection connection, DatabaseMetadata metadata) {
         create(connection, metadata.getName(), true, null, false, metadata);
@@ -255,7 +255,7 @@ public class DatabaseMetadataManager {
 
     private String getCatalog(Connection connection) {
         String catalog = JdbcUtils.getCatalog(connection);
-        if (Strings.isEmpty(catalog)) {
+        if (Str.isEmpty(catalog)) {
             throw new DatabaseMetadataException("#driver.not.support.catalog");
         }
         return catalog;

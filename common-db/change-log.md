@@ -1,8 +1,10 @@
-# 0.7.3
+# 0.8.0
 1. 修复ClassMappingUtils类ignoreProperty方法在属性是内嵌属性（xxx.yyy）时发生错误的问题
 2. AutoCloseConnection,AutoCloseCallableStatement,AutoClosePreparedStatement,AutoCloseStatement重载equals和hashCode方法
 3. AutoCloseXxx重命名为CascadedCloseXxx
 4. 加入CascadedCloseDataSource
+5. Dialect加入DateFunction相关的sql生成方法，MySQLDialect实现了相关逻辑
+6. ColumnElement实现Function支持
 
 # 0.7.2 2024-11-06
 

@@ -58,7 +58,7 @@ public class CompositeConditionColumnElementTest {
         assertEquals(composite.toSql(), "`age` + ? < ?");
         assertEquals(composite.getParam(), new Object[] { add, age });
 
-        c = new ArithmeticColumnElement(dialect, "age", CalculationOperator.PLUS, add, "u");
+        c = new ArithmeticColumnElement(dialect, "u", "age", CalculationOperator.PLUS, add);
 
         composite = new CompositeConditionColumnElement(dialect, c, age, ComparisonOperator.LT, IgnoreStrategy.EMPTY);
 
@@ -70,7 +70,7 @@ public class CompositeConditionColumnElementTest {
 
         Object[] actAges = new Object[] { 1, 2, 3, 4 };
 
-        c = new ArithmeticColumnElement(dialect, "age", CalculationOperator.PLUS, actAges)
+        c = new ArithmeticColumnElement(dialect, "age", CalculationOperator.PLUS, actAges[0])
             .add(CalculationOperator.SUBTRACT, actAges[1]).add(CalculationOperator.MULTIPLY, actAges[2])
             .add(CalculationOperator.DIVIDE, actAges[3]);
 
@@ -80,7 +80,7 @@ public class CompositeConditionColumnElementTest {
         assertEquals(composite.toSql(), "`age` + ? - ? * ? / ? < ?");
         assertEquals(composite.getParam(), SqlUtils.flatParams(actAges, age));
 
-        c = new ArithmeticColumnElement(dialect, "age", CalculationOperator.PLUS, actAges, "u")
+        c = new ArithmeticColumnElement(dialect, "u", "age", CalculationOperator.PLUS, actAges[0])
             .add(CalculationOperator.SUBTRACT, actAges[1]).add(CalculationOperator.MULTIPLY, actAges[2])
             .add(CalculationOperator.DIVIDE, actAges[3]);
 

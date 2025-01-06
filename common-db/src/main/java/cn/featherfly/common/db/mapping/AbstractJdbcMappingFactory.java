@@ -35,7 +35,7 @@ import cn.featherfly.common.db.mapping.operator.EnumSqlTypeOperator;
 import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.lang.SystemPropertyUtils;
 import cn.featherfly.common.repository.id.IdGenerator;
 import cn.featherfly.common.repository.id.IdGeneratorManager;
@@ -245,13 +245,13 @@ public abstract class AbstractJdbcMappingFactory implements JdbcMappingFactory {
             idGenerator = dialect.getIdGenerator(tableName, columnName);
             if (idGenerator == null) {
                 throw new JdbcMappingException(
-                    Strings.format("database {} not supported GenerationType.AUTO", dialect.getDatabaseName()));
+                    Str.format("database {} not supported GenerationType.AUTO", dialect.getDatabaseName()));
             }
         } else {
             String generatorName = generatedValue.generator();
             idGenerator = idGeneratorManager.get(generatorName);
             if (idGenerator == null) {
-                throw new JdbcMappingException(Strings.format("No IdGenerator named {} was found", generatorName));
+                throw new JdbcMappingException(Str.format("No IdGenerator named {} was found", generatorName));
             }
         }
         PrimaryKey primaryKey = new PrimaryKey(idGenerator, idGenerator.isDatabaseGeneration());

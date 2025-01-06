@@ -34,43 +34,43 @@ public class Perf {
         return sb.toString();
     }
 
-    private static final String SELECT = "select";
-
-    private static final char[] SELECT_CHARS = new char[] { 's', 'e', 'l', 'e', 'c', 't', 'S', 'E', 'L', 'E', 'C',
-        'T' };
-
-    private static final int SELECT_LEN = SELECT.length();
-
-    private static final String FROM = "select";
-
-    private static final char[] FROM_CHARS = new char[] { 's', 'e', 'l', 'e', 'c', 't', 'S', 'E', 'L', 'E', 'C', 'T' };
-
-    private static final int FROM_LEN = SELECT.length();
-
-    private boolean isSelect(String sql, int index, StringBuilder newSql) {
-        for (int j = 1; j < SELECT_LEN; j++) {
-            char cc = sql.charAt(index + j);
-            if (cc == SELECT_CHARS[j] || cc == SELECT_CHARS[j + SELECT_LEN]) {
-                continue;
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean isFrom(String sql, int index, StringBuilder newSql) {
-        for (int j = 1; j < SELECT_LEN; j++) {
-            char cc = sql.charAt(index + j);
-            newSql.append(cc);
-            if (cc == SELECT_CHARS[j] || cc == SELECT_CHARS[j + SELECT_LEN]) {
-                continue;
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
+    //    private static final String SELECT = "select";
+    //
+    //    private static final char[] SELECT_CHARS = new char[] { 's', 'e', 'l', 'e', 'c', 't', 'S', 'E', 'L', 'E', 'C',
+    //        'T' };
+    //
+    //    private static final int SELECT_LEN = SELECT.length();
+    //
+    //    private static final String FROM = "select";
+    //
+    //    private static final char[] FROM_CHARS = new char[] { 's', 'e', 'l', 'e', 'c', 't', 'S', 'E', 'L', 'E', 'C', 'T' };
+    //
+    //    private static final int FROM_LEN = SELECT.length();
+    //
+    //    private boolean isSelect(String sql, int index, StringBuilder newSql) {
+    //        for (int j = 1; j < SELECT_LEN; j++) {
+    //            char cc = sql.charAt(index + j);
+    //            if (cc == SELECT_CHARS[j] || cc == SELECT_CHARS[j + SELECT_LEN]) {
+    //                continue;
+    //            } else {
+    //                return false;
+    //            }
+    //        }
+    //        return true;
+    //    }
+    //
+    //    private boolean isFrom(String sql, int index, StringBuilder newSql) {
+    //        for (int j = 1; j < SELECT_LEN; j++) {
+    //            char cc = sql.charAt(index + j);
+    //            newSql.append(cc);
+    //            if (cc == SELECT_CHARS[j] || cc == SELECT_CHARS[j + SELECT_LEN]) {
+    //                continue;
+    //            } else {
+    //                return false;
+    //            }
+    //        }
+    //        return true;
+    //    }
 
     //    private boolean isSpaceOrNewLine(char c) {
     //        return c == ' ' || c == '\n' || c == '\t';

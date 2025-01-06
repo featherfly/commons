@@ -18,42 +18,42 @@ public class UpdateColumnElement extends ParamedColumnElement {
     /**
      * Instantiates a new update column element.
      *
-     * @param dialect        the dialect
-     * @param name           the name
-     * @param param          the param
+     * @param dialect the dialect
+     * @param name the name
+     * @param param the param
      * @param ignoreStrategy the ignore strategy
      */
     public UpdateColumnElement(Dialect dialect, String name, Object param, Predicate<?> ignoreStrategy) {
-        this(dialect, name, param, null, ignoreStrategy);
+        this(dialect, null, name, param, ignoreStrategy);
     }
 
     /**
      * Instantiates a new update column element.
      *
-     * @param dialect        dialect
-     * @param name           name
-     * @param param          param
-     * @param tableAlias     tableAlias
+     * @param dialect dialect
+     * @param tableAlias tableAlias
+     * @param name name
+     * @param param param
      * @param ignoreStrategy the ignore strategy
      */
-    public UpdateColumnElement(Dialect dialect, String name, Object param, String tableAlias,
-            Predicate<?> ignoreStrategy) {
-        this(dialect, name, param, tableAlias, null, ignoreStrategy);
+    public UpdateColumnElement(Dialect dialect, String tableAlias, String name, Object param,
+        Predicate<?> ignoreStrategy) {
+        this(dialect, tableAlias, name, param, null, ignoreStrategy);
     }
 
     /**
      * Instantiates a new update column element.
      *
-     * @param dialect        dialect
-     * @param name           name
-     * @param param          param
-     * @param tableAlias     tableAlias
-     * @param setType        setType
+     * @param dialect dialect
+     * @param tableAlias tableAlias
+     * @param name name
+     * @param param param
+     * @param setType setType
      * @param ignoreStrategy the ignore strategy
      */
-    public UpdateColumnElement(Dialect dialect, String name, Object param, String tableAlias, SetType setType,
-            Predicate<?> ignoreStrategy) {
-        super(dialect, name, param, tableAlias, ignoreStrategy);
+    public UpdateColumnElement(Dialect dialect, String tableAlias, String name, Object param, SetType setType,
+        Predicate<?> ignoreStrategy) {
+        super(dialect, tableAlias, name, param, ignoreStrategy);
         if (setType == null) {
             this.setType = SetType.SET;
         } else {

@@ -17,7 +17,7 @@ import java.sql.ResultSet;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.JavaTypeSqlTypeOperator;
 import cn.featherfly.common.db.mapping.JdbcMappingException;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 
 /**
  * The Class DefaultJavaSqlTypeOperator.
@@ -61,7 +61,7 @@ public class EnumSqlTypeOperator<E extends Enum<E>> implements JavaTypeSqlTypeOp
         super();
         if (checkType && !support(type)) {
             // ENHANCE 后续来优化异常信息
-            throw new JdbcMappingException(Strings.format("not support for type {0}", type.getName()));
+            throw new JdbcMappingException(Str.format("not support for type {0}", type.getName()));
         }
         this.type = type;
         this.enumUseOrdinal = enumUseOrdinal;

@@ -21,7 +21,7 @@ import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.function.ThPredicate;
 import cn.featherfly.common.lang.CollectionUtils;
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.repository.Index;
 import cn.featherfly.common.repository.mapping.ClassMapping;
 import cn.featherfly.common.repository.mapping.MappingFactory;
@@ -1458,7 +1458,7 @@ public final class ClassMappingUtils {
     private static String getSelectColumnsSql(String tableAlias, JdbcPropertyMapping propertyMapping,
         String prefixPropertyName, Dialect dialect) {
         StringBuilder selectSql = new StringBuilder();
-        if (Strings.isNotBlank(tableAlias)) {
+        if (Str.isNotBlank(tableAlias)) {
             selectSql.append(tableAlias).append(Chars.DOT);
         }
         selectSql.append(dialect.wrapName(propertyMapping.getRepositoryFieldName())).append(Chars.SPACE)
@@ -1479,7 +1479,7 @@ public final class ClassMappingUtils {
     private static String getSelectColumnsSql(String tableAlias, JdbcPropertyMapping propertyMapping,
         JdbcPropertyMapping nestedJdbcPropertyMapping, Dialect dialect) {
         StringBuilder selectSql = new StringBuilder();
-        if (Strings.isNotBlank(tableAlias)) {
+        if (Str.isNotBlank(tableAlias)) {
             selectSql.append(tableAlias).append(Chars.DOT);
         }
         selectSql.append(dialect.wrapName(propertyMapping.getRepositoryFieldName())).append(Chars.SPACE)

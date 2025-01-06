@@ -22,7 +22,7 @@ import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.JavaTypeSqlTypeOperator;
 import cn.featherfly.common.db.mapping.JdbcMappingException;
 import cn.featherfly.common.lang.ClassUtils;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 
 /**
  * The Class DefaultJavaSqlTypeOperator.
@@ -46,23 +46,23 @@ public class DefaultTypesSqlTypeOperator<E> implements JavaTypeSqlTypeOperator<E
     /**
      * Instantiates a new default java sql type operator.
      *
-     * @param type      the type
+     * @param type the type
      * @param checkType the check type
      */
     public DefaultTypesSqlTypeOperator(Class<E> type, boolean checkType) {
         super();
         if (checkType && !support(type)) {
             // ENHANCE 后续来优化异常信息
-            throw new JdbcMappingException(Strings.format("not support for type {0}", type.getName()));
+            throw new JdbcMappingException(Str.format("not support for type {0}", type.getName()));
         }
         this.type = type;
     }
 
     public static boolean support(Class<?> type) {
         return type.isPrimitive() || ClassUtils.isParent(Number.class, type)
-                || ClassUtils.isParent(java.util.Date.class, type) || type == Boolean.class || type == String.class
-                || type == Character.class || type == LocalDate.class || type == LocalDateTime.class
-                || type == LocalTime.class || type == AtomicBoolean.class;
+            || ClassUtils.isParent(java.util.Date.class, type) || type == Boolean.class || type == String.class
+            || type == Character.class || type == LocalDate.class || type == LocalDateTime.class
+            || type == LocalTime.class || type == AtomicBoolean.class;
     }
 
     /**

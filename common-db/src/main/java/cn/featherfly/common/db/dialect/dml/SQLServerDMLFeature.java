@@ -11,10 +11,12 @@ package cn.featherfly.common.db.dialect.dml;
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.builder.model.SqlElement;
 import cn.featherfly.common.db.dialect.AbstractDMLFeature;
+import cn.featherfly.common.db.dialect.DialectException;
 import cn.featherfly.common.db.dialect.SQLServerDialect;
 import cn.featherfly.common.exception.NotImplementedException;
 import cn.featherfly.common.operator.ComparisonOperator;
 import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
+import cn.featherfly.common.operator.DateFunction;
 
 /**
  * SQLServer DML feature
@@ -94,6 +96,16 @@ public class SQLServerDMLFeature extends AbstractDMLFeature<SQLServerDialect> {
     @Override
     protected String preparePrimaryKeyColumnForInsert(String tableName, String columnName, boolean autoIncrement) {
         return Chars.QUESTION;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String column(boolean distinct, String tableAlias, String columnName,
+        String columnAlias, DateFunction function, Object... argus) {
+        // NOIMPL 未实现
+        throw new DialectException("未实现的 function" + function.getClass().getName());
     }
 
 }

@@ -16,14 +16,16 @@ import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.builder.model.SqlElement;
 import cn.featherfly.common.db.dialect.AbstractDMLFeature;
+import cn.featherfly.common.db.dialect.Dialect.StringCase;
 import cn.featherfly.common.db.dialect.DialectException;
 import cn.featherfly.common.db.dialect.Keywords;
 import cn.featherfly.common.db.dialect.MySQLDialect;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.operator.ComparisonOperator;
 import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
+import cn.featherfly.common.operator.DateFunction;
 
 /**
  * Mysql DML feature
@@ -70,7 +72,7 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
 
         StringBuilder columnsSql = new StringBuilder();
         for (String columnName : columns) {
-            BuilderUtils.link(columnsSql, Strings.format("{0}=values({0}),", dialect.wrapName(columnName)));
+            BuilderUtils.link(columnsSql, Str.format("{0}=values({0}),", dialect.wrapName(columnName)));
         }
         if (columnsSql.length() > 0) {
             columnsSql.deleteCharAt(columnsSql.length() - 1);
@@ -250,4 +252,77 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
     protected String preparePrimaryKeyColumnForInsert(String tableName, String columnName, boolean autoIncrement) {
         return Chars.QUESTION;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String column(boolean distinct, String tableAlias, String columnName,
+        String columnAlias, DateFunction function, Object... argus) {
+        String name = null;
+        switch (function) {
+            case GET_YEAR:
+                name = "year";
+                break;
+            case GET_MONTH:
+                name = "month";
+                break;
+            case GET_DAY_OF_MONTH:
+                name = "dayofmonth";
+                break;
+            case GET_HOUR:
+                name = "hour";
+                break;
+            case GET_MINUTE:
+                name = "minute";
+                break;
+            case GET_SECOND:
+                name = "second";
+                break;
+            case GET_WEEKDAY:
+                name = "weekday";
+                break;
+            case GET_WEEK_OF_YEAR:
+                name = "weekofyear";
+                break;
+            case GET_DAY_OF_YEAR:
+                name = "dayofyear";
+                break;
+            case GET_QUARTER:
+                name = "quarter";
+                break;
+            case DATE_FORMAT:
+                name = "date_format";
+                break;
+            case TIME_FORMAT:
+                name = "time_format";
+                break;
+            default:
+                throw new DialectException("not support date function " + function.name());
+        }
+        if (dialect.tableAndColumnNameCase() == StringCase.UPPER_CASE) {
+            name = name.toUpperCase();
+        }
+
+        String column = dialect.wrapName(dialect.convertTableOrColumnName(columnName));
+        if (Lang.isNotEmpty(tableAlias)) {
+            column = tableAlias + Chars.DOT + column;
+        }
+        // 拼接方法
+        column = name + Chars.PAREN_L + column;
+        if (function.getParameterCount() > 1) {
+            for (Object argu : argus) {
+                column = column + Chars.COMMA + Chars.SPACE + Chars.QM + argu + Chars.QM;
+            }
+        }
+        column += Chars.PAREN_R;
+        if (distinct) {
+            column = dialect.getKeywords().distinct() + Chars.SPACE + column;
+        }
+        if (Lang.isNotEmpty(columnAlias)) {
+            column = column + Chars.SPACE + dialect.wrapName(columnAlias);
+        }
+        return column;
+    }
+
 }

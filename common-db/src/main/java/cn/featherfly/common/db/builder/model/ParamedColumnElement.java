@@ -31,21 +31,21 @@ public abstract class ParamedColumnElement extends ColumnElement {
      * @param ignoreStrategy the ignore strategy
      */
     protected ParamedColumnElement(Dialect dialect, String name, Object param, Predicate<?> ignoreStrategy) {
-        this(dialect, name, param, null, ignoreStrategy);
+        this(dialect, null, name, param, ignoreStrategy);
     }
 
     /**
      * Instantiates a new paramed column element.
      *
      * @param dialect dialect
+     * @param tableAlias tableAlias
      * @param name name
      * @param param param
-     * @param tableAlias tableAlias
      * @param ignoreStrategy the ignore strategy
      */
-    protected ParamedColumnElement(Dialect dialect, String name, Object param, String tableAlias,
+    protected ParamedColumnElement(Dialect dialect, String tableAlias, String name, Object param,
         Predicate<?> ignoreStrategy) {
-        super(dialect, name, tableAlias);
+        super(dialect, tableAlias, name);
         this.param = param;
         setIgnoreStrategy(ignoreStrategy);
     }

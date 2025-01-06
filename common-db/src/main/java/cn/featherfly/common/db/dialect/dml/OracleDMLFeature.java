@@ -17,6 +17,7 @@ import cn.featherfly.common.exception.NotImplementedException;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.operator.ComparisonOperator;
 import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
+import cn.featherfly.common.operator.DateFunction;
 
 /**
  * Oracle DML feature.
@@ -153,6 +154,16 @@ public class OracleDMLFeature extends AbstractDMLFeature<OracleDialect> {
     @Override
     protected String preparePrimaryKeyColumnForInsert(String tableName, String columnName, boolean autoIncrement) {
         return Chars.QUESTION;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String column(boolean distinct, String tableAlias, String columnName,
+        String columnAlias, DateFunction function, Object... argus) {
+        // NOIMPL 未实现
+        throw new DialectException("未实现的 function" + function.getClass().getName());
     }
 
 }

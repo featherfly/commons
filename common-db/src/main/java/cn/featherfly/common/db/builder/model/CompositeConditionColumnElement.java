@@ -16,7 +16,7 @@ import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
  */
 public class CompositeConditionColumnElement extends ConditionColumnElement {
 
-    private ParamedColumnElement column;
+    private ColumnElement column;
 
     /**
      * Instantiates a new composite condition column element.
@@ -27,24 +27,24 @@ public class CompositeConditionColumnElement extends ConditionColumnElement {
      * @param comparisonOperator the comparison operator
      * @param ignoreStrategy the ignore strategy
      */
-    public CompositeConditionColumnElement(Dialect dialect, ParamedColumnElement column, Object value,
+    public CompositeConditionColumnElement(Dialect dialect, ColumnElement column, Object value,
         ComparisonOperator comparisonOperator, Predicate<?> ignoreStrategy) {
-        this(dialect, column, value, comparisonOperator, null, ignoreStrategy);
+        this(dialect, column.tableAlias, column, value, comparisonOperator, ignoreStrategy);
     }
 
     /**
      * Instantiates a new composite condition column element.
      *
      * @param dialect the dialect
+     * @param tableAlias the table alias
      * @param column the column
      * @param value the value
      * @param comparisonOperator the comparison operator
-     * @param tableAlias the table alias
      * @param ignoreStrategy the ignore strategy
      */
-    public CompositeConditionColumnElement(Dialect dialect, ParamedColumnElement column, Object value,
-        ComparisonOperator comparisonOperator, String tableAlias, Predicate<?> ignoreStrategy) {
-        super(dialect, column.name, value, comparisonOperator, tableAlias, ignoreStrategy);
+    public CompositeConditionColumnElement(Dialect dialect, String tableAlias, ColumnElement column, Object value,
+        ComparisonOperator comparisonOperator, Predicate<?> ignoreStrategy) {
+        super(dialect, tableAlias, column.name, value, comparisonOperator, ignoreStrategy);
         this.column = column;
     }
 
@@ -59,10 +59,10 @@ public class CompositeConditionColumnElement extends ConditionColumnElement {
      * @param tableAlias the table alias
      * @param ignoreStrategy the ignore strategy
      */
-    public CompositeConditionColumnElement(Dialect dialect, ParamedColumnElement column, Object value,
-        ComparisonOperator comparisonOperator, MatchStrategy matchStrategy, String tableAlias,
+    public CompositeConditionColumnElement(Dialect dialect, String tableAlias, ColumnElement column, Object value,
+        ComparisonOperator comparisonOperator, MatchStrategy matchStrategy,
         Predicate<?> ignoreStrategy) {
-        super(dialect, column.name, value, comparisonOperator, matchStrategy, tableAlias, ignoreStrategy);
+        super(dialect, tableAlias, column.name, value, comparisonOperator, matchStrategy, ignoreStrategy);
         this.column = column;
     }
 
@@ -71,7 +71,11 @@ public class CompositeConditionColumnElement extends ConditionColumnElement {
      */
     @Override
     public Object getParam() {
-        return SqlUtils.flatParams(column.getParam(), super.getParam());
+        if (column instanceof ParamedColumnElement) {
+            return SqlUtils.flatParams(((ParamedColumnElement) column).getParam(), super.getParam());
+        } else {
+            return super.getParam();
+        }
     }
 
     /**

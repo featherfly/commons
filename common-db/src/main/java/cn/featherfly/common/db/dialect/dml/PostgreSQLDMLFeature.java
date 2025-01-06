@@ -13,9 +13,10 @@ import cn.featherfly.common.db.builder.model.SqlElement;
 import cn.featherfly.common.db.dialect.AbstractDMLFeature;
 import cn.featherfly.common.db.dialect.DialectException;
 import cn.featherfly.common.db.dialect.PostgreSQLDialect;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.operator.ComparisonOperator;
 import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
+import cn.featherfly.common.operator.DateFunction;
 
 /**
  * PostgreSQLDMLFeature.
@@ -108,7 +109,7 @@ public class PostgreSQLDMLFeature extends AbstractDMLFeature<PostgreSQLDialect> 
             case CASE_INSENSITIVE:
             case CASE_SENSITIVE:
                 throw new DialectException(
-                    Strings.format("{} operator unsupported {}", comparisonOperator, matchStrategy));
+                    Str.format("{} operator unsupported {}", comparisonOperator, matchStrategy));
             default:
                 condition.append(name);
                 break;
@@ -129,7 +130,7 @@ public class PostgreSQLDMLFeature extends AbstractDMLFeature<PostgreSQLDialect> 
             case CASE_INSENSITIVE:
             case CASE_SENSITIVE:
                 throw new DialectException(
-                    Strings.format("{} operator unsupported {}", comparisonOperator, matchStrategy));
+                    Str.format("{} operator unsupported {}", comparisonOperator, matchStrategy));
             default:
                 condition.append(name);
                 break;
@@ -149,6 +150,16 @@ public class PostgreSQLDMLFeature extends AbstractDMLFeature<PostgreSQLDialect> 
         } else {
             return Chars.QUESTION;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String column(boolean distinct, String tableAlias, String columnName,
+        String columnAlias, DateFunction function, Object... argus) {
+        // NOIMPL 未实现
+        throw new DialectException("未实现的 function" + function.getClass().getName());
     }
 
 }

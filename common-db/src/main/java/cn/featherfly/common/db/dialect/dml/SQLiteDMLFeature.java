@@ -20,6 +20,7 @@ import cn.featherfly.common.db.dialect.Keywords;
 import cn.featherfly.common.db.dialect.SQLiteDialect;
 import cn.featherfly.common.operator.ComparisonOperator;
 import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
+import cn.featherfly.common.operator.DateFunction;
 
 /**
  * SQLiteDMLFeature.
@@ -256,5 +257,15 @@ public class SQLiteDMLFeature extends AbstractDMLFeature<SQLiteDialect> {
     @Override
     protected String preparePrimaryKeyColumnForInsert(String tableName, String columnName, boolean autoIncrement) {
         return Chars.QUESTION;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String column(boolean distinct, String tableAlias, String columnName,
+        String columnAlias, DateFunction function, Object... argus) {
+        // NOIMPL 未实现
+        throw new DialectException("未实现的 function" + function.getClass().getName());
     }
 }

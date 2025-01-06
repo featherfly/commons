@@ -17,10 +17,12 @@ import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.builder.model.SqlElement;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.operator.AggregateFunction;
 import cn.featherfly.common.operator.ComparisonOperator;
 import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
+import cn.featherfly.common.operator.DateFunction;
+import cn.featherfly.common.operator.Function;
 
 /**
  * abstract DML feature.
@@ -123,7 +125,7 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
         sql = BuilderUtils.link(sql, "ON CONFLICT", conflict.toString(), "DO UPDATE SET");
         StringBuilder columnsSql = new StringBuilder();
         for (String columnName : columns) {
-            BuilderUtils.link(columnsSql, Strings.format("{0}=EXCLUDED.{0},", dialect.wrapName(columnName)));
+            BuilderUtils.link(columnsSql, Str.format("{0}=EXCLUDED.{0},", dialect.wrapName(columnName)));
         }
         if (columnsSql.length() > 0) {
             columnsSql.deleteCharAt(columnsSql.length() - 1);
@@ -208,7 +210,7 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
             case ISN:
             case INN:
                 throw new DialectException(
-                    Strings.format("unspport for {} with {} ", values.getClass().getName(), comparisonOperator));
+                    Str.format("unspport for {} with {} ", values.getClass().getName(), comparisonOperator));
             default:
                 break;
         }
@@ -320,9 +322,49 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
         return condition.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String column(boolean distinct, String tableAlias, String columnName,
+        String columnAlias, Function function, Object... argus) {
+        if (function == null) {
+            throw new DialectException("function can not be null");
+        }
+        if (function instanceof AggregateFunction) {
+            return column((AggregateFunction) function, distinct, tableAlias, columnName, columnAlias);
+        }
+        if (function instanceof DateFunction) {
+            if (Chars.STAR.equals(columnName)) {
+                throw new DialectException("function {} column name can not be *", function.name());
+            }
+            if (function.getParameterCount() != argus.length + 1) { // column name is one of arguments
+                throw new DialectException("function {} parameter count is {}, but {} was be found", function.name(),
+                    function.getParameterCount(), argus.length + 1);
+            }
+            return column(distinct, tableAlias, columnName, columnAlias, (DateFunction) function, argus);
+        }
+        // YUFEI_TODO 后续添加其他实现
+        throw new DialectException("未实现的 function" + function.getClass().getName());
+    }
+
     // ****************************************************************************************************************
     //
     // ****************************************************************************************************************
+
+    /**
+     * build sql for column with tableAlias and Date function.
+     *
+     * @param distinct the distinct
+     * @param tableAlias the table alias
+     * @param columnName the column name
+     * @param columnAlias the column alias
+     * @param function the function
+     * @param argus the argus
+     * @return the string
+     */
+    protected abstract String column(boolean distinct, String tableAlias, String columnName,
+        String columnAlias, DateFunction function, Object... argus);
 
     /**
      * Insert values.

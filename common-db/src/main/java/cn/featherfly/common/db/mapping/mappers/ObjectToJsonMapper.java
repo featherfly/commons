@@ -24,15 +24,15 @@ import cn.featherfly.common.bean.BeanProperty;
 import cn.featherfly.common.db.JdbcException;
 import cn.featherfly.common.db.mapping.AbstractJavaSqlTypeMapper;
 import cn.featherfly.common.lang.ClassUtils;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.lang.reflect.ClassType;
 import cn.featherfly.common.lang.reflect.Type;
 
 /**
  * The Class ObjectToJsonMapper.
  *
- * @param <E> the element type
  * @author zhongj
+ * @param <E> the element type
  */
 public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMapper<E> {
 
@@ -132,7 +132,7 @@ public class ObjectToJsonMapper<E extends Object> extends AbstractJavaSqlTypeMap
                             .constructCollectionType((Class<? extends Collection>) bp.getType(), bp.getGenericType());
                     } else if (ClassUtils.isParent(Map.class, bp.getType())) {
                         if (bp.getGenericTypes().size() != 2) {
-                            throw new JdbcException(Strings.format(
+                            throw new JdbcException(Str.format(
                                 "bean property {0} type is Map and generic type size must be 2", bp.toString()));
                         }
                         List<Class<?>> genericTypes = bp.getGenericTypes();

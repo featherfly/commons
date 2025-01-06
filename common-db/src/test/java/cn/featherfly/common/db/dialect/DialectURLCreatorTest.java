@@ -8,8 +8,8 @@
  */
 package cn.featherfly.common.db.dialect;
 
-import static org.junit.Assert.assertNull;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
 import org.testng.annotations.Test;
 
@@ -25,7 +25,8 @@ import cn.featherfly.common.db.dialect.creator.SQLiteDialectURLCreator;
  */
 public class DialectURLCreatorTest {
 
-    String mysqlUrl = "jdbc:mysql://127.0.0.1:3306/db_test?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false";
+    String mysqlUrl =
+        "jdbc:mysql://127.0.0.1:3306/db_test?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false";
     String oracleUrl = "jdbc:oracle:thin:@192.168.1.99:1521:ORCL10G";
     String postgresqlUrl = "jdbc:postgresql://localhost:5432/db_test";
     String sqliteUrl = "jdbc:sqlite:D:\\db_test.sqlite3.db";

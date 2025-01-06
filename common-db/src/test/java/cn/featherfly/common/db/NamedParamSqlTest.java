@@ -62,6 +62,7 @@ public class NamedParamSqlTest {
         namedSql3 = sb.append(namedSql).toString();
     }
 
+    @SuppressWarnings("rawtypes")
     @BeforeMethod
     void beforeMethod() {
         idList = new ArrayList<>();

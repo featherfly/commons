@@ -17,8 +17,8 @@ public class DialectException extends LocalizedException {
 
     /**
      * @param message message
-     * @param locale  locale
-     * @param ex      ex
+     * @param locale locale
+     * @param ex ex
      */
     public DialectException(String message, Locale locale, Throwable ex) {
         super(message, locale, ex);
@@ -26,7 +26,7 @@ public class DialectException extends LocalizedException {
 
     /**
      * @param message message
-     * @param locale  locale
+     * @param locale locale
      */
     public DialectException(String message, Locale locale) {
         super(message, locale);
@@ -34,9 +34,9 @@ public class DialectException extends LocalizedException {
 
     /**
      * @param message message
-     * @param argus   argus
-     * @param locale  locale
-     * @param ex      ex
+     * @param argus argus
+     * @param locale locale
+     * @param ex ex
      */
     public DialectException(String message, Object[] argus, Locale locale, Throwable ex) {
         super(message, argus, locale, ex);
@@ -44,8 +44,8 @@ public class DialectException extends LocalizedException {
 
     /**
      * @param message message
-     * @param argus   argus
-     * @param locale  locale
+     * @param argus argus
+     * @param locale locale
      */
     public DialectException(String message, Object[] argus, Locale locale) {
         super(message, argus, locale);
@@ -53,8 +53,8 @@ public class DialectException extends LocalizedException {
 
     /**
      * @param message message
-     * @param argus   argus
-     * @param ex      ex
+     * @param argus argus
+     * @param ex ex
      */
     public DialectException(String message, Object[] argus, Throwable ex) {
         super(message, argus, ex);
@@ -62,15 +62,15 @@ public class DialectException extends LocalizedException {
 
     /**
      * @param message message
-     * @param argus   argus
+     * @param argus argus
      */
-    public DialectException(String message, Object[] argus) {
+    public DialectException(String message, Object... argus) {
         super(message, argus);
     }
 
     /**
      * @param message message
-     * @param ex      ex
+     * @param ex ex
      */
     public DialectException(String message, Throwable ex) {
         super(message, ex);

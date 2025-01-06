@@ -428,8 +428,8 @@ public interface Dialect {
         switch (keywordsCase()) {
             case LOWER_CASE:
                 return function.toString().toLowerCase();
-            //            case UPPER_CASE:
-            //                return function.toString().toUpperCase();
+            case UPPER_CASE:
+                return function.toString().toUpperCase();
             default:
                 return function.toString();
         }

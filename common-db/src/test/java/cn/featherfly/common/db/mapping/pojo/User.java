@@ -9,15 +9,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * <p>
- * User
- * </p>
+ * User.
  *
  * @author zhongj
  */
 @Entity
 @Table
 public class User implements Serializable {
+
+    private static final long serialVersionUID = 6721187382272400926L;
 
     @Id
     private Long id;

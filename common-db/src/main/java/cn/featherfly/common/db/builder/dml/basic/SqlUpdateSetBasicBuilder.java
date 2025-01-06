@@ -96,7 +96,7 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
      * @return the sql update set basic builder
      */
     public SqlUpdateSetBasicBuilder setValue(String columnName, Object value, Predicate<?> setIgnoreStrategy) {
-        params.add(new UpdateColumnElement(dialect, columnName, value, alias, setIgnoreStrategy));
+        params.add(new UpdateColumnElement(dialect, alias, columnName, value, setIgnoreStrategy));
         return this;
     }
 
@@ -123,7 +123,7 @@ public class SqlUpdateSetBasicBuilder implements SqlBuilder {
      */
     public SqlUpdateSetBasicBuilder setValue(String columnName, Object value, SetType setType,
         Predicate<?> setIgnoreStrategy) {
-        params.add(new UpdateColumnElement(dialect, columnName, value, alias, setType, setIgnoreStrategy));
+        params.add(new UpdateColumnElement(dialect, alias, columnName, value, setType, setIgnoreStrategy));
         return this;
     }
 

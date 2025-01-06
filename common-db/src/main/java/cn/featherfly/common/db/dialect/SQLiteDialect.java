@@ -12,7 +12,7 @@ import cn.featherfly.common.db.dialect.ddl.SQLiteDDLFeature;
 import cn.featherfly.common.db.dialect.dml.SQLiteDMLFeature;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.Dates;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.repository.id.IdGenerator;
 
 /**
@@ -90,9 +90,9 @@ public class SQLiteDialect extends AbstractDialect {
         if (isParamNamed) {
             if (start > 0) {
                 pagingSelect
-                    .append(Strings.format(" LIMIT {0}{1},{0}{2}", startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME));
+                    .append(Str.format(" LIMIT {0}{1},{0}{2}", startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME));
             } else {
-                pagingSelect.append(Strings.format(" LIMIT {0}{1}", startSymbol, LIMIT_PARAM_NAME));
+                pagingSelect.append(Str.format(" LIMIT {0}{1}", startSymbol, LIMIT_PARAM_NAME));
             }
         } else {
             if (start > 0) {

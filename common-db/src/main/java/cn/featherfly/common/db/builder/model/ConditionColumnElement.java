@@ -28,8 +28,10 @@ import cn.featherfly.common.repository.Params.ParamType;
  */
 public class ConditionColumnElement extends ParamedColumnElement {
 
+    /** The comparison operator. */
     protected final ComparisonOperator comparisonOperator;
 
+    /** The match strategy. */
     protected final MatchStrategy matchStrategy;
 
     /**
@@ -43,38 +45,40 @@ public class ConditionColumnElement extends ParamedColumnElement {
      */
     public ConditionColumnElement(Dialect dialect, String name, Object value, ComparisonOperator comparisonOperator,
         Predicate<?> ignoreStrategy) {
-        this(dialect, name, value, comparisonOperator, null, ignoreStrategy);
+        this(dialect, null, name, value, comparisonOperator, ignoreStrategy);
     }
 
     /**
      * Instantiates a new condition column element.
      *
      * @param dialect dialect
+     * @param tableAlias tableAlias
      * @param name name
      * @param value param value
      * @param comparisonOperator comparisonOperator
-     * @param tableAlias tableAlias
      * @param ignoreStrategy the ignore strategy
      */
-    public ConditionColumnElement(Dialect dialect, String name, Object value, ComparisonOperator comparisonOperator,
-        String tableAlias, Predicate<?> ignoreStrategy) {
-        this(dialect, name, value, comparisonOperator, MatchStrategy.AUTO, tableAlias, ignoreStrategy);
+    public ConditionColumnElement(Dialect dialect, String tableAlias, String name, Object value,
+        ComparisonOperator comparisonOperator,
+        Predicate<?> ignoreStrategy) {
+        this(dialect, tableAlias, name, value, comparisonOperator, MatchStrategy.AUTO, ignoreStrategy);
     }
 
     /**
      * Instantiates a new condition column element.
      *
      * @param dialect the dialect
+     * @param tableAlias the table alias
      * @param name the name
      * @param value the value
      * @param comparisonOperator the comparison operator
      * @param matchStrategy the match strategy
-     * @param tableAlias the table alias
      * @param ignoreStrategy the ignore strategy
      */
-    public ConditionColumnElement(Dialect dialect, String name, Object value, ComparisonOperator comparisonOperator,
-        MatchStrategy matchStrategy, String tableAlias, Predicate<?> ignoreStrategy) {
-        super(dialect, name, value, tableAlias, ignoreStrategy);
+    public ConditionColumnElement(Dialect dialect, String tableAlias, String name, Object value,
+        ComparisonOperator comparisonOperator,
+        MatchStrategy matchStrategy, Predicate<?> ignoreStrategy) {
+        super(dialect, tableAlias, name, value, ignoreStrategy);
         AssertIllegalArgument.isNotNull(comparisonOperator, "comparisonOperator");
         if (matchStrategy == null) {
             matchStrategy = MatchStrategy.AUTO;

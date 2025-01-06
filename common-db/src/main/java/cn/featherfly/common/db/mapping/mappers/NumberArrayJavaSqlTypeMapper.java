@@ -9,7 +9,7 @@ import java.sql.SQLType;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.AbstractGenericJavaSqlTypeMapper;
 import cn.featherfly.common.lang.ArrayUtils;
-import cn.featherfly.common.lang.NumberUtils;
+import cn.featherfly.common.lang.Num;
 import cn.featherfly.common.lang.reflect.Type;
 
 /**
@@ -38,7 +38,7 @@ public class NumberArrayJavaSqlTypeMapper<N extends Number> extends AbstractGene
     @Override
     public boolean support(SQLType sqlType) {
         return JDBCType.VARCHAR == sqlType || JDBCType.NVARCHAR == sqlType || JDBCType.CHAR == sqlType
-                || JDBCType.NCHAR == sqlType;
+            || JDBCType.NCHAR == sqlType;
     }
 
     /**
@@ -116,7 +116,7 @@ public class NumberArrayJavaSqlTypeMapper<N extends Number> extends AbstractGene
             String[] values = value.split(",");
             N[] numbers = ArrayUtils.create(numberType, values.length);
             for (int i = 0; i < values.length; i++) {
-                numbers[i] = NumberUtils.parse(values[i], numberType);
+                numbers[i] = Num.parse(values[i], numberType);
             }
             return numbers;
         } else {
@@ -134,7 +134,7 @@ public class NumberArrayJavaSqlTypeMapper<N extends Number> extends AbstractGene
             String[] values = value.split(",");
             N[] numbers = ArrayUtils.create(numberType, values.length);
             for (int i = 0; i < values.length; i++) {
-                numbers[i] = NumberUtils.parse(values[i], numberType);
+                numbers[i] = Num.parse(values[i], numberType);
             }
             return numbers;
         } else {

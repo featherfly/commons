@@ -1,6 +1,6 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
-# 1.13.1
+# 1.14.0
 
 1. 加入Str类代替Strings，删除StringUtils类，标注Strings为废弃
 

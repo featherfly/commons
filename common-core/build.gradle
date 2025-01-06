@@ -14,9 +14,9 @@ dependencies {
     api group: 'cn.featherfly.common', name: 'common-api', version: '0.5.2'
     api group: 'cn.featherfly.common', name: 'common-algorithm', version: '1.1.0'
     api group: 'cn.featherfly.common', name: 'common-functional', version: '0.1.0'
-    api group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
+    api group: 'org.apache.commons', name: 'commons-lang3', version: '3.17.0'
     api group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
-    api group: 'commons-io', name: 'commons-io', version: '2.16.1'
+    api group: 'commons-io', name: 'commons-io', version: '2.18.0'
     //compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'    
     //compile group: 'org.springframework', name: 'spring-core', version: '5.1.8.RELEASE'
         

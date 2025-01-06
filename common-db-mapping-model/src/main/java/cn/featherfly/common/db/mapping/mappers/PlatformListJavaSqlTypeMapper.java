@@ -11,7 +11,7 @@ import java.util.List;
 import cn.featherfly.common.db.JdbcUtils;
 import cn.featherfly.common.db.mapping.AbstractGenericJavaSqlTypeMapper;
 import cn.featherfly.common.db.mapping.JdbcMappingException;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.model.app.Platform;
 import cn.featherfly.common.model.app.Platforms;
 
@@ -35,7 +35,7 @@ public class PlatformListJavaSqlTypeMapper extends AbstractGenericJavaSqlTypeMap
     @Override
     public boolean support(SQLType sqlType) {
         return JDBCType.VARCHAR == sqlType || JDBCType.NVARCHAR == sqlType || JDBCType.CHAR == sqlType
-                || JDBCType.NCHAR == sqlType;
+            || JDBCType.NCHAR == sqlType;
     }
 
     //    /**
@@ -121,7 +121,7 @@ public class PlatformListJavaSqlTypeMapper extends AbstractGenericJavaSqlTypeMap
                         platforms.add(Platforms.valueOf(Integer.parseInt(values[i])));
                     } catch (NumberFormatException e2) {
                         throw new JdbcMappingException(
-                                Strings.format("convert {0} to type {1} error", values[i], Platforms.class.getName()));
+                            Str.format("convert {0} to type {1} error", values[i], Platforms.class.getName()));
                     }
                 }
             }

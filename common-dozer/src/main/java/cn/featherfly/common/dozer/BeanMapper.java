@@ -16,11 +16,20 @@ public class BeanMapper {
 
     private Mapper mapper;
 
+    private ClassLoader classLoader;
+
+    private int sign;
+
     BeanMapper(Mapper mapper) {
         this.mapper = mapper;
     }
 
     BeanMapper(int sign) {
+        this.sign = sign;
+        init();
+    }
+
+    private void init() {
         List<String> mappingFiles = new ArrayList<>();
         mappingFiles.add(DozerConstants.JAVA8_MAPPING);
         if (sign == 0) {
@@ -34,6 +43,13 @@ public class BeanMapper {
         }
     }
 
+    private void checkClassLoader() {
+        if (classLoader != Thread.currentThread().getContextClassLoader()) {
+            classLoader = Thread.currentThread().getContextClassLoader();
+            init();
+        }
+    }
+
     /**
      * Copy the value from A to B, use Default DozerBeanMapper.
      *
@@ -43,6 +59,7 @@ public class BeanMapper {
      * @return the merged destination object
      */
     public <T> T copy(T destination, Object source) {
+        checkClassLoader();
         if (source != null) {
             mapper.map(source, destination);
         }
@@ -58,6 +75,7 @@ public class BeanMapper {
      * @return the merged destination object
      */
     public <T> T copy(Class<T> destination, Object source) {
+        checkClassLoader();
         T destinationObject = null;
         try {
             destinationObject = destination.newInstance();
@@ -76,6 +94,7 @@ public class BeanMapper {
      * @return list
      */
     public <T> List<T> copyList(Class<T> destinationClass, Collection<?> sourceList) {
+        checkClassLoader();
         List<T> destinationList = new ArrayList<>();
         if (mapper != null) {
             for (Object sourceObject : sourceList) {

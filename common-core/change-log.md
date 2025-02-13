@@ -1,26 +1,19 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
+# 1.15.0
+1. 
+
 # 1.14.0 2025-02-13
 
 1. 加入Str类代替Strings，删除StringUtils类，标注Strings为废弃
-
 2. 加入ReflectionPropertyAccessorFactory
-
 3. LocalizedException支持字符串格式化
-
 4. 修复StringFormatter在使用NotMatchStrategy.TRIM_PLACEHOLDER策略时，{name},{1}中的name和1被去除的问题(即只返回{})
-
 5. AutoCloseableIterable覆盖close方法，抛出异常BaseException代替抛出异常Exception
-
 6. 加入Num类代替NumberUtils
-
 7. ListPropertyAccessor和MapPropertyAccessor加入检查属性不存在的逻辑，不存在抛出NoSuchPropertyException
-
 8. 添加不可变 list|set|map
-
 9. CollectionUtils加入newList,newSet,newQueue,newCollection, 重构newMap逻辑
-
-    
 
 # 1.13.0 2024-06-02
 

@@ -1,4 +1,4 @@
-# 0.5.2 
+# 0.5.2 2025-02-13
 1. AutoCloseableIterable替换为RowIterable
 
 # 0.5.1 2024-11-06

@@ -1,4 +1,4 @@
-# 0.8.0
+# 0.8.0 2025-02-13
 1. 修复ClassMappingUtils类ignoreProperty方法在属性是内嵌属性（xxx.yyy）时发生错误的问题
 2. AutoCloseConnection,AutoCloseCallableStatement,AutoClosePreparedStatement,AutoCloseStatement重载equals和hashCode方法
 3. AutoCloseXxx重命名为CascadedCloseXxx

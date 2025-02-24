@@ -1,3 +1,6 @@
+# 0.4.3
+1. 升级common-core版本
+
 # 0.4.2 2024-06-07
 1. 修复没有移除RestartClassLoaderClassDefiner在Service loader里的定义
 

@@ -1,3 +1,14 @@
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenLocal()
+        maven {
+            url = "https://maven.aliyun.com/repository/public"
+        }
+        mavenCentral()
+    }
+}
+
 rootProject.name = 'commons-build-config'
 //includeFlat 'common-test'
 includeFlat 'common-api'

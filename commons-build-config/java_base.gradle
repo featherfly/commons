@@ -16,14 +16,6 @@ tasks.withType(Javadoc) {
     }
 }
 
-repositories {
-    mavenLocal()
-    maven {
-        url "https://maven.aliyun.com/repository/central"
-    }
-    mavenCentral()
-}
-
 jar {
     archiveBaseName = archivesBaseName
     manifest.attributes 'Build-Name': archivesBaseName

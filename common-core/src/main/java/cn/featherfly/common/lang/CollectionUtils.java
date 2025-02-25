@@ -42,7 +42,7 @@ public final class CollectionUtils {
      * @return 传入集合是否为空
      */
     public static boolean isEmpty(Collection<?> collection) {
-        return Lang.isEmpty(collection);
+        return collection == null || collection.isEmpty();
     }
 
     /**
@@ -56,6 +56,26 @@ public final class CollectionUtils {
      */
     public static boolean isNotEmpty(Collection<?> collection) {
         return !isEmpty(collection);
+    }
+
+    /**
+     * 返回传入map是否为空（是null或size=0） .
+     *
+     * @param map the map
+     * @return 传入map是否为空
+     */
+    public static boolean isEmpty(Map<?, ?> map) {
+        return map == null || map.isEmpty();
+    }
+
+    /**
+     * 返回传入map是否不为空（不是null或size&gt;0） .
+     *
+     * @param map the map
+     * @return 传入map是否不为空
+     */
+    public static boolean isNotEmpty(Map<?, ?> map) {
+        return !isEmpty(map);
     }
 
     /**

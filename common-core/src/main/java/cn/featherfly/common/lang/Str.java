@@ -23,14 +23,55 @@ import cn.featherfly.common.lang.string.StringFormatter;
  * @author zhongj
  * @since 1.13.1
  */
-public final class Str extends org.apache.commons.lang3.StringUtils {
+public final class Str {
 
     private static final Pattern UNICODE_PATTERN = Pattern.compile("(\\\\u(\\p{XDigit}{4}))");
 
     private static final StringFormatter FORMATTER = new StringFormatter(Chars.CURLY_L_CHAR, Chars.CURLY_R_CHAR, true);
 
     // 全角空格 String s = "　"
-    private static final String FULL_WIDTH_SPACE = "\u3000";
+    private static final char FULL_WIDTH_SPACE = '\u3000';
+
+    /**
+     * A String for a space character.
+     *
+     * @since 3.2
+     */
+    public static final String SPACE = Chars.SPACE;
+
+    /**
+     * The empty String {@code ""}.
+     *
+     * @since 2.0
+     */
+    public static final String EMPTY = Chars.EMPTY_STR;
+
+    /**
+     * A String for linefeed LF ("\n").
+     *
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10.6">JLF:
+     *      Escape Sequences
+     *      for Character and String Literals</a>
+     * @since 3.2
+     */
+    public static final String LF = Chars.NEW_LINE;
+
+    /**
+     * A String for carriage return CR ("\r").
+     *
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10.6">JLF:
+     *      Escape Sequences
+     *      for Character and String Literals</a>
+     * @since 3.2
+     */
+    public static final String CR = Chars.CARRIAGE_RETURN;
+
+    /**
+     * Represents a failed index search.
+     *
+     * @since 2.1
+     */
+    public static final int INDEX_NOT_FOUND = -1;
 
     private Str() {
     }
@@ -172,8 +213,8 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      * @param str 需要判断的字符串
      * @return 传入字符串是否是空字符串
      */
-    public static boolean isEmpty(String str) {
-        return Lang.isEmpty(str);
+    public static boolean isEmpty(CharSequence str) {
+        return str == null || str.length() == 0;
     }
 
     /**
@@ -187,12 +228,44 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
+     * Checks if a CharSequence is empty (""), null or whitespace only.
+     * <p>
+     * Whitespace is defined by {@link Character#isWhitespace(char)}.
+     * </p>
+     *
+     * <pre>
+     * Str.isBlank(null)      = true
+     * Str.isBlank("")        = true
+     * Str.isBlank(" ")       = true
+     * Str.isBlank("bob")     = false
+     * Str.isBlank("  bob  ") = false
+     * </pre>
+     *
+     * @param cs the CharSequence to check, may be null
+     * @return {@code true} if the CharSequence is null, empty or whitespace only
+     * @since 1.15.0
+     */
+    public static boolean isBlank(final CharSequence cs) {
+        final int strLen = length(cs);
+        if (strLen == 0) {
+            return true;
+        }
+        for (int i = 0; i < strLen; i++) {
+            if (!Character.isWhitespace(cs.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * 判断传入字符串是否不是空白字符串（即包含空白字符以外的字符） .
      *
      * @param str 需要判断的字符串
      * @return 传入字符串是否不是空白字符串
+     * @since 1.15.0 Changed signature from length(String) to length(CharSequence)
      */
-    public static boolean isNotBlank(String str) {
+    public static boolean isNotBlank(final CharSequence str) {
         return !isBlank(str);
     }
 
@@ -204,6 +277,20 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
      */
     public static boolean isNull(String str) {
         return isEmpty(str) || "NULL".equalsIgnoreCase(str.trim());
+    }
+
+    /**
+     * Gets a CharSequence length or {@code 0} if the CharSequence is
+     * {@code null}.
+     *
+     * @param cs
+     *        a CharSequence or {@code null}
+     * @return CharSequence length or {@code 0} if the CharSequence is
+     *         {@code null}.
+     * @since 1.15.0
+     */
+    public static int length(final CharSequence cs) {
+        return cs == null ? 0 : cs.length();
     }
 
     /**
@@ -332,10 +419,17 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
         if (str == null) {
             return "";
         }
-        str = str.trim();
-        //        str = trimStartEnd(str, " ");
-        str = trimStartEnd(str, FULL_WIDTH_SPACE); // 全角空格
-        return str;
+        int len = str.length();
+        int st = 0;
+        char c = 0;
+
+        while (st < len && ((c = str.charAt(st)) <= ' ' || c == FULL_WIDTH_SPACE)) {
+            st++;
+        }
+        while (st < len && ((c = str.charAt(len - 1)) <= ' ' || c == FULL_WIDTH_SPACE)) {
+            len--;
+        }
+        return st > 0 || len < str.length() ? str.substring(st, len) : str;
     }
 
     /**
@@ -596,18 +690,291 @@ public final class Str extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
+     * Replaces all occurrences of a String within another String.
      * <p>
-     * 文本替换
+     * A {@code null} reference passed to this method is a no-op.
      * </p>
-     * .
      *
-     * @param text 搜索的源
-     * @param searchString 搜索的内容
-     * @param replacement 替换的内容
-     * @return 替换完成的文本, 如果传入null返回null
+     * <pre>
+     * Str.replace(null, *, *)        = null
+     * Str.replace("", *, *)          = ""
+     * Str.replace("any", null, *)    = "any"
+     * Str.replace("any", *, null)    = "any"
+     * Str.replace("any", "", *)      = "any"
+     * Str.replace("aba", "a", null)  = "aba"
+     * Str.replace("aba", "a", "")    = "b"
+     * Str.replace("aba", "a", "z")   = "zbz"
+     * </pre>
+     *
+     * @see #replace(String text, String searchString, String replacement, int max)
+     * @param text text to search and replace in, may be null
+     * @param searchString the String to search for, may be null
+     * @param replacement the String to replace it with, may be null
+     * @return the text with any replacements processed,
+     *         {@code null} if null String input
      */
-    public static String replace(String text, String searchString, String replacement) {
+    public static String replace(final String text, final String searchString, final String replacement) {
         return replace(text, searchString, replacement, -1);
+    }
+
+    /**
+     * Replaces a String with another String inside a larger String,
+     * for the first {@code max} values of the search String.
+     * <p>
+     * A {@code null} reference passed to this method is a no-op.
+     * </p>
+     *
+     * <pre>
+     * Str.replace(null, *, *, *)         = null
+     * Str.replace("", *, *, *)           = ""
+     * Str.replace("any", null, *, *)     = "any"
+     * Str.replace("any", *, null, *)     = "any"
+     * Str.replace("any", "", *, *)       = "any"
+     * Str.replace("any", *, *, 0)        = "any"
+     * Str.replace("abaa", "a", null, -1) = "abaa"
+     * Str.replace("abaa", "a", "", -1)   = "b"
+     * Str.replace("abaa", "a", "z", 0)   = "abaa"
+     * Str.replace("abaa", "a", "z", 1)   = "zbaa"
+     * Str.replace("abaa", "a", "z", 2)   = "zbza"
+     * Str.replace("abaa", "a", "z", -1)  = "zbzz"
+     * </pre>
+     *
+     * @param text text to search and replace in, may be null
+     * @param searchString the String to search for, may be null
+     * @param replacement the String to replace it with, may be null
+     * @param max maximum number of values to replace, or {@code -1} if no maximum
+     * @return the text with any replacements processed,
+     *         {@code null} if null String input
+     */
+    public static String replace(final String text, final String searchString, final String replacement,
+        final int max) {
+        return replace(text, searchString, replacement, max, false);
+    }
+
+    /**
+     * Replaces a String with another String inside a larger String,
+     * for the first {@code max} values of the search String,
+     * case-sensitively/insensitively based on {@code ignoreCase} value.
+     * <p>
+     * A {@code null} reference passed to this method is a no-op.
+     * </p>
+     *
+     * <pre>
+     * Str.replace(null, *, *, *, false)         = null
+     * Str.replace("", *, *, *, false)           = ""
+     * Str.replace("any", null, *, *, false)     = "any"
+     * Str.replace("any", *, null, *, false)     = "any"
+     * Str.replace("any", "", *, *, false)       = "any"
+     * Str.replace("any", *, *, 0, false)        = "any"
+     * Str.replace("abaa", "a", null, -1, false) = "abaa"
+     * Str.replace("abaa", "a", "", -1, false)   = "b"
+     * Str.replace("abaa", "a", "z", 0, false)   = "abaa"
+     * Str.replace("abaa", "A", "z", 1, false)   = "abaa"
+     * Str.replace("abaa", "A", "z", 1, true)   = "zbaa"
+     * Str.replace("abAa", "a", "z", 2, true)   = "zbza"
+     * Str.replace("abAa", "a", "z", -1, true)  = "zbzz"
+     * </pre>
+     *
+     * @param text text to search and replace in, may be null
+     * @param searchString the String to search for (case-insensitive), may be null
+     * @param replacement the String to replace it with, may be null
+     * @param max maximum number of values to replace, or {@code -1} if no maximum
+     * @param ignoreCase if true replace is case-insensitive, otherwise case-sensitive
+     * @return the text with any replacements processed,
+     *         {@code null} if null String input
+     */
+    private static String replace(final String text, String searchString, final String replacement, int max,
+        final boolean ignoreCase) {
+        if (isEmpty(text) || isEmpty(searchString) || replacement == null || max == 0) {
+            return text;
+        }
+        if (ignoreCase) {
+            searchString = searchString.toLowerCase();
+        }
+        int start = 0;
+        int end =
+            ignoreCase ? Str.indexOfIgnoreCase(text, searchString, start) : indexOf(text, searchString, start);
+        if (end == INDEX_NOT_FOUND) {
+            return text;
+        }
+        final int replLength = searchString.length();
+        int increase = Math.max(replacement.length() - replLength, 0);
+        increase *= max < 0 ? 16 : Math.min(max, 64);
+        final StringBuilder buf = new StringBuilder(text.length() + increase);
+        while (end != INDEX_NOT_FOUND) {
+            buf.append(text, start, end).append(replacement);
+            start = end + replLength;
+            if (--max == 0) {
+                break;
+            }
+            end = ignoreCase ? Str.indexOfIgnoreCase(text, searchString, start)
+                : indexOf(text, searchString, start);
+        }
+        buf.append(text, start, text.length());
+        return buf.toString();
+    }
+
+    /**
+     * Finds the first index within a CharSequence, handling {@code null}.
+     * This method uses {@link String#indexOf(String, int)} if possible.
+     * <p>
+     * A {@code null} CharSequence will return {@code -1}.
+     * </p>
+     *
+     * <pre>
+     * Str.indexOf(null, *)          = -1
+     * Str.indexOf(*, null)          = -1
+     * Str.indexOf("", "")           = 0
+     * Str.indexOf("", *)            = -1 (except when * = "")
+     * Str.indexOf("aabaabaa", "a")  = 0
+     * Str.indexOf("aabaabaa", "b")  = 2
+     * Str.indexOf("aabaabaa", "ab") = 1
+     * Str.indexOf("aabaabaa", "")   = 0
+     * </pre>
+     *
+     * @param seq the CharSequence to check, may be null
+     * @param searchSeq the CharSequence to find, may be null
+     * @return the first index of the search CharSequence,
+     *         -1 if no match or {@code null} string input
+     * @since 2.0
+     * @since 3.0 Changed signature from indexOf(String, String) to indexOf(CharSequence,
+     *        CharSequence)
+     */
+    public static int indexOf(final CharSequence seq, final CharSequence searchSeq) {
+        if (seq == null || searchSeq == null) {
+            return INDEX_NOT_FOUND;
+        }
+        return CharSequenceUtils.indexOf(seq, searchSeq, 0);
+    }
+
+    /**
+     * Finds the first index within a CharSequence, handling {@code null}.
+     * This method uses {@link String#indexOf(String, int)} if possible.
+     * <p>
+     * A {@code null} CharSequence will return {@code -1}.
+     * A negative start position is treated as zero.
+     * An empty ("") search CharSequence always matches.
+     * A start position greater than the string length only matches
+     * an empty search CharSequence.
+     * </p>
+     *
+     * <pre>
+     * Str.indexOf(null, *, *)          = -1
+     * Str.indexOf(*, null, *)          = -1
+     * Str.indexOf("", "", 0)           = 0
+     * Str.indexOf("", *, 0)            = -1 (except when * = "")
+     * Str.indexOf("aabaabaa", "a", 0)  = 0
+     * Str.indexOf("aabaabaa", "b", 0)  = 2
+     * Str.indexOf("aabaabaa", "ab", 0) = 1
+     * Str.indexOf("aabaabaa", "b", 3)  = 5
+     * Str.indexOf("aabaabaa", "b", 9)  = -1
+     * Str.indexOf("aabaabaa", "b", -1) = 2
+     * Str.indexOf("aabaabaa", "", 2)   = 2
+     * Str.indexOf("abc", "", 9)        = 3
+     * </pre>
+     *
+     * @param seq the CharSequence to check, may be null
+     * @param searchSeq the CharSequence to find, may be null
+     * @param startPos the start position, negative treated as zero
+     * @return the first index of the search CharSequence (always &ge; startPos),
+     *         -1 if no match or {@code null} string input
+     * @since 2.0
+     * @since 3.0 Changed signature from indexOf(String, String, int) to indexOf(CharSequence,
+     *        CharSequence, int)
+     */
+    public static int indexOf(final CharSequence seq, final CharSequence searchSeq, final int startPos) {
+        if (seq == null || searchSeq == null) {
+            return INDEX_NOT_FOUND;
+        }
+        return CharSequenceUtils.indexOf(seq, searchSeq, startPos);
+    }
+
+    /**
+     * Case in-sensitive find of the first index within a CharSequence.
+     * <p>
+     * A {@code null} CharSequence will return {@code -1}.
+     * A negative start position is treated as zero.
+     * An empty ("") search CharSequence always matches.
+     * A start position greater than the string length only matches
+     * an empty search CharSequence.
+     * </p>
+     *
+     * <pre>
+     * Str.indexOfIgnoreCase(null, *)          = -1
+     * Str.indexOfIgnoreCase(*, null)          = -1
+     * Str.indexOfIgnoreCase("", "")           = 0
+     * Str.indexOfIgnoreCase(" ", " ")         = 0
+     * Str.indexOfIgnoreCase("aabaabaa", "a")  = 0
+     * Str.indexOfIgnoreCase("aabaabaa", "b")  = 2
+     * Str.indexOfIgnoreCase("aabaabaa", "ab") = 1
+     * </pre>
+     *
+     * @param str the CharSequence to check, may be null
+     * @param searchStr the CharSequence to find, may be null
+     * @return the first index of the search CharSequence,
+     *         -1 if no match or {@code null} string input
+     * @since 2.5
+     * @since 3.0 Changed signature from indexOfIgnoreCase(String, String) to
+     *        indexOfIgnoreCase(CharSequence, CharSequence)
+     */
+    public static int indexOfIgnoreCase(final CharSequence str, final CharSequence searchStr) {
+        return indexOfIgnoreCase(str, searchStr, 0);
+    }
+
+    /**
+     * Case in-sensitive find of the first index within a CharSequence
+     * from the specified position.
+     * <p>
+     * A {@code null} CharSequence will return {@code -1}.
+     * A negative start position is treated as zero.
+     * An empty ("") search CharSequence always matches.
+     * A start position greater than the string length only matches
+     * an empty search CharSequence.
+     * </p>
+     *
+     * <pre>
+     * Str.indexOfIgnoreCase(null, *, *)          = -1
+     * Str.indexOfIgnoreCase(*, null, *)          = -1
+     * Str.indexOfIgnoreCase("", "", 0)           = 0
+     * Str.indexOfIgnoreCase("aabaabaa", "A", 0)  = 0
+     * Str.indexOfIgnoreCase("aabaabaa", "B", 0)  = 2
+     * Str.indexOfIgnoreCase("aabaabaa", "AB", 0) = 1
+     * Str.indexOfIgnoreCase("aabaabaa", "B", 3)  = 5
+     * Str.indexOfIgnoreCase("aabaabaa", "B", 9)  = -1
+     * Str.indexOfIgnoreCase("aabaabaa", "B", -1) = 2
+     * Str.indexOfIgnoreCase("aabaabaa", "", 2)   = 2
+     * Str.indexOfIgnoreCase("abc", "", 9)        = -1
+     * </pre>
+     *
+     * @param str the CharSequence to check, may be null
+     * @param searchStr the CharSequence to find, may be null
+     * @param startPos the start position, negative treated as zero
+     * @return the first index of the search CharSequence (always &ge; startPos),
+     *         -1 if no match or {@code null} string input
+     * @since 2.5
+     * @since 3.0 Changed signature from indexOfIgnoreCase(String, String, int) to
+     *        indexOfIgnoreCase(CharSequence, CharSequence, int)
+     */
+    public static int indexOfIgnoreCase(final CharSequence str, final CharSequence searchStr, int startPos) {
+        if (str == null || searchStr == null) {
+            return INDEX_NOT_FOUND;
+        }
+        if (startPos < 0) {
+            startPos = 0;
+        }
+        final int endLimit = str.length() - searchStr.length() + 1;
+        if (startPos > endLimit) {
+            return INDEX_NOT_FOUND;
+        }
+        if (searchStr.length() == 0) {
+            return startPos;
+        }
+        for (int i = startPos; i < endLimit; i++) {
+            if (CharSequenceUtils.regionMatches(str, true, i, searchStr, 0, searchStr.length())) {
+                return i;
+            }
+        }
+        return INDEX_NOT_FOUND;
     }
 
     /**

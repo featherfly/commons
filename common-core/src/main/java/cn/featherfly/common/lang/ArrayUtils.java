@@ -124,6 +124,16 @@ public final class ArrayUtils {
     }
 
     /**
+     * 返回数组是否为空（是null或是空数组） .
+     *
+     * @param array the array
+     * @return 传入数组是否为空
+     */
+    public static <E> boolean isEmpty(E[] array) {
+        return array == null || array.length == 0;
+    }
+
+    /**
      * 返回传入数组是否不为空（是null或size=0）. 当传入对象不是数组时，只会进行null的判断.
      *
      * @param array 传入的数组

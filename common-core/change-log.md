@@ -1,7 +1,7 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
 # 1.15.0
-1. 
+1. Str加入一系列方法
 
 # 1.14.0 2025-02-13
 

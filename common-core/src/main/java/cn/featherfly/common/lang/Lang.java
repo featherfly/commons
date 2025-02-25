@@ -43,8 +43,8 @@ public final class Lang {
     /**
      * 如果第一个参数为空(null），返回第二个参数，否则返回第一个参数 .
      *
-     * @param <T>           the generic type
-     * @param target        the target
+     * @param <T> the generic type
+     * @param target the target
      * @param defaultTarget the default target
      * @return 第一个参数为空(null），返回第二个参数，否则返回第一个参数
      * @deprecated {@link #ifNull(Object, Object)}
@@ -57,8 +57,8 @@ public final class Lang {
     /**
      * 如果第一个参数为空(null），返回第二个参数，否则返回第一个参数 .
      *
-     * @param <T>           the generic type
-     * @param target        the target
+     * @param <T> the generic type
+     * @param target the target
      * @param defaultTarget the default target
      * @return 第一个参数为空(null），返回第二个参数，否则返回第一个参数
      * @deprecated use {@link #ifNull(Object, Supplier)} instead
@@ -71,7 +71,7 @@ public final class Lang {
     /**
      * 返回第一个非空的项，!=null .
      *
-     * @param <T>     the generic type
+     * @param <T> the generic type
      * @param objects the objects
      * @return 第一个非空的对象
      * @deprecated use {@link #ifNotNullFirst(Object...)} instead
@@ -91,7 +91,7 @@ public final class Lang {
     /**
      * 返回第一个非空的对象，!=null .
      *
-     * @param <T>     the generic type
+     * @param <T> the generic type
      * @param objects the objects
      * @return 第一个非空的对象
      * @deprecated use {@link #ifNotNullFirst(Iterable)} instead
@@ -111,7 +111,7 @@ public final class Lang {
     /**
      * 返回最后一个非空的对象，!=null .
      *
-     * @param <T>         the generic type
+     * @param <T> the generic type
      * @param pickedItems the picked items
      * @return 最后一个非空的对象
      */
@@ -130,7 +130,7 @@ public final class Lang {
     /**
      * 返回最后一个非空的对象，!=null .
      *
-     * @param <T>         the generic type
+     * @param <T> the generic type
      * @param pickedItems the picked items
      * @return 最后一个非空的对象
      */
@@ -190,9 +190,9 @@ public final class Lang {
     /**
      * ifTrue.
      *
-     * @param <R>     the generic type
-     * @param bool    the bool
-     * @param isTrue  the is true
+     * @param <R> the generic type
+     * @param bool the bool
+     * @param isTrue the is true
      * @param isFalse the is false
      * @return obj
      */
@@ -207,10 +207,10 @@ public final class Lang {
     /**
      * ifTrue.
      *
-     * @param <R>            the generic type
+     * @param <R> the generic type
      * @param decideSupplier the decide supplier
-     * @param isTrue         the is true
-     * @param isFalse        the is false
+     * @param isTrue the is true
+     * @param isFalse the is false
      * @return obj
      */
     public static <R> R ifTrue(BooleanSupplier decideSupplier, Supplier<R> isTrue, Supplier<R> isFalse) {
@@ -220,10 +220,10 @@ public final class Lang {
     /**
      * ifTrue.
      *
-     * @param <R>     the generic type
-     * @param bool    the bool
+     * @param <R> the generic type
+     * @param bool the bool
      * @param isFalse the is false
-     * @param isTrue  the is true
+     * @param isTrue the is true
      * @return obj
      */
     public static <R> R ifFalse(boolean bool, Supplier<R> isFalse, Supplier<R> isTrue) {
@@ -237,10 +237,10 @@ public final class Lang {
     /**
      * ifTrue.
      *
-     * @param <R>            the generic type
+     * @param <R> the generic type
      * @param decideSupplier the decide supplier
-     * @param isFalse        the is false
-     * @param isTrue         the is true
+     * @param isFalse the is false
+     * @param isTrue the is true
      * @return obj
      */
     public static <R> R ifFalse(BooleanSupplier decideSupplier, Supplier<R> isFalse, Supplier<R> isTrue) {
@@ -250,9 +250,9 @@ public final class Lang {
     /**
      * 判断传入对象是否为empty,使用{@link #isEmpty(Object)}判断. 如果为空则返回defaultObject, 否则直接返回传入对象.
      *
-     * @param <O>           the generic type
-     * @param <R>           the generic type
-     * @param object        the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param defaultObject the default object
      * @return object
      */
@@ -266,9 +266,9 @@ public final class Lang {
     /**
      * 判断传入对象是否为empty,使用{@link #isEmpty(Object)}判断. 如果为空则执行传入的supplier, 并返回其返回值, 否则直接返回传入对象.
      *
-     * @param <O>      the generic type
-     * @param <R>      the generic type
-     * @param object   the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param supplier the supplier
      * @return object
      */
@@ -282,9 +282,9 @@ public final class Lang {
     /**
      * 判断传入对象是否为empty，使用{@link #isEmpty(Object)}判断， 如果为空则迭代suppliers并执行，如果其返回对象不是null，则返回.
      *
-     * @param <O>       the generic type
-     * @param <R>       the generic type
-     * @param object    the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param suppliers the suppliers
      * @return object
      */
@@ -304,9 +304,9 @@ public final class Lang {
     /**
      * 判断传入对象是否为empty，使用{@link #isEmpty(Object)}判断， 如果为空则迭代suppliers并执行，如果其返回对象不是null，则返回.
      *
-     * @param <O>       the generic type
-     * @param <R>       the generic type
-     * @param object    the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param suppliers the suppliers
      * @return object
      */
@@ -325,9 +325,9 @@ public final class Lang {
     /**
      * 判断传入对象是否为empty,使用{@link #isEmpty(Object)}判断. 如果为空则执行传入supplier,并返回其执行值,否则直接返回传入对象.
      *
-     * @param <O>      the generic type
-     * @param <R>      the generic type
-     * @param object   the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param supplier the supplier
      * @return object
      */
@@ -338,9 +338,9 @@ public final class Lang {
     /**
      * 判断传入对象是否为empty，使用{@link #isEmpty(Object)}判断， 如果为空则迭代suppliers并执行，如果其返回对象不是null，则返回.
      *
-     * @param <O>       the generic type
-     * @param <R>       the generic type
-     * @param object    the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param suppliers the suppliers
      * @return object
      */
@@ -352,9 +352,9 @@ public final class Lang {
     /**
      * 判断传入对象是否为empty，使用{@link #isEmpty(Object)}判断， 如果为空则迭代suppliers并执行，如果其返回对象不是null，则返回.
      *
-     * @param <O>       the generic type
-     * @param <R>       the generic type
-     * @param object    the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param suppliers the suppliers
      * @return object
      */
@@ -363,12 +363,13 @@ public final class Lang {
     }
 
     /**
-     * 判断传入对象是否为空，使用{@link #isEmpty(Object)}判断， 如果为空返回参数emptyFunction的执行结果，否则返回参数notEmptyFunction的执行结果.
+     * 判断传入对象是否为空，使用{@link #isEmpty(Object)}判断，
+     * 如果为空返回参数emptyFunction的执行结果，否则返回参数notEmptyFunction的执行结果.
      *
-     * @param <O>              the generic type
-     * @param <R>              the generic type
-     * @param object           the object
-     * @param emptyFunction    the empty function
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
+     * @param emptyFunction the empty function
      * @param notEmptyFunction the not empty function
      * @return emptyFunction or notEmptyFunction execute result
      */
@@ -377,12 +378,13 @@ public final class Lang {
     }
 
     /**
-     * 判断传入对象是否为空，使用{@link #isEmpty(Object)}判断， 如果为空返回参数nullSupplier的执行结果，否则返回参数notEmptyFunction的执行结果.
+     * 判断传入对象是否为空，使用{@link #isEmpty(Object)}判断，
+     * 如果为空返回参数nullSupplier的执行结果，否则返回参数notEmptyFunction的执行结果.
      *
-     * @param <O>              the generic type
-     * @param <R>              the generic type
-     * @param object           the object
-     * @param emptySupplier    the empty supplier
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
+     * @param emptySupplier the empty supplier
      * @param notEmptyFunction the not empty function
      * @return object
      */
@@ -393,7 +395,7 @@ public final class Lang {
     /**
      * 返回第一个非空的对象，使用!=null判断逻辑.
      *
-     * @param <T>     the generic type
+     * @param <T> the generic type
      * @param objects the objects
      * @return 第一个非空的对象
      */
@@ -411,7 +413,7 @@ public final class Lang {
     /**
      * 返回第一个非空的对象，使用!=null判断逻辑.
      *
-     * @param <T>     the generic type
+     * @param <T> the generic type
      * @param objects the objects
      * @return 第一个非空的对象
      */
@@ -427,13 +429,14 @@ public final class Lang {
     }
 
     /**
-     * Determines whether the passed object is not null. If it is not null, the passed function is executed; otherwise,
+     * Determines whether the passed object is not null. If it is not null, the passed function is
+     * executed; otherwise,
      * null is returned. <br>
      * 判断传入对象是否不为null，不为空则执行传入的function，否则返回null.
      *
-     * @param <O>     the generic type
-     * @param <R>     the generic type
-     * @param object  the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param notNull the not null
      * @return null or notNull function return type
      */
@@ -442,15 +445,17 @@ public final class Lang {
     }
 
     /**
-     * Determines({@link #isNotEmpty(Object)}) whether the passed object is not empty. If it is not empty, the result of
-     * the function parameter is returned. If it is not empty, the result of the supplier parameter is returned. <br>
+     * Determines({@link #isNotEmpty(Object)}) whether the passed object is not empty. If it is not
+     * empty, the result of
+     * the function parameter is returned. If it is not empty, the result of the supplier parameter
+     * is returned. <br>
      * 判断({@link #isNotEmpty(Object)})传入对象是否不为空，不为空则返回参数function的执行结果，否则返回参数supplier的执行结果.
      *
-     * @param <O>             the generic type
-     * @param <R>             the generic type
-     * @param object          the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param notNullFunction the not null function
-     * @param nullSupplier    the null supplier
+     * @param nullSupplier the null supplier
      * @return notNullFunction or nullSupplier execute result
      */
 
@@ -461,9 +466,9 @@ public final class Lang {
     /**
      * 如果第一个参数为空(null），返回第二个参数，否则返回第一个参数 .
      *
-     * @param <O>           the generic type
-     * @param <R>           the generic type
-     * @param object        the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param defaultObject the default object
      * @return object
      */
@@ -474,9 +479,9 @@ public final class Lang {
     /**
      * 判断传入对象是否为null，如果为空则执行传入的supplier, 并返回其返回值,否则直接返回传入对象.
      *
-     * @param <O>      the generic type
-     * @param <R>      the generic type
-     * @param object   the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param supplier the supplier
      * @return object
      */
@@ -487,9 +492,9 @@ public final class Lang {
     /**
      * 判断传入对象是否为null，如果为空则迭代suppliers并执行，如果其返回对象不是null，则返回.
      *
-     * @param <O>       the generic type
-     * @param <R>       the generic type
-     * @param object    the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param suppliers the suppliers
      * @return object
      */
@@ -509,9 +514,9 @@ public final class Lang {
     /**
      * 判断传入对象是否为null，如果为空则迭代suppliers并执行，如果其返回对象不是null，则返回.
      *
-     * @param <O>       the generic type
-     * @param <R>       the generic type
-     * @param object    the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param suppliers the suppliers
      * @return object
      */
@@ -530,9 +535,9 @@ public final class Lang {
     /**
      * 判断传入对象是否为null，如果为空则执行传入的方法, 并返回其返回值.
      *
-     * @param <O>      the generic type
-     * @param <R>      the generic type
-     * @param object   the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param supplier the supplier
      * @return object
      */
@@ -543,9 +548,9 @@ public final class Lang {
     /**
      * 判断传入对象是否为null，如果为空则迭代suppliers并执行，如果其返回对象不是null，则返回.
      *
-     * @param <O>       the generic type
-     * @param <R>       the generic type
-     * @param object    the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param suppliers the suppliers
      * @return the o
      */
@@ -557,9 +562,9 @@ public final class Lang {
     /**
      * 判断传入对象是否为null，如果为空则迭代suppliers并执行，如果其返回对象不是null，则返回.
      *
-     * @param <O>       the generic type
-     * @param <R>       the generic type
-     * @param object    the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param suppliers the suppliers
      * @return the o
      */
@@ -570,10 +575,10 @@ public final class Lang {
     /**
      * 判断传入对象是否为null，如果为null返回参数nullSupplier的执行结果，否则返回参数notNullFunction的执行结果.
      *
-     * @param <O>             the generic type
-     * @param <R>             the generic type
-     * @param object          the object
-     * @param nullSupplier    the null supplier
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
+     * @param nullSupplier the null supplier
      * @param notNullFunction the not null function
      * @return nullSupplier or notNullFunction execute result
      */
@@ -584,7 +589,7 @@ public final class Lang {
     /**
      * 返回第一个非空的对象，使用{@link #isNotEmpty(Object)}判断逻辑.
      *
-     * @param <T>     the generic type
+     * @param <T> the generic type
      * @param objects the objects
      * @return 第一个非空的对象
      */
@@ -602,8 +607,8 @@ public final class Lang {
     /**
      * 返回第一个非空的对象，使用{@link #isNotEmpty(Object)}判断逻辑.
      *
-     * @param <T>       the generic type
-     * @param first     the first
+     * @param <T> the generic type
+     * @param first the first
      * @param suppliers the suppliers
      * @return 第一个非空的对象
      */
@@ -620,13 +625,14 @@ public final class Lang {
     }
 
     /**
-     * Check ({@link #isNotEmpty(Object)}) whether the passed object is not empty. If it is not empty, the passed
+     * Check ({@link #isNotEmpty(Object)}) whether the passed object is not empty. If it is not
+     * empty, the passed
      * function is executed; otherwise, null is returned.
      * 判断({@link #isNotEmpty(Object)})传入对象是否不为空，不为空则执行传入的function，否则返回null.
      *
-     * @param <O>              the generic type
-     * @param <R>              the generic type
-     * @param object           the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param notEmptyFunction the not empty function
      * @return null or notEmptyFunction function return type
      */
@@ -635,16 +641,19 @@ public final class Lang {
     }
 
     /**
-     * Check ({@link #isNotEmpty(Object)}) whether the passed object is not empty. If it is not empty, the result of the
-     * first argument (notEmptyFunction) is returned. * Otherwise, the result of the second argument (emptyFunction) is
+     * Check ({@link #isNotEmpty(Object)}) whether the passed object is not empty. If it is not
+     * empty, the result of the
+     * first argument (notEmptyFunction) is returned. * Otherwise, the result of the second argument
+     * (emptyFunction) is
      * returned. <br>
-     * 判断({@link #isNotEmpty(Object)})传入对象是否不为空，不为空则返回第一个参数(notEmptyFunction)的执行结果， 否则返回第二个参数(emptyFunction)的执行结果.
+     * 判断({@link #isNotEmpty(Object)})传入对象是否不为空，不为空则返回第一个参数(notEmptyFunction)的执行结果，
+     * 否则返回第二个参数(emptyFunction)的执行结果.
      *
-     * @param <O>              the generic type
-     * @param <R>              the generic type
-     * @param object           the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param notEmptyFunction the not empty function
-     * @param emptyFunction    the empty function
+     * @param emptyFunction the empty function
      * @return notEmptyFunction or emptyFunction execute result
      */
     public static <O, R> R ifNotEmptyOrElse(O object, Function<O, R> notEmptyFunction, Function<O, R> emptyFunction) {
@@ -652,16 +661,19 @@ public final class Lang {
     }
 
     /**
-     * Check ({@link #isNotEmpty(Object)}) whether the passed object is not empty. If it is not empty, the result of the
-     * first argument (notEmptyFunction) is returned. * Otherwise, the result of the second argument (emptySupplier) is
+     * Check ({@link #isNotEmpty(Object)}) whether the passed object is not empty. If it is not
+     * empty, the result of the
+     * first argument (notEmptyFunction) is returned. * Otherwise, the result of the second argument
+     * (emptySupplier) is
      * returned. <br>
-     * 判断({@link #isNotEmpty(Object)})传入对象是否不为空，不为空则返回第一个参数(notEmptyFunction)的执行结果， 否则返回第二个参数(emptySupplier)的执行结果.
+     * 判断({@link #isNotEmpty(Object)})传入对象是否不为空，不为空则返回第一个参数(notEmptyFunction)的执行结果，
+     * 否则返回第二个参数(emptySupplier)的执行结果.
      *
-     * @param <O>              the generic type
-     * @param <R>              the generic type
-     * @param object           the object
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object the object
      * @param notEmptyFunction the not empty function
-     * @param emptySupplier    the empty supplier
+     * @param emptySupplier the empty supplier
      * @return notEmptyFunction or emptySupplier execute result
      */
     public static <O, R> R ifNotEmptyOrElse(O object, Function<O, R> notEmptyFunction, Supplier<R> emptySupplier) {
@@ -671,8 +683,8 @@ public final class Lang {
     /**
      * 判断传入对象是否不为空，（String、Collection、Map、Array还要判断长度是否为0），如果不为空则执行传入的方法 .
      *
-     * @param <O>      the generic type
-     * @param object   传入的对象
+     * @param <O> the generic type
+     * @param object 传入的对象
      * @param consumer 需要执行的方法
      */
     public static <O> void ifNotEmpty(O object, Consumer<O> consumer) {
@@ -731,7 +743,7 @@ public final class Lang {
      * @return 传入字符串是否为空
      */
     public static boolean isEmpty(String string) {
-        return string == null || "".equals(string);
+        return Str.isEmpty(string);
     }
 
     /**
@@ -750,8 +762,8 @@ public final class Lang {
      * @param array the array
      * @return 传入数组是否为空
      */
-    public static boolean isEmpty(Object[] array) {
-        return array == null || array.length == 0;
+    public static <E> boolean isEmpty(E[] array) {
+        return ArrayUtils.isEmpty(array);
     }
 
     /**
@@ -771,7 +783,7 @@ public final class Lang {
      * @return 传入集合是否为空
      */
     public static boolean isEmpty(Collection<?> collection) {
-        return collection == null || collection.isEmpty();
+        return CollectionUtils.isEmpty(collection);
     }
 
     /**
@@ -791,7 +803,7 @@ public final class Lang {
      * @return 传入map是否为空
      */
     public static boolean isEmpty(Map<?, ?> map) {
-        return map == null || map.isEmpty();
+        return CollectionUtils.isEmpty(map);
     }
 
     /**
@@ -867,7 +879,7 @@ public final class Lang {
     /**
      * 判断传入文件对象代表的物理文件是否存在，存在则执行传入方法 .
      *
-     * @param file     判断的文件
+     * @param file 判断的文件
      * @param consumer 需要执行的方法
      */
     public static void ifExists(File file, Consumer<File> consumer) {
@@ -879,9 +891,9 @@ public final class Lang {
     /**
      * 判断传入文件对象代表的物理文件是否存在，存在则执行传入方法 .
      *
-     * @param <R>       the generic type
-     * @param file      the file
-     * @param exists    the exists
+     * @param <R> the generic type
+     * @param file the file
+     * @param exists the exists
      * @param notExists the not exists
      * @return obj
      */
@@ -896,7 +908,7 @@ public final class Lang {
     /**
      * 判断传入文件对象代表的物理文件是否不存在，不存在则执行传入方法 .
      *
-     * @param file     判断的文件
+     * @param file 判断的文件
      * @param consumer 需要执行的方法
      */
     public static void ifNotExists(File file, Consumer<File> consumer) {
@@ -908,10 +920,10 @@ public final class Lang {
     /**
      * 判断传入文件对象代表的物理文件是否不存在，不存在则执行传入方法 .
      *
-     * @param <R>       the generic type
-     * @param file      the file
+     * @param <R> the generic type
+     * @param file the file
      * @param notExists the not exists
-     * @param exists    the exists
+     * @param exists the exists
      * @return obj
      */
     public static <R> R ifNotExists(File file, Function<File, R> notExists, Function<File, R> exists) {
@@ -925,8 +937,8 @@ public final class Lang {
     /**
      * 判断传入文件对象代表的物理文件是否不存在，不存在则执行传入方法 .
      *
-     * @param <R>      the generic type
-     * @param file     the file
+     * @param <R> the generic type
+     * @param file the file
      * @param supplier the supplier
      * @return obj
      */
@@ -940,9 +952,9 @@ public final class Lang {
     /**
      * 将传入对象转换为枚举 .
      *
-     * @param <T>     the generic type
+     * @param <T> the generic type
      * @param toClass the to class
-     * @param object  the object
+     * @param object the object
      * @return 转换后的枚举，如果是无法转换或不存在的枚举类型，则返回null
      */
     public static <T extends Enum<T>> T toEnum(Class<T> toClass, Object object) {
@@ -962,9 +974,9 @@ public final class Lang {
     /**
      * 将传入对象转换为枚举 .
      *
-     * @param <T>     the generic type
+     * @param <T> the generic type
      * @param toClass the to class
-     * @param object  the object
+     * @param object the object
      * @return 转换后的枚举，如果是无法转换或不存在的枚举类型，则返回null
      */
     public static <T extends Enum<T>> T toEnum0(Class<T> toClass, Object object) {
@@ -1026,7 +1038,7 @@ public final class Lang {
     /**
      * 安全的equals，防止空指针异常 .
      *
-     * @param target      the target
+     * @param target the target
      * @param otherTarget the other target
      * @return 比较结果
      */
@@ -1048,7 +1060,7 @@ public final class Lang {
     /**
      * 转换为String，如果不能转换（null）则使用默认值 .
      *
-     * @param obj          the obj
+     * @param obj the obj
      * @param defaultValue the default value
      * @return string
      */
@@ -1089,7 +1101,7 @@ public final class Lang {
         int i = depth;
         for (StackTraceElement stackTraceElement : ss) {
             if (stackTraceElement.getClassName().equals(Lang.class.getName())
-                    && stackTraceElement.getMethodName().equals(methodName) && ss.length > i) {
+                && stackTraceElement.getMethodName().equals(methodName) && ss.length > i) {
                 return ss[i];
             }
             i++;
@@ -1108,7 +1120,7 @@ public final class Lang {
         StackTraceElement[] ss = Thread.currentThread().getStackTrace();
         for (StackTraceElement stackTraceElement : ss) {
             if (stackTraceElement.getClassName().equals(Lang.class.getName())
-                    && stackTraceElement.getMethodName().equals(methodName)) {
+                && stackTraceElement.getMethodName().equals(methodName)) {
                 Collections.addAll(invokers, ss);
                 return invokers;
             }
@@ -1119,7 +1131,7 @@ public final class Lang {
     /**
      * 转换为数组. 如果传入集合为空（null或者size=0）或者集合内的对象都是null,返回null.
      *
-     * @param <A>        the generic type
+     * @param <A> the generic type
      * @param collection the collection
      * @return 数组
      */
@@ -1132,9 +1144,9 @@ public final class Lang {
      * 转换为数组. 如果传入集合为空（null或者size=0），返回长度为0的数组（不会返回null）.
      * </p>
      *
-     * @param <A>        the generic type
+     * @param <A> the generic type
      * @param collection the collection
-     * @param type       the type
+     * @param type the type
      * @return 数组
      */
     public static <A> A[] toArray(Collection<A> collection, Class<A> type) {
@@ -1147,7 +1159,7 @@ public final class Lang {
      * </p>
      * .
      *
-     * @param <A>    the generic type
+     * @param <A> the generic type
      * @param arrays the arrays
      * @return 列表
      */
@@ -1158,7 +1170,7 @@ public final class Lang {
     /**
      * 转换为以数组索引为key,数组值为value的map.
      *
-     * @param <A>    the generic type
+     * @param <A> the generic type
      * @param arrays the arrays
      * @return map
      */
@@ -1169,7 +1181,7 @@ public final class Lang {
     /**
      * 转换为以数组索引为key,数组值为value的map.
      *
-     * @param <A>    the generic type
+     * @param <A> the generic type
      * @param arrays the arrays
      * @return map
      * @deprecated use {@link #toMapStringKey(Object...)} instead
@@ -1182,7 +1194,7 @@ public final class Lang {
     /**
      * 转换为以数组索引为key(string类型),数组值为value的map.
      *
-     * @param <A>    the generic type
+     * @param <A> the generic type
      * @param arrays the arrays
      * @return 列表
      */
@@ -1213,8 +1225,8 @@ public final class Lang {
     /**
      * Wrap throw.
      *
-     * @param <E>                     the element type
-     * @param throwable               the throwable
+     * @param <E> the element type
+     * @param throwable the throwable
      * @param wrappedRuntimeException the wrapped runtime exception
      */
     public static <E extends RuntimeException> void wrapThrow(Throwable throwable, Class<E> wrappedRuntimeException) {
@@ -1226,8 +1238,8 @@ public final class Lang {
     /**
      * Each.
      *
-     * @param <T>      the generic type
-     * @param array    the array
+     * @param <T> the generic type
+     * @param array the array
      * @param consumer the consumer
      */
     public static <T> void each(T[] array, ObjIntConsumer<T> consumer) {
@@ -1237,9 +1249,9 @@ public final class Lang {
     /**
      * Each.
      *
-     * @param <T>      the generic type
+     * @param <T> the generic type
      * @param consumer the consumer
-     * @param array    the array
+     * @param array the array
      */
     public static <T> void each(ObjIntConsumer<T> consumer, @SuppressWarnings("unchecked") T... array) {
         ArrayUtils.each(consumer, array);
@@ -1248,7 +1260,7 @@ public final class Lang {
     /**
      * Each.
      *
-     * @param <T>      the generic type
+     * @param <T> the generic type
      * @param iterable the iterable
      * @param consumer the consumer
      */
@@ -1257,10 +1269,11 @@ public final class Lang {
     }
 
     /**
-     * If a given object is iterable(Iterable or array), iterate over it and pass each item to the consumer. otherwise
+     * If a given object is iterable(Iterable or array), iterate over it and pass each item to the
+     * consumer. otherwise
      * pass object to the consumer once.
      *
-     * @param obj      the array
+     * @param obj the array
      * @param consumer the consumer
      */
     public static void eachObj(Object obj, Consumer<Object> consumer) {
@@ -1280,10 +1293,11 @@ public final class Lang {
     }
 
     /**
-     * If a given object is iterable(Iterable or array), iterate over it and pass each item to the consumer. otherwise
+     * If a given object is iterable(Iterable or array), iterate over it and pass each item to the
+     * consumer. otherwise
      * pass object to the consumer once.
      *
-     * @param obj      the array
+     * @param obj the array
      * @param consumer the consumer
      */
     @SuppressWarnings("unchecked")
@@ -1302,7 +1316,7 @@ public final class Lang {
     /**
      * create new array.
      *
-     * @param <T>   the generic type
+     * @param <T> the generic type
      * @param array the array
      * @return the t[]
      */
@@ -1314,7 +1328,7 @@ public final class Lang {
     /**
      * craete new list.
      *
-     * @param <E>      the element type
+     * @param <E> the element type
      * @param elements the elements
      * @return the list
      */
@@ -1325,7 +1339,7 @@ public final class Lang {
     /**
      * create new set.
      *
-     * @param <E>      the element type
+     * @param <E> the element type
      * @param elements the elements
      * @return the list
      */

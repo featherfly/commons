@@ -6,6 +6,8 @@
 package cn.featherfly.common.lang;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 import java.util.Map;
 
@@ -15,6 +17,30 @@ import cn.featherfly.common.lang.vo.User;
 import cn.featherfly.common.structure.ChainMapImpl;
 
 public class StrTest {
+
+    @Test
+    public void trimFullWidthSpace() {
+        String expected = "hello";
+
+        String str = "  hello  ";
+        assertEquals(Str.trimStartEndBlank(str), expected);
+
+        str = "　　hello　　";
+        assertEquals(Str.trimStartEndBlank(str), expected);
+
+        str = " 　 　 hello 　 　 ";
+        assertEquals(Str.trimStartEndBlank(str), expected);
+
+        assertEquals(Str.trimStartEndBlank(expected), expected);
+
+    }
+
+    @Test
+    public void isEmpty() {
+        assertTrue(Str.isEmpty(""));
+        assertFalse(Str.isEmpty("a"));
+    }
+
     @Test
     public void testSubstring() {
         String str = "cn.featherfly.common.lang.Str";

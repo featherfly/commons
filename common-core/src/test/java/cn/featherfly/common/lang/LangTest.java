@@ -7,6 +7,7 @@ package cn.featherfly.common.lang;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,6 +18,16 @@ import java.util.Map;
 import org.testng.annotations.Test;
 
 public class LangTest {
+
+    @Test
+    public void isEmpty_Array() {
+        String[] obj = new String[] {};
+        assertTrue(Lang.isEmpty(obj));
+
+        Object[] obj2 = new Object[] {};
+        assertTrue(Lang.isEmpty(obj2));
+    }
+
     @Test
     public void ifEmpty_Object() {
         Object obj = null;

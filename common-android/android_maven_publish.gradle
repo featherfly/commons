@@ -76,7 +76,7 @@ project.afterEvaluate {
             }
 //            task("javadoc${variant.name.capitalize()}Jar", type: Jar, dependsOn: "generate${variant.name.capitalize()}Javadoc") {
             task javadocJar(type: Jar, dependsOn: javadoc) {
-                classifier = 'javadoc'
+                archiveClassifier.set("javadoc")
                 from javadoc.destinationDir
             }
 //            artifacts {

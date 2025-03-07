@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 import cn.featherfly.common.exception.LocalizedExceptionUtils;
 import cn.featherfly.common.function.serializable.SerializableNumberSupplier;
 import cn.featherfly.common.function.serializable.SerializableSupplier;
+import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.LambdaUtils;
 import cn.featherfly.common.lang.LambdaUtils.SerializableSupplierLambdaInfo;
@@ -30,6 +31,7 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     private static final String MIN = "min";
     private static final String MAX = "max";
     private static final String VALUE = "value";
+    private static final String IS_ARRAY = "#isArray";
 
     private Function<String, E> newException;
 
@@ -134,6 +136,26 @@ public class LocalizedAssert<E extends RuntimeException> implements ILocalizedAs
     public void isNotEmpty(Map<?, ?> map, String arg) {
         if (Lang.isEmpty(map)) {
             throwException(IS_NOT_EMPTY, arg);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isArray(Object array, String arguDescps) {
+        if (ArrayUtils.isArray(array)) {
+            throwException(IS_ARRAY, arguDescps);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void isArray(Object array, Supplier<String> arguDescps) {
+        if (ArrayUtils.isArray(array)) {
+            throwException(IS_ARRAY, nullSafeGet(arguDescps));
         }
     }
 

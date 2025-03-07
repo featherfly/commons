@@ -2,6 +2,11 @@
 
 # 1.15.0
 1. Str加入一系列方法
+2. ArrayUtils加入getLength,get方法
+3. CollectionUtils加入each(Map<K, V> map, ObjIntConsumer<Entry<K, V>> consumer)
+4. Lang加入each(Map<K, V> map, ObjIntConsumer<Entry<K, V>> consumer), eachObj支持Map类型
+5. Lang加入array(primitive type...), getFirst, getLast方法
+7. assert断言加入isArray判断是否为数组
 
 # 1.14.0 2025-02-13
 

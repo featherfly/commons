@@ -154,6 +154,22 @@ public interface ILocalizedAssert {
     void isNotEmpty(Map<?, ?> map, Supplier<String> arguDescp);
 
     /**
+     * if argument array is not a array, throw exception.
+     *
+     * @param array 判断的数组对象
+     * @param arguDescps 出错时对参数的描述信息，例如：uploadFile等等
+     */
+    void isArray(Object array, String arguDescps);
+
+    /**
+     * if argument array is not a array, throw exception.
+     *
+     * @param array 判断的数组对象
+     * @param arguDescps 出错时对参数的描述信息，例如：uploadFile等等
+     */
+    void isArray(Object array, Supplier<String> arguDescps);
+
+    /**
      * 判断传入文件对象代表的物理文件是否存在，判断失败抛出指定异常 .
      *
      * @param file 判断的文件对象
@@ -170,7 +186,7 @@ public interface ILocalizedAssert {
     void isExists(File file, Supplier<String> arguDescps);
 
     /**
-     * if arguDescpu file is not a file, throw exception.
+     * if argument file is not a file, throw exception.
      *
      * @param file 判断的文件对象
      * @param arguDescps 出错时对参数的描述信息，例如：uploadFile等等
@@ -178,7 +194,7 @@ public interface ILocalizedAssert {
     void isFile(File file, String arguDescps);
 
     /**
-     * if arguDescpu file is not a file, throw exception.
+     * if argument file is not a file, throw exception.
      *
      * @param file 判断的文件对象
      * @param arguDescps 出错时对参数的描述信息，例如：uploadFile等等
@@ -186,7 +202,7 @@ public interface ILocalizedAssert {
     void isFile(File file, Supplier<String> arguDescps);
 
     /**
-     * if arguDescpu file is not directory, throw exception.
+     * if argument file is not directory, throw exception.
      *
      * @param file 判断的文件对象
      * @param arguDescps 出错时对参数的描述信息，例如：uploadFile等等
@@ -194,7 +210,7 @@ public interface ILocalizedAssert {
     void isDirectory(File file, String arguDescps);
 
     /**
-     * if arguDescpu file is not directory, throw exception.
+     * if argument file is not directory, throw exception.
      *
      * @param file 判断的文件对象
      * @param arguDescps 出错时对参数的描述信息，例如：uploadFile等等

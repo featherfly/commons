@@ -12,6 +12,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
@@ -592,12 +593,32 @@ public final class CollectionUtils {
      * @param consumer the consumer
      */
     public static <T> void each(Iterable<T> iterable, ObjIntConsumer<T> consumer) {
-        if (iterable != null) {
-            int i = 0;
-            for (T t : iterable) {
-                consumer.accept(t, i);
-                i++;
-            }
+        if (iterable == null) {
+            return;
+        }
+        int i = 0;
+        for (T t : iterable) {
+            consumer.accept(t, i);
+            i++;
+        }
+    }
+
+    /**
+     * Each.
+     *
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map
+     * @param consumer the consumer
+     */
+    public static <K, V> void each(Map<K, V> map, ObjIntConsumer<Entry<K, V>> consumer) {
+        if (map == null) {
+            return;
+        }
+        int i = 0;
+        for (Entry<K, V> entry : map.entrySet()) {
+            consumer.accept(entry, i);
+            i++;
         }
     }
 

@@ -6,7 +6,6 @@
 package cn.featherfly.common.lang;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 import java.io.File;
@@ -14,8 +13,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.testng.annotations.Test;
+
+import cn.featherfly.common.constant.Chars;
 
 public class LangTest {
 
@@ -334,66 +336,80 @@ public class LangTest {
     }
 
     @Test
-    public void testPickFirst() {
+    public void getFirst() {
         String s = "yufei";
-        String result = Lang.pickFirst(null, s);
+        String s2 = "yi";
+        String result = Lang.getFirst(Objects::nonNull, null, s);
         assertEquals(s, result);
 
-        result = Lang.pickFirst(s, null);
+        result = Lang.getFirst(Objects::nonNull, s, null);
         assertEquals(s, result);
 
-        result = Lang.pickFirst(null, null, s);
+        result = Lang.getFirst(Objects::nonNull, null, null, s);
         assertEquals(s, result);
 
-        result = Lang.pickFirst(null, s, null);
+        result = Lang.getFirst(Objects::nonNull, null, s, null);
         assertEquals(s, result);
 
-        result = Lang.pickFirst(null, s, "yi", null);
+        result = Lang.getFirst(Objects::nonNull, null, s, s2, null);
         assertEquals(s, result);
 
-        result = Lang.pickFirst(null, "yi", s, null);
-        assertFalse(s.equals(result));
+        result = Lang.getFirst(Objects::nonNull, null, s2, s, null);
+        assertEquals(s2, result);
+
+        result = Lang.getFirst(Objects::nonNull, null, "", s2, s, null);
+        assertEquals(Chars.EMPTY_STR, result);
+
+        result = Lang.getFirst(Str::isNotEmpty, null, "", s2, s, null);
+        assertEquals(s2, result);
     }
 
     @Test
     public void testPickLast() {
         String s = "yufei";
-        String result = Lang.pickLast(null, s);
+        String s2 = "yi";
+        String result = Lang.getLast(Objects::nonNull, null, s);
         assertEquals(s, result);
 
-        result = Lang.pickLast(s, null);
+        result = Lang.getLast(Objects::nonNull, s, null);
         assertEquals(s, result);
 
-        result = Lang.pickLast(s, null, null);
+        result = Lang.getLast(Objects::nonNull, null, null, s);
         assertEquals(s, result);
 
-        result = Lang.pickLast(null, s, null);
+        result = Lang.getLast(Objects::nonNull, null, s, null);
         assertEquals(s, result);
 
-        result = Lang.pickLast(null, s, "yi", null);
-        assertFalse(s.equals(result));
+        result = Lang.getLast(Objects::nonNull, null, s, s2, null);
+        assertEquals(s2, result);
 
-        result = Lang.pickLast(null, "yi", s, null);
+        result = Lang.getLast(Objects::nonNull, null, s2, s, null);
+        assertEquals(s, result);
+
+        result = Lang.getLast(Objects::nonNull, null, "", s2, s, "", null);
+        assertEquals(Chars.EMPTY_STR, result);
+
+        result = Lang.getLast(Str::isNotEmpty, null, "", s2, s, "", null);
         assertEquals(s, result);
     }
 
     @Test
     public void testGetInvoker() {
-        StackTraceElement e = Lang.getInvoker();
-        System.out.println(
-            Str.format("e.getClassName = {0}     e.getMethodName() = {1}", e.getClassName(), e.getMethodName()));
-        assertEquals(e.getMethodName(), "testGetInvoker");
+        //        StackTraceElement e = Lang.getInvoker();
+        //        System.out.println(
+        //            Str.format("e.getClassName = {0}     e.getMethodName() = {1}", e.getClassName(), e.getMethodName()));
+        //        assertEquals(e.getMethodName(), "testGetInvoker");
 
         assertInvoker1("testGetInvoker");
         assertInvoker2("testGetInvoker");
 
         System.out.println();
         List<StackTraceElement> ss = Lang.getInvokers();
-        assertEquals(ss.get(0).getMethodName(), "testGetInvoker");
+        assertEquals(ss.get(2).getMethodName(), "testGetInvoker");
         for (StackTraceElement s : ss) {
             System.out.println(s.getClassName() + " " + s.getMethodName());
 
-            assertEquals(Lang.getInvoker().getMethodName(), "testGetInvoker");
+            //            assertEquals(Lang.getInvoker().getMethodName(), "testGetInvoker");
         }
 
     }

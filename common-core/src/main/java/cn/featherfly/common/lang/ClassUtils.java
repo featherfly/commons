@@ -102,10 +102,7 @@ public final class ClassUtils {
     }
 
     /**
-     * <p>
-     * 返回传入类型的共同父类
-     * </p>
-     * .
+     * 返回传入类型的共同父类.
      *
      * @param c1 类型1
      * @param c2 类型2

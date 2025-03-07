@@ -106,9 +106,7 @@ public final class ArrayUtils {
     public static final Character[] EMPTY_CHARACTER_OBJECT_ARRAY = new Character[0];
 
     /**
-     * <p>
-     * 返回传入数组是否为空（是null或size=0）. 当传入对象不是数组时，只会进行null的判断
-     * </p>
+     * 返回传入数组是否为空（是null或size=0）. 当传入对象不是数组时，只会进行null的判断.
      *
      * @param array 传入的数组
      * @return 传入数组是否为空
@@ -124,7 +122,7 @@ public final class ArrayUtils {
     }
 
     /**
-     * 返回数组是否为空（是null或是空数组） .
+     * 返回数组是否为空（是null或是空数组）.
      *
      * @param array the array
      * @return 传入数组是否为空
@@ -164,10 +162,11 @@ public final class ArrayUtils {
      * @param array the array
      */
     public static <T> void each(ObjIntConsumer<T> consumer, @SuppressWarnings("unchecked") T... array) {
-        if (array != null) {
-            for (int i = 0; i < array.length; i++) {
-                consumer.accept(array[i], i);
-            }
+        if (array == null) {
+            return;
+        }
+        for (int i = 0; i < array.length; i++) {
+            consumer.accept(array[i], i);
         }
     }
 
@@ -178,14 +177,15 @@ public final class ArrayUtils {
      * @param consumer the consumer
      */
     public static void each(Object array, ObjIntConsumer<Object> consumer) {
-        if (array != null) {
-            if (array.getClass().isArray()) {
-                for (int i = 0; i < Array.getLength(array); i++) {
-                    consumer.accept(Array.get(array, i), i);
-                }
-            } else {
-                consumer.accept(array, 0);
+        if (array == null) {
+            return;
+        }
+        if (array.getClass().isArray()) {
+            for (int i = 0; i < Array.getLength(array); i++) {
+                consumer.accept(Array.get(array, i), i);
             }
+        } else {
+            consumer.accept(array, 0);
         }
     }
 
@@ -216,46 +216,41 @@ public final class ArrayUtils {
     }
 
     /**
-     * <p>
-     * 将传入数组进行字符串转换（与Collection的一样使用,分割）
-     * </p>
-     * .
+     * 将传入数组进行字符串转换（与Collection的一样使用,分割）.
      *
      * @param array 对象数组
      * @return 字符串
      */
     public static String toString(Object array) {
+        if (array == null) {
+            return Chars.EMPTY_STR;
+        }
         StringBuilder sb = new StringBuilder();
-        if (array != null) {
-            Class<?> type = array.getClass();
-            if (type.isArray()) {
-                sb.append(Chars.BRACK_L);
-                StringBuilder result = new StringBuilder();
-                for (int i = 0; i < Array.getLength(array); i++) {
-                    Object a = Array.get(array, i);
-                    if (a == null) {
-                        result.append("null");
-                    } else {
-                        result.append(a);
-                    }
-                    result.append(Chars.COMMA);
+        Class<?> type = array.getClass();
+        if (type.isArray()) {
+            sb.append(Chars.BRACK_L);
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < Array.getLength(array); i++) {
+                Object a = Array.get(array, i);
+                if (a == null) {
+                    result.append("null");
+                } else {
+                    result.append(a);
                 }
-                if (result.length() > 0) {
-                    result.deleteCharAt(result.length() - 1);
-                }
-                sb.append(result.toString()).append(Chars.BRACK_R);
-            } else {
-                sb.append(array.toString());
+                result.append(Chars.COMMA);
             }
+            if (result.length() > 0) {
+                result.deleteCharAt(result.length() - 1);
+            }
+            sb.append(result.toString()).append(Chars.BRACK_R);
+        } else {
+            sb.append(array.toString());
         }
         return sb.toString();
     }
 
     /**
-     * <p>
-     * 将传入数组进行字符串转换（与Collection的一样使用,分割）
-     * </p>
-     * .
+     * 将传入数组进行字符串转换（与Collection的一样使用,分割）.
      *
      * @param <E> 对象类型
      * @param objects 对象数组
@@ -384,24 +379,21 @@ public final class ArrayUtils {
             len = source.length;
         }
         System.arraycopy(source, 0, target, 0, len);
-        //        for (int i = 0; i < len; i++) {
-        //            target[i] = source[i];
-        //        }
     }
 
     /**
      * 判断第一个传入的数组中是否存在第二个参数 .
      *
      * @param <T> 泛型
-     * @param tSet 源数组
+     * @param array 源数组
      * @param target 查找对象
      * @return 第一个数组中是否存在第二个对象
      */
-    public static <T> boolean contain(T[] tSet, T target) {
-        if (tSet == null || target == null) {
+    public static <T> boolean contain(T[] array, T target) {
+        if (array == null || target == null) {
             return false;
         }
-        for (T t : tSet) {
+        for (T t : array) {
             if (target.equals(t)) {
                 return true;
             }
@@ -412,30 +404,29 @@ public final class ArrayUtils {
     /**
      * 判断第一个传入的字符串数组中是否存在第二个传入的字符串.
      *
-     * @param strSet 源字符串数组
+     * @param array 源字符串数组
      * @param strTarget 查找字符串
      * @param ignoreCase 忽略大小写
      * @return 第一个数组中是否存在第二个字符串
      */
-    public static boolean contain(String[] strSet, String strTarget, boolean ignoreCase) {
-        if (strSet == null || strTarget == null) {
+    public static boolean contain(String[] array, String strTarget, boolean ignoreCase) {
+        if (array == null || strTarget == null) {
             return false;
         }
-        boolean result = false;
-        for (String str : strSet) {
-            if (ignoreCase) {
+        if (ignoreCase) {
+            for (String str : array) {
                 if (strTarget.equalsIgnoreCase(str)) {
-                    result = true;
-                    break;
+                    return true;
                 }
-            } else {
+            }
+        } else {
+            for (String str : array) {
                 if (strTarget.equals(str)) {
-                    result = true;
-                    break;
+                    return true;
                 }
             }
         }
-        return result;
+        return false;
     }
 
     /**
@@ -469,11 +460,11 @@ public final class ArrayUtils {
             return arr1;
         }
 
+        Class<?> componentType = ClassUtils.parentClass(arr1.getClass().getComponentType(),
+            arr2.getClass().getComponentType());
         int len1 = Array.getLength(arr1);
         int len2 = Array.getLength(arr2);
-        Class<?> commonComponentType = ClassUtils.parentClass(arr1.getClass().getComponentType(),
-            arr2.getClass().getComponentType());
-        Object newArray = Array.newInstance(commonComponentType, len1 + len2);
+        Object newArray = Array.newInstance(componentType, len1 + len2);
         System.arraycopy(arr1, 0, newArray, 0, len1);
         System.arraycopy(arr2, 0, newArray, len1, len2);
         return newArray;
@@ -493,6 +484,37 @@ public final class ArrayUtils {
     }
 
     /**
+     * get array item by index.
+     * if give object is not a array, return null.
+     *
+     * @param <T> the generic type
+     * @param array the array
+     * @param index the index
+     * @return array item
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T get(Object array, int index) {
+        if (array == null) {
+            return null;
+        }
+        return (T) Array.get(array, index);
+    }
+
+    /**
+     * get array length.
+     * if give object is not a array, return 0.
+     *
+     * @param array the array
+     * @return array length
+     */
+    public static int getLength(Object array) {
+        if (!isArray(array)) {
+            return 0;
+        }
+        return Array.getLength(array);
+    }
+
+    /**
      * 创建数组 .
      *
      * @param <T> 泛型
@@ -502,7 +524,7 @@ public final class ArrayUtils {
      */
     @SuppressWarnings("unchecked")
     public static <T> T[] create(Class<T> type, int length) {
-        return (T[]) Array.newInstance(type, length);
+        return (T[]) newInstance(type, length);
     }
 
     /**
@@ -515,9 +537,6 @@ public final class ArrayUtils {
      * @return the array
      */
     public static <T> T[] create(Class<T> type, int length, IntFunction<T> filler) {
-        if (type == null) {
-            return null;
-        }
         T[] array = create(type, length);
         each(array, (e, i) -> {
             array[i] = filler.apply(i);
@@ -535,9 +554,6 @@ public final class ArrayUtils {
      * @return the array
      */
     public static <T> T[] createFill(Class<T> type, int length, T element) {
-        if (type == null) {
-            return null;
-        }
         T[] array = create(type, length);
         Arrays.fill(array, element);
         return array;
@@ -883,5 +899,4 @@ public final class ArrayUtils {
         each((e, i) -> a[i] = e, array);
         return a;
     }
-
 }

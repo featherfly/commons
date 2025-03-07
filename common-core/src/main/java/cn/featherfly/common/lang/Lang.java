@@ -7,12 +7,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.ObjIntConsumer;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.StringUtils;
@@ -114,7 +117,9 @@ public final class Lang {
      * @param <T> the generic type
      * @param pickedItems the picked items
      * @return 最后一个非空的对象
+     * @deprecated use {@link #ifNotNullLast(Iterable)} instead
      */
+    @Deprecated
     public static <T> T pickLast(@SuppressWarnings("unchecked") T... pickedItems) {
         if (pickedItems != null) {
             for (int i = pickedItems.length - 1; i >= 0; i--) {
@@ -133,7 +138,9 @@ public final class Lang {
      * @param <T> the generic type
      * @param pickedItems the picked items
      * @return 最后一个非空的对象
+     * @deprecated use {@link #ifNotNullLast(List)} instead
      */
+    @Deprecated
     public static <T> T pickLast(List<T> pickedItems) {
         if (pickedItems != null) {
             for (int i = pickedItems.size() - 1; i >= 0; i--) {
@@ -141,6 +148,87 @@ public final class Lang {
                 if (t != null) {
                     return t;
                 }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 返回第一个通过Predicate判断的对象.
+     *
+     * @param <T> the generic type
+     * @param predicate the predicate
+     * @param objects the objects
+     * @return 第一个通过Predicate判断的对象, 如果没有满足条件的，返回null
+     */
+    public static <T> T getFirst(Predicate<T> predicate, @SuppressWarnings("unchecked") T... objects) {
+        if (objects == null) {
+            return null;
+        }
+        for (T obj : objects) {
+            if (predicate.test(obj)) {
+                return obj;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 返回第一个通过Predicate判断的对象.
+     *
+     * @param <T> the generic type
+     * @param objects the objects
+     * @param predicate the predicate
+     * @return 第一个通过Predicate判断的对象, 如果没有满足条件的，返回null
+     */
+    public static <T> T getFirst(Iterable<T> objects, Predicate<T> predicate) {
+        if (objects == null) {
+            return null;
+        }
+        for (T obj : objects) {
+            if (predicate.test(obj)) {
+                return obj;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 返回最后一个通过Predicate判断的对象.
+     *
+     * @param <T> the generic type
+     * @param predicate the predicate
+     * @param objects the objects
+     * @return 最后一个通过Predicate判断的对象, 如果没有满足条件的，返回null
+     */
+    public static <T> T getLast(Predicate<T> predicate, @SuppressWarnings("unchecked") T... objects) {
+        if (objects == null) {
+            return null;
+        }
+        for (int i = objects.length - 1; i >= 0; i--) {
+            T t = objects[i];
+            if (predicate.test(t)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 返回最后一个通过Predicate判断的对象.
+     *
+     * @param <T> the generic type
+     * @param predicate the predicate
+     * @return 最后一个通过Predicate判断的对象, 如果没有满足条件的，返回null
+     */
+    public static <T> T getLast(List<T> objects, Predicate<T> predicate) {
+        if (objects == null) {
+            return null;
+        }
+        for (int i = objects.size() - 1; i >= 0; i--) {
+            T t = objects.get(i);
+            if (predicate.test(t)) {
+                return t;
             }
         }
         return null;
@@ -169,10 +257,10 @@ public final class Lang {
             return Array.getLength(object) == 0;
         }
         if (object instanceof Optional) {
-            isEmpty((Optional<?>) object);
+            return isEmpty((Optional<?>) object);
         }
         if (object instanceof Supplier) {
-            isEmpty((Supplier<?>) object);
+            return isEmpty((Supplier<?>) object);
         }
         return false;
     }
@@ -400,14 +488,7 @@ public final class Lang {
      * @return 第一个非空的对象
      */
     public static <T> T ifNotNullFirst(@SuppressWarnings("unchecked") T... objects) {
-        if (objects != null) {
-            for (T obj : objects) {
-                if (obj != null) {
-                    return obj;
-                }
-            }
-        }
-        return null;
+        return getFirst(Objects::nonNull, objects);
     }
 
     /**
@@ -418,14 +499,29 @@ public final class Lang {
      * @return 第一个非空的对象
      */
     public static <T> T ifNotNullFirst(Iterable<T> objects) {
-        if (objects != null) {
-            for (T obj : objects) {
-                if (obj != null) {
-                    return obj;
-                }
-            }
-        }
-        return null;
+        return getFirst(objects, Objects::nonNull);
+    }
+
+    /**
+     * 返回最后一个非空的对象，使用!=null判断逻辑.
+     *
+     * @param <T> the generic type
+     * @param objects the objects
+     * @return 最后一个非空的对象
+     */
+    public static <T> T ifNotNullLast(@SuppressWarnings("unchecked") T... objects) {
+        return getLast(Objects::nonNull, objects);
+    }
+
+    /**
+     * 返回最后一个非空的对象，使用!=null判断逻辑.
+     *
+     * @param <T> the generic type
+     * @param objects the objects
+     * @return 最后一个非空的对象
+     */
+    public static <T> T ifNotNullLast(List<T> objects) {
+        return getLast(objects, Objects::nonNull);
     }
 
     /**
@@ -700,6 +796,9 @@ public final class Lang {
      * @return 传入Optional是否为空
      */
     public static boolean isEmpty(Optional<?> optional) {
+        if (optional == null) {
+            return true;
+        }
         return isEmpty(optional.orElse(null));
     }
 
@@ -759,6 +858,7 @@ public final class Lang {
     /**
      * 返回数组是否为空（是null或是空数组） .
      *
+     * @param <E> the element type
      * @param array the array
      * @return 传入数组是否为空
      */
@@ -1269,23 +1369,38 @@ public final class Lang {
     }
 
     /**
-     * If a given object is iterable(Iterable or array), iterate over it and pass each item to the
-     * consumer. otherwise
-     * pass object to the consumer once.
+     * Each.
+     *
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param map the map
+     * @param consumer the consumer
+     */
+    public static <K, V> void each(Map<K, V> map, ObjIntConsumer<Entry<K, V>> consumer) {
+        CollectionUtils.each(map, consumer);
+    }
+
+    /**
+     * If a given object is iterable(Iterable or array or Map), iterate over it and pass each item
+     * to the consumer. otherwise pass object to the consumer once.
      *
      * @param obj the array
      * @param consumer the consumer
      */
     public static void eachObj(Object obj, Consumer<Object> consumer) {
         if (obj == null) {
-            consumer.accept(null);
-        } else if (obj instanceof Collection) {
-            for (Object o : (Collection<?>) obj) {
+            consumer.accept(obj);
+        } else if (obj instanceof Iterable) {
+            for (Object o : (Iterable<?>) obj) {
                 consumer.accept(o);
             }
         } else if (obj.getClass().isArray()) {
             for (int i = 0; i < Array.getLength(obj); i++) {
                 consumer.accept(Array.get(obj, i));
+            }
+        } else if (obj instanceof Map) {
+            for (Entry<?, ?> entry : ((Map<?, ?>) obj).entrySet()) {
+                consumer.accept(entry);
             }
         } else {
             consumer.accept(obj);
@@ -1293,9 +1408,8 @@ public final class Lang {
     }
 
     /**
-     * If a given object is iterable(Iterable or array), iterate over it and pass each item to the
-     * consumer. otherwise
-     * pass object to the consumer once.
+     * If a given object is iterable(Iterable or array or Map), iterate over it and pass each item
+     * to the consumer. otherwise pass object to the consumer once.
      *
      * @param obj the array
      * @param consumer the consumer
@@ -1308,6 +1422,13 @@ public final class Lang {
             CollectionUtils.each((Iterable<Object>) obj, consumer);
         } else if (obj.getClass().isArray()) {
             ArrayUtils.each(obj, consumer);
+        } else if (obj instanceof Map) {
+            Map<?, ?> map = (Map<?, ?>) obj;
+            int i = 0;
+            for (Entry<?, ?> entry : map.entrySet()) {
+                consumer.accept(entry, i);
+                i++;
+            }
         } else {
             consumer.accept(obj, 0);
         }
@@ -1322,6 +1443,86 @@ public final class Lang {
      */
     @SuppressWarnings("unchecked")
     public static <T> T[] array(T... array) {
+        return array;
+    }
+
+    /**
+     * create new array.
+     *
+     * @param array the array
+     * @return the int[]
+     */
+    public static int[] array(int... array) {
+        return array;
+    }
+
+    /**
+     * create new array.
+     *
+     * @param array the array
+     * @return the long[]
+     */
+    public static long[] array(long... array) {
+        return array;
+    }
+
+    /**
+     * create new array.
+     *
+     * @param array the array
+     * @return the short[]
+     */
+    public static short[] array(short... array) {
+        return array;
+    }
+
+    /**
+     * create new array.
+     *
+     * @param array the array
+     * @return the byte[]
+     */
+    public static byte[] array(byte... array) {
+        return array;
+    }
+
+    /**
+     * create new array.
+     *
+     * @param array the array
+     * @return the char[]
+     */
+    public static char[] array(char... array) {
+        return array;
+    }
+
+    /**
+     * create new array.
+     *
+     * @param array the array
+     * @return the boolean[]
+     */
+    public static boolean[] array(boolean... array) {
+        return array;
+    }
+
+    /**
+     * create new array.
+     *
+     * @param array the array
+     * @return the double[]
+     */
+    public static double[] array(double... array) {
+        return array;
+    }
+
+    /**
+     * create new array.
+     *
+     * @param array the array
+     * @return the float[]
+     */
+    public static float[] array(float... array) {
         return array;
     }
 

@@ -34,4 +34,25 @@ public class ArrayUtilsTest {
             assertEquals(a, is[i]);
         }, is);
     }
+
+    @Test
+    public void testContact() {
+        String[] strs1 = Lang.array("1", "2");
+        String[] strs2 = Lang.array("3", "4", "5");
+        assertEquals(5, ArrayUtils.getLength(ArrayUtils.concat(strs1, strs2)));
+
+        Object[] objs = Lang.array("1", "2");
+        assertEquals(5, ArrayUtils.getLength(ArrayUtils.concat(objs, strs2)));
+
+        int[] ints1 = Lang.array(1, 2);
+        int[] ints2 = Lang.array(1, 2, 3, 4);
+        assertEquals(6, ArrayUtils.getLength(ArrayUtils.concat(ints1, ints2)));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testContactException() {
+        int[] ints1 = Lang.array(1, 2);
+        long[] ints2 = Lang.array(1L, 2L, 3L, 4L);
+        assertEquals(6, ArrayUtils.getLength(ArrayUtils.concat(ints1, ints2)));
+    }
 }

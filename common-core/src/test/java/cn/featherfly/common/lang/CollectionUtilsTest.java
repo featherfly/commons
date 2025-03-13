@@ -6,6 +6,7 @@
  */
 package cn.featherfly.common.lang;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 import java.util.ArrayDeque;
@@ -192,6 +193,18 @@ public class CollectionUtilsTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void newQueueException() {
         CollectionUtils.newQueue(Map.class);
+    }
+
+    @Test
+    public void map() {
+        final String titleKey = "title";
+        final String contentKey = "content";
+        String title = "title-1";
+        String content = "content-1";
+        Map<String, String> map = CollectionUtils.map(titleKey, title)
+            .set(contentKey, content);
+        assertEquals(map.get(titleKey), title);
+        assertEquals(map.get(contentKey), content);
     }
 
     @Test

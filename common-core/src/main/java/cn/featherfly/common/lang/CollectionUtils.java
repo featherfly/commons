@@ -26,6 +26,9 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.function.Function;
 import java.util.function.ObjIntConsumer;
 
+import cn.featherfly.common.structure.ChainMap;
+import cn.featherfly.common.structure.ChainMapImpl;
+
 /**
  * 集合类工具.
  *
@@ -615,11 +618,7 @@ public final class CollectionUtils {
         if (map == null) {
             return;
         }
-        int i = 0;
-        for (Entry<K, V> entry : map.entrySet()) {
-            consumer.accept(entry, i);
-            i++;
-        }
+        Lang.each(map.entrySet(), consumer);
     }
 
     /**
@@ -640,11 +639,24 @@ public final class CollectionUtils {
      *
      * @param <T> the generic type
      * @param args the args
-     * @return the sets the
+     * @return the sets
      */
     public static <T> Set<T> set(@SuppressWarnings("unchecked") T... args) {
         Set<T> set = new HashSet<>();
         addAll(set, args);
         return set;
+    }
+
+    /**
+     * create new map.
+     *
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param key the key
+     * @param value the value
+     * @return the map
+     */
+    public static <K, V> ChainMap<K, V> map(K key, V value) {
+        return new ChainMapImpl<K, V>().set(key, value);
     }
 }

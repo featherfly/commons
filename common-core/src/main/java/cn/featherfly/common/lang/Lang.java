@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import cn.featherfly.common.exception.ExceptionWrapper;
 import cn.featherfly.common.exception.IOException;
+import cn.featherfly.common.structure.ChainMap;
 
 /**
  * A utility class that encapsulates some common operations that are syntactically cumbersome. <br>
@@ -154,6 +155,34 @@ public final class Lang {
     }
 
     /**
+     * Gets the.
+     *
+     * @param <T> the generic type
+     * @param optional the optional
+     * @return the t
+     */
+    public static <T> T get(Optional<T> optional) {
+        if (isNull(optional)) {
+            return null;
+        }
+        return optional.orElse(null);
+    }
+
+    /**
+     * Gets the.
+     *
+     * @param <T> the generic type
+     * @param supplier the supplier
+     * @return the t
+     */
+    public static <T> T get(Supplier<T> supplier) {
+        if (supplier == null) {
+            return null;
+        }
+        return supplier.get();
+    }
+
+    /**
      * 返回第一个通过Predicate判断的对象.
      *
      * @param <T> the generic type
@@ -162,6 +191,18 @@ public final class Lang {
      * @return 第一个通过Predicate判断的对象, 如果没有满足条件的，返回null
      */
     public static <T> T getFirst(Predicate<T> predicate, @SuppressWarnings("unchecked") T... objects) {
+        return getFirst(objects, predicate);
+    }
+
+    /**
+     * 返回第一个通过Predicate判断的对象.
+     *
+     * @param <T> the generic type
+     * @param objects the objects
+     * @param predicate the predicate
+     * @return 第一个通过Predicate判断的对象, 如果没有满足条件的，返回null
+     */
+    public static <T> T getFirst(T[] objects, Predicate<T> predicate) {
         if (objects == null) {
             return null;
         }
@@ -202,6 +243,18 @@ public final class Lang {
      * @return 最后一个通过Predicate判断的对象, 如果没有满足条件的，返回null
      */
     public static <T> T getLast(Predicate<T> predicate, @SuppressWarnings("unchecked") T... objects) {
+        return getLast(objects, predicate);
+    }
+
+    /**
+     * 返回最后一个通过Predicate判断的对象.
+     *
+     * @param <T> the generic type
+     * @param objects the objects
+     * @param predicate the predicate
+     * @return 最后一个通过Predicate判断的对象, 如果没有满足条件的，返回null
+     */
+    public static <T> T getLast(T[] objects, Predicate<T> predicate) {
         if (objects == null) {
             return null;
         }
@@ -218,6 +271,7 @@ public final class Lang {
      * 返回最后一个通过Predicate判断的对象.
      *
      * @param <T> the generic type
+     * @param objects the objects
      * @param predicate the predicate
      * @return 最后一个通过Predicate判断的对象, 如果没有满足条件的，返回null
      */
@@ -232,6 +286,51 @@ public final class Lang {
             }
         }
         return null;
+    }
+
+    /**
+     * 返回传入Optional是否为空（是null或者内部数据为null）.
+     * <p>
+     * <code>
+     * optional == null || !optional.isPresent()
+     * </code>
+     * </p>
+     *
+     * @param optional the optional
+     * @return 传入Optional是否为空
+     */
+    public static boolean isNull(Optional<?> optional) {
+        return optional == null || !optional.isPresent();
+    }
+
+    /**
+     * 返回传入Optional是否不为空.
+     *
+     * @param optional the optional
+     * @return 传入Optional是否不为空
+     */
+    public static boolean isNotNull(Optional<?> optional) {
+        return !isNull(optional);
+    }
+
+    /**
+     * 返回传入Supplier是否为空（是null或者get()返回值为null） .
+     *
+     * @param supplier the supplier
+     * @return 传入Optional是否为空
+     */
+    public static boolean isNull(Supplier<?> supplier) {
+        return supplier == null || supplier.get() == null;
+    }
+
+    /**
+     * 返回传入Supplier是否为空（是null或者get()返回值为null） .
+     *
+     * @param supplier the supplier
+     * @return 传入Optional是否为空
+     */
+    public static boolean isNotNull(Supplier<?> supplier) {
+        return !isNull(supplier);
     }
 
     /**
@@ -488,7 +587,7 @@ public final class Lang {
      * @return 第一个非空的对象
      */
     public static <T> T ifNotNullFirst(@SuppressWarnings("unchecked") T... objects) {
-        return getFirst(Objects::nonNull, objects);
+        return getFirst(objects, Objects::nonNull);
     }
 
     /**
@@ -510,7 +609,7 @@ public final class Lang {
      * @return 最后一个非空的对象
      */
     public static <T> T ifNotNullLast(@SuppressWarnings("unchecked") T... objects) {
-        return getLast(Objects::nonNull, objects);
+        return getLast(objects, Objects::nonNull);
     }
 
     /**
@@ -690,34 +789,38 @@ public final class Lang {
      * @return 第一个非空的对象
      */
     public static <T> T ifNotEmptyFirst(@SuppressWarnings("unchecked") T... objects) {
-        if (objects != null) {
-            for (T value : objects) {
-                if (isNotEmpty(value)) {
-                    return value;
-                }
-            }
-        }
-        return null;
+        return getFirst(objects, Lang::isNotEmpty);
     }
 
     /**
      * 返回第一个非空的对象，使用{@link #isNotEmpty(Object)}判断逻辑.
      *
      * @param <T> the generic type
-     * @param first the first
+     * @param objects the objects
+     * @return 第一个非空的对象
+     */
+    public static <T> T ifNotEmptyFirst(Iterable<T> objects) {
+        return getFirst(objects, Lang::isNotEmpty);
+    }
+
+    /**
+     * 返回第一个非空的对象，使用{@link #isNotEmpty(Object)}判断逻辑.
+     *
+     * @param <T> the generic type
      * @param suppliers the suppliers
      * @return 第一个非空的对象
      */
-    public static <T> T ifNotEmptyFirst(T first, @SuppressWarnings("unchecked") Supplier<T>... suppliers) {
-        if (isEmpty(first) && suppliers != null) {
-            for (Supplier<T> supplier : suppliers) {
-                T obj = supplier.get();
-                if (isNotEmpty(obj)) {
-                    return obj;
-                }
+    public static <T> T ifNotEmptyFirst(@SuppressWarnings("unchecked") Supplier<T>... suppliers) {
+        if (suppliers == null) {
+            return null;
+        }
+        for (Supplier<T> supplier : suppliers) {
+            T obj = get(supplier);
+            if (isNotEmpty(obj)) {
+                return obj;
             }
         }
-        return first;
+        return null;
     }
 
     /**
@@ -790,13 +893,13 @@ public final class Lang {
     }
 
     /**
-     * 返回传入Optional是否为空（是null或者内部数据为null） .
+     * 返回传入Optional是否为空（是null或者内部数据为空(使用isEmpty判断内部数据)） .
      *
      * @param optional the optional
      * @return 传入Optional是否为空
      */
     public static boolean isEmpty(Optional<?> optional) {
-        if (optional == null) {
+        if (isNull(optional)) {
             return true;
         }
         return isEmpty(optional.orElse(null));
@@ -1339,10 +1442,10 @@ public final class Lang {
      * Each.
      *
      * @param <T> the generic type
-     * @param array the array
      * @param consumer the consumer
+     * @param array the array
      */
-    public static <T> void each(T[] array, ObjIntConsumer<T> consumer) {
+    public static <T> void each(ObjIntConsumer<T> consumer, @SuppressWarnings("unchecked") T... array) {
         ArrayUtils.each(consumer, array);
     }
 
@@ -1350,10 +1453,10 @@ public final class Lang {
      * Each.
      *
      * @param <T> the generic type
-     * @param consumer the consumer
      * @param array the array
+     * @param consumer the consumer
      */
-    public static <T> void each(ObjIntConsumer<T> consumer, @SuppressWarnings("unchecked") T... array) {
+    public static <T> void each(T[] array, ObjIntConsumer<T> consumer) {
         ArrayUtils.each(consumer, array);
     }
 
@@ -1529,6 +1632,7 @@ public final class Lang {
     /**
      * craete new list.
      *
+     * @see {@link CollectionUtils#list(Object...)}
      * @param <E> the element type
      * @param elements the elements
      * @return the list
@@ -1540,11 +1644,26 @@ public final class Lang {
     /**
      * create new set.
      *
+     * @see {@link CollectionUtils#set(Object...)}
      * @param <E> the element type
      * @param elements the elements
-     * @return the list
+     * @return the set
      */
     public static <E> Set<E> set(@SuppressWarnings("unchecked") E... elements) {
         return CollectionUtils.set(elements);
+    }
+
+    /**
+     * create new map.
+     *
+     * @see {@link CollectionUtils#map(Object, Object)}
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param key the key
+     * @param value the value
+     * @return the map
+     */
+    public static <K, V> ChainMap<K, V> map(K key, V value) {
+        return CollectionUtils.map(key, value);
     }
 }

@@ -6,14 +6,20 @@
 package cn.featherfly.common.lang;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.testng.annotations.Test;
 
@@ -336,6 +342,78 @@ public class LangTest {
     }
 
     @Test
+    public void getSupplier() {
+        Supplier<String> s = null;
+        assertNull(Lang.get(s));
+
+        s = () -> null;
+        assertNull(Lang.get(s));
+
+        assertNotNull(Lang.get(() -> ""));
+    }
+
+    @Test
+    public void getOptional() {
+        Optional<String> opt = null;
+
+        assertNull(Lang.get(opt));
+
+        opt = Optional.empty();
+        assertNull(Lang.get(opt));
+
+        opt = Optional.of("");
+        assertNotNull(Lang.get(opt));
+    }
+
+    @Test
+    public void isNullAndEmptyOptional() {
+        Optional<String> opt = null;
+
+        assertTrue(Lang.isNull(opt));
+        assertTrue(Lang.isEmpty(opt));
+
+        opt = Optional.empty();
+        assertTrue(Lang.isNull(opt));
+        assertTrue(Lang.isEmpty(opt));
+
+        opt = Optional.of("");
+        assertFalse(Lang.isNull(opt));
+        assertTrue(Lang.isEmpty(opt));
+
+        Optional<Object[]> optArray = Optional.of(ArrayUtils.EMPTY_OBJECT_ARRAY);
+        assertFalse(Lang.isNull(optArray));
+        assertTrue(Lang.isEmpty(optArray));
+
+        Optional<Collection<?>> optCollection = Optional.of(Lang.list());
+        assertFalse(Lang.isNull(optCollection));
+        assertTrue(Lang.isEmpty(optCollection));
+    }
+
+    @Test
+    public void isNullAndEmptySupplier() {
+        Supplier<String> supplier = null;
+
+        assertTrue(Lang.isNull(supplier));
+        assertTrue(Lang.isEmpty(supplier));
+
+        supplier = () -> null;
+        assertTrue(Lang.isNull(supplier));
+        assertTrue(Lang.isEmpty(supplier));
+
+        supplier = () -> "";
+        assertFalse(Lang.isNull(supplier));
+        assertTrue(Lang.isEmpty(supplier));
+
+        Supplier<Object[]> supplierArray = () -> ArrayUtils.EMPTY_OBJECT_ARRAY;
+        assertFalse(Lang.isNull(supplierArray));
+        assertTrue(Lang.isEmpty(supplierArray));
+
+        Supplier<Collection<?>> supplierCollection = () -> Lang.list();
+        assertFalse(Lang.isNull(supplierCollection));
+        assertTrue(Lang.isEmpty(supplierCollection));
+    }
+
+    @Test
     public void getFirst() {
         String s = "yufei";
         String s2 = "yi";
@@ -391,6 +469,18 @@ public class LangTest {
 
         result = Lang.getLast(Str::isNotEmpty, null, "", s2, s, "", null);
         assertEquals(s, result);
+    }
+
+    @Test
+    public void map() {
+        final String titleKey = "title";
+        final String contentKey = "content";
+        String title = "title-1";
+        String content = "content-1";
+        Map<String, String> map = Lang.map(titleKey, title)
+            .set(contentKey, content);
+        assertEquals(map.get(titleKey), title);
+        assertEquals(map.get(contentKey), content);
     }
 
     @Test

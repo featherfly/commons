@@ -7,6 +7,9 @@
 4. Lang加入each(Map<K, V> map, ObjIntConsumer<Entry<K, V>> consumer), eachObj支持Map类型
 5. Lang加入array(primitive type...), getFirst, getLast方法
 7. assert断言加入isArray判断是否为数组
+7. CollectionUtils加入map(K,V)方法
+8. Lang加入map(K,V)，get(Optional|Supplier)，is[Not]Null(Optional|Supplier)方法
+9. ChainMap加入set(K,V), set(Map)方法（功能和putChain,putAllChain方法一样）
 
 # 1.14.0 2025-02-13
 

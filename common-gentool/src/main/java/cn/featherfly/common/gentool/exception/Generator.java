@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thymeleaf.TemplateEngine;
@@ -63,6 +64,8 @@ public class Generator {
     }
 
     public void generate(GenModule genModule) throws IOException {
+        check(genModule);
+
         Context context = new Context();
         context.setVariable("packageName", genModule.getPackageName());
         context.setVariable("author", genModule.getAuthor());
@@ -73,21 +76,21 @@ public class Generator {
         String resourceRootPath = config.getResourceDir();
 
         String exceptionJavaFile = UriUtils.linkUri(javaRootPath,
-                ClassUtils.packageToDir(genModule.getException().getPackageName()),
-                genModule.getException().getName() + ".java");
+            ClassUtils.packageToDir(genModule.getException().getPackageName()),
+            genModule.getException().getName() + ".java");
         logger.debug("generated exceptionJavaFile -> {}", exceptionJavaFile);
 
         String codeJavaFile = UriUtils.linkUri(javaRootPath,
-                ClassUtils.packageToDir(genModule.getCode().getPackageName()), genModule.getCode().getName() + ".java");
+            ClassUtils.packageToDir(genModule.getCode().getPackageName()), genModule.getCode().getName() + ".java");
         logger.debug("generated exceptionCodeJavaFile -> {}", codeJavaFile);
 
         org.apache.commons.io.FileUtils.write(new File(exceptionJavaFile), templateEngine.process("exception", context),
-                Charset.UTF_8);
+            Charset.UTF_8);
         org.apache.commons.io.FileUtils.write(new File(codeJavaFile), templateEngine.process("code", context),
-                Charset.UTF_8);
+            Charset.UTF_8);
 
         String propertiesFile = UriUtils.linkUri(resourceRootPath,
-                ClassUtils.packageToDir(genModule.getException().getPackageName()), genModule.getException().getName());
+            ClassUtils.packageToDir(genModule.getException().getPackageName()), genModule.getException().getName());
 
         genModule.getCode().getLocales().forEach((locale, properties) -> {
             // context.setVariable("locale", locale);
@@ -104,6 +107,33 @@ public class Generator {
                 e.printStackTrace();
             }
         });
+    }
+
+    private void check(GenModule genModule) {
+        // exception
+        if (StringUtils.isBlank(genModule.getException().getName())) {
+            if (StringUtils.isBlank(genModule.getName())) {
+                throw new IllegalArgumentException("name and exception.name are both empty");
+            }
+            genModule.getException().setName(genModule.getName() + "Exception");
+        }
+        if (StringUtils.isBlank(genModule.getException().getPackageName())) {
+            genModule.getException().setPackageName(genModule.getPackageName());
+        }
+        if (StringUtils.isBlank(genModule.getException().getAuthor())) {
+            genModule.getException().setAuthor(genModule.getAuthor());
+        }
+
+        // exception code
+        if (StringUtils.isBlank(genModule.getCode().getName())) {
+            genModule.getCode().setName(genModule.getException().getName() + "Code");
+        }
+        if (StringUtils.isBlank(genModule.getCode().getPackageName())) {
+            genModule.getCode().setPackageName(genModule.getPackageName());
+        }
+        if (StringUtils.isBlank(genModule.getCode().getAuthor())) {
+            genModule.getCode().setAuthor(genModule.getAuthor());
+        }
     }
 
     private GenModule read(String filePath) throws JsonProcessingException, IOException {

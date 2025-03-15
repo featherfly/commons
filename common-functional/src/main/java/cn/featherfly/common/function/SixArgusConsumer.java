@@ -10,8 +10,6 @@
  */
 package cn.featherfly.common.function;
 
-import java.util.Objects;
-
 /**
  * FiveArgusConsumer.
  *
@@ -22,40 +20,10 @@ import java.util.Objects;
  * @param <E4> the fourth function argument type
  * @param <E5> the fifth function argument type
  * @param <E6> the sixth function argument type
+ * @deprecated use {@link SiConsumer} instead
  */
+@Deprecated
 @FunctionalInterface
-public interface SixArgusConsumer<E1, E2, E3, E4, E5, E6> {
+public interface SixArgusConsumer<E1, E2, E3, E4, E5, E6> extends SiConsumer<E1, E2, E3, E4, E5, E6> {
 
-    /**
-     * Performs this operation on the given arguments.
-     *
-     * @param e1 the first function argument
-     * @param e2 the second function argument
-     * @param e3 the third function argument
-     * @param e4 the fourth function argument
-     * @param e5 the fifth function argument
-     * @param e6 the sixth function argument
-     */
-    void accept(E1 e1, E2 e2, E3 e3, E4 e4, E5 e5, E6 e6);
-
-    /**
-     * Returns a composed {@code BiConsumer} that performs, in sequence, this
-     * operation followed by the {@code after} operation. If performing either
-     * operation throws an exception, it is relayed to the caller of the
-     * composed operation. If performing this operation throws an exception, the
-     * {@code after} operation will not be performed.
-     *
-     * @param after the operation to perform after this operation
-     * @return a composed {@code BiConsumer} that performs in sequence this
-     *         operation followed by the {@code after} operation
-     * @throws NullPointerException if {@code after} is null
-     */
-    default SixArgusConsumer<E1, E2, E3, E4, E5, E6> andThen(
-            SixArgusConsumer<? super E1, ? super E2, ? super E3, ? super E4, ? super E5, ? super E6> after) {
-        Objects.requireNonNull(after);
-        return (e1, e2, e3, e4, e5, e6) -> {
-            accept(e1, e2, e3, e4, e5, e6);
-            after.accept(e1, e2, e3, e4, e5, e6);
-        };
-    }
 }

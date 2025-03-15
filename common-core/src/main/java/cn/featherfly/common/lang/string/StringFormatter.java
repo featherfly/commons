@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 import cn.featherfly.common.bean.BeanDescriptor;
-import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Lang;
 
@@ -104,7 +103,7 @@ public class StringFormatter {
      * @return formated str
      */
     public String format(String str, Object... args) {
-        return format(str, startSymbol, endSymbol, Lang.toMapStringKey(args), true);
+        return format(str, startSymbol, endSymbol, Lang.toMapStringKey(args));
     }
 
     /**
@@ -122,7 +121,7 @@ public class StringFormatter {
      * @return formated str
      */
     public String format(String str, Serializable... args) {
-        return format(str, startSymbol, endSymbol, Lang.toMapStringKey(args), true);
+        return format(str, startSymbol, endSymbol, Lang.toMapStringKey(args));
     }
 
     /**
@@ -141,7 +140,7 @@ public class StringFormatter {
      * @return formated str
      */
     public String format(String str, Map<String, ?> args) {
-        return format(str, startSymbol, endSymbol, args, false);
+        return format(str, startSymbol, endSymbol, args);
     }
 
     /**
@@ -163,10 +162,10 @@ public class StringFormatter {
      * @return formated str
      */
     public <O extends Object> String formatBean(String str, O args) {
-        return format(str, startSymbol, endSymbol, args, false);
+        return format(str, startSymbol, endSymbol, args);
     }
 
-    private String format(String str, char startSymbol, char endSymbol, Object args, boolean arrayParams) {
+    private String format(String str, char startSymbol, char endSymbol, Object args) {
         if (Lang.isEmpty(str)) {
             return str;
         }
@@ -239,9 +238,12 @@ public class StringFormatter {
                 }
             };
         } else {
+            @SuppressWarnings("unchecked")
+            final BeanDescriptor<Object> bd =
+                (BeanDescriptor<Object>) BeanDescriptor.getBeanDescriptor(args.getClass());
             return (name, namedParam) -> {
-                if (BeanDescriptor.getBeanDescriptor(args.getClass()).hasBeanProperty(name)) {
-                    return ArrayUtils.toString(BeanUtils.getProperty(args, name));
+                if (bd.hasBeanProperty(name)) {
+                    return ArrayUtils.toString(bd.getProperty(args, name));
                 } else {
                     return getNotMatch(name, true, "no property[" + name + "] was found in " + args.getClass().getName()
                         + " for the placeholder " + startSymbol + name + endSymbol);

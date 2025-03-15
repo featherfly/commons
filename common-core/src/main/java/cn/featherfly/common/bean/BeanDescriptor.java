@@ -480,8 +480,7 @@ public class BeanDescriptor<T> extends AbstractPropertyAccessor<T> {
                 return propertyDescriptor.getProperty(propertyValue, innerPropertyName);
             }
         } else {
-            BeanProperty<?, ?> p = getBeanProperty(name);
-            return p.getValue(obj);
+            return getBeanProperty(name).getValue(obj);
         }
     }
 

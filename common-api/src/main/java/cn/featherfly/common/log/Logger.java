@@ -1,6 +1,8 @@
 
 package cn.featherfly.common.log;
 
+import java.util.function.Supplier;
+
 /**
  * Logger.
  *
@@ -14,6 +16,26 @@ public interface Logger extends LoggerFunctionArgs {
      * @return name of this logger instance
      */
     String getName();
+
+    default boolean isEnabled(Level level) {
+        if (level == null) {
+            return false;
+        }
+        switch (level) {
+            case ERROR:
+                return isErrorEnabled();
+            case WARN:
+                return isWarnEnabled();
+            case INFO:
+                return isInfoEnabled();
+            case DEBUG:
+                return isDebugEnabled();
+            case TRACE:
+                return isTraceEnabled();
+            default:
+                return false;
+        }
+    }
 
     /**
      * Is the logger instance enabled for the TRACE level?
@@ -41,7 +63,7 @@ public interface Logger extends LoggerFunctionArgs {
      * </p>
      *
      * @param format the format string
-     * @param arg    the argument
+     * @param arg the argument
      * @since 1.4
      */
     void trace(String format, Object arg);
@@ -55,8 +77,8 @@ public interface Logger extends LoggerFunctionArgs {
      * </p>
      *
      * @param format the format string
-     * @param arg1   the first argument
-     * @param arg2   the second argument
+     * @param arg1 the first argument
+     * @param arg2 the second argument
      * @since 1.4
      */
     void trace(String format, Object arg1, Object arg2);
@@ -74,7 +96,7 @@ public interface Logger extends LoggerFunctionArgs {
      * order to avoid this hidden cost.
      * </p>
      *
-     * @param format    the format string
+     * @param format the format string
      * @param arguments a list of 3 or more arguments
      * @since 1.4
      */
@@ -85,10 +107,23 @@ public interface Logger extends LoggerFunctionArgs {
      * message.
      *
      * @param msg the message accompanying the exception
-     * @param t   the exception (throwable) to log
+     * @param t the exception (throwable) to log
      * @since 1.4
      */
     void trace(String msg, Throwable t);
+
+    /**
+     * trace.
+     *
+     * @param msg the msg
+     * @param supplier the supplier
+     */
+    @Override
+    default <A> void trace(String msg, Supplier<A[]> supplier) {
+        if (isTraceEnabled()) {
+            trace(msg, supplier.get());
+        }
+    }
 
     /**
      * Is the logger instance enabled for the DEBUG level?
@@ -114,7 +149,7 @@ public interface Logger extends LoggerFunctionArgs {
      * </p>
      *
      * @param format the format string
-     * @param arg    the argument
+     * @param arg the argument
      */
     void debug(String format, Object arg);
 
@@ -127,8 +162,8 @@ public interface Logger extends LoggerFunctionArgs {
      * </p>
      *
      * @param format the format string
-     * @param arg1   the first argument
-     * @param arg2   the second argument
+     * @param arg1 the first argument
+     * @param arg2 the second argument
      */
     void debug(String format, Object arg1, Object arg2);
 
@@ -145,7 +180,7 @@ public interface Logger extends LoggerFunctionArgs {
      * order to avoid this hidden cost.
      * </p>
      *
-     * @param format    the format string
+     * @param format the format string
      * @param arguments a list of 3 or more arguments
      */
     void debug(String format, Object... arguments);
@@ -155,9 +190,22 @@ public interface Logger extends LoggerFunctionArgs {
      * message.
      *
      * @param msg the message accompanying the exception
-     * @param t   the exception (throwable) to log
+     * @param t the exception (throwable) to log
      */
     void debug(String msg, Throwable t);
+
+    /**
+     * debug.
+     *
+     * @param msg the msg
+     * @param supplier the supplier
+     */
+    @Override
+    default <A> void debug(String msg, Supplier<A[]> supplier) {
+        if (isDebugEnabled()) {
+            debug(msg, supplier.get());
+        }
+    }
 
     /**
      * Is the logger instance enabled for the INFO level?
@@ -183,7 +231,7 @@ public interface Logger extends LoggerFunctionArgs {
      * </p>
      *
      * @param format the format string
-     * @param arg    the argument
+     * @param arg the argument
      */
     void info(String format, Object arg);
 
@@ -196,8 +244,8 @@ public interface Logger extends LoggerFunctionArgs {
      * </p>
      *
      * @param format the format string
-     * @param arg1   the first argument
-     * @param arg2   the second argument
+     * @param arg1 the first argument
+     * @param arg2 the second argument
      */
     void info(String format, Object arg1, Object arg2);
 
@@ -214,7 +262,7 @@ public interface Logger extends LoggerFunctionArgs {
      * to avoid this hidden cost.
      * </p>
      *
-     * @param format    the format string
+     * @param format the format string
      * @param arguments a list of 3 or more arguments
      */
     void info(String format, Object... arguments);
@@ -224,9 +272,22 @@ public interface Logger extends LoggerFunctionArgs {
      * message.
      *
      * @param msg the message accompanying the exception
-     * @param t   the exception (throwable) to log
+     * @param t the exception (throwable) to log
      */
     void info(String msg, Throwable t);
+
+    /**
+     * info.
+     *
+     * @param msg the msg
+     * @param supplier the supplier
+     */
+    @Override
+    default <A> void info(String msg, Supplier<A[]> supplier) {
+        if (isInfoEnabled()) {
+            info(msg, supplier.get());
+        }
+    }
 
     /**
      * Is the logger instance enabled for the WARN level?
@@ -252,7 +313,7 @@ public interface Logger extends LoggerFunctionArgs {
      * </p>
      *
      * @param format the format string
-     * @param arg    the argument
+     * @param arg the argument
      */
     void warn(String format, Object arg);
 
@@ -269,7 +330,7 @@ public interface Logger extends LoggerFunctionArgs {
      * to avoid this hidden cost.
      * </p>
      *
-     * @param format    the format string
+     * @param format the format string
      * @param arguments a list of 3 or more arguments
      */
     void warn(String format, Object... arguments);
@@ -283,8 +344,8 @@ public interface Logger extends LoggerFunctionArgs {
      * </p>
      *
      * @param format the format string
-     * @param arg1   the first argument
-     * @param arg2   the second argument
+     * @param arg1 the first argument
+     * @param arg2 the second argument
      */
     void warn(String format, Object arg1, Object arg2);
 
@@ -293,9 +354,22 @@ public interface Logger extends LoggerFunctionArgs {
      * message.
      *
      * @param msg the message accompanying the exception
-     * @param t   the exception (throwable) to log
+     * @param t the exception (throwable) to log
      */
     void warn(String msg, Throwable t);
+
+    /**
+     * warn.
+     *
+     * @param msg the msg
+     * @param supplier the supplier
+     */
+    @Override
+    default <A> void warn(String msg, Supplier<A[]> supplier) {
+        if (isWarnEnabled()) {
+            warn(msg, supplier.get());
+        }
+    }
 
     /**
      * Is the logger instance enabled for the ERROR level?
@@ -321,7 +395,7 @@ public interface Logger extends LoggerFunctionArgs {
      * </p>
      *
      * @param format the format string
-     * @param arg    the argument
+     * @param arg the argument
      */
     void error(String format, Object arg);
 
@@ -334,8 +408,8 @@ public interface Logger extends LoggerFunctionArgs {
      * </p>
      *
      * @param format the format string
-     * @param arg1   the first argument
-     * @param arg2   the second argument
+     * @param arg1 the first argument
+     * @param arg2 the second argument
      */
     void error(String format, Object arg1, Object arg2);
 
@@ -352,7 +426,7 @@ public interface Logger extends LoggerFunctionArgs {
      * order to avoid this hidden cost.
      * </p>
      *
-     * @param format    the format string
+     * @param format the format string
      * @param arguments a list of 3 or more arguments
      */
     void error(String format, Object... arguments);
@@ -362,49 +436,22 @@ public interface Logger extends LoggerFunctionArgs {
      * message.
      *
      * @param msg the message accompanying the exception
-     * @param t   the exception (throwable) to log
+     * @param t the exception (throwable) to log
      */
     void error(String msg, Throwable t);
 
-    //    /**
-    //     * trace.
-    //     *
-    //     * @param msg      the msg
-    //     * @param supplier the supplier
-    //     */
-    //    void trace(String msg, ArraySupplier<Object> supplier);
-    //
-    //    /**
-    //     * debug.
-    //     *
-    //     * @param msg      the msg
-    //     * @param supplier the supplier
-    //     */
-    //    void debug(String msg, ArraySupplier<Object> supplier);
-    //
-    //    /**
-    //     * info.
-    //     *
-    //     * @param msg      the msg
-    //     * @param supplier the supplier
-    //     */
-    //    void info(String msg, ArraySupplier<Object> supplier);
-    //
-    //    /**
-    //     * warn.
-    //     *
-    //     * @param msg      the msg
-    //     * @param supplier the supplier
-    //     */
-    //    void warn(String msg, ArraySupplier<Object> supplier);
-    //
-    //    /**
-    //     * error.
-    //     *
-    //     * @param msg      the msg
-    //     * @param supplier the supplier
-    //     */
-    //    void error(String msg, ArraySupplier<Object> supplier);
+    /**
+     * error.
+     *
+     * @param msg the msg
+     * @param supplier the supplier
+     */
+    @Override
+    default <A> void error(String msg, Supplier<A[]> supplier) {
+        if (isErrorEnabled()) {
+            error(msg, supplier.get());
+        }
+    }
 
     //    /**
     //     * trace.

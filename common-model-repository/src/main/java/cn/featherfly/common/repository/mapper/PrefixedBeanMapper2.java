@@ -1,15 +1,28 @@
 package cn.featherfly.common.repository.mapper;
 
-import cn.featherfly.common.repository.ParamedMappedExecutor;
+import java.io.Serializable;
+import java.util.Map;
+
 import cn.featherfly.common.tuple.Tuple2;
 
 /**
  * prefixed bean mapper2.
  *
+ * @author zhongj
  * @param <T1> the generic type
  * @param <T2> the generic type
  */
-public interface PrefixedBeanMapper2<T1, T2> extends ParamedMappedExecutor<Tuple2<T1, T2>> {
+public interface PrefixedBeanMapper2<T1, T2> extends PrefixedBeanMapper<Tuple2<T1, T2>> {
+
+    /**
+     * Map.
+     *
+     * @param prefix the prefix
+     * @return the prefix bean property mapper 3
+     */
+    default PrefixedBeanMapper3<T1, T2, Map<String, Serializable>> map(String prefix) {
+        return map(prefix, MAP_TYPE);
+    }
 
     /**
      * Map.

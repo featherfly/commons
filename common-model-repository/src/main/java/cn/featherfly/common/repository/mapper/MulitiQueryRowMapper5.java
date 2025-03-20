@@ -11,6 +11,7 @@ package cn.featherfly.common.repository.mapper;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import cn.featherfly.common.tuple.Tuple5;
 
@@ -27,27 +28,36 @@ import cn.featherfly.common.tuple.Tuple5;
 public interface MulitiQueryRowMapper5<T1, T2, T3, T4, T5>
     extends MulitiQueryRowMapper<Tuple5<List<T1>, List<T2>, List<T3>, List<T4>, List<T5>>> {
     /**
-     * Map.
+     * mapper.
      *
      * @return the muliti row mapper 6
      */
-    MulitiQueryRowMapper6<T1, T2, T3, T4, T5, Map<String, Serializable>> map();
+    MulitiQueryRowMapper6<T1, T2, T3, T4, T5, Map<String, Serializable>> mapper();
 
     /**
-     * Map.
+     * mapper.
      *
      * @param <T6> the generic type
      * @param mappingType the mapping type
      * @return the muliti row mapper 6
      */
-    <T6> MulitiQueryRowMapper6<T1, T2, T3, T4, T5, T6> map(Class<T6> mappingType);
+    <T6> MulitiQueryRowMapper6<T1, T2, T3, T4, T5, T6> mapper(Class<T6> mappingType);
 
     /**
-     * Map.
+     * mapper.
      *
      * @param <T6> the generic type
      * @param rowMapper the row mapper
      * @return the muliti row mapper 2
      */
-    <T6> MulitiQueryRowMapper6<T1, T2, T3, T4, T5, T6> map(RowMapper<T6> rowMapper);
+    <T6> MulitiQueryRowMapper6<T1, T2, T3, T4, T5, T6> mapper(RowMapper<T6> rowMapper);
+
+    /**
+     * mapper.
+     *
+     * @param <T6> the generic type
+     * @param rowMapper the row mapper
+     * @return the muliti row mapper 2
+     */
+    <T6> MulitiQueryRowMapper6<T1, T2, T3, T4, T5, T6> mapper(Function<TupleRowMapperBuilder, RowMapper<T6>> rowMapper);
 }

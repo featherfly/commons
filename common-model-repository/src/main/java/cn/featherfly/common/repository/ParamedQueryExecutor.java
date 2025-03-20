@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.function.Function;
 
-import cn.featherfly.common.repository.mapper.TupleMapperBuilder;
+import cn.featherfly.common.repository.mapper.TupleMappedExecutorBuilder;
 import cn.featherfly.common.tuple.Tuple2;
 import cn.featherfly.common.tuple.Tuple3;
 import cn.featherfly.common.tuple.Tuple4;
@@ -121,7 +121,7 @@ public interface ParamedQueryExecutor
      * @param mapperBuilderFunction the mapper builder function
      * @return the paramed mapped executor
      */
-    <T> ParamedMappedExecutor<T> mapper(Function<TupleMapperBuilder, ParamedMappedExecutor<T>> mapperBuilderFunction);
+    <T> ParamedMappedExecutor<T> mapper(Function<TupleMappedExecutorBuilder, ParamedMappedExecutor<T>> mapperBuilderFunction);
 
     /**
      * query 32 bit integer(int).

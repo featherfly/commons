@@ -1,3 +1,10 @@
+# 0.5.3 2025-03-20
+1. 重命名TupleMappedBuilder到TupleMappedExecutorBuilder，PrefixedBeanMapper[1-6]到PrefixedBeanMappedExecutor[1-6]
+2. 加入PrefixedBeanMappedExecutor[1-6]的实现类PrefixedBeanMappedExecutor[1-6]Impl
+3. 加入ArrayParamedExecutionExecutor,ArrayParamedExecutionExecutorEx,ArrayParamTupleMapperBuilder
+4. 加入MapParamedExecutionExecutor,MapParamedExecutionExecutorEx,MapParamsTupleMapperBuilder
+5. 加入TupleRowMapperBuilder,PrefixedBeanMapper[1-6]
+
 # 0.5.2 2025-02-13
 1. AutoCloseableIterable替换为RowIterable
 

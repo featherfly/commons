@@ -13,7 +13,7 @@ package cn.featherfly.common.repository.mapper;
  *
  * @author zhongj
  */
-public interface TupleMapperBuilder {
+public interface TupleMappedExecutorBuilder {
 
     /**
      * Map.
@@ -23,6 +23,6 @@ public interface TupleMapperBuilder {
      * @param type   the type
      * @return the prefixed bean mapper 1
      */
-    <T1> PrefixedBeanMapper1<T1> map(String prefix, Class<T1> type);
+    <T1> PrefixedBeanMappedExecutor1<T1> map(String prefix, Class<T1> type);
 
 }

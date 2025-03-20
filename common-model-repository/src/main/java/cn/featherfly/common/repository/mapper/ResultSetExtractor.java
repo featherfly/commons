@@ -8,8 +8,6 @@
  */
 package cn.featherfly.common.repository.mapper;
 
-import java.util.List;
-
 /**
  * ResultSetExtractor.
  *
@@ -25,5 +23,5 @@ public interface ResultSetExtractor<E, R extends ResultSet> {
      * @param resultSet the result set
      * @return the r
      */
-    List<E> extract(R resultSet);
+    E extract(R resultSet);
 }

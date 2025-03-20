@@ -10,6 +10,7 @@ package cn.featherfly.common.repository.mapper;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * muliti query tuple mapper builder.
@@ -19,27 +20,36 @@ import java.util.Map;
 public interface MulitiQueryTupleMapperBuilder {
 
     /**
-     * Map.
+     * mapper.
      *
      * @return the muliti row mapper 1
      */
-    MulitiQueryRowMapper1<Map<String, Serializable>> map();
+    MulitiQueryRowMapper1<Map<String, Serializable>> mapper();
 
     /**
-     * Map.
+     * mapper.
      *
      * @param <T1> the generic type
      * @param mappingType the mapping type
      * @return the muliti row mapper 1
      */
-    <T1> MulitiQueryRowMapper1<T1> map(Class<T1> mappingType);
+    <T1> MulitiQueryRowMapper1<T1> mapper(Class<T1> mappingType);
 
     /**
-     * Map.
+     * mapper.
      *
      * @param <T1> the generic type
      * @param rowMapper the row mapper
      * @return the muliti row mapper 1
      */
-    <T1> MulitiQueryRowMapper1<T1> map(RowMapper<T1> rowMapper);
+    <T1> MulitiQueryRowMapper1<T1> mapper(RowMapper<T1> rowMapper);
+
+    /**
+     * mapper.
+     *
+     * @param <T1> the generic type
+     * @param rowMapper the row mapper
+     * @return the muliti row mapper 1
+     */
+    <T1> MulitiQueryRowMapper1<T1> mapper(Function<TupleRowMapperBuilder, RowMapper<T1>> rowMapper);
 }

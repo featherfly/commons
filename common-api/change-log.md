@@ -1,3 +1,6 @@
+# 0.5.5
+1. TypeNames加入name对应的code
+
 # 0.5.4 2025-03-21
 1. 加入TypeNames
 

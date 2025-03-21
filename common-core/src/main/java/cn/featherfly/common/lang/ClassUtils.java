@@ -61,11 +61,40 @@ public final class ClassUtils {
 
     /**
      * 查找指定类型 .
+     * <p>
+     * use type name hash code for swith key when match primitive type.
+     *
+     * <pre>
+     * <code>
+     * forName("int") is the same as {@linkplain #forName(String, boolean) forName("int", true)}
+     * </code>
+     * </pre>
      *
      * @param className 类名
      * @return 指定类型
      */
     public static Class<?> forName(String className) {
+        return forName(className, true);
+    }
+
+    /**
+     * 查找指定类型 .
+     *
+     * @param className 类名
+     * @param useHashCode use type name hash code for swith key when match primitive type
+     * @return 指定类型
+     */
+    public static Class<?> forName(String className, boolean useHashCode) {
+        if (Lang.isEmpty(className)) {
+            return null;
+        }
+
+        Class<?> type = getPrimitiveType(className, true);
+
+        if (type != null) {
+            return type;
+        }
+
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
@@ -651,7 +680,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 是否是数组
+     * 是否是数组.
      *
      * @param type 类型
      * @return 是否是map接口，及其子接口或实现类
@@ -1936,8 +1965,7 @@ public final class ClassUtils {
             return constructor.newInstance(args);
         } catch (IllegalArgumentException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
-            throw new ReflectException(
-                Str.format(" {0} 是否定义成抽象类了 不能实例化", constructor.getDeclaringClass().getName()));
+            throw new ReflectException(Str.format(" {0} 是否定义成抽象类了 不能实例化", constructor.getDeclaringClass().getName()));
         } catch (InstantiationException e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));
             throw new ReflectException(Str.format("{0} 构造器是否为私有", constructor.getDeclaringClass().getName()));
@@ -2104,6 +2132,72 @@ public final class ClassUtils {
     }
 
     /**
+     * Gets the primitive type.
+     *
+     * @param primitiveTypeName the primitive type name
+     * @return the primitive type if match, else null
+     */
+    public static Class<?> getPrimitiveType(String primitiveTypeName) {
+        return getPrimitiveType(primitiveTypeName, true);
+    }
+
+    /**
+     * Gets the primitive type.
+     *
+     * @param primitiveTypeName the primitive type name
+     * @param useHashCode use type name hash code for swith key when match primitive type.
+     * @return the primitive type if match, else null
+     */
+    public static Class<?> getPrimitiveType(String primitiveTypeName, boolean useHashCode) {
+        if (useHashCode) {
+            switch (primitiveTypeName.hashCode()) {
+                case TypeNames.BOOL_CODE:
+                    return Boolean.TYPE;
+                case TypeNames.BYTE_CODE:
+                    return Byte.TYPE;
+                case TypeNames.CHAR_CODE:
+                    return Character.TYPE;
+                case TypeNames.SHORT_CODE:
+                    return Short.TYPE;
+                case TypeNames.INT_CODE:
+                    return Integer.TYPE;
+                case TypeNames.LONG_CODE:
+                    return Long.TYPE;
+                case TypeNames.FLOAT_CODE:
+                    return Float.TYPE;
+                case TypeNames.DOUBLE_CODE:
+                    return Double.TYPE;
+                case TypeNames.VOID_CODE:
+                    return Void.TYPE;
+                default:
+                    return null;
+            }
+        }
+        switch (primitiveTypeName) {
+            case TypeNames.BOOL_NAME:
+                return Boolean.TYPE;
+            case TypeNames.BYTE_NAME:
+                return Byte.TYPE;
+            case TypeNames.CHAR_NAME:
+                return Character.TYPE;
+            case TypeNames.SHORT_NAME:
+                return Short.TYPE;
+            case TypeNames.INT_NAME:
+                return Integer.TYPE;
+            case TypeNames.LONG_NAME:
+                return Long.TYPE;
+            case TypeNames.FLOAT_NAME:
+                return Float.TYPE;
+            case TypeNames.DOUBLE_NAME:
+                return Double.TYPE;
+            case TypeNames.VOID_NAME:
+                return Void.TYPE;
+            default:
+                return null;
+        }
+    }
+
+    /**
      * Gets the primitive wrapped.
      *
      * @param type the type
@@ -2138,27 +2232,134 @@ public final class ClassUtils {
      * Gets the primitive wrapped.
      *
      * @param type the type
+     * @param useHashCode use type name hash code for swith key when match primitive type.
+     * @return the primitive wrapped if match, else null
+     */
+    public static Class<?> getPrimitiveWrapped(Class<?> type, boolean useHashCode) {
+        if (useHashCode) {
+            switch (type.getName().hashCode()) {
+                case TypeNames.BOOL_CODE:
+                    return Boolean.class;
+                case TypeNames.BYTE_CODE:
+                    return Byte.class;
+                case TypeNames.CHAR_CODE:
+                    return Character.class;
+                case TypeNames.SHORT_CODE:
+                    return Short.class;
+                case TypeNames.INT_CODE:
+                    return Integer.class;
+                case TypeNames.LONG_CODE:
+                    return Long.class;
+                case TypeNames.FLOAT_CODE:
+                    return Float.TYPE;
+                case TypeNames.DOUBLE_CODE:
+                    return Double.class;
+                case TypeNames.VOID_CODE:
+                    return Void.class;
+                default:
+                    return null;
+            }
+        }
+        switch (type.getName()) {
+            case TypeNames.BOOL_NAME:
+                return Boolean.class;
+            case TypeNames.BYTE_NAME:
+                return Byte.class;
+            case TypeNames.CHAR_NAME:
+                return Character.class;
+            case TypeNames.SHORT_NAME:
+                return Short.class;
+            case TypeNames.INT_NAME:
+                return Integer.class;
+            case TypeNames.LONG_NAME:
+                return Long.class;
+            case TypeNames.FLOAT_NAME:
+                return Float.class;
+            case TypeNames.DOUBLE_NAME:
+                return Double.class;
+            case TypeNames.VOID_NAME:
+                return Void.class;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Gets the primitive wrapped.
+     *
+     * @param type the type
      * @return the primitive wrapped
      */
     public static String getPrimitiveClassValueMethodName(Class<?> type) {
-        if (type == Boolean.TYPE || type == Boolean.class) {
-            return "booleanValue";
-        } else if (type == Byte.TYPE || type == Byte.class) {
-            return "byteValue";
-        } else if (type == Integer.TYPE || type == Integer.class) {
-            return "intValue";
-        } else if (type == Long.TYPE || type == Long.class) {
-            return "longValue";
-        } else if (type == Float.TYPE || type == Float.class) {
-            return "floatValue";
-        } else if (type == Double.TYPE || type == Double.class) {
-            return "doubleValue";
-        } else if (type == Character.TYPE || type == Character.class) {
-            return "charValue";
-        } else if (type == Short.TYPE || type == Short.class) {
-            return "shortValue";
+        return getPrimitiveClassValueMethodName(type, false);
+    }
+
+    /**
+     * Gets the primitive wrapped.
+     *
+     * @param type the type
+     * @param useHashCode use type name hash code for swith key when match primitive type.
+     * @return the method name if match, else null
+     */
+    public static String getPrimitiveClassValueMethodName(Class<?> type, boolean useHashCode) {
+        if (useHashCode) {
+            switch (type.getName().hashCode()) {
+                case TypeNames.BOOL_CODE:
+                case TypeNames.BOOLEAN_CODE:
+                    return "booleanValue";
+                case TypeNames.BYTE_CODE:
+                case TypeNames.BYTE_TYPE_CODE:
+                    return "byteValue";
+                case TypeNames.CHAR_CODE:
+                case TypeNames.CHARACTER_CODE:
+                    return "charValue";
+                case TypeNames.SHORT_CODE:
+                case TypeNames.SHORT_TYPE_CODE:
+                    return "shortValue";
+                case TypeNames.INT_CODE:
+                case TypeNames.INTEGER_CODE:
+                    return "intValue";
+                case TypeNames.LONG_CODE:
+                case TypeNames.LONG_TYPE_CODE:
+                    return "longValue";
+                case TypeNames.FLOAT_CODE:
+                case TypeNames.FLOAT_TYPE_CODE:
+                    return "floatValue";
+                case TypeNames.DOUBLE_CODE:
+                case TypeNames.DOUBLE_TYPE_CODE:
+                    return "doubleValue";
+                default:
+                    return null;
+            }
         }
-        return null;
+        switch (type.getName()) {
+            case TypeNames.BOOL_NAME:
+            case TypeNames.BOOLEAN_NAME:
+                return "booleanValue";
+            case TypeNames.BYTE_NAME:
+            case TypeNames.BYTE_TYPE_NAME:
+                return "byteValue";
+            case TypeNames.CHAR_NAME:
+            case TypeNames.CHARACTER_NAME:
+                return "charValue";
+            case TypeNames.SHORT_NAME:
+            case TypeNames.SHORT_TYPE_NAME:
+                return "shortValue";
+            case TypeNames.INT_NAME:
+            case TypeNames.INTEGER_NAME:
+                return "intValue";
+            case TypeNames.LONG_NAME:
+            case TypeNames.LONG_TYPE_NAME:
+                return "longValue";
+            case TypeNames.FLOAT_NAME:
+            case TypeNames.FLOAT_TYPE_NAME:
+                return "floatValue";
+            case TypeNames.DOUBLE_NAME:
+            case TypeNames.DOUBLE_TYPE_NAME:
+                return "doubleValue";
+            default:
+                return null;
+        }
     }
 
     /**

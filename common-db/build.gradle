@@ -5,7 +5,7 @@ dependencies {
     //api project(":common-api")
     //api project(":common-core")
     //api project(":common-model-repository")
-    api group: 'cn.featherfly.common', name: 'common-api', version: '0.5.3'
+    api group: 'cn.featherfly.common', name: 'common-api', version: '0.5.4'
     api group: 'cn.featherfly.common', name: 'common-functional', version: '0.2.0'
     api group: 'cn.featherfly.common', name: 'common-core', version: '1.14.0'
     api group: 'cn.featherfly.common', name: 'common-model-repository', version: '0.5.2'

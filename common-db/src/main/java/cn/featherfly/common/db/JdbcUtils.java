@@ -51,6 +51,7 @@ import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.LogUtils;
 import cn.featherfly.common.lang.Str;
+import cn.featherfly.common.lang.TypeNames;
 import cn.featherfly.common.lang.WordUtils;
 import cn.featherfly.common.repository.mapper.RowMapper;
 
@@ -60,6 +61,11 @@ import cn.featherfly.common.repository.mapper.RowMapper;
  * @author zhongj
  */
 public final class JdbcUtils {
+
+    private static final String SQL_TIMESTAMP = "java.sql.Timestamp";
+    private static final String ORACLE_TIMESTAMP = "oracle.sql.TIMESTAMP";
+    private static final String ORACLE_TIMESTAMPTZ = "oracle.sql.TIMESTAMPTZ";
+    private static final String ORACLE_DATE = "oracle.sql.DATE";
 
     /**
      * Instantiates a new jdbc utils.
@@ -401,16 +407,6 @@ public final class JdbcUtils {
         }
     }
 
-    //    /**
-    //     * 设置参数 .
-    //     *
-    //     * @param prep PreparedStatementWrapper
-    //     * @param values 参数
-    //     */
-    //    public static void setParameters(PreparedStatementWrapper prep, Object... values) {
-    //        setParameters(prep, true, values);
-    //    }
-
     /**
      * 设置参数 .
      *
@@ -420,21 +416,6 @@ public final class JdbcUtils {
     public static void setParameters(PreparedStatementWrapper prep, Serializable... values) {
         setParameters(prep, true, values);
     }
-
-    //    /**
-    //     * 设置参数 .
-    //     *
-    //     * @param prep PreparedStatementWrapper
-    //     * @param enumWithOridinal the enum with oridinal
-    //     * @param values 参数
-    //     */
-    //    public static void setParameters(PreparedStatementWrapper prep, boolean enumWithOridinal, Object... values) {
-    //        if (Lang.isNotEmpty(values)) {
-    //            for (int i = 0; i < values.length; i++) {
-    //                setParameter(prep, i + 1, values[i], enumWithOridinal);
-    //            }
-    //        }
-    //    }
 
     /**
      * 设置参数 .
@@ -450,16 +431,6 @@ public final class JdbcUtils {
             }
         }
     }
-
-    //    /**
-    //     * 设置参数.
-    //     *
-    //     * @param prep PreparedStatement
-    //     * @param values 参数
-    //     */
-    //    public static void setParameters(PreparedStatement prep, Object... values) {
-    //        setParameters(prep, true, values);
-    //    }
 
     /**
      * 设置参数.
@@ -1092,62 +1063,113 @@ public final class JdbcUtils {
         try {
             if (value == null) {
                 prep.setObject(position, value);
-            } else if (value.getClass().isEnum()) {
+                return;
+            }
+
+            if (value.getClass().isEnum()) {
                 if (enumWithOridinal) {
                     prep.setInt(position, ((Enum<?>) value).ordinal());
                 } else {
                     prep.setString(position, ((Enum<?>) value).name());
                 }
-            } else if (value instanceof Boolean) {
-                prep.setBoolean(position, ((Boolean) value).booleanValue());
-            } else if (value instanceof String) {
-                prep.setString(position, (String) value);
-            } else if (value instanceof Integer) {
-                prep.setInt(position, ((Integer) value).intValue());
-            } else if (value instanceof Long) {
-                prep.setLong(position, ((Long) value).longValue());
-            } else if (value instanceof Float) {
-                prep.setFloat(position, ((Float) value).floatValue());
-            } else if (value instanceof Double) {
-                prep.setDouble(position, ((Double) value).doubleValue());
-            } else if (value instanceof BigDecimal) {
-                prep.setBigDecimal(position, (BigDecimal) value);
-            } else if (value instanceof BigInteger) {
-                prep.setLong(position, ((BigInteger) value).longValue());
-            } else if (value instanceof Byte) {
-                prep.setByte(position, ((Byte) value).byteValue());
-            } else if (value instanceof Character) {
-                prep.setString(position, ((Character) value).toString());
-            } else if (value instanceof Short) {
-                prep.setShort(position, ((Short) value).shortValue());
-            } else if (value instanceof java.sql.Date) {
-                prep.setDate(position, (java.sql.Date) value);
-            } else if (value instanceof Time) {
-                prep.setTime(position, (Time) value);
-            } else if (value instanceof LocalTime) {
-                prep.setTime(position, Time.valueOf((LocalTime) value));
-            } else if (value instanceof LocalDate) {
-                prep.setDate(position, java.sql.Date.valueOf((LocalDate) value));
-            } else if (value instanceof LocalDateTime) {
-                setParameter(prep, position, (LocalDateTime) value);
-                //                prep.setTimestamp(position, Timestamp.valueOf((LocalDateTime) value));
-            } else if (value instanceof Date) {
-                setParameter(prep, position, (Date) value);
-                //                prep.setTimestamp(position, new Timestamp(((Date) value).getTime()));
-            } else if (value instanceof Timestamp) {
-                prep.setTimestamp(position, (Timestamp) value);
-            } else if (value instanceof FieldValueOperator) {
-                setParameter(prep, position, (FieldValueOperator<?>) value);
-            } else if (value instanceof Optional) {
-                setParameter(prep, position, ((Optional<?>) value).orElse(null), enumWithOridinal);
-            } else if (value instanceof AtomicInteger) {
-                prep.setInt(position, ((AtomicInteger) value).get());
-            } else if (value instanceof AtomicLong) {
-                prep.setLong(position, ((AtomicLong) value).get());
-            } else if (value instanceof AtomicBoolean) {
-                prep.setBoolean(position, ((AtomicBoolean) value).get());
-            } else {
-                prep.setObject(position, value);
+                return;
+            }
+
+            switch (value.getClass().getName()) {
+                case TypeNames.STRING_NAME:
+                    prep.setString(position, (String) value);
+                    return;
+
+                case TypeNames.BOOL_NAME:
+                case TypeNames.BOOLEAN_NAME:
+                    prep.setBoolean(position, ((Boolean) value).booleanValue());
+                    return;
+
+                case TypeNames.CHAR_NAME:
+                case TypeNames.CHARACTER_NAME:
+                    prep.setString(position, ((Character) value).toString());
+                    return;
+
+                case TypeNames.INT_NAME:
+                case TypeNames.INTEGER_NAME:
+                    prep.setInt(position, ((Integer) value).intValue());
+                    return;
+
+                case TypeNames.LONG_NAME:
+                case TypeNames.LONG_TYPE_NAME:
+                    prep.setLong(position, ((Long) value).longValue());
+                    return;
+
+                case TypeNames.BYTE_NAME:
+                case TypeNames.BYTE_TYPE_NAME:
+                    prep.setByte(position, ((Byte) value).byteValue());
+                    return;
+
+                case TypeNames.SHORT_NAME:
+                case TypeNames.SHORT_TYPE_NAME:
+                    prep.setShort(position, ((Short) value).shortValue());
+                    return;
+
+                case TypeNames.FLOAT_NAME:
+                case TypeNames.FLOAT_TYPE_NAME:
+                    prep.setFloat(position, ((Float) value).floatValue());
+                    return;
+
+                case TypeNames.DOUBLE_NAME:
+                case TypeNames.DOUBLE_TYPE_NAME:
+                    prep.setDouble(position, ((Double) value).doubleValue());
+                    return;
+
+                case TypeNames.BIGDECIMAL_NAME:
+                    prep.setBigDecimal(position, (BigDecimal) value);
+                    return;
+                case TypeNames.BIGINTEGER_NAME:
+                    prep.setBigDecimal(position, new BigDecimal((BigInteger) value));
+                    return;
+
+                case TypeNames.DATE_NAME:
+                    prep.setTimestamp(position, new Timestamp(((Date) value).getTime()));
+                    return;
+                case TypeNames.SQL_DATE_NAME:
+                    prep.setDate(position, (java.sql.Date) value);
+                    return;
+                case TypeNames.SQL_TIME_NAME:
+                    prep.setTime(position, (Time) value);
+                    return;
+                case TypeNames.SQL_TIMESTAMP_NAME:
+                    prep.setTimestamp(position, (Timestamp) value);
+                    return;
+                case TypeNames.LOCALDATE_NAME:
+                    prep.setDate(position, java.sql.Date.valueOf((LocalDate) value));
+                    return;
+                case TypeNames.LOCALTIME_NAME:
+                    prep.setTime(position, Time.valueOf((LocalTime) value));
+                    return;
+                case TypeNames.LOCALDATETIME_NAME:
+                    prep.setTimestamp(position, Timestamp.valueOf((LocalDateTime) value));
+                    return;
+
+                case TypeNames.FIELDVALUEOPERATOR_NAME:
+                    setParameter(prep, position, (FieldValueOperator<?>) value);
+                    return;
+
+                case TypeNames.OPTIONAL_NAME:
+                    setParameter(prep, position, ((Optional<?>) value).orElse(null), enumWithOridinal);
+                    return;
+
+                case TypeNames.ATOMICBOOLEAN_NAME:
+                    prep.setInt(position, ((AtomicInteger) value).get());
+                    return;
+                case TypeNames.ATOMICINTEGER_NAME:
+                    prep.setLong(position, ((AtomicLong) value).get());
+                    return;
+                case TypeNames.ATOMICLONG_NAME:
+                    prep.setBoolean(position, ((AtomicBoolean) value).get());
+                    return;
+
+                default:
+                    prep.setObject(position, value);
+                    return;
             }
         } catch (SQLException e) {
             throw new JdbcException(e);
@@ -1159,25 +1181,6 @@ public final class JdbcUtils {
     // ****************************************************************************************************************
 
     /**
-     * The main method.
-     *
-     * @param args the arguments
-     */
-    public static void main(String[] args) {
-        System.out.println(Long.MAX_VALUE);
-        System.out.println(new BigInteger(Long.MAX_VALUE + "0"));
-    }
-
-    //    /**
-    //     * 设置参数 .
-    //     *
-    //     * @param res ResultSetWrapper
-    //     * @param values 参数
-    //     */
-    //    public static void setParameters(ResultSetWrapper res, Object... values) {
-    //        setParameters(res, true, values);
-    //    }
-    /**
      * 设置参数 .
      *
      * @param res ResultSetWrapper
@@ -1187,20 +1190,6 @@ public final class JdbcUtils {
         setParameters(res, true, values);
     }
 
-    //    /**
-    //     * 设置参数 .
-    //     *
-    //     * @param res ResultSetWrapper
-    //     * @param enumWithOridinal the enum with oridinal
-    //     * @param values 参数
-    //     */
-    //    public static void setParameters(ResultSetWrapper res, boolean enumWithOridinal, Object... values) {
-    //        if (Lang.isNotEmpty(values)) {
-    //            for (int i = 0; i < values.length; i++) {
-    //                setParameter(res, i + 1, values[i], enumWithOridinal);
-    //            }
-    //        }
-    //    }
     /**
      * 设置参数 .
      *
@@ -1225,16 +1214,6 @@ public final class JdbcUtils {
     public static void setParameters(ResultSet res, Serializable... values) {
         setParameters(res, true, values);
     }
-
-    //    /**
-    //     * 设置参数.
-    //     *
-    //     * @param res the res
-    //     * @param values 参数
-    //     */
-    //    public static void setParameters(ResultSet res, Object... values) {
-    //        setParameters(res, true, values);
-    //    }
 
     /**
      * 设置参数.
@@ -1855,60 +1834,113 @@ public final class JdbcUtils {
         try {
             if (value == null) {
                 res.updateObject(position, value);
-            } else if (value.getClass().isEnum()) {
+                return;
+            }
+
+            if (value.getClass().isEnum()) {
                 if (enumWithOridinal) {
                     res.updateInt(position, ((Enum<?>) value).ordinal());
                 } else {
                     res.updateString(position, ((Enum<?>) value).name());
                 }
-            } else if (value instanceof Boolean) {
-                res.updateBoolean(position, ((Boolean) value).booleanValue());
-            } else if (value instanceof String) {
-                res.updateString(position, (String) value);
-            } else if (value instanceof Integer) {
-                res.updateInt(position, ((Integer) value).intValue());
-            } else if (value instanceof Long) {
-                res.updateLong(position, ((Long) value).longValue());
-            } else if (value instanceof Float) {
-                res.updateFloat(position, ((Float) value).floatValue());
-            } else if (value instanceof Double) {
-                res.updateDouble(position, ((Double) value).doubleValue());
-            } else if (value instanceof BigDecimal) {
-                res.updateBigDecimal(position, (BigDecimal) value);
-            } else if (value instanceof BigInteger) {
-                res.updateBigDecimal(position, new BigDecimal((BigInteger) value));
-            } else if (value instanceof Byte) {
-                res.updateByte(position, ((Byte) value).byteValue());
-            } else if (value instanceof Character) {
-                res.updateString(position, ((Character) value).toString());
-            } else if (value instanceof Short) {
-                res.updateShort(position, ((Short) value).shortValue());
-            } else if (value instanceof java.sql.Date) {
-                res.updateDate(position, (java.sql.Date) value);
-            } else if (value instanceof Time) {
-                res.updateTime(position, (Time) value);
-            } else if (value instanceof LocalTime) {
-                res.updateTime(position, Time.valueOf((LocalTime) value));
-            } else if (value instanceof LocalDate) {
-                res.updateDate(position, java.sql.Date.valueOf((LocalDate) value));
-            } else if (value instanceof LocalDateTime) {
-                setParameter(res, position, (LocalDateTime) value);
-            } else if (value instanceof Date) {
-                setParameter(res, position, (Date) value);
-            } else if (value instanceof Timestamp) {
-                res.updateTimestamp(position, (Timestamp) value);
-            } else if (value instanceof FieldValueOperator) {
-                setParameter(res, position, (FieldValueOperator<?>) value);
-            } else if (value instanceof Optional) {
-                setParameter(res, position, ((Optional<?>) value).orElse(null), enumWithOridinal);
-            } else if (value instanceof AtomicInteger) {
-                res.updateInt(position, ((AtomicInteger) value).get());
-            } else if (value instanceof AtomicLong) {
-                res.updateLong(position, ((AtomicLong) value).get());
-            } else if (value instanceof AtomicBoolean) {
-                res.updateBoolean(position, ((AtomicBoolean) value).get());
-            } else {
-                res.updateObject(position, value);
+                return;
+            }
+
+            switch (value.getClass().getName()) {
+                case TypeNames.STRING_NAME:
+                    res.updateString(position, (String) value);
+                    return;
+
+                case TypeNames.BOOL_NAME:
+                case TypeNames.BOOLEAN_NAME:
+                    res.updateBoolean(position, ((Boolean) value).booleanValue());
+                    return;
+
+                case TypeNames.CHAR_NAME:
+                case TypeNames.CHARACTER_NAME:
+                    res.updateString(position, ((Character) value).toString());
+                    return;
+
+                case TypeNames.INT_NAME:
+                case TypeNames.INTEGER_NAME:
+                    res.updateInt(position, ((Integer) value).intValue());
+                    return;
+
+                case TypeNames.LONG_NAME:
+                case TypeNames.LONG_TYPE_NAME:
+                    res.updateLong(position, ((Long) value).longValue());
+                    return;
+
+                case TypeNames.BYTE_NAME:
+                case TypeNames.BYTE_TYPE_NAME:
+                    res.updateByte(position, ((Byte) value).byteValue());
+                    return;
+
+                case TypeNames.SHORT_NAME:
+                case TypeNames.SHORT_TYPE_NAME:
+                    res.updateShort(position, ((Short) value).shortValue());
+                    return;
+
+                case TypeNames.FLOAT_NAME:
+                case TypeNames.FLOAT_TYPE_NAME:
+                    res.updateFloat(position, ((Float) value).floatValue());
+                    return;
+
+                case TypeNames.DOUBLE_NAME:
+                case TypeNames.DOUBLE_TYPE_NAME:
+                    res.updateDouble(position, ((Double) value).doubleValue());
+                    return;
+
+                case TypeNames.BIGDECIMAL_NAME:
+                    res.updateBigDecimal(position, (BigDecimal) value);
+                    return;
+                case TypeNames.BIGINTEGER_NAME:
+                    res.updateBigDecimal(position, new BigDecimal((BigInteger) value));
+                    return;
+
+                case TypeNames.DATE_NAME:
+                    res.updateTimestamp(position, new Timestamp(((Date) value).getTime()));
+                    return;
+                case TypeNames.SQL_DATE_NAME:
+                    res.updateDate(position, (java.sql.Date) value);
+                    return;
+                case TypeNames.SQL_TIME_NAME:
+                    res.updateTime(position, (Time) value);
+                    return;
+                case TypeNames.SQL_TIMESTAMP_NAME:
+                    res.updateTimestamp(position, (Timestamp) value);
+                    return;
+                case TypeNames.LOCALDATE_NAME:
+                    res.updateDate(position, java.sql.Date.valueOf((LocalDate) value));
+                    return;
+                case TypeNames.LOCALTIME_NAME:
+                    res.updateTime(position, Time.valueOf((LocalTime) value));
+                    return;
+                case TypeNames.LOCALDATETIME_NAME:
+                    res.updateTimestamp(position, Timestamp.valueOf((LocalDateTime) value));
+                    return;
+
+                case TypeNames.FIELDVALUEOPERATOR_NAME:
+                    setParameter(res, position, (FieldValueOperator<?>) value);
+                    return;
+
+                case TypeNames.OPTIONAL_NAME:
+                    setParameter(res, position, ((Optional<?>) value).orElse(null), enumWithOridinal);
+                    return;
+
+                case TypeNames.ATOMICBOOLEAN_NAME:
+                    res.updateInt(position, ((AtomicInteger) value).get());
+                    return;
+                case TypeNames.ATOMICINTEGER_NAME:
+                    res.updateLong(position, ((AtomicLong) value).get());
+                    return;
+                case TypeNames.ATOMICLONG_NAME:
+                    res.updateBoolean(position, ((AtomicBoolean) value).get());
+                    return;
+
+                default:
+                    res.updateObject(position, value);
+                    return;
             }
         } catch (SQLException e) {
             throw new JdbcException(e);
@@ -1983,60 +2015,113 @@ public final class JdbcUtils {
         try {
             if (value == null) {
                 call.setObject(name, value);
-            } else if (value.getClass().isEnum()) {
+                return;
+            }
+
+            if (value.getClass().isEnum()) {
                 if (enumWithOridinal) {
                     call.setInt(name, ((Enum<?>) value).ordinal());
                 } else {
                     call.setString(name, ((Enum<?>) value).name());
                 }
-            } else if (value instanceof Boolean) {
-                call.setBoolean(name, ((Boolean) value).booleanValue());
-            } else if (value instanceof String) {
-                call.setString(name, (String) value);
-            } else if (value instanceof Integer) {
-                call.setInt(name, ((Integer) value).intValue());
-            } else if (value instanceof Long) {
-                call.setLong(name, ((Long) value).longValue());
-            } else if (value instanceof Float) {
-                call.setFloat(name, ((Float) value).floatValue());
-            } else if (value instanceof Double) {
-                call.setDouble(name, ((Double) value).doubleValue());
-            } else if (value instanceof BigDecimal) {
-                call.setBigDecimal(name, (BigDecimal) value);
-            } else if (value instanceof BigInteger) {
-                call.setBigDecimal(name, new BigDecimal((BigInteger) value));
-            } else if (value instanceof Byte) {
-                call.setByte(name, ((Byte) value).byteValue());
-            } else if (value instanceof Character) {
-                call.setString(name, ((Character) value).toString());
-            } else if (value instanceof Short) {
-                call.setShort(name, ((Short) value).shortValue());
-            } else if (value instanceof java.sql.Date) {
-                call.setDate(name, (java.sql.Date) value);
-            } else if (value instanceof Time) {
-                call.setTime(name, (Time) value);
-            } else if (value instanceof LocalTime) {
-                call.setTime(name, Time.valueOf((LocalTime) value));
-            } else if (value instanceof LocalDate) {
-                call.setDate(name, java.sql.Date.valueOf((LocalDate) value));
-            } else if (value instanceof LocalDateTime) {
-                call.setTimestamp(name, Timestamp.valueOf((LocalDateTime) value));
-            } else if (value instanceof Date) {
-                call.setTimestamp(name, new Timestamp(((Date) value).getTime()));
-            } else if (value instanceof Timestamp) {
-                call.setTimestamp(name, (Timestamp) value);
-            } else if (value instanceof FieldValueOperator) {
-                setParameter(call, name, value);
-            } else if (value instanceof Optional) {
-                setParameter(call, name, ((Optional<?>) value).orElse(null), enumWithOridinal);
-            } else if (value instanceof AtomicInteger) {
-                call.setInt(name, ((AtomicInteger) value).get());
-            } else if (value instanceof AtomicLong) {
-                call.setLong(name, ((AtomicLong) value).get());
-            } else if (value instanceof AtomicBoolean) {
-                call.setBoolean(name, ((AtomicBoolean) value).get());
-            } else {
-                call.setObject(name, value);
+                return;
+            }
+
+            switch (value.getClass().getName()) {
+                case TypeNames.STRING_NAME:
+                    call.setString(name, (String) value);
+                    return;
+
+                case TypeNames.BOOL_NAME:
+                case TypeNames.BOOLEAN_NAME:
+                    call.setBoolean(name, ((Boolean) value).booleanValue());
+                    return;
+
+                case TypeNames.CHAR_NAME:
+                case TypeNames.CHARACTER_NAME:
+                    call.setString(name, ((Character) value).toString());
+                    return;
+
+                case TypeNames.INT_NAME:
+                case TypeNames.INTEGER_NAME:
+                    call.setInt(name, ((Integer) value).intValue());
+                    return;
+
+                case TypeNames.LONG_NAME:
+                case TypeNames.LONG_TYPE_NAME:
+                    call.setLong(name, ((Long) value).longValue());
+                    return;
+
+                case TypeNames.BYTE_NAME:
+                case TypeNames.BYTE_TYPE_NAME:
+                    call.setByte(name, ((Byte) value).byteValue());
+                    return;
+
+                case TypeNames.SHORT_NAME:
+                case TypeNames.SHORT_TYPE_NAME:
+                    call.setShort(name, ((Short) value).shortValue());
+                    return;
+
+                case TypeNames.FLOAT_NAME:
+                case TypeNames.FLOAT_TYPE_NAME:
+                    call.setFloat(name, ((Float) value).floatValue());
+                    return;
+
+                case TypeNames.DOUBLE_NAME:
+                case TypeNames.DOUBLE_TYPE_NAME:
+                    call.setDouble(name, ((Double) value).doubleValue());
+                    return;
+
+                case TypeNames.BIGDECIMAL_NAME:
+                    call.setBigDecimal(name, (BigDecimal) value);
+                    return;
+                case TypeNames.BIGINTEGER_NAME:
+                    call.setBigDecimal(name, new BigDecimal((BigInteger) value));
+                    return;
+
+                case TypeNames.DATE_NAME:
+                    call.setTimestamp(name, new Timestamp(((Date) value).getTime()));
+                    return;
+                case TypeNames.SQL_DATE_NAME:
+                    call.setDate(name, (java.sql.Date) value);
+                    return;
+                case TypeNames.SQL_TIME_NAME:
+                    call.setTime(name, (Time) value);
+                    return;
+                case TypeNames.SQL_TIMESTAMP_NAME:
+                    call.setTimestamp(name, (Timestamp) value);
+                    return;
+                case TypeNames.LOCALDATE_NAME:
+                    call.setDate(name, java.sql.Date.valueOf((LocalDate) value));
+                    return;
+                case TypeNames.LOCALTIME_NAME:
+                    call.setTime(name, Time.valueOf((LocalTime) value));
+                    return;
+                case TypeNames.LOCALDATETIME_NAME:
+                    call.setTimestamp(name, Timestamp.valueOf((LocalDateTime) value));
+                    return;
+
+                case TypeNames.FIELDVALUEOPERATOR_NAME:
+                    setParameter(call, name, (FieldValueOperator<?>) value);
+                    return;
+
+                case TypeNames.OPTIONAL_NAME:
+                    setParameter(call, name, ((Optional<?>) value).orElse(null), enumWithOridinal);
+                    return;
+
+                case TypeNames.ATOMICBOOLEAN_NAME:
+                    call.setInt(name, ((AtomicInteger) value).get());
+                    return;
+                case TypeNames.ATOMICINTEGER_NAME:
+                    call.setLong(name, ((AtomicLong) value).get());
+                    return;
+                case TypeNames.ATOMICLONG_NAME:
+                    call.setBoolean(name, ((AtomicBoolean) value).get());
+                    return;
+
+                default:
+                    call.setObject(name, value);
+                    return;
             }
         } catch (SQLException e) {
             throw new JdbcException(e);
@@ -2074,7 +2159,6 @@ public final class JdbcUtils {
      * @param values the values
      * @return the out parameter index and class map
      */
-    //    public static Map<Integer, Class<?>> setParameters(CallableStatement call, boolean enumWithOridinal, Object... values) {
     public static Map<Integer, Class<? extends Serializable>> setParameters(CallableStatement call,
         boolean enumWithOridinal, Serializable... values) {
         Map<Integer, Class<? extends Serializable>> outParamMap = new HashMap<>(0);
@@ -2469,20 +2553,19 @@ public final class JdbcUtils {
             } else if (obj instanceof Clob) {
                 obj = rs.getString(index);
             } else if (className != null
-                && ("oracle.sql.TIMESTAMP".equals(className) || "oracle.sql.TIMESTAMPTZ".equals(className))) {
+                && (ORACLE_TIMESTAMP.equals(className) || ORACLE_TIMESTAMPTZ.equals(className))) {
                 obj = rs.getTimestamp(index);
-            } else if (className != null && className.startsWith("oracle.sql.DATE")) {
+            } else if (className != null && className.startsWith(ORACLE_DATE)) {
                 String metaDataClassName = rs.getMetaData().getColumnClassName(index);
-                if ("java.sql.Timestamp".equals(metaDataClassName)
-                    || "oracle.sql.TIMESTAMP".equals(metaDataClassName)) {
+                if (SQL_TIMESTAMP.equals(metaDataClassName)
+                    || ORACLE_TIMESTAMP.equals(metaDataClassName)) {
                     obj = rs.getTimestamp(index);
                 } else {
                     obj = rs.getDate(index);
                 }
-            } else if (obj != null && obj instanceof java.sql.Date) {
-                if ("java.sql.Timestamp".equals(rs.getMetaData().getColumnClassName(index))) {
-                    obj = rs.getTimestamp(index);
-                }
+            } else if (obj instanceof java.sql.Date
+                && SQL_TIMESTAMP.equals(rs.getMetaData().getColumnClassName(index))) {
+                obj = rs.getTimestamp(index);
             }
             return (Serializable) obj;
         } catch (SQLException e) {
@@ -2501,9 +2584,6 @@ public final class JdbcUtils {
             Map<String, Serializable> resultMap = new HashMap<>();
             ResultSetMetaData metaData = rs.getMetaData();
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                //                Object value = JdbcUtils.getResultSetValue(rs, i);
-                //                String name = JdbcUtils.lookupColumnName(metaData, i, true);
-                //                resultMap.put(name, value);
                 resultMap.put(JdbcUtils.lookupColumnName(metaData, i, true), JdbcUtils.getResultSetValue(rs, i));
             }
             return resultMap;
@@ -2531,8 +2611,6 @@ public final class JdbcUtils {
                 } else {
                     value = JdbcUtils.getResultSetValue(rs, i);
                 }
-                //                String name = JdbcUtils.lookupColumnName(metaData, i, true);
-                //                resultMap.put(name, value);
                 resultMap.put(JdbcUtils.lookupColumnName(metaData, i, true), value);
             }
             return resultMap;
@@ -2769,18 +2847,6 @@ public final class JdbcUtils {
                 value = call.getClob(name);
             } else if (requiredType.isEnum()) {
                 value = Lang.toEnum((Class<Enum>) requiredType, call.getObject(name));
-                //                ParameterMetaData meta = call.getParameterMetaData();
-                //                switch (meta.getParameterType(name)) {
-                //                    case Types.TINYINT:
-                //                    case Types.SMALLINT:
-                //                    case Types.INTEGER:
-                //                    case Types.BIGINT:
-                //                        value = Lang.toEnum((Class<Enum>) requiredType, call.getInt(name));
-                //                        break;
-                //                    default:
-                //                        value = Lang.toEnum((Class<Enum>) requiredType, call.getString(name));
-                //                        break;
-                //                }
             } else {
                 // Some unknown type desired -> rely on getObject.
                 value = getCallableParam(call, name);
@@ -2828,21 +2894,21 @@ public final class JdbcUtils {
             } else if (obj instanceof Clob) {
                 obj = call.getString(name);
             } else if (className != null
-                && ("oracle.sql.TIMESTAMP".equals(className) || "oracle.sql.TIMESTAMPTZ".equals(className))) {
+                && (ORACLE_TIMESTAMP.equals(className) || ORACLE_TIMESTAMPTZ.equals(className))) {
                 obj = call.getTimestamp(name);
             }
             // FIXME 后续看看能不能实现
-            //            else if (className != null && className.startsWith("oracle.sql.DATE")) {
+            //            else if (className != null && className.startsWith(ORACLE_DATE)) {
             //                String metaDataClassName = call.getParameterMetaData().getParameterClassName(name);
-            //                if ("java.sql.Timestamp".equals(metaDataClassName)
-            //                        || "oracle.sql.TIMESTAMP".equals(metaDataClassName)) {
+            //                if (SQL_TIMESTAMP.equals(metaDataClassName)
+            //                        || ORACLE_TIMESTAMP.equals(metaDataClassName)) {
             //                    obj = call.getTimestamp(name);
             //                } else {
             //                    obj = call.getDate(name);
             //                }
             //            } else if (obj != null && obj instanceof java.sql.Date) {
             //                ParameterMetaData meta = call.getParameterMetaData();
-            //                if ("java.sql.Timestamp".equals(call.getParameterMetaData().getParameterClassName(name))) {
+            //                if (SQL_TIMESTAMP.equals(call.getParameterMetaData().getParameterClassName(name))) {
             //                    obj = call.getTimestamp(name);
             //                }
             //            }
@@ -2984,20 +3050,19 @@ public final class JdbcUtils {
             } else if (obj instanceof Clob) {
                 obj = call.getString(index);
             } else if (className != null
-                && ("oracle.sql.TIMESTAMP".equals(className) || "oracle.sql.TIMESTAMPTZ".equals(className))) {
+                && (ORACLE_TIMESTAMP.equals(className) || ORACLE_TIMESTAMPTZ.equals(className))) {
                 obj = call.getTimestamp(index);
-            } else if (className != null && className.startsWith("oracle.sql.DATE")) {
+            } else if (className != null && className.startsWith(ORACLE_DATE)) {
                 String metaDataClassName = call.getParameterMetaData().getParameterClassName(index);
-                if ("java.sql.Timestamp".equals(metaDataClassName)
-                    || "oracle.sql.TIMESTAMP".equals(metaDataClassName)) {
+                if (SQL_TIMESTAMP.equals(metaDataClassName)
+                    || ORACLE_TIMESTAMP.equals(metaDataClassName)) {
                     obj = call.getTimestamp(index);
                 } else {
                     obj = call.getDate(index);
                 }
-            } else if (obj != null && obj instanceof java.sql.Date) {
-                if ("java.sql.Timestamp".equals(call.getParameterMetaData().getParameterClassName(index))) {
-                    obj = call.getTimestamp(index);
-                }
+            } else if (obj instanceof java.sql.Date
+                && SQL_TIMESTAMP.equals(call.getParameterMetaData().getParameterClassName(index))) {
+                obj = call.getTimestamp(index);
             }
             return obj;
         } catch (SQLException e) {

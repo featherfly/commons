@@ -3114,8 +3114,8 @@ public final class JdbcUtils {
      */
     public static Boolean getBoolean(ResultSet rs, int index) {
         try {
-            Boolean value = Boolean.valueOf(rs.getBoolean(index));
-            if (value != null && rs.wasNull()) {
+            boolean value = rs.getBoolean(index);
+            if (rs.wasNull()) {
                 return null;
             }
             return value;
@@ -3148,8 +3148,8 @@ public final class JdbcUtils {
      */
     public static Byte getByte(ResultSet rs, int index) {
         try {
-            Byte value = Byte.valueOf(rs.getByte(index));
-            if (value != null && rs.wasNull()) {
+            byte value = rs.getByte(index);
+            if (rs.wasNull()) {
                 return null;
             }
             return value;
@@ -3182,8 +3182,8 @@ public final class JdbcUtils {
      */
     public static Short getShort(ResultSet rs, int index) {
         try {
-            Short value = Short.valueOf(rs.getShort(index));
-            if (value != null && rs.wasNull()) {
+            short value = rs.getShort(index);
+            if (rs.wasNull()) {
                 return null;
             }
             return value;
@@ -3216,8 +3216,8 @@ public final class JdbcUtils {
      */
     public static Integer getInteger(ResultSet rs, int index) {
         try {
-            Integer value = Integer.valueOf(rs.getInt(index));
-            if (value != null && rs.wasNull()) {
+            int value = rs.getInt(index);
+            if (rs.wasNull()) {
                 return null;
             }
             return value;
@@ -3235,8 +3235,8 @@ public final class JdbcUtils {
      */
     public static Long getLong(ResultSet rs, int index) {
         try {
-            Long value = Long.valueOf(rs.getLong(index));
-            if (value != null && rs.wasNull()) {
+            long value = rs.getLong(index);
+            if (rs.wasNull()) {
                 return null;
             }
             return value;
@@ -3269,8 +3269,8 @@ public final class JdbcUtils {
      */
     public static Float getFloat(ResultSet rs, int index) {
         try {
-            Float value = Float.valueOf(rs.getFloat(index));
-            if (value != null && rs.wasNull()) {
+            float value = rs.getFloat(index);
+            if (rs.wasNull()) {
                 return null;
             }
             return value;
@@ -3303,8 +3303,8 @@ public final class JdbcUtils {
      */
     public static Double getDouble(ResultSet rs, int index) {
         try {
-            Double value = Double.valueOf(rs.getDouble(index));
-            if (value != null && rs.wasNull()) {
+            double value = rs.getDouble(index);
+            if (rs.wasNull()) {
                 return null;
             }
             return value;
@@ -3531,8 +3531,8 @@ public final class JdbcUtils {
      */
     public static Boolean getBoolean(CallableStatement call, int index) {
         try {
-            Boolean value = Boolean.valueOf(call.getBoolean(index));
-            if (value != null && call.wasNull()) {
+            boolean value = call.getBoolean(index);
+            if (call.wasNull()) {
                 return null;
             }
             return value;
@@ -3565,8 +3565,8 @@ public final class JdbcUtils {
      */
     public static Byte getByte(CallableStatement call, int index) {
         try {
-            Byte value = Byte.valueOf(call.getByte(index));
-            if (value != null && call.wasNull()) {
+            byte value = call.getByte(index);
+            if (call.wasNull()) {
                 return null;
             }
             return value;
@@ -3599,8 +3599,8 @@ public final class JdbcUtils {
      */
     public static Short getShort(CallableStatement call, int index) {
         try {
-            Short value = Short.valueOf(call.getShort(index));
-            if (value != null && call.wasNull()) {
+            short value = call.getShort(index);
+            if (call.wasNull()) {
                 return null;
             }
             return value;
@@ -3633,8 +3633,8 @@ public final class JdbcUtils {
      */
     public static Integer getInteger(CallableStatement call, int index) {
         try {
-            Integer value = Integer.valueOf(call.getInt(index));
-            if (value != null && call.wasNull()) {
+            int value = call.getInt(index);
+            if (call.wasNull()) {
                 return null;
             }
             return value;
@@ -3652,8 +3652,8 @@ public final class JdbcUtils {
      */
     public static Long getLong(CallableStatement call, int index) {
         try {
-            Long value = Long.valueOf(call.getLong(index));
-            if (value != null && call.wasNull()) {
+            long value = call.getLong(index);
+            if (call.wasNull()) {
                 return null;
             }
             return value;
@@ -3686,8 +3686,8 @@ public final class JdbcUtils {
      */
     public static Float getFloat(CallableStatement call, int index) {
         try {
-            Float value = Float.valueOf(call.getFloat(index));
-            if (value != null && call.wasNull()) {
+            float value = call.getFloat(index);
+            if (call.wasNull()) {
                 return null;
             }
             return value;
@@ -3720,8 +3720,8 @@ public final class JdbcUtils {
      */
     public static Double getDouble(CallableStatement call, int index) {
         try {
-            Double value = Double.valueOf(call.getDouble(index));
-            if (value != null && call.wasNull()) {
+            double value = call.getDouble(index);
+            if (call.wasNull()) {
                 return null;
             }
             return value;

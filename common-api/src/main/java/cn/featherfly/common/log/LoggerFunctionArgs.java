@@ -9,9 +9,11 @@ import java.util.function.Supplier;
  * @author zhongj
  */
 public interface LoggerFunctionArgs {
+
     /**
      * trace.
      *
+     * @param <A> the generic type
      * @param msg the msg
      * @param supplier the supplier
      */
@@ -20,6 +22,7 @@ public interface LoggerFunctionArgs {
     /**
      * debug.
      *
+     * @param <A> the generic type
      * @param msg the msg
      * @param supplier the supplier
      */
@@ -28,6 +31,7 @@ public interface LoggerFunctionArgs {
     /**
      * info.
      *
+     * @param <A> the generic type
      * @param msg the msg
      * @param supplier the supplier
      */
@@ -36,6 +40,7 @@ public interface LoggerFunctionArgs {
     /**
      * warn.
      *
+     * @param <A> the generic type
      * @param msg the msg
      * @param supplier the supplier
      */
@@ -44,6 +49,7 @@ public interface LoggerFunctionArgs {
     /**
      * error.
      *
+     * @param <A> the generic type
      * @param msg the msg
      * @param supplier the supplier
      */

@@ -59,7 +59,7 @@ def generateExceptionCodeAll = task("all-exception-code", group: 'gen-code-excep
 exceptions.each { code ->
     def generateExceptionCode = task("${code.taskName}-exception-code", type: JavaExec, dependsOn: 'classes', group : 'gen-code-exception') {
         classpath = sourceSets.main.runtimeClasspath
-        main = "cn.featherfly.common.gentool.exception.GeneratorRunner"
+        mainClass = "cn.featherfly.common.gentool.exception.GeneratorRunner"
         args = ['gentool/config.yaml', code.yaml]
     }
     generateExceptionCodeAll.dependsOn(generateExceptionCode)

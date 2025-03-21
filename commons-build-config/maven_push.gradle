@@ -91,17 +91,17 @@ publishing {
     }
     repositories {
         maven {
-            url getSonatypeRepositoryUrl()
+            url = getSonatypeRepositoryUrl()
             credentials {
-                username getRepositoryUsername()
-                password getRepositoryPassword()
+                username = getRepositoryUsername()
+                password = getRepositoryPassword()
             }
         }
     }
 }
 
 signing {
-    required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
+    required = { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
     sign publishing.publications.release
 }
 

@@ -12,6 +12,6 @@ dependencies {
 
 task genCode(type: JavaExec, dependsOn: 'classes', group: 'generate-code') {
     classpath = sourceSets.main.runtimeClasspath
-    main = "cn.featherfly.common.gentool.exception.GeneratorRunner"
+    mainClass = "cn.featherfly.common.gentool.exception.GeneratorRunner"
     args = ['src/gen/BuilderException.yaml']
 }

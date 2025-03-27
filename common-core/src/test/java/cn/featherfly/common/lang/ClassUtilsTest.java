@@ -44,27 +44,173 @@ public class ClassUtilsTest {
     static Class<GenericTest> genericType = GenericTest.class;
 
     @Test
-    public void testIsParent() {
+    void getPrimitiveType() {
+        assertEquals(ClassUtils.getPrimitiveType("boolean"), Boolean.TYPE);
+        assertEquals(ClassUtils.getPrimitiveType("byte"), Byte.TYPE);
+        assertEquals(ClassUtils.getPrimitiveType("short"), Short.TYPE);
+        assertEquals(ClassUtils.getPrimitiveType("int"), Integer.TYPE);
+        assertEquals(ClassUtils.getPrimitiveType("long"), Long.TYPE);
+        assertEquals(ClassUtils.getPrimitiveType("double"), Double.TYPE);
+        assertEquals(ClassUtils.getPrimitiveType("float"), Float.TYPE);
+        assertEquals(ClassUtils.getPrimitiveType("void"), Void.TYPE);
+
+        assertEquals(ClassUtils.getPrimitiveType("boolean", true), Boolean.TYPE);
+        assertEquals(ClassUtils.getPrimitiveType("byte", true), Byte.TYPE);
+        assertEquals(ClassUtils.getPrimitiveType("short", true), Short.TYPE);
+        assertEquals(ClassUtils.getPrimitiveType("int", true), Integer.TYPE);
+        assertEquals(ClassUtils.getPrimitiveType("long", true), Long.TYPE);
+        assertEquals(ClassUtils.getPrimitiveType("double", true), Double.TYPE);
+        assertEquals(ClassUtils.getPrimitiveType("float", true), Float.TYPE);
+        assertEquals(ClassUtils.getPrimitiveType("void", true), Void.TYPE);
+
+        Function<String, Class<?>> fn = null;
+        fn = ClassUtils.getPrimitiveTypeFunction(true);
+        assertEquals(fn.apply("boolean"), Boolean.TYPE);
+        assertEquals(fn.apply("byte"), Byte.TYPE);
+        assertEquals(fn.apply("short"), Short.TYPE);
+        assertEquals(fn.apply("int"), Integer.TYPE);
+        assertEquals(fn.apply("long"), Long.TYPE);
+        assertEquals(fn.apply("double"), Double.TYPE);
+        assertEquals(fn.apply("float"), Float.TYPE);
+        assertEquals(fn.apply("void"), Void.TYPE);
+
+        fn = ClassUtils.getPrimitiveTypeFunction(false);
+        assertEquals(fn.apply("boolean"), Boolean.TYPE);
+        assertEquals(fn.apply("byte"), Byte.TYPE);
+        assertEquals(fn.apply("short"), Short.TYPE);
+        assertEquals(fn.apply("int"), Integer.TYPE);
+        assertEquals(fn.apply("long"), Long.TYPE);
+        assertEquals(fn.apply("double"), Double.TYPE);
+        assertEquals(fn.apply("float"), Float.TYPE);
+        assertEquals(fn.apply("void"), Void.TYPE);
+    }
+
+    @Test
+    void getPrimitiveWrapped() {
+        assertEquals(ClassUtils.getPrimitiveWrapped(Boolean.TYPE), Boolean.class);
+        assertEquals(ClassUtils.getPrimitiveWrapped(Byte.TYPE), Byte.class);
+        assertEquals(ClassUtils.getPrimitiveWrapped(Short.TYPE), Short.class);
+        assertEquals(ClassUtils.getPrimitiveWrapped(Integer.TYPE), Integer.class);
+        assertEquals(ClassUtils.getPrimitiveWrapped(Long.TYPE), Long.class);
+        assertEquals(ClassUtils.getPrimitiveWrapped(Double.TYPE), Double.class);
+        assertEquals(ClassUtils.getPrimitiveWrapped(Float.TYPE), Float.class);
+
+        assertEquals(ClassUtils.getPrimitiveWrapped(Boolean.TYPE, true), Boolean.class);
+        assertEquals(ClassUtils.getPrimitiveWrapped(Byte.TYPE, true), Byte.class);
+        assertEquals(ClassUtils.getPrimitiveWrapped(Short.TYPE, true), Short.class);
+        assertEquals(ClassUtils.getPrimitiveWrapped(Integer.TYPE, true), Integer.class);
+        assertEquals(ClassUtils.getPrimitiveWrapped(Long.TYPE, true), Long.class);
+        assertEquals(ClassUtils.getPrimitiveWrapped(Double.TYPE, true), Double.class);
+        assertEquals(ClassUtils.getPrimitiveWrapped(Float.TYPE, true), Float.class);
+
+        Function<Class<?>, Class<?>> fn = null;
+        fn = ClassUtils.getPrimitiveWrappedFunction(true);
+        assertEquals(fn.apply(Boolean.TYPE), Boolean.class);
+        assertEquals(fn.apply(Byte.TYPE), Byte.class);
+        assertEquals(fn.apply(Short.TYPE), Short.class);
+        assertEquals(fn.apply(Integer.TYPE), Integer.class);
+        assertEquals(fn.apply(Long.TYPE), Long.class);
+        assertEquals(fn.apply(Double.TYPE), Double.class);
+        assertEquals(fn.apply(Float.TYPE), Float.class);
+
+        fn = ClassUtils.getPrimitiveWrappedFunction(false);
+        assertEquals(fn.apply(Boolean.TYPE), Boolean.class);
+        assertEquals(fn.apply(Byte.TYPE), Byte.class);
+        assertEquals(fn.apply(Short.TYPE), Short.class);
+        assertEquals(fn.apply(Integer.TYPE), Integer.class);
+        assertEquals(fn.apply(Long.TYPE), Long.class);
+        assertEquals(fn.apply(Double.TYPE), Double.class);
+        assertEquals(fn.apply(Float.TYPE), Float.class);
+    }
+
+    @Test
+    void getPrimitiveClassValueMethodName() {
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Boolean.TYPE), "booleanValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Boolean.class), "booleanValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Byte.TYPE), "byteValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Byte.class), "byteValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Short.TYPE), "shortValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Short.class), "shortValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Integer.TYPE), "intValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Integer.class), "intValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Long.TYPE), "longValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Long.class), "longValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Double.TYPE), "doubleValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Double.class), "doubleValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Float.TYPE), "floatValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Float.class), "floatValue");
+
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Boolean.TYPE, true), "booleanValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Boolean.class, true), "booleanValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Byte.TYPE, true), "byteValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Byte.class, true), "byteValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Short.TYPE, true), "shortValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Short.class, true), "shortValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Integer.TYPE, true), "intValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Integer.class, true), "intValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Long.TYPE, true), "longValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Long.class, true), "longValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Double.TYPE, true), "doubleValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Double.class, true), "doubleValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Float.TYPE, true), "floatValue");
+        assertEquals(ClassUtils.getPrimitiveClassValueMethodName(Float.class, true), "floatValue");
+
+        Function<Class<?>, String> fn = null;
+        fn = ClassUtils.getPrimitiveClassValueMethodNameFunction(true);
+        assertEquals(fn.apply(Boolean.TYPE), "booleanValue");
+        assertEquals(fn.apply(Boolean.class), "booleanValue");
+        assertEquals(fn.apply(Byte.TYPE), "byteValue");
+        assertEquals(fn.apply(Byte.class), "byteValue");
+        assertEquals(fn.apply(Short.TYPE), "shortValue");
+        assertEquals(fn.apply(Short.class), "shortValue");
+        assertEquals(fn.apply(Integer.TYPE), "intValue");
+        assertEquals(fn.apply(Integer.class), "intValue");
+        assertEquals(fn.apply(Long.TYPE), "longValue");
+        assertEquals(fn.apply(Long.class), "longValue");
+        assertEquals(fn.apply(Double.TYPE), "doubleValue");
+        assertEquals(fn.apply(Double.class), "doubleValue");
+        assertEquals(fn.apply(Float.TYPE), "floatValue");
+        assertEquals(fn.apply(Float.class), "floatValue");
+
+        fn = ClassUtils.getPrimitiveClassValueMethodNameFunction(false);
+        assertEquals(fn.apply(Boolean.TYPE), "booleanValue");
+        assertEquals(fn.apply(Boolean.class), "booleanValue");
+        assertEquals(fn.apply(Byte.TYPE), "byteValue");
+        assertEquals(fn.apply(Byte.class), "byteValue");
+        assertEquals(fn.apply(Short.TYPE), "shortValue");
+        assertEquals(fn.apply(Short.class), "shortValue");
+        assertEquals(fn.apply(Integer.TYPE), "intValue");
+        assertEquals(fn.apply(Integer.class), "intValue");
+        assertEquals(fn.apply(Long.TYPE), "longValue");
+        assertEquals(fn.apply(Long.class), "longValue");
+        assertEquals(fn.apply(Double.TYPE), "doubleValue");
+        assertEquals(fn.apply(Double.class), "doubleValue");
+        assertEquals(fn.apply(Float.TYPE), "floatValue");
+        assertEquals(fn.apply(Float.class), "floatValue");
+    }
+
+    @Test
+    public void isParent() {
         assertTrue(ClassUtils.isParent(Map.class, HashMap.class));
         assertFalse(ClassUtils.isParent(HashMap.class, Map.class));
     }
 
     @Test
-    public void testIsAbstractClass() {
+    public void isAbstractClass() {
         assertTrue(ClassUtils.isAbstractClass(Map.class));
         assertTrue(ClassUtils.isAbstractClass(AbstractList.class));
         assertFalse(ClassUtils.isAbstractClass(ArrayList.class));
     }
 
     @Test
-    public void testIsInstanceClass() {
+    public void isInstanceClass() {
         assertFalse(ClassUtils.isInstanceClass(Map.class));
         assertFalse(ClassUtils.isInstanceClass(AbstractList.class));
         assertTrue(ClassUtils.isInstanceClass(ArrayList.class));
     }
 
     @Test
-    public void testNewInstance() {
+    public void newInstance() {
         List<String> list = new ArrayList<>();
         list.add("ArrayList1");
         User user = ClassUtils.newInstance(User.class, list);
@@ -86,12 +232,12 @@ public class ClassUtilsTest {
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testNewInstance2() {
+    public void newInstance2() {
         ClassUtils.newInstance(null);
     }
 
     @Test
-    public void testInvokeMethod() {
+    public void invokeMethod() {
         String name = "yufei";
         Integer age = 18;
         User user = new User();
@@ -116,7 +262,7 @@ public class ClassUtilsTest {
     }
 
     @Test
-    public void testGetAnnotation() {
+    public void getAnnotation() {
         Bar bar = Coo.class.getAnnotation(Bar.class);
         Foo foo = ClassUtils.getAnnotation(bar, Foo.class);
         assertEquals("test", foo.value());
@@ -124,7 +270,7 @@ public class ClassUtilsTest {
     }
 
     @Test
-    public void testGetter() throws NoSuchMethodException, SecurityException {
+    public void getter() throws NoSuchMethodException, SecurityException {
         Method method = User3.class.getMethod("isUser", new Class[] { String.class });
         assertFalse(ClassUtils.isGetter(method));
 
@@ -138,7 +284,7 @@ public class ClassUtilsTest {
     }
 
     @Test
-    public void testGetSuperClassGenericType() throws NoSuchMethodException, SecurityException {
+    public void getSuperClassGenericType() throws NoSuchMethodException, SecurityException {
         assertEquals(ClassUtils.getSuperClassGenericType(genericType), Integer.class);
         assertEquals(ClassUtils.getSuperClassGenericType(genericType, 1), String.class);
         assertEquals(ClassUtils.getSuperClassGenericType(genericType, 2), Long.class);
@@ -155,7 +301,7 @@ public class ClassUtilsTest {
     }
 
     @Test
-    public void testGetInterfaceGenericType() throws NoSuchMethodException, SecurityException {
+    public void getInterfaceGenericType() throws NoSuchMethodException, SecurityException {
         assertEquals(ClassUtils.getInterfaceGenericType(UserList.class, List.class), User.class);
 
         assertEquals(ClassUtils.getInterfaceGenericType(UserFunction.class, Supplier.class), User.class);
@@ -169,12 +315,12 @@ public class ClassUtilsTest {
     }
 
     @Test
-    public void testGetFieldType() throws NoSuchFieldException, SecurityException, NoSuchMethodException {
+    public void getFieldType() throws NoSuchFieldException, SecurityException, NoSuchMethodException {
         assertEquals(ClassUtils.getFieldType(genericType, "id"), Long.class);
     }
 
     @Test
-    public void testGetFieldGenericParameterType()
+    public void getFieldGenericParameterType()
         throws NoSuchFieldException, SecurityException, NoSuchMethodException {
         assertEquals(ClassUtils.getFieldGenericParameterType(User.class, User.class.getDeclaredField("list")),
             String.class);
@@ -208,7 +354,7 @@ public class ClassUtilsTest {
     }
 
     @Test
-    public void testGetMethodReturnType() {
+    public void getMethodReturnType() {
         assertEquals(ClassUtils.getMethodReturnType(genericType, "get", EMPTY_CLASS_ARRAY), User.class);
         assertEquals(ClassUtils.getMethodReturnType(genericType, "apply", Object.class), String.class);
         assertEquals(ClassUtils.getMethodReturnType(genericType, "getId", EMPTY_CLASS_ARRAY), Long.class);
@@ -225,19 +371,19 @@ public class ClassUtilsTest {
     }
 
     @Test
-    public void testGetMethodReturnType2() {
+    public void getMethodReturnType2() {
         assertEquals(ClassUtils.getMethodReturnType(genericType, "number", EMPTY_CLASS_ARRAY), Number.class);
         assertEquals(ClassUtils.getMethodReturnType(genericType, "number", Number.class), Number.class);
     }
 
     @Test
-    public void testGetMethodReturnTypeGenericParameterType2() {
+    public void getMethodReturnTypeGenericParameterType2() {
         assertEquals(ClassUtils.getMethodReturnTypeGenericParameterType(genericType, "listNumber", EMPTY_CLASS_ARRAY),
             Number.class);
     }
 
     @Test
-    public void testGetMethodReturnTypeGenericParameterType()
+    public void getMethodReturnTypeGenericParameterType()
         throws NoSuchFieldException, SecurityException, NoSuchMethodException {
         assertEquals(ClassUtils.getMethodReturnTypeGenericParameterType(genericType,
             genericType.getMethod("listUser", EMPTY_CLASS_ARRAY)), User.class);
@@ -269,7 +415,7 @@ public class ClassUtilsTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testGetMethodParameterType() throws NoSuchFieldException, SecurityException, NoSuchMethodException {
+    public void getMethodParameterType() throws NoSuchFieldException, SecurityException, NoSuchMethodException {
         //        Method method = ClassUtils.getMethod(genericType, "set", Integer.class, String.class, Long.class);
         Method method = ClassUtils.getMethod(genericType, "set", Object.class, Object.class, Number.class);
         System.out.println(Arrays.toString(method.getParameterTypes()));
@@ -314,7 +460,7 @@ public class ClassUtilsTest {
     }
 
     @Test
-    public void testGetMethodParameterType2() throws NoSuchFieldException, SecurityException, NoSuchMethodException {
+    public void getMethodParameterType2() throws NoSuchFieldException, SecurityException, NoSuchMethodException {
         //        Method method = ClassUtils.getMethod(genericType, "set", Integer.class, String.class, Long.class);
         Method number = ClassUtils.getMethod(genericType, "number", Number.class);
         System.out.println(number);
@@ -323,7 +469,7 @@ public class ClassUtilsTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testGetMethodGenericParameterType()
+    public void getMethodGenericParameterType()
         throws NoSuchFieldException, SecurityException, NoSuchMethodException {
         //        assertEquals(
         //                ClassUtils.getMethodGenericParameterType(genericType, genericType.getMethod("setId", Object.class)),
@@ -359,7 +505,7 @@ public class ClassUtilsTest {
     }
 
     @Test
-    public void testGetMethodGenericParameterType2()
+    public void getMethodGenericParameterType2()
         throws NoSuchFieldException, SecurityException, NoSuchMethodException {
         //        assertEquals(ClassUtils.getMethodGenericReturnType(User.class.getMethod("getList", new Class[0])),
         //                String.class);

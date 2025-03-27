@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Function;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -66,7 +67,7 @@ public final class ClassUtils {
      *
      * <pre>
      * <code>
-     * forName("int") is the same as {@linkplain #forName(String, boolean) forName("int", true)}
+     * forName("int") is the same as {@linkplain #forName(String, boolean) forName("int", false)}
      * </code>
      * </pre>
      *
@@ -74,17 +75,17 @@ public final class ClassUtils {
      * @return 指定类型
      */
     public static Class<?> forName(String className) {
-        return forName(className, true);
+        return forName(className, false);
     }
 
     /**
      * 查找指定类型 .
      *
      * @param className 类名
-     * @param useHashCode use type name hash code for swith key when match primitive type
+     * @param useHashCodeOnly use type name hash code only for swith key when match primitive type
      * @return 指定类型
      */
-    public static Class<?> forName(String className, boolean useHashCode) {
+    public static Class<?> forName(String className, boolean useHashCodeOnly) {
         if (Lang.isEmpty(className)) {
             return null;
         }
@@ -2138,41 +2139,64 @@ public final class ClassUtils {
      * @return the primitive type if match, else null
      */
     public static Class<?> getPrimitiveType(String primitiveTypeName) {
-        return getPrimitiveType(primitiveTypeName, true);
+        return getPrimitiveType(primitiveTypeName, false);
     }
 
     /**
      * Gets the primitive type.
      *
      * @param primitiveTypeName the primitive type name
-     * @param useHashCode use type name hash code for swith key when match primitive type.
-     * @return the primitive type if match, else null
+     * @param useHashCodeOnly use type name hash code for swith key when match primitive type only.
+     *        hash code conflicts may occur.
      */
-    public static Class<?> getPrimitiveType(String primitiveTypeName, boolean useHashCode) {
-        if (useHashCode) {
-            switch (primitiveTypeName.hashCode()) {
-                case TypeNames.BOOL_CODE:
-                    return Boolean.TYPE;
-                case TypeNames.BYTE_CODE:
-                    return Byte.TYPE;
-                case TypeNames.CHAR_CODE:
-                    return Character.TYPE;
-                case TypeNames.SHORT_CODE:
-                    return Short.TYPE;
-                case TypeNames.INT_CODE:
-                    return Integer.TYPE;
-                case TypeNames.LONG_CODE:
-                    return Long.TYPE;
-                case TypeNames.FLOAT_CODE:
-                    return Float.TYPE;
-                case TypeNames.DOUBLE_CODE:
-                    return Double.TYPE;
-                case TypeNames.VOID_CODE:
-                    return Void.TYPE;
-                default:
-                    return null;
-            }
+    public static Class<?> getPrimitiveType(String primitiveTypeName, boolean useHashCodeOnly) {
+        if (useHashCodeOnly) {
+            return getPrimitiveTypeUseHashCodeOnly(primitiveTypeName);
         }
+        return getPrimitiveTypeSwitch(primitiveTypeName);
+    }
+
+    /**
+     * Gets a function for get the primitive type.
+     *
+     * @param primitiveTypeName the primitive type name
+     * @param useHashCodeOnly use type name hash code for swith key when match primitive type only.
+     *        hash code conflicts may occur.
+     * @return the function to get primitive type if match, else null
+     */
+    public static Function<String, Class<?>> getPrimitiveTypeFunction(boolean useHashCodeOnly) {
+        if (useHashCodeOnly) {
+            return ClassUtils::getPrimitiveTypeUseHashCodeOnly;
+        }
+        return ClassUtils::getPrimitiveTypeSwitch;
+    }
+
+    private static Class<?> getPrimitiveTypeUseHashCodeOnly(String primitiveTypeName) {
+        switch (primitiveTypeName.hashCode()) {
+            case TypeNames.BOOL_CODE:
+                return Boolean.TYPE;
+            case TypeNames.BYTE_CODE:
+                return Byte.TYPE;
+            case TypeNames.CHAR_CODE:
+                return Character.TYPE;
+            case TypeNames.SHORT_CODE:
+                return Short.TYPE;
+            case TypeNames.INT_CODE:
+                return Integer.TYPE;
+            case TypeNames.LONG_CODE:
+                return Long.TYPE;
+            case TypeNames.FLOAT_CODE:
+                return Float.TYPE;
+            case TypeNames.DOUBLE_CODE:
+                return Double.TYPE;
+            case TypeNames.VOID_CODE:
+                return Void.TYPE;
+            default:
+                return null;
+        }
+    }
+
+    private static Class<?> getPrimitiveTypeSwitch(String primitiveTypeName) {
         switch (primitiveTypeName) {
             case TypeNames.BOOL_NAME:
                 return Boolean.TYPE;
@@ -2204,62 +2228,64 @@ public final class ClassUtils {
      * @return the primitive wrapped
      */
     public static Class<?> getPrimitiveWrapped(Class<?> type) {
-        if (type.isPrimitive()) {
-            if (type == Boolean.TYPE) {
-                return Boolean.class;
-            } else if (type == Byte.TYPE) {
-                return Byte.class;
-            } else if (type == Integer.TYPE) {
-                return Integer.class;
-            } else if (type == Long.TYPE) {
-                return Long.class;
-            } else if (type == Float.TYPE) {
-                return Float.class;
-            } else if (type == Double.TYPE) {
-                return Double.class;
-            } else if (type == Character.TYPE) {
-                return Character.class;
-            } else if (type == Short.TYPE) {
-                return Short.class;
-            } else if (type == Void.TYPE) {
-                return Void.class;
-            }
-        }
-        return type;
+        return getPrimitiveWrapped(type, false);
     }
 
     /**
      * Gets the primitive wrapped.
      *
      * @param type the type
-     * @param useHashCode use type name hash code for swith key when match primitive type.
+     * @param useHashCodeOnly use type name hash code for swith key when match type only.
+     *        hash code conflicts may occur.
      * @return the primitive wrapped if match, else null
      */
-    public static Class<?> getPrimitiveWrapped(Class<?> type, boolean useHashCode) {
-        if (useHashCode) {
-            switch (type.getName().hashCode()) {
-                case TypeNames.BOOL_CODE:
-                    return Boolean.class;
-                case TypeNames.BYTE_CODE:
-                    return Byte.class;
-                case TypeNames.CHAR_CODE:
-                    return Character.class;
-                case TypeNames.SHORT_CODE:
-                    return Short.class;
-                case TypeNames.INT_CODE:
-                    return Integer.class;
-                case TypeNames.LONG_CODE:
-                    return Long.class;
-                case TypeNames.FLOAT_CODE:
-                    return Float.TYPE;
-                case TypeNames.DOUBLE_CODE:
-                    return Double.class;
-                case TypeNames.VOID_CODE:
-                    return Void.class;
-                default:
-                    return null;
-            }
+    public static Class<?> getPrimitiveWrapped(Class<?> type, boolean useHashCodeOnly) {
+        if (useHashCodeOnly) {
+            return getPrimitiveWrappedUseHashCodeOnly(type);
         }
+        return getPrimitiveWrappedSwitch(type);
+    }
+
+    /**
+     * Gets a function for get the primitive wrapped.
+     *
+     * @param useHashCodeOnly use type name hash code for swith key when match type only.
+     *        hash code conflicts may occur.
+     * @return the function to get primitive type if match, else null
+     */
+    public static Function<Class<?>, Class<?>> getPrimitiveWrappedFunction(boolean useHashCodeOnly) {
+        if (useHashCodeOnly) {
+            return ClassUtils::getPrimitiveWrappedUseHashCodeOnly;
+        }
+        return ClassUtils::getPrimitiveWrappedSwitch;
+    }
+
+    private static Class<?> getPrimitiveWrappedUseHashCodeOnly(Class<?> type) {
+        switch (type.getName().hashCode()) {
+            case TypeNames.BOOL_CODE:
+                return Boolean.class;
+            case TypeNames.BYTE_CODE:
+                return Byte.class;
+            case TypeNames.CHAR_CODE:
+                return Character.class;
+            case TypeNames.SHORT_CODE:
+                return Short.class;
+            case TypeNames.INT_CODE:
+                return Integer.class;
+            case TypeNames.LONG_CODE:
+                return Long.class;
+            case TypeNames.FLOAT_CODE:
+                return Float.class;
+            case TypeNames.DOUBLE_CODE:
+                return Double.class;
+            case TypeNames.VOID_CODE:
+                return Void.class;
+            default:
+                return null;
+        }
+    }
+
+    private static Class<?> getPrimitiveWrappedSwitch(Class<?> type) {
         switch (type.getName()) {
             case TypeNames.BOOL_NAME:
                 return Boolean.class;
@@ -2288,7 +2314,7 @@ public final class ClassUtils {
      * Gets the primitive wrapped.
      *
      * @param type the type
-     * @return the primitive wrapped
+     * @return the primitive class value method name if match, else null
      */
     public static String getPrimitiveClassValueMethodName(Class<?> type) {
         return getPrimitiveClassValueMethodName(type, false);
@@ -2298,40 +2324,63 @@ public final class ClassUtils {
      * Gets the primitive wrapped.
      *
      * @param type the type
-     * @param useHashCode use type name hash code for swith key when match primitive type.
-     * @return the method name if match, else null
+     * @param useHashCodeOnly use type name hash code for swith key when match primitive type only.
+     *        hash code conflicts may occur.
+     * @return the primitive class value method name if match, else null
      */
-    public static String getPrimitiveClassValueMethodName(Class<?> type, boolean useHashCode) {
-        if (useHashCode) {
-            switch (type.getName().hashCode()) {
-                case TypeNames.BOOL_CODE:
-                case TypeNames.BOOLEAN_CODE:
-                    return "booleanValue";
-                case TypeNames.BYTE_CODE:
-                case TypeNames.BYTE_TYPE_CODE:
-                    return "byteValue";
-                case TypeNames.CHAR_CODE:
-                case TypeNames.CHARACTER_CODE:
-                    return "charValue";
-                case TypeNames.SHORT_CODE:
-                case TypeNames.SHORT_TYPE_CODE:
-                    return "shortValue";
-                case TypeNames.INT_CODE:
-                case TypeNames.INTEGER_CODE:
-                    return "intValue";
-                case TypeNames.LONG_CODE:
-                case TypeNames.LONG_TYPE_CODE:
-                    return "longValue";
-                case TypeNames.FLOAT_CODE:
-                case TypeNames.FLOAT_TYPE_CODE:
-                    return "floatValue";
-                case TypeNames.DOUBLE_CODE:
-                case TypeNames.DOUBLE_TYPE_CODE:
-                    return "doubleValue";
-                default:
-                    return null;
-            }
+    public static String getPrimitiveClassValueMethodName(Class<?> type, boolean useHashCodeOnly) {
+        if (useHashCodeOnly) {
+            return getPrimitiveClassValueMethodNameUseHashCodeOnly(type);
         }
+        return getPrimitiveClassValueMethodNameSwitch(type);
+    }
+
+    /**
+     * Gets the primitive class value method name function.
+     *
+     * @param useHashCodeOnly use type name hash code for swith key when match primitive type only.
+     *        hash code conflicts may occur.
+     * @return the function to get primitive class value method name
+     */
+    public static Function<Class<?>, String> getPrimitiveClassValueMethodNameFunction(boolean useHashCodeOnly) {
+        if (useHashCodeOnly) {
+            return ClassUtils::getPrimitiveClassValueMethodNameUseHashCodeOnly;
+        }
+        return ClassUtils::getPrimitiveClassValueMethodNameSwitch;
+    }
+
+    private static String getPrimitiveClassValueMethodNameUseHashCodeOnly(Class<?> type) {
+        switch (type.getName().hashCode()) {
+            case TypeNames.BOOL_CODE:
+            case TypeNames.BOOLEAN_CODE:
+                return "booleanValue";
+            case TypeNames.BYTE_CODE:
+            case TypeNames.BYTE_TYPE_CODE:
+                return "byteValue";
+            case TypeNames.CHAR_CODE:
+            case TypeNames.CHARACTER_CODE:
+                return "charValue";
+            case TypeNames.SHORT_CODE:
+            case TypeNames.SHORT_TYPE_CODE:
+                return "shortValue";
+            case TypeNames.INT_CODE:
+            case TypeNames.INTEGER_CODE:
+                return "intValue";
+            case TypeNames.LONG_CODE:
+            case TypeNames.LONG_TYPE_CODE:
+                return "longValue";
+            case TypeNames.FLOAT_CODE:
+            case TypeNames.FLOAT_TYPE_CODE:
+                return "floatValue";
+            case TypeNames.DOUBLE_CODE:
+            case TypeNames.DOUBLE_TYPE_CODE:
+                return "doubleValue";
+            default:
+                return null;
+        }
+    }
+
+    private static String getPrimitiveClassValueMethodNameSwitch(Class<?> type) {
         switch (type.getName()) {
             case TypeNames.BOOL_NAME:
             case TypeNames.BOOLEAN_NAME:

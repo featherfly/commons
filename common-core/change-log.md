@@ -12,6 +12,7 @@
 9. ChainMap加入set(K,V), set(Map)方法（功能和putChain,putAllChain方法一样）
 9. ClassUtils加入getPrimitiveType方法，forName方法支持基本类型(primitive type)
 11. 加入TreeUtils，可以从任意父子关系对象集合构建树形结构
+12. ClassUtils加入isRecord用于在jdk8的源码判断jdk16的record
 
 # 1.14.0 2025-02-13
 

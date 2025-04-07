@@ -714,6 +714,21 @@ public final class ClassUtils {
     }
 
     /**
+     * 是否是record类.
+     *
+     * @param type 类型
+     * @return 是否是map接口，及其子接口或实现类
+     */
+    public static boolean isRecord(Class<?> type) {
+        Class<?> parent = type.getSuperclass();
+        if (parent == null) {
+            return false;
+        }
+        return "java.lang.Record".equals(parent.getName())
+            && Modifier.isFinal(type.getModifiers());
+    }
+
+    /**
      * 判断传入类型是否是抽象类 .
      *
      * @param type type
@@ -2148,6 +2163,7 @@ public final class ClassUtils {
      * @param primitiveTypeName the primitive type name
      * @param useHashCodeOnly use type name hash code for swith key when match primitive type only.
      *        hash code conflicts may occur.
+     * @return the primitive type
      */
     public static Class<?> getPrimitiveType(String primitiveTypeName, boolean useHashCodeOnly) {
         if (useHashCodeOnly) {
@@ -2159,7 +2175,6 @@ public final class ClassUtils {
     /**
      * Gets a function for get the primitive type.
      *
-     * @param primitiveTypeName the primitive type name
      * @param useHashCodeOnly use type name hash code for swith key when match primitive type only.
      *        hash code conflicts may occur.
      * @return the function to get primitive type if match, else null

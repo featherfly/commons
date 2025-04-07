@@ -118,7 +118,7 @@ public final class Lang {
      * @param <T> the generic type
      * @param pickedItems the picked items
      * @return 最后一个非空的对象
-     * @deprecated use {@link #ifNotNullLast(Iterable)} instead
+     * @deprecated use {@link #ifNotNullLast(Object...)} instead
      */
     @Deprecated
     public static <T> T pickLast(@SuppressWarnings("unchecked") T... pickedItems) {
@@ -1254,7 +1254,7 @@ public final class Lang {
      *
      * @param o the o
      * @return hash code
-     * @see Object#hashCode
+     * @see Object#hashCode()
      */
     public static int hashCode(Object o) {
         return o != null ? o.hashCode() : 0;
@@ -1632,10 +1632,10 @@ public final class Lang {
     /**
      * craete new list.
      *
-     * @see {@link CollectionUtils#list(Object...)}
      * @param <E> the element type
      * @param elements the elements
      * @return the list
+     * @see CollectionUtils#list(Object...)
      */
     public static <E> List<E> list(@SuppressWarnings("unchecked") E... elements) {
         return CollectionUtils.list(elements);
@@ -1644,10 +1644,10 @@ public final class Lang {
     /**
      * create new set.
      *
-     * @see {@link CollectionUtils#set(Object...)}
      * @param <E> the element type
      * @param elements the elements
      * @return the set
+     * @see CollectionUtils#set(Object...)
      */
     public static <E> Set<E> set(@SuppressWarnings("unchecked") E... elements) {
         return CollectionUtils.set(elements);
@@ -1656,12 +1656,12 @@ public final class Lang {
     /**
      * create new map.
      *
-     * @see {@link CollectionUtils#map(Object, Object)}
      * @param <K> the key type
      * @param <V> the value type
      * @param key the key
      * @param value the value
      * @return the map
+     * @see CollectionUtils#map(Object, Object)
      */
     public static <K, V> ChainMap<K, V> map(K key, V value) {
         return CollectionUtils.map(key, value);

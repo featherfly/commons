@@ -229,6 +229,7 @@ public final class BitMask {
     /**
      * The Interface Bit.
      *
+     * @author zhongj
      * @param <V> the value type
      */
     public interface Bit<V extends Number> {
@@ -245,7 +246,6 @@ public final class BitMask {
          * toggle bit, and return the new state.
          *
          * @param index the index
-         * @return true, if successful
          */
         void toggle(int index);
 

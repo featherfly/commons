@@ -124,6 +124,7 @@ public final class ArrayUtils {
     /**
      * 返回数组是否为空（是null或是空数组）.
      *
+     * @param <E> the element type
      * @param array the array
      * @return 传入数组是否为空
      */

@@ -2,8 +2,10 @@
 package cn.featherfly.common.bean;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
@@ -61,24 +63,39 @@ public class BeanDescriptor<T> extends AbstractPropertyAccessor<T> {
      */
     protected BeanDescriptor(Class<T> type) {
         this.type = type;
-
         initTypeGenericParam(this.type);
-        int index = 0;
-        index = this.initFromField(this.type, index);
-        this.initFromMethod(this.type, index);
+        if (ClassUtils.isRecord(type)) {
+            initRecord(this.type);
+        } else {
+            int index = 0;
+            index = this.initFromField(this.type, index);
+            this.initFromMethod(this.type, index);
+        }
     }
 
     /**
-     * <p>
-     * 初始化泛型参数
-     * </p>
-     * .
+     * 初始化泛型参数.
      *
      * @param type type
      */
     protected void initTypeGenericParam(Class<T> type) {
         // 得到泛型父类
         typeGenericParams = ClassUtils.getSuperClassGenericTypeMap(type);
+    }
+
+    private void initRecord(Class<T> initType) {
+        Constructor<?> constructor = initType.getConstructors()[0];
+        int index = 0;
+        for (Parameter parameter : constructor.getParameters()) {
+            // record 始终能拿到参数名
+            Method getter = ClassUtils.getMethod(initType, parameter.getName());
+            Field field = ClassUtils.getField(initType, parameter.getName());
+            BeanProperty<T, ?> prop =
+                FACTORY.create(index, parameter.getName(), field, field.getType(), null, getter, initType,
+                    initType);
+            beanProperties.put(prop.getName(), prop);
+            index++;
+        }
     }
 
     // 从field开始初始化

@@ -14,6 +14,7 @@ package cn.featherfly.common.lang.reflect;
  * Type.
  *
  * @author zhongj
+ * @param <T> the generic type
  */
 public interface Type<T> extends java.lang.reflect.Type {
     /**
@@ -22,4 +23,12 @@ public interface Type<T> extends java.lang.reflect.Type {
      * @return type
      */
     Class<T> getType();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default String getTypeName() {
+        return getType().getName();
+    }
 }

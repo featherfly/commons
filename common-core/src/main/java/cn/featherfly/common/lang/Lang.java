@@ -20,6 +20,7 @@ import java.util.function.Supplier;
 
 import org.apache.commons.lang3.StringUtils;
 
+import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.exception.ExceptionWrapper;
 import cn.featherfly.common.exception.IOException;
 import cn.featherfly.common.structure.ChainMap;
@@ -1268,17 +1269,20 @@ public final class Lang {
      * @return string
      */
     public static String toString(Object obj, String defaultValue) {
-        return obj != null ? obj.toString() : defaultValue;
+        if (obj == null) {
+            return defaultValue;
+        }
+        return ArrayUtils.toString(obj);
     }
 
     /**
-     * 转换为String，如果不能转换（null）则返回null .
+     * 转换为String，如果不能转换（null）则返回空字符串.
      *
      * @param obj the obj
      * @return string
      */
     public static String toString(Object obj) {
-        return toString(obj, null);
+        return toString(obj, Chars.EMPTY_STR);
     }
 
     /**

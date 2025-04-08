@@ -226,9 +226,8 @@ public final class ArrayUtils {
         if (array == null) {
             return Chars.EMPTY_STR;
         }
-        StringBuilder sb = new StringBuilder();
-        Class<?> type = array.getClass();
-        if (type.isArray()) {
+        if (array.getClass().isArray()) {
+            StringBuilder sb = new StringBuilder();
             sb.append(Chars.BRACK_L);
             StringBuilder result = new StringBuilder();
             for (int i = 0; i < Array.getLength(array); i++) {
@@ -244,10 +243,10 @@ public final class ArrayUtils {
                 result.deleteCharAt(result.length() - 1);
             }
             sb.append(result.toString()).append(Chars.BRACK_R);
+            return sb.toString();
         } else {
-            sb.append(array.toString());
+            return array.toString();
         }
-        return sb.toString();
     }
 
     /**

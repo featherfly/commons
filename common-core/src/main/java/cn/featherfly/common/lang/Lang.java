@@ -1184,22 +1184,24 @@ public final class Lang {
      * @return 转换后的枚举，如果是无法转换或不存在的枚举类型，则返回null
      */
     public static <T extends Enum<T>> T toEnum0(Class<T> toClass, Object object) {
-        if (object != null) {
-            if (object instanceof Enum) {
-                return toEnum(toClass, (Enum<?>) object);
-            } else if (object instanceof String) {
-                return toEnum(toClass, (String) object);
-            } else if (object instanceof Integer || object.getClass() == int.class) {
-                return toEnum(toClass, (Integer) object);
-            } else if (object instanceof String[]) {
-                return toEnum(toClass, ((String[]) object)[0]);
-            } else if (object instanceof Byte || object.getClass() == byte.class) {
-                Byte ordinal = (Byte) object;
-                return toEnum(toClass, Integer.valueOf(ordinal));
-            } else if (object instanceof Short || object.getClass() == short.class) {
-                Short ordinal = (Short) object;
-                return toEnum(toClass, Integer.valueOf(ordinal));
-            }
+        if (object == null) {
+            return null;
+        }
+        Class<?> type = object.getClass();
+        if (type.isEnum()) {
+            return toEnum(toClass, (Enum<?>) object);
+        } else if (type == String.class) {
+            return toEnum(toClass, (String) object);
+        } else if (type == Integer.class || type == int.class) {
+            return toEnum(toClass, (Integer) object);
+        } else if (type == String[].class) {
+            return toEnum(toClass, (String[]) object);
+        } else if (type == Byte.class || type == byte.class) {
+            Byte ordinal = (Byte) object;
+            return toEnum(toClass, Integer.valueOf(ordinal));
+        } else if (type == Short.class || type == short.class) {
+            Short ordinal = (Short) object;
+            return toEnum(toClass, Integer.valueOf(ordinal));
         }
         return null;
     }
@@ -1214,19 +1216,23 @@ public final class Lang {
     }
 
     private static <T extends Enum<T>> T toEnum(Class<T> toClass, String value) {
+        value = value.trim();
+        if (Lang.isEmpty(value)) {
+            return null;
+        }
         if (StringUtils.isNumeric(value)) {
             int ordinal = Integer.parseInt(value);
             return toEnum(toClass, ordinal);
         } else {
             return Enum.valueOf(toClass, value);
         }
-        // 优化逻辑，try catch 性能不行
-        //        try {
-        //            int ordinal = Integer.parseInt(value);
-        //            return toEnum(toClass, ordinal);
-        //        } catch (NumberFormatException e) {
-        //            return Enum.valueOf(toClass, value);
-        //        }
+    }
+
+    private static <T extends Enum<T>> T toEnum(Class<T> toClass, String[] value) {
+        if (Lang.isEmpty(value)) {
+            return null;
+        }
+        return toEnum(toClass, value[0]);
     }
 
     private static <T extends Enum<T>> T toEnum(Class<T> toClass, Integer ordinal) {

@@ -11,10 +11,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * <p>
- * 对一些在语法上显得拖沓的常用操作进行封装的工具类
- * </p>
- * .
+ * 对一些在语法上显得拖沓的常用操作进行封装的工具类.
  *
  * @author zhongj
  * @version 1.0
@@ -36,8 +33,8 @@ public final class LangUtils {
      * </p>
      * .
      *
-     * @param <T>           泛型
-     * @param target        目标参数
+     * @param <T> 泛型
+     * @param target 目标参数
      * @param defaultTarget 默认值
      * @return 第一个参数为空(null），返回第二个参数，否则返回第一个参数
      */
@@ -51,20 +48,13 @@ public final class LangUtils {
      * <p>
      * .
      *
-     * @param <T>         泛型
+     * @param <T> 泛型
      * @param pickedItems 需要选择的对象
      * @return 第一个非空的对象
      */
     @SafeVarargs
     public static <T> T pickFirst(T... pickedItems) {
-        if (pickedItems != null) {
-            for (T t : pickedItems) {
-                if (t != null) {
-                    return t;
-                }
-            }
-        }
-        return null;
+        return Lang.pickFirst(pickedItems);
     }
 
     /**
@@ -73,21 +63,13 @@ public final class LangUtils {
      * </p>
      * .
      *
-     * @param <T>         泛型
+     * @param <T> 泛型
      * @param pickedItems 需要选择的对象
      * @return 最后一个非空的对象
      */
     @SafeVarargs
     public static <T> T pickLast(T... pickedItems) {
-        if (pickedItems != null) {
-            for (int i = pickedItems.length - 1; i >= 0; i--) {
-                T t = pickedItems[i];
-                if (t != null) {
-                    return t;
-                }
-            }
-        }
-        return null;
+        return Lang.pickLast(pickedItems);
     }
 
     /**
@@ -134,10 +116,10 @@ public final class LangUtils {
     /**
      * ifTrue.
      *
-     * @param <O>     the generic type
-     * @param <R>     the generic type
-     * @param bool    bool
-     * @param isTrue  exec when bool is true
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param bool bool
+     * @param isTrue exec when bool is true
      * @param isFalse exec when bool is false
      * @return obj
      */
@@ -152,11 +134,11 @@ public final class LangUtils {
     /**
      * ifTrue.
      *
-     * @param <O>     the generic type
-     * @param <R>     the generic type
-     * @param bool    bool
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param bool bool
      * @param isFalse exec when bool is false
-     * @param isTrue  exec when bool is true
+     * @param isTrue exec when bool is true
      * @return obj
      */
     public static <O, R> R ifFalse(boolean bool, Supplier<R> isFalse, Supplier<R> isTrue) {
@@ -173,10 +155,10 @@ public final class LangUtils {
      * </p>
      * .
      *
-     * @param <O>      the generic type
-     * @param <R>      the generic type
-     * @param object   传入的对象
-     * @param empty    exec when empty
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object 传入的对象
+     * @param empty exec when empty
      * @param notEmpty exec when not empty
      * @return object
      */
@@ -194,10 +176,10 @@ public final class LangUtils {
      * </p>
      * .
      *
-     * @param <O>      the generic type
-     * @param <R>      the generic type
-     * @param object   传入的对象
-     * @param empty    exec when empty
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object 传入的对象
+     * @param empty exec when empty
      * @param notEmpty exec when not empty
      * @return object
      */
@@ -215,8 +197,8 @@ public final class LangUtils {
      * </p>
      * .
      *
-     * @param <O>      the generic type
-     * @param object   传入的对象
+     * @param <O> the generic type
+     * @param object 传入的对象
      * @param consumer 需要执行的方法
      */
     public static <O> void ifNotEmpty(O object, Consumer<O> consumer) {
@@ -231,11 +213,11 @@ public final class LangUtils {
      * </p>
      * .
      *
-     * @param <O>      the generic type
-     * @param <R>      the generic type
-     * @param object   传入的对象
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object 传入的对象
      * @param notEmpty 需要执行的方法
-     * @param empty    the empty
+     * @param empty the empty
      * @return object
      */
     public static <O, R> R ifNotEmpty(O object, Supplier<R> notEmpty, Supplier<R> empty) {
@@ -252,11 +234,11 @@ public final class LangUtils {
      * </p>
      * .
      *
-     * @param <O>      the generic type
-     * @param <R>      the generic type
-     * @param object   传入的对象
+     * @param <O> the generic type
+     * @param <R> the generic type
+     * @param object 传入的对象
      * @param notEmpty 需要执行的方法
-     * @param empty    the empty
+     * @param empty the empty
      * @return object
      */
     public static <O, R> R ifNotEmpty(O object, Function<O, R> notEmpty, Supplier<R> empty) {
@@ -517,7 +499,7 @@ public final class LangUtils {
      * </p>
      * .
      *
-     * @param file     判断的文件
+     * @param file 判断的文件
      * @param consumer 需要执行的方法
      */
     public static void ifExists(File file, Consumer<File> consumer) {
@@ -532,9 +514,9 @@ public final class LangUtils {
      * </p>
      * .
      *
-     * @param <R>       the generic type
-     * @param file      判断的文件
-     * @param exists    exec when exists
+     * @param <R> the generic type
+     * @param file 判断的文件
+     * @param exists exec when exists
      * @param notExists exec when not exists
      * @return obj
      */
@@ -552,7 +534,7 @@ public final class LangUtils {
      * </p>
      * .
      *
-     * @param file     判断的文件
+     * @param file 判断的文件
      * @param consumer 需要执行的方法
      */
     public static void ifNotExists(File file, Consumer<File> consumer) {
@@ -567,10 +549,10 @@ public final class LangUtils {
      * </p>
      * .
      *
-     * @param <R>       the generic type
-     * @param file      判断的文件
+     * @param <R> the generic type
+     * @param file 判断的文件
      * @param notExists exec when not exists
-     * @param exists    exec when exists
+     * @param exists exec when exists
      * @return obj
      */
     public static <R> R ifNotExists(File file, Function<File, R> notExists, Function<File, R> exists) {
@@ -587,8 +569,8 @@ public final class LangUtils {
      * </p>
      * .
      *
-     * @param <R>      the generic type
-     * @param file     判断的文件
+     * @param <R> the generic type
+     * @param file 判断的文件
      * @param supplier 需要执行的方法
      * @return obj
      */
@@ -600,69 +582,15 @@ public final class LangUtils {
     }
 
     /**
-     * <p>
-     * 将传入对象转换为枚举
-     * </p>
-     * .
+     * 将传入对象转换为枚举.
      *
-     * @param <T>     泛型
+     * @param <T> 泛型
      * @param toClass 枚举的类型
-     * @param object  需要转换的对象
+     * @param object 需要转换的对象
      * @return 转换后的枚举，如果是无法转换或不存在的枚举类型，则返回null
      */
     public static <T extends Enum<T>> T toEnum(Class<T> toClass, Object object) {
-        if (object != null) {
-            if (object instanceof String[]) {
-                return toEnum(toClass, ((String[]) object)[0]);
-            } else if (object instanceof String) {
-                return toEnum(toClass, (String) object);
-            } else if (object instanceof Integer || object.getClass() == int.class) {
-                Integer ordinal = (Integer) object;
-                return toEnum(toClass, ordinal);
-            } else if (object instanceof Byte || object.getClass() == byte.class) {
-                Byte ordinal = (Byte) object;
-                return toEnum(toClass, new Integer(ordinal));
-            } else if (object instanceof Short || object.getClass() == short.class) {
-                Short ordinal = (Short) object;
-                return toEnum(toClass, new Integer(ordinal));
-            }
-        }
-        return null;
-    }
-
-    /**
-     * To enum.
-     *
-     * @param <T>     the generic type
-     * @param toClass the to class
-     * @param value   the value
-     * @return the t
-     */
-    private static <T extends Enum<T>> T toEnum(Class<T> toClass, String value) {
-        try {
-            int ordinal = Integer.parseInt(value);
-            return toEnum(toClass, ordinal);
-        } catch (NumberFormatException e) {
-            return Enum.valueOf(toClass, value);
-        }
-    }
-
-    /**
-     * To enum.
-     *
-     * @param <T>     the generic type
-     * @param toClass the to class
-     * @param ordinal the ordinal
-     * @return the t
-     */
-    private static <T extends Enum<T>> T toEnum(Class<T> toClass, Integer ordinal) {
-        T[] es = toClass.getEnumConstants();
-        for (T e : es) {
-            if (e.ordinal() == ordinal) {
-                return e;
-            }
-        }
-        return null;
+        return Lang.toEnum(toClass, object);
     }
 
     /**
@@ -671,7 +599,7 @@ public final class LangUtils {
      * </p>
      * .
      *
-     * @param target      比较对象
+     * @param target 比较对象
      * @param otherTarget 另一个比较对象
      * @return 比较结果
      */
@@ -696,7 +624,7 @@ public final class LangUtils {
      * </p>
      * .
      *
-     * @param obj          obj
+     * @param obj obj
      * @param defaultValue defaultValue
      * @return string
      */
@@ -730,7 +658,7 @@ public final class LangUtils {
         int i = 0;
         for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()) {
             if (stackTraceElement.getClassName().equals(Lang.class.getName())
-                    && stackTraceElement.getMethodName().equals(methodName)) {
+                && stackTraceElement.getMethodName().equals(methodName)) {
                 return Thread.currentThread().getStackTrace()[i + 2];
             }
             i++;
@@ -753,7 +681,7 @@ public final class LangUtils {
         int i = 0;
         for (StackTraceElement stackTraceElement : stackTraceElements) {
             if (stackTraceElement.getClassName().equals(Lang.class.getName())
-                    && stackTraceElement.getMethodName().equals(methodName)) {
+                && stackTraceElement.getMethodName().equals(methodName)) {
                 for (int j = i + 2; j < stackTraceElements.length; j++) {
                     invokers.add(stackTraceElements[j]);
                 }
@@ -763,75 +691,4 @@ public final class LangUtils {
         }
         return invokers;
     }
-
-    //    /**
-    //     * <p>
-    //     * 获取调用getInvoker方法所在的方法被调用的信息（即调用方法、类等）
-    //     * </p>
-    //     *
-    //     * @return StackTraceElement
-    //     */
-    //    public static StackTraceElement getInvokerAll() {
-    //        final String methodName = "getInvokerAll";
-    //        for (Entry<Thread, StackTraceElement[]> entry : Thread.getAllStackTraces().entrySet()) {
-    //            StackTraceElement[] stackTraceElements = entry.getValue();
-    //            boolean findThis = false;
-    //            boolean findInvokeThis = false;
-    //            boolean findInvokor = false;
-    //            for (StackTraceElement stackTraceElement : stackTraceElements) {
-    //                if (findThis) {
-    //                    findInvokeThis = true;
-    //                    findThis = false;
-    //                }
-    //                if (stackTraceElement.getClassName().equals(Lang.class.getName())
-    //                        && stackTraceElement.getMethodName().equals(methodName)) {
-    //                    findThis = true;
-    //                }
-    //                if (findInvokor) {
-    //                    return stackTraceElement;
-    //                }
-    //                if (findInvokeThis) {
-    //                    findInvokeThis = false;
-    //                    findInvokor = true;
-    //                }
-    //            }
-    //        }
-    //        return null;
-    //    }
-    //
-    //    /**
-    //     * <p>
-    //     * 获取调用此方法的调用方法栈
-    //     * </p>
-    //     *
-    //     * @return List&lt;StackTraceElement&gt;
-    //     */
-    //    public static List<StackTraceElement> getInvokersAll() {
-    //        final String methodName = "getInvokersAll";
-    //        List<StackTraceElement> invokers = new ArrayList<>();
-    //        for (Entry<Thread, StackTraceElement[]> entry : Thread.getAllStackTraces().entrySet()) {
-    //            StackTraceElement[] stackTraceElements = entry.getValue();
-    //            boolean findThis = false;
-    //            boolean findInvokeThis = false;
-    //            boolean findInvokor = false;
-    //            for (StackTraceElement stackTraceElement : stackTraceElements) {
-    //                if (findThis) {
-    //                    findInvokeThis = true;
-    //                    findThis = false;
-    //                }
-    //                if (stackTraceElement.getClassName().equals(Lang.class.getName())
-    //                        && stackTraceElement.getMethodName().equals(methodName)) {
-    //                    findThis = true;
-    //                }
-    //                if (findInvokor) {
-    //                    invokers.add(stackTraceElement);
-    //                }
-    //                if (findInvokeThis) {
-    //                    findInvokeThis = false;
-    //                    findInvokor = true;
-    //                }
-    //            }
-    //        }
-    //        return invokers;
-    //    }
 }

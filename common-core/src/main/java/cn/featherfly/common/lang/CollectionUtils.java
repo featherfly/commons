@@ -618,7 +618,7 @@ public final class CollectionUtils {
         if (map == null) {
             return;
         }
-        Lang.each(map.entrySet(), consumer);
+        each(map.entrySet(), consumer);
     }
 
     /**

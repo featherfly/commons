@@ -1,6 +1,6 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
-# 1.15.0
+# 1.15.0 2025-05-27
 1. Str加入一系列方法
 2. ArrayUtils加入getLength,get方法
 3. CollectionUtils加入each(Map<K, V> map, ObjIntConsumer<Entry<K, V>> consumer)
@@ -14,6 +14,7 @@
 11. 加入TreeUtils，可以从任意父子关系对象集合构建树形结构
 12. ClassUtils加入isRecord用于在jdk8的源码判断jdk16的record
 13. Lang的toString方法加入数组的支持（与Collection相同逻辑）
+14. CollectionUtils加入返回创建list|set|queue|map的构造器的方法
 
 # 1.14.0 2025-02-13
 

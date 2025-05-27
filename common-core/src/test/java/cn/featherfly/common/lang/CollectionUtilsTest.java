@@ -112,6 +112,26 @@ public class CollectionUtilsTest {
     }
 
     @Test
+    public void listCreator() {
+        List<?> list = null;
+
+        list = CollectionUtils.listCreator(List.class).get();
+        assertTrue(list instanceof ArrayList);
+
+        list = CollectionUtils.listCreator(ArrayList.class).get();
+        assertTrue(list instanceof ArrayList);
+
+        list = CollectionUtils.listCreator(LinkedList.class).get();
+        assertTrue(list instanceof LinkedList);
+
+        list = CollectionUtils.listCreator(Vector.class).get();
+        assertTrue(list instanceof Vector);
+
+        list = CollectionUtils.listCreator(MyStringList.class).get();
+        assertTrue(list instanceof MyStringList);
+    }
+
+    @Test
     public void newList() {
         List<String> list = null;
 
@@ -134,6 +154,35 @@ public class CollectionUtilsTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void newListException() {
         CollectionUtils.newList(Map.class);
+    }
+
+    @Test
+    public void setCreator() {
+        Set<?> set = null;
+
+        set = CollectionUtils.setCreator(Set.class).get();
+        assertTrue(set instanceof HashSet);
+
+        set = CollectionUtils.setCreator(HashSet.class).get();
+        assertTrue(set instanceof HashSet);
+
+        set = CollectionUtils.setCreator(LinkedHashSet.class).get();
+        assertTrue(set instanceof LinkedHashSet);
+
+        set = CollectionUtils.setCreator(SortedSet.class).get();
+        assertTrue(set instanceof TreeSet);
+
+        set = CollectionUtils.setCreator(NavigableSet.class).get();
+        assertTrue(set instanceof TreeSet);
+
+        set = CollectionUtils.setCreator(TreeSet.class).get();
+        assertTrue(set instanceof TreeSet);
+
+        set = CollectionUtils.setCreator(ConcurrentSkipListSet.class).get();
+        assertTrue(set instanceof ConcurrentSkipListSet);
+
+        set = CollectionUtils.setCreator(MyStringSet.class).get();
+        assertTrue(set instanceof MyStringSet);
     }
 
     @Test
@@ -168,6 +217,26 @@ public class CollectionUtilsTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void newSetException() {
         CollectionUtils.newSet(Map.class);
+    }
+
+    @Test
+    public void queueCreator() {
+        Queue<?> queue = null;
+
+        queue = CollectionUtils.queueCreator(Queue.class).get();
+        assertTrue(queue instanceof ArrayDeque);
+
+        queue = CollectionUtils.queueCreator(Deque.class).get();
+        assertTrue(queue instanceof ArrayDeque);
+
+        queue = CollectionUtils.queueCreator(ConcurrentLinkedQueue.class).get();
+        assertTrue(queue instanceof ConcurrentLinkedQueue);
+
+        queue = CollectionUtils.queueCreator(ConcurrentLinkedDeque.class).get();
+        assertTrue(queue instanceof ConcurrentLinkedDeque);
+
+        queue = CollectionUtils.queueCreator(MyStringQueue.class).get();
+        assertTrue(queue instanceof MyStringQueue);
     }
 
     @Test

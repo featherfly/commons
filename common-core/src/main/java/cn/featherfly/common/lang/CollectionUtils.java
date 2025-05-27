@@ -25,6 +25,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.function.Function;
 import java.util.function.ObjIntConsumer;
+import java.util.function.Supplier;
 
 import cn.featherfly.common.structure.ChainMap;
 import cn.featherfly.common.structure.ChainMapImpl;
@@ -445,6 +446,46 @@ public final class CollectionUtils {
     }
 
     /**
+     * get List creator with type argument.
+     * 根据传入类型创建List创建者.
+     *
+     * @param <E> type of List value
+     * @param type List type
+     * @return List creator
+     */
+    @SuppressWarnings("unchecked")
+    public static <E> Supplier<List<E>> listCreator(Class<?> type) {
+        return listCreator(type, t -> (List<E>) ClassUtils.newInstance(t));
+    }
+
+    /**
+     * get List creator with type argument.
+     * 根据传入类型创建List创建者.
+     *
+     * @param <E> type of List value
+     * @param type List type
+     * @param creator if method can not get a List creator use this to create
+     * @return List creator
+     */
+    public static <E> Supplier<List<E>> listCreator(Class<?> type, Function<Class<?>, List<E>> creator) {
+        AssertIllegalArgument.isParent(List.class, type);
+        switch (type.getName()) {
+            case "java.util.List":
+            case "java.util.ArrayList":
+                return () -> new ArrayList<>();
+            case "java.util.LinkedList":
+                return () -> new LinkedList<>();
+            case "java.util.Vector":
+                return () -> new Vector<>();
+            default:
+                if (ClassUtils.isInstanceClass(type)) {
+                    return () -> creator.apply(type);
+                }
+                throw new IllegalArgumentException("unsupport type：" + type.getName());
+        }
+    }
+
+    /**
      * create Set with type argument.
      * 根据传入类型创建Set实例.
      *
@@ -492,6 +533,53 @@ public final class CollectionUtils {
     }
 
     /**
+     * get Set creator with type argument.
+     * 根据传入类型创建Set创建者.
+     *
+     * @param <E> type of Set value
+     * @param type Set type
+     * @return Set creator
+     */
+    @SuppressWarnings("unchecked")
+    public static <E> Supplier<Set<E>> setCreator(Class<?> type) {
+        return setCreator(type, t -> (Set<E>) ClassUtils.newInstance(t));
+    }
+
+    /**
+     * get Set creator with type argument.
+     * 根据传入类型创建Set创建者.
+     *
+     * @param <E> type of Set value
+     * @param type Set type
+     * @param creator if method can not get a Set creator use this to create
+     * @return Set creator
+     */
+    public static <E> Supplier<Set<E>> setCreator(Class<?> type, Function<Class<?>, Set<E>> creator) {
+        AssertIllegalArgument.isParent(Set.class, type);
+        switch (type.getName()) {
+            case "java.util.Set":
+            case "java.util.HashSet":
+                return () -> new HashSet<>();
+
+            case "java.util.LinkedHashSet":
+                return () -> new LinkedHashSet<>();
+
+            case "java.util.SortedSet":
+            case "java.util.NavigableSet":
+            case "java.util.TreeSet":
+                return () -> new TreeSet<>();
+
+            case "java.util.concurrent.ConcurrentSkipListSet":
+                return () -> new ConcurrentSkipListSet<>();
+            default:
+                if (ClassUtils.isInstanceClass(type)) {
+                    return () -> creator.apply(type);
+                }
+                throw new IllegalArgumentException("unsupport type：" + type.getName());
+        }
+    }
+
+    /**
      * create Queue with type argument.
      * 根据传入类型创建Queue实例.
      *
@@ -529,6 +617,49 @@ public final class CollectionUtils {
             default:
                 if (ClassUtils.isInstanceClass(type)) {
                     return creator.apply(type);
+                }
+                throw new IllegalArgumentException("unsupport type：" + type.getName());
+        }
+    }
+
+    /**
+     * get Queue creator with type argument.
+     * 根据传入类型创建Queue创建者.
+     *
+     * @param <E> type of Queue value
+     * @param type Queue type
+     * @return Queue creator
+     */
+    @SuppressWarnings("unchecked")
+    public static <E> Supplier<Queue<E>> queueCreator(Class<?> type) {
+        return queueCreator(type, t -> (Queue<E>) ClassUtils.newInstance(t));
+    }
+
+    /**
+     * get Queue creator with type argument.
+     * 根据传入类型创建List创建者.
+     *
+     * @param <E> type of Queue value
+     * @param type Queue type
+     * @param creator if method can not get a Queue creator use this to create
+     * @return Queue creator
+     */
+    public static <E> Supplier<Queue<E>> queueCreator(Class<?> type, Function<Class<?>, Queue<E>> creator) {
+        AssertIllegalArgument.isParent(Queue.class, type);
+        switch (type.getName()) {
+            case "java.util.Queue":
+            case "java.util.Deque":
+                return () -> new ArrayDeque<>();
+
+            case "java.util.concurrent.ConcurrentLinkedQueue":
+                return () -> new ConcurrentLinkedQueue<>();
+
+            case "java.util.concurrent.ConcurrentLinkedDeque":
+                return () -> new ConcurrentLinkedDeque<>();
+
+            default:
+                if (ClassUtils.isInstanceClass(type)) {
+                    return () -> creator.apply(type);
                 }
                 throw new IllegalArgumentException("unsupport type：" + type.getName());
         }
@@ -585,6 +716,59 @@ public final class CollectionUtils {
                 }
                 throw new IllegalArgumentException("unsupport type：" + type.getName());
             // throw new IllegalArgumentException("不支持的类型：" + type.getName());
+        }
+    }
+
+    /**
+     * get Map creator with type argument.
+     * 根据传入类型创建Map创建者.
+     *
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param type Map type
+     * @return Map creator
+     */
+    @SuppressWarnings("unchecked")
+    public static <K, V> Supplier<Map<K, V>> mapCreator(Class<?> type) {
+        return mapCreator(type, t -> (Map<K, V>) ClassUtils.newInstance(t));
+    }
+
+    /**
+     * get Map creator with type argument.
+     * 根据传入类型创建List创建者.
+     *
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param type Map type
+     * @param creator if method can not get a Map creator use this to create
+     * @return Map creator
+     */
+    public static <K, V> Supplier<Map<K, V>> mapCreator(Class<?> type, Function<Class<?>, Map<K, V>> creator) {
+        AssertIllegalArgument.isParent(Map.class, type);
+        switch (type.getName()) {
+            case "java.util.Map":
+            case "java.util.HashMap":
+                return () -> new HashMap<>();
+
+            case "java.util.LinkedHashMap":
+                return () -> new LinkedHashMap<>();
+
+            case "java.util.NavigableMap":
+            case "java.util.TreeMap":
+                return () -> new TreeMap<>();
+
+            case "java.util.concurrent.ConcurrentMap":
+            case "java.util.concurrent.ConcurrentHashMap":
+                return () -> new ConcurrentHashMap<>();
+
+            case "java.util.concurrent.ConcurrentNavigableMap":
+            case "java.util.concurrent.ConcurrentSkipListMap":
+                return () -> new ConcurrentSkipListMap<>();
+            default:
+                if (ClassUtils.isInstanceClass(type)) {
+                    return () -> creator.apply(type);
+                }
+                throw new IllegalArgumentException("unsupport type：" + type.getName());
         }
     }
 

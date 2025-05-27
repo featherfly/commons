@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.serialization.Serialization;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -328,7 +328,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
                 return readed;
             } else {
                 throw new HttpErrorResponseException(
-                    Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
+                    Str.format("{0} error, code {1}, message {2}", request.url(), response.code(),
                         response.message()),
                     new HttpResponse(response.code(), response.body().bytes(),
                         HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
@@ -376,7 +376,6 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
         switch (httpMethod) {
             case GET:
                 throw new HttpException("http get method can not send request body");
-            //                return get(url, new HashMap<>(), headers);
             case POST:
                 return stream(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
                     .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());

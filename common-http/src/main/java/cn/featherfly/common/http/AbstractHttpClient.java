@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.serialization.Serialization;
 import cn.featherfly.common.serialization.SerializationException;
 import cn.featherfly.common.serialization.SerializationExceptionCode;
@@ -27,7 +27,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * http client.
+ * abstract http client.
  *
  * @author zhongj
  */
@@ -65,7 +65,7 @@ public abstract class AbstractHttpClient {
     /**
      * Instantiates a new http client.
      */
-    public AbstractHttpClient() {
+    protected AbstractHttpClient() {
         this(new HashMap<>());
     }
 
@@ -74,7 +74,7 @@ public abstract class AbstractHttpClient {
      *
      * @param config the config
      */
-    public AbstractHttpClient(HttpRequestConfig config) {
+    protected AbstractHttpClient(HttpRequestConfig config) {
         this(config, null);
     }
 
@@ -83,7 +83,7 @@ public abstract class AbstractHttpClient {
      *
      * @param headers the headers
      */
-    public AbstractHttpClient(Map<String, String> headers) {
+    protected AbstractHttpClient(Map<String, String> headers) {
         this(new HttpRequestConfig(), headers);
     }
 
@@ -93,7 +93,7 @@ public abstract class AbstractHttpClient {
      * @param config the config
      * @param headers the headers
      */
-    public AbstractHttpClient(HttpRequestConfig config, Map<String, String> headers) {
+    protected AbstractHttpClient(HttpRequestConfig config, Map<String, String> headers) {
         this(config, null, null);
     }
 
@@ -104,7 +104,7 @@ public abstract class AbstractHttpClient {
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public AbstractHttpClient(HttpRequestConfig config, Serialization serialization, MediaType mediaType) {
+    protected AbstractHttpClient(HttpRequestConfig config, Serialization serialization, MediaType mediaType) {
         this(config, null, serialization, mediaType);
     }
 
@@ -116,7 +116,7 @@ public abstract class AbstractHttpClient {
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public AbstractHttpClient(HttpRequestConfig config, Map<String, String> headers, Serialization serialization,
+    protected AbstractHttpClient(HttpRequestConfig config, Map<String, String> headers, Serialization serialization,
         MediaType mediaType) {
         init(config, headers, serialization, mediaType);
     }
@@ -127,7 +127,7 @@ public abstract class AbstractHttpClient {
      * @param client the client
      * @param headers the headers
      */
-    public AbstractHttpClient(OkHttpClient client, Map<String, String> headers) {
+    protected AbstractHttpClient(OkHttpClient client, Map<String, String> headers) {
         this(client, null, null);
     }
 
@@ -138,7 +138,7 @@ public abstract class AbstractHttpClient {
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public AbstractHttpClient(OkHttpClient client, Serialization serialization, MediaType mediaType) {
+    protected AbstractHttpClient(OkHttpClient client, Serialization serialization, MediaType mediaType) {
         this(client, null, serialization, mediaType);
     }
 
@@ -150,7 +150,7 @@ public abstract class AbstractHttpClient {
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public AbstractHttpClient(OkHttpClient client, Map<String, String> headers, Serialization serialization,
+    protected AbstractHttpClient(OkHttpClient client, Map<String, String> headers, Serialization serialization,
         MediaType mediaType) {
         init(client, headers, serialization, mediaType);
     }
@@ -427,7 +427,7 @@ public abstract class AbstractHttpClient {
                 return response;
             } else {
                 throw new HttpErrorResponseException(
-                    Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
+                    Str.format("{0} error, code {1}, message {2}", request.url(), response.code(),
                         response.message()),
                     new HttpResponse(response.code(), response.body().bytes(),
                         HttpUtils.headersToMap(response.headers()), deserializeWithContentType,

@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.serialization.Serialization;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -345,7 +345,7 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
                     completion.setResponse(readed);
                 } else {
                     completion.setHttpErrorResponse(new HttpErrorResponse(
-                        Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
+                        Str.format("{0} error, code {1}, message {2}", request.url(), response.code(),
                             response.message()),
                         new HttpResponse(response.code(), response.body().bytes(),
                             HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
@@ -374,7 +374,7 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
                     completion.setResponse(response.body().string());
                 } else {
                     completion.setHttpErrorResponse(new HttpErrorResponse(
-                        Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
+                        Str.format("{0} error, code {1}, message {2}", request.url(), response.code(),
                             response.message()),
                         new HttpResponse(response.code(), response.body().bytes(),
                             HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
@@ -400,7 +400,7 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
                     completion.setResponse(deserialize(response, responseType));
                 } else {
                     completion.setHttpErrorResponse(new HttpErrorResponse(
-                        Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
+                        Str.format("{0} error, code {1}, message {2}", request.url(), response.code(),
                             response.message()),
                         new HttpResponse(response.code(), response.body().bytes(),
                             HttpUtils.headersToMap(response.headers()), deserializeWithContentType,

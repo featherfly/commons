@@ -41,12 +41,12 @@ configurations {
 dependencies {
 	//implementation project(":common-core")
 	//api project(":common-serialization")
-	api 'cn.featherfly.common:common-serialization:0.3.0'
+	api 'cn.featherfly.common:common-serialization:0.4.0'
 	
     api 'com.squareup.okhttp3:okhttp:3.14.9'
     
     //api group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.20'
-    api group: 'io.reactivex.rxjava3', name: 'rxjava', version: '3.1.5'
+    api group: 'io.reactivex.rxjava3', name: 'rxjava', version: '3.1.10'
     
     
     testImplementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"

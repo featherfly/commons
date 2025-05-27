@@ -18,11 +18,11 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 /**
- * Http.
+ * http utils.
  *
  * @author zhongj
  */
-public class HttpUtils {
+public final class HttpUtils {
 
     /** The Constant STREAM_CONTENT_TYPE. */
     public static final String STREAM_CONTENT_TYPE = "application/octet-stream";
@@ -60,15 +60,8 @@ public class HttpUtils {
     /** The Constant PROTOBUFF_MEDIA_TYPE. */
     public static final MediaType PROTOBUFF_MEDIA_TYPE = MediaType.parse(PROTOBUFF_CONTENT_TYPE);
 
-    //    /**
-    //     * Gets the content type.
-    //     *
-    //     * @param response the response
-    //     * @return the content type
-    //     */
-    //    public static MediaType getContentType(Response response) {
-    //        return MediaType.parse(response.header("Content-Type", HTML_CONTENT_TYPE));
-    //    }
+    private HttpUtils() {
+    }
 
     /**
      * Creates the form body.
@@ -89,6 +82,35 @@ public class HttpUtils {
     }
 
     /**
+     * Creates the multipart body.
+     *
+     * @param params the params
+     * @return the multipart body
+     */
+    public static MultipartBody createMultipartBody(Map<String, Serializable> params) {
+        MultipartBody.Builder multiparBuilder = new MultipartBody.Builder();
+        for (Map.Entry<String, Serializable> entry : params.entrySet()) {
+            Serializable value = entry.getValue();
+            if (value instanceof UploadFile) {
+                UploadFile uploadFile = (UploadFile) value;
+                try {
+                    multiparBuilder.addFormDataPart(entry.getKey(),
+                        URL.encodeURL(uploadFile.getFilename()),
+                        RequestBody.create(MediaType.parse(uploadFile.getMediaType()),
+                            uploadFile.getContent()));
+                } catch (AlgorithmException e) {
+                    multiparBuilder.addFormDataPart(entry.getKey(), uploadFile.getFilename(),
+                        RequestBody.create(MediaType.parse(uploadFile.getMediaType()),
+                            uploadFile.getContent()));
+                }
+            } else {
+                multiparBuilder.addFormDataPart(entry.getKey(), value.toString());
+            }
+        }
+        return multiparBuilder.build();
+    }
+
+    /**
      * Creates the request body, support upload file.
      *
      * @param params the params
@@ -103,56 +125,14 @@ public class HttpUtils {
                     break;
                 }
             }
-
-            if (isMultipar) {
-                MultipartBody.Builder multiparBuilder = new MultipartBody.Builder();
-                if (Lang.isNotEmpty(params)) {
-                    for (Map.Entry<String, Serializable> entry : params.entrySet()) {
-                        Serializable value = entry.getValue();
-                        if (value != null) {
-                            if (value instanceof UploadFile) {
-                                UploadFile uploadFile = (UploadFile) value;
-                                try {
-                                    multiparBuilder.addFormDataPart(entry.getKey(),
-                                            URL.encodeURL(uploadFile.getFilename()),
-                                            RequestBody.create(MediaType.parse(uploadFile.getMediaType()),
-                                                    uploadFile.getContent()));
-                                } catch (AlgorithmException e) {
-                                    multiparBuilder.addFormDataPart(entry.getKey(), uploadFile.getFilename(),
-                                            RequestBody.create(MediaType.parse(uploadFile.getMediaType()),
-                                                    uploadFile.getContent()));
-                                }
-                            } else {
-                                multiparBuilder.addFormDataPart(entry.getKey(), value.toString());
-                            }
-                        }
-                    }
-                }
-                return multiparBuilder.build();
-            }
         }
+
+        if (isMultipar) {
+            return createMultipartBody(params);
+        }
+
         return createFormBody(params);
     }
-
-    //    /**
-    //     * Creates the multipart body.
-    //     *
-    //     * @param params the params
-    //     * @return the form body
-    //     */
-    //    public static MultipartBody createMultipartBody(Map<String, UploadFile> uploadFiles) {
-    //        MultipartBody.Builder builder = new MultipartBody.Builder();
-    //        if (Lang.isNotEmpty(uploadFiles)) {
-    //            for (Map.Entry<String, UploadFile> entry : uploadFiles.entrySet()) {
-    //                if (entry.getValue() != null) {
-    //                    UploadFile uploadFile = entry.getValue();
-    //                    builder.addFormDataPart(entry.getKey(), uploadFile.getFilename(),
-    //                            RequestBody.create(MediaType.parse(uploadFile.getMediaType()), uploadFile.getContent()));
-    //                }
-    //            }
-    //        }
-    //        return builder.build();
-    //    }
 
     /**
      * Headers to map.
@@ -185,7 +165,7 @@ public class HttpUtils {
     /**
      * Creates the headers.
      *
-     * @param headers        the headers
+     * @param headers the headers
      * @param defaultHeaders the default headers
      * @return the headers
      */
@@ -222,8 +202,8 @@ public class HttpUtils {
     /**
      * Append param.
      *
-     * @param url   the url
-     * @param name  the name
+     * @param url the url
+     * @param name the name
      * @param value the value
      * @return the url string with param
      */
@@ -243,7 +223,7 @@ public class HttpUtils {
     /**
      * Append param.
      *
-     * @param url    the url
+     * @param url the url
      * @param params the params
      * @return the url string with params
      */

@@ -20,6 +20,9 @@ public final class HttpAsync {
     //        Runtime.getRuntime().addShutdownHook(new Thread(() -> CLIENT.shutdown()));
     //    }
 
+    /**
+     * Instantiates a new http async.
+     */
     private HttpAsync() {
     }
 

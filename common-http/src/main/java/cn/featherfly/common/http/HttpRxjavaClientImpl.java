@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.serialization.Serialization;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -362,7 +362,7 @@ public class HttpRxjavaClientImpl extends AbstractHttpClient implements HttpRxja
                         emitter.onNext(readed);
                     } else {
                         emitter.onError(new HttpErrorResponseException(
-                            Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
+                            Str.format("{0} error, code {1}, message {2}", request.url(), response.code(),
                                 response.message()),
                             new HttpResponse(response.code(), response.body().bytes(),
                                 HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
@@ -396,7 +396,7 @@ public class HttpRxjavaClientImpl extends AbstractHttpClient implements HttpRxja
                         emitter.onNext(response.body().string());
                     } else {
                         emitter.onError(new HttpErrorResponseException(
-                            Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
+                            Str.format("{0} error, code {1}, message {2}", request.url(), response.code(),
                                 response.message()),
                             new HttpResponse(response.code(), response.body().bytes(),
                                 HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
@@ -426,7 +426,7 @@ public class HttpRxjavaClientImpl extends AbstractHttpClient implements HttpRxja
                         emitter.onNext(deserialize(response, responseType));
                     } else {
                         emitter.onError(new HttpErrorResponseException(
-                            Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
+                            Str.format("{0} error, code {1}, message {2}", request.url(), response.code(),
                                 response.message()),
                             new HttpResponse(response.code(), response.body().bytes(),
                                 HttpUtils.headersToMap(response.headers()), deserializeWithContentType,

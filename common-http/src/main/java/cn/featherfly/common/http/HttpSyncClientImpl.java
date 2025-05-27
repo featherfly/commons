@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.serialization.Serialization;
@@ -307,16 +308,24 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
      * {@inheritDoc}
      */
     @Override
-    public Integer download(String url, Map<String, Serializable> params, Map<String, String> headers,
-        OutputStream output) {
+    public Long download(String url, Map<String, Serializable> params, Map<String, String> headers,
+        OutputStream output, BiConsumer<Long, Long> progress) {
         Request request = new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
             .get().build();
         try {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
-                byte[] bs = response.body().bytes();
-                output.write(bs);
-                return bs.length;
+                byte[] bs = new byte[downloadProgressPerSize];
+                InputStream is = response.body().byteStream();
+                long total = response.body().contentLength();
+                int len = -1;
+                long readed = 0;
+                while ((len = is.read(bs)) != -1) {
+                    readed += len;
+                    progress.accept(readed, total);
+                    output.write(bs, 0, len);
+                }
+                return readed;
             } else {
                 throw new HttpErrorResponseException(
                     Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),

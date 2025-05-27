@@ -21,14 +21,14 @@ import io.reactivex.rxjava3.core.Observable;
  *
  * @author zhongj
  */
-public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDownloadClient<Observable<Integer>> {
+public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDownloadClient<Observable<Long>> {
 
     /**
      * request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
      * @param responseType the response type
      * @return the http request completion
      */
@@ -39,31 +39,31 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return the http request completion
      */
     default <R> Observable<R> request(HttpMethod httpMethod, String url, Map<String, Serializable> params,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return request(httpMethod, url, params, new HashMap<>(), responseType);
     }
 
     /**
      * request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return the http request completion
      */
     default <R> Observable<R> request(HttpMethod httpMethod, String url, Map<String, Serializable> params,
-            Map<String, String> headers, Class<R> responseType) {
+        Map<String, String> headers, Class<R> responseType) {
         switch (httpMethod) {
             case GET:
                 return get(url, params, headers, responseType);
@@ -85,10 +85,10 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * Post requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the response type
      * @return the http request completion
      */
@@ -99,16 +99,16 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * Post requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the response type
      * @return the http request completion
      */
     default <R> Observable<R> request(HttpMethod httpMethod, String url, Object requestBody,
-            Map<String, String> headers, Class<R> responseType) {
+        Map<String, String> headers, Class<R> responseType) {
         switch (httpMethod) {
             case GET:
                 throw new HttpException("http get method can not send request body");
@@ -132,8 +132,8 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * get request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
+     * @param <R> the generic type
+     * @param url the url
      * @param responseType the response type
      * @return the http request completion
      */
@@ -144,9 +144,9 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * get request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return the http request completion
      */
@@ -157,21 +157,21 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * get request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return the http request completion
      */
     <R> Observable<R> get(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType);
+        Class<R> responseType);
 
     /**
      * head request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
+     * @param <R> the generic type
+     * @param url the url
      * @param responseType the response type
      * @return the http request completion
      */
@@ -182,9 +182,9 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * head request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return the http request completion
      */
@@ -195,22 +195,22 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * head request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return the http request completion
      */
     <R> Observable<R> head(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType);
+        Class<R> responseType);
 
     /**
      * Post params with FormBody and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return response string
      */
@@ -221,22 +221,22 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * Post params with FormBody and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return response string
      */
     <R> Observable<R> post(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType);
+        Class<R> responseType);
 
     /**
      * Post requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the response type
      * @return the http request completion
      */
@@ -247,10 +247,10 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * Post requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the response type
      * @return the http request completion
      */
@@ -259,9 +259,9 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * Put params with FormBody.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return the http request completion
      */
@@ -272,9 +272,9 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * Put requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the responset type
      * @return the http request completion
      */
@@ -285,10 +285,10 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * Put requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the responset type
      * @return the http request completion
      */
@@ -297,22 +297,22 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * Put params with FormBody.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return the http request completion
      */
     <R> Observable<R> put(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType);
+        Class<R> responseType);
 
     /**
      * patch request params with FormBody.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return the http request completion
      */
@@ -323,22 +323,22 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * patch request params with FormBody.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return the http request completion
      */
     <R> Observable<R> patch(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType);
+        Class<R> responseType);
 
     /**
      * patch request requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the responset type
      * @return the http request completion
      */
@@ -349,10 +349,10 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * patch request requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the responset type
      * @return the http request completion
      */
@@ -361,8 +361,8 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * Delete request and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
+     * @param <R> the generic type
+     * @param url the url
      * @param responseType the response type
      * @return response string
      */
@@ -373,9 +373,9 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * Delete request and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param headers the headers
      * @param responseType the response type
      * @return response string
      */
@@ -384,9 +384,9 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * Delete requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the response type
      * @return the http request completion
      */
@@ -397,10 +397,10 @@ public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDo
     /**
      * Delete requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the response type
      * @return the http request completion
      */

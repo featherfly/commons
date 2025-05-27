@@ -1,3 +1,7 @@
+# 0.7.2 2025-05-27
+1. download方法加入下载进度回调参数的重载方法
+2. 删除HttpClientImpl
+
 # 0.7.1 2022-12-02
 1. 加入HttpClients缺少的方法
 2. 抽取HttpSyncClient,HttpAsyncClient,HttpRxjavaClient接口

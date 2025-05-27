@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import io.reactivex.rxjava3.core.Observable;
 
@@ -65,7 +66,7 @@ public final class HttpRxjava {
     /**
      * Gets the observable.
      *
-     * @param url    the url
+     * @param url the url
      * @param params the params
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#get(java.lang.String,
@@ -78,8 +79,8 @@ public final class HttpRxjava {
     /**
      * Gets the observable.
      *
-     * @param url     the url
-     * @param params  the params
+     * @param url the url
+     * @param params the params
      * @param headers the headers
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#get(java.lang.String,
@@ -92,8 +93,8 @@ public final class HttpRxjava {
     /**
      * Gets the observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
+     * @param <R> the generic type
+     * @param url the url
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#get(java.lang.String,
@@ -106,9 +107,9 @@ public final class HttpRxjava {
     /**
      * Gets the observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#get(java.lang.String,
@@ -121,17 +122,17 @@ public final class HttpRxjava {
     /**
      * Gets the observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#get(java.lang.String,
      *      java.util.Map, java.util.Map, java.lang.Class)
      */
     public static <R> Observable<R> get(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return CLIENT.get(url, params, headers, responseType);
     }
 
@@ -149,7 +150,7 @@ public final class HttpRxjava {
     /**
      * Head observable.
      *
-     * @param url    the url
+     * @param url the url
      * @param params the params
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#head(java.lang.String,
@@ -162,8 +163,8 @@ public final class HttpRxjava {
     /**
      * Head observable.
      *
-     * @param url     the url
-     * @param params  the params
+     * @param url the url
+     * @param params the params
      * @param headers the headers
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#head(java.lang.String,
@@ -176,8 +177,8 @@ public final class HttpRxjava {
     /**
      * Head observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
+     * @param <R> the generic type
+     * @param url the url
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#head(java.lang.String,
@@ -190,9 +191,9 @@ public final class HttpRxjava {
     /**
      * Head observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#head(java.lang.String,
@@ -205,17 +206,17 @@ public final class HttpRxjava {
     /**
      * Head observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#head(java.lang.String,
      *      java.util.Map, java.util.Map, java.lang.Class)
      */
     public static <R> Observable<R> head(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return CLIENT.head(url, params, headers, responseType);
     }
 
@@ -233,7 +234,7 @@ public final class HttpRxjava {
     /**
      * Post observable.
      *
-     * @param url    the url
+     * @param url the url
      * @param params the params
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#post(java.lang.String,
@@ -246,8 +247,8 @@ public final class HttpRxjava {
     /**
      * Post observable.
      *
-     * @param url     the url
-     * @param params  the params
+     * @param url the url
+     * @param params the params
      * @param headers the headers
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#post(java.lang.String,
@@ -260,9 +261,9 @@ public final class HttpRxjava {
     /**
      * Post observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#post(java.lang.String,
@@ -275,24 +276,24 @@ public final class HttpRxjava {
     /**
      * Post observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#post(java.lang.String,
      *      java.util.Map, java.util.Map, java.lang.Class)
      */
     public static <R> Observable<R> post(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return CLIENT.post(url, params, headers, responseType);
     }
 
     /**
      * Post observable.
      *
-     * @param url         the url
+     * @param url the url
      * @param requestBody the request body
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#post(java.lang.String,
@@ -305,9 +306,9 @@ public final class HttpRxjava {
     /**
      * Post observable.
      *
-     * @param url         the url
+     * @param url the url
      * @param requestBody the request body
-     * @param headers     the headers
+     * @param headers the headers
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#post(java.lang.String,
      *      java.lang.Object, java.util.Map)
@@ -319,9 +320,9 @@ public final class HttpRxjava {
     /**
      * Post observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#post(java.lang.String,
@@ -334,17 +335,17 @@ public final class HttpRxjava {
     /**
      * Post observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#post(java.lang.String,
      *      java.lang.Object, java.util.Map, java.lang.Class)
      */
     public static <R> Observable<R> post(String url, Object requestBody, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return CLIENT.post(url, requestBody, headers, responseType);
     }
 
@@ -362,7 +363,7 @@ public final class HttpRxjava {
     /**
      * Put observable.
      *
-     * @param url    the url
+     * @param url the url
      * @param params the params
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#put(java.lang.String,
@@ -375,8 +376,8 @@ public final class HttpRxjava {
     /**
      * Put observable.
      *
-     * @param url     the url
-     * @param params  the params
+     * @param url the url
+     * @param params the params
      * @param headers the headers
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#put(java.lang.String,
@@ -389,9 +390,9 @@ public final class HttpRxjava {
     /**
      * Put observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#put(java.lang.String,
@@ -404,24 +405,24 @@ public final class HttpRxjava {
     /**
      * Put observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#put(java.lang.String,
      *      java.util.Map, java.util.Map, java.lang.Class)
      */
     public static <R> Observable<R> put(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return CLIENT.put(url, params, headers, responseType);
     }
 
     /**
      * Put observable.
      *
-     * @param url         the url
+     * @param url the url
      * @param requestBody the request body
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#put(java.lang.String,
@@ -434,9 +435,9 @@ public final class HttpRxjava {
     /**
      * Put observable.
      *
-     * @param url         the url
+     * @param url the url
      * @param requestBody the request body
-     * @param headers     the headers
+     * @param headers the headers
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#put(java.lang.String,
      *      java.lang.Object, java.util.Map)
@@ -448,9 +449,9 @@ public final class HttpRxjava {
     /**
      * Put observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#put(java.lang.String,
@@ -463,17 +464,17 @@ public final class HttpRxjava {
     /**
      * Put observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#put(java.lang.String,
      *      java.lang.Object, java.util.Map, java.lang.Class)
      */
     public static <R> Observable<R> put(String url, Object requestBody, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return CLIENT.put(url, requestBody, headers, responseType);
     }
 
@@ -491,7 +492,7 @@ public final class HttpRxjava {
     /**
      * Patch observable.
      *
-     * @param url    the url
+     * @param url the url
      * @param params the params
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#patch(java.lang.String,
@@ -504,8 +505,8 @@ public final class HttpRxjava {
     /**
      * Patch observable.
      *
-     * @param url     the url
-     * @param params  the params
+     * @param url the url
+     * @param params the params
      * @param headers the headers
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#patch(java.lang.String,
@@ -518,9 +519,9 @@ public final class HttpRxjava {
     /**
      * Patch observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#patch(java.lang.String,
@@ -533,24 +534,24 @@ public final class HttpRxjava {
     /**
      * Patch observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#patch(java.lang.String,
      *      java.util.Map, java.util.Map, java.lang.Class)
      */
     public static <R> Observable<R> patch(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return CLIENT.patch(url, params, headers, responseType);
     }
 
     /**
      * Patch observable.
      *
-     * @param url         the url
+     * @param url the url
      * @param requestBody the request body
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#patch(java.lang.String,
@@ -563,9 +564,9 @@ public final class HttpRxjava {
     /**
      * Patch observable.
      *
-     * @param url         the url
+     * @param url the url
      * @param requestBody the request body
-     * @param headers     the headers
+     * @param headers the headers
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#patch(java.lang.String,
      *      java.lang.Object, java.util.Map)
@@ -577,9 +578,9 @@ public final class HttpRxjava {
     /**
      * Patch observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#patch(java.lang.String,
@@ -592,17 +593,17 @@ public final class HttpRxjava {
     /**
      * Patch observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#patch(java.lang.String,
      *      java.lang.Object, java.util.Map, java.lang.Class)
      */
     public static <R> Observable<R> patch(String url, Object requestBody, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return CLIENT.patch(url, requestBody, headers, responseType);
     }
 
@@ -620,7 +621,7 @@ public final class HttpRxjava {
     /**
      * Delete observable.
      *
-     * @param url     the url
+     * @param url the url
      * @param headers the headers
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#delete(java.lang.String,
@@ -633,8 +634,8 @@ public final class HttpRxjava {
     /**
      * Delete observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
+     * @param <R> the generic type
+     * @param url the url
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#delete(java.lang.String,
@@ -647,9 +648,9 @@ public final class HttpRxjava {
     /**
      * Delete observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param headers the headers
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#delete(java.lang.String,
@@ -662,7 +663,7 @@ public final class HttpRxjava {
     /**
      * Delete observable.
      *
-     * @param url         the url
+     * @param url the url
      * @param requestBody the request body
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#delete(java.lang.String,
@@ -675,9 +676,9 @@ public final class HttpRxjava {
     /**
      * Delete observable.
      *
-     * @param url         the url
+     * @param url the url
      * @param requestBody the request body
-     * @param headers     the headers
+     * @param headers the headers
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#delete(java.lang.String,
      *      java.lang.Object, java.util.Map)
@@ -689,9 +690,9 @@ public final class HttpRxjava {
     /**
      * Delete observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#delete(java.lang.String,
@@ -704,17 +705,17 @@ public final class HttpRxjava {
     /**
      * Delete observable.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#delete(java.lang.String,
      *      java.lang.Object, java.util.Map, java.lang.Class)
      */
     public static <R> Observable<R> delete(String url, Object requestBody, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return CLIENT.delete(url, requestBody, headers, responseType);
     }
 
@@ -722,7 +723,7 @@ public final class HttpRxjava {
      * Request observable.
      *
      * @param httpMethod the http method
-     * @param url        the url
+     * @param url the url
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String)
@@ -735,8 +736,8 @@ public final class HttpRxjava {
      * Request observable.
      *
      * @param httpMethod the http method
-     * @param url        the url
-     * @param params     the params
+     * @param url the url
+     * @param params the params
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.util.Map)
@@ -749,24 +750,24 @@ public final class HttpRxjava {
      * Request observable.
      *
      * @param httpMethod the http method
-     * @param url        the url
-     * @param params     the params
-     * @param headers    the headers
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.util.Map, java.util.Map)
      */
     public static Observable<String> request(HttpMethod httpMethod, String url, Map<String, Serializable> params,
-            Map<String, String> headers) {
+        Map<String, String> headers) {
         return CLIENT.request(httpMethod, url, params, headers);
     }
 
     /**
      * Request observable.
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#request(cn.featherfly.common.http.HttpMethod,
@@ -779,43 +780,43 @@ public final class HttpRxjava {
     /**
      * Request observable.
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.util.Map, java.lang.Class)
      */
     public static <R> Observable<R> request(HttpMethod httpMethod, String url, Map<String, Serializable> params,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return CLIENT.request(httpMethod, url, params, responseType);
     }
 
     /**
      * Request observable.
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.util.Map, java.util.Map, java.lang.Class)
      */
     public static <R> Observable<R> request(HttpMethod httpMethod, String url, Map<String, Serializable> params,
-            Map<String, String> headers, Class<R> responseType) {
+        Map<String, String> headers, Class<R> responseType) {
         return CLIENT.request(httpMethod, url, params, headers, responseType);
     }
 
     /**
      * Request observable.
      *
-     * @param httpMethod  the http method
-     * @param url         the url
+     * @param httpMethod the http method
+     * @param url the url
      * @param requestBody the request body
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#request(cn.featherfly.common.http.HttpMethod,
@@ -828,138 +829,231 @@ public final class HttpRxjava {
     /**
      * Request observable.
      *
-     * @param httpMethod  the http method
-     * @param url         the url
+     * @param httpMethod the http method
+     * @param url the url
      * @param requestBody the request body
-     * @param headers     the headers
+     * @param headers the headers
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.lang.Object, java.util.Map)
      */
     public static Observable<String> request(HttpMethod httpMethod, String url, Object requestBody,
-            Map<String, String> headers) {
+        Map<String, String> headers) {
         return CLIENT.request(httpMethod, url, requestBody, headers);
     }
 
     /**
      * Request observable.
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.lang.Object, java.lang.Class)
      */
     public static <R> Observable<R> request(HttpMethod httpMethod, String url, Object requestBody,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return CLIENT.request(httpMethod, url, requestBody, responseType);
     }
 
     /**
      * Request observable.
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the response type
      * @return the observable
      * @see cn.featherfly.common.http.HttpSyncClientImpl#request(cn.featherfly.common.http.HttpMethod,
      *      java.lang.String, java.lang.Object, java.util.Map, java.lang.Class)
      */
     public static <R> Observable<R> request(HttpMethod httpMethod, String url, Object requestBody,
-            Map<String, String> headers, Class<R> responseType) {
+        Map<String, String> headers, Class<R> responseType) {
         return CLIENT.request(httpMethod, url, requestBody, headers, responseType);
     }
 
     /**
      * Download.
      *
-     * @param url    the url
+     * @param url the url
      * @param output the output
      * @return the observable
      * @see cn.featherfly.common.http.HttpRxjavaClientImpl#download(java.lang.String,
      *      java.io.OutputStream)
      */
-    public static Observable<Integer> download(String url, OutputStream output) {
+    public static Observable<Long> download(String url, OutputStream output) {
         return CLIENT.download(url, output);
     }
 
     /**
      * Download.
      *
-     * @param url       the url
+     * @param url the url
+     * @param output the output
+     * @param progress the progress
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClientImpl#download(java.lang.String,
+     *      java.io.OutputStream, BiConsumer)
+     */
+    public static Observable<Long> download(String url, OutputStream output, BiConsumer<Long, Long> progress) {
+        return CLIENT.download(url, output, progress);
+    }
+
+    /**
+     * Download.
+     *
+     * @param url the url
      * @param localFile the local file
      * @return the observable
      * @see cn.featherfly.common.http.HttpRxjavaClientImpl#download(java.lang.String,
      *      java.io.File)
      */
-    public static Observable<Integer> download(String url, File localFile) {
+    public static Observable<Long> download(String url, File localFile) {
         return CLIENT.download(url, localFile);
     }
 
     /**
      * Download.
      *
-     * @param url    the url
+     * @param url the url
+     * @param localFile the local file
+     * @param progress the progress
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClientImpl#download(java.lang.String,
+     *      java.io.File, BiConsumer)
+     */
+    public static Observable<Long> download(String url, File localFile, BiConsumer<Long, Long> progress) {
+        return CLIENT.download(url, localFile, progress);
+    }
+
+    /**
+     * Download.
+     *
+     * @param url the url
      * @param params the params
      * @param output the output
      * @return the observable
      * @see cn.featherfly.common.http.HttpRxjavaClientImpl#download(java.lang.String,
      *      java.util.Map, java.io.OutputStream)
      */
-    public static Observable<Integer> download(String url, Map<String, Serializable> params, OutputStream output) {
+    public static Observable<Long> download(String url, Map<String, Serializable> params, OutputStream output) {
         return CLIENT.download(url, params, output);
     }
 
     /**
      * Download.
      *
-     * @param url       the url
-     * @param params    the params
+     * @param url the url
+     * @param params the params
+     * @param output the output
+     * @param progress the progress
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClientImpl#download(java.lang.String,
+     *      java.util.Map, java.io.OutputStream, BiConsumer)
+     */
+    public static Observable<Long> download(String url, Map<String, Serializable> params, OutputStream output,
+        BiConsumer<Long, Long> progress) {
+        return CLIENT.download(url, params, output, progress);
+    }
+
+    /**
+     * Download.
+     *
+     * @param url the url
+     * @param params the params
      * @param localFile the local file
      * @return the observable
      * @see cn.featherfly.common.http.HttpRxjavaClientImpl#download(java.lang.String,
      *      java.util.Map, java.io.File)
      */
-    public static Observable<Integer> download(String url, Map<String, Serializable> params, File localFile) {
+    public static Observable<Long> download(String url, Map<String, Serializable> params, File localFile) {
         return CLIENT.download(url, params, localFile);
     }
 
     /**
      * Download.
      *
-     * @param url       the url
-     * @param params    the params
-     * @param headers   the headers
+     * @param url the url
+     * @param params the params
+     * @param localFile the local file
+     * @param progress the progress
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClientImpl#download(java.lang.String,
+     *      java.util.Map, java.io.File, BiConsumer)
+     */
+    public static Observable<Long> download(String url, Map<String, Serializable> params, File localFile,
+        BiConsumer<Long, Long> progress) {
+        return CLIENT.download(url, params, localFile, progress);
+    }
+
+    /**
+     * Download.
+     *
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param localFile the local file
      * @return the observable
      * @see cn.featherfly.common.http.HttpRxjavaClientImpl#download(java.lang.String,
      *      java.util.Map, java.util.Map, java.io.File)
      */
-    public static Observable<Integer> download(String url, Map<String, Serializable> params,
-            Map<String, String> headers, File localFile) {
+    public static Observable<Long> download(String url, Map<String, Serializable> params,
+        Map<String, String> headers, File localFile) {
         return CLIENT.download(url, params, headers, localFile);
     }
 
     /**
      * Download.
      *
-     * @param url     the url
-     * @param params  the params
+     * @param url the url
+     * @param params the params
      * @param headers the headers
-     * @param output  the output
+     * @param localFile the local file
+     * @param progress the progress
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClientImpl#download(java.lang.String,
+     *      java.util.Map, java.util.Map, java.io.File, BiConsumer)
+     */
+    public static Observable<Long> download(String url, Map<String, Serializable> params,
+        Map<String, String> headers, File localFile, BiConsumer<Long, Long> progress) {
+        return CLIENT.download(url, params, headers, localFile, progress);
+    }
+
+    /**
+     * Download.
+     *
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
+     * @param output the output
      * @return the observable
      * @see cn.featherfly.common.http.HttpRxjavaClientImpl#download(java.lang.String,
      *      java.util.Map, java.util.Map, java.io.OutputStream)
      */
-    public static Observable<Integer> download(String url, Map<String, Serializable> params,
-            Map<String, String> headers, OutputStream output) {
+    public static Observable<Long> download(String url, Map<String, Serializable> params,
+        Map<String, String> headers, OutputStream output) {
         return CLIENT.download(url, params, headers, output);
     }
 
+    /**
+     * Download.
+     *
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
+     * @param output the output
+     * @param progress the progress
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClientImpl#download(java.lang.String,
+     *      java.util.Map, java.util.Map, java.io.OutputStream, BiConsumer)
+     */
+    public static Observable<Long> download(String url, Map<String, Serializable> params,
+        Map<String, String> headers, OutputStream output, BiConsumer<Long, Long> progress) {
+        return CLIENT.download(url, params, headers, output, progress);
+    }
 }

@@ -60,6 +60,8 @@ public abstract class AbstractHttpClient {
 
     private Set<Integer> codeSameAsSuccess = new HashSet<>();
 
+    protected int downloadProgressPerSize = 1024 * 256;
+
     /**
      * Instantiates a new http client.
      */
@@ -88,7 +90,7 @@ public abstract class AbstractHttpClient {
     /**
      * Instantiates a new http client.
      *
-     * @param config  the config
+     * @param config the config
      * @param headers the headers
      */
     public AbstractHttpClient(HttpRequestConfig config, Map<String, String> headers) {
@@ -98,9 +100,9 @@ public abstract class AbstractHttpClient {
     /**
      * Instantiates a new http client.
      *
-     * @param config        the config
+     * @param config the config
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
     public AbstractHttpClient(HttpRequestConfig config, Serialization serialization, MediaType mediaType) {
         this(config, null, serialization, mediaType);
@@ -109,20 +111,20 @@ public abstract class AbstractHttpClient {
     /**
      * Instantiates a new http client.
      *
-     * @param config        the config
-     * @param headers       the headers
+     * @param config the config
+     * @param headers the headers
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
     public AbstractHttpClient(HttpRequestConfig config, Map<String, String> headers, Serialization serialization,
-            MediaType mediaType) {
+        MediaType mediaType) {
         init(config, headers, serialization, mediaType);
     }
 
     /**
      * Instantiates a new http client.
      *
-     * @param client  the client
+     * @param client the client
      * @param headers the headers
      */
     public AbstractHttpClient(OkHttpClient client, Map<String, String> headers) {
@@ -132,9 +134,9 @@ public abstract class AbstractHttpClient {
     /**
      * Instantiates a new http client.
      *
-     * @param client        the client
+     * @param client the client
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
     public AbstractHttpClient(OkHttpClient client, Serialization serialization, MediaType mediaType) {
         this(client, null, serialization, mediaType);
@@ -143,26 +145,26 @@ public abstract class AbstractHttpClient {
     /**
      * Instantiates a new http client.
      *
-     * @param client        the client
-     * @param headers       the headers
+     * @param client the client
+     * @param headers the headers
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
     public AbstractHttpClient(OkHttpClient client, Map<String, String> headers, Serialization serialization,
-            MediaType mediaType) {
+        MediaType mediaType) {
         init(client, headers, serialization, mediaType);
     }
 
     /**
      * Inits the.
      *
-     * @param config        the config
-     * @param headers       the headers
+     * @param config the config
+     * @param headers the headers
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
     protected void init(HttpRequestConfig config, Map<String, String> headers, Serialization serialization,
-            MediaType mediaType) {
+        MediaType mediaType) {
         init(okHttpClient(config), headers, serialization, mediaType);
     }
 
@@ -174,19 +176,19 @@ public abstract class AbstractHttpClient {
         dispatcher.setMaxRequests(config.maxRequests);
         dispatcher.setMaxRequestsPerHost(config.maxRequestsPerHost);
         return new OkHttpClient.Builder().cache(new okhttp3.Cache(config.cacheDir, config.cacheMaxSize))
-                .dispatcher(dispatcher).connectTimeout(config.connectTimeout, TimeUnit.SECONDS).build();
+            .dispatcher(dispatcher).connectTimeout(config.connectTimeout, TimeUnit.SECONDS).build();
     }
 
     /**
      * Inits the.
      *
-     * @param client        the client
-     * @param headers       the headers
+     * @param client the client
+     * @param headers the headers
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
     protected void init(OkHttpClient client, Map<String, String> headers, Serialization serialization,
-            MediaType mediaType) {
+        MediaType mediaType) {
         if (client == null) {
             this.client = okHttpClient(null);
         } else {
@@ -280,8 +282,8 @@ public abstract class AbstractHttpClient {
     /**
      * Deserialize.
      *
-     * @param <T>          the generic type
-     * @param response     the response
+     * @param <T> the generic type
+     * @param response the response
      * @param responseType the response type
      * @return the deserialized object
      * @throws IOException Signals that an I/O exception has occurred.
@@ -304,7 +306,7 @@ public abstract class AbstractHttpClient {
     /**
      * Gets the serializer.
      *
-     * @param mediaType                  the media type
+     * @param mediaType the media type
      * @param throwExceptionNoSerializer the throw exception no serializer
      * @return the serializer
      */
@@ -316,7 +318,7 @@ public abstract class AbstractHttpClient {
             if (serializer == null) {
                 if (throwExceptionNoSerializer) {
                     throw new SerializationException(
-                            SerializationExceptionCode.createNoSerializerForMimeTypeCode(mimeType.getBaseType()));
+                        SerializationExceptionCode.createNoSerializerForMimeTypeCode(mimeType.getBaseType()));
                 }
                 logger.warn("no serializer found for content-type {}", mimeType.getBaseType());
             }
@@ -343,7 +345,7 @@ public abstract class AbstractHttpClient {
     /**
      * Creates the headers.
      *
-     * @param headers       the headers
+     * @param headers the headers
      * @param requestObject the request object
      * @return the headers
      */
@@ -365,7 +367,7 @@ public abstract class AbstractHttpClient {
      * Gets the media type.
      *
      * @param requestObject the request object
-     * @param headers       the headers
+     * @param headers the headers
      * @return the media type
      */
     protected MediaType getMediaType(Object requestObject, Map<String, String> headers) {
@@ -425,11 +427,11 @@ public abstract class AbstractHttpClient {
                 return response;
             } else {
                 throw new HttpErrorResponseException(
-                        Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
-                                response.message()),
-                        new HttpResponse(response.code(), response.body().bytes(),
-                                HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
-                                response.receivedResponseAtMillis() - response.sentRequestAtMillis()));
+                    Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
+                        response.message()),
+                    new HttpResponse(response.code(), response.body().bytes(),
+                        HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
+                        response.receivedResponseAtMillis() - response.sentRequestAtMillis()));
             }
         } catch (IOException e) {
             throw new HttpException(e);

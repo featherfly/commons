@@ -1,9 +1,11 @@
 package cn.featherfly.common.http;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.serialization.Serialization;
@@ -32,20 +34,20 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
     /**
      * Instantiates a new http async client.
      *
-     * @param config        the config
-     * @param headers       the headers
+     * @param config the config
+     * @param headers the headers
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
     public HttpAsyncClientImpl(HttpRequestConfig config, Map<String, String> headers, Serialization serialization,
-            MediaType mediaType) {
+        MediaType mediaType) {
         super(config, headers, serialization, mediaType);
     }
 
     /**
      * Instantiates a new http async client.
      *
-     * @param config  the config
+     * @param config the config
      * @param headers the headers
      */
     public HttpAsyncClientImpl(HttpRequestConfig config, Map<String, String> headers) {
@@ -55,9 +57,9 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
     /**
      * Instantiates a new http async client.
      *
-     * @param config        the config
+     * @param config the config
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
     public HttpAsyncClientImpl(HttpRequestConfig config, Serialization serialization, MediaType mediaType) {
         super(config, serialization, mediaType);
@@ -84,20 +86,20 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
     /**
      * Instantiates a new http async client.
      *
-     * @param client        the client
-     * @param headers       the headers
+     * @param client the client
+     * @param headers the headers
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
     public HttpAsyncClientImpl(OkHttpClient client, Map<String, String> headers, Serialization serialization,
-            MediaType mediaType) {
+        MediaType mediaType) {
         super(client, headers, serialization, mediaType);
     }
 
     /**
      * Instantiates a new http async client.
      *
-     * @param client  the client
+     * @param client the client
      * @param headers the headers
      */
     public HttpAsyncClientImpl(OkHttpClient client, Map<String, String> headers) {
@@ -107,9 +109,9 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
     /**
      * Instantiates a new http async client.
      *
-     * @param client        the client
+     * @param client the client
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
     public HttpAsyncClientImpl(OkHttpClient client, Serialization serialization, MediaType mediaType) {
         super(client, serialization, mediaType);
@@ -120,9 +122,9 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      */
     @Override
     public HttpRequestCompletion<String> get(String url, Map<String, Serializable> params,
-            Map<String, String> headers) {
+        Map<String, String> headers) {
         return completetion(new Request.Builder().url(HttpUtils.appendParams(url, params))
-                .headers(createHeaders(headers)).get().build());
+            .headers(createHeaders(headers)).get().build());
     }
 
     /**
@@ -130,9 +132,9 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      */
     @Override
     public <R> HttpRequestCompletion<R> get(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return completetion(new Request.Builder().url(HttpUtils.appendParams(url, params))
-                .headers(createHeaders(headers)).get().build(), responseType);
+            .headers(createHeaders(headers)).get().build(), responseType);
     }
 
     /**
@@ -140,9 +142,9 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      */
     @Override
     public HttpRequestCompletion<String> head(String url, Map<String, Serializable> params,
-            Map<String, String> headers) {
+        Map<String, String> headers) {
         return completetion(new Request.Builder().url(HttpUtils.appendParams(url, params))
-                .headers(createHeaders(headers)).head().build());
+            .headers(createHeaders(headers)).head().build());
     }
 
     /**
@@ -150,9 +152,9 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      */
     @Override
     public <R> HttpRequestCompletion<R> head(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return completetion(new Request.Builder().url(HttpUtils.appendParams(url, params))
-                .headers(createHeaders(headers)).head().build(), responseType);
+            .headers(createHeaders(headers)).head().build(), responseType);
     }
 
     /**
@@ -160,9 +162,9 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      */
     @Override
     public HttpRequestCompletion<String> post(String url, Map<String, Serializable> params,
-            Map<String, String> headers) {
+        Map<String, String> headers) {
         return completetion(new Request.Builder().url(url).headers(createHeaders(headers))
-                .post(HttpUtils.createRequestBody(params)).build());
+            .post(HttpUtils.createRequestBody(params)).build());
     }
 
     /**
@@ -170,9 +172,9 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      */
     @Override
     public <R> HttpRequestCompletion<R> post(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return completetion(new Request.Builder().url(url).headers(createHeaders(headers))
-                .post(HttpUtils.createRequestBody(params)).build(), responseType);
+            .post(HttpUtils.createRequestBody(params)).build(), responseType);
     }
 
     /**
@@ -181,7 +183,7 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
     @Override
     public HttpRequestCompletion<String> post(String url, Object requestBody, Map<String, String> headers) {
         return completetion(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+            .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
     }
 
     /**
@@ -189,11 +191,11 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      */
     @Override
     public <R> HttpRequestCompletion<R> post(String url, Object requestBody, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return completetion(
-                new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                        .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
-                responseType);
+            new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
+                .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+            responseType);
     }
 
     /**
@@ -201,9 +203,9 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      */
     @Override
     public HttpRequestCompletion<String> put(String url, Map<String, Serializable> params,
-            Map<String, String> headers) {
+        Map<String, String> headers) {
         return completetion(new Request.Builder().url(url).headers(createHeaders(headers))
-                .put(HttpUtils.createFormBody(params)).build());
+            .put(HttpUtils.createFormBody(params)).build());
     }
 
     /**
@@ -211,9 +213,9 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      */
     @Override
     public <R> HttpRequestCompletion<R> put(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return completetion(new Request.Builder().url(url).headers(createHeaders(headers))
-                .put(HttpUtils.createFormBody(params)).build(), responseType);
+            .put(HttpUtils.createFormBody(params)).build(), responseType);
     }
 
     /**
@@ -222,7 +224,7 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
     @Override
     public HttpRequestCompletion<String> put(String url, Object requestBody, Map<String, String> headers) {
         return completetion(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+            .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
     }
 
     /**
@@ -230,11 +232,11 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      */
     @Override
     public <R> HttpRequestCompletion<R> put(String url, Object requestBody, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return completetion(
-                new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                        .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
-                responseType);
+            new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
+                .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+            responseType);
     }
 
     /**
@@ -242,9 +244,9 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      */
     @Override
     public HttpRequestCompletion<String> patch(String url, Map<String, Serializable> params,
-            Map<String, String> headers) {
+        Map<String, String> headers) {
         return completetion(new Request.Builder().url(url).headers(createHeaders(headers))
-                .patch(HttpUtils.createFormBody(params)).build());
+            .patch(HttpUtils.createFormBody(params)).build());
     }
 
     /**
@@ -252,9 +254,9 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      */
     @Override
     public <R> HttpRequestCompletion<R> patch(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return completetion(new Request.Builder().url(url).headers(createHeaders(headers))
-                .patch(HttpUtils.createFormBody(params)).build(), responseType);
+            .patch(HttpUtils.createFormBody(params)).build(), responseType);
     }
 
     /**
@@ -263,7 +265,7 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
     @Override
     public HttpRequestCompletion<String> patch(String url, Object requestBody, Map<String, String> headers) {
         return completetion(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+            .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
     }
 
     /**
@@ -271,11 +273,11 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      */
     @Override
     public <R> HttpRequestCompletion<R> patch(String url, Object requestBody, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return completetion(
-                new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                        .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
-                responseType);
+            new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
+                .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+            responseType);
     }
 
     /**
@@ -292,7 +294,7 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
     @Override
     public <R> HttpRequestCompletion<R> delete(String url, Map<String, String> headers, Class<R> responseType) {
         return completetion(new Request.Builder().url(url).headers(createHeaders(headers)).delete().build(),
-                responseType);
+            responseType);
     }
 
     /**
@@ -301,7 +303,7 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
     @Override
     public HttpRequestCompletion<String> delete(String url, Object requestBody, Map<String, String> headers) {
         return completetion(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+            .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
     }
 
     /**
@@ -309,37 +311,45 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      */
     @Override
     public <R> HttpRequestCompletion<R> delete(String url, Object requestBody, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return completetion(
-                new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                        .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
-                responseType);
+            new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
+                .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+            responseType);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public HttpRequestCompletion<Integer> download(String url, Map<String, Serializable> params,
-            Map<String, String> headers, OutputStream output) {
+    public HttpRequestCompletion<Long> download(String url, Map<String, Serializable> params,
+        Map<String, String> headers, OutputStream output, BiConsumer<Long, Long> progress) {
         Request request = new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
-                .get().build();
-        HttpRequestCompletionImpl<Integer> completion = new HttpRequestCompletionImpl<>();
+            .get().build();
+        HttpRequestCompletionImpl<Long> completion = new HttpRequestCompletionImpl<>();
         client.newCall(request).enqueue(new Callback() {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    byte[] bs = response.body().bytes();
-                    output.write(bs);
-                    completion.setResponse(bs.length);
+                    byte[] bs = new byte[downloadProgressPerSize];
+                    InputStream is = response.body().byteStream();
+                    long total = response.body().contentLength();
+                    int len = -1;
+                    long readed = 0;
+                    while ((len = is.read(bs)) != -1) {
+                        readed += len;
+                        progress.accept(readed, total);
+                        output.write(bs, 0, len);
+                    }
+                    completion.setResponse(readed);
                 } else {
                     completion.setHttpErrorResponse(new HttpErrorResponse(
-                            Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
-                                    response.message()),
-                            new HttpResponse(response.code(), response.body().bytes(),
-                                    HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
-                                    response.receivedResponseAtMillis() - response.sentRequestAtMillis())));
+                        Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
+                            response.message()),
+                        new HttpResponse(response.code(), response.body().bytes(),
+                            HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
+                            response.receivedResponseAtMillis() - response.sentRequestAtMillis())));
                 }
             }
 
@@ -364,11 +374,11 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
                     completion.setResponse(response.body().string());
                 } else {
                     completion.setHttpErrorResponse(new HttpErrorResponse(
-                            Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
-                                    response.message()),
-                            new HttpResponse(response.code(), response.body().bytes(),
-                                    HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
-                                    response.receivedResponseAtMillis() - response.sentRequestAtMillis())));
+                        Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
+                            response.message()),
+                        new HttpResponse(response.code(), response.body().bytes(),
+                            HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
+                            response.receivedResponseAtMillis() - response.sentRequestAtMillis())));
                 }
             }
 
@@ -390,11 +400,11 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
                     completion.setResponse(deserialize(response, responseType));
                 } else {
                     completion.setHttpErrorResponse(new HttpErrorResponse(
-                            Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
-                                    response.message()),
-                            new HttpResponse(response.code(), response.body().bytes(),
-                                    HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
-                                    response.receivedResponseAtMillis() - response.sentRequestAtMillis())));
+                        Strings.format("{0} error, code {1}, message {2}", request.url(), response.code(),
+                            response.message()),
+                        new HttpResponse(response.code(), response.body().bytes(),
+                            HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
+                            response.receivedResponseAtMillis() - response.sentRequestAtMillis())));
                 }
             }
 

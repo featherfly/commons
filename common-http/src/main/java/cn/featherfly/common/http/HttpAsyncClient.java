@@ -20,14 +20,14 @@ import java.util.Map;
  * @author zhongj
  */
 public interface HttpAsyncClient
-        extends HttpClient<HttpRequestCompletion<String>>, HttpDownloadClient<HttpRequestCompletion<Integer>> {
+    extends HttpClient<HttpRequestCompletion<String>>, HttpDownloadClient<HttpRequestCompletion<Long>> {
 
     /**
      * request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
      * @param responseType the response type
      * @return the http request completion
      */
@@ -38,31 +38,31 @@ public interface HttpAsyncClient
     /**
      * request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return the http request completion
      */
     default <R> HttpRequestCompletion<R> request(HttpMethod httpMethod, String url, Map<String, Serializable> params,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return request(httpMethod, url, params, new HashMap<>(), responseType);
     }
 
     /**
      * request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return the http request completion
      */
     default <R> HttpRequestCompletion<R> request(HttpMethod httpMethod, String url, Map<String, Serializable> params,
-            Map<String, String> headers, Class<R> responseType) {
+        Map<String, String> headers, Class<R> responseType) {
         switch (httpMethod) {
             case GET:
                 return get(url, params, headers, responseType);
@@ -84,31 +84,31 @@ public interface HttpAsyncClient
     /**
      * Post requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the response type
      * @return the http request completion
      */
     default <R> HttpRequestCompletion<R> request(HttpMethod httpMethod, String url, Object requestBody,
-            Class<R> responseType) {
+        Class<R> responseType) {
         return request(httpMethod, url, requestBody, new HashMap<>(), responseType);
     }
 
     /**
      * Post requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the response type
      * @return the http request completion
      */
     default <R> HttpRequestCompletion<R> request(HttpMethod httpMethod, String url, Object requestBody,
-            Map<String, String> headers, Class<R> responseType) {
+        Map<String, String> headers, Class<R> responseType) {
         switch (httpMethod) {
             case GET:
                 throw new HttpException("http get method can not send request body");
@@ -132,8 +132,8 @@ public interface HttpAsyncClient
     /**
      * get request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
+     * @param <R> the generic type
+     * @param url the url
      * @param responseType the response type
      * @return the http request completion
      */
@@ -144,9 +144,9 @@ public interface HttpAsyncClient
     /**
      * get request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return the http request completion
      */
@@ -157,21 +157,21 @@ public interface HttpAsyncClient
     /**
      * get request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return the http request completion
      */
     <R> HttpRequestCompletion<R> get(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType);
+        Class<R> responseType);
 
     /**
      * head request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
+     * @param <R> the generic type
+     * @param url the url
      * @param responseType the response type
      * @return the http request completion
      */
@@ -182,9 +182,9 @@ public interface HttpAsyncClient
     /**
      * head request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return the http request completion
      */
@@ -195,22 +195,22 @@ public interface HttpAsyncClient
     /**
      * head request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return the http request completion
      */
     <R> HttpRequestCompletion<R> head(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType);
+        Class<R> responseType);
 
     /**
      * Post params with FormBody and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return response string
      */
@@ -221,22 +221,22 @@ public interface HttpAsyncClient
     /**
      * Post params with FormBody and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return response string
      */
     <R> HttpRequestCompletion<R> post(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType);
+        Class<R> responseType);
 
     /**
      * Post requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the response type
      * @return the http request completion
      */
@@ -247,22 +247,22 @@ public interface HttpAsyncClient
     /**
      * Post requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the response type
      * @return the http request completion
      */
     <R> HttpRequestCompletion<R> post(String url, Object requestBody, Map<String, String> headers,
-            Class<R> responseType);
+        Class<R> responseType);
 
     /**
      * Put params with FormBody.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return the http request completion
      */
@@ -273,9 +273,9 @@ public interface HttpAsyncClient
     /**
      * Put requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the responset type
      * @return the http request completion
      */
@@ -286,35 +286,35 @@ public interface HttpAsyncClient
     /**
      * Put requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the responset type
      * @return the http request completion
      */
     <R> HttpRequestCompletion<R> put(String url, Object requestBody, Map<String, String> headers,
-            Class<R> responseType);
+        Class<R> responseType);
 
     /**
      * Put params with FormBody.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return the http request completion
      */
     <R> HttpRequestCompletion<R> put(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType);
+        Class<R> responseType);
 
     /**
      * patch request params with FormBody.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return the http request completion
      */
@@ -325,22 +325,22 @@ public interface HttpAsyncClient
     /**
      * patch request params with FormBody.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return the http request completion
      */
     <R> HttpRequestCompletion<R> patch(String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<R> responseType);
+        Class<R> responseType);
 
     /**
      * patch request requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the responset type
      * @return the http request completion
      */
@@ -351,21 +351,21 @@ public interface HttpAsyncClient
     /**
      * patch request requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the responset type
      * @return the http request completion
      */
     <R> HttpRequestCompletion<R> patch(String url, Object requestBody, Map<String, String> headers,
-            Class<R> responseType);
+        Class<R> responseType);
 
     /**
      * Delete request and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
+     * @param <R> the generic type
+     * @param url the url
      * @param responseType the response type
      * @return response string
      */
@@ -376,9 +376,9 @@ public interface HttpAsyncClient
     /**
      * Delete request and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param headers the headers
      * @param responseType the response type
      * @return response string
      */
@@ -387,9 +387,9 @@ public interface HttpAsyncClient
     /**
      * Delete requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the response type
      * @return the http request completion
      */
@@ -400,14 +400,14 @@ public interface HttpAsyncClient
     /**
      * Delete requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the response type
      * @return the http request completion
      */
     <R> HttpRequestCompletion<R> delete(String url, Object requestBody, Map<String, String> headers,
-            Class<R> responseType);
+        Class<R> responseType);
 
 }

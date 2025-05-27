@@ -20,14 +20,14 @@ import java.util.Map;
  *
  * @author zhongj
  */
-public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<Integer>, HttpStreamClient<InputStream> {
+public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<Long>, HttpStreamClient<InputStream> {
 
     /**
      * request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
      * @param responseType the response type
      * @return responseType instance
      */
@@ -38,10 +38,10 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return responseType instance
      */
@@ -52,16 +52,16 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return responseType instance
      */
     default <R> R request(HttpMethod httpMethod, String url, Map<String, Serializable> params,
-            Map<String, String> headers, Class<R> responseType) {
+        Map<String, String> headers, Class<R> responseType) {
         switch (httpMethod) {
             case GET:
                 return get(url, params, headers, responseType);
@@ -83,10 +83,10 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * Post requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the response type
      * @return responseType instance
      */
@@ -97,16 +97,16 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * Post requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param httpMethod   the http method
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param httpMethod the http method
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the response type
      * @return responseType instance
      */
     default <R> R request(HttpMethod httpMethod, String url, Object requestBody, Map<String, String> headers,
-            Class<R> responseType) {
+        Class<R> responseType) {
         switch (httpMethod) {
             case GET:
                 throw new HttpException("http get method can not send request body");
@@ -130,8 +130,8 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * get request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
+     * @param <R> the generic type
+     * @param url the url
      * @param responseType the response type
      * @return responseType instance
      */
@@ -142,9 +142,9 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * get request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return responseType instance
      */
@@ -155,10 +155,10 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * get request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return responseType instance
      */
@@ -167,8 +167,8 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * head request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
+     * @param <R> the generic type
+     * @param url the url
      * @param responseType the response type
      * @return responseType instance
      */
@@ -179,9 +179,9 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * head request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return responseType instance
      */
@@ -192,10 +192,10 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * head request with params and deserialize response .
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return responseType instance
      */
@@ -204,9 +204,9 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * Post params with FormBody and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return response string
      */
@@ -217,10 +217,10 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * Post params with FormBody and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return response string
      */
@@ -229,9 +229,9 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * Post requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the response type
      * @return responseType instance
      */
@@ -242,10 +242,10 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * Post requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the response type
      * @return responseType instance
      */
@@ -254,9 +254,9 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * Put params with FormBody.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return responseType instance
      */
@@ -267,9 +267,9 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * Put requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the responset type
      * @return responseType instance
      */
@@ -280,10 +280,10 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * Put requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the responset type
      * @return responseType instance
      */
@@ -292,10 +292,10 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * Put params with FormBody.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return responseType instance
      */
@@ -304,9 +304,9 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * patch request params with FormBody.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
      * @param responseType the response type
      * @return responseType instance
      */
@@ -317,10 +317,10 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * patch request params with FormBody.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      * @return responseType instance
      */
@@ -329,9 +329,9 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * patch request requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the responset type
      * @return responseType instance
      */
@@ -342,10 +342,10 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * patch request requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the responset type
      * @return responseType instance
      */
@@ -354,8 +354,8 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * Delete request and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
+     * @param <R> the generic type
+     * @param url the url
      * @param responseType the response type
      * @return response string
      */
@@ -366,9 +366,9 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * Delete request and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param headers the headers
      * @param responseType the response type
      * @return response string
      */
@@ -377,9 +377,9 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * Delete requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
      * @param responseType the response type
      * @return responseType instance
      */
@@ -390,10 +390,10 @@ public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<I
     /**
      * Delete requestBody with medieType format and deserialize response.
      *
-     * @param <R>          the generic type
-     * @param url          the url
-     * @param requestBody  the request body
-     * @param headers      the headers
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param headers the headers
      * @param responseType the response type
      * @return responseType instance
      */

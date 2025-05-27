@@ -11,7 +11,7 @@ sourceSets {
 
 dependencies {
     //api project(":common-api")
-    api group: 'cn.featherfly.common', name: 'common-api', version: '0.5.5-SNAPSHOT'
+    api group: 'cn.featherfly.common', name: 'common-api', version: '0.5.5'
     api group: 'cn.featherfly.common', name: 'common-algorithm', version: '1.1.0'
     api group: 'cn.featherfly.common', name: 'common-functional', version: '0.1.0'
     api group: 'org.apache.commons', name: 'commons-lang3', version: '3.17.0'

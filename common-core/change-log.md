@@ -1,5 +1,8 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
+# 1.15.1 2025-05-27
+1. 修复依赖快照版本的问题
+
 # 1.15.0 2025-05-27
 1. Str加入一系列方法
 2. ArrayUtils加入getLength,get方法

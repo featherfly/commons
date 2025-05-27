@@ -7,19 +7,25 @@ sourceSets {
 }
   
 dependencies {
-	api project(":common-core")
-
-    api 'com.fasterxml.jackson.core:jackson-databind:2.14.0'
-    //api group: 'javax.activation', name: 'activation', version: '1.1.1'
+	//api project(":common-core")
 	
-	implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.14.0'	
-	implementation group: 'com.esotericsoftware', name: 'kryo', version: '5.3.0'
+	api group: 'cn.featherfly.common', name: 'common-core', version: '1.15.0'
+
+    //api group: 'javax.activation', name: 'activation', version: '1.1.1'
+    
+    // json
+    api 'com.fasterxml.jackson.core:jackson-databind:2.19.0'	
+	// xml
+	implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.19.0'	
+	// kryo	
+	implementation group: 'com.esotericsoftware', name: 'kryo', version: '5.6.2'
+	// protobuff
     implementation group: 'io.protostuff', name: 'protostuff-core', version: '1.8.0'
     implementation group: 'io.protostuff', name: 'protostuff-runtime', version: '1.8.0'
     
-    testImplementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.14.0'
-    testImplementation group: 'com.esotericsoftware', name: 'kryo', version: '5.3.0'
-    testImplementation group: 'io.protostuff', name: 'protostuff-core', version: '1.8.0'
-    testImplementation group: 'io.protostuff', name: 'protostuff-runtime', version: '1.8.0'
+    // testImplementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.19.0'
+    // testImplementation group: 'com.esotericsoftware', name: 'kryo', version: '5.6.2'
+    // testImplementation group: 'io.protostuff', name: 'protostuff-core', version: '1.8.0'
+    // testImplementation group: 'io.protostuff', name: 'protostuff-runtime', version: '1.8.0'
     
 }

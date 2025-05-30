@@ -13,9 +13,7 @@ import cn.featherfly.common.repository.builder.Builder;
 public interface FindBuilder extends Builder {
 
     /**
-     * <p>
-     * 添加select的列
-     * </p>
+     * 添加select的列.
      *
      * @param propertyName propertyName
      * @return FindBuilder
@@ -23,9 +21,7 @@ public interface FindBuilder extends Builder {
     FindBuilder property(String propertyName);
 
     /**
-     * <p>
-     * 批量添加select的列
-     * </p>
+     * 批量添加select的列.
      *
      * @param propertyNames propertyNames
      * @return FindBuilder
@@ -33,9 +29,7 @@ public interface FindBuilder extends Builder {
     FindBuilder property(String... propertyNames);
 
     /**
-     * <p>
-     * 批量添加select的列
-     * </p>
+     * 批量添加select的列.
      *
      * @param propertyNames propertyNames
      * @return FindBuilder
@@ -43,9 +37,7 @@ public interface FindBuilder extends Builder {
     FindBuilder property(Collection<String> propertyNames);
 
     /**
-     * <p>
-     * 进入条件表达式
-     * </p>
+     * 进入条件表达式.
      *
      * @return ConditionBuilder
      */

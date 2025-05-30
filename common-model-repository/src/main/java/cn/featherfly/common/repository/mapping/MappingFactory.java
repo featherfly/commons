@@ -2,9 +2,7 @@
 package cn.featherfly.common.repository.mapping;
 
 /**
- * <p>
- * MappingFactory
- * </p>
+ * MappingFactory.
  *
  * @author zhongj
  * @since 0.1.0
@@ -15,7 +13,7 @@ public interface MappingFactory<P extends PropertyMapping<P>> {
     /**
      * getClassMapping
      *
-     * @param <T>  type
+     * @param <T> type
      * @param type type
      * @return ClassMapping
      */

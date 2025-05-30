@@ -7,10 +7,7 @@ import cn.featherfly.common.exception.LocalizedException;
 import cn.featherfly.common.locale.LocalizedMessage;
 
 /**
- * <p>
- * MappingException
- * </p>
- * .
+ * MappingException.
  *
  * @author zhongj
  */
@@ -23,8 +20,8 @@ public abstract class MappingException extends LocalizedException {
      * Instantiates a new mapping exception.
      *
      * @param message the message
-     * @param locale  the locale
-     * @param ex      the ex
+     * @param locale the locale
+     * @param ex the ex
      */
     public MappingException(LocalizedMessage message, Locale locale, Throwable ex) {
         super(message, locale, ex);
@@ -34,7 +31,7 @@ public abstract class MappingException extends LocalizedException {
      * Instantiates a new mapping exception.
      *
      * @param message the message
-     * @param locale  the locale
+     * @param locale the locale
      */
     public MappingException(LocalizedMessage message, Locale locale) {
         super(message, locale);
@@ -44,9 +41,9 @@ public abstract class MappingException extends LocalizedException {
      * Instantiates a new mapping exception.
      *
      * @param message the message
-     * @param args    the args
-     * @param locale  the locale
-     * @param ex      the ex
+     * @param args the args
+     * @param locale the locale
+     * @param ex the ex
      */
     public MappingException(LocalizedMessage message, Object[] args, Locale locale, Throwable ex) {
         super(message, args, locale, ex);
@@ -56,8 +53,8 @@ public abstract class MappingException extends LocalizedException {
      * Instantiates a new mapping exception.
      *
      * @param message the message
-     * @param args    the args
-     * @param locale  the locale
+     * @param args the args
+     * @param locale the locale
      */
     public MappingException(LocalizedMessage message, Object[] args, Locale locale) {
         super(message, args, locale);
@@ -67,8 +64,8 @@ public abstract class MappingException extends LocalizedException {
      * Instantiates a new mapping exception.
      *
      * @param message the message
-     * @param args    the args
-     * @param ex      the ex
+     * @param args the args
+     * @param ex the ex
      */
     public MappingException(LocalizedMessage message, Object[] args, Throwable ex) {
         super(message, args, ex);
@@ -78,7 +75,7 @@ public abstract class MappingException extends LocalizedException {
      * Instantiates a new mapping exception.
      *
      * @param message the message
-     * @param args    the args
+     * @param args the args
      */
     public MappingException(LocalizedMessage message, Object[] args) {
         super(message, args);
@@ -88,7 +85,7 @@ public abstract class MappingException extends LocalizedException {
      * Instantiates a new mapping exception.
      *
      * @param message the message
-     * @param ex      the ex
+     * @param ex the ex
      */
     public MappingException(LocalizedMessage message, Throwable ex) {
         super(message, ex);
@@ -107,8 +104,8 @@ public abstract class MappingException extends LocalizedException {
      * Instantiates a new mapping exception.
      *
      * @param message the message
-     * @param locale  the locale
-     * @param ex      the ex
+     * @param locale the locale
+     * @param ex the ex
      */
     public MappingException(String message, Locale locale, Throwable ex) {
         super(message, locale, ex);
@@ -118,7 +115,7 @@ public abstract class MappingException extends LocalizedException {
      * Instantiates a new mapping exception.
      *
      * @param message the message
-     * @param locale  the locale
+     * @param locale the locale
      */
     public MappingException(String message, Locale locale) {
         super(message, locale);
@@ -128,9 +125,9 @@ public abstract class MappingException extends LocalizedException {
      * Instantiates a new mapping exception.
      *
      * @param message the message
-     * @param args    the args
-     * @param locale  the locale
-     * @param ex      the ex
+     * @param args the args
+     * @param locale the locale
+     * @param ex the ex
      */
     public MappingException(String message, Object[] args, Locale locale, Throwable ex) {
         super(message, args, locale, ex);
@@ -140,8 +137,8 @@ public abstract class MappingException extends LocalizedException {
      * Instantiates a new mapping exception.
      *
      * @param message the message
-     * @param args    the args
-     * @param locale  the locale
+     * @param args the args
+     * @param locale the locale
      */
     public MappingException(String message, Object[] args, Locale locale) {
         super(message, args, locale);
@@ -151,8 +148,8 @@ public abstract class MappingException extends LocalizedException {
      * Instantiates a new mapping exception.
      *
      * @param message the message
-     * @param args    the args
-     * @param ex      the ex
+     * @param args the args
+     * @param ex the ex
      */
     public MappingException(String message, Object[] args, Throwable ex) {
         super(message, args, ex);
@@ -162,7 +159,7 @@ public abstract class MappingException extends LocalizedException {
      * Instantiates a new mapping exception.
      *
      * @param message the message
-     * @param args    the args
+     * @param args the args
      */
     public MappingException(String message, Object[] args) {
         super(message, args);
@@ -172,7 +169,7 @@ public abstract class MappingException extends LocalizedException {
      * Instantiates a new mapping exception.
      *
      * @param message the message
-     * @param ex      the ex
+     * @param ex the ex
      */
     public MappingException(String message, Throwable ex) {
         super(message, ex);

@@ -7,9 +7,7 @@ import javax.persistence.Table;
 import cn.featherfly.common.bean.BeanDescriptor;
 
 /**
- * <p>
- * ClassNameJpaConversion jpa impl. use javax.persistence.Table
- * </p>
+ * ClassNameJpaConversion jpa impl. use javax.persistence.Table .
  *
  * @author zhongj
  * @since 0.1.0

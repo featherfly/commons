@@ -8,32 +8,28 @@ package cn.featherfly.common.repository.builder.dml;
  */
 public interface LogicBuilder {
     /**
-     * <p>
-     * 逻辑与
-     * </p>
+     * 逻辑与.
      *
      * @return ExpressionBuilder
      */
     ExpressionBuilder and();
 
     /**
-     * <p>
-     * 逻辑或
-     * </p>
+     * 逻辑或.
      *
      * @return ExpressionBuilder
      */
     ExpressionBuilder or();
 
     /**
-     * 结束当前条件逻辑组并返回上一级逻辑组 {@link ExpressionBuilder#group()}
+     * 结束当前条件逻辑组并返回上一级逻辑组 {@link ExpressionBuilder#group()} .
      *
      * @return parent LogicBuilder
      */
     LogicBuilder endGroup();
 
     /**
-     * 结束当前条件并进入排序器
+     * 结束当前条件并进入排序器.
      *
      * @return SortBuilder
      */

@@ -2,17 +2,13 @@
 package cn.featherfly.common.repository.mapping;
 
 /**
- * <p>
- * name conversion
- * </p>
+ * name conversion.
  *
  * @author zhongj
  */
 public interface NameConversion<T> {
     /**
-     * <p>
-     * convert type to mapping name
-     * </p>
+     * convert type to mapping name.
      *
      * @param type type
      * @return mapping name

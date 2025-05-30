@@ -11,10 +11,7 @@ import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.repository.Index;
 
 /**
- * <p>
- * class repository mapping
- * </p>
- * .
+ * class repository mapping.
  *
  * @author zhongj
  * @param <T> 类型
@@ -59,9 +56,7 @@ public class ClassMapping<T, P extends PropertyMapping<P>> {
     }
 
     /**
-     * <p>
      * 返回指定属性名称的属性映射. 没有找到返回null.
-     * </p>
      *
      * @param propertyName 属性名称
      * @return 属性映射对象
@@ -71,9 +66,7 @@ public class ClassMapping<T, P extends PropertyMapping<P>> {
     }
 
     /**
-     * <p>
      * 通过持久化字段（数据库字段）的名称返回指定属性映射. 没有找到返回null.
-     * </p>
      *
      * @param persitField 持久化字段（数据库字段）
      * @return 属性映射对象
@@ -88,10 +81,7 @@ public class ClassMapping<T, P extends PropertyMapping<P>> {
     }
 
     /**
-     * <p>
-     * 返回所有属性映射
-     * </p>
-     * .
+     * 返回所有属性映射.
      *
      * @return 所有属性映射
      */

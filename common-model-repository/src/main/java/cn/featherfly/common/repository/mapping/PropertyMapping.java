@@ -13,7 +13,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import cn.featherfly.common.bean.Property;
 
 /**
- * entity property map to
+ * entity property map to.
  * 属性与列的映射对象.
  *
  * @author zhongj
@@ -497,9 +497,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
     }
 
     /**
-     * <p>
      * 返回指定属性名称的属性映射. 没有找到返回null.
-     * </p>
      *
      * @param propertyName 属性名称
      * @return 属性映射对象
@@ -514,9 +512,7 @@ public class PropertyMapping<P extends PropertyMapping<P>> {
     }
 
     /**
-     * <p>
      * 通过持久化字段（数据库字段）的名称返回指定属性映射. 没有找到返回null.
-     * </p>
      *
      * @param repositoryFiledName 持久化字段（数据库字段）
      * @return PropertyMapping

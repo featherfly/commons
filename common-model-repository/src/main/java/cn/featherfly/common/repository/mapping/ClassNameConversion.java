@@ -2,9 +2,7 @@
 package cn.featherfly.common.repository.mapping;
 
 /**
- * <p>
- * ClassNameConversion
- * </p>
+ * ClassNameConversion.
  *
  * @author zhongj
  */

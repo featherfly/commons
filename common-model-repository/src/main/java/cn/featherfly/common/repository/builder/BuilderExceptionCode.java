@@ -109,10 +109,7 @@ public class BuilderExceptionCode extends cn.featherfly.common.exception.SimpleL
     }
 
     /**
-     * <p>
-     * create QueryOperatorNullCode
-     * </p>
-     * .
+     * create QueryOperatorNullCode.
      *
      * @return QueryOperatorNullCode
      */
@@ -121,10 +118,7 @@ public class BuilderExceptionCode extends cn.featherfly.common.exception.SimpleL
     }
 
     /**
-     * <p>
-     * create NoConditionBehindCode
-     * </p>
-     * .
+     * create NoConditionBehindCode.
      *
      * @param operatorName operatorName
      * @return NoConditionBehindCode
@@ -135,10 +129,7 @@ public class BuilderExceptionCode extends cn.featherfly.common.exception.SimpleL
     }
 
     /**
-     * <p>
-     * create NextToSameConditionCode
-     * </p>
-     * .
+     * create NextToSameConditionCode.
      *
      * @param conditionTypeName conditionTypeName
      * @return NextToSameConditionCode
@@ -149,10 +140,7 @@ public class BuilderExceptionCode extends cn.featherfly.common.exception.SimpleL
     }
 
     /**
-     * <p>
-     * create IndexOutOffBoundsNameAliasSizeCode
-     * </p>
-     * .
+     * create IndexOutOffBoundsNameAliasSizeCode.
      *
      * @param index index
      * @param size size
@@ -165,10 +153,7 @@ public class BuilderExceptionCode extends cn.featherfly.common.exception.SimpleL
     }
 
     /**
-     * <p>
-     * create MulitipleNameCode
-     * </p>
-     * .
+     * create MulitipleNameCode.
      *
      * @param name name
      * @return MulitipleNameCode

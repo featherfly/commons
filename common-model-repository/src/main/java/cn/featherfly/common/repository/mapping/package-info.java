@@ -1,8 +1,6 @@
 /**
- * <p>
- * object record mapping
- * </p>
- * 
+ * object record mapping .
+ *
  * @author zhongj
  */
 package cn.featherfly.common.repository.mapping;

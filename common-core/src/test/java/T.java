@@ -27,16 +27,16 @@ import cn.featherfly.common.lang.Randoms;
 public class T {
     static String s() {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"))
-                + String.format("%04d", Randoms.getInt(10000));
+            + String.format("%04d", Randoms.getInt(10000));
     }
 
     static String s2() {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmssSSS"))
-                + String.format("%04d", Randoms.getInt(10000));
+            + String.format("%04d", Randoms.getInt(10000));
     }
 
     @Test
-    void test() {
+    void test2() {
         String input = "1 fish 2 fish red fish blue fish";
         Scanner s = new Scanner(input).useDelimiter(" ");
         while (s.hasNext()) {

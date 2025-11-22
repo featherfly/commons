@@ -724,8 +724,7 @@ public final class ClassUtils {
         if (parent == null) {
             return false;
         }
-        return "java.lang.Record".equals(parent.getName())
-            && Modifier.isFinal(type.getModifiers());
+        return "java.lang.Record".equals(parent.getName()) && Modifier.isFinal(type.getModifiers());
     }
 
     /**
@@ -2189,23 +2188,50 @@ public final class ClassUtils {
     private static Class<?> getPrimitiveTypeUseHashCodeOnly(String primitiveTypeName) {
         switch (primitiveTypeName.hashCode()) {
             case TypeNames.BOOL_CODE:
-                return Boolean.TYPE;
+                if (TypeNames.BOOL_NAME.length() == primitiveTypeName.length()) {
+                    return Boolean.TYPE;
+                }
+                return null;
             case TypeNames.BYTE_CODE:
-                return Byte.TYPE;
+                if (TypeNames.BYTE_NAME.length() == primitiveTypeName.length()) {
+                    return Byte.TYPE;
+                }
+                return null;
             case TypeNames.CHAR_CODE:
-                return Character.TYPE;
+                if (TypeNames.CHAR_NAME.length() == primitiveTypeName.length()) {
+                    return Character.TYPE;
+                }
+                return null;
             case TypeNames.SHORT_CODE:
-                return Short.TYPE;
+                if (TypeNames.SHORT_NAME.length() == primitiveTypeName.length()) {
+                    return Short.TYPE;
+                }
+                return null;
             case TypeNames.INT_CODE:
-                return Integer.TYPE;
+                if (TypeNames.INT_NAME.length() == primitiveTypeName.length()) {
+                    return Integer.TYPE;
+                }
+                return null;
             case TypeNames.LONG_CODE:
-                return Long.TYPE;
+                if (TypeNames.LONG_NAME.length() == primitiveTypeName.length()) {
+                    return Long.TYPE;
+                }
+                return null;
             case TypeNames.FLOAT_CODE:
-                return Float.TYPE;
+                if (TypeNames.FLOAT_NAME.length() == primitiveTypeName.length()) {
+                    return Float.TYPE;
+                }
+                return null;
             case TypeNames.DOUBLE_CODE:
-                return Double.TYPE;
+                if (TypeNames.DOUBLE_NAME.length() == primitiveTypeName.length()) {
+                    return Double.TYPE;
+                }
+                return null;
             case TypeNames.VOID_CODE:
-                return Void.TYPE;
+                if (TypeNames.VOID_NAME.length() == primitiveTypeName.length()) {
+                    return Void.TYPE;
+                }
+                return null;
             default:
                 return null;
         }

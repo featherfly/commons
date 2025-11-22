@@ -5,12 +5,12 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -1647,7 +1647,7 @@ public final class Lang {
      * @return the list
      * @see CollectionUtils#list(Object...)
      */
-    public static <E> List<E> list(@SuppressWarnings("unchecked") E... elements) {
+    public static <E> ArrayList<E> list(@SuppressWarnings("unchecked") E... elements) {
         return CollectionUtils.list(elements);
     }
 
@@ -1659,7 +1659,7 @@ public final class Lang {
      * @return the set
      * @see CollectionUtils#set(Object...)
      */
-    public static <E> Set<E> set(@SuppressWarnings("unchecked") E... elements) {
+    public static <E> HashSet<E> set(@SuppressWarnings("unchecked") E... elements) {
         return CollectionUtils.set(elements);
     }
 

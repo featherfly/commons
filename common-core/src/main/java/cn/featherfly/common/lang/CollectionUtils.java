@@ -812,8 +812,8 @@ public final class CollectionUtils {
      * @param args the args
      * @return the list
      */
-    public static <T> List<T> list(@SuppressWarnings("unchecked") T... args) {
-        List<T> list = new ArrayList<>();
+    public static <T> ArrayList<T> list(@SuppressWarnings("unchecked") T... args) {
+        ArrayList<T> list = new ArrayList<>();
         addAll(list, args);
         return list;
     }
@@ -825,8 +825,8 @@ public final class CollectionUtils {
      * @param args the args
      * @return the sets
      */
-    public static <T> Set<T> set(@SuppressWarnings("unchecked") T... args) {
-        Set<T> set = new HashSet<>();
+    public static <T> HashSet<T> set(@SuppressWarnings("unchecked") T... args) {
+        HashSet<T> set = new HashSet<>();
         addAll(set, args);
         return set;
     }

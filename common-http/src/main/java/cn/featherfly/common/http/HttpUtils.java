@@ -94,14 +94,11 @@ public final class HttpUtils {
             if (value instanceof UploadFile) {
                 UploadFile uploadFile = (UploadFile) value;
                 try {
-                    multiparBuilder.addFormDataPart(entry.getKey(),
-                        URL.encodeURL(uploadFile.getFilename()),
-                        RequestBody.create(MediaType.parse(uploadFile.getMediaType()),
-                            uploadFile.getContent()));
+                    multiparBuilder.addFormDataPart(entry.getKey(), URL.encodeURL(uploadFile.getFilename()),
+                        RequestBody.create(MediaType.parse(uploadFile.getMediaType()), uploadFile.getContent()));
                 } catch (AlgorithmException e) {
                     multiparBuilder.addFormDataPart(entry.getKey(), uploadFile.getFilename(),
-                        RequestBody.create(MediaType.parse(uploadFile.getMediaType()),
-                            uploadFile.getContent()));
+                        RequestBody.create(MediaType.parse(uploadFile.getMediaType()), uploadFile.getContent()));
                 }
             } else {
                 multiparBuilder.addFormDataPart(entry.getKey(), value.toString());
@@ -183,16 +180,38 @@ public final class HttpUtils {
     }
 
     /**
-     * To parame string.
+     * to parameter name value string. example: name=yufei&age=1
      *
      * @param params the params
-     * @return the string
+     * @return parameter name value string
      */
     public static String toParameString(Map<String, Serializable> params) {
         StringBuilder sb = new StringBuilder();
         for (Entry<String, Serializable> entry : params.entrySet()) {
-            sb.append("&").append(entry.getKey()).append("=").append(entry.getValue());
+            if (entry.getValue() == null) {
+                continue;
+            }
+            sb.append("&").append(toParameString(entry.getKey(), entry.getValue()));
         }
+        if (sb.length() > 0) {
+            sb.deleteCharAt(0);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * to parameter name value string. example:name=yufei or name=yufei&name=yi
+     *
+     * @param name the name
+     * @param value the value
+     * @return parameter name value string
+     */
+    public static String toParameString(String name, Serializable value) {
+        StringBuilder sb = new StringBuilder();
+        if (value == null) {
+            return "";
+        }
+        Lang.eachObj(value, v -> sb.append("&").append(name).append("=").append(v));
         if (sb.length() > 0) {
             sb.deleteCharAt(0);
         }
@@ -215,7 +234,7 @@ public final class HttpUtils {
             } else {
                 uri += Chars.QUESTION;
             }
-            uri += name + "=" + value;
+            uri += toParameString(name, value);
         }
         return uri;
     }
@@ -227,7 +246,7 @@ public final class HttpUtils {
      * @param params the params
      * @return the url string with params
      */
-    public static String appendParams(String url, Map<String, Serializable> params) {
+    public static String appendParam(String url, Map<String, Serializable> params) {
         if (Lang.isNotEmpty(params)) {
             if (url.contains(Chars.QUESTION)) {
                 url += Chars.AMP;
@@ -237,5 +256,18 @@ public final class HttpUtils {
             url += toParameString(params);
         }
         return url;
+    }
+
+    /**
+     * Append param.
+     *
+     * @param url the url
+     * @param params the params
+     * @return the url string with params
+     * @deprecated use {@link #appendParam(String, Map)} instead
+     */
+    @Deprecated
+    public static String appendParams(String url, Map<String, Serializable> params) {
+        return appendParam(url, params);
     }
 }

@@ -1,4 +1,9 @@
+# 0.8.1
+
+1. HttpUtils appenParam|toParamString支持同名多参数(name=yufei&name=yi)
+
 # 0.8.0 2025-05-27
+
 1. 升级依赖
 
 # 0.7.2 2025-05-27

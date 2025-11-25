@@ -120,7 +120,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
      */
     @Override
     public String get(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return request(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
+        return request(new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
             .get().build());
     }
 
@@ -129,8 +129,9 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
      */
     @Override
     public <R> R get(String url, Map<String, Serializable> params, Map<String, String> headers, Class<R> responseType) {
-        return request(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
-            .get().build(), responseType);
+        return request(
+            new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers)).get().build(),
+            responseType);
     }
 
     /**
@@ -138,7 +139,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
      */
     @Override
     public String head(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return request(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
+        return request(new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
             .head().build());
     }
 
@@ -148,7 +149,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     @Override
     public <R> R head(String url, Map<String, Serializable> params, Map<String, String> headers,
         Class<R> responseType) {
-        return request(new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
+        return request(new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
             .head().build(), responseType);
     }
 
@@ -308,9 +309,9 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
      * {@inheritDoc}
      */
     @Override
-    public Long download(String url, Map<String, Serializable> params, Map<String, String> headers,
-        OutputStream output, BiConsumer<Long, Long> progress) {
-        Request request = new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
+    public Long download(String url, Map<String, Serializable> params, Map<String, String> headers, OutputStream output,
+        BiConsumer<Long, Long> progress) {
+        Request request = new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
             .get().build();
         try {
             Response response = client.newCall(request).execute();
@@ -328,8 +329,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
                 return readed;
             } else {
                 throw new HttpErrorResponseException(
-                    Str.format("{0} error, code {1}, message {2}", request.url(), response.code(),
-                        response.message()),
+                    Str.format("{0} error, code {1}, message {2}", request.url(), response.code(), response.message()),
                     new HttpResponse(response.code(), response.body().bytes(),
                         HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
                         response.receivedResponseAtMillis() - response.sentRequestAtMillis()));
@@ -347,7 +347,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
         Map<String, String> headers) {
         switch (httpMethod) {
             case GET:
-                return stream(new Request.Builder().url(HttpUtils.appendParams(url, params))
+                return stream(new Request.Builder().url(HttpUtils.appendParam(url, params))
                     .headers(createHeaders(headers)).get().build());
             case POST:
                 return stream(new Request.Builder().url(url).headers(createHeaders(headers))
@@ -358,7 +358,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
             case DELETE:
                 return stream(new Request.Builder().url(url).headers(createHeaders(headers)).delete().build());
             case HEAD:
-                return stream(new Request.Builder().url(HttpUtils.appendParams(url, params))
+                return stream(new Request.Builder().url(HttpUtils.appendParam(url, params))
                     .headers(createHeaders(headers)).head().build());
             case PATCH:
                 return stream(new Request.Builder().url(url).headers(createHeaders(headers))

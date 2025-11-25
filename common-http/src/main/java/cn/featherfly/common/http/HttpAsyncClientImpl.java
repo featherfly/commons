@@ -123,7 +123,7 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
     @Override
     public HttpRequestCompletion<String> get(String url, Map<String, Serializable> params,
         Map<String, String> headers) {
-        return completetion(new Request.Builder().url(HttpUtils.appendParams(url, params))
+        return completetion(new Request.Builder().url(HttpUtils.appendParam(url, params))
             .headers(createHeaders(headers)).get().build());
     }
 
@@ -133,8 +133,9 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
     @Override
     public <R> HttpRequestCompletion<R> get(String url, Map<String, Serializable> params, Map<String, String> headers,
         Class<R> responseType) {
-        return completetion(new Request.Builder().url(HttpUtils.appendParams(url, params))
-            .headers(createHeaders(headers)).get().build(), responseType);
+        return completetion(
+            new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers)).get().build(),
+            responseType);
     }
 
     /**
@@ -143,7 +144,7 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
     @Override
     public HttpRequestCompletion<String> head(String url, Map<String, Serializable> params,
         Map<String, String> headers) {
-        return completetion(new Request.Builder().url(HttpUtils.appendParams(url, params))
+        return completetion(new Request.Builder().url(HttpUtils.appendParam(url, params))
             .headers(createHeaders(headers)).head().build());
     }
 
@@ -153,7 +154,7 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
     @Override
     public <R> HttpRequestCompletion<R> head(String url, Map<String, Serializable> params, Map<String, String> headers,
         Class<R> responseType) {
-        return completetion(new Request.Builder().url(HttpUtils.appendParams(url, params))
+        return completetion(new Request.Builder().url(HttpUtils.appendParam(url, params))
             .headers(createHeaders(headers)).head().build(), responseType);
     }
 
@@ -324,7 +325,7 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
     @Override
     public HttpRequestCompletion<Long> download(String url, Map<String, Serializable> params,
         Map<String, String> headers, OutputStream output, BiConsumer<Long, Long> progress) {
-        Request request = new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
+        Request request = new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
             .get().build();
         HttpRequestCompletionImpl<Long> completion = new HttpRequestCompletionImpl<>();
         client.newCall(request).enqueue(new Callback() {

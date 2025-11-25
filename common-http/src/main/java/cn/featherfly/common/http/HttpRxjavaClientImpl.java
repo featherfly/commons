@@ -142,8 +142,8 @@ public class HttpRxjavaClientImpl extends AbstractHttpClient implements HttpRxja
      */
     @Override
     public Observable<String> get(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return observation(new Request.Builder().url(HttpUtils.appendParams(url, params))
-            .headers(createHeaders(headers)).get().build());
+        return observation(new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+            .get().build());
     }
 
     /**
@@ -152,8 +152,9 @@ public class HttpRxjavaClientImpl extends AbstractHttpClient implements HttpRxja
     @Override
     public <R> Observable<R> get(String url, Map<String, Serializable> params, Map<String, String> headers,
         Class<R> responseType) {
-        return observation(new Request.Builder().url(HttpUtils.appendParams(url, params))
-            .headers(createHeaders(headers)).get().build(), responseType);
+        return observation(
+            new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers)).get().build(),
+            responseType);
     }
 
     /**
@@ -161,8 +162,8 @@ public class HttpRxjavaClientImpl extends AbstractHttpClient implements HttpRxja
      */
     @Override
     public Observable<String> head(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return observation(new Request.Builder().url(HttpUtils.appendParams(url, params))
-            .headers(createHeaders(headers)).head().build());
+        return observation(new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+            .head().build());
     }
 
     /**
@@ -171,8 +172,8 @@ public class HttpRxjavaClientImpl extends AbstractHttpClient implements HttpRxja
     @Override
     public <R> Observable<R> head(String url, Map<String, Serializable> params, Map<String, String> headers,
         Class<R> responseType) {
-        return observation(new Request.Builder().url(HttpUtils.appendParams(url, params))
-            .headers(createHeaders(headers)).head().build(), responseType);
+        return observation(new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+            .head().build(), responseType);
     }
 
     /**
@@ -336,7 +337,7 @@ public class HttpRxjavaClientImpl extends AbstractHttpClient implements HttpRxja
     @Override
     public Observable<Long> download(String url, Map<String, Serializable> params, Map<String, String> headers,
         OutputStream output, BiConsumer<Long, Long> progress) {
-        Request request = new Request.Builder().url(HttpUtils.appendParams(url, params)).headers(createHeaders(headers))
+        Request request = new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
             .get().build();
         Observable<Long> observable = Observable.create(emitter -> {
             client.newCall(request).enqueue(new Callback() {

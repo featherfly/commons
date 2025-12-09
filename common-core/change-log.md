@@ -1,5 +1,9 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
+# 1.15.2 2025-12-09
+
+1. 修复当参数不是原始类型时ClassUtils.getPrimitiveWrapped返回null的错误问题（更改返回传递的类型，即不是基本类型就原样返回）
+
 # 1.15.1 2025-05-27
 1. 修复依赖快照版本的问题
 

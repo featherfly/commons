@@ -95,6 +95,8 @@ public class ClassUtilsTest {
         assertEquals(ClassUtils.getPrimitiveWrapped(Double.TYPE), Double.class);
         assertEquals(ClassUtils.getPrimitiveWrapped(Float.TYPE), Float.class);
 
+        assertEquals(ClassUtils.getPrimitiveWrapped(Float.class), Float.class);
+
         assertEquals(ClassUtils.getPrimitiveWrapped(Boolean.TYPE, true), Boolean.class);
         assertEquals(ClassUtils.getPrimitiveWrapped(Byte.TYPE, true), Byte.class);
         assertEquals(ClassUtils.getPrimitiveWrapped(Short.TYPE, true), Short.class);
@@ -102,6 +104,8 @@ public class ClassUtilsTest {
         assertEquals(ClassUtils.getPrimitiveWrapped(Long.TYPE, true), Long.class);
         assertEquals(ClassUtils.getPrimitiveWrapped(Double.TYPE, true), Double.class);
         assertEquals(ClassUtils.getPrimitiveWrapped(Float.TYPE, true), Float.class);
+
+        assertEquals(ClassUtils.getPrimitiveWrapped(Float.class, true), Float.class);
 
         Function<Class<?>, Class<?>> fn = null;
         fn = ClassUtils.getPrimitiveWrappedFunction(true);
@@ -320,8 +324,7 @@ public class ClassUtilsTest {
     }
 
     @Test
-    public void getFieldGenericParameterType()
-        throws NoSuchFieldException, SecurityException, NoSuchMethodException {
+    public void getFieldGenericParameterType() throws NoSuchFieldException, SecurityException, NoSuchMethodException {
         assertEquals(ClassUtils.getFieldGenericParameterType(User.class, User.class.getDeclaredField("list")),
             String.class);
         assertEquals(ClassUtils.getFieldGenericParameterType(User.class, User.class.getDeclaredField("map")),
@@ -469,8 +472,7 @@ public class ClassUtilsTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void getMethodGenericParameterType()
-        throws NoSuchFieldException, SecurityException, NoSuchMethodException {
+    public void getMethodGenericParameterType() throws NoSuchFieldException, SecurityException, NoSuchMethodException {
         //        assertEquals(
         //                ClassUtils.getMethodGenericParameterType(genericType, genericType.getMethod("setId", Object.class)),
         //                Long.class);
@@ -505,8 +507,7 @@ public class ClassUtilsTest {
     }
 
     @Test
-    public void getMethodGenericParameterType2()
-        throws NoSuchFieldException, SecurityException, NoSuchMethodException {
+    public void getMethodGenericParameterType2() throws NoSuchFieldException, SecurityException, NoSuchMethodException {
         //        assertEquals(ClassUtils.getMethodGenericReturnType(User.class.getMethod("getList", new Class[0])),
         //                String.class);
         //        assertEquals(ClassUtils.getMethodGenericReturnType(User.class.getMethod("getMap", new Class[0])), String.class);

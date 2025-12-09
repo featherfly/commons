@@ -2322,7 +2322,7 @@ public final class ClassUtils {
             case TypeNames.VOID_CODE:
                 return Void.class;
             default:
-                return null;
+                return type;
         }
     }
 
@@ -2347,7 +2347,7 @@ public final class ClassUtils {
             case TypeNames.VOID_NAME:
                 return Void.class;
             default:
-                return null;
+                return type;
         }
     }
 

@@ -480,6 +480,9 @@ public final class ArrayUtils {
      */
     @SuppressWarnings("unchecked")
     public static <T> T newInstance(Class<?> type, int length) {
+        if (type == null) {
+            return null;
+        }
         return (T) Array.newInstance(type, length);
     }
 

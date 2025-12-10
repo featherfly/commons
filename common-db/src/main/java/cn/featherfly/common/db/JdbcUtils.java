@@ -1157,13 +1157,13 @@ public final class JdbcUtils {
                     setParameter(prep, position, ((Optional<?>) value).orElse(null), enumWithOridinal);
                     return;
 
-                case TypeNames.ATOMICBOOLEAN_NAME:
+                case TypeNames.ATOMICINTEGER_NAME:
                     prep.setInt(position, ((AtomicInteger) value).get());
                     return;
-                case TypeNames.ATOMICINTEGER_NAME:
+                case TypeNames.ATOMICLONG_NAME:
                     prep.setLong(position, ((AtomicLong) value).get());
                     return;
-                case TypeNames.ATOMICLONG_NAME:
+                case TypeNames.ATOMICBOOLEAN_NAME:
                     prep.setBoolean(position, ((AtomicBoolean) value).get());
                     return;
 
@@ -1928,13 +1928,13 @@ public final class JdbcUtils {
                     setParameter(res, position, ((Optional<?>) value).orElse(null), enumWithOridinal);
                     return;
 
-                case TypeNames.ATOMICBOOLEAN_NAME:
+                case TypeNames.ATOMICINTEGER_NAME:
                     res.updateInt(position, ((AtomicInteger) value).get());
                     return;
-                case TypeNames.ATOMICINTEGER_NAME:
+                case TypeNames.ATOMICLONG_NAME:
                     res.updateLong(position, ((AtomicLong) value).get());
                     return;
-                case TypeNames.ATOMICLONG_NAME:
+                case TypeNames.ATOMICBOOLEAN_NAME:
                     res.updateBoolean(position, ((AtomicBoolean) value).get());
                     return;
 
@@ -2109,13 +2109,13 @@ public final class JdbcUtils {
                     setParameter(call, name, ((Optional<?>) value).orElse(null), enumWithOridinal);
                     return;
 
-                case TypeNames.ATOMICBOOLEAN_NAME:
+                case TypeNames.ATOMICINTEGER_NAME:
                     call.setInt(name, ((AtomicInteger) value).get());
                     return;
-                case TypeNames.ATOMICINTEGER_NAME:
+                case TypeNames.ATOMICLONG_NAME:
                     call.setLong(name, ((AtomicLong) value).get());
                     return;
-                case TypeNames.ATOMICLONG_NAME:
+                case TypeNames.ATOMICBOOLEAN_NAME:
                     call.setBoolean(name, ((AtomicBoolean) value).get());
                     return;
 
@@ -2557,8 +2557,7 @@ public final class JdbcUtils {
                 obj = rs.getTimestamp(index);
             } else if (className != null && className.startsWith(ORACLE_DATE)) {
                 String metaDataClassName = rs.getMetaData().getColumnClassName(index);
-                if (SQL_TIMESTAMP.equals(metaDataClassName)
-                    || ORACLE_TIMESTAMP.equals(metaDataClassName)) {
+                if (SQL_TIMESTAMP.equals(metaDataClassName) || ORACLE_TIMESTAMP.equals(metaDataClassName)) {
                     obj = rs.getTimestamp(index);
                 } else {
                     obj = rs.getDate(index);
@@ -3054,8 +3053,7 @@ public final class JdbcUtils {
                 obj = call.getTimestamp(index);
             } else if (className != null && className.startsWith(ORACLE_DATE)) {
                 String metaDataClassName = call.getParameterMetaData().getParameterClassName(index);
-                if (SQL_TIMESTAMP.equals(metaDataClassName)
-                    || ORACLE_TIMESTAMP.equals(metaDataClassName)) {
+                if (SQL_TIMESTAMP.equals(metaDataClassName) || ORACLE_TIMESTAMP.equals(metaDataClassName)) {
                     obj = call.getTimestamp(index);
                 } else {
                     obj = call.getDate(index);

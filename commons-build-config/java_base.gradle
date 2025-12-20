@@ -1,10 +1,11 @@
 apply plugin: 'java-library'
-apply plugin: 'maven-publish'
+// apply plugin: 'maven-publish'
 
 import java.io.File;
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
+    options.release.set(Integer.parseInt(jdkVersion))
 }
 tasks.withType(Javadoc) {
     options.encoding = "UTF-8"
@@ -23,5 +24,6 @@ jar {
     manifest.attributes 'Build-Tool' : "gradle " + gradle.gradleVersion
     manifest.attributes 'Build-Jdk' : ant.properties['java.runtime.version']
     manifest.attributes 'Bundle-License': 'http://www.apache.org/licenses/LICENSE-2.0'
+    manifest.attributes 'Java-Version' : jdkVersion
 }
 

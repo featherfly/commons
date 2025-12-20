@@ -1,6 +1,11 @@
+plugins {
+  id "com.vanniktech.maven.publish" version "0.35.0"
+}
+
 allprojects {
-    apply from: rootDir.getAbsolutePath() + '/java_base.gradle'   
-    apply from: rootDir.getAbsolutePath() + '/maven_push.gradle'
+    apply from: rootDir.getAbsolutePath() + '/java_base.gradle'
+//     apply from: rootDir.getAbsolutePath() + '/maven_push.gradle'
+    apply from: rootDir.getAbsolutePath() + '/maven_push_plugin.gradle'
         
     ext {
     }

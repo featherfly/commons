@@ -13,12 +13,14 @@ def getFinalVersion() {
 def getSonatypeRepositoryUrl() {
     if (isReleaseBuild()) {
         println 'RELEASE BUILD'
-        return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
-                : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+        return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL :
+                "https://central.sonatype.com"
+                // "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
     } else {
         println 'SNAPSHOT BUILD'
-        return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL
-                : "https://oss.sonatype.org/content/repositories/snapshots/"
+        return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL :
+                "https://central.sonatype.com/content/repositories/snapshots/"
+                // "https://oss.sonatype.org/content/repositories/snapshots/"
     
     }
 }

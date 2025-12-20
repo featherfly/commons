@@ -7,7 +7,7 @@ dependencies {
     //api project(":common-model-repository")
     // api group: 'cn.featherfly.common', name: 'common-api', version: '0.5.5'
     api group: 'cn.featherfly.common', name: 'common-functional', version: '0.2.0'
-    api group: 'cn.featherfly.common', name: 'common-core', version: '1.15.1'
+    api group: 'cn.featherfly.common', name: 'common-core', version: '1.15.2'
     api group: 'cn.featherfly.common', name: 'common-model-repository', version: '0.5.3'
     //api group: 'cn.featherfly.common', name: 'common-tuple', version: '1.0.0'
     //api group: 'com.speedment.common', name: 'tuple', version: '3.2.10'

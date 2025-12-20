@@ -1,5 +1,8 @@
-# 0.8.1
+# 0.8.1 2025-12-21
 1. 优化JdbcUtils设置参数逻辑，使用switch代替if else,以及获取原始类型包装对象
+2. 移动枚举JdbcMappingFactory.MappingMode到JdbcMappingFactoryImpl.MappingMode
+3. ObjectToJsonTypeRegister添加ObjectToJsonTypeRegister(Class)构造器
+3. 升级common-core到1.15.2
 
 # 0.8.0 2025-02-13
 1. 修复ClassMappingUtils类ignoreProperty方法在属性是内嵌属性（xxx.yyy）时发生错误的问题

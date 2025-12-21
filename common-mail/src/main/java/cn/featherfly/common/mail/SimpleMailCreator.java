@@ -30,9 +30,7 @@ import cn.featherfly.common.lang.UUIDGenerator;
 import cn.featherfly.common.mail.client.AbstractMailClient;
 
 /**
- * <p>
- * SimpleMailCreator
- * </p>
+ * SimpleMailCreator.
  *
  * @author 钟冀
  */
@@ -174,13 +172,13 @@ public class SimpleMailCreator implements MailCreator<Mail> {
     }
 
     private void setContent(MimeMultipart part, Mail mail)
-            throws FileNotFoundException, IOException, MessagingException {
+        throws FileNotFoundException, IOException, MessagingException {
         for (int i = 0; i < part.getCount(); i++) {
             BodyPart bodyPart = part.getBodyPart(i);
             String disposition = bodyPart.getDisposition();
             if (disposition != null && (disposition.equals(Part.ATTACHMENT) || disposition.equals(Part.INLINE))) {
                 mail.getMailBody().addMailAttach(new MailAttach(storeAttach(bodyPart.getInputStream()),
-                        MimeUtility.decodeText(bodyPart.getFileName())));
+                    MimeUtility.decodeText(bodyPart.getFileName())));
             } else {
                 Object content = bodyPart.getContent();
                 if (content instanceof MimeMultipart) {
@@ -191,8 +189,8 @@ public class SimpleMailCreator implements MailCreator<Mail> {
                     //					System.out.println("InputStream : " + bodyPart.getContentType());
                     InputStream is = (InputStream) part.getBodyPart(i).getContent();
                     //					mail.getMailBody().addMailAttach(new MailAttach(storeAttach(is), bodyPart.getFileName()));
-                    mail.getMailBody().addMailAttach(
-                            new MailAttach(storeAttach(is), MimeUtility.decodeText(bodyPart.getFileName())));
+                    mail.getMailBody()
+                        .addMailAttach(new MailAttach(storeAttach(is), MimeUtility.decodeText(bodyPart.getFileName())));
                 } else if (content instanceof String) {
                     // contentType text/html;charset="gb2312";
                     //					System.out.println("String : " + bodyPart.getContentType());
@@ -208,13 +206,11 @@ public class SimpleMailCreator implements MailCreator<Mail> {
     }
 
     /**
-     * <p>
      * 存储文件. 可以由子类覆盖.
-     * </p>
      *
      * @param is 附件输入流
      * @return 存储的文件
-     * @throws IOException
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     protected File storeAttach(InputStream is) throws IOException {
         File file = new File(UUIDGenerator.generateUUID());

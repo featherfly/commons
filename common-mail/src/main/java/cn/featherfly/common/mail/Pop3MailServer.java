@@ -1,24 +1,29 @@
 
 package cn.featherfly.common.mail;
 
-
 /**
- * <p>
- * Pop3MailServer
- * </p>
+ * Pop3MailServer.
  *
  * @author 钟冀
  */
-public class Pop3MailServer extends MailServer{
+public class Pop3MailServer extends MailServer {
 
-	/**
-	 */
-	public Pop3MailServer(String host) {
-		this(host, 110);
-	}
-	/**
-	 */
-	public Pop3MailServer(String host, int port) {
-		super(host, port, "pop3");
-	}
+    /**
+     * Instantiates a new pop 3 mail server.
+     *
+     * @param host the host
+     */
+    public Pop3MailServer(String host) {
+        this(host, 110);
+    }
+
+    /**
+     * Instantiates a new pop 3 mail server.
+     *
+     * @param host the host
+     * @param port the port
+     */
+    public Pop3MailServer(String host, int port) {
+        super(host, port, "pop3");
+    }
 }

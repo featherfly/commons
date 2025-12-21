@@ -30,16 +30,16 @@ import cn.featherfly.common.mail.MailUser;
 import cn.featherfly.common.mail.SmtpMailServer;
 
 /**
- * <p>
- * 邮件发送客户端
- * </p>
+ * 邮件发送客户端.
  *
  * @author 钟冀
  */
 public class MailSender extends AbstractMailClient {
 
     /**
-     * @param mailUser   mailUser
+     * Instantiates a new mail sender.
+     *
+     * @param mailUser mailUser
      * @param smtpServer smtpServer
      */
     public MailSender(MailUser mailUser, SmtpMailServer smtpServer) {
@@ -47,9 +47,11 @@ public class MailSender extends AbstractMailClient {
     }
 
     /**
-     * @param mailUser   mailUser
+     * Instantiates a new mail sender.
+     *
+     * @param mailUser mailUser
      * @param smtpServer smtpServer
-     * @param props      props
+     * @param props props
      */
     public MailSender(MailUser mailUser, SmtpMailServer smtpServer, Map<String, Object> props) {
         super(mailUser, smtpServer, null, props);
@@ -58,7 +60,7 @@ public class MailSender extends AbstractMailClient {
     }
 
     /**
-     * 发送邮件
+     * 发送邮件.
      *
      * @param address mail address
      * @param subject mail subject
@@ -69,10 +71,10 @@ public class MailSender extends AbstractMailClient {
     }
 
     /**
-     * 发送邮件
+     * 发送邮件.
      *
-     * @param mailAddress
-     * @param mailBody
+     * @param mailAddress the mail address
+     * @param mailBody the mail body
      */
     public void send(MailAddress mailAddress, MailBody mailBody) {
         setDebug();
@@ -80,7 +82,7 @@ public class MailSender extends AbstractMailClient {
             Message message = createMessage(mailAddress, mailBody);
             // 连接服务器的邮箱
             transport.connect(getSmtpServer().getHost(), getSmtpServer().getPort(), getMailUser().getUsername(),
-                    getMailUser().getPassword());
+                getMailUser().getPassword());
             // 发送邮件
             transport.sendMessage(message, message.getAllRecipients());
             //          transport.close();
@@ -161,7 +163,7 @@ public class MailSender extends AbstractMailClient {
             if (property.getValue() != null) {
                 try {
                     message.setHeader(PROPERTY_PREFIX + property.getKey(),
-                            MimeUtility.encodeText(property.getValue(), getCharset(), getEncoding()));
+                        MimeUtility.encodeText(property.getValue(), getCharset(), getEncoding()));
                 } catch (UnsupportedEncodingException e) {
                     logger.error("参数[{}]编码出错：{}", property.getValue(), e.getMessage());
                     message.setHeader(PROPERTY_PREFIX + property.getKey(), property.getValue());

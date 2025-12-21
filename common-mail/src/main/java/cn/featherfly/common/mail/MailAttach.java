@@ -7,9 +7,7 @@ import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Lang;
 
 /**
- * <p>
- * MailAttach
- * </p>
+ * MailAttach.
  *
  * @author 钟冀
  */
@@ -20,12 +18,19 @@ public class MailAttach {
     private File file;
 
     /**
+     * Instantiates a new mail attach.
+     *
+     * @param file the file
      */
     public MailAttach(File file) {
         init(file, null);
     }
 
     /**
+     * Instantiates a new mail attach.
+     *
+     * @param file the file
+     * @param fileName the file name
      */
     public MailAttach(File file, String fileName) {
         init(file, fileName);
@@ -43,7 +48,7 @@ public class MailAttach {
     }
 
     /**
-     * 返回fileName
+     * 返回fileName.
      *
      * @return fileName
      */
@@ -52,7 +57,7 @@ public class MailAttach {
     }
 
     /**
-     * 返回file
+     * 返回file.
      *
      * @return file
      */

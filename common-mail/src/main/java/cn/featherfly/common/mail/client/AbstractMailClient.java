@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.mail.ImapMailServer;
 import cn.featherfly.common.mail.MailException;
 import cn.featherfly.common.mail.MailServer;
@@ -32,32 +32,38 @@ import cn.featherfly.common.mail.SmtpMailServer;
  * <p>
  * 抽象邮件发送客户端
  * </p>
+ * .
  *
  * @author 钟冀
  */
 public abstract class AbstractMailClient {
 
+    /** The logger. */
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /** The Constant MAIL_SMTP_AUTH. */
     protected static final String MAIL_SMTP_AUTH = "mail.smtp.auth";
 
+    /** The Constant MAIL_SMTP_HOST. */
     protected static final String MAIL_SMTP_HOST = "mail.smtp.host";
 
-    /**
-     * 扩展属性前置
-     */
+    /** 扩展属性前置. */
     public static final String PROPERTY_PREFIX = "prop-";
 
     /**
-     * @param mailUser
-     * @param smtpMailServer
+     * Instantiates a new abstract mail client.
+     *
+     * @param mailUser the mail user
+     * @param smtpMailServer the smtp mail server
      */
     public AbstractMailClient(MailUser mailUser, SmtpMailServer smtpMailServer) {
         this(mailUser, smtpMailServer, null);
     }
 
     /**
-     * @param mailUser       mailUser
+     * Instantiates a new abstract mail client.
+     *
+     * @param mailUser mailUser
      * @param pop3MailServer pop3MailServer
      */
     public AbstractMailClient(MailUser mailUser, Pop3MailServer pop3MailServer) {
@@ -65,30 +71,36 @@ public abstract class AbstractMailClient {
     }
 
     /**
-     * @param mailUser
-     * @param imapMailServer
+     * Instantiates a new abstract mail client.
+     *
+     * @param mailUser the mail user
+     * @param imapMailServer the imap mail server
      */
     public AbstractMailClient(MailUser mailUser, ImapMailServer imapMailServer) {
         this(mailUser, null, imapMailServer);
     }
 
     /**
-     * @param mailUser
-     * @param smtpServer
-     * @param storeServer
+     * Instantiates a new abstract mail client.
+     *
+     * @param mailUser the mail user
+     * @param smtpServer the smtp server
+     * @param storeServer the store server
      */
     public AbstractMailClient(MailUser mailUser, MailServer smtpServer, MailServer storeServer) {
         this(mailUser, smtpServer, storeServer, null);
     }
 
     /**
-     * @param mailUser
-     * @param smtpServer
-     * @param storeServer
-     * @param props
+     * Instantiates a new abstract mail client.
+     *
+     * @param mailUser the mail user
+     * @param smtpServer the smtp server
+     * @param storeServer the store server
+     * @param props the props
      */
     public AbstractMailClient(MailUser mailUser, MailServer smtpServer, MailServer storeServer,
-            Map<String, Object> props) {
+        Map<String, Object> props) {
         try {
             init(mailUser, smtpServer, storeServer, props);
         } catch (Exception e) {
@@ -97,7 +109,9 @@ public abstract class AbstractMailClient {
     }
 
     /**
-     * @param mailClient
+     * Instantiates a new abstract mail client.
+     *
+     * @param mailClient the mail client
      */
     public AbstractMailClient(AbstractMailClient mailClient) {
         this(mailClient.mailUser, mailClient.smtpServer, mailClient.storeServer);
@@ -113,9 +127,18 @@ public abstract class AbstractMailClient {
     //	private method
     // ********************************************************************
 
+    /**
+     * Inits the.
+     *
+     * @param mailUser the mail user
+     * @param smtpServer the smtp server
+     * @param storeServer the store server
+     * @param props the props
+     * @throws MessagingException the messaging exception
+     */
     // 初始化<code> Session, Transport </code>
     protected void init(final MailUser mailUser, MailServer smtpServer, MailServer storeServer,
-            Map<String, Object> props) throws MessagingException {
+        Map<String, Object> props) throws MessagingException {
         Properties properties = new Properties();
 
         AssertIllegalArgument.isNotNull(mailUser, "mailUser");
@@ -160,7 +183,14 @@ public abstract class AbstractMailClient {
         });
     }
 
-    // 获取所有的邮件地址
+    /**
+     * Gets the address.
+     * 获取所有的邮件地址.
+     *
+     * @param address the address
+     * @return the address
+     * @throws AddressException the address exception
+     */
     protected Address[] getAddress(String[] address) throws AddressException {
         Address[] addrs = new InternetAddress[address.length];
         for (int i = 0; i < address.length; i++) {
@@ -169,10 +199,13 @@ public abstract class AbstractMailClient {
         return addrs;
     }
 
+    /**
+     * Sets the debug.
+     */
     protected void setDebug() {
         // 有了这句便可以在发送邮件的过程中在console处显示过程信息，供调试使用（你可以在控制台（console)上看到发送邮件的过程）
         if (debug) {
-            if (Strings.isNotEmpty(mailLogFile)) {
+            if (Str.isNotEmpty(mailLogFile)) {
                 try {
                     session.setDebugOut(new PrintStream(new FileOutputStream(mailLogFile, true)));
                 } catch (FileNotFoundException e) {
@@ -200,7 +233,7 @@ public abstract class AbstractMailClient {
     //	private MailBody mailBody;
 
     /**
-     * 返回session
+     * 返回session.
      *
      * @return session
      */
@@ -209,7 +242,7 @@ public abstract class AbstractMailClient {
     }
 
     /**
-     * 返回smtpServer
+     * 返回smtpServer.
      *
      * @return smtpServer
      */
@@ -218,7 +251,7 @@ public abstract class AbstractMailClient {
     }
 
     /**
-     * 返回storeServer
+     * 返回storeServer.
      *
      * @return storeServer
      */
@@ -250,7 +283,7 @@ public abstract class AbstractMailClient {
     private String mailLogFile;
 
     /**
-     * 返回debug
+     * 返回debug.
      *
      * @return debug
      */
@@ -259,7 +292,7 @@ public abstract class AbstractMailClient {
     }
 
     /**
-     * 设置debug
+     * 设置debug.
      *
      * @param debug debug
      */
@@ -268,6 +301,8 @@ public abstract class AbstractMailClient {
     }
 
     /**
+     * Gets the mail smtp host.
+     *
      * @return the mailSmtpHost
      */
     public String getMailSmtpHost() {
@@ -278,6 +313,8 @@ public abstract class AbstractMailClient {
     }
 
     /**
+     * Sets the mail smtp host.
+     *
      * @param mailSmtpHost the mailSmtpHost to set
      */
     public void setMailSmtpHost(String mailSmtpHost) {
@@ -285,6 +322,8 @@ public abstract class AbstractMailClient {
     }
 
     /**
+     * Gets the mail smtp auth.
+     *
      * @return the mailSmtpAuth
      */
     public String getMailSmtpAuth() {
@@ -295,6 +334,8 @@ public abstract class AbstractMailClient {
     }
 
     /**
+     * Sets the mail smtp auth.
+     *
      * @param mailSmtpAuth the mailSmtpAuth to set
      */
     public void setMailSmtpAuth(String mailSmtpAuth) {
@@ -302,7 +343,7 @@ public abstract class AbstractMailClient {
     }
 
     /**
-     * 返回mailLogFile
+     * 返回mailLogFile.
      *
      * @return mailLogFile
      */
@@ -311,7 +352,7 @@ public abstract class AbstractMailClient {
     }
 
     /**
-     * 设置mailLogFile
+     * 设置mailLogFile.
      *
      * @param mailLogFile mailLogFile
      */
@@ -320,7 +361,7 @@ public abstract class AbstractMailClient {
     }
 
     /**
-     * 返回charset
+     * 返回charset.
      *
      * @return charset
      */
@@ -329,7 +370,7 @@ public abstract class AbstractMailClient {
     }
 
     /**
-     * 设置charset
+     * 设置charset.
      *
      * @param charset charset
      */
@@ -338,7 +379,7 @@ public abstract class AbstractMailClient {
     }
 
     /**
-     * 返回encoding
+     * 返回encoding.
      *
      * @return encoding
      */
@@ -347,7 +388,7 @@ public abstract class AbstractMailClient {
     }
 
     /**
-     * 设置encoding
+     * 设置encoding.
      *
      * @param encoding encoding
      */
@@ -356,7 +397,7 @@ public abstract class AbstractMailClient {
     }
 
     /**
-     * 返回props
+     * 返回props.
      *
      * @return props
      */
@@ -365,7 +406,7 @@ public abstract class AbstractMailClient {
     }
 
     /**
-     * 返回mailUser
+     * 返回mailUser.
      *
      * @return mailUser
      */

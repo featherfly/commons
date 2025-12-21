@@ -7,10 +7,11 @@ sourceSets {
 }
   
 dependencies {
-	implementation project(":common-core")
-    	//compile 'org.apache.commons:commons-email:1.4'
-	//compile 'javax.mail:mail:1.4.7'
-	implementation group: 'javax.mail', name: 'javax.mail-api', version: '1.6.2'	
-	implementation group: 'com.sun.mail', name: 'javax.mail', version: '1.6.2'
+	//implementation project(":common-core")
+    api 'cn.featherfly.common:common-core:1.15.2'
+    //implementation 'org.apache.commons:commons-email:1.4'
+	//implementation 'javax.mail:mail:1.4.7'
+	implementation 'javax.mail:javax.mail-api:1.6.2'	
+	implementation 'com.sun.mail:javax.mail:1.6.2'
     
 }

@@ -27,16 +27,16 @@ import cn.featherfly.common.mail.Pop3MailServer;
 import cn.featherfly.common.mail.SimpleMailCreator;
 
 /**
- * <p>
- * 邮件接收客户端
- * </p>
+ * 邮件接收客户端.
  *
  * @author 钟冀
  */
 public class MailReceiver extends AbstractMailClient {
 
     /**
-     * @param mailUser       mailUser
+     * Instantiates a new mail receiver.
+     *
+     * @param mailUser mailUser
      * @param pop3MailServer pop3MailServer
      */
     public MailReceiver(MailUser mailUser, Pop3MailServer pop3MailServer) {
@@ -44,7 +44,9 @@ public class MailReceiver extends AbstractMailClient {
     }
 
     /**
-     * @param mailUser       mailUser
+     * Instantiates a new mail receiver.
+     *
+     * @param mailUser mailUser
      * @param imapMailServer imapMailServer
      */
     public MailReceiver(MailUser mailUser, ImapMailServer imapMailServer) {
@@ -52,9 +54,11 @@ public class MailReceiver extends AbstractMailClient {
     }
 
     /**
-     * @param mailUser
-     * @param pop3MailServer
-     * @param props
+     * Instantiates a new mail receiver.
+     *
+     * @param mailUser the mail user
+     * @param pop3MailServer the pop 3 mail server
+     * @param props the props
      */
     public MailReceiver(MailUser mailUser, Pop3MailServer pop3MailServer, Map<String, Object> props) {
         super(mailUser, null, pop3MailServer, props);
@@ -63,9 +67,11 @@ public class MailReceiver extends AbstractMailClient {
     }
 
     /**
-     * @param mailUser
-     * @param imapMailServer
-     * @param props
+     * Instantiates a new mail receiver.
+     *
+     * @param mailUser the mail user
+     * @param imapMailServer the imap mail server
+     * @param props the props
      */
     public MailReceiver(MailUser mailUser, ImapMailServer imapMailServer, Map<String, Object> props) {
         super(mailUser, null, imapMailServer, props);
@@ -89,7 +95,8 @@ public class MailReceiver extends AbstractMailClient {
      * 获取指定folder指定messageId的邮件.
      * </p>
      *
-     * @param messageId   messageId
+     * @param <E> the element type
+     * @param messageId messageId
      * @param mailCreator 邮件创建器
      * @return 邮件
      */
@@ -107,9 +114,7 @@ public class MailReceiver extends AbstractMailClient {
     }
 
     /**
-     * <p>
      * 处理从指定folder的所有邮件.
-     * </p>
      *
      * @param mailHandler 处理对象
      */
@@ -118,11 +123,9 @@ public class MailReceiver extends AbstractMailClient {
     }
 
     /**
-     * <p>
      * 处理从指定folder的所有邮件.
-     * </p>
      *
-     * @param searchTerm  查询条件，如果为空则返回所有
+     * @param searchTerm 查询条件，如果为空则返回所有
      * @param mailHandler 处理对象
      */
     public void receive(SearchTerm searchTerm, MailHandler<Mail> mailHandler) {
@@ -130,10 +133,9 @@ public class MailReceiver extends AbstractMailClient {
     }
 
     /**
-     * <p>
      * 处理从指定folder的所有邮件.
-     * </p>
      *
+     * @param <E> the element type
      * @param mailCreator 邮件创建器
      * @param mailHandler 处理对象
      */
@@ -142,11 +144,10 @@ public class MailReceiver extends AbstractMailClient {
     }
 
     /**
-     * <p>
      * 处理从指定folder查询出的邮件.
-     * </p>
      *
-     * @param searchTerm  查询条件，如果为空则返回所有
+     * @param <E> the element type
+     * @param searchTerm 查询条件，如果为空则返回所有
      * @param mailCreator 邮件创建器
      * @param mailHandler 处理对象
      */
@@ -157,11 +158,9 @@ public class MailReceiver extends AbstractMailClient {
     }
 
     /**
-     * <p>
      * 查询指定folder的邮件.
-     * </p>
      *
-     * @param searchTerm  查询条件，如果为空则返回所有
+     * @param searchTerm 查询条件，如果为空则返回所有
      * @param mailCreator 邮件创建器
      * @return 邮件
      */
@@ -179,16 +178,14 @@ public class MailReceiver extends AbstractMailClient {
     }
 
     /**
-     * <p>
      * 查询指定folder的邮件.
-     * </p>
      *
-     * @param searchTerm  查询条件，如果为空则返回所有
+     * @param searchTerm 查询条件，如果为空则返回所有
      * @param mailCreator 邮件创建器
      * @return 邮件
      */
     private <E> List<E> searchInStore(SearchTerm searchTerm, int start, Store store, MailCreator<E> mailCreator,
-            MailHandler<E> handler) throws Exception {
+        MailHandler<E> handler) throws Exception {
         AssertIllegalArgument.isNotNull(mailCreator, "mailCreator");
         Folder folder = null;
         int cacheSize = 0;
@@ -213,7 +210,7 @@ public class MailReceiver extends AbstractMailClient {
                 if (allowCacheSize > 0 && cacheSize > allowCacheSize) {
                     // 超过允许的缓存大小
                     logger.debug("从第[{}]封邮件开始，在第{}封邮件时累计缓存[{}]超过允许的缓存[{}]大小，重新连接",
-                            new Object[] { start, i, cacheSize, allowCacheSize });
+                        new Object[] { start, i, cacheSize, allowCacheSize });
                     MailApiUtils.close(folder, false, logger);
                     mails.addAll(searchInStore(searchTerm, start + i, store, mailCreator, handler));
                     return mails;
@@ -236,55 +233,46 @@ public class MailReceiver extends AbstractMailClient {
     }
 
     /**
-     * <p>
-     * 删除
-     * </p>
+     * 删除.
      *
-     * @param messageId
+     * @param messageId the message id
      */
     public void delete(String messageId) {
         flag(messageId, new Flags(Flag.DELETED));
     }
 
     /**
-     * <p>
-     * 标记已读
-     * </p>
+     * 标记已读.
      *
-     * @param messageId
+     * @param messageId the message id
      */
     public void seen(String messageId) {
         flag(messageId, new Flags(Flag.SEEN));
     }
 
     /**
-     * <p>
-     * 标记已回复
-     * </p>
+     * 标记已回复.
      *
-     * @param messageId
+     * @param messageId the message id
      */
     public void answer(String messageId) {
         flag(messageId, new Flags(Flag.ANSWERED));
     }
 
     /**
-     * <p>
-     * 标记已回复
-     * </p>
+     * 标记已回复.
      *
-     * @param messageId
+     * @param messageId the message id
      */
     public void recent(String messageId) {
         flag(messageId, new Flags(Flag.RECENT));
     }
 
     /**
-     * <p>
-     * 标记
-     * </p>
+     * 标记.
      *
-     * @param messageId
+     * @param messageId the message id
+     * @param flag the flag
      */
     public void flag(String messageId, String flag) {
         flag(messageId, new Flags(flag));
@@ -339,7 +327,7 @@ public class MailReceiver extends AbstractMailClient {
     private Store getStore() throws MessagingException {
         Store store = getSession().getStore(getStoreServer().getProtocol());
         store.connect(getStoreServer().getHost(), getStoreServer().getPort(), getMailUser().getUsername(),
-                getMailUser().getPassword());
+            getMailUser().getPassword());
         return store;
     }
 
@@ -358,7 +346,7 @@ public class MailReceiver extends AbstractMailClient {
     private String folder = "INBOX";
 
     /**
-     * 返回folder
+     * 返回folder.
      *
      * @return folder
      */
@@ -367,7 +355,7 @@ public class MailReceiver extends AbstractMailClient {
     }
 
     /**
-     * 设置folder
+     * 设置folder.
      *
      * @param folder folder
      */
@@ -376,7 +364,7 @@ public class MailReceiver extends AbstractMailClient {
     }
 
     /**
-     * 返回allowCacheSize
+     * 返回allowCacheSize.
      *
      * @return allowCacheSize
      */
@@ -385,7 +373,7 @@ public class MailReceiver extends AbstractMailClient {
     }
 
     /**
-     * 设置allowCacheSize
+     * 设置allowCacheSize.
      *
      * @param allowCacheSize allowCacheSize
      */

@@ -4,9 +4,7 @@ package cn.featherfly.common.mail;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 
 /**
- * <p>
- * MailServer
- * </p>
+ * MailServer.
  *
  * @author 钟冀
  */
@@ -19,6 +17,11 @@ public class MailServer {
     private String protocol;
 
     /**
+     * Instantiates a new mail server.
+     *
+     * @param host the host
+     * @param port the port
+     * @param protocol the protocol
      */
     public MailServer(String host, int port, String protocol) {
         AssertIllegalArgument.isNotEmpty(host, "host");
@@ -30,8 +33,8 @@ public class MailServer {
     }
 
     /**
-     * 返回host
-     * 
+     * 返回host.
+     *
      * @return host
      */
     public String getHost() {
@@ -39,8 +42,8 @@ public class MailServer {
     }
 
     /**
-     * 返回port
-     * 
+     * 返回port.
+     *
      * @return port
      */
     public int getPort() {
@@ -48,8 +51,8 @@ public class MailServer {
     }
 
     /**
-     * 返回protocol
-     * 
+     * 返回protocol.
+     *
      * @return protocol
      */
     public String getProtocol() {

@@ -43,7 +43,9 @@ public class Generator {
     GenerateConfig config;
 
     /**
-     * @param config
+     * Instantiates a new generator.
+     *
+     * @param config the config
      */
     protected Generator(GenerateConfig config) {
         super();

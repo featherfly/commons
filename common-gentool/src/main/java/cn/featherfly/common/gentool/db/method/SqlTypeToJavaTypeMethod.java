@@ -6,7 +6,7 @@ import java.util.List;
 
 import cn.featherfly.common.db.mapping.SqlTypeMappingManager;
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import freemarker.ext.beans.StringModel;
+import freemarker.ext.beans.GenericObjectModel;
 import freemarker.template.SimpleNumber;
 import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModelException;
@@ -47,12 +47,12 @@ public class SqlTypeToJavaTypeMethod implements TemplateMethodModelEx {
             if (n.getClass() == Integer.class || n.getClass() == Integer.TYPE) {
                 sqlType = JDBCType.valueOf((int) n);
             }
-        } else if (type instanceof StringModel) {
-            sqlType = JDBCType.valueOf(((StringModel) type).getAsString());
+        } else if (type instanceof GenericObjectModel) {
+            sqlType = JDBCType.valueOf(((GenericObjectModel) type).getAsString());
         }
         if (sqlType == null) {
             throw new RuntimeException(
-                    "Wrong argument, it must be a sql type, only int,Integer,String,SqlType types support");
+                "Wrong argument, it must be a sql type, only int,Integer,String,SqlType types support");
         }
         return manager.getJavaType(sqlType).getName();
     }

@@ -3,6 +3,7 @@ package ${packageName};
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Entity;
+import javax.persistence.Column;
 
 <#assign entityName=table.name()?replace("_"," ")?capitalize?replace(" ","")>
 /**
@@ -12,43 +13,46 @@ import javax.persistence.Entity;
  * create by cn.featherlfy.common:common-db generate tool at ${createTime?string('yyyy-MM-dd')}
  */
 @Entity
-@Table(name = "${table.name()}")
+@Table(name = "${table.name()}"<#if table.schema?? && table.schema?length gt 0>, schema = "${table.schema}"</#if>)
 public class ${entityName}{
-
     <#list table.columns as column>
+    <#assign propertyName=column.name()?lower_case?replace("_"," ")?capitalize?replace(" ","")?uncap_first>
     /**
      * property for ${column.name()} 
-     */
-     <#if column.primaryKey>@Id</#if>
-     <#assign propertyName=column.name()?lower_case?replace("_"," ")?capitalize?replace(" ","")?uncap_first>
-     private ${sql_java(column.sqlType)} ${propertyName};
+     */<#if column.primaryKey>
+    @Id</#if>
+    @Column(name = "${column.name()}"<#if !column.nullable>,  nullable = ${column.nullable?string("true","false")}</#if><#if sql_java(column.sqlType) = 'java.lang.String'>, length = ${column.size?c}<#else>, precision = ${column.size?c}<#if column.decimalDigits gt 0>, scale = ${column.decimalDigits?c}</#if></#if>)
+    private ${sql_java(column.sqlType)} ${propertyName};
     </#list>
 
-    public ${entityName}(){
-    }
+    /**
+     * Instantiates a new ${entityName}
+     */
+    public ${entityName}(){}
     
     /**
+     * Instantiates a new ${entityName}
      * <#list table.primaryColumns as column>
      * @param ${column.name()?lower_case?replace("_"," ")?cap_first?replace(" ","")?uncap_first}</#list>
      */
-    public ${entityName}(<#list table.primaryColumns as column>${sql_java(column.sqlType)} ${column.name()?lower_case?replace("_"," ")?cap_first?replace(" ","")?uncap_first}<#if column?has_next>,</#if></#list>){
-    }
+    public ${entityName}(<#list table.primaryColumns as column>${sql_java(column.sqlType)} ${column.name()?lower_case?replace("_"," ")?cap_first?replace(" ","")?uncap_first}<#if column?has_next>,</#if></#list>){}
     
     <#list table.columns as column>
     <#assign propertyName=column.name()?lower_case?replace("_"," ")?capitalize?replace(" ","")?uncap_first>
     /**
-     * column ${column.name()}
-     * set ${propertyName} 
+     * set ${propertyName}
+     * @param ${propertyName} ${propertyName}
      */
-     public ${entityName} set${propertyName?cap_first}(${sql_java(column.sqlType)} ${propertyName}){
+    public ${entityName} set${propertyName?cap_first}(${sql_java(column.sqlType)} ${propertyName}){
         this.${propertyName} = ${propertyName};
         return this;
-     }
-     /**
+    }
+    /**
      * get ${propertyName} 
+     * @return ${propertyName}
      */
-     public ${sql_java(column.sqlType)} get${propertyName?cap_first}(){
+    public ${sql_java(column.sqlType)} get${propertyName?cap_first}(){
         return ${propertyName};
-     }
+    }
     </#list>
 }

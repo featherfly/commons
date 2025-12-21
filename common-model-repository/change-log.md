@@ -1,3 +1,7 @@
+# 0.5.4 2025-12-21
+1. 升级common-core到1.15.2 
+2. Params改为继承HashMap
+
 # 0.5.3 2025-03-20
 1. 重命名TupleMappedBuilder到TupleMappedExecutorBuilder，PrefixedBeanMapper[1-6]到PrefixedBeanMappedExecutor[1-6]
 2. 加入PrefixedBeanMappedExecutor[1-6]的实现类PrefixedBeanMappedExecutor[1-6]Impl

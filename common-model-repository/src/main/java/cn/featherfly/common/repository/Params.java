@@ -11,16 +11,15 @@
 package cn.featherfly.common.repository;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
-
-import cn.featherfly.common.structure.ChainMapImpl;
 
 /**
  * Params.
  *
  * @author zhongj
  */
-public class Params extends ChainMapImpl<String, Serializable> {
+public class Params extends HashMap<String, Serializable> {
 
     private static final long serialVersionUID = -5375023636015964291L;
 
@@ -28,7 +27,7 @@ public class Params extends ChainMapImpl<String, Serializable> {
      * Instantiates a new params.
      */
     public Params() {
-        super();
+        this(null);
     }
 
     /**
@@ -37,7 +36,9 @@ public class Params extends ChainMapImpl<String, Serializable> {
      * @param map the map
      */
     public Params(Map<String, Serializable> map) {
-        super(map);
+        if (map != null) {
+            super.putAll(map);
+        }
     }
 
     /**
@@ -57,7 +58,7 @@ public class Params extends ChainMapImpl<String, Serializable> {
      * @param value the value
      * @return the params
      */
-    public static final Params setParam(String name, Object value) {
+    public static final Params setParam(String name, Serializable value) {
         return new Params().set(name, value);
     }
 
@@ -68,7 +69,7 @@ public class Params extends ChainMapImpl<String, Serializable> {
      * @param value the value
      * @return the params
      */
-    public Params set(String name, Object value) {
+    private Params set(String name, Object value) {
         if (value != null && !(value instanceof Serializable)) {
             throw new IllegalArgumentException("param value type must implements " + Serializable.class.getName());
         }

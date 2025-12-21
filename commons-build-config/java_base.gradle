@@ -5,7 +5,12 @@ import java.io.File;
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
-    options.release.set(Integer.parseInt(jdkVersion))
+    int runJdkVersion = Integer.parseInt(ant.properties['java.version'].split("\\.")[0])
+    //println ant.properties['java.version']
+    //println ant.properties['java.runtime.version']
+    if (runJdkVersion > 8) {
+        options.release.set(Integer.parseInt(jdkVersion))
+    }
 }
 tasks.withType(Javadoc) {
     options.encoding = "UTF-8"

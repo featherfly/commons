@@ -22,7 +22,7 @@ includeFlat 'common-serialization'
 includeFlat 'common-mail'
 includeFlat 'common-http'
 includeFlat 'common-compress'
-includeFlat 'common-logger' // 引入就初始化项目报错
+//includeFlat 'common-logger' // 引入就初始化项目报错
 //includeFlat 'common-locale-database'
 includeFlat 'common-spring'
 includeFlat 'common-db'

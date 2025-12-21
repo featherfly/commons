@@ -1,0 +1,132 @@
+apply plugin: 'java-library'
+apply plugin: 'maven-publish'
+apply plugin: 'org.jreleaser'
+
+def isReleaseBuild() {
+    return System.getProperty("snapshot") == null && System.getProperty("SNAPSHOT") == null && getProperties().get("snapshot") == null && getProperties().get("SNAPSHOT") == null 
+}
+
+def getFinalVersion() {
+    return isReleaseBuild() ? version : version + "-SNAPSHOT"
+}
+
+def getSonatypeRepositoryUrl() {
+    if (isReleaseBuild()) {
+        println 'RELEASE BUILD'
+        return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL : "https://central.sonatype.com"
+    } else {
+        println 'SNAPSHOT BUILD'
+        return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL : "https://central.sonatype.com"
+    
+    }
+}
+
+def getRepositoryUsername() {
+    if (hasProperty('localNexusUsername')) {
+        return hasProperty('localNexusUsername') ? localNexusUsername : ""
+    } else {
+        return hasProperty('nexusUsername') ? nexusUsername : ""
+    }
+}
+
+def getRepositoryPassword() {
+    if (hasProperty('localNexusPassword')) {
+        return hasProperty('localNexusPassword') ? localNexusPassword : ""
+    } else {
+        hasProperty('nexusPassword') ? nexusPassword : ""
+    }
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set("sources")
+    from sourceSets.main.java.srcDirs
+}
+
+task javadocJar(type: Jar, dependsOn:javadoc) {
+    archiveClassifier.set("javadoc")
+    from javadoc.destinationDir
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+
+            artifact sourcesJar
+            artifact javadocJar
+            groupId = group
+            artifactId = archivesBaseName
+            version = getFinalVersion()
+            pom {
+                name = archivesBaseName
+                packaging = POM_Packaging
+                description = POM_DESCRIPTION
+                url = POM_URL
+                inceptionYear = POM_INCEPTION_YEAR
+
+                scm {
+                    url = POM_SCM_URL
+                    connection = POM_SCM_CONNECTION
+                    developerConnection = POM_SCM_DEV_CONNECTION
+                }
+
+                licenses {
+                    license {
+                        name = POM_LICENCE_NAME
+                        url = POM_LICENCE_URL
+                        distribution = POM_LICENCE_DIST
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = POM_DEVELOPER_ID
+                        name = POM_DEVELOPER_NAME
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url = layout.buildDirectory.dir('staging-deploy')
+        }
+    }
+}
+
+var publicKeyFile = project.getProperty('publicKeyFile')
+var privateKeyFile = project.getProperty('privateKeyFile')
+
+
+jreleaser {
+    signing {
+        active = 'ALWAYS'
+        armored = true
+        mode = 'FILE'
+        publicKey = publicKeyFile
+        secretKey = privateKeyFile
+    }
+    deploy {
+        maven {
+            mavenCentral {
+                sonatype {
+                    active = 'ALWAYS'
+                    url = 'https://central.sonatype.com/api/v1/publisher'
+                    stagingRepository('build/staging-deploy')
+                }
+            }
+            /* Legacy OSSRH
+            nexus2 {
+                'maven-central' {
+                    active = 'ALWAYS'
+                    url = 'https://s01.oss.sonatype.org/service/local'
+                    snapshotUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+                    closeRepository = true
+                    releaseRepository = true
+                    stagingRepository('build/staging-deploy')
+                }
+            }
+            */
+        }
+    }
+}

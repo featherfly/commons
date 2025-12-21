@@ -1,3 +1,6 @@
+# 0.2.3 2022-12-21
+1. 升级common-core到1.15.2
+
 # 0.2.2 2022-03-19
 1. 修复subscribe(String topicFilter, Qos qos, BiConsumer<String, MqttMessage> consumer)中consumer第一个参数不是消息真实topic的问题
 

@@ -7,7 +7,7 @@ import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 
 /**
  * ClientBuilder.
@@ -48,7 +48,7 @@ public class EasyMqttClientBuilder {
     /**
      * Instantiates a new client builder.
      *
-     * @param address  the address
+     * @param address the address
      * @param clientId the client id
      */
     public EasyMqttClientBuilder(String address, String clientId) {
@@ -59,8 +59,8 @@ public class EasyMqttClientBuilder {
     /**
      * Instantiates a new client builder.
      *
-     * @param host     the host
-     * @param port     the port
+     * @param host the host
+     * @param port the port
      * @param clientId the client id
      */
     public EasyMqttClientBuilder(String host, int port, String clientId) {
@@ -73,8 +73,8 @@ public class EasyMqttClientBuilder {
      * Instantiates a new client builder.
      *
      * @param protocol the protocol
-     * @param host     the host
-     * @param port     the port
+     * @param host the host
+     * @param port the port
      * @param clientId the client id
      */
     public EasyMqttClientBuilder(String protocol, String host, int port, String clientId) {
@@ -232,10 +232,10 @@ public class EasyMqttClientBuilder {
             options = new MqttConnectOptions();
         }
 
-        if (Strings.isNotEmpty(username)) {
+        if (Str.isNotEmpty(username)) {
             options.setUserName(username);
         }
-        if (Strings.isNotEmpty(password)) {
+        if (Str.isNotEmpty(password)) {
             options.setPassword(password.toCharArray());
         }
         client.options = options;

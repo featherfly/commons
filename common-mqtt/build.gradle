@@ -1,13 +1,6 @@
-sourceSets {
-    main {
-        java {
-            //srcDirs = ["src-http", "src/main/java"]
-        }
-    }
-}
-  
 dependencies {
-    api project(":common-core")
+    //api project(":common-core")
+    api group: 'cn.featherfly.common', name: 'common-core', version: '1.15.2'
     
     api 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
 

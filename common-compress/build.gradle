@@ -1,6 +1,6 @@
 dependencies {
-    // implementation project(":common-core")    
-    implementation group: 'cn.featherfly.common', name: 'common-core', version: '1.14.0'
+    // implementation project(":common-core")  
+    implementation group: 'cn.featherfly.common', name: 'common-core', version: '1.15.2'
 	implementation group: 'org.apache.ant', name: 'ant', version: '1.10.15'
-	implementation group: 'org.apache.commons', name: 'commons-compress', version: '1.27.1'
+	implementation group: 'org.apache.commons', name: 'commons-compress', version: '1.28.0'
 }

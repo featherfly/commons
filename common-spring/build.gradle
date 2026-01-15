@@ -3,7 +3,7 @@ ext {
 }
   
 dependencies {
-    api group: 'cn.featherfly.common', name: 'common-core', version: '1.14.0'
+    api group: 'cn.featherfly.common', name: 'common-core', version: '1.15.2'
     implementation group: 'org.springframework', name: 'spring-core', version: sv    
     implementation 'org.springframework:spring-context-support:' + sv
     implementation 'org.springframework:spring-jdbc:' + sv

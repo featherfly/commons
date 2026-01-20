@@ -17,6 +17,20 @@ import cn.featherfly.common.lang.number.Radix;
 public class NumTest {
 
     @Test
+    public void getLastDigit() {
+        assertEquals(Num.getLastDigit(1234567, 3), 567);
+        assertEquals(Num.getLastDigit(1234567, 7), 1234567);
+        assertEquals(Num.getLastDigit(1234567, 8), 1234567);
+    }
+
+    @Test
+    public void getFirstDigit() {
+        assertEquals(Num.getLastDigit(1234567, 3), 123);
+        assertEquals(Num.getLastDigit(1234567, 7), 1234567);
+        assertEquals(Num.getLastDigit(1234567, 8), 1234567);
+    }
+
+    @Test
     public void testLongToString62() {
         String string64 = Num.toString62Unit(1);
         assertEquals(string64, "1");

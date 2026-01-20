@@ -125,6 +125,29 @@ public final class Num {
     }
 
     /**
+     * get first digit.
+     *
+     * @param number the number
+     * @param size digit size
+     * @return the first digit
+     */
+    public static long getFirstDigit(long number, int size) {
+        long length = number % 10;
+        return number / (int) Math.pow(10, length < size ? 0 : length - size);
+    }
+
+    /**
+     * get last digit.
+     *
+     * @param number the number
+     * @param size digit size
+     * @return the last digit
+     */
+    public static long getLastDigit(long number, int size) {
+        return number % (int) Math.pow(10, size);
+    }
+
+    /**
      * 转换数字对象到指定数字类型.
      *
      * @param <T> 转换后的类型

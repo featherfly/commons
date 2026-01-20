@@ -10,11 +10,14 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.constant.Unit;
+import cn.featherfly.common.exception.UnsupportedException;
 
 /**
  * <p>
@@ -90,25 +93,6 @@ public final class Dates {
     public static final int COMPARE_GT = 1;
 
     /**
-     * <p>
-     * 时间类型
-     * </p>
-     * millisecond 毫秒 second 秒 minute 分钟 hour 小时 day 日.
-     */
-    public enum TimeType {
-        /** The millisecond. */
-        millisecond,
-        /** The second. */
-        second,
-        /** The minute. */
-        minute,
-        /** The hour. */
-        hour,
-        /** The day. */
-        day
-    }
-
-    /**
      * Gets the time.
      *
      * @param localDateTime the local date time
@@ -122,7 +106,7 @@ public final class Dates {
      * Gets the time.
      *
      * @param localDateTime the local date time
-     * @param zoneId        the zone id
+     * @param zoneId the zone id
      * @return the time
      */
     public static long getTime(LocalDateTime localDateTime, ZoneId zoneId) {
@@ -225,7 +209,7 @@ public final class Dates {
      * 使用传入的格式化参数进行格式化.
      *
      * @param localDateTime the local date time
-     * @param format        格式化参数
+     * @param format 格式化参数
      * @return 如果传入的日期不会null,则按传入的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
      */
     public static String format(LocalDateTime localDateTime, String format) {
@@ -264,7 +248,7 @@ public final class Dates {
     /**
      * 使用传入的格式化参数进行格式化.
      *
-     * @param date   日期
+     * @param date 日期
      * @param format 格式化参数
      * @return 如果传入的日期不会null,则按传入的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
      */
@@ -275,6 +259,116 @@ public final class Dates {
             return df.format(date);
         }
         return "";
+    }
+
+    /**
+     * 使用传入的时间已天格式化参数进行格式化.
+     *
+     * @param duration 持续时间
+     * @return 格式化为从大到小进行显示，1day-23hour-14minute
+     */
+    public static String format(long duration) {
+        return format(duration, TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * 使用传入的时间进行格式化.
+     *
+     * @param duration 持续时间
+     * @param durationTimeUnit the duration time unit
+     * @return 格式化为从大到小进行显示，1day-23hour-14minute
+     */
+    public static String format(long duration, TimeUnit durationTimeUnit) {
+        return format(duration, durationTimeUnit, TimeUnit.DAYS);
+    }
+
+    /**
+     * 使用传入的时间进行格式化.
+     *
+     * @param duration 持续时间
+     * @param durationTimeUnit the duration time unit
+     * @param formatMaxTimeUnit the format max time unit
+     * @return 格式化为从大到小进行显示，1day-23hour-14minute
+     */
+    public static String format(long duration, TimeUnit durationTimeUnit, TimeUnit formatMaxTimeUnit) {
+        AssertIllegalArgument.isNotNull(durationTimeUnit, "durationTimeUnit");
+        AssertIllegalArgument.isNotNull(formatMaxTimeUnit, "formatMaxTimeUnit");
+        if (formatMaxTimeUnit.ordinal() <= durationTimeUnit.ordinal()) {
+            return duration + " " + durationTimeUnit.name().toLowerCase();
+        }
+        StringBuilder sb = new StringBuilder();
+        long leftDuration = duration;
+        long current = 0;
+        switch (durationTimeUnit) {
+            case NANOSECONDS:
+                current = leftDuration % 1000;
+                sb.insert(0, current + " " + TimeUnit.NANOSECONDS.name().toLowerCase());
+                if (leftDuration <= 1000) {
+                    break;
+                }
+                //                leftDuration = leftDuration / 1000;
+                return sb.insert(0, format(leftDuration / 1000, TimeUnit.values()[durationTimeUnit.ordinal() + 1],
+                    formatMaxTimeUnit) + " ").toString();
+            case MICROSECONDS:
+                sb.insert(0, leftDuration % 1000 + " " + TimeUnit.MICROSECONDS.name().toLowerCase());
+                if (leftDuration <= 1000) {
+                    break;
+                }
+                //                leftDuration = leftDuration / 1000;
+                return sb.insert(0, format(leftDuration / 1000, TimeUnit.values()[durationTimeUnit.ordinal() + 1],
+                    formatMaxTimeUnit) + " ").toString();
+            case MILLISECONDS:
+                sb.insert(0, leftDuration % 1000 + " " + TimeUnit.MILLISECONDS.name().toLowerCase());
+                if (leftDuration <= 1000) {
+                    break;
+                }
+                //                leftDuration = leftDuration / 1000;
+                return sb.insert(0, format(leftDuration / 1000, TimeUnit.values()[durationTimeUnit.ordinal() + 1],
+                    formatMaxTimeUnit) + " ").toString();
+            case SECONDS:
+                if (TimeUnit.SECONDS == formatMaxTimeUnit) {
+                    current = leftDuration;
+                } else {
+                    current = leftDuration % 60;
+                }
+                sb.insert(0, current + " " + TimeUnit.SECONDS.name().toLowerCase());
+                if (leftDuration <= 60 || TimeUnit.SECONDS == formatMaxTimeUnit) {
+                    break;
+                }
+                //                leftDuration = leftDuration / 60;
+                return sb.insert(0, format(leftDuration / 60, TimeUnit.values()[durationTimeUnit.ordinal() + 1],
+                    formatMaxTimeUnit) + " ").toString();
+            case MINUTES:
+                sb.insert(0, leftDuration % 60 + " " + TimeUnit.MINUTES.name().toLowerCase());
+                if (leftDuration <= 60) {
+                    break;
+                }
+                //                leftDuration = leftDuration / 60;
+                return sb.insert(0, format(leftDuration / 60, TimeUnit.values()[durationTimeUnit.ordinal() + 1],
+                    formatMaxTimeUnit) + " ").toString();
+            case HOURS:
+                sb.insert(0, leftDuration % 24 + " " + TimeUnit.HOURS.name().toLowerCase());
+                if (leftDuration <= 24) {
+                    break;
+                }
+                //                leftDuration = leftDuration / 24;
+                return sb.insert(0, format(leftDuration / 24, TimeUnit.values()[durationTimeUnit.ordinal() + 1],
+                    formatMaxTimeUnit) + " ").toString();
+            case DAYS:
+                //                sb.insert(0, leftDuration % 24 + " " + TimeUnit.DAYS.name().toLowerCase() + " ");
+                //                if (leftDuration <= 24) {
+                //                    break;
+                //                }
+                break;
+            default:
+                throw new UnsupportedOperationException("unsupport TimeUnit: " + durationTimeUnit);
+        }
+        LOGGER.debug("formart: duration={} | durationTimeUnit={} | formatMaxTimeUnit={}", duration, durationTimeUnit,
+            formatMaxTimeUnit);
+        if (sb.charAt(sb.length() - 1) == Chars.SPACE_CHAR) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        return sb.toString();
     }
 
     /**
@@ -328,9 +422,9 @@ public final class Dates {
     /**
      * 根据指定的 year,month,day 返回Date实例.
      *
-     * @param year  年
+     * @param year 年
      * @param month 月 1-12
-     * @param day   日 start 1
+     * @param day 日 start 1
      * @return 指定year,month,day的Date实例
      */
     public static Date getDate(int year, int month, int day) {
@@ -340,10 +434,10 @@ public final class Dates {
     /**
      * 根据指定的 year,month,day,hour,minute,second 返回Date实例.
      *
-     * @param year   年
-     * @param month  月 1-12
-     * @param day    日 start 1
-     * @param hour   小时 0-23
+     * @param year 年
+     * @param month 月 1-12
+     * @param day 日 start 1
+     * @param hour 小时 0-23
      * @param minute 分钟 0-59
      * @param second 秒 0-59
      * @return 指定year,month,day,hour,minute,second的Date实例
@@ -512,30 +606,31 @@ public final class Dates {
      * 返回给定日期按照指定单位的一个数字表示值.
      *
      * @param date 日期
-     * @param type 指定一个单位（如second,hour）
+     * @param timeUnit 指定一个单位（如second,hour）
      * @return 指定单位的一个数字表示值
      */
-    public static long getTime(Date date, TimeType type) {
+    public static long getTime(Date date, TimeUnit timeUnit) {
         long result = 0;
         if (date != null) {
-            switch (type) {
-                case millisecond:
+            switch (timeUnit) {
+                case MILLISECONDS:
                     result = date.getTime();
                     break;
-                case second:
+                case SECONDS:
                     result = date.getTime() / Unit.KILO;
                     break;
-                case minute:
+                case MINUTES:
                     result = date.getTime() / Unit.KILO / Unit.SIXTY;
                     break;
-                case hour:
+                case HOURS:
                     result = date.getTime() / Unit.KILO / Unit.SIXTY / Unit.SIXTY;
                     break;
-                case day:
+                case DAYS:
                     result = date.getTime() / Unit.KILO / Unit.SIXTY / Unit.SIXTY / Unit.TWENTYFOUR;
                     break;
                 default:
-                    result = date.getTime();
+                    throw new UnsupportedException("unsupported TimeUnit[{}], Date min unit is {}",
+                        new Object[] { timeUnit, TimeUnit.MILLISECONDS.name() });
             }
         }
         return result;
@@ -545,7 +640,7 @@ public final class Dates {
      * 以年为最小单位比较日期大小. 如果第一个日期小于第二个日期，返回 -1 如果第一个日期等于第二个日期，返回 0 如果第一个日期大于第二个日期，返回
      * 1
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 日期比较后的常量
      */
@@ -558,7 +653,7 @@ public final class Dates {
      * 以月为最小单位比较日期大小. 如果第一个日期小于第二个日期，返回 -1 如果第一个日期等于第二个日期，返回 0 如果第一个日期大于第二个日期，返回
      * 1
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 日期比较后的常量
      */
@@ -571,7 +666,7 @@ public final class Dates {
      * 以日为最小单位比较日期大小. 如果第一个日期小于第二个日期，返回 -1 如果第一个日期等于第二个日期，返回 0 如果第一个日期大于第二个日期，返回
      * 1
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 日期比较后的常量
      */
@@ -584,7 +679,7 @@ public final class Dates {
      * 以小时为最小单位比较日期大小. 如果第一个日期小于第二个日期，返回 -1 如果第一个日期等于第二个日期，返回 0
      * 如果第一个日期大于第二个日期，返回 1
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 日期比较后的常量
      */
@@ -597,7 +692,7 @@ public final class Dates {
      * 以分钟为最小单位比较日期大小. 如果第一个日期小于第二个日期，返回 -1 如果第一个日期等于第二个日期，返回 0
      * 如果第一个日期大于第二个日期，返回 1
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 日期比较后的常量
      */
@@ -610,7 +705,7 @@ public final class Dates {
      * 以秒为最小单位比较日期大小. 如果第一个日期小于第二个日期，返回 -1 如果第一个日期等于第二个日期，返回 0 如果第一个日期大于第二个日期，返回
      * 1
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 日期比较后的常量
      */
@@ -625,7 +720,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否早于第二个日期
      */
@@ -639,7 +734,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否是早于第二个日期
      */
@@ -653,7 +748,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否是早于第二个日期
      */
@@ -667,7 +762,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否早于第二个日期
      */
@@ -681,7 +776,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否是早于第二个日期
      */
@@ -695,7 +790,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否是早于第二个日期
      */
@@ -709,7 +804,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否早于第二个日期
      */
@@ -723,7 +818,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否是早于第二个日期
      */
@@ -737,7 +832,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否是早于第二个日期
      */
@@ -751,7 +846,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否早于第二个日期
      */
@@ -765,7 +860,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否是早于第二个日期
      */
@@ -779,7 +874,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否是早于第二个日期
      */
@@ -793,7 +888,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否早于第二个日期
      */
@@ -807,7 +902,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否是早于第二个日期
      */
@@ -821,7 +916,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否是早于第二个日期
      */
@@ -835,7 +930,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否早于第二个日期
      */
@@ -849,7 +944,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否是早于第二个日期
      */
@@ -863,7 +958,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param firstDate  第一个日期
+     * @param firstDate 第一个日期
      * @param secondDate 第二个日期
      * @return 第一个日期是否是早于第二个日期
      */
@@ -895,7 +990,7 @@ public final class Dates {
      * </p>
      * .
      *
-     * @param year  某年
+     * @param year 某年
      * @param month 某月
      * @return 最大天数
      */
@@ -912,7 +1007,7 @@ public final class Dates {
      * 获取两个日期中间的年分数（包含月份与天数计算）.
      *
      * @param startDate 开始日期
-     * @param endDate   结束日期
+     * @param endDate 结束日期
      * @return 两个日期中间的月份数
      */
     public static int getYearNumber(Date startDate, Date endDate) {
@@ -922,10 +1017,10 @@ public final class Dates {
     /**
      * 获取两个日期中间的年分数.
      *
-     * @param startDate    开始日期
-     * @param endDate      结束日期
+     * @param startDate 开始日期
+     * @param endDate 结束日期
      * @param computeMonth 计算月份
-     * @param computeDay   计算天数（当computeMonth为true时有效）
+     * @param computeDay 计算天数（当computeMonth为true时有效）
      * @return 两个日期中间的月份数
      */
     public static int getYearNumber(Date startDate, Date endDate, boolean computeMonth, boolean computeDay) {
@@ -955,7 +1050,7 @@ public final class Dates {
      * 获取两个日期中间的月份数（包含天数计算）.
      *
      * @param startDate 开始日期
-     * @param endDate   结束日期
+     * @param endDate 结束日期
      * @return 两个日期中间的月份数
      */
     public static int getMonthNumber(Date startDate, Date endDate) {
@@ -965,8 +1060,8 @@ public final class Dates {
     /**
      * 获取两个日期中间的月份数.
      *
-     * @param startDate  开始日期
-     * @param endDate    结束日期
+     * @param startDate 开始日期
+     * @param endDate 结束日期
      * @param computeDay 是否计算天数
      * @return 两个日期中间的月份数
      */
@@ -999,7 +1094,7 @@ public final class Dates {
      * 获取两个日期中间的天数.
      *
      * @param startDate 开始日期
-     * @param endDate   结束日期
+     * @param endDate 结束日期
      * @return 两个日期中间的天数
      */
     public static int getDayNumber(Date startDate, Date endDate) {
@@ -1026,7 +1121,7 @@ public final class Dates {
      * 获取两个日期中间的工作日天数. 不包含周六周日
      *
      * @param startDate 开始日期
-     * @param endDate   结束日期
+     * @param endDate 结束日期
      * @return 两个日期中间的工作日天数
      */
     public static int getWorkDayNumber(Date startDate, Date endDate) {
@@ -1041,7 +1136,7 @@ public final class Dates {
             //设置日期
             cal.setTime(startDate);
             if (cal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
-                    && cal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                && cal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
                 //进行比较，如果日期不等于周六也不等于周日，工作日+1
                 days++;
             }
@@ -1071,7 +1166,7 @@ public final class Dates {
      * 使用传入比较日期与传入出生日期比较获得年龄.参数只要有一个为null，则返回null
      * </p>
      *
-     * @param birthday   生日
+     * @param birthday 生日
      * @param compareDay 比较日期
      * @return 年龄
      */

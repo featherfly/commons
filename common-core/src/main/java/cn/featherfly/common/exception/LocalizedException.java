@@ -155,6 +155,7 @@ public abstract class LocalizedException extends BaseException {
         super(message.getMessage(locale, args), ex);
         this.args = args;
         this.locale = locale;
+        localeMessage = message;
     }
 
     /**
@@ -190,6 +191,7 @@ public abstract class LocalizedException extends BaseException {
         super(message.getMessage(locale, args));
         this.args = args;
         this.locale = locale;
+        localeMessage = message;
     }
 
     /**

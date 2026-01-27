@@ -773,6 +773,79 @@ public final class CollectionUtils {
     }
 
     /**
+     * clone Collection with argument.
+     * 根据传入Collection克隆Collection实例.
+     *
+     * @param <C> the generic type
+     * @param <E> the element type
+     * @param collection the collection
+     * @return 克隆的Collection实例
+     */
+    @SuppressWarnings("unchecked")
+    public static <C extends Collection<E>, E> C cloneCollection(Collection<E> collection) {
+        if (collection == null) {
+            return (C) Collections.emptyList();
+        }
+        if (ClassUtils.isParent(List.class, collection.getClass())) {
+            return (C) cloneList((List<E>) collection);
+        } else if (ClassUtils.isParent(Set.class, collection.getClass())) {
+            return (C) cloneSet((Set<E>) collection);
+        } else if (ClassUtils.isParent(Queue.class, collection.getClass())) {
+            return (C) cloneQueue((Queue<E>) collection);
+        } else {
+            throw new IllegalArgumentException("不支持的类型：" + collection.getClass());
+        }
+    }
+
+    /**
+     * clone argument list.
+     *
+     * @param <E> the element type
+     * @param list the list
+     * @return the clone list
+     */
+    public static <E> List<E> cloneList(List<E> list) {
+        if (list == null) {
+            return list;
+        }
+        List<E> clone = newList(list.getClass());
+        clone.addAll(list);
+        return clone;
+    }
+
+    /**
+     * clone argument set.
+     *
+     * @param <E> the element type
+     * @param set the set
+     * @return the clone set
+     */
+    public static <E> Set<E> cloneSet(Set<E> set) {
+        if (set == null) {
+            return set;
+        }
+        Set<E> clone = newSet(set.getClass());
+        clone.addAll(set);
+        return clone;
+    }
+
+    /**
+     * clone argument queue.
+     *
+     * @param <E> the element type
+     * @param queue the queue
+     * @return the clone queue
+     */
+    public static <E> Queue<E> cloneQueue(Queue<E> queue) {
+        if (queue == null) {
+            return queue;
+        }
+        Queue<E> clone = newQueue(queue.getClass());
+        clone.addAll(queue);
+        return clone;
+    }
+
+    /**
      * Each.
      *
      * @param <T> the generic type

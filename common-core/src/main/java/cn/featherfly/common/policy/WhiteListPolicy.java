@@ -12,9 +12,7 @@ import java.util.Collection;
  */
 public interface WhiteListPolicy<T, P extends WhiteListPolicy<T, P>> extends AllowPolicy<T> {
     /**
-     * <p>
-     * 添加项到白名单
-     * </p>
+     * 添加项到白名单.
      *
      * @param t 项
      * @return this
@@ -22,9 +20,7 @@ public interface WhiteListPolicy<T, P extends WhiteListPolicy<T, P>> extends All
     P addWhite(T t);
 
     /**
-     * <p>
-     * 添加多个项到白名单
-     * </p>
+     * 添加多个项到白名单.
      *
      * @param t 项数组
      * @return this
@@ -32,9 +28,7 @@ public interface WhiteListPolicy<T, P extends WhiteListPolicy<T, P>> extends All
     P addWhite(@SuppressWarnings("unchecked") T... t);
 
     /**
-     * <p>
-     * 从白名单移除项
-     * </p>
+     * 从白名单移除项.
      *
      * @param t 项
      * @return this
@@ -42,9 +36,7 @@ public interface WhiteListPolicy<T, P extends WhiteListPolicy<T, P>> extends All
     P removeWhite(T t);
 
     /**
-     * <p>
-     * 清除白名单
-     * </p>
+     * 清除白名单.
      *
      * @return this
      */
@@ -58,11 +50,9 @@ public interface WhiteListPolicy<T, P extends WhiteListPolicy<T, P>> extends All
     Collection<T> getWhiteList();
 
     /**
-     * <p>
-     * 设置策略
-     * </p>
+     * 设置策略.
      *
      * @param whiteList 策略
      */
-    void setWhiteList(Collection<T> whiteList);
+    P setWhiteList(Collection<T> whiteList);
 }

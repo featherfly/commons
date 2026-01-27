@@ -13,7 +13,7 @@ import cn.featherfly.common.lang.CollectionUtils;
  * @author zhongj
  */
 public abstract class WhiteBlackListPolicy<T>
-        implements WhiteListPolicy<T, WhiteBlackListPolicy<T>>, BlackListPolicy<T, WhiteBlackListPolicy<T>> {
+    implements WhiteListPolicy<T, WhiteBlackListPolicy<T>>, BlackListPolicy<T, WhiteBlackListPolicy<T>> {
 
     /**
      */
@@ -33,7 +33,7 @@ public abstract class WhiteBlackListPolicy<T>
      */
     @Override
     public WhiteBlackListPolicy<T> addBlack(T t) {
-        this.blackList.add(t);
+        blackList.add(t);
         return this;
     }
 
@@ -51,7 +51,7 @@ public abstract class WhiteBlackListPolicy<T>
      */
     @Override
     public WhiteBlackListPolicy<T> removeBlack(T t) {
-        this.blackList.remove(t);
+        blackList.remove(t);
         return this;
     }
 
@@ -60,7 +60,7 @@ public abstract class WhiteBlackListPolicy<T>
      */
     @Override
     public WhiteBlackListPolicy<T> clearBlackList() {
-        this.blackList.clear();
+        blackList.clear();
         return this;
     }
 
@@ -69,7 +69,7 @@ public abstract class WhiteBlackListPolicy<T>
      */
     @Override
     public WhiteBlackListPolicy<T> addWhite(T t) {
-        this.whiteList.add(t);
+        whiteList.add(t);
         return this;
     }
 
@@ -87,7 +87,7 @@ public abstract class WhiteBlackListPolicy<T>
      */
     @Override
     public WhiteBlackListPolicy<T> removeWhite(T t) {
-        this.whiteList.remove(t);
+        whiteList.remove(t);
         return this;
     }
 
@@ -96,7 +96,7 @@ public abstract class WhiteBlackListPolicy<T>
      */
     @Override
     public WhiteBlackListPolicy<T> clearWhiteList() {
-        this.whiteList.clear();
+        whiteList.clear();
         return this;
     }
 
@@ -108,8 +108,8 @@ public abstract class WhiteBlackListPolicy<T>
      * @return this
      */
     public WhiteBlackListPolicy<T> clear() {
-        this.blackList.clear();
-        this.whiteList.clear();
+        blackList.clear();
+        whiteList.clear();
         return this;
     }
 
@@ -120,7 +120,7 @@ public abstract class WhiteBlackListPolicy<T>
      */
     @Override
     public Collection<T> getBlackList() {
-        return new HashSet<>(blackList);
+        return CollectionUtils.cloneCollection(whiteList);
     }
 
     /**
@@ -139,15 +139,16 @@ public abstract class WhiteBlackListPolicy<T>
      */
     @Override
     public Collection<T> getWhiteList() {
-        return new HashSet<>(whiteList);
+        return CollectionUtils.cloneCollection(whiteList);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void setWhiteList(Collection<T> whiteList) {
+    public WhiteBlackListPolicy<T> setWhiteList(Collection<T> whiteList) {
         this.whiteList = whiteList;
+        return this;
     }
 
     /**

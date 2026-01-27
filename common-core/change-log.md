@@ -1,5 +1,14 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
+# 1.15.3
+
+1. 修复当传入参数是localeMessage时未设置localMessage字段
+2. Num加入get[First|Last]Digit方法
+3. 使用java.util.concurrent.TimeUnit代替Dates.TimeType并删除Dates.TimeType
+4. CollectionUtils加入clone[Collection|List|Set|Queue]方法
+5. WhiteListPolist重构void setWhiteList(Collection<T>)为P setWhiteList(Collection<T>)
+6. 修复WhiteBlackListPolicy.get[White|Black]List在使用了用户自定义时始终返回HashSet的问题，使用CollectionUtils.cloneCollection代替new HashSet
+
 # 1.15.2 2025-12-20
 
 1. 修复当参数不是原始类型时ClassUtils.getPrimitiveWrapped返回null的错误问题（更改返回传递的类型，即不是基本类型就原样返回）

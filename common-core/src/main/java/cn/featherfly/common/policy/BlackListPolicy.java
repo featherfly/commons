@@ -12,9 +12,7 @@ import java.util.Collection;
  */
 public interface BlackListPolicy<T, P extends BlackListPolicy<T, P>> extends AllowPolicy<T> {
     /**
-     * <p>
-     * 添加项到黑名单
-     * </p>
+     * 添加项到黑名单.
      *
      * @param t 项
      * @return this
@@ -22,9 +20,7 @@ public interface BlackListPolicy<T, P extends BlackListPolicy<T, P>> extends All
     P addBlack(T t);
 
     /**
-     * <p>
-     * 添加多个项到黑名单
-     * </p>
+     * 添加多个项到黑名单.
      *
      * @param t 项数组
      * @return this
@@ -32,9 +28,7 @@ public interface BlackListPolicy<T, P extends BlackListPolicy<T, P>> extends All
     P addBlack(@SuppressWarnings("unchecked") T... t);
 
     /**
-     * <p>
-     * 从黑名单移除项
-     * </p>
+     * 从黑名单移除项.
      *
      * @param t 项
      * @return this
@@ -42,27 +36,21 @@ public interface BlackListPolicy<T, P extends BlackListPolicy<T, P>> extends All
     P removeBlack(T t);
 
     /**
-     * <p>
-     * 清除黑名单
-     * </p>
+     * 清除黑名单.
      *
      * @return this
      */
     P clearBlackList();
 
     /**
-     * <p>
-     * 获取黑名单集合
-     * </p>
+     * 获取黑名单集合.
      *
      * @return 黑名单集合
      */
     Collection<T> getBlackList();
 
     /**
-     * <p>
-     * 设置策略
-     * </p>
+     * 设置策略.
      *
      * @param blackList 策略
      * @return this;

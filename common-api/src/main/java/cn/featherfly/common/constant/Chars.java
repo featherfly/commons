@@ -2,838 +2,840 @@
 package cn.featherfly.common.constant;
 
 /**
- * <p>
- * 基本字符的常量
- * </p>
+ * 基本字符的常量.
  *
  * @author zhongj
  */
-public interface Chars {
+public final class Chars {
+
+    private Chars() {
+    }
+
     /**
      * 符号 ~
      */
-    String NOT_B = "~";
+    public static final String NOT_B = "~";
     /**
      * 符号 !
      */
-    String NOT_L = "!";
+    public static final String NOT_L = "!";
     /**
      * 符号 @
      */
-    String AT = "@";
+    public static final String AT = "@";
     /**
      * 符号 #
      */
-    String SHARP = "#";
+    public static final String SHARP = "#";
     /**
      * 符号 $
      */
-    String DOLLAR = "$";
+    public static final String DOLLAR = "$";
     /**
      * 符号 %
      */
-    String MOD = "%";
+    public static final String MOD = "%";
     /**
      * 符号 ^
      */
-    String BXOR = "^";
+    public static final String BXOR = "^";
     /**
      * 符号 &amp;
      */
-    String AMP = "&";
+    public static final String AMP = "&";
     /**
      * 符号 *
      */
-    String STAR = "*";
+    public static final String STAR = "*";
     /**
      * 符号 (
      */
-    String PAREN_L = "(";
+    public static final String PAREN_L = "(";
     /**
      * 符号 )
      */
-    String PAREN_R = ")";
+    public static final String PAREN_R = ")";
     /**
      * 符号 _
      */
-    String UNDER_LINE = "_";
+    public static final String UNDER_LINE = "_";
     /**
      * 符号 -
      */
-    String MINUS = "-";
+    public static final String MINUS = "-";
     /**
      * 符号 +
      */
-    String PLUS = "+";
+    public static final String PLUS = "+";
     /**
      * 符号 =
      */
-    String EQ = "=";
+    public static final String EQ = "=";
     /**
      * 符号 {
      */
-    String CURLY_L = "{";
+    public static final String CURLY_L = "{";
     /**
      * 符号 }
      */
-    String CURLY_R = "}";
+    public static final String CURLY_R = "}";
     /**
      * 符号 [
      */
-    String BRACK_L = "[";
+    public static final String BRACK_L = "[";
     /**
      * 符号 ]
      */
-    String BRACK_R = "]";
+    public static final String BRACK_R = "]";
     /**
      * 符号 |
      */
-    String OR = "|";
+    public static final String OR = "|";
     /**
      * 符号 \
      */
-    String TL = "\\";
+    public static final String TL = "\\";
     /**
      * 符号 :
      */
-    String COLON = ":";
+    public static final String COLON = ":";
     /**
      * 符号 ;
      */
-    String SEMI = ";";
+    public static final String SEMI = ";";
     /**
      * 符号 "
      */
-    String DQM = "\"";
+    public static final String DQM = "\"";
     /**
      * 符号 '
      */
-    String QM = "'";
+    public static final String QM = "'";
     /**
      * 符号&lt;
      */
-    String LT = "<";
+    public static final String LT = "<";
     /**
      * 符号 &gt;
      */
-    String GT = ">";
+    public static final String GT = ">";
     /**
      * 符号 .
      */
-    String DOT = ".";
+    public static final String DOT = ".";
     /**
      * 符号 ,
      */
-    String COMMA = ",";
+    public static final String COMMA = ",";
     /**
      * 符号 ?
      */
-    String QUESTION = "?";
+    public static final String QUESTION = "?";
     /**
      * 符号 /
      */
-    String DIV = "/";
+    public static final String DIV = "/";
     /**
      * 空格
      */
-    String SPACE = " ";
+    public static final String SPACE = " ";
     /**
      * 空字符串
      */
-    String EMPTY_STR = "";
+    public static final String EMPTY_STR = "";
     /**
      * 换行符号
      */
-    String NEW_LINE = "\n";
+    public static final String NEW_LINE = "\n";
     /**
      * 回车符号
      */
-    String CARRIAGE_RETURN = "\r";
+    public static final String CARRIAGE_RETURN = "\r";
     /**
      * 制表符
      */
-    String TAB = "\t";
+    public static final String TAB = "\t";
     /**
      * 数字 0
      */
-    int ZERO = 0;
+    public static final int ZERO = 0;
     /**
      * 数字 1
      */
-    int ONE = 1;
+    public static final int ONE = 1;
     /**
      * 数字 2
      */
-    int TWO = 2;
+    public static final int TWO = 2;
     /**
      * 数字 3
      */
-    int THREE = 3;
+    public static final int THREE = 3;
     /**
      * 数字 4
      */
-    int FOUR = 4;
+    public static final int FOUR = 4;
     /**
      * 数字 5
      */
-    int FIVE = 5;
+    public static final int FIVE = 5;
     /**
      * 数字 6
      */
-    int SIX = 6;
+    public static final int SIX = 6;
     /**
      * 数字 7
      */
-    int SEVEN = 7;
+    public static final int SEVEN = 7;
     /**
      * 数字 8
      */
-    int EIGHT = 8;
+    public static final int EIGHT = 8;
     /**
      * 数字 9
      */
-    int NINE = 9;
+    public static final int NINE = 9;
     /**
      * 数字 0
      */
-    String ZERO_STR = "0";
+    public static final String ZERO_STR = "0";
     /**
      * 数字 1
      */
-    String ONE_STR = "1";
+    public static final String ONE_STR = "1";
     /**
      * 数字 2
      */
-    String TWO_STR = "2";
+    public static final String TWO_STR = "2";
     /**
      * 数字 3
      */
-    String THREE_STR = "3";
+    public static final String THREE_STR = "3";
     /**
      * 数字 4
      */
-    String FOUR_STR = "4";
+    public static final String FOUR_STR = "4";
     /**
      * 数字 5
      */
-    String FIVE_STR = "5";
+    public static final String FIVE_STR = "5";
     /**
      * 数字 6
      */
-    String SIX_STR = "6";
+    public static final String SIX_STR = "6";
     /**
      * 数字 7
      */
-    String SEVEN_STR = "7";
+    public static final String SEVEN_STR = "7";
     /**
      * 数字 8
      */
-    String EIGHT_STR = "8";
+    public static final String EIGHT_STR = "8";
     /**
      * 数字 9
      */
-    String NINE_STR = "9";
+    public static final String NINE_STR = "9";
     /**
      * 数字 0
      */
-    char ZERO_CHAR = '0';
+    public static final char ZERO_CHAR = '0';
     /**
      * 数字 1
      */
-    char ONE_CHAR = '1';
+    public static final char ONE_CHAR = '1';
     /**
      * 数字 2
      */
-    char TWO_CHAR = '2';
+    public static final char TWO_CHAR = '2';
     /**
      * 数字 3
      */
-    char THREE_CHAR = '3';
+    public static final char THREE_CHAR = '3';
     /**
      * 数字 4
      */
-    char FOUR_CHAR = '4';
+    public static final char FOUR_CHAR = '4';
     /**
      * 数字 5
      */
-    char FIVE_CHAR = '5';
+    public static final char FIVE_CHAR = '5';
     /**
      * 数字 6
      */
-    char SIX_CHAR = '6';
+    public static final char SIX_CHAR = '6';
     /**
      * 数字 7
      */
-    char SEVEN_CHAR = '7';
+    public static final char SEVEN_CHAR = '7';
     /**
      * 数字 8
      */
-    char EIGHT_CHAR = '8';
+    public static final char EIGHT_CHAR = '8';
     /**
      * 数字 9
      */
-    char NINE_CHAR = '9';
+    public static final char NINE_CHAR = '9';
     /**
      * 大写 A
      */
-    String A_UPPER = "A";
+    public static final String A_UPPER = "A";
     /**
      * 大写 B
      */
-    String B_UPPER = "B";
+    public static final String B_UPPER = "B";
     /**
      * 大写 C
      */
-    String C_UPPER = "C";
+    public static final String C_UPPER = "C";
     /**
      * 大写 D
      */
-    String D_UPPER = "D";
+    public static final String D_UPPER = "D";
     /**
      * 大写 E
      */
-    String E_UPPER = "E";
+    public static final String E_UPPER = "E";
     /**
      * 大写 F
      */
-    String F_UPPER = "F";
+    public static final String F_UPPER = "F";
     /**
      * 大写 G
      */
-    String G_UPPER = "G";
+    public static final String G_UPPER = "G";
     /**
      * 大写 H
      */
-    String H_UPPER = "H";
+    public static final String H_UPPER = "H";
     /**
      * 大写 I
      */
-    String I_UPPER = "I";
+    public static final String I_UPPER = "I";
     /**
      * 大写 J
      */
-    String J_UPPER = "J";
+    public static final String J_UPPER = "J";
     /**
      * 大写 K
      */
-    String K_UPPER = "K";
+    public static final String K_UPPER = "K";
     /**
      * 大写 L
      */
-    String L_UPPER = "L";
+    public static final String L_UPPER = "L";
     /**
      * 大写 M
      */
-    String M_UPPER = "M";
+    public static final String M_UPPER = "M";
     /**
      * 大写 N
      */
-    String N_UPPER = "N";
+    public static final String N_UPPER = "N";
     /**
      * 大写 O
      */
-    String O_UPPER = "O";
+    public static final String O_UPPER = "O";
     /**
      * 大写 P
      */
-    String P_UPPER = "P";
+    public static final String P_UPPER = "P";
     /**
      * 大写 Q
      */
-    String Q_UPPER = "Q";
+    public static final String Q_UPPER = "Q";
     /**
      * 大写 R
      */
-    String R_UPPER = "R";
+    public static final String R_UPPER = "R";
     /**
      * 大写 S
      */
-    String S_UPPER = "S";
+    public static final String S_UPPER = "S";
     /**
      * 大写 T
      */
-    String T_UPPER = "T";
+    public static final String T_UPPER = "T";
     /**
      * 大写 U
      */
-    String U_UPPER = "U";
+    public static final String U_UPPER = "U";
     /**
      * 大写 V
      */
-    String V_UPPER = "V";
+    public static final String V_UPPER = "V";
     /**
      * 大写 W
      */
-    String W_UPPER = "W";
+    public static final String W_UPPER = "W";
     /**
      * 大写 X
      */
-    String X_UPPER = "X";
+    public static final String X_UPPER = "X";
     /**
      * 大写 Y
      */
-    String Y_UPPER = "Y";
+    public static final String Y_UPPER = "Y";
     /**
      * 大写 Z
      */
-    String Z_UPPER = "Z";
+    public static final String Z_UPPER = "Z";
     /**
      * 小写 a
      */
-    String A_LOWER = "a";
+    public static final String A_LOWER = "a";
     /**
      * 小写 b
      */
-    String B_LOWER = "b";
+    public static final String B_LOWER = "b";
     /**
      * 小写 c
      */
-    String C_LOWER = "c";
+    public static final String C_LOWER = "c";
     /**
      * 小写 d
      */
-    String D_LOWER = "d";
+    public static final String D_LOWER = "d";
     /**
      * 小写 e
      */
-    String E_LOWER = "e";
+    public static final String E_LOWER = "e";
     /**
      * 小写 f
      */
-    String F_LOWER = "f";
+    public static final String F_LOWER = "f";
     /**
      * 小写 g
      */
-    String G_LOWER = "g";
+    public static final String G_LOWER = "g";
     /**
      * 小写 h
      */
-    String H_LOWER = "h";
+    public static final String H_LOWER = "h";
     /**
      * 小写 i
      */
-    String I_LOWER = "i";
+    public static final String I_LOWER = "i";
     /**
      * 小写 j
      */
-    String J_LOWER = "j";
+    public static final String J_LOWER = "j";
     /**
      * 小写 k
      */
-    String K_LOWER = "k";
+    public static final String K_LOWER = "k";
     /**
      * 小写 l
      */
-    String L_LOWER = "l";
+    public static final String L_LOWER = "l";
     /**
      * 小写 m
      */
-    String M_LOWER = "m";
+    public static final String M_LOWER = "m";
     /**
      * 小写 n
      */
-    String N_LOWER = "n";
+    public static final String N_LOWER = "n";
     /**
      * 小写 o
      */
-    String O_LOWER = "o";
+    public static final String O_LOWER = "o";
     /**
      * 小写 p
      */
-    String P_LOWER = "p";
+    public static final String P_LOWER = "p";
     /**
      * 小写 q
      */
-    String Q_LOWER = "q";
+    public static final String Q_LOWER = "q";
     /**
      * 小写 r
      */
-    String R_LOWER = "r";
+    public static final String R_LOWER = "r";
     /**
      * 小写 s
      */
-    String S_LOWER = "s";
+    public static final String S_LOWER = "s";
     /**
      * 小写 t
      */
-    String T_LOWER = "t";
+    public static final String T_LOWER = "t";
     /**
      * 小写 u
      */
-    String U_LOWER = "u";
+    public static final String U_LOWER = "u";
     /**
      * 小写 v
      */
-    String V_LOWER = "v";
+    public static final String V_LOWER = "v";
     /**
      * 小写 w
      */
-    String W_LOWER = "w";
+    public static final String W_LOWER = "w";
     /**
      * 小写 x
      */
-    String X_LOWER = "x";
+    public static final String X_LOWER = "x";
     /**
      * 小写 y
      */
-    String Y_LOWER = "y";
+    public static final String Y_LOWER = "y";
     /**
      * 小写 z
      */
-    String Z_LOWER = "z";
+    public static final String Z_LOWER = "z";
     /**
      * 符号 ~
      */
-    char NOT_B_CHAR = '~';
+    public static final char NOT_B_CHAR = '~';
     /**
      * 符号 !
      */
-    char NOT_L_CHAR = '!';
+    public static final char NOT_L_CHAR = '!';
     /**
      * 符号 @
      */
-    char AT_CHAR = '@';
+    public static final char AT_CHAR = '@';
     /**
      * 符号 #
      */
-    char SHARP_CHAR = '#';
+    public static final char SHARP_CHAR = '#';
     /**
      * 符号 $
      */
-    char DOLLAR_CHAR = '$';
+    public static final char DOLLAR_CHAR = '$';
     /**
      * 符号 %
      */
-    char MOD_CHAR = '%';
+    public static final char MOD_CHAR = '%';
     /**
      * 符号 ^
      */
-    char BXOR_CHAR = '^';
+    public static final char BXOR_CHAR = '^';
     /**
      * 符号 &amp;
      */
-    char AMP_CHAR = '&';
+    public static final char AMP_CHAR = '&';
     /**
      * 符号 *
      */
-    char STAR_CHAR = '*';
+    public static final char STAR_CHAR = '*';
     /**
      * 符号 (
      */
-    char PAREN_L_CHAR = '(';
+    public static final char PAREN_L_CHAR = '(';
     /**
      * 符号 )
      */
-    char PAREN_R_CHAR = ')';
+    public static final char PAREN_R_CHAR = ')';
     /**
      * 符号 _
      */
-    char UNDER_LINE_CHAR = '_';
+    public static final char UNDER_LINE_CHAR = '_';
     /**
      * 符号 -
      */
-    char MINUS_CHAR = '-';
+    public static final char MINUS_CHAR = '-';
     /**
      * 符号 +
      */
-    char PLUS_CHAR = '+';
+    public static final char PLUS_CHAR = '+';
     /**
      * 符号 =
      */
-    char EQ_CHAR = '=';
+    public static final char EQ_CHAR = '=';
     /**
      * 符号 {
      */
-    char CURLY_L_CHAR = '{';
+    public static final char CURLY_L_CHAR = '{';
     /**
      * 符号 }
      */
-    char CURLY_R_CHAR = '}';
+    public static final char CURLY_R_CHAR = '}';
     /**
      * 符号 [
      */
-    char BRACK_L_CHAR = '[';
+    public static final char BRACK_L_CHAR = '[';
     /**
      * 符号 ]
      */
-    char BRACK_R_CHAR = ']';
+    public static final char BRACK_R_CHAR = ']';
     /**
      * 符号 |
      */
-    char OR_CHAR = '|';
+    public static final char OR_CHAR = '|';
     /**
      * 符号 \
      */
-    char TL_CHAR = '\\';
+    public static final char TL_CHAR = '\\';
     /**
      * 符号 :
      */
-    char COLON_CHAR = ':';
+    public static final char COLON_CHAR = ':';
     /**
      * 符号 ;
      */
-    char SEMI_CHAR = ';';
+    public static final char SEMI_CHAR = ';';
     /**
      * 符号 "
      */
-    char DQM_CHAR = '"';
+    public static final char DQM_CHAR = '"';
     /**
      * 符号 '
      */
-    char QM_CHAR = '\'';
+    public static final char QM_CHAR = '\'';
     /**
      * 符号&lt;
      */
-    char LT_CHAR = '<';
+    public static final char LT_CHAR = '<';
     /**
      * 符号 &gt;
      */
-    char GT_CHAR = '>';
+    public static final char GT_CHAR = '>';
     /**
      * 符号 .
      */
-    char DOT_CHAR = '.';
+    public static final char DOT_CHAR = '.';
     /**
      * 符号 ,
      */
-    char COMMA_CHAR = ',';
+    public static final char COMMA_CHAR = ',';
     /**
      * 符号 ?
      */
-    char QUESTION_CHAR = '?';
+    public static final char QUESTION_CHAR = '?';
     /**
      * 符号 /
      */
-    char DIV_CHAR = '/';
+    public static final char DIV_CHAR = '/';
     /**
      * 空格
      */
-    char SPACE_CHAR = ' ';
+    public static final char SPACE_CHAR = ' ';
 
     /**
      * 空字符 NUL(null)
      */
-    char EMPTY_CHAR = '\0';
+    public static final char EMPTY_CHAR = '\0';
 
     /**
      * 大写 A
      */
-    char A_UPPER_CHAR = 'A';
+    public static final char A_UPPER_CHAR = 'A';
     /**
      * 大写 B
      */
-    char B_UPPER_CHAR = 'B';
+    public static final char B_UPPER_CHAR = 'B';
     /**
      * 大写 C
      */
-    char C_UPPER_CHAR = 'C';
+    public static final char C_UPPER_CHAR = 'C';
     /**
      * 大写 D
      */
-    char D_UPPER_CHAR = 'D';
+    public static final char D_UPPER_CHAR = 'D';
     /**
      * 大写 E
      */
-    char E_UPPER_CHAR = 'E';
+    public static final char E_UPPER_CHAR = 'E';
     /**
      * 大写 F
      */
-    char F_UPPER_CHAR = 'F';
+    public static final char F_UPPER_CHAR = 'F';
     /**
      * 大写 G
      */
-    char G_UPPER_CHAR = 'G';
+    public static final char G_UPPER_CHAR = 'G';
     /**
      * 大写 H
      */
-    char H_UPPER_CHAR = 'H';
+    public static final char H_UPPER_CHAR = 'H';
     /**
      * 大写 I
      */
-    char I_UPPER_CHAR = 'I';
+    public static final char I_UPPER_CHAR = 'I';
     /**
      * 大写 J
      */
-    char J_UPPER_CHAR = 'J';
+    public static final char J_UPPER_CHAR = 'J';
     /**
      * 大写 K
      */
-    char K_UPPER_CHAR = 'K';
+    public static final char K_UPPER_CHAR = 'K';
     /**
      * 大写 L
      */
-    char L_UPPER_CHAR = 'L';
+    public static final char L_UPPER_CHAR = 'L';
     /**
      * 大写 M
      */
-    char M_UPPER_CHAR = 'M';
+    public static final char M_UPPER_CHAR = 'M';
     /**
      * 大写 N
      */
-    char N_UPPER_CHAR = 'N';
+    public static final char N_UPPER_CHAR = 'N';
     /**
      * 大写 O
      */
-    char O_UPPER_CHAR = 'O';
+    public static final char O_UPPER_CHAR = 'O';
     /**
      * 大写 P
      */
-    char P_UPPER_CHAR = 'P';
+    public static final char P_UPPER_CHAR = 'P';
     /**
      * 大写 Q
      */
-    char Q_UPPER_CHAR = 'Q';
+    public static final char Q_UPPER_CHAR = 'Q';
     /**
      * 大写 R
      */
-    char R_UPPER_CHAR = 'R';
+    public static final char R_UPPER_CHAR = 'R';
     /**
      * 大写 S
      */
-    char S_UPPER_CHAR = 'S';
+    public static final char S_UPPER_CHAR = 'S';
     /**
      * 大写 T
      */
-    char T_UPPER_CHAR = 'T';
+    public static final char T_UPPER_CHAR = 'T';
     /**
      * 大写 U
      */
-    char U_UPPER_CHAR = 'U';
+    public static final char U_UPPER_CHAR = 'U';
     /**
      * 大写 V
      */
-    char V_UPPER_CHAR = 'V';
+    public static final char V_UPPER_CHAR = 'V';
     /**
      * 大写 W
      */
-    char W_UPPER_CHAR = 'W';
+    public static final char W_UPPER_CHAR = 'W';
     /**
      * 大写 X
      */
-    char X_UPPER_CHAR = 'X';
+    public static final char X_UPPER_CHAR = 'X';
     /**
      * 大写 Y
      */
-    char Y_UPPER_CHAR = 'Y';
+    public static final char Y_UPPER_CHAR = 'Y';
     /**
      * 大写 Z
      */
-    char Z_UPPER_CHAR = 'Z';
+    public static final char Z_UPPER_CHAR = 'Z';
     /**
      * 小写 a
      */
-    char A_LOWER_CHAR = 'a';
+    public static final char A_LOWER_CHAR = 'a';
     /**
      * 小写 b
      */
-    char B_LOWER_CHAR = 'b';
+    public static final char B_LOWER_CHAR = 'b';
     /**
      * 小写 c
      */
-    char C_LOWER_CHAR = 'c';
+    public static final char C_LOWER_CHAR = 'c';
     /**
      * 小写 d
      */
-    char D_LOWER_CHAR = 'd';
+    public static final char D_LOWER_CHAR = 'd';
     /**
      * 小写 e
      */
-    char E_LOWER_CHAR = 'e';
+    public static final char E_LOWER_CHAR = 'e';
     /**
      * 小写 f
      */
-    char F_LOWER_CHAR = 'f';
+    public static final char F_LOWER_CHAR = 'f';
     /**
      * 小写 g
      */
-    char G_LOWER_CHAR = 'g';
+    public static final char G_LOWER_CHAR = 'g';
     /**
      * 小写 h
      */
-    char H_LOWER_CHAR = 'h';
+    public static final char H_LOWER_CHAR = 'h';
     /**
      * 小写 i
      */
-    char I_LOWER_CHAR = 'i';
+    public static final char I_LOWER_CHAR = 'i';
     /**
      * 小写 j
      */
-    char J_LOWER_CHAR = 'j';
+    public static final char J_LOWER_CHAR = 'j';
     /**
      * 小写 k
      */
-    char K_LOWER_CHAR = 'k';
+    public static final char K_LOWER_CHAR = 'k';
     /**
      * 小写 l
      */
-    char L_LOWER_CHAR = 'l';
+    public static final char L_LOWER_CHAR = 'l';
     /**
      * 小写 m
      */
-    char M_LOWER_CHAR = 'm';
+    public static final char M_LOWER_CHAR = 'm';
     /**
      * 小写 n
      */
-    char N_LOWER_CHAR = 'n';
+    public static final char N_LOWER_CHAR = 'n';
     /**
      * 小写 o
      */
-    char O_LOWER_CHAR = 'o';
+    public static final char O_LOWER_CHAR = 'o';
     /**
      * 小写 p
      */
-    char P_LOWER_CHAR = 'p';
+    public static final char P_LOWER_CHAR = 'p';
     /**
      * 小写 q
      */
-    char Q_LOWER_CHAR = 'q';
+    public static final char Q_LOWER_CHAR = 'q';
     /**
      * 小写 r
      */
-    char R_LOWER_CHAR = 'r';
+    public static final char R_LOWER_CHAR = 'r';
     /**
      * 小写 s
      */
-    char S_LOWER_CHAR = 's';
+    public static final char S_LOWER_CHAR = 's';
     /**
      * 小写 t
      */
-    char T_LOWER_CHAR = 't';
+    public static final char T_LOWER_CHAR = 't';
     /**
      * 小写 u
      */
-    char U_LOWER_CHAR = 'u';
+    public static final char U_LOWER_CHAR = 'u';
     /**
      * 小写 v
      */
-    char V_LOWER_CHAR = 'v';
+    public static final char V_LOWER_CHAR = 'v';
     /**
      * 小写 w
      */
-    char W_LOWER_CHAR = 'w';
+    public static final char W_LOWER_CHAR = 'w';
     /**
      * 小写 x
      */
-    char X_LOWER_CHAR = 'x';
+    public static final char X_LOWER_CHAR = 'x';
     /**
      * 小写 y
      */
-    char Y_LOWER_CHAR = 'y';
+    public static final char Y_LOWER_CHAR = 'y';
     /**
      * 小写 z
      */
-    char Z_LOWER_CHAR = 'z';
+    public static final char Z_LOWER_CHAR = 'z';
 
     /**
      * 换行符号
      */
-    char NEW_LINE_CHAR = '\n';
+    public static final char NEW_LINE_CHAR = '\n';
     /**
      * 回车符号
      */
-    char CARRIAGE_RETURN_CHAR = '\r';
+    public static final char CARRIAGE_RETURN_CHAR = '\r';
     /**
      * 制表符
      */
-    char TAB_CHAR = '\t';
+    public static final char TAB_CHAR = '\t';
 }

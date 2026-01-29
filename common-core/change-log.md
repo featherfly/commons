@@ -1,6 +1,6 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
-# 1.15.3
+# 1.16.0 2026-01-29
 
 1. 修复当传入参数是localeMessage时未设置localMessage字段
 2. Num加入get[First|Last]Digit方法

@@ -12,10 +12,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import cn.featherfly.common.constant.Chars;
+import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Str;
@@ -37,72 +40,56 @@ public class PropertiesImpl implements Properties {
     private Properties defaults;
 
     /**
-     * Creates an empty property list with no default values.
+     * Creates an property list with no default values.
      */
     public PropertiesImpl() {
-        super();
+        this((Properties) null);
     }
 
     /**
-     * Creates an empty property list with no default values.
+     * Creates an property list with no default values.
      *
      * @param charset the charset
-     * @deprecated jdk properties file only charset 8859_1，PropertiesImpl stored
-     *             file write it's charset in file
      */
-    @Deprecated
     public PropertiesImpl(Charset charset) {
-        if (charset != null) {
-            this.charset = charset;
-        }
+        this(null, charset);
     }
 
     /**
-     * Creates an empty property list with the specified defaults.
+     * Creates an property list with the specified defaults.
      *
      * @param defaults the defaults.
      */
     public PropertiesImpl(Properties defaults) {
-        this(defaults, null);
+        this(defaults, defaults == null ? StandardCharsets.UTF_8 : defaults.getCharset());
     }
 
-    /**
-     * Creates an empty property list with the specified defaults.
-     *
-     * @param defaults the defaults.
-     * @param charset  the charset
-     */
     PropertiesImpl(Properties defaults, Charset charset) {
-        this(charset);
+        AssertIllegalArgument.isNotNull(charset, "charset");
+        this.charset = charset;
         this.defaults = defaults;
-        int i = 1;
-        for (Part part : defaults.listAll()) {
-            if (part instanceof Property) {
-                partMap.put(((Property) part).getKey(), part);
-            } else {
-                partMap.put("comments[" + i + "]", part);
-                i++;
+        if (defaults != null) {
+            int i = 1;
+            for (Part part : defaults.listAll()) {
+                if (part instanceof Property) {
+                    partMap.put(((Property) part).getKey(), part);
+                } else {
+                    partMap.put("comments[" + i + "]", part);
+                    i++;
+                }
             }
         }
     }
 
     /**
-     * Creates an empty property list with the specified defaults.
+     * Creates an property list with the specified defaults.
      *
      * @param properties properties
      */
     public PropertiesImpl(java.util.Properties properties) {
-        this(properties, null);
-    }
-
-    /**
-     * Creates an empty property list with the specified defaults.
-     *
-     * @param properties properties
-     * @param charset    the charset
-     */
-    PropertiesImpl(java.util.Properties properties, Charset charset) {
-        this(charset);
+        // jdk properties file only charset 8859_1
+        // PropertiesImpl stored file write it's charset in file
+        charset = StandardCharsets.ISO_8859_1;
         if (properties != null) {
             properties.stringPropertyNames().forEach(pn -> setProperty(pn, properties.getProperty(pn)));
         }
@@ -171,8 +158,12 @@ public class PropertiesImpl implements Properties {
      */
     @Override
     public Collection<Property> getPropertyParts() {
-        return partMap.values().stream().filter(Property.class::isInstance).map(p -> (Property) p)
-                .collect(Collectors.toList());
+        Collection<Property> parts = partMap.values().stream().filter(Property.class::isInstance).map(p -> (Property) p)
+            .collect(Collectors.toList());
+        if (defaults != null) {
+            parts.addAll(defaults.getPropertyParts());
+        }
+        return parts;
     }
 
     /**
@@ -180,7 +171,23 @@ public class PropertiesImpl implements Properties {
      */
     @Override
     public Collection<String> getPropertyNames() {
-        return partMap.keySet();
+        Set<String> names = new LinkedHashSet<>(partMap.keySet());
+        if (defaults != null) {
+            names.addAll(defaults.getPropertyNames());
+        }
+        return names;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<Part> listAll() {
+        Collection<Part> parts = partMap.values();
+        if (defaults != null) {
+            parts.addAll(defaults.listAll());
+        }
+        return parts;
     }
 
     //    /**
@@ -204,14 +211,6 @@ public class PropertiesImpl implements Properties {
         String key = System.currentTimeMillis() + "";
         partMap.put(key, new Comment(comment));
         return key;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Collection<Part> listAll() {
-        return partMap.values();
     }
 
     /**
@@ -253,7 +252,7 @@ public class PropertiesImpl implements Properties {
     @Override
     public void store(OutputStream out, Charset charset) throws IOException {
         store0(new BufferedWriter(new OutputStreamWriter(out, charset)), charset == StandardCharsets.ISO_8859_1,
-                charset);
+            charset);
     }
 
     /**
@@ -339,7 +338,7 @@ public class PropertiesImpl implements Properties {
             String key = loadConvert(lr.lineBuf, 0, keyLen, convtBuf);
             String value = loadConvert(lr.lineBuf, valueStart, limit - valueStart, convtBuf);
             setProperty(Str.encode(key, StandardCharsets.ISO_8859_1, charset),
-                    Str.encode(value, StandardCharsets.ISO_8859_1, charset), comment);
+                Str.encode(value, StandardCharsets.ISO_8859_1, charset), comment);
             partMap.remove(commentKey);
             comment = null;
         }
@@ -348,9 +347,9 @@ public class PropertiesImpl implements Properties {
     /**
      * Load convert.
      *
-     * @param in       the in
-     * @param off      the off
-     * @param len      the len
+     * @param in the in
+     * @param off the off
+     * @param len the len
      * @param convtBuf the convt buf
      * @return the string
      */
@@ -432,9 +431,9 @@ public class PropertiesImpl implements Properties {
     /**
      * Store 0.
      *
-     * @param bw         the bw
+     * @param bw the bw
      * @param escUnicode the esc unicode
-     * @param charset    the charset
+     * @param charset the charset
      * @throws IOException Signals that an I/O exception has occurred.
      */
     private void store0(BufferedWriter bw, boolean escUnicode, Charset charset) throws IOException {
@@ -449,7 +448,7 @@ public class PropertiesImpl implements Properties {
                     String val = saveConvert(property.getValue(), false, escUnicode);
                     //                    String comment = saveConvert(property.getComment(), false, escUnicode);
                     Property np = new Property(key, val, Lang.ifNotEmptyOrElse(property.getComment(),
-                            comm -> saveConvert(comm, false, escUnicode), () -> ""));
+                        comm -> saveConvert(comm, false, escUnicode), () -> ""));
                     bw.write(np.toPart());
                     bw.write(Chars.NEW_LINE);
                     //                    bw.newLine();
@@ -472,8 +471,8 @@ public class PropertiesImpl implements Properties {
     /**
      * Save convert.
      *
-     * @param theString     the the string
-     * @param escapeSpace   the escape space
+     * @param theString the the string
+     * @param escapeSpace the escape space
      * @param escapeUnicode the escape unicode
      * @return the string
      */
@@ -718,6 +717,6 @@ public class PropertiesImpl implements Properties {
 
     /** A table of hex digits. */
     private static final char[] hexDigit = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E',
-            'F' };
+        'F' };
 
 }

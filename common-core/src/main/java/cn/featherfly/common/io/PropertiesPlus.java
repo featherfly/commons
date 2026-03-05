@@ -29,52 +29,29 @@ public class PropertiesPlus extends java.util.Properties implements cn.featherfl
     private Properties properties;
 
     /**
-     * Creates an empty property list with no default values.
+     * Creates an property list with no default values.
      */
     public PropertiesPlus() {
-        this(null, null);
+        this((Properties) null);
     }
 
     /**
-     * Creates an empty property list with the specified defaults.
+     * Creates an property list with the specified defaults.
      *
      * @param defaults the defaults.
      */
     public PropertiesPlus(Properties defaults) {
-        properties = new PropertiesImpl(defaults);
+        properties = new PropertiesImpl(defaults, StandardCharsets.ISO_8859_1);
     }
 
     /**
-     * Creates an empty property list with the specified defaults.
+     * Creates an property list with the specified defaults.
      *
      * @param defaults the defaults.
      */
     public PropertiesPlus(java.util.Properties defaults) {
-        this(defaults, null);
-    }
-
-    /**
-     * Creates an empty property list with the specified defaults.
-     *
-     * @param defaults the defaults.
-     * @param charset  charset.
-     */
-    public PropertiesPlus(java.util.Properties defaults, Charset charset) {
         super(defaults);
-        // 为了兼容java.util.Properties
-        if (charset == null) {
-            charset = StandardCharsets.ISO_8859_1;
-        }
-        properties = new PropertiesImpl(defaults, charset);
-    }
-
-    /**
-     * Creates an empty property list with no default values.
-     *
-     * @param charset charset
-     */
-    public PropertiesPlus(Charset charset) {
-        this(null, charset);
+        properties = new PropertiesImpl(defaults);
     }
 
     /**
@@ -194,6 +171,12 @@ public class PropertiesPlus extends java.util.Properties implements cn.featherfl
      */
     @Override
     public void store(OutputStream out, String comment) throws IOException {
+        //        if (withJdkPropertiesFormat) {
+        //            super.store(out, comment);
+        //        } else {
+        //            logger.warn("comment argu is ignore");
+        //            properties.store(out);
+        //        }
         logger.warn("comment argu is ignore");
         properties.store(out);
     }

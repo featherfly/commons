@@ -1,6 +1,8 @@
 
 package cn.featherfly.common.io;
 
+import static org.testng.Assert.assertEquals;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,12 +12,8 @@ import java.nio.charset.StandardCharsets;
 
 import org.testng.annotations.Test;
 
-import cn.featherfly.common.constant.Charsets;
-
 /**
- * <p>
- * PropertiesTest
- * </p>
+ * PropertiesTest.
  *
  * @author zhongj
  */
@@ -25,8 +23,10 @@ public class PropertiesPlusTest {
 
     @Test
     public void writeAndReadWithCharset() throws IOException, InterruptedException {
-        String filePath = Properties.class.getResource("/").getPath() + "writeAndReadWithCharset.properties";
-        Properties pp = new PropertiesPlus(charset);
+        String filePath = Properties.class.getResource("/").getPath()
+            + "../test/writeAndReadWithCharset.jdk.properties";
+        //        Properties pp = new PropertiesPlus(charset);
+        Properties pp = new PropertiesPlus();
         setProperties(pp);
         OutputStream os = new FileOutputStream(filePath);
         pp.store(os);
@@ -35,26 +35,33 @@ public class PropertiesPlusTest {
 
         Thread.sleep(100);
 
-        Properties p = new PropertiesPlus(charset);
-        p.load(new FileInputStream(filePath));
-        showProperties(p);
+        //        Properties p = new PropertiesPlus(charset);
+        Properties reader = new PropertiesPlus();
+        reader.load(new FileInputStream(filePath));
+        showProperties(reader);
 
-        System.out.println(p.listAll());
+        System.out.println(reader.listAll());
 
-        p.setProperty("descp", "描述说明", "这个是读取文件后新加入的");
+        reader.setProperty("descp", "描述说明", "这个是读取文件后新加入的");
 
-        p.setProperty("name", "钟冀11", "这个是读取文件后修改的");
+        reader.setProperty("name", "钟冀11", "这个是读取文件后修改的");
 
-        System.out.println(p.listAll());
+        System.out.println(reader.listAll());
 
         os = new FileOutputStream(filePath);
-        p.store(os);
+        reader.store(os);
         os.close();
+
+        reader = new PropertiesImpl();
+        reader.load(new FileInputStream(filePath));
+        assertReset(reader);
+        System.out.println(reader.listAll());
     }
 
     @Test
     public void writeAndReadWithoutCharset() throws IOException {
-        String filePath = Properties.class.getResource("/").getPath() + "writeAndReadWithOutCharset.properties";
+        String filePath = Properties.class.getResource("/").getPath()
+            + "../test/writeAndReadWithOutCharset.jdk.properties";
         Properties pp = new PropertiesPlus();
         setProperties(pp);
         OutputStream os = new FileOutputStream(filePath);
@@ -62,51 +69,65 @@ public class PropertiesPlusTest {
         os.close();
         System.out.println(pp.listAll());
 
-        Properties p = new PropertiesPlus();
-        p.load(new FileInputStream(filePath));
-        showProperties(p);
+        Properties reader = new PropertiesPlus();
+        reader.load(new FileInputStream(filePath));
+        showProperties(reader);
 
-        p.setProperty("descp", "描述说明", "这个是读取文件后新加入的");
+        reader.setProperty("descp", "描述说明", "这个是读取文件后新加入的");
 
-        p.setProperty("name", "钟冀11", "这个是读取文件后修改的");
+        reader.setProperty("name", "钟冀11", "这个是读取文件后修改的");
 
-        System.out.println(p.listAll());
+        System.out.println(reader.listAll());
 
         os = new FileOutputStream(filePath);
-        p.store(os);
+        reader.store(os);
         os.close();
+
+        reader = new PropertiesImpl();
+        reader.load(new FileInputStream(filePath));
+        assertReset(reader);
+        System.out.println(reader.listAll());
     }
 
     @Test
     public void writeWithCharsetAndSmartRead() throws IOException {
-        String filePath = Properties.class.getResource("/").getPath() + "writeWithCharsetAndSmartRead.properties";
-        Properties pp = new PropertiesPlus(Charsets.GBK);
+        String filePath = Properties.class.getResource("/").getPath()
+            + "../test/writeWithCharsetAndSmartRead.jdk.properties";
+        //        Properties pp = new PropertiesPlus(Charsets.GBK);
+        Properties pp = new PropertiesPlus();
         setProperties(pp);
         OutputStream os = new FileOutputStream(filePath);
         pp.store(os);
         os.close();
         System.out.println(pp.listAll());
 
-        Properties p = new PropertiesPlus();
-        p.load(new FileInputStream(filePath));
-        showProperties(p);
+        Properties reader = new PropertiesPlus();
+        reader.load(new FileInputStream(filePath));
+        showProperties(reader);
 
-        p.setProperty("descp", "描述说明", "这个是读取文件后新加入的");
+        reader.setProperty("descp", "描述说明", "这个是读取文件后新加入的");
 
-        p.setProperty("name", "钟冀11", "这个是读取文件后修改的");
+        reader.setProperty("name", "钟冀11", "这个是读取文件后修改的");
 
-        System.out.println(p.listAll());
+        System.out.println(reader.listAll());
 
         os = new FileOutputStream(filePath);
-        p.store(os);
+        reader.store(os);
         os.close();
+
+        reader = new PropertiesImpl();
+        reader.load(new FileInputStream(filePath));
+        assertReset(reader);
+        System.out.println(reader.listAll());
     }
 
     @Test
-    public void readCommonProperties() throws IOException {
+    public void readJdkProperties() throws IOException {
         String filePath = Properties.class.getResource("/").getPath() + "../test/test.properties";
-        Properties p = new PropertiesPlus(StandardCharsets.UTF_8);
+        //        Properties p = new PropertiesPlus(StandardCharsets.UTF_8);
+        Properties p = new PropertiesPlus();
         p.load(new FileInputStream(filePath));
+
         System.out.println(p.getProperty("isDirectory"));
         System.out.println(p.getPropertyPart("isDirectory"));
         System.out.println(p.getProperty("isExists"));
@@ -115,6 +136,11 @@ public class PropertiesPlusTest {
         System.out.println(p.getPropertyPart("isFile"));
         System.out.println(p.getProperty("isGt"));
         System.out.println(p.getPropertyPart("isGt"));
+
+        assertEquals(p.getProperty("isDirectory"), "{0}不能为null且{1}必须是目录类型");
+        assertEquals(p.getProperty("isExists"), "{0}不能为null且文件{1}必须存在");
+        assertEquals(p.getProperty("isFile"), "{0}不能为null且{1}必须是文件类型");
+        assertEquals(p.getProperty("isGt"), "参数{2}的值{0}必须是大于{1}的整数");
 
         //        System.out.println(p.listAll());
 
@@ -150,5 +176,21 @@ public class PropertiesPlusTest {
         System.out.println(p.getPropertyPart("语言"));
         System.out.println(p.getProperty("username"));
         System.out.println(p.getPropertyPart("username"));
+
+        assertEquals(p.getProperty("name"), "钟冀");
+        assertEquals(p.getPropertyPart("name").getComment(), "姓名");
+        assertEquals(p.getProperty("age"), "18");
+        assertEquals(p.getPropertyPart("age").getComment(), "年龄");
+        assertEquals(p.getProperty("语言"), "中文");
+        assertEquals(p.getPropertyPart("语言").getComment(), "原因说明");
+        assertEquals(p.getProperty("username"), "yufei");
+        assertEquals(p.getPropertyPart("username").getComment(), null);
+    }
+
+    private void assertReset(Properties p) {
+        assertEquals(p.getProperty("name"), "钟冀11");
+        assertEquals(p.getPropertyPart("name").getComment(), "这个是读取文件后修改的");
+        assertEquals(p.getProperty("descp"), "描述说明");
+        assertEquals(p.getPropertyPart("descp").getComment(), "这个是读取文件后新加入的");
     }
 }

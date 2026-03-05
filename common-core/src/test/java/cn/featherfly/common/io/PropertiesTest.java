@@ -1,6 +1,8 @@
 
 package cn.featherfly.common.io;
 
+import static org.testng.Assert.assertEquals;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,9 +15,7 @@ import org.testng.annotations.Test;
 import cn.featherfly.common.constant.Charsets;
 
 /**
- * <p>
- * PropertiesTest
- * </p>
+ * PropertiesTest.
  *
  * @author zhongj
  */
@@ -25,98 +25,119 @@ public class PropertiesTest {
 
     @Test
     public void writeAndReadWithoutCharset() throws IOException, InterruptedException {
-        String filePath = Properties.class.getResource("/").getPath() + "writeAndReadWithCharset.properties";
+        String filePath = Properties.class.getResource("/").getPath() + "../test/writeAndReadWithCharset.properties";
         // 默认使用UTF-8
-        Properties pp = new PropertiesImpl();
-        setProperties(pp);
+        Properties writer = new PropertiesImpl();
+        setProperties(writer);
         OutputStream os = new FileOutputStream(filePath);
-        pp.store(os);
+        writer.store(os);
         os.close();
-        System.out.println(pp.listAll());
+        System.out.println(writer.listAll());
 
         Thread.sleep(100);
 
-        Properties p = new PropertiesImpl();
-        p.load(new FileInputStream(filePath));
-        showProperties(p);
+        Properties reader = new PropertiesImpl();
+        reader.load(new FileInputStream(filePath));
+        showProperties(reader);
 
-        System.out.println(p.listAll());
+        System.out.println(reader.listAll());
 
-        p.setProperty("descp", "描述说明", "这个是读取文件后新加入的");
+        reader.setProperty("descp", "描述说明", "这个是读取文件后新加入的");
 
-        p.setProperty("name", "钟冀11", "这个是读取文件后修改的");
+        reader.setProperty("name", "钟冀11", "这个是读取文件后修改的");
 
-        System.out.println(p.listAll());
+        System.out.println(reader.listAll());
 
         os = new FileOutputStream(filePath);
-        p.store(os);
+        reader.store(os);
         os.close();
+
+        reader = new PropertiesImpl();
+        reader.load(new FileInputStream(filePath));
+        assertReset(reader);
+        System.out.println(reader.listAll());
     }
 
     @Test
     public void writeAndReadWithCharset() throws IOException {
-        String filePath = Properties.class.getResource("/").getPath() + "writeAndReadWithOutCharset.properties";
+        String filePath = Properties.class.getResource("/").getPath() + "../test/writeAndReadWithOutCharset.properties";
         // java 默认使用的编码
-        Properties pp = new PropertiesImpl(StandardCharsets.ISO_8859_1);
-        setProperties(pp);
+        Properties writer = new PropertiesImpl(StandardCharsets.ISO_8859_1);
+        setProperties(writer);
         OutputStream os = new FileOutputStream(filePath);
-        pp.store(os);
+        writer.store(os);
         os.close();
-        System.out.println(pp.listAll());
+        System.out.println(writer.listAll());
 
-        Properties p = new PropertiesImpl();
-        p.load(new FileInputStream(filePath));
-        showProperties(p);
+        Properties reader = new PropertiesImpl();
+        reader.load(new FileInputStream(filePath));
+        showProperties(reader);
 
-        p.setProperty("descp", "描述说明", "这个是读取文件后新加入的");
+        reader.setProperty("descp", "描述说明", "这个是读取文件后新加入的");
 
-        p.setProperty("name", "钟冀11", "这个是读取文件后修改的");
+        reader.setProperty("name", "钟冀11", "这个是读取文件后修改的");
 
-        System.out.println(p.listAll());
+        System.out.println(reader.listAll());
 
         os = new FileOutputStream(filePath);
-        p.store(os);
+        reader.store(os);
         os.close();
+
+        reader = new PropertiesImpl();
+        reader.load(new FileInputStream(filePath));
+        assertReset(reader);
+        System.out.println(reader.listAll());
     }
 
     @Test
     public void writeWithCharsetAndSmartRead() throws IOException {
-        String filePath = Properties.class.getResource("/").getPath() + "writeWithCharsetAndSmartRead.properties";
-        Properties pp = new PropertiesImpl(Charsets.GBK);
-        setProperties(pp);
+        String filePath = Properties.class.getResource("/").getPath()
+            + "../test/writeWithCharsetAndSmartRead.properties";
+        Properties writer = new PropertiesImpl(Charsets.GBK);
+        setProperties(writer);
         OutputStream os = new FileOutputStream(filePath);
-        pp.store(os);
+        writer.store(os);
         os.close();
-        System.out.println(pp.listAll());
+        System.out.println(writer.listAll());
 
-        Properties p = new PropertiesImpl();
-        p.load(new FileInputStream(filePath));
-        showProperties(p);
+        Properties reader = new PropertiesImpl();
+        reader.load(new FileInputStream(filePath));
+        showProperties(reader);
 
-        p.setProperty("descp", "描述说明", "这个是读取文件后新加入的");
+        reader.setProperty("descp", "描述说明", "这个是读取文件后新加入的");
 
-        p.setProperty("name", "钟冀11", "这个是读取文件后修改的");
+        reader.setProperty("name", "钟冀11", "这个是读取文件后修改的");
 
-        System.out.println(p.listAll());
+        System.out.println(reader.listAll());
 
         os = new FileOutputStream(filePath);
-        p.store(os);
+        reader.store(os);
         os.close();
+
+        reader = new PropertiesImpl();
+        reader.load(new FileInputStream(filePath));
+        assertReset(reader);
+        System.out.println(reader.listAll());
     }
 
     @Test
-    public void readCommonProperties() throws IOException {
+    public void readJdkProperties() throws IOException {
         String filePath = Properties.class.getResource("/").getPath() + "../test/test.properties";
-        Properties p = new PropertiesImpl(StandardCharsets.UTF_8);
-        p.load(new FileInputStream(filePath));
-        System.out.println(p.getProperty("isDirectory"));
-        System.out.println(p.getPropertyPart("isDirectory"));
-        System.out.println(p.getProperty("isExists"));
-        System.out.println(p.getPropertyPart("isExists"));
-        System.out.println(p.getProperty("isFile"));
-        System.out.println(p.getPropertyPart("isFile"));
-        System.out.println(p.getProperty("isGt"));
-        System.out.println(p.getPropertyPart("isGt"));
+        Properties reader = new PropertiesImpl(StandardCharsets.ISO_8859_1);
+        reader.load(new FileInputStream(filePath));
+        System.out.println(reader.getProperty("isDirectory"));
+        System.out.println(reader.getPropertyPart("isDirectory"));
+        System.out.println(reader.getProperty("isExists"));
+        System.out.println(reader.getPropertyPart("isExists"));
+        System.out.println(reader.getProperty("isFile"));
+        System.out.println(reader.getPropertyPart("isFile"));
+        System.out.println(reader.getProperty("isGt"));
+        System.out.println(reader.getPropertyPart("isGt"));
+
+        assertEquals(reader.getProperty("isDirectory"), "{0}不能为null且{1}必须是目录类型");
+        assertEquals(reader.getProperty("isExists"), "{0}不能为null且文件{1}必须存在");
+        assertEquals(reader.getProperty("isFile"), "{0}不能为null且{1}必须是文件类型");
+        assertEquals(reader.getProperty("isGt"), "参数{2}的值{0}必须是大于{1}的整数");
 
         //        System.out.println(p.listAll());
 
@@ -152,5 +173,21 @@ public class PropertiesTest {
         System.out.println(p.getPropertyPart("语言"));
         System.out.println(p.getProperty("username"));
         System.out.println(p.getPropertyPart("username"));
+
+        assertEquals(p.getProperty("name"), "钟冀");
+        assertEquals(p.getPropertyPart("name").getComment(), "姓名");
+        assertEquals(p.getProperty("age"), "18");
+        assertEquals(p.getPropertyPart("age").getComment(), "年龄");
+        assertEquals(p.getProperty("语言"), "中文");
+        assertEquals(p.getPropertyPart("语言").getComment(), "原因说明");
+        assertEquals(p.getProperty("username"), "yufei");
+        assertEquals(p.getPropertyPart("username").getComment(), null);
+    }
+
+    private void assertReset(Properties p) {
+        assertEquals(p.getProperty("name"), "钟冀11");
+        assertEquals(p.getPropertyPart("name").getComment(), "这个是读取文件后修改的");
+        assertEquals(p.getProperty("descp"), "描述说明");
+        assertEquals(p.getPropertyPart("descp").getComment(), "这个是读取文件后新加入的");
     }
 }

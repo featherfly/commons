@@ -104,11 +104,23 @@ public class CollectionUtilsTest {
 
         c = CollectionUtils.newQueue(MyStringQueue.class);
         assertTrue(c instanceof MyStringQueue);
+
+    }
+
+    @Test(expectedExceptions = ClassCastException.class)
+    public void newInstanceClassCastException() {
+        Set<String> set = CollectionUtils.newInstance(Collection.class);
+        assertTrue(set instanceof ArrayList);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void newCollectionException() {
-        CollectionUtils.newCollection(Map.class);
+    public void newCollectionForceIllegalArgumentException() {
+        CollectionUtils.newCollectionForce(Map.class);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void newMapForceIllegalArgumentException() {
+        CollectionUtils.newMapForce(List.class);
     }
 
     @Test
@@ -149,11 +161,28 @@ public class CollectionUtilsTest {
 
         list = CollectionUtils.newList(MyStringList.class);
         assertTrue(list instanceof MyStringList);
+
+        // ****************************************************************************************************************
+
+        list = CollectionUtils.newListForce(List.class);
+        assertTrue(list instanceof ArrayList);
+
+        list = CollectionUtils.newListForce(ArrayList.class);
+        assertTrue(list instanceof ArrayList);
+
+        list = CollectionUtils.newListForce(LinkedList.class);
+        assertTrue(list instanceof LinkedList);
+
+        list = CollectionUtils.newListForce(Vector.class);
+        assertTrue(list instanceof Vector);
+
+        list = CollectionUtils.newListForce(MyStringList.class);
+        assertTrue(list instanceof MyStringList);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void newListException() {
-        CollectionUtils.newList(Map.class);
+    public void newListForceException() {
+        CollectionUtils.newListForce(Map.class);
     }
 
     @Test
@@ -212,11 +241,37 @@ public class CollectionUtilsTest {
 
         set = CollectionUtils.newSet(MyStringSet.class);
         assertTrue(set instanceof MyStringSet);
+
+        // ****************************************************************************************************************
+
+        set = CollectionUtils.newSetForce(Set.class);
+        assertTrue(set instanceof HashSet);
+
+        set = CollectionUtils.newSetForce(HashSet.class);
+        assertTrue(set instanceof HashSet);
+
+        set = CollectionUtils.newSetForce(LinkedHashSet.class);
+        assertTrue(set instanceof LinkedHashSet);
+
+        set = CollectionUtils.newSetForce(SortedSet.class);
+        assertTrue(set instanceof TreeSet);
+
+        set = CollectionUtils.newSetForce(NavigableSet.class);
+        assertTrue(set instanceof TreeSet);
+
+        set = CollectionUtils.newSetForce(TreeSet.class);
+        assertTrue(set instanceof TreeSet);
+
+        set = CollectionUtils.newSetForce(ConcurrentSkipListSet.class);
+        assertTrue(set instanceof ConcurrentSkipListSet);
+
+        set = CollectionUtils.newSetForce(MyStringSet.class);
+        assertTrue(set instanceof MyStringSet);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void newSetException() {
-        CollectionUtils.newSet(Map.class);
+    public void newSetForceException() {
+        CollectionUtils.newSetForce(Map.class);
     }
 
     @Test
@@ -257,11 +312,29 @@ public class CollectionUtilsTest {
 
         queue = CollectionUtils.newQueue(MyStringQueue.class);
         assertTrue(queue instanceof MyStringQueue);
+
+        // ****************************************************************************************************************
+
+        queue = CollectionUtils.newQueueForce(Queue.class);
+        assertTrue(queue instanceof ArrayDeque);
+
+        queue = CollectionUtils.newQueueForce(Deque.class);
+        assertTrue(queue instanceof ArrayDeque);
+
+        queue = CollectionUtils.newQueueForce(ConcurrentLinkedQueue.class);
+        assertTrue(queue instanceof ConcurrentLinkedQueue);
+
+        queue = CollectionUtils.newQueueForce(ConcurrentLinkedDeque.class);
+        assertTrue(queue instanceof ConcurrentLinkedDeque);
+
+        queue = CollectionUtils.newQueueForce(MyStringQueue.class);
+        assertTrue(queue instanceof MyStringQueue);
+
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void newQueueException() {
-        CollectionUtils.newQueue(Map.class);
+    public void newQueueForceException() {
+        CollectionUtils.newQueueForce(Map.class);
     }
 
     @Test
@@ -279,7 +352,6 @@ public class CollectionUtilsTest {
     @Test
     public void newMap() {
         Map<String, String> map = null;
-
         map = CollectionUtils.newMap(Map.class);
         assertTrue(map instanceof HashMap);
 
@@ -306,11 +378,41 @@ public class CollectionUtilsTest {
 
         map = CollectionUtils.newMap(MyStringMap.class);
         assertTrue(map instanceof MyStringMap);
+
+        // ****************************************************************************************************************
+
+        map = CollectionUtils.newMapForce(Map.class);
+        assertTrue(map instanceof HashMap);
+
+        map = CollectionUtils.newMapForce(HashMap.class);
+        assertTrue(map instanceof HashMap);
+
+        map = CollectionUtils.newMapForce(LinkedHashMap.class);
+        assertTrue(map instanceof LinkedHashMap);
+
+        map = CollectionUtils.newMapForce(NavigableMap.class);
+        assertTrue(map instanceof TreeMap);
+        map = CollectionUtils.newMap(TreeMap.class);
+        assertTrue(map instanceof TreeMap);
+
+        map = CollectionUtils.newMapForce(ConcurrentMap.class);
+        assertTrue(map instanceof ConcurrentHashMap);
+        map = CollectionUtils.newMapForce(ConcurrentHashMap.class);
+        assertTrue(map instanceof ConcurrentHashMap);
+
+        map = CollectionUtils.newMapForce(ConcurrentNavigableMap.class);
+        assertTrue(map instanceof ConcurrentSkipListMap);
+        map = CollectionUtils.newMapForce(ConcurrentSkipListMap.class);
+        assertTrue(map instanceof ConcurrentSkipListMap);
+
+        map = CollectionUtils.newMapForce(MyStringMap.class);
+        assertTrue(map instanceof MyStringMap);
+
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void newMapException() {
-        CollectionUtils.newMap(Queue.class);
+    public void newMapForceException() {
+        CollectionUtils.newMapForce(Queue.class);
     }
 
 }

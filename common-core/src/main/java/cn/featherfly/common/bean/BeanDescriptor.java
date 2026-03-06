@@ -419,11 +419,11 @@ public class BeanDescriptor<T> extends AbstractPropertyAccessor<T> {
                     if (ClassUtils.isCellection(property.getType())) {
                         LOGGER.trace("类{}的属性[{}]为空，对象为Collection接口实现类，自动创建该属性对象", property.getOwnerType().getName(),
                             property.getName());
-                        propertyValue = CollectionUtils.newCollection(property.getType());
+                        propertyValue = CollectionUtils.newCollectionForce(property.getType());
                     } else if (ClassUtils.isMap(property.getType())) {
                         LOGGER.trace("类{}的属性[{}]为空，对象为MAP接口，自动创建该属性对象", property.getOwnerType().getName(),
                             property.getName());
-                        propertyValue = CollectionUtils.newMap(property.getType());
+                        propertyValue = CollectionUtils.newMapForce(property.getType());
                     } else if (property.getType() == Optional.class) {
                         LOGGER.trace("类{}的属性[{}]为空，对象为Optional容器，自动创建Optional和其对应的泛型对象",
                             property.getOwnerType().getName(), property.getName());
@@ -462,7 +462,7 @@ public class BeanDescriptor<T> extends AbstractPropertyAccessor<T> {
             @SuppressWarnings("unchecked")
             Collection<Object> collection = (Collection<Object>) getProperty(obj, name);
             if (collection == null) {
-                collection = CollectionUtils.newCollection(beanProperty.getType());
+                collection = CollectionUtils.newCollectionForce(beanProperty.getType());
                 setProperty(obj, name, collection);
             }
             collection.add(value);

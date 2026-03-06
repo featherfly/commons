@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
@@ -1661,6 +1662,18 @@ public final class Lang {
      */
     public static <E> Set<E> set(@SuppressWarnings("unchecked") E... elements) {
         return CollectionUtils.set(elements);
+    }
+
+    /**
+     * Queue.
+     *
+     * @param <T> the generic type
+     * @param args the args
+     * @return the queue
+     * @see CollectionUtils#queue(Object...)
+     */
+    public static <T> Queue<T> queue(@SuppressWarnings("unchecked") T... args) {
+        return CollectionUtils.queue(args);
     }
 
     /**

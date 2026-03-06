@@ -21,11 +21,13 @@ import java.util.Set;
  */
 public class ChainSetImpl<E> extends ChainCollectionImpl<E, ChainSetImpl<E>> implements Set<E> {
 
+    private static final long serialVersionUID = -7155231615993384668L;
+
     /**
      * Instantiates a new chain map impl, work same as HashMap.
      */
     public ChainSetImpl() {
-        this(new HashSet<E>(0));
+        this(new HashSet<>(0));
     }
 
     /**

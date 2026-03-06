@@ -63,7 +63,7 @@ public class ReflectionMapInstantiator<K, V> implements Instantiator<Map<K, V>> 
      */
     @Override
     public Map<K, V> instantiate() {
-        return CollectionUtils.newMap(type);
+        return CollectionUtils.newMapForce(type);
     }
 
     /**

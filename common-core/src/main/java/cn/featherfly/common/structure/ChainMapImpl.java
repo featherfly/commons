@@ -30,7 +30,7 @@ public class ChainMapImpl<K, V> implements ChainMap<K, V>, Serializable {
 
     private static final long serialVersionUID = -202220931792105889L;
 
-    private final Map<K, V> map;
+    private final transient Map<K, V> map;
 
     /**
      * Instantiates a new chain map impl, work same as HashMap.

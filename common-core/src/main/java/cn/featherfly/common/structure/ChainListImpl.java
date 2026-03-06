@@ -23,11 +23,13 @@ import java.util.ListIterator;
  */
 public class ChainListImpl<E> extends ChainCollectionImpl<E, ChainListImpl<E>> implements List<E> {
 
+    private static final long serialVersionUID = 1732727175960625533L;
+
     /**
      * Instantiates a new chain map impl, work same as HashMap.
      */
     public ChainListImpl() {
-        this(new ArrayList<E>(0));
+        this(new ArrayList<>(0));
     }
 
     /**
@@ -121,5 +123,17 @@ public class ChainListImpl<E> extends ChainCollectionImpl<E, ChainListImpl<E>> i
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
         return getList().subList(fromIndex, toIndex);
+    }
+
+    /**
+     * Adds the chain.
+     *
+     * @param index the index
+     * @param element the element
+     * @return the chain list impl
+     */
+    public ChainListImpl<E> addChain(int index, E element) {
+        add(index, element);
+        return this;
     }
 }

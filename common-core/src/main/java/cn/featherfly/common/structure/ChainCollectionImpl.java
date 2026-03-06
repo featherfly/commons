@@ -10,6 +10,7 @@
  */
 package cn.featherfly.common.structure;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Spliterator;
@@ -24,10 +25,12 @@ import java.util.stream.Stream;
  * @param <E> the element type
  * @param <T> the generic type
  */
-public class ChainCollectionImpl<E, T extends Collection<E>> implements ChainCollection<E, T> {
+public class ChainCollectionImpl<E, T extends Collection<E>> implements ChainCollection<E, T>, Serializable {
+
+    private static final long serialVersionUID = 8482897240108533108L;
 
     /** The collection. */
-    protected final Collection<E> collection;
+    protected final transient Collection<E> collection;
 
     /**
      * Instantiates a new abstract chain collection.
@@ -141,7 +144,7 @@ public class ChainCollectionImpl<E, T extends Collection<E>> implements ChainCol
      * To array.
      *
      * @param <A> the generic type
-     * @param a   the a
+     * @param a the a
      * @return the a[]
      * @see java.util.Collection#toArray(java.lang.Object[])
      */

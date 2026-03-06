@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.function.IntFunction;
 import java.util.function.ObjIntConsumer;
@@ -291,10 +292,21 @@ public final class ArrayUtils {
      *
      * @param <T> the generic type
      * @param arrays the arrays
-     * @return the sets
+     * @return the set
      */
     public static <T> Set<T> toSet(@SuppressWarnings("unchecked") T... arrays) {
         return CollectionUtils.set(arrays);
+    }
+
+    /**
+     * To queue.
+     *
+     * @param <T> the generic type
+     * @param arrays the arrays
+     * @return the queue
+     */
+    public static <T> Queue<T> toQueue(@SuppressWarnings("unchecked") T... arrays) {
+        return CollectionUtils.queue(arrays);
     }
 
     /**
@@ -360,9 +372,7 @@ public final class ArrayUtils {
             len = array.length;
         }
         A[] as = create(type, len);
-        each((a, i) -> {
-            as[i] = Num.parse(a, type);
-        }, array);
+        each((a, i) -> as[i] = Num.parse(a, type), array);
         return as;
     }
 

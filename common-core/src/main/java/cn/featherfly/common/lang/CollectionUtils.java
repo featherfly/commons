@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 import java.util.function.ObjIntConsumer;
 import java.util.function.Supplier;
 
@@ -84,6 +85,41 @@ public final class CollectionUtils {
     }
 
     /**
+     * 批量添加元素到集合，如果source==null或者appendCollection为空则直接返回source.
+     * 其他情况请参考{@link java.util.Collection#addAll(Collection)}
+     *
+     * @param <T> 泛型
+     * @param source 原集合
+     * @param appendCollection 需要批量添加的集合
+     * @return collection
+     */
+    public static <T> Collection<T> addAllChain(Collection<T> source, Collection<T> appendCollection) {
+        if (source == null || Lang.isEmpty(appendCollection)) {
+            return source;
+        }
+        source.addAll(appendCollection);
+        return source;
+    }
+
+    /**
+     * 批量添加元素到集合，如果collection==null或者elements为空则直接返回collection.
+     * 其他情况请参考{@link java.util.Collections#addAll(Collection, Object...)}
+     *
+     * @param <T> 泛型
+     * @param collection 集合
+     * @param elements 需要批量添加的元素
+     * @return collection
+     */
+    public static <T> Collection<T> addAllChain(Collection<T> collection,
+        @SuppressWarnings("unchecked") T... elements) {
+        if (collection == null || Lang.isEmpty(elements)) {
+            return collection;
+        }
+        Collections.addAll(collection, elements);
+        return collection;
+    }
+
+    /**
      * 批量添加元素到集合，如果collection==null返回false,或者appendCollection为空返回false.
      * 其他情况请参考{@link java.util.Collection#addAll(Collection)}
      *
@@ -93,10 +129,7 @@ public final class CollectionUtils {
      * @return 是否添加
      */
     public static <T> boolean addAll(Collection<T> source, Collection<T> appendCollection) {
-        if (source == null) {
-            return false;
-        }
-        if (Lang.isEmpty(appendCollection)) {
+        if (source == null || Lang.isEmpty(appendCollection)) {
             return false;
         }
         return source.addAll(appendCollection);
@@ -112,10 +145,7 @@ public final class CollectionUtils {
      * @return 是否添加
      */
     public static <T> boolean addAll(Collection<T> collection, @SuppressWarnings("unchecked") T... elements) {
-        if (collection == null) {
-            return false;
-        }
-        if (Lang.isEmpty(elements)) {
+        if (collection == null || Lang.isEmpty(elements)) {
             return false;
         }
         return Collections.addAll(collection, elements);
@@ -130,10 +160,7 @@ public final class CollectionUtils {
      * @return 是否添加
      */
     public static boolean addAll(Collection<Boolean> collection, boolean... elements) {
-        if (collection == null) {
-            return false;
-        }
-        if (Lang.isEmpty(elements)) {
+        if (collection == null || Lang.isEmpty(elements)) {
             return false;
         }
         boolean result = false;
@@ -152,10 +179,7 @@ public final class CollectionUtils {
      * @return 是否添加
      */
     public static boolean addAll(Collection<Short> collection, short... elements) {
-        if (collection == null) {
-            return false;
-        }
-        if (Lang.isEmpty(elements)) {
+        if (collection == null || Lang.isEmpty(elements)) {
             return false;
         }
         boolean result = false;
@@ -174,10 +198,7 @@ public final class CollectionUtils {
      * @return 是否添加
      */
     public static boolean addAll(Collection<Byte> collection, byte... elements) {
-        if (collection == null) {
-            return false;
-        }
-        if (Lang.isEmpty(elements)) {
+        if (collection == null || Lang.isEmpty(elements)) {
             return false;
         }
         boolean result = false;
@@ -196,10 +217,7 @@ public final class CollectionUtils {
      * @return 是否添加
      */
     public static boolean addAll(Collection<Integer> collection, int... elements) {
-        if (collection == null) {
-            return false;
-        }
-        if (Lang.isEmpty(elements)) {
+        if (collection == null || Lang.isEmpty(elements)) {
             return false;
         }
         boolean result = false;
@@ -218,10 +236,7 @@ public final class CollectionUtils {
      * @return 是否添加
      */
     public static boolean addAll(Collection<Long> collection, long... elements) {
-        if (collection == null) {
-            return false;
-        }
-        if (Lang.isEmpty(elements)) {
+        if (collection == null || Lang.isEmpty(elements)) {
             return false;
         }
         boolean result = false;
@@ -240,10 +255,7 @@ public final class CollectionUtils {
      * @return 是否添加
      */
     public static boolean addAll(Collection<Double> collection, double... elements) {
-        if (collection == null) {
-            return false;
-        }
-        if (Lang.isEmpty(elements)) {
+        if (collection == null || Lang.isEmpty(elements)) {
             return false;
         }
         boolean result = false;
@@ -292,7 +304,7 @@ public final class CollectionUtils {
     @SuppressWarnings("unchecked")
     public static <A> A[] toArray(Collection<A> collection) {
         if (isEmpty(collection)) {
-            return null;
+            return (A[]) ArrayUtils.EMPTY_OBJECT_ARRAY;
         }
         Class<A> type = null;
         for (A a : collection) {
@@ -301,7 +313,7 @@ public final class CollectionUtils {
             }
         }
         if (type == null) {
-            return null;
+            return (A[]) ArrayUtils.EMPTY_OBJECT_ARRAY;
         }
         return doToArray(collection, type);
     }
@@ -366,23 +378,48 @@ public final class CollectionUtils {
     }
 
     /**
-     * create Collection with type argument.
+     * create collection or map with type argument.
+     * 根据传入类型创建Collection或者Map实例.
+     *
+     * @param <C> collection|map type
+     * @param <E> collection|map value map
+     * @param <K> map key type
+     * @param type collection or map class
+     * @return collection or map instance
+     */
+    @SuppressWarnings("unchecked")
+    public static <C, E, K> C newInstance(Class<?> type) {
+        if (ClassUtils.isParent(Collection.class, type)) {
+            return (C) newCollectionForce(type);
+        } else {
+            return (C) newMap((Class<Map<K, E>>) type);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <C> C newInstanceCreator(@SuppressWarnings("rawtypes") Class type) {
+        if (ClassUtils.isInstanceClass(type)) {
+            return (C) ClassUtils.newInstance(type);
+        }
+        throw new IllegalArgumentException("unsupport type：" + type.getName());
+    }
+
+    /**
+     * create Collection with type argument. compile-time check type.
      * 根据传入类型创建Collection实例.
      *
      * @param <C> type of Collection
      * @param <E> type of Collection value
      * @param type 类型
      * @return Collection实例
-     * @deprecated use {@link #newCollection(Class)} instead
      */
-    @Deprecated
-    public static <C extends Collection<E>, E> C newInstance(Class<?> type) {
-        return newCollection(type);
+    public static <E, C extends Collection<?>> Collection<E> newCollection(Class<C> type) {
+        return newCollectionForce(type);
     }
 
     /**
-     * create Collection with type argument.
-     * 根据传入类型创建Collection实例.
+     * create Collection with type argument. runtime check type.
+     * 根据传入类型创建Collection实例. 运行期检查.
      *
      * @param <C> type of Collection
      * @param <E> type of Collection value
@@ -390,18 +427,18 @@ public final class CollectionUtils {
      * @return Collection实例
      */
     @SuppressWarnings("unchecked")
-    public static <C extends Collection<E>, E> C newCollection(Class<?> type) {
+    public static <E> Collection<E> newCollectionForce(Class<?> type) {
         AssertIllegalArgument.isParent(Collection.class, type);
         if (type == Collection.class) {
-            return (C) new ArrayList<E>();
+            return new ArrayList<>();
         } else if (ClassUtils.isParent(List.class, type)) {
-            return (C) newList(type);
+            return newList((Class<List<E>>) type);
         } else if (ClassUtils.isParent(Set.class, type)) {
-            return (C) newSet(type);
+            return newSet((Class<Set<E>>) type);
         } else if (ClassUtils.isParent(Queue.class, type)) {
-            return (C) newQueue(type);
+            return newQueue((Class<Queue<E>>) type);
         } else {
-            throw new IllegalArgumentException("不支持的类型：" + type.getName());
+            throw new IllegalArgumentException("unsupport type: " + type.getName());
         }
     }
 
@@ -413,9 +450,8 @@ public final class CollectionUtils {
      * @param type List type
      * @return instance of list
      */
-    @SuppressWarnings("unchecked")
-    public static <E> List<E> newList(Class<?> type) {
-        return newList(type, t -> (List<E>) ClassUtils.newInstance(t));
+    public static <E, L extends List<?>> List<E> newList(Class<L> type) {
+        return newList(type, CollectionUtils::newInstanceCreator);
     }
 
     /**
@@ -427,21 +463,52 @@ public final class CollectionUtils {
      * @param creator if method can not create a new List use this to create
      * @return instance of list
      */
-    public static <E> List<E> newList(Class<?> type, Function<Class<?>, List<E>> creator) {
+    public static <E, L extends List<?>> List<E> newList(Class<L> type, Function<Class<L>, List<E>> creator) {
+        List<E> list = newListOrNull(type);
+        return list != null ? list : creator.apply(type);
+    }
+
+    /**
+     * create List with type argument. runtime check type.
+     * 根据传入类型创建List实例.
+     *
+     * @param <E> type of List value
+     * @param type List type
+     * @return instance of list
+     */
+    public static <E> List<E> newListForce(Class<?> type) {
+        return newListForce(type, CollectionUtils::newInstanceCreator);
+    }
+
+    /**
+     * create List with type argument. runtime check type.
+     * 根据传入类型创建List实例.
+     *
+     * @param <E> type of List value
+     * @param type List type
+     * @param creator if method can not create a new List use this to create
+     * @return instance of list
+     */
+    public static <E> List<E> newListForce(Class<?> type, Function<Class<?>, List<E>> creator) {
+        List<E> list = newListOrNull(type);
+        return list != null ? list : creator.apply(type);
+    }
+
+    private static <E, L> List<E> newListOrNull(Class<?> type) {
         AssertIllegalArgument.isParent(List.class, type);
         switch (type.getName()) {
             case "java.util.List":
             case "java.util.ArrayList":
                 return new ArrayList<>();
+
             case "java.util.LinkedList":
                 return new LinkedList<>();
+
             case "java.util.Vector":
                 return new Vector<>();
+
             default:
-                if (ClassUtils.isInstanceClass(type)) {
-                    return creator.apply(type);
-                }
-                throw new IllegalArgumentException("unsupport type：" + type.getName());
+                return null;
         }
     }
 
@@ -454,7 +521,7 @@ public final class CollectionUtils {
      * @return List creator
      */
     @SuppressWarnings("unchecked")
-    public static <E> Supplier<List<E>> listCreator(Class<?> type) {
+    public static <E, L extends List<?>> Supplier<List<E>> listCreator(Class<L> type) {
         return listCreator(type, t -> (List<E>) ClassUtils.newInstance(t));
     }
 
@@ -467,16 +534,20 @@ public final class CollectionUtils {
      * @param creator if method can not get a List creator use this to create
      * @return List creator
      */
-    public static <E> Supplier<List<E>> listCreator(Class<?> type, Function<Class<?>, List<E>> creator) {
+    public static <E, L extends List<?>> Supplier<List<E>> listCreator(Class<L> type,
+        Function<Class<L>, List<E>> creator) {
         AssertIllegalArgument.isParent(List.class, type);
         switch (type.getName()) {
             case "java.util.List":
             case "java.util.ArrayList":
                 return () -> new ArrayList<>();
+
             case "java.util.LinkedList":
                 return () -> new LinkedList<>();
+
             case "java.util.Vector":
                 return () -> new Vector<>();
+
             default:
                 if (ClassUtils.isInstanceClass(type)) {
                     return () -> creator.apply(type);
@@ -493,9 +564,20 @@ public final class CollectionUtils {
      * @param type Set type
      * @return Set instance object
      */
-    @SuppressWarnings("unchecked")
-    public static <E> Set<E> newSet(Class<?> type) {
-        return newSet(type, t -> (Set<E>) ClassUtils.newInstance(t));
+    public static <E, S extends Set<?>> Set<E> newSet(Class<S> type) {
+        return newSet(type, CollectionUtils::newInstanceCreator);
+    }
+
+    /**
+     * create Set with type argument.runtime check type.
+     * 根据传入类型创建Set实例.
+     *
+     * @param <E> type of Set value
+     * @param type Set type
+     * @return Set instance object
+     */
+    public static <E> Set<E> newSetForce(Class<?> type) {
+        return newSetForce(type, CollectionUtils::newInstanceCreator);
     }
 
     /**
@@ -507,7 +589,26 @@ public final class CollectionUtils {
      * @param creator if method can not create a new Set use this to create
      * @return Set instance object
      */
-    public static <E> Set<E> newSet(Class<?> type, Function<Class<?>, Set<E>> creator) {
+    public static <E, S extends Set<?>> Set<E> newSet(Class<S> type, Function<Class<S>, Set<E>> creator) {
+        Set<E> set = newSetOrNull(type);
+        return set != null ? set : creator.apply(type);
+    }
+
+    /**
+     * create Set with type argument.runtime check type.
+     * 根据传入类型创建Set实例.
+     *
+     * @param <E> type of Set value
+     * @param type Set type
+     * @param creator if method can not create a new Set use this to create
+     * @return Set instance object
+     */
+    public static <E> Set<E> newSetForce(Class<?> type, Function<Class<?>, Set<E>> creator) {
+        Set<E> set = newSetOrNull(type);
+        return set != null ? set : creator.apply(type);
+    }
+
+    private static <E> Set<E> newSetOrNull(Class<?> type) {
         AssertIllegalArgument.isParent(Set.class, type);
         switch (type.getName()) {
             case "java.util.Set":
@@ -524,11 +625,9 @@ public final class CollectionUtils {
 
             case "java.util.concurrent.ConcurrentSkipListSet":
                 return new ConcurrentSkipListSet<>();
+
             default:
-                if (ClassUtils.isInstanceClass(type)) {
-                    return creator.apply(type);
-                }
-                throw new IllegalArgumentException("unsupport type：" + type.getName());
+                return null;
         }
     }
 
@@ -541,7 +640,7 @@ public final class CollectionUtils {
      * @return Set creator
      */
     @SuppressWarnings("unchecked")
-    public static <E> Supplier<Set<E>> setCreator(Class<?> type) {
+    public static <E, S extends Set<?>> Supplier<Set<E>> setCreator(Class<S> type) {
         return setCreator(type, t -> (Set<E>) ClassUtils.newInstance(t));
     }
 
@@ -554,7 +653,7 @@ public final class CollectionUtils {
      * @param creator if method can not get a Set creator use this to create
      * @return Set creator
      */
-    public static <E> Supplier<Set<E>> setCreator(Class<?> type, Function<Class<?>, Set<E>> creator) {
+    public static <E, S extends Set<?>> Supplier<Set<E>> setCreator(Class<S> type, Function<Class<S>, Set<E>> creator) {
         AssertIllegalArgument.isParent(Set.class, type);
         switch (type.getName()) {
             case "java.util.Set":
@@ -587,9 +686,20 @@ public final class CollectionUtils {
      * @param type Queue type
      * @return Queue instance object
      */
-    @SuppressWarnings("unchecked")
-    public static <E> Queue<E> newQueue(Class<?> type) {
-        return newQueue(type, t -> (Queue<E>) ClassUtils.newInstance(t));
+    public static <E, Q extends Queue<?>> Queue<E> newQueue(Class<Q> type) {
+        return newQueue(type, CollectionUtils::newInstanceCreator);
+    }
+
+    /**
+     * create Queue with type argument. runtime check type.
+     * 根据传入类型创建Queue实例.
+     *
+     * @param <E> type of Queue value
+     * @param type Queue type
+     * @return Queue instance object
+     */
+    public static <E> Queue<E> newQueueForce(Class<?> type) {
+        return newQueueForce(type, CollectionUtils::newInstanceCreator);
     }
 
     /**
@@ -601,7 +711,26 @@ public final class CollectionUtils {
      * @param creator if method can not create a new Set use this to create
      * @return Queue instance object
      */
-    public static <E> Queue<E> newQueue(Class<?> type, Function<Class<?>, Queue<E>> creator) {
+    public static <E, Q extends Queue<?>> Queue<E> newQueue(Class<Q> type, Function<Class<Q>, Queue<E>> creator) {
+        Queue<E> queue = newQueueOrNull(type);
+        return queue != null ? queue : creator.apply(type);
+    }
+
+    /**
+     * create Queue with type argument. runtime check type.
+     * 根据传入类型创建Queue实例.
+     *
+     * @param <E> type of Queue value
+     * @param type Queue type
+     * @param creator if method can not create a new Set use this to create
+     * @return Queue instance object
+     */
+    public static <E> Queue<E> newQueueForce(Class<?> type, Function<Class<?>, Queue<E>> creator) {
+        Queue<E> queue = newQueueOrNull(type);
+        return queue != null ? queue : creator.apply(type);
+    }
+
+    private static <E> Queue<E> newQueueOrNull(Class<?> type) {
         AssertIllegalArgument.isParent(Queue.class, type);
         switch (type.getName()) {
             case "java.util.Queue":
@@ -615,10 +744,7 @@ public final class CollectionUtils {
                 return new ConcurrentLinkedDeque<>();
 
             default:
-                if (ClassUtils.isInstanceClass(type)) {
-                    return creator.apply(type);
-                }
-                throw new IllegalArgumentException("unsupport type：" + type.getName());
+                return null;
         }
     }
 
@@ -631,7 +757,7 @@ public final class CollectionUtils {
      * @return Queue creator
      */
     @SuppressWarnings("unchecked")
-    public static <E> Supplier<Queue<E>> queueCreator(Class<?> type) {
+    public static <E, Q extends Queue<?>> Supplier<Queue<E>> queueCreator(Class<Q> type) {
         return queueCreator(type, t -> (Queue<E>) ClassUtils.newInstance(t));
     }
 
@@ -644,7 +770,8 @@ public final class CollectionUtils {
      * @param creator if method can not get a Queue creator use this to create
      * @return Queue creator
      */
-    public static <E> Supplier<Queue<E>> queueCreator(Class<?> type, Function<Class<?>, Queue<E>> creator) {
+    public static <E, Q extends Queue<?>> Supplier<Queue<E>> queueCreator(Class<Q> type,
+        Function<Class<Q>, Queue<E>> creator) {
         AssertIllegalArgument.isParent(Queue.class, type);
         switch (type.getName()) {
             case "java.util.Queue":
@@ -674,9 +801,8 @@ public final class CollectionUtils {
      * @param type map type
      * @return Map instance object
      */
-    @SuppressWarnings("unchecked")
-    public static <K, V> Map<K, V> newMap(Class<?> type) {
-        return newMap(type, t -> (Map<K, V>) ClassUtils.newInstance(t));
+    public static <K, V, M extends Map<?, ?>> Map<K, V> newMap(Class<M> type) {
+        return newMap(type, CollectionUtils::newInstanceCreator);
     }
 
     /**
@@ -689,7 +815,40 @@ public final class CollectionUtils {
      * @param creator if method can not create a new Map use this to create
      * @return Map instance object
      */
-    public static <K, V> Map<K, V> newMap(Class<?> type, Function<Class<?>, Map<K, V>> creator) {
+    public static <K, V, M extends Map<?, ?>> Map<K, V> newMap(Class<M> type, Function<Class<M>, Map<K, V>> creator) {
+        Map<K, V> map = newMapOrNull(type);
+        return map != null ? map : creator.apply(type);
+    }
+
+    /**
+     * create Map with type argument. runtime check type.
+     * 根据传入的类型生成Map实例.
+     *
+     * @param <K> type of Map Key
+     * @param <V> type of Map Value
+     * @param type map type
+     * @return Map instance object
+     */
+    public static <K, V> Map<K, V> newMapForce(Class<?> type) {
+        return newMapForce(type, CollectionUtils::newInstanceCreator);
+    }
+
+    /**
+     * create Map with type argument. runtime check type.
+     * 根据传入的类型生成Map实例.
+     *
+     * @param <K> type of Map Key
+     * @param <V> type of Map Value
+     * @param type map type
+     * @param creator if method can not create a new Map use this to create
+     * @return Map instance object
+     */
+    public static <K, V> Map<K, V> newMapForce(Class<?> type, Function<Class<?>, Map<K, V>> creator) {
+        Map<K, V> map = newMapOrNull(type);
+        return map != null ? map : creator.apply(type);
+    }
+
+    private static <K, V> Map<K, V> newMapOrNull(Class<?> type) {
         AssertIllegalArgument.isParent(Map.class, type);
         switch (type.getName()) {
             case "java.util.Map":
@@ -710,12 +869,9 @@ public final class CollectionUtils {
             case "java.util.concurrent.ConcurrentNavigableMap":
             case "java.util.concurrent.ConcurrentSkipListMap":
                 return new ConcurrentSkipListMap<>();
+
             default:
-                if (ClassUtils.isInstanceClass(type)) {
-                    return creator.apply(type);
-                }
-                throw new IllegalArgumentException("unsupport type：" + type.getName());
-            // throw new IllegalArgumentException("不支持的类型：" + type.getName());
+                return null;
         }
     }
 
@@ -728,9 +884,8 @@ public final class CollectionUtils {
      * @param type Map type
      * @return Map creator
      */
-    @SuppressWarnings("unchecked")
-    public static <K, V> Supplier<Map<K, V>> mapCreator(Class<?> type) {
-        return mapCreator(type, t -> (Map<K, V>) ClassUtils.newInstance(t));
+    public static <K, V, M extends Map<K, V>> Supplier<Map<K, V>> mapCreator(Class<M> type) {
+        return mapCreator(type, ClassUtils::newInstance);
     }
 
     /**
@@ -743,7 +898,8 @@ public final class CollectionUtils {
      * @param creator if method can not get a Map creator use this to create
      * @return Map creator
      */
-    public static <K, V> Supplier<Map<K, V>> mapCreator(Class<?> type, Function<Class<?>, Map<K, V>> creator) {
+    public static <K, V, M extends Map<K, V>> Supplier<Map<K, V>> mapCreator(Class<M> type,
+        Function<Class<M>, Map<K, V>> creator) {
         AssertIllegalArgument.isParent(Map.class, type);
         switch (type.getName()) {
             case "java.util.Map":
@@ -784,7 +940,7 @@ public final class CollectionUtils {
     @SuppressWarnings("unchecked")
     public static <C extends Collection<E>, E> C cloneCollection(Collection<E> collection) {
         if (collection == null) {
-            return (C) Collections.emptyList();
+            return (C) collection;
         }
         if (ClassUtils.isParent(List.class, collection.getClass())) {
             return (C) cloneList((List<E>) collection);
@@ -808,7 +964,7 @@ public final class CollectionUtils {
         if (list == null) {
             return list;
         }
-        List<E> clone = newList(list.getClass());
+        List<E> clone = newList(ClassUtils.getClass(list));
         clone.addAll(list);
         return clone;
     }
@@ -824,7 +980,7 @@ public final class CollectionUtils {
         if (set == null) {
             return set;
         }
-        Set<E> clone = newSet(set.getClass());
+        Set<E> clone = newSet(ClassUtils.getClass(set));
         clone.addAll(set);
         return clone;
     }
@@ -840,7 +996,7 @@ public final class CollectionUtils {
         if (queue == null) {
             return queue;
         }
-        Queue<E> clone = newQueue(queue.getClass());
+        Queue<E> clone = newQueue(ClassUtils.getClass(queue));
         clone.addAll(queue);
         return clone;
     }
@@ -879,29 +1035,87 @@ public final class CollectionUtils {
     }
 
     /**
-     * List.
+     * create list with args.
      *
      * @param <T> the generic type
      * @param args the args
      * @return the list
      */
-    public static <T> ArrayList<T> list(@SuppressWarnings("unchecked") T... args) {
-        ArrayList<T> list = new ArrayList<>();
+    public static <T> List<T> list(@SuppressWarnings("unchecked") T... args) {
+        List<T> list = new ArrayList<>(ArrayUtils.getLength(args));
         addAll(list, args);
         return list;
     }
 
     /**
-     * Sets the.
+     * create list with args.
+     *
+     * @param <T> the generic type
+     * @param listSupplier the list supplier
+     * @param args the args
+     * @return the list
+     */
+    public static <T> List<T> list(IntFunction<List<T>> listCreator, @SuppressWarnings("unchecked") T... args) {
+        List<T> list = listCreator == null ? new ArrayList<>(ArrayUtils.getLength(args))
+            : listCreator.apply(ArrayUtils.getLength(args));
+        addAll(list, args);
+        return list;
+    }
+
+    /**
+     * create set with args.
      *
      * @param <T> the generic type
      * @param args the args
      * @return the sets
      */
-    public static <T> HashSet<T> set(@SuppressWarnings("unchecked") T... args) {
-        HashSet<T> set = new HashSet<>();
+    public static <T> Set<T> set(@SuppressWarnings("unchecked") T... args) {
+        HashSet<T> set = new HashSet<>(ArrayUtils.getLength(args));
         addAll(set, args);
         return set;
+    }
+
+    /**
+     * create set with args.
+     *
+     * @param <T> the generic type
+     * @param setCreator the set creator
+     * @param args the args
+     * @return the sets
+     */
+    public static <T> Set<T> set(IntFunction<Set<T>> setCreator, @SuppressWarnings("unchecked") T... args) {
+        Set<T> set = setCreator == null ? new HashSet<>(ArrayUtils.getLength(args))
+            : setCreator.apply(ArrayUtils.getLength(args));
+        addAll(set, args);
+        return set;
+    }
+
+    /**
+     * create queue with args.
+     *
+     * @param <T> the generic type
+     * @param args the args
+     * @return the sets
+     */
+    public static <T> Queue<T> queue(@SuppressWarnings("unchecked") T... args) {
+        ArrayDeque<T> queue = new ArrayDeque<>(ArrayUtils.getLength(args));
+        addAll(queue, args);
+        return queue;
+    }
+
+    /**
+     * create queue with args.
+     *
+     * @param <T> the generic type
+     * @param queueCreator the queue creator
+     * @param args the args
+     * @return the sets
+     */
+    public static <T> Queue<T> queue(IntFunction<Queue<T>> queueCreator, @SuppressWarnings("unchecked") T... args) {
+        Queue<T> queue = queueCreator == null ? new ArrayDeque<>(ArrayUtils.getLength(args))
+            : queueCreator.apply(ArrayUtils.getLength(args));
+        addAll(queue, args);
+        return queue;
     }
 
     /**

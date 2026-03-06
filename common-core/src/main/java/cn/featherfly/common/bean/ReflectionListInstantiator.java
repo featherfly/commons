@@ -61,7 +61,7 @@ public class ReflectionListInstantiator<E> implements Instantiator<List<E>> {
      */
     @Override
     public List<E> instantiate() {
-        return CollectionUtils.newList(type);
+        return CollectionUtils.newListForce(type);
     }
 
     /**

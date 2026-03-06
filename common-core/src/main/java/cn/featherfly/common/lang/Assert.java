@@ -46,7 +46,7 @@ public class Assert<E extends RuntimeException> {
      */
     public void isNull(Object object, String message) {
         if (object != null) {
-            throwException(message);
+            exceptionFunction.apply(message);
         }
     }
 
@@ -68,7 +68,7 @@ public class Assert<E extends RuntimeException> {
      */
     public void isNotNull(Object object, String message) {
         if (object == null) {
-            throwException(message);
+            exceptionFunction.apply(message);
         }
     }
 
@@ -101,7 +101,7 @@ public class Assert<E extends RuntimeException> {
      */
     public void isTrue(boolean expression, String message) {
         if (!expression) {
-            throwException(message);
+            exceptionFunction.apply(message);
         }
     }
 
@@ -123,7 +123,7 @@ public class Assert<E extends RuntimeException> {
      */
     public void isFalse(boolean expression, String message) {
         if (expression) {
-            throwException(message);
+            exceptionFunction.apply(message);
         }
     }
 
@@ -145,7 +145,7 @@ public class Assert<E extends RuntimeException> {
      */
     public void isNotBlank(String text, String message) {
         if (!Str.isNotBlank(text)) {
-            throwException(message);
+            exceptionFunction.apply(message);
         }
     }
 
@@ -178,7 +178,7 @@ public class Assert<E extends RuntimeException> {
      */
     public void isEmpty(Object obj, String message) {
         if (Lang.isNotEmpty(obj)) {
-            throwException(message);
+            exceptionFunction.apply(message);
         }
     }
 
@@ -200,7 +200,7 @@ public class Assert<E extends RuntimeException> {
      */
     public void isNotEmpty(Object obj, String message) {
         if (Lang.isEmpty(obj)) {
-            throwException(message);
+            exceptionFunction.apply(message);
         }
     }
 
@@ -233,7 +233,7 @@ public class Assert<E extends RuntimeException> {
      */
     public void isNotEmpty(String text, String message) {
         if (!Lang.isNotEmpty(text)) {
-            throwException(message);
+            exceptionFunction.apply(message);
         }
     }
 
@@ -266,7 +266,7 @@ public class Assert<E extends RuntimeException> {
      */
     public void isNotEmpty(Object[] array, String message) {
         if (Lang.isEmpty(array)) {
-            throwException(message);
+            exceptionFunction.apply(message);
         }
     }
 
@@ -299,7 +299,7 @@ public class Assert<E extends RuntimeException> {
      */
     public void isNotEmpty(Collection<?> collection, String message) {
         if (Lang.isEmpty(collection)) {
-            throwException(message);
+            exceptionFunction.apply(message);
         }
     }
 
@@ -332,7 +332,7 @@ public class Assert<E extends RuntimeException> {
      */
     public void isNotEmpty(Map<?, ?> map, String message) {
         if (Lang.isEmpty(map)) {
-            throwException(message);
+            exceptionFunction.apply(message);
         }
     }
 
@@ -365,7 +365,7 @@ public class Assert<E extends RuntimeException> {
      */
     public void isExists(File file, String message) {
         if (!Lang.isExists(file)) {
-            throwException(message);
+            exceptionFunction.apply(message);
         }
     }
 
@@ -422,10 +422,6 @@ public class Assert<E extends RuntimeException> {
      */
     public void isInstanceOf(Class<?> clazz, Object obj) {
         isInstanceOf(clazz, obj, "");
-    }
-
-    private void throwException(String msg) {
-        throw exceptionFunction.apply(msg);
     }
 
     private static String nullSafeGet(Supplier<String> messageSupplier) {

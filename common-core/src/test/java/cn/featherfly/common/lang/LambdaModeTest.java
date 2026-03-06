@@ -91,23 +91,23 @@ public class LambdaModeTest {
         //        con(user::getDescp);
     }
 
-    private <R> void sp(SerializableSupplier<R> f) {
+    <R> void sp(SerializableSupplier<R> f) {
         System.out.println("Supplier");
     }
 
-    private <T, R> void fn(SerializableFunction<T, R> f) {
+    <T, R> void fn(SerializableFunction<T, R> f) {
         System.out.println("Function");
     }
 
-    private <T, U, R> void bfn(SerializableBiFunction<T, U, R> f) {
+    <T, U, R> void bfn(SerializableBiFunction<T, U, R> f) {
         System.out.println("BiFunction");
     }
 
-    private <T> void con(SerializableConsumer<T> f) {
+    <T> void con(SerializableConsumer<T> f) {
         System.out.println("Consumer");
     }
 
-    private <T, U> void bcon(SerializableBiConsumer<T, U> f) {
+    <T, U> void bcon(SerializableBiConsumer<T, U> f) {
         System.out.println("BiConsumer");
     }
 }

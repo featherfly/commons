@@ -6,6 +6,7 @@
 package cn.featherfly.common.lang;
 
 import static cn.featherfly.common.lang.ArrayUtils.EMPTY_CLASS_ARRAY;
+import static cn.featherfly.common.lang.Lang.array;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNull;
@@ -23,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.ObjIntConsumer;
 import java.util.function.Supplier;
 
 import org.testng.annotations.Test;
@@ -42,6 +44,20 @@ import cn.featherfly.common.lang.vo.UserList;
 public class ClassUtilsTest {
 
     static Class<GenericTest> genericType = GenericTest.class;
+
+    @Test
+    void test1() {
+        ObjIntConsumer<String> consumer = (e, i) -> {
+            System.out.println(i + " " + e);
+        };
+        boolean b = ClassUtils.invokeMethod(Lang.class, "isEmpty", "");
+        Class<Void> v = ClassUtils.invokeMethod(Lang.class, "each", array("a", "b"), consumer);
+        ClassUtils.invokeMethod(Lang.class, "each", array("a", "b"), consumer);
+        System.out.println(ClassUtils.invokeMethod(Lang.class, "isEmpty", "").toString());
+        System.out.println(b);
+        System.out.println(ClassUtils.invokeMethod(Lang.class, "each", array("a", "b"), consumer).toString());
+        System.out.println(v);
+    }
 
     @Test
     void getPrimitiveType() {

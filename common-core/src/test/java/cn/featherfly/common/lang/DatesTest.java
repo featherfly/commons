@@ -47,8 +47,8 @@ public class DatesTest {
         System.out.println(Dates.getTime(new Date(), TimeUnit.NANOSECONDS));
     }
 
-    @Test
-    public void getTimeMICROSECONDS2() {
-        System.out.println(Dates.getTime(new Date(), TimeUnit.MICROSECONDS));
-    }
+    //    @Test
+    //    public void getTimeMICROSECONDS2() {
+    //        System.out.println(Dates.getTime(new Date(), TimeUnit.MICROSECONDS));
+    //    }
 }

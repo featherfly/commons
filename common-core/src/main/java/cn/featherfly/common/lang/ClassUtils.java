@@ -169,7 +169,7 @@ public final class ClassUtils {
      *
      * @param type 目标类型
      * @param fieldName 字段名
-     * @return 目标类型的指定名称的字段，支持多层嵌套
+     * @return 目标类型的指定名称的字段
      */
     public static Field getField(Class<?> type, String fieldName) {
         try {
@@ -190,14 +190,10 @@ public final class ClassUtils {
      *
      * @param type 目标类型
      * @param fieldName 字段名
-     * @return 目标类型的指定名称的字段，支持多层嵌套
+     * @return 目标类型的指定名称的字段
      */
-    public static Object getFieldValue(Class<?> type, String fieldName) {
-        try {
-            return getField(type, fieldName).get(type);
-        } catch (IllegalArgumentException | IllegalAccessException e) {
-            throw new ReflectException(e);
-        }
+    public static <V> V getFieldValue(Class<?> type, String fieldName) {
+        return getFieldValue(type, getField(type, fieldName));
     }
 
     /**
@@ -207,9 +203,37 @@ public final class ClassUtils {
      * @param fieldName 字段名
      * @return 目标类型的指定名称的字段，支持多层嵌套
      */
-    public static Object getFieldValue(Object object, String fieldName) {
+    public static <V> V getFieldValue(Object object, String fieldName) {
+        return getFieldValue(object, getField(object.getClass(), fieldName));
+    }
+
+    /**
+     * 返回目标对象的指定类型的字段值
+     *
+     * @param object 目标对象
+     * @param field 字段
+     * @return 目标类型的指定名称的字段
+     */
+    @SuppressWarnings("unchecked")
+    public static <V> V getFieldValue(Object object, Field field) {
         try {
-            return getField(object.getClass(), fieldName).get(object);
+            return (V) field.get(object);
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            throw new ReflectException(e);
+        }
+    }
+
+    /**
+     * 返回目标对象的指定类型的字段值
+     *
+     * @param type 目标类型
+     * @param field 字段
+     * @return 目标类型的指定名称的字段
+     */
+    @SuppressWarnings("unchecked")
+    public static <V> V getFieldValue(Class<?> type, Field field) {
+        try {
+            return (V) field.get(type);
         } catch (IllegalArgumentException | IllegalAccessException e) {
             throw new ReflectException(e);
         }
@@ -223,8 +247,19 @@ public final class ClassUtils {
      * @param value the value
      */
     public static void setFieldValue(Class<?> type, String fieldName, Object value) {
+        setFieldValue(type, getField(type, fieldName), value);
+    }
+
+    /**
+     * 设置目标类型的指定类型的静态字段值，支持多层嵌套 例如, user.address.no
+     *
+     * @param type 目标类型
+     * @param field 字段
+     * @param value the value
+     */
+    public static void setFieldValue(Class<?> type, Field field, Object value) {
         try {
-            getField(type, fieldName).set(type, value);
+            field.set(type, value);
         } catch (IllegalArgumentException | IllegalAccessException e) {
             throw new ReflectException(e);
         }
@@ -238,8 +273,19 @@ public final class ClassUtils {
      * @param value value
      */
     public static void setFieldValue(Object object, String fieldName, Object value) {
+        setFieldValue(object, getField(object.getClass(), fieldName), value);
+    }
+
+    /**
+     * 设置目标对象的指定类型的字段值，支持多层嵌套 例如, user.address.no
+     *
+     * @param object 目标对象
+     * @param field 字段
+     * @param value value
+     */
+    public static void setFieldValue(Object object, Field field, Object value) {
         try {
-            getField(object.getClass(), fieldName).set(object, value);
+            field.set(object, value);
         } catch (IllegalArgumentException | IllegalAccessException e) {
             throw new ReflectException(e);
         }
@@ -268,7 +314,7 @@ public final class ClassUtils {
      * @param methodName method name
      * @return method return value
      */
-    public static Object invokeMethod(Class<?> type, String methodName) {
+    public static <T> T invokeMethod(Class<?> type, String methodName) {
         return invokeMethod(type, methodName, new Object[0]);
     }
 
@@ -280,7 +326,7 @@ public final class ClassUtils {
      * @param args method arguments
      * @return method return value
      */
-    public static Object invokeMethod(Class<?> type, String methodName, Object... args) {
+    public static <T> T invokeMethod(Class<?> type, String methodName, Object... args) {
         return invokeMethod(type, matchMethod(type, methodName, args), args);
     }
 
@@ -292,9 +338,15 @@ public final class ClassUtils {
      * @param args method arguments
      * @return method return value
      */
-    public static Object invokeMethod(Class<?> type, Method method, Object... args) {
+    @SuppressWarnings("unchecked")
+    public static <T> T invokeMethod(Class<?> type, Method method, Object... args) {
         try {
-            return method.invoke(null, args);
+            if (method.getReturnType() == Void.TYPE) {
+                method.invoke(null, args);
+                return (T) Void.TYPE;
+            } else {
+                return (T) method.invoke(null, args);
+            }
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
             throw new ReflectException(e);
         }
@@ -307,7 +359,7 @@ public final class ClassUtils {
      * @param methodName method name
      * @return method return value
      */
-    public static Object invokeMethod(Object object, String methodName) {
+    public static <T> T invokeMethod(Object object, String methodName) {
         return invokeMethod(object, methodName, new Object[0]);
     }
 
@@ -319,7 +371,7 @@ public final class ClassUtils {
      * @param args method arguments
      * @return method return value
      */
-    public static Object invokeMethod(Object object, String methodName, Object... args) {
+    public static <T> T invokeMethod(Object object, String methodName, Object... args) {
         return invokeMethod(object, matchMethod(object.getClass(), methodName, args), args);
     }
 
@@ -331,9 +383,15 @@ public final class ClassUtils {
      * @param args method arguments
      * @return method return value
      */
-    public static Object invokeMethod(Object object, Method method, Object... args) {
+    @SuppressWarnings("unchecked")
+    public static <T> T invokeMethod(Object object, Method method, Object... args) {
         try {
-            return method.invoke(object, args);
+            if (method.getReturnType() == Void.TYPE) {
+                method.invoke(object, args);
+                return (T) Void.TYPE;
+            } else {
+                return (T) method.invoke(object, args);
+            }
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException e) {
             throw new ReflectException(e);
         }
@@ -1549,19 +1607,19 @@ public final class ClassUtils {
      * 获得Field参数的实际类型，如果是已经具现化的泛型，则返回具现化的类型.
      * 例：
      * <code>
-     *  public abstract class Entity&lt;ID, N&gt; {
-     *      public ID id;
+     * public abstract class Entity&lt;ID, N&gt; {
+     *     public ID id;
      *
-     *      public N age;
-     *  }
+     *     public N age;
+     * }
      *
-     *  public class User extends Entity&lt;Long,Integer&gt; {
-     *  }
+     * public class User extends Entity&lt;Long,Integer&gt; {
+     * }
      *
-     *  ClassUtils.getFieldType(User.class, "id") == Long.class
-     *  ClassUtils.getFieldType(User.class, "age") == Integer.class
+     * ClassUtils.getFieldType(User.class, "id") == Long.class
+     * ClassUtils.getFieldType(User.class, "age") == Integer.class
      *
-     *  </code>
+     * </code>
      * </pre>
      *
      * @param <T> 泛型

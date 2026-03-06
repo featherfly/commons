@@ -226,7 +226,7 @@ public class LambdaUtilsTest {
         assertEquals(info.getMethodInstanceClassName(), user.getClass().getName());
 
         SerializableConsumerLambdaInfo<
-                Integer> consumerLambdaInfo = LambdaUtils.getSerializableConsumerLambdaInfo(user::setAge);
+            Integer> consumerLambdaInfo = LambdaUtils.getSerializableConsumerLambdaInfo(user::setAge);
 
         assertTrue(consumerLambdaInfo.getInstance() == user);
 
@@ -335,7 +335,7 @@ public class LambdaUtilsTest {
         System.out.println(info.getMethodInstanceClassName());
 
         SerializableSupplierLambdaInfo<
-                Integer> supplier = LambdaUtils.getSerializableSupplierLambdaInfo(user::getAgeInt);
+            Integer> supplier = LambdaUtils.getSerializableSupplierLambdaInfo(user::getAgeInt);
 
         System.out.println(supplier.get());
 
@@ -476,15 +476,15 @@ public class LambdaUtilsTest {
         System.out.println(info.getMethod());
 
         User2 user = new User2();
-        System.out.println(ClassUtils.invokeMethod(user, info.getMethod(), new Object[0]));
+        System.out.println(ClassUtils.invokeMethod(user, info.getMethod(), new Object[0]).toString());
         user.setLocked(true);
-        System.out.println(ClassUtils.invokeMethod(user, info.getMethod(), new Object[0]));
+        System.out.println(ClassUtils.invokeMethod(user, info.getMethod(), new Object[0]).toString());
 
         Method method = LambdaUtils.getLambdaMethod(s);
         System.out.println(method);
-        System.out.println(ClassUtils.invokeMethod(user, method, new Object[0]));
+        System.out.println(ClassUtils.invokeMethod(user, method, new Object[0]).toString());
         user.setLocked(false);
-        System.out.println(ClassUtils.invokeMethod(user, method, new Object[0]));
+        System.out.println(ClassUtils.invokeMethod(user, method, new Object[0]).toString());
 
         System.err.println(s);
     }

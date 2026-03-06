@@ -25,9 +25,9 @@ public class NumTest {
 
     @Test
     public void getFirstDigit() {
-        assertEquals(Num.getLastDigit(1234567, 3), 123);
-        assertEquals(Num.getLastDigit(1234567, 7), 1234567);
-        assertEquals(Num.getLastDigit(1234567, 8), 1234567);
+        assertEquals(Num.getFirstDigit(1234567, 3), 123);
+        assertEquals(Num.getFirstDigit(1234567, 7), 1234567);
+        assertEquals(Num.getFirstDigit(1234567, 8), 1234567);
     }
 
     @Test

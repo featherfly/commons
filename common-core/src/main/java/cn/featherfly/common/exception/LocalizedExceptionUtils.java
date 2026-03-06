@@ -1,5 +1,6 @@
 package cn.featherfly.common.exception;
 
+import java.nio.charset.Charset;
 import java.util.Locale;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -145,16 +146,21 @@ public final class LocalizedExceptionUtils {
         throw ClassUtils.newInstance(exceptionType, getMessage(exceptionType, message, args, locale), cause);
     }
 
-    private static String getMessage(Class<? extends RuntimeException> exceptionType, String message, Object[] args,
+    static String getMessage(Class<? extends RuntimeException> exceptionType, String message, Object[] args,
         Locale locale) {
+        return getMessage(exceptionType, message, args, locale, null);
+    }
+
+    static String getMessage(Class<? extends RuntimeException> exceptionType, String message, Object[] args,
+        Locale locale, Charset charset) {
         AssertIllegalArgument.isNotNull(exceptionType, "Class<? extends RuntimeException> exceptionType");
         String msg = null;
         int keyIndex = message.indexOf(ResourceBundleUtils.KEY_SIGN);
         char firstChar = message.charAt(0);
         if (firstChar == ResourceBundleUtils.RESOURCE_SIGN && keyIndex != -1) {
-            msg = ResourceBundleUtils.getString(message, args, locale);
+            msg = ResourceBundleUtils.getString(message, args, locale, charset);
         } else if (firstChar == ResourceBundleUtils.KEY_SIGN) {
-            msg = ResourceBundleUtils.getString(exceptionType, message.substring(1), args, locale);
+            msg = ResourceBundleUtils.getString(exceptionType, message.substring(1), args, locale, charset);
         } else {
             msg = Lang.isEmpty(args) ? message : Str.format(message, args);
         }

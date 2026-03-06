@@ -5,9 +5,7 @@ import java.util.Locale;
 
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.locale.LocalizedMessage;
-import cn.featherfly.common.locale.ResourceBundleUtils;
 
 /**
  * support i18n message exception. <br>
@@ -240,22 +238,15 @@ public abstract class LocalizedException extends BaseException {
         if (localeMessage != null) {
             return super.getMessage();
         }
-        if (Lang.isEmpty(localizedMessage)) {
-            String message = super.getMessage();
-            if (Lang.isEmpty(message)) {
-                return message;
-            }
-            int keyIndex = message.indexOf(ResourceBundleUtils.KEY_SIGN);
-            char firstChar = message.charAt(0);
-            if (firstChar == ResourceBundleUtils.RESOURCE_SIGN && keyIndex != -1) {
-                localizedMessage = ResourceBundleUtils.getString(message, args, locale, charset);
-            } else if (firstChar == ResourceBundleUtils.KEY_SIGN) {
-                localizedMessage = ResourceBundleUtils.getString(this.getClass(), message.substring(1), args, locale,
-                    charset);
-            } else {
-                localizedMessage = Lang.isEmpty(args) ? message : Str.format(message, args);
-            }
+        if (Lang.isNotEmpty(localizedMessage)) {
+            return localizedMessage;
         }
+
+        String message = super.getMessage();
+        if (Lang.isEmpty(message)) {
+            return message;
+        }
+        localizedMessage = LocalizedExceptionUtils.getMessage(this.getClass(), message, args, locale, charset);
         return localizedMessage;
     }
 

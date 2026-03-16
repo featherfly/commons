@@ -1,3 +1,7 @@
+# 0.3.0 2026-03-16
+1. 升级dozer7.0.0
+2. javax升级为jakarta
+
 # 0.2.2 2025-01-17
 1. 检测classloader是否已经被重置，用于在srpingboot快速重启后能正常工作
 

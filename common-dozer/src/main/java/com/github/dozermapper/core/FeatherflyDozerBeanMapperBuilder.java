@@ -211,7 +211,7 @@ public final class FeatherflyDozerBeanMapperBuilder {
      * {@link DefaultClassLoader}).
      *
      * @param classLoader custom classloader to be used by Dozer. Will be
-     *                    wrapped into {@link DefaultClassLoader}.
+     *        wrapped into {@link DefaultClassLoader}.
      * @return modified builder to be further configured.
      */
     public FeatherflyDozerBeanMapperBuilder withClassLoader(ClassLoader classLoader) {
@@ -349,7 +349,7 @@ public final class FeatherflyDozerBeanMapperBuilder {
      * By default, no API builders are registered.
      *
      * @param beanMappingsBuilder mapping builder to be registered for the
-     *                            mapper.
+     *        mapper.
      * @return modified builder to be further configured.
      */
     public FeatherflyDozerBeanMapperBuilder withBeanMappingsBuilders(BeanMappingsBuilder beanMappingsBuilder) {
@@ -367,7 +367,7 @@ public final class FeatherflyDozerBeanMapperBuilder {
      * By default, no API builders are registered.
      *
      * @param beanMappingsBuilder mapping builder to be registered for the
-     *                            mapper.
+     *        mapper.
      * @return modified builder to be further configured.
      */
     public FeatherflyDozerBeanMapperBuilder withBeanMappingsBuilders(BeanMappingsBuilder... beanMappingsBuilder) {
@@ -385,7 +385,7 @@ public final class FeatherflyDozerBeanMapperBuilder {
      * By default, no API builders are registered.
      *
      * @param beanMappingsBuilder mapping builder to be registered for the
-     *                            mapper.
+     *        mapper.
      * @return modified builder to be further configured.
      */
     public FeatherflyDozerBeanMapperBuilder withBeanMappingsBuilders(List<BeanMappingsBuilder> beanMappingsBuilder) {
@@ -445,7 +445,7 @@ public final class FeatherflyDozerBeanMapperBuilder {
      * By default, no custom field mapper is registered.
      *
      * @param customFieldMapper custom field mapper to be registered for the
-     *                          mapper.
+     *        mapper.
      * @return modified builder to be further configured.
      */
     public FeatherflyDozerBeanMapperBuilder withCustomFieldMapper(CustomFieldMapper customFieldMapper) {
@@ -464,8 +464,8 @@ public final class FeatherflyDozerBeanMapperBuilder {
      * By default, no converters with IDs are registered.
      *
      * @param converterId unique ID of the converter, used as reference in
-     *                    mappings.
-     * @param converter   converter to be used for provided ID.
+     *        mappings.
+     * @param converter converter to be used for provided ID.
      * @return modified builder to be further configured.
      */
     public FeatherflyDozerBeanMapperBuilder withCustomConverterWithId(String converterId, CustomConverter converter) {
@@ -487,7 +487,7 @@ public final class FeatherflyDozerBeanMapperBuilder {
      * @return modified builder to be further configured.
      */
     public FeatherflyDozerBeanMapperBuilder withCustomConvertersWithIds(
-            Map<String, CustomConverter> customConvertersWithId) {
+        Map<String, CustomConverter> customConvertersWithId) {
         if (customConvertersWithId != null) {
             this.customConvertersWithId.putAll(customConvertersWithId);
         }
@@ -597,7 +597,7 @@ public final class FeatherflyDozerBeanMapperBuilder {
      */
     public Mapper build() {
         LOG.info("Initializing Dozer. Version: {}, Thread Name: {}", DozerConstants.CURRENT_VERSION,
-                Thread.currentThread().getName());
+            Thread.currentThread().getName());
 
         DozerClassLoader defaultClassLoader = getClassLoader();
         Settings settings = getSettings(defaultClassLoader);
@@ -622,16 +622,16 @@ public final class FeatherflyDozerBeanMapperBuilder {
 
         PropertyDescriptorFactory propertyDescriptorFactory = new PropertyDescriptorFactory();
         BeanMappingGenerator beanMappingGenerator = new BeanMappingGenerator(beanContainer, destBeanCreator,
-                propertyDescriptorFactory);
+            propertyDescriptorFactory);
         DestBeanBuilderCreator destBeanBuilderCreator = new DestBeanBuilderCreator();
 
         loadDozerModules(beanContainer, destBeanBuilderCreator, beanMappingGenerator, propertyDescriptorFactory,
-                destBeanCreator);
+            destBeanCreator);
 
         List<MappingFileData> mappingsFileData = new ArrayList<>();
         if (settings.getUseJaxbMappingEngine()) {
             mappingsFileData
-                    .addAll(buildXmlMappings(beanContainer, destBeanCreator, propertyDescriptorFactory, elEngine));
+                .addAll(buildXmlMappings(beanContainer, destBeanCreator, propertyDescriptorFactory, elEngine));
         } else {
             XMLParser xmlParser = new XMLParser(beanContainer, destBeanCreator, propertyDescriptorFactory);
             XMLParserFactory xmlParserFactory = new XMLParserFactory(beanContainer);
@@ -644,19 +644,19 @@ public final class FeatherflyDozerBeanMapperBuilder {
         mappingsFileData.addAll(createMappingsWithBuilders(beanContainer, destBeanCreator, propertyDescriptorFactory));
 
         loadCustomMappings(mappingsFileData, beanContainer, propertyDescriptorFactory, beanMappingGenerator,
-                destBeanCreator);
+            destBeanCreator);
 
         return new cn.featherfly.common.dozer.DozerBeanMapper(mappingFiles, beanContainer, destBeanCreator,
-                destBeanBuilderCreator, beanMappingGenerator, propertyDescriptorFactory, customConverters,
-                mappingsFileData, eventListeners, customFieldMapper, customConvertersWithId, customMappings,
-                globalConfiguration, cacheManager, isMapNull, isMapEmptyString);
+            destBeanBuilderCreator, beanMappingGenerator, propertyDescriptorFactory, customConverters,
+            mappingsFileData, eventListeners, customFieldMapper, customConvertersWithId, customMappings,
+            globalConfiguration, cacheManager, isMapNull, isMapEmptyString);
     }
 
     private List<MappingFileData> createMappingsWithBuilders(BeanContainer beanContainer,
-            DestBeanCreator destBeanCreator, PropertyDescriptorFactory propertyDescriptorFactory) {
+        DestBeanCreator destBeanCreator, PropertyDescriptorFactory propertyDescriptorFactory) {
         return mappingBuilders.stream()
-                .map(fluentBuilder -> fluentBuilder.build(beanContainer, destBeanCreator, propertyDescriptorFactory))
-                .collect(Collectors.toList());
+            .map(fluentBuilder -> fluentBuilder.build(beanContainer, destBeanCreator, propertyDescriptorFactory))
+            .collect(Collectors.toList());
     }
 
     private List<MappingFileData> readXmlMappings(XMLParserFactory xmlParserFactory, XMLParser xmlParser) {
@@ -671,7 +671,7 @@ public final class FeatherflyDozerBeanMapperBuilder {
     }
 
     private List<MappingFileData> buildXmlMappings(BeanContainer beanContainer, DestBeanCreator destBeanCreator,
-            PropertyDescriptorFactory propertyDescriptorFactory, ELEngine elEngine) {
+        PropertyDescriptorFactory propertyDescriptorFactory, ELEngine elEngine) {
         BeanMappingXMLBuilder builder = new BeanMappingXMLBuilder(beanContainer, elEngine);
         builder.loadFiles(mappingFiles);
         builder.loadInputStreams(xmlMappingSuppliers);
@@ -680,10 +680,10 @@ public final class FeatherflyDozerBeanMapperBuilder {
     }
 
     private List<MappingFileData> buildGenericMappings(BeanContainer beanContainer, DestBeanCreator destBeanCreator,
-            PropertyDescriptorFactory propertyDescriptorFactory) {
+        PropertyDescriptorFactory propertyDescriptorFactory) {
         return beanMappingsBuilders.stream()
-                .map(m -> m.build(beanContainer, destBeanCreator, propertyDescriptorFactory))
-                .collect(ArrayList::new, ArrayList::addAll, ArrayList::addAll);
+            .map(m -> m.build(beanContainer, destBeanCreator, propertyDescriptorFactory))
+            .collect(ArrayList::new, ArrayList::addAll, ArrayList::addAll);
     }
 
     private DozerClassLoader getClassLoader() {
@@ -704,7 +704,7 @@ public final class FeatherflyDozerBeanMapperBuilder {
         String classLoaderName = settings.getClassLoaderBeanName();
         if (!SettingsDefaults.CLASS_LOADER_BEAN.equalsIgnoreCase(classLoaderName)) {
             answer = ReflectionUtils
-                    .newInstance(loadBeanType(classLoaderName, defaultClassLoader, DozerClassLoader.class));
+                .newInstance(loadBeanType(classLoaderName, defaultClassLoader, DozerClassLoader.class));
         }
 
         return answer;
@@ -727,7 +727,7 @@ public final class FeatherflyDozerBeanMapperBuilder {
             answer = new DefaultProxyResolver();
         } else {
             answer = ReflectionUtils
-                    .newInstance(loadBeanType(proxyResolverName, dozerClassLoader, DozerProxyResolver.class));
+                .newInstance(loadBeanType(proxyResolverName, dozerClassLoader, DozerProxyResolver.class));
         }
 
         return answer;
@@ -748,7 +748,7 @@ public final class FeatherflyDozerBeanMapperBuilder {
             // are not shared across the VM.
             CacheManager cacheManager = new DefaultCacheManager();
             cacheManager.putCache(DozerCacheType.CONVERTER_BY_DEST_TYPE.name(),
-                    settings.getConverterByDestTypeCacheMaxSize());
+                settings.getConverterByDestTypeCacheMaxSize());
             cacheManager.putCache(DozerCacheType.SUPER_TYPE_CHECK.name(), settings.getSuperTypesCacheMaxSize());
 
             return cacheManager;
@@ -783,13 +783,13 @@ public final class FeatherflyDozerBeanMapperBuilder {
     }
 
     private void loadCustomMappings(List<MappingFileData> allMappings, BeanContainer beanContainer,
-            PropertyDescriptorFactory propertyDescriptorFactory, BeanMappingGenerator beanMappingGenerator,
-            DestBeanCreator destBeanCreator) {
+        PropertyDescriptorFactory propertyDescriptorFactory, BeanMappingGenerator beanMappingGenerator,
+        DestBeanCreator destBeanCreator) {
         MappingsParser mappingsParser = new MappingsParser(beanContainer, destBeanCreator, propertyDescriptorFactory);
         ClassMapBuilder classMapBuilder = new ClassMapBuilder(beanContainer, destBeanCreator, beanMappingGenerator,
-                propertyDescriptorFactory);
+            propertyDescriptorFactory);
         CustomMappingsLoader customMappingsLoader = new CustomMappingsLoader(mappingsParser, classMapBuilder,
-                beanContainer);
+            beanContainer);
 
         LoadMappingsResult loadMappingsResult = customMappingsLoader.load(allMappings);
 
@@ -798,12 +798,12 @@ public final class FeatherflyDozerBeanMapperBuilder {
     }
 
     private List<MappingFileData> loadFromFiles(List<String> mappingFiles, XMLParserFactory xmlParserFactory,
-            XMLParser xmlParser, BeanContainer beanContainer) {
+        XMLParser xmlParser, BeanContainer beanContainer) {
         MappingFileReader mappingFileReader = new MappingFileReader(xmlParserFactory, xmlParser, beanContainer);
         List<MappingFileData> mappingFileDataList = new ArrayList<>();
         if (mappingFiles != null && mappingFiles.size() > 0) {
             LOG.info("Using the following xml files to load custom mappings for the bean mapper instance: {}",
-                    mappingFiles);
+                mappingFiles);
 
             for (String mappingFileName : mappingFiles) {
                 LOG.info("Trying to find xml mapping file: {}", mappingFileName);
@@ -824,8 +824,8 @@ public final class FeatherflyDozerBeanMapperBuilder {
     }
 
     private void loadDozerModules(BeanContainer beanContainer, DestBeanBuilderCreator destBeanBuilderCreator,
-            BeanMappingGenerator beanMappingGenerator, PropertyDescriptorFactory propertyDescriptorFactory,
-            DestBeanCreator destBeanCreator) {
+        BeanMappingGenerator beanMappingGenerator, PropertyDescriptorFactory propertyDescriptorFactory,
+        DestBeanCreator destBeanCreator) {
         try {
             ServiceLoader<DozerModule> services = ServiceLoader.load(DozerModule.class);
             for (DozerModule module : services) {
@@ -835,7 +835,7 @@ public final class FeatherflyDozerBeanMapperBuilder {
                 destBeanBuilderCreator.addPluggedStrategies(module.getBeanBuilderCreationStrategies());
                 beanMappingGenerator.addPluggedFieldDetectors(module.getBeanFieldsDetectors());
                 propertyDescriptorFactory.addPluggedPropertyDescriptorCreationStrategies(
-                        module.getPropertyDescriptorCreationStrategies());
+                    module.getPropertyDescriptorCreationStrategies());
             }
         } catch (ServiceConfigurationError ex) {
             LOG.error("{}", ex.getMessage());

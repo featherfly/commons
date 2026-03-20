@@ -1,3 +1,11 @@
+sourceSets {
+    test {
+        java {
+            srcDirs = ["src/test/java", "src/test/java-gen"]
+        }
+    }
+}
+
 dependencies {
     //api project(":common-api")
     //api project(":common-core")

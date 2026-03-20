@@ -2,6 +2,7 @@
 package cn.featherfly.common.gentool;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -15,12 +16,10 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import cn.featherfly.common.bean.BeanUtils;
 import cn.featherfly.common.lang.ClassLoaderUtils;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 
 /**
- * <p>
- * GenerateConfig
- * </p>
+ * GenerateConfig.
  *
  * @author zhongj
  */
@@ -128,8 +127,14 @@ public class GenerateConfig {
         this.templateSuffix = templateSuffix;
     }
 
-    public void load(String filePath) throws Exception {
-        if (LangUtils.isEmpty(filePath)) {
+    /**
+     * load config from file path.
+     *
+     * @param filePath the file path
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public void load(String filePath) throws IOException {
+        if (Lang.isEmpty(filePath)) {
             return;
         }
         logger.debug("read config file -> {}", filePath);
@@ -146,21 +151,17 @@ public class GenerateConfig {
         }
         BeanUtils.copyProperties(this, newConfig);
     }
-    //
-    //    public static GenerateConfig create(String filePath) throws Exception {
-    //        if (LangUtils.isEmpty(filePath)) {
-    //            filePath = "gentool/config.yaml";
-    //        }
-    //        logger.debug("read config file -> {}", filePath);
-    //        YAMLFactory yamlFactory = new YAMLFactory();
-    //        ObjectMapper mapper = new ObjectMapper(yamlFactory);
-    //        mapper.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-    //        File file = new File(filePath);
-    //        if (file.exists()) {
-    //            return mapper.readerFor(GenerateConfig.class).readValue(file);
-    //        } else {
-    //            InputStream input = ClassLoaderUtils.getResourceAsStream(filePath, GenerateConfig.class);
-    //            return mapper.readerFor(GenerateConfig.class).readValue(input);
-    //        }
-    //    }
+
+    /**
+     * create GenerateConfig.
+     *
+     * @param filePath the file path
+     * @return the generate config
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public static GenerateConfig create(String filePath) throws IOException {
+        GenerateConfig config = new GenerateConfig();
+        config.load(filePath);
+        return config;
+    }
 }

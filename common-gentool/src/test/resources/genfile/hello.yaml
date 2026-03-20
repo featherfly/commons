@@ -25,7 +25,7 @@ code:
       name: "propertyName"
   - num: 10001
     key: "property_access"
-    name: "PropertyAccess"
+#    name: "PropertyAccess"
     messages:
       zh: "{0}的属性{1}读写异常"
       en: "{0} property {1} read or write exception"
@@ -36,7 +36,7 @@ code:
       name: "propertyName"
   - num: 10002
     key: "not_null"
-    name: "NotNull"
+#    name: "NotNull"
     messages:
       zh: "不能为空"
       en: "can not be null"

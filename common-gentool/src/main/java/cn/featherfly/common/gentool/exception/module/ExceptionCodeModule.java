@@ -13,21 +13,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import cn.featherfly.common.exception.SimpleLocalizedExceptionCode;
 
 /**
- * <p>
- * ExceptionCodeModule
- * </p>
- * 
+ * exception code module.
+ *
  * @author zhongj
  */
 public class ExceptionCodeModule extends ClassModule {
 
     public static final Class<SimpleLocalizedExceptionCode> DEFAULT_PARENT = SimpleLocalizedExceptionCode.class;
-    
+
     private String module;
-    
+
     private List<ExceptionCodeInstanceModule> codes = new ArrayList<>(0);
-    
-    private Map<Locale, Properties> locales = new HashMap<>(); 
+
+    private Map<Locale, Properties> locales = new HashMap<>();
 
     /**
      * {@inheritDoc}
@@ -35,12 +33,13 @@ public class ExceptionCodeModule extends ClassModule {
     @Override
     public Class<?> getParent() {
         return super.getParent() != null
-                ? super.getParent()
-                : DEFAULT_PARENT;
+            ? super.getParent()
+            : DEFAULT_PARENT;
     }
-    
+
     /**
      * 返回codes
+     *
      * @return codes
      */
     public List<ExceptionCodeInstanceModule> getCodes() {
@@ -49,6 +48,7 @@ public class ExceptionCodeModule extends ClassModule {
 
     /**
      * 设置codes
+     *
      * @param codes codes
      */
     public void setCodes(List<ExceptionCodeInstanceModule> codes) {
@@ -57,6 +57,7 @@ public class ExceptionCodeModule extends ClassModule {
 
     /**
      * 返回module
+     *
      * @return module
      */
     public String getModule() {
@@ -65,6 +66,7 @@ public class ExceptionCodeModule extends ClassModule {
 
     /**
      * 设置module
+     *
      * @param module module
      */
     public void setModule(String module) {
@@ -73,6 +75,7 @@ public class ExceptionCodeModule extends ClassModule {
 
     /**
      * 返回locales
+     *
      * @return locales
      */
     @JsonIgnore
@@ -82,24 +85,22 @@ public class ExceptionCodeModule extends ClassModule {
         }
         return locales;
     }
-    
+
     /**
-     * <p>
-     * 生成locales
-     * </p>
+     * 生成locales.
      */
     public void generateLocales() {
-        locales.clear();        
+        locales.clear();
         codes.forEach(code -> {
             code.getMessages().forEach((key, value) -> {
                 Properties p = locales.get(key);
                 if (p == null) {
                     p = new Properties();
                     locales.put(key, p);
-                }                
+                }
                 p.setProperty(code.getKey(), value);
             });
         });
     }
-    
+
 }

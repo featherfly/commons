@@ -79,20 +79,21 @@ public class Generator {
      * @throws Exception the exception
      */
     public void generate() throws Exception {
-        ConnectionWrapper connection = JdbcUtils.getConnection(config.driverClassName, config.url, config.username,
-            config.password);
+        ConnectionWrapper connection =
+            JdbcUtils.getConnection(config.getDriverClassName(), config.getUrl(), config.getUsername(),
+                config.getPassword());
 
         DatabaseMetadata dbmd = DatabaseMetadataManager.getDefaultManager().create(connection);
         Map<String, List<Table>> moduleTableMap = new HashMap<>();
-        for (Module module : config.modules) {
-            if (module.moduleName == null) {
-                module.moduleName = "";
+        for (Module module : config.getModules()) {
+            if (module.getModuleName() == null) {
+                module.setModuleName("");
             }
             List<Table> moduleList = new ArrayList<>();
             for (Table table : dbmd.getTables()) {
                 boolean exclude = false;
-                if (Lang.isNotEmpty(module.excludes)) {
-                    for (String pattern : module.includes) {
+                if (Lang.isNotEmpty(module.getExcludes())) {
+                    for (String pattern : module.getExcludes()) {
                         if (matcher.match(pattern, table.getName())) {
                             exclude = true;
                             break;
@@ -102,10 +103,10 @@ public class Generator {
                 if (exclude) {
                     break;
                 }
-                if (Lang.isEmpty(module.includes)) {
+                if (Lang.isEmpty(module.getIncludes())) {
                     moduleList.add(table);
                 } else {
-                    for (String pattern : module.includes) {
+                    for (String pattern : module.getIncludes()) {
                         if (matcher.match(pattern, table.getName())) {
                             moduleList.add(table);
                             break;
@@ -113,46 +114,46 @@ public class Generator {
                     }
                 }
             }
-            if (moduleTableMap.containsKey(module.moduleName)) {
-                throw new IllegalArgumentException("duplicate moduleName [" + module.moduleName + "]");
+            if (moduleTableMap.containsKey(module.getModuleName())) {
+                throw new IllegalArgumentException("duplicate moduleName [" + module.getModuleName() + "]");
             }
-            moduleTableMap.put(module.moduleName, moduleList);
+            moduleTableMap.put(module.getModuleName(), moduleList);
         }
 
-        for (DbModule module : config.modules) {
-            generateDatabaseModel(module, moduleTableMap.get(module.moduleName));
-            generateEntity(module, moduleTableMap.get(module.moduleName));
+        for (DbModule module : config.getModules()) {
+            generateDatabaseModel(module, moduleTableMap.get(module.getModuleName()));
+            generateEntity(module, moduleTableMap.get(module.getModuleName()));
         }
     }
 
     private void generateEntity(DbModule module, List<Table> tables) throws TemplateNotFoundException,
         MalformedTemplateNameException, ParseException, IOException, TemplateException {
         Date createTime = new Date();
-        if (module.generateEntity != null && module.generateEntity || config.generateEntity) {
-            if (config.generateDbModel) {
+        if (module.isGenerateEntity() || config.isGenerateEntity()) {
+            if (config.isGenerateDbModel()) {
                 Map<String, Object> root = new HashMap<>();
                 //            root.put("createTime", createTime);
                 //            root.put("packageName", module.packageName);
                 //            root.put("author", module.author);
-                //            if (Lang.isNotEmpty(module.moduleName)) {
-                //                root.put("moduleName", module.moduleName);
+                //            if (Lang.isNotEmpty(module.getModuleName())) {
+                //                root.put("moduleName", module.getModuleName());
                 //            }
                 //            root.put("tables", tables);
 
                 for (Table table : tables) {
                     root = new HashMap<>();
                     root.put("createTime", createTime);
-                    root.put("packageName", module.packageName);
-                    root.put("author", module.author);
-                    if (Lang.isNotEmpty(module.moduleName)) {
-                        root.put("moduleName", module.moduleName);
+                    root.put("packageName", module.getPackageName());
+                    root.put("author", module.getAuthor());
+                    if (Lang.isNotEmpty(module.getModuleName())) {
+                        root.put("moduleName", module.getModuleName());
                     }
                     SqlTypeMappingManager manager = new SqlTypeMappingManager();
                     root.put("table", table);
                     root.put("sql_java", new SqlTypeToJavaTypeMethod(manager));
                     Template temp = cfg.getTemplate(UriUtils.linkUri(config.getTemplateDir(), "/entity.ftl"));
                     Writer out = getWriter(UriUtils.linkUri(config.getJavaSrcDir(),
-                        ClassUtils.packageToDir(module.packageName),
+                        ClassUtils.packageToDir(module.getPackageName()),
                         WordUtils.upperCaseFirst(WordUtils.parseToUpperFirst(table.getName(), Chars.UNDER_LINE_CHAR))
                             + ".java"));
                     temp.process(root, out);
@@ -165,18 +166,19 @@ public class Generator {
     private void generateDatabaseModel(DbModule module, List<Table> tables) throws TemplateNotFoundException,
         MalformedTemplateNameException, ParseException, IOException, TemplateException {
         Date createTime = new Date();
-        if (module.generateDbModel != null && module.generateDbModel || config.generateDbModel) {
+        if (module.isGenerateDbModel() || config.isGenerateDbModel()) {
             Map<String, Object> root = new HashMap<>();
             root.put("createTime", createTime);
-            root.put("packageName", module.packageName);
+            root.put("packageName", module.getPackageName());
             root.put("author", getAuthor(module));
-            if (Lang.isNotEmpty(module.moduleName)) {
-                root.put("moduleName", module.moduleName);
+            if (Lang.isNotEmpty(module.getModuleName())) {
+                root.put("moduleName", module.getModuleName());
             }
             root.put("tables", tables);
-            Writer out = getWriter(UriUtils.linkUri(config.getJavaSrcDir(), ClassUtils.packageToDir(module.packageName),
-                WordUtils.upperCaseFirst(WordUtils.parseToUpperFirst(module.moduleName, Chars.UNDER_LINE_CHAR))
-                    + "Tables.java"));
+            Writer out =
+                getWriter(UriUtils.linkUri(config.getJavaSrcDir(), ClassUtils.packageToDir(module.getPackageName()),
+                    WordUtils.upperCaseFirst(WordUtils.parseToUpperFirst(module.getModuleName(), Chars.UNDER_LINE_CHAR))
+                        + "Tables.java"));
             Template temp = cfg.getTemplate(UriUtils.linkUri(config.getTemplateDir(), "/tables.ftl"));
             temp.process(root, out);
             // generate tables
@@ -184,15 +186,17 @@ public class Generator {
             for (Table tableModel : tables) {
                 root = new HashMap<>();
                 root.put("createTime", createTime);
-                root.put("packageName", module.packageName);
+                root.put("packageName", module.getPackageName());
                 root.put("author", getAuthor(module));
-                if (Lang.isNotEmpty(module.moduleName)) {
-                    root.put("moduleName", module.moduleName);
+                if (Lang.isNotEmpty(module.getModuleName())) {
+                    root.put("moduleName", module.getModuleName());
                 }
                 root.put("table", tableModel);
-                out = getWriter(UriUtils.linkUri(config.getJavaSrcDir(), ClassUtils.packageToDir(module.packageName),
-                    WordUtils.upperCaseFirst(WordUtils.parseToUpperFirst(tableModel.getName(), Chars.UNDER_LINE_CHAR))
-                        + "Table.java"));
+                out =
+                    getWriter(UriUtils.linkUri(config.getJavaSrcDir(), ClassUtils.packageToDir(module.getPackageName()),
+                        WordUtils
+                            .upperCaseFirst(WordUtils.parseToUpperFirst(tableModel.getName(), Chars.UNDER_LINE_CHAR))
+                            + "Table.java"));
                 temp = cfg.getTemplate(UriUtils.linkUri(config.getTemplateDir(), "/table.ftl"));
                 temp.process(root, out);
                 // generate table
@@ -201,7 +205,7 @@ public class Generator {
     }
 
     private String getAuthor(DbModule module) {
-        return Lang.isEmpty(module.author) ? config.author : module.author;
+        return Lang.isEmpty(module.getAuthor()) ? config.getAuthor() : module.getAuthor();
     }
 
     private Writer getWriter(String path) throws FileNotFoundException {

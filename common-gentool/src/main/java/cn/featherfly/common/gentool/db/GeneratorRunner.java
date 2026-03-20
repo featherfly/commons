@@ -2,9 +2,7 @@
 package cn.featherfly.common.gentool.db;
 
 /**
- * <p>
- * GeneratorRunner
- * </p>
+ * GeneratorRunner.
  *
  * @author zhongj
  */

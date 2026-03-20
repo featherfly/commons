@@ -2,10 +2,8 @@
 package cn.featherfly.common.gentool.exception.module;
 
 /**
- * <p>
- * ClassModule
- * </p>
- * 
+ * class module.
+ *
  * @author zhongj
  */
 public class ClassModule {
@@ -22,7 +20,7 @@ public class ClassModule {
 
     /**
      * 返回packageName
-     * 
+     *
      * @return packageName
      */
     public String getPackageName() {
@@ -31,9 +29,9 @@ public class ClassModule {
 
     /**
      * 设置packageName
-     * 
+     *
      * @param packageName
-     *            packageName
+     *        packageName
      */
     public void setPackageName(String packageName) {
         this.packageName = packageName;
@@ -41,7 +39,7 @@ public class ClassModule {
 
     /**
      * 返回name
-     * 
+     *
      * @return name
      */
     public String getName() {
@@ -50,9 +48,9 @@ public class ClassModule {
 
     /**
      * 设置name
-     * 
+     *
      * @param name
-     *            name
+     *        name
      */
     public void setName(String name) {
         this.name = name;
@@ -60,7 +58,7 @@ public class ClassModule {
 
     /**
      * 返回descp
-     * 
+     *
      * @return descp
      */
     public String getDescp() {
@@ -69,9 +67,9 @@ public class ClassModule {
 
     /**
      * 设置descp
-     * 
+     *
      * @param descp
-     *            descp
+     *        descp
      */
     public void setDescp(String descp) {
         this.descp = descp;
@@ -79,7 +77,7 @@ public class ClassModule {
 
     /**
      * 返回author
-     * 
+     *
      * @return author
      */
     public String getAuthor() {
@@ -88,9 +86,9 @@ public class ClassModule {
 
     /**
      * 设置author
-     * 
+     *
      * @param author
-     *            author
+     *        author
      */
     public void setAuthor(String author) {
         this.author = author;
@@ -98,7 +96,7 @@ public class ClassModule {
 
     /**
      * 返回parent
-     * 
+     *
      * @return parent
      */
     public Class<?> getParent() {
@@ -107,9 +105,9 @@ public class ClassModule {
 
     /**
      * 设置parent
-     * 
+     *
      * @param parent
-     *            parent
+     *        parent
      */
     public void setParent(Class<?> parent) {
         this.parent = parent;

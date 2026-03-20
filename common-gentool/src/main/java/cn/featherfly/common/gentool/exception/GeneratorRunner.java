@@ -7,9 +7,7 @@ import java.util.List;
 import cn.featherfly.common.gentool.GenerateConfig;
 
 /**
- * <p>
- * GeneratorRunner
- * </p>
+ * GeneratorRunner.
  *
  * @author zhongj
  */
@@ -35,7 +33,6 @@ public class GeneratorRunner {
         GenerateConfig config = new GenerateConfig();
         if (configFile != null) {
             config.load(configFile);
-            //            config = GenerateConfig.create(configFile);
         } else {
             config.setTemplateSuffix(".template");
             config.setTemplateDir("cn/featherfly/common/gentool/exception/template/");

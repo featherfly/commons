@@ -25,14 +25,14 @@ public class GeneratorTest {
         DbGenerateConfig config = new DbGenerateConfig();
         config.setJavaSrcDir("src/test/java");
         config.setResourceDir("src/test/resources");
-        config.driverClassName = "com.mysql.jdbc.Driver";
-        config.url = "jdbc:mysql://127.0.0.1:3306/db_test?useUnicode=true&characterEncoding=UTF-8";
-        config.username = "root";
-        config.password = "123456";
+        config.setDriverClassName("com.mysql.jdbc.Driver");
+        config.setUrl("jdbc:mysql://127.0.0.1:3306/db_test?useUnicode=true&characterEncoding=UTF-8");
+        config.setUsername("root");
+        config.setPassword("123456");
         DbModule m = new DbModule();
-        m.author = "zhongj";
-        m.packageName = "gencode.db";
-        config.modules.add(m);
+        m.setAuthor("zhongj");
+        m.setPackageName("gencode.db");
+        config.getModules().add(m);
 
         Generator generator = new Generator(config);
         generator.generate();
@@ -47,14 +47,14 @@ public class GeneratorTest {
         DbGenerateConfig config = new DbGenerateConfig();
         config.setJavaSrcDir("src/test/java");
         config.setResourceDir("src/test/resources");
-        config.driverClassName = "com.mysql.jdbc.Driver";
-        config.url = "jdbc:mysql://127.0.0.1:3306/db_test?useUnicode=true&characterEncoding=UTF-8";
-        config.username = "root";
-        config.password = "123456";
+        config.setDriverClassName("com.mysql.jdbc.Driver");
+        config.setUrl("jdbc:mysql://127.0.0.1:3306/db_test?useUnicode=true&characterEncoding=UTF-8");
+        config.setUsername("root");
+        config.setPassword("123456");
         DbModule m = new DbModule();
-        m.author = "zhongj";
-        m.packageName = "gencode.db";
-        config.modules.add(m);
+        m.setAuthor("zhongj");
+        m.setPackageName("gencode.db");
+        config.getModules().add(m);
 
         YAMLFactory yamlFactory = new YAMLFactory();
         ObjectMapper mapper = new ObjectMapper(yamlFactory);

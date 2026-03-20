@@ -1,3 +1,8 @@
+# 0.2.5 2026-03-20
+
+1. 生成ExceptionCode时，code instance的name未设置时，使用key自动设置（snake case to upper camel case）
+2. 使用bean property代替public field
+
 # 0.2.4 2025-12-21
 
 1. 生成的具体column元数据对象为只读
@@ -7,13 +12,13 @@
 # 0.2.3 2023-02-21
 
 1. 生成的具体table元数据和对应的实体对象的属性（column）为驼峰规则（转换column的_连接单词为驼峰命名法）
-    
+   
 
 # 0.2.2 2020-11-27
 
 1. 生成的具体table元数据对象为只读
 2. 生成的具体Column元数据对象加入setTable
-    
+   
 # 0.2.1 2020-7-3
 
 1. 修复common-db升级后的不兼容性问题
@@ -21,11 +26,11 @@
 # 0.2.0 2020-4-20
 
 1. 加入为common-db支持的生成数据库表模型和实体对象
-    
+   
 # 0.1.5 2020-4-19
 
 1. 读取文件先使用file文件进行文件查找，再使用ResourceLoader查找
-    
+   
 # 0.1.4 2019-12-03
 
 1. 修改group名称

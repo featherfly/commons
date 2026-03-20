@@ -7,17 +7,20 @@ import java.util.Locale;
 import java.util.Map;
 
 import cn.featherfly.common.constant.Chars;
-import cn.featherfly.common.lang.LangUtils;
+import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.WordUtils;
 
+/**
+ * exception code instance module.
+ *
+ * @author zhongj
+ */
 public class ExceptionCodeInstanceModule {
-
-    // private ExceptionCodeModule exceptionCodeModule;
 
     private Integer num;
 
     private String key;
-    
+
     private String name;
 
     private Map<Locale, String> messages = new HashMap<>();
@@ -25,8 +28,8 @@ public class ExceptionCodeInstanceModule {
     private List<ArgumentModule> argus = new ArrayList<>(0);
 
     /**
-     * 返回num
-     * 
+     * 返回num.
+     *
      * @return num
      */
     public Integer getNum() {
@@ -34,18 +37,17 @@ public class ExceptionCodeInstanceModule {
     }
 
     /**
-     * 设置num
-     * 
-     * @param num
-     *            num
+     * 设置num.
+     *
+     * @param num num
      */
     public void setNum(Integer num) {
         this.num = num;
     }
 
     /**
-     * 返回arguss
-     * 
+     * 返回arguss.
+     *
      * @return arguss
      */
     public List<ArgumentModule> getArgus() {
@@ -53,18 +55,17 @@ public class ExceptionCodeInstanceModule {
     }
 
     /**
-     * 设置arguss
-     * 
-     * @param arguss
-     *            arguss
+     * 设置arguss.
+     *
+     * @param arguss arguss
      */
     public void setArgus(List<ArgumentModule> arguss) {
-        this.argus = arguss;
+        argus = arguss;
     }
 
     /**
-     * 返回key
-     * 
+     * 返回key.
+     *
      * @return key
      */
     public String getKey() {
@@ -72,18 +73,17 @@ public class ExceptionCodeInstanceModule {
     }
 
     /**
-     * 设置key
-     * 
-     * @param key
-     *            key
+     * 设置key.
+     *
+     * @param key key
      */
     public void setKey(String key) {
         this.key = key;
     }
 
     /**
-     * 返回messages
-     * 
+     * 返回messages.
+     *
      * @return messages
      */
     public Map<Locale, String> getMessages() {
@@ -91,27 +91,32 @@ public class ExceptionCodeInstanceModule {
     }
 
     /**
-     * 设置messages
-     * 
-     * @param messages
-     *            messages
+     * 设置messages.
+     *
+     * @param messages messages
      */
     public void setMessages(Map<Locale, String> messages) {
         this.messages = messages;
     }
-            
+
     /**
-     * 设置name
+     * 设置name.
+     *
      * @param name name
      */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Gets the name.
+     *
+     * @return the name
+     */
     public String getName() {
-        if (LangUtils.isEmpty(name)) {            
+        if (Lang.isEmpty(name)) {
             if (key.contains(Chars.UNDER_LINE)) {
-                name = WordUtils.parseToUpperFirst(key, Chars.UNDER_LINE.toCharArray()[0]);                
+                name = WordUtils.parseToUpperFirst(key, Chars.UNDER_LINE.toCharArray()[0]);
             } else if (key.contains(Chars.DOT)) {
                 name = WordUtils.parseToUpperFirst(key, Chars.DOT.toCharArray()[0]);
             } else {

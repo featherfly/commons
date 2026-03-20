@@ -20,17 +20,20 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
-import cn.featherfly.common.constant.Charset;
+import cn.featherfly.common.constant.Chars;
+import cn.featherfly.common.constant.Charsets;
 import cn.featherfly.common.gentool.GenerateConfig;
+import cn.featherfly.common.gentool.exception.module.ExceptionCodeInstanceModule;
 import cn.featherfly.common.gentool.exception.module.GenModule;
+import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.ClassLoaderUtils;
 import cn.featherfly.common.lang.ClassUtils;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.lang.UriUtils;
+import cn.featherfly.common.lang.WordUtils;
 
 /**
- * <p>
- * Generator
- * </p>
+ * Generator.
  *
  * @author zhongj
  */
@@ -54,14 +57,11 @@ public class Generator {
         templateResolver.setTemplateMode(TemplateMode.TEXT);
         templateResolver.setPrefix(config.getTemplateDir());
         templateResolver.setSuffix(config.getTemplateSuffix());
-        // Template cache TTL=1h. If not set, entries would be cached until
-        // expelled
-        //        templateResolver.setCacheTTLMs(Long.valueOf(3600000L));
         templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(templateResolver);
     }
 
-    public void generate(String filePath) throws Exception {
+    public void generate(String filePath) throws IOException {
         generate(read(filePath));
     }
 
@@ -87,9 +87,9 @@ public class Generator {
         logger.debug("generated exceptionCodeJavaFile -> {}", codeJavaFile);
 
         org.apache.commons.io.FileUtils.write(new File(exceptionJavaFile), templateEngine.process("exception", context),
-            Charset.UTF_8);
+            Charsets.UTF_8);
         org.apache.commons.io.FileUtils.write(new File(codeJavaFile), templateEngine.process("code", context),
-            Charset.UTF_8);
+            Charsets.UTF_8);
 
         String propertiesFile = UriUtils.linkUri(resourceRootPath,
             ClassUtils.packageToDir(genModule.getException().getPackageName()), genModule.getException().getName());
@@ -135,6 +135,14 @@ public class Generator {
         }
         if (StringUtils.isBlank(genModule.getCode().getAuthor())) {
             genModule.getCode().setAuthor(genModule.getAuthor());
+        }
+
+        for (ExceptionCodeInstanceModule codeInstanceModule : genModule.getCode().getCodes()) {
+            AssertIllegalArgument.isNotBlank(codeInstanceModule.getKey(), "key");
+            if (Str.isBlank(codeInstanceModule.getName())) {
+                codeInstanceModule
+                    .setName(WordUtils.parseToUpperCamelCase(codeInstanceModule.getKey(), Chars.UNDER_LINE_CHAR));
+            }
         }
     }
 

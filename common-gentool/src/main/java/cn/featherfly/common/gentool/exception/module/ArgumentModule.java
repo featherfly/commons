@@ -6,21 +6,19 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import cn.featherfly.common.gentool.jackson.JavaTypeDeserializer;
 
 /**
- * <p>
- * ArgumentModule
- * </p>
- * 
+ * argument module.
+ *
  * @author zhongj
  */
 public class ArgumentModule {
 
-    @JsonDeserialize(using= JavaTypeDeserializer.class)
+    @JsonDeserialize(using = JavaTypeDeserializer.class)
     private Class<?> type;
-    
+
     private String name;
-    
+
     /**
-     * 
+     *
      */
     public ArgumentModule() {
     }
@@ -37,6 +35,7 @@ public class ArgumentModule {
 
     /**
      * 返回type
+     *
      * @return type
      */
     public Class<?> getType() {
@@ -45,6 +44,7 @@ public class ArgumentModule {
 
     /**
      * 设置type
+     *
      * @param type type
      */
     public void setType(Class<?> type) {
@@ -53,6 +53,7 @@ public class ArgumentModule {
 
     /**
      * 返回name
+     *
      * @return name
      */
     public String getName() {
@@ -61,6 +62,7 @@ public class ArgumentModule {
 
     /**
      * 设置name
+     *
      * @param name name
      */
     public void setName(String name) {

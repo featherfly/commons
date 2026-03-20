@@ -2,9 +2,7 @@
 package cn.featherfly.common.gentool.exception.module;
 
 /**
- * <p>
- * GenModule
- * </p>
+ * GenModule.
  *
  * @author zhongj
  */

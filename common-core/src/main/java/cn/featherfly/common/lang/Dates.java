@@ -8,8 +8,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -20,10 +23,7 @@ import cn.featherfly.common.constant.Unit;
 import cn.featherfly.common.exception.UnsupportedException;
 
 /**
- * <p>
- * 日期的帮助类
- * </p>
- * .
+ * 日期的帮助类.
  *
  * @author zhongj
  * @since 1.8.7
@@ -38,11 +38,29 @@ public final class Dates {
     // 默认格式化参数
     private static final String FORMART_DATE = "yyyy-MM-dd";
 
-    private static final String FORMART_TIME = "yyyy-MM-dd HH:mm:ss";
+    private static final String FORMART_TIME = "HH:mm:ss";
+
+    private static final String FORMART_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
+
+    private static final Map<String, DateFormat> DATE_FORMAT_MAP = new HashMap<>();
+    static {
+        DATE_FORMAT_MAP.put(FORMART_DATE, new SimpleDateFormat(FORMART_DATE));
+        DATE_FORMAT_MAP.put(FORMART_TIME, new SimpleDateFormat(FORMART_TIME));
+        DATE_FORMAT_MAP.put(FORMART_DATE_TIME, new SimpleDateFormat(FORMART_DATE_TIME));
+    }
 
     private static final DateTimeFormatter FORMATTER_DATE = DateTimeFormatter.ofPattern(FORMART_DATE);
 
     private static final DateTimeFormatter FORMATTER_TIME = DateTimeFormatter.ofPattern(FORMART_TIME);
+
+    private static final DateTimeFormatter FORMATTER_DATE_TIME = DateTimeFormatter.ofPattern(FORMART_DATE_TIME);
+
+    private static final Map<String, DateTimeFormatter> DATE_TIME_FORMATTER_MAP = new HashMap<>();
+    static {
+        DATE_TIME_FORMATTER_MAP.put(FORMART_DATE, FORMATTER_DATE);
+        DATE_TIME_FORMATTER_MAP.put(FORMART_TIME, FORMATTER_TIME);
+        DATE_TIME_FORMATTER_MAP.put(FORMART_DATE_TIME, FORMATTER_DATE_TIME);
+    }
 
     // 信息
     private static final String MSG_START_AFTER_END = "开始日期startDate不能晚于结束日期endDate";
@@ -195,13 +213,45 @@ public final class Dates {
     }
 
     /**
+     * 使用yyyy-MM-dd进行格式化.
+     *
+     * @param localDate the local date
+     * @return 如果传入的日期不为null,则按yyyy-MM-dd的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
+     */
+    public static String formatDate(LocalDate localDateTime) {
+        return localDateTime.format(FORMATTER_DATE);
+    }
+
+    /**
      * 使用yyyy-MM-dd hh:mm:ss进行格式化.
      *
      * @param localDateTime the local date time
      * @return 如果传入的日期不为null,则按yyyy-MM-dd hh:mm:ss的格式返回一个格式化的字符串
      *         如果传入的日期为null则返回空字符串（""）
      */
+    public static String formatDateTime(LocalDateTime localDateTime) {
+        return format(localDateTime, FORMATTER_DATE_TIME);
+    }
+
+    /**
+     * 使用hh:mm:ss进行格式化.
+     *
+     * @param localDateTime the local date time
+     * @return 如果传入的日期不为null,则按hh:mm:ss的格式返回一个格式化的字符串
+     *         如果传入的日期为null则返回空字符串（""）
+     */
     public static String formatTime(LocalDateTime localDateTime) {
+        return format(localDateTime, FORMATTER_TIME);
+    }
+
+    /**
+     * 使用hh:mm:ss进行格式化.
+     *
+     * @param localDateTime the local date time
+     * @return 如果传入的日期不为null,则按yyyy-MM-dd hh:mm:ss的格式返回一个格式化的字符串
+     *         如果传入的日期为null则返回空字符串（""）
+     */
+    public static String formatTime(LocalTime localDateTime) {
         return format(localDateTime, FORMATTER_TIME);
     }
 
@@ -213,13 +263,45 @@ public final class Dates {
      * @return 如果传入的日期不会null,则按传入的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
      */
     public static String format(LocalDateTime localDateTime, String format) {
-        LOGGER.debug("formart : formart={} ||| localDateTime ={}", new Object[] { format, localDateTime });
-        return format(localDateTime, DateTimeFormatter.ofPattern(format));
+        LOGGER.debug("formart : formart = {} ||| localDateTime = {}", format, localDateTime);
+        return format(localDateTime, getDateTimeFormatter(format));
     }
 
-    private static String format(LocalDateTime localDateTime, DateTimeFormatter formartter) {
-        if (localDateTime != null) {
-            return localDateTime.format(formartter);
+    /**
+     * 使用传入的格式化参数进行格式化.
+     *
+     * @param localDate the local date
+     * @param format 格式化参数
+     * @return 如果传入的日期不会null,则按传入的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
+     */
+    public static String format(LocalDate localDate, String format) {
+        LOGGER.debug("formart : formart = {} ||| localDate = {}", format, localDate);
+        return format(localDate, getDateTimeFormatter(format));
+    }
+
+    /**
+     * 使用传入的格式化参数进行格式化.
+     *
+     * @param localTime the local time
+     * @param format 格式化参数
+     * @return 如果传入的日期不会null,则按传入的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
+     */
+    public static String format(LocalTime localTime, String format) {
+        LOGGER.debug("formart : formart = {} ||| localTime = {}", format, localTime);
+        return format(localTime, getDateTimeFormatter(format));
+    }
+
+    private static DateTimeFormatter getDateTimeFormatter(String format) {
+        DateTimeFormatter formatter = DATE_TIME_FORMATTER_MAP.get(format);
+        if (formatter == null) {
+            return DateTimeFormatter.ofPattern(format);
+        }
+        return formatter;
+    }
+
+    private static String format(TemporalAccessor accessor, DateTimeFormatter formartter) {
+        if (accessor != null) {
+            return formartter.format(accessor);
         }
         return "";
     }
@@ -241,6 +323,17 @@ public final class Dates {
      * @return 如果传入的日期不为null,则按yyyy-MM-dd hh:mm:ss的格式返回一个格式化的字符串
      *         如果传入的日期为null则返回空字符串（""）
      */
+    public static String formatDateTime(Date date) {
+        return format(date, FORMART_DATE_TIME);
+    }
+
+    /**
+     * 使用hh:mm:ss进行格式化.
+     *
+     * @param date 日期对象
+     * @return 如果传入的日期不为null,则按hh:mm:ss的格式返回一个格式化的字符串
+     *         如果传入的日期为null则返回空字符串（""）
+     */
     public static String formatTime(Date date) {
         return format(date, FORMART_TIME);
     }
@@ -253,12 +346,19 @@ public final class Dates {
      * @return 如果传入的日期不会null,则按传入的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
      */
     public static String format(Date date, String format) {
-        LOGGER.debug("formartDate: formart={} ||| date={}", new Object[] { format, date });
-        if (date != null) {
-            DateFormat df = new SimpleDateFormat(format);
-            return df.format(date);
+        LOGGER.debug("formartDate: formart={} ||| date={}", format, date);
+        if (date == null) {
+            return "";
         }
-        return "";
+        return getDateFormat(format).format(date);
+    }
+
+    private static DateFormat getDateFormat(String format) {
+        DateFormat df = DATE_FORMAT_MAP.get(format);
+        if (df == null) {
+            return new SimpleDateFormat(format);
+        }
+        return df;
     }
 
     /**
@@ -306,7 +406,6 @@ public final class Dates {
                 if (leftDuration <= 1000) {
                     break;
                 }
-                //                leftDuration = leftDuration / 1000;
                 return sb.insert(0, format(leftDuration / 1000, TimeUnit.values()[durationTimeUnit.ordinal() + 1],
                     formatMaxTimeUnit) + " ").toString();
             case MICROSECONDS:
@@ -314,7 +413,6 @@ public final class Dates {
                 if (leftDuration <= 1000) {
                     break;
                 }
-                //                leftDuration = leftDuration / 1000;
                 return sb.insert(0, format(leftDuration / 1000, TimeUnit.values()[durationTimeUnit.ordinal() + 1],
                     formatMaxTimeUnit) + " ").toString();
             case MILLISECONDS:
@@ -322,7 +420,6 @@ public final class Dates {
                 if (leftDuration <= 1000) {
                     break;
                 }
-                //                leftDuration = leftDuration / 1000;
                 return sb.insert(0, format(leftDuration / 1000, TimeUnit.values()[durationTimeUnit.ordinal() + 1],
                     formatMaxTimeUnit) + " ").toString();
             case SECONDS:
@@ -335,7 +432,6 @@ public final class Dates {
                 if (leftDuration <= 60 || TimeUnit.SECONDS == formatMaxTimeUnit) {
                     break;
                 }
-                //                leftDuration = leftDuration / 60;
                 return sb.insert(0, format(leftDuration / 60, TimeUnit.values()[durationTimeUnit.ordinal() + 1],
                     formatMaxTimeUnit) + " ").toString();
             case MINUTES:
@@ -343,7 +439,6 @@ public final class Dates {
                 if (leftDuration <= 60) {
                     break;
                 }
-                //                leftDuration = leftDuration / 60;
                 return sb.insert(0, format(leftDuration / 60, TimeUnit.values()[durationTimeUnit.ordinal() + 1],
                     formatMaxTimeUnit) + " ").toString();
             case HOURS:
@@ -351,14 +446,9 @@ public final class Dates {
                 if (leftDuration <= 24) {
                     break;
                 }
-                //                leftDuration = leftDuration / 24;
                 return sb.insert(0, format(leftDuration / 24, TimeUnit.values()[durationTimeUnit.ordinal() + 1],
                     formatMaxTimeUnit) + " ").toString();
             case DAYS:
-                //                sb.insert(0, leftDuration % 24 + " " + TimeUnit.DAYS.name().toLowerCase() + " ");
-                //                if (leftDuration <= 24) {
-                //                    break;
-                //                }
                 break;
             default:
                 throw new UnsupportedOperationException("unsupport TimeUnit: " + durationTimeUnit);
@@ -372,10 +462,17 @@ public final class Dates {
     }
 
     /**
-     * <p>
-     * 将传入的参数以yyyy-MM-dd的格式进行日期转换
-     * </p>
-     * .
+     * 将传入的参数以yyyy-MM-dd hh:mm:ss的格式进行日期转换.
+     *
+     * @param strDate 日期的字符串表示
+     * @return 转换后的日期
+     */
+    public static Date parseDateTime(String strDate) {
+        return parse(strDate, FORMART_DATE_TIME);
+    }
+
+    /**
+     * 将传入的参数以yyyy-MM-dd的格式进行日期转换.
      *
      * @param strDate 日期的字符串表示
      * @return 转换后的日期
@@ -385,12 +482,9 @@ public final class Dates {
     }
 
     /**
-     * <p>
-     * 将传入的参数以yyyy-MM-dd hh:mm:ss的格式进行日期转换
-     * </p>
-     * .
+     * 将传入的参数以hh:mm:ss的格式进行日期转换.
      *
-     * @param strDate 日期的字符串表示
+     * @param strDate 时间的字符串表示
      * @return 转换后的日期
      */
     public static Date parseTime(String strDate) {
@@ -398,25 +492,51 @@ public final class Dates {
     }
 
     /**
-     * <p>
-     * 将传入的参数（第一个）以传入的格式（第二个）进行日期转换
-     * </p>
-     * .
+     * 将传入的参数（第一个）以传入的格式（第二个）进行日期转换.
      *
      * @param strDate 日期的字符串表示
      * @param formart 格式
      * @return 转换后的日期
      */
     public static Date parse(String strDate, String formart) {
-        LOGGER.debug("parse: formart={} ||| strDate={}", new Object[] { formart, strDate });
+        LOGGER.debug("parse: formart={} ||| strDate={}", formart, strDate);
         AssertIllegalArgument.isNotBlank(strDate, "String strDate");
         AssertIllegalArgument.isNotBlank(formart, "String formart");
-        DateFormat format = new SimpleDateFormat(formart);
         try {
-            return format.parse(strDate);
+            return getDateFormat(formart).parse(strDate);
         } catch (ParseException e) {
             throw new IllegalArgumentException(e);
         }
+    }
+
+    /**
+     * 将传入的参数以yyyy-MM-dd hh:mm:ss的格式进行日期转换.
+     *
+     * @param strDate 日期的字符串表示
+     * @return 转换后的日期(LocalDateTime)
+     */
+    public static LocalDateTime parseLocalDateTime(String strDate) {
+        return FORMATTER_DATE_TIME.parse(strDate, LocalDateTime::from);
+    }
+
+    /**
+     * 将传入的参数以yyyy-MM-dd的格式进行日期转换.
+     *
+     * @param strDate 日期的字符串表示
+     * @return 转换后的日期(LocalDate)
+     */
+    public static LocalDate parseLocalDate(String strDate) {
+        return FORMATTER_DATE.parse(strDate, LocalDate::from);
+    }
+
+    /**
+     * 将传入的参数以hh:mm:ss的格式进行日期转换.
+     *
+     * @param strDate 时间的字符串表示
+     * @return 转换后的时间(LocalTime)
+     */
+    public static LocalTime parseLocalTime(String strDate) {
+        return FORMATTER_TIME.parse(strDate, LocalTime::from);
     }
 
     /**
@@ -516,7 +636,8 @@ public final class Dates {
      * @return 传入日期的年份
      */
     public static int getYear(Date date) {
-        return toLocalDate(date).getYear();
+        LocalDate localDate = toLocalDate(date);
+        return localDate == null ? -1 : localDate.getYear();
     }
 
     /**
@@ -526,7 +647,8 @@ public final class Dates {
      * @return 传入日期的月份
      */
     public static int getMonth(Date date) {
-        return toLocalDate(date).getMonthValue();
+        LocalDate localDate = toLocalDate(date);
+        return localDate == null ? -1 : localDate.getMonthValue();
     }
 
     /**
@@ -536,7 +658,8 @@ public final class Dates {
      * @return 传入日期的日（一月中的哪天）
      */
     public static int getDayOfMonth(Date date) {
-        return toLocalDate(date).getDayOfMonth();
+        LocalDate localDate = toLocalDate(date);
+        return localDate == null ? -1 : localDate.getDayOfMonth();
     }
 
     /**
@@ -546,7 +669,8 @@ public final class Dates {
      * @return 传入日期是星期几
      */
     public static int getDayOfWeek(Date date) {
-        return toLocalDate(date).getDayOfWeek().getValue();
+        LocalDate localDate = toLocalDate(date);
+        return localDate == null ? -1 : localDate.getDayOfWeek().getValue();
     }
 
     /**
@@ -556,7 +680,8 @@ public final class Dates {
      * @return 传入日期是当年的第几天
      */
     public static int getDayOfYear(Date date) {
-        return toLocalDate(date).getDayOfYear();
+        LocalDate localDate = toLocalDate(date);
+        return localDate == null ? -1 : localDate.getDayOfYear();
     }
 
     /**
@@ -579,7 +704,8 @@ public final class Dates {
      * @return 传入日期小时（24小时制）
      */
     public static int getHour(Date date) {
-        return toLocalTime(date).getHour();
+        LocalTime localTime = toLocalTime(date);
+        return localTime == null ? -1 : localTime.getHour();
     }
 
     /**
@@ -589,7 +715,8 @@ public final class Dates {
      * @return 传入日期分钟
      */
     public static int getMinute(Date date) {
-        return toLocalTime(date).getMinute();
+        LocalTime localTime = toLocalTime(date);
+        return localTime == null ? -1 : localTime.getMinute();
     }
 
     /**
@@ -599,7 +726,8 @@ public final class Dates {
      * @return 传入日期秒
      */
     public static int getSecond(Date date) {
-        return toLocalTime(date).getSecond();
+        LocalTime localTime = toLocalTime(date);
+        return localTime == null ? -1 : localTime.getSecond();
     }
 
     /**
@@ -985,10 +1113,7 @@ public final class Dates {
     }
 
     /**
-     * <p>
-     * 返回某年某月的最大天数
-     * </p>
-     * .
+     * 返回某年某月的最大天数.
      *
      * @param year 某年
      * @param month 某月
@@ -997,9 +1122,6 @@ public final class Dates {
     public static int getMaxDayOfMonth(int year, int month) {
         final int lastMonth = 12;
         AssertIllegalArgument.isInRange(month, 1, lastMonth, "month");
-        //        if (month < 1 || month > lastMonth) {
-        //            throw new IllegalArgumentException("month 必须是 1-12 的整数 ");
-        //        }
         return getMaxDayOfMonth(getDate(year, month, 1));
     }
 

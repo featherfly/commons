@@ -1203,6 +1203,8 @@ public final class Lang {
         } else if (type == Short.class || type == short.class) {
             Short ordinal = (Short) object;
             return toEnum(toClass, Integer.valueOf(ordinal));
+        } else if (type == Long.class || type == long.class) {
+            return toEnum(toClass, (Long) object);
         }
         return null;
     }
@@ -1236,14 +1238,29 @@ public final class Lang {
         return toEnum(toClass, value[0]);
     }
 
+    private static void assertOrdinal(int ordinal) {
+        if (ordinal < 0) {
+            throw new IllegalArgumentException("enum ordinal must >= 0");
+        }
+    }
+
     private static <T extends Enum<T>> T toEnum(Class<T> toClass, Integer ordinal) {
+        int intOrdinal = ordinal.intValue();
+        assertOrdinal(intOrdinal);
         T[] es = toClass.getEnumConstants();
         for (T e : es) {
-            if (e.ordinal() == ordinal) {
+            if (e.ordinal() == intOrdinal) {
                 return e;
             }
         }
         return null;
+    }
+
+    private static <T extends Enum<T>> T toEnum(Class<T> toClass, Long ordinal) {
+        if (ordinal.longValue() > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("enum ordinal is int type, value[{}] > Integer.MAX_VALUE[{1}]");
+        }
+        return toEnum(toClass, ordinal.intValue());
     }
 
     /**

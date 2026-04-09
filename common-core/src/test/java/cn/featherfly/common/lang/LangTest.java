@@ -24,8 +24,53 @@ import java.util.function.Supplier;
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.constant.Chars;
+import cn.featherfly.common.lang.vo.Gender;
+import cn.featherfly.common.lang.vo.Gender2;
 
 public class LangTest {
+
+    @Test
+    public void toEnum() {
+        Gender male = Lang.toEnum(Gender.class, 0);
+        Gender female = Lang.toEnum(Gender.class, 1);
+        assertEquals(male, Gender.MALE);
+        assertEquals(female, Gender.FEMALE);
+
+        male = Lang.toEnum(Gender.class, 0L);
+        female = Lang.toEnum(Gender.class, 1L);
+        assertEquals(male, Gender.MALE);
+        assertEquals(female, Gender.FEMALE);
+
+        male = Lang.toEnum(Gender.class, (byte) 0);
+        female = Lang.toEnum(Gender.class, (byte) 1);
+        assertEquals(male, Gender.MALE);
+        assertEquals(female, Gender.FEMALE);
+
+        male = Lang.toEnum(Gender.class, (short) 0);
+        female = Lang.toEnum(Gender.class, (short) 1);
+        assertEquals(male, Gender.MALE);
+        assertEquals(female, Gender.FEMALE);
+
+        male = Lang.toEnum(Gender.class, "0");
+        female = Lang.toEnum(Gender.class, "1");
+        assertEquals(male, Gender.MALE);
+        assertEquals(female, Gender.FEMALE);
+
+        male = Lang.toEnum(Gender.class, "MALE");
+        female = Lang.toEnum(Gender.class, "FEMALE");
+        assertEquals(male, Gender.MALE);
+        assertEquals(female, Gender.FEMALE);
+
+        male = Lang.toEnum(Gender.class, new String[] { "MALE" });
+        female = Lang.toEnum(Gender.class, new String[] { "FEMALE" });
+        assertEquals(male, Gender.MALE);
+        assertEquals(female, Gender.FEMALE);
+
+        male = Lang.toEnum(Gender.class, Gender2.MALE);
+        female = Lang.toEnum(Gender.class, Gender2.FEMALE);
+        assertEquals(male, Gender.MALE);
+        assertEquals(female, Gender.FEMALE);
+    }
 
     @Test
     public void isEmpty_Array() {

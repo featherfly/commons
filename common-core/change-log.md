@@ -1,5 +1,9 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
+# 1.16.1
+
+1. 修复StringFormatter连续两个占位参数在一起（{}{})时，参数是空字符串导致后面紧跟的占位参数没有被替换的问题
+
 # 1.16.0 2026-01-29
 
 1. 修复当传入参数是localeMessage时未设置localMessage字段

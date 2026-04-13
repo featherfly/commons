@@ -408,8 +408,8 @@ public final class CollectionUtils {
      * create Collection with type argument. compile-time check type.
      * 根据传入类型创建Collection实例.
      *
-     * @param <C> type of Collection
      * @param <E> type of Collection value
+     * @param <C> type of Collection
      * @param type 类型
      * @return Collection实例
      */
@@ -421,7 +421,6 @@ public final class CollectionUtils {
      * create Collection with type argument. runtime check type.
      * 根据传入类型创建Collection实例. 运行期检查.
      *
-     * @param <C> type of Collection
      * @param <E> type of Collection value
      * @param type 类型
      * @return Collection实例
@@ -447,6 +446,7 @@ public final class CollectionUtils {
      * 根据传入类型创建List实例.
      *
      * @param <E> type of List value
+     * @param <L> the generic type
      * @param type List type
      * @return instance of list
      */
@@ -459,6 +459,7 @@ public final class CollectionUtils {
      * 根据传入类型创建List实例.
      *
      * @param <E> type of List value
+     * @param <L> the generic type
      * @param type List type
      * @param creator if method can not create a new List use this to create
      * @return instance of list
@@ -517,6 +518,7 @@ public final class CollectionUtils {
      * 根据传入类型创建List创建者.
      *
      * @param <E> type of List value
+     * @param <L> the generic type
      * @param type List type
      * @return List creator
      */
@@ -530,6 +532,7 @@ public final class CollectionUtils {
      * 根据传入类型创建List创建者.
      *
      * @param <E> type of List value
+     * @param <L> the generic type
      * @param type List type
      * @param creator if method can not get a List creator use this to create
      * @return List creator
@@ -561,6 +564,7 @@ public final class CollectionUtils {
      * 根据传入类型创建Set实例.
      *
      * @param <E> type of Set value
+     * @param <S> the generic type
      * @param type Set type
      * @return Set instance object
      */
@@ -585,6 +589,7 @@ public final class CollectionUtils {
      * 根据传入类型创建Set实例.
      *
      * @param <E> type of Set value
+     * @param <S> the generic type
      * @param type Set type
      * @param creator if method can not create a new Set use this to create
      * @return Set instance object
@@ -636,6 +641,7 @@ public final class CollectionUtils {
      * 根据传入类型创建Set创建者.
      *
      * @param <E> type of Set value
+     * @param <S> the generic type
      * @param type Set type
      * @return Set creator
      */
@@ -649,6 +655,7 @@ public final class CollectionUtils {
      * 根据传入类型创建Set创建者.
      *
      * @param <E> type of Set value
+     * @param <S> the generic type
      * @param type Set type
      * @param creator if method can not get a Set creator use this to create
      * @return Set creator
@@ -683,6 +690,7 @@ public final class CollectionUtils {
      * 根据传入类型创建Queue实例.
      *
      * @param <E> type of Queue value
+     * @param <Q> the generic type
      * @param type Queue type
      * @return Queue instance object
      */
@@ -707,6 +715,7 @@ public final class CollectionUtils {
      * 根据传入类型创建Queue实例.
      *
      * @param <E> type of Queue value
+     * @param <Q> the generic type
      * @param type Queue type
      * @param creator if method can not create a new Set use this to create
      * @return Queue instance object
@@ -753,6 +762,7 @@ public final class CollectionUtils {
      * 根据传入类型创建Queue创建者.
      *
      * @param <E> type of Queue value
+     * @param <Q> the generic type
      * @param type Queue type
      * @return Queue creator
      */
@@ -766,6 +776,7 @@ public final class CollectionUtils {
      * 根据传入类型创建List创建者.
      *
      * @param <E> type of Queue value
+     * @param <Q> the generic type
      * @param type Queue type
      * @param creator if method can not get a Queue creator use this to create
      * @return Queue creator
@@ -798,6 +809,7 @@ public final class CollectionUtils {
      *
      * @param <K> type of Map Key
      * @param <V> type of Map Value
+     * @param <M> the generic type
      * @param type map type
      * @return Map instance object
      */
@@ -811,6 +823,7 @@ public final class CollectionUtils {
      *
      * @param <K> type of Map Key
      * @param <V> type of Map Value
+     * @param <M> the generic type
      * @param type map type
      * @param creator if method can not create a new Map use this to create
      * @return Map instance object
@@ -881,6 +894,7 @@ public final class CollectionUtils {
      *
      * @param <K> the key type
      * @param <V> the value type
+     * @param <M> the generic type
      * @param type Map type
      * @return Map creator
      */
@@ -894,6 +908,7 @@ public final class CollectionUtils {
      *
      * @param <K> the key type
      * @param <V> the value type
+     * @param <M> the generic type
      * @param type Map type
      * @param creator if method can not get a Map creator use this to create
      * @return Map creator
@@ -1051,7 +1066,7 @@ public final class CollectionUtils {
      * create list with args.
      *
      * @param <T> the generic type
-     * @param listSupplier the list supplier
+     * @param listCreator the list creator
      * @param args the args
      * @return the list
      */

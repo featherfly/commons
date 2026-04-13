@@ -213,9 +213,14 @@ public class StringFormatter {
                         namedParam = false;
                     }
                     nameEndIndex++;
-                    sb.insert(nameEndIndex, getParam.apply(name, namedParam));
+                    Object insert = getParam.apply(name, namedParam);
+                    sb.insert(nameEndIndex, insert);
                     sb.delete(nameStartIndex, nameEndIndex);
-                    index -= nameEndIndex - nameStartIndex - 1;
+                    if (Lang.isEmpty(insert)) {
+                        index -= nameEndIndex - nameStartIndex;
+                    } else {
+                        index -= nameEndIndex - nameStartIndex - 1;
+                    }
                     // 查找name完成，start index 重置
                     nameStartIndex = -1;
                     nameEndIndex = -1;

@@ -34,6 +34,35 @@ public class StringFormatterTest {
     Object[] args = new Object[] { name, year, name2, time };
 
     @Test
+    public void testEmptyString() {
+        StringFormatter formatter = new StringFormatter('{', '}');
+
+        assertEquals(formatter.format("{ifNotNull}{sourceObjectName}.set",
+            new ChainMapImpl<String, Object>()
+                .set("sourceObjectName", "userDto")
+                .set("ifNotNull", "")),
+            "userDto.set");
+
+        assertEquals(formatter.format("(String) {ifNotNull}{sourceObjectName}.set",
+            new ChainMapImpl<String, Object>()
+                .set("sourceObjectName", "userDto")
+                .set("ifNotNull", "")),
+            "(String) userDto.set");
+
+        assertEquals(formatter.format("{ifNotNull}{sourceObjectName}.set",
+            new ChainMapImpl<String, Object>()
+                .set("sourceObjectName", "userDto")
+                .set("ifNotNull", "if (user.get() == null) ")),
+            "if (user.get() == null) userDto.set");
+
+        assertEquals(formatter.format("(String) {ifNotNull}{sourceObjectName}.set",
+            new ChainMapImpl<String, Object>()
+                .set("sourceObjectName", "userDto")
+                .set("ifNotNull", "if (user.get() == null) ")),
+            "(String) if (user.get() == null) userDto.set");
+    }
+
+    @Test
     public void test1() {
         StringFormatter formatter = new StringFormatter('{', '}');
 

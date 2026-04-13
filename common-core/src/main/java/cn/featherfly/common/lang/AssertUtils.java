@@ -10,10 +10,11 @@ import java.util.function.Function;
  * 断言工具类，对于满足断言的情况，抛出指定异常
  * 一般用于检查传入参数是否合法
  * </p>
+ * .
  *
  * @author zhongj
- * @since 1.0
  * @version 1.0
+ * @since 1.0
  */
 public final class AssertUtils {
 
@@ -23,10 +24,10 @@ public final class AssertUtils {
     /**
      * 判断不为空，如果为空，抛出指定异常.
      *
+     * @param <E> 泛型
      * @param object 判断的对象
      * @param message 断言失败的信息
      * @param exceptionCreator 异常构建器
-     * @param <E> 泛型
      */
     public static <E extends RuntimeException> void isNotNull(Object object, String message,
         Function<String, E> exceptionCreator) {
@@ -34,12 +35,12 @@ public final class AssertUtils {
     }
 
     /**
-     * 判断为true，如果为false，抛出指定异常
+     * 判断为true，如果为false，抛出指定异常.
      *
+     * @param <E> 泛型
      * @param expression 判断的值
      * @param message 断言失败的信息
      * @param exceptionCreator 异常构建器
-     * @param <E> 泛型
      */
     public static <E extends RuntimeException> void isTrue(boolean expression, String message,
         Function<String, E> exceptionCreator) {
@@ -47,12 +48,12 @@ public final class AssertUtils {
     }
 
     /**
-     * 判断为false，如果为true，抛出指定异常
+     * 判断为false，如果为true，抛出指定异常.
      *
+     * @param <E> 泛型
      * @param expression 判断的值
      * @param message 断言失败的信息
      * @param exceptionCreator 异常构建器
-     * @param <E> 泛型
      */
     public static <E extends RuntimeException> void isFalse(boolean expression, String message,
         Function<String, E> exceptionCreator) {
@@ -60,12 +61,12 @@ public final class AssertUtils {
     }
 
     /**
-     * 判断不为空或空串（包括只有空字符的串），判断失败抛出指定异常
+     * 判断不为空或空串（包括只有空字符的串），判断失败抛出指定异常.
      *
+     * @param <E> 泛型
      * @param text 判断的字符串
      * @param message 断言失败的信息
      * @param exceptionCreator 异常构建器
-     * @param <E> 泛型
      */
     public static <E extends RuntimeException> void isNotBlank(String text, String message,
         Function<String, E> exceptionCreator) {
@@ -73,12 +74,12 @@ public final class AssertUtils {
     }
 
     /**
-     * 判断不为空（String,Collection,Map,Array还要判断长度是否为0），判断失败抛出指定异常
+     * 判断不为空（String,Collection,Map,Array还要判断长度是否为0），判断失败抛出指定异常.
      *
+     * @param <E> 泛型
      * @param obj 判断的对象
      * @param message 断言失败的信息
      * @param exceptionCreator 异常构建器
-     * @param <E> 泛型
      */
     public static <E extends RuntimeException> void isNotEmpty(Object obj, String message,
         Function<String, E> exceptionCreator) {
@@ -86,12 +87,12 @@ public final class AssertUtils {
     }
 
     /**
-     * 判断不为空或空串，判断失败抛出指定异常
+     * 判断不为空或空串，判断失败抛出指定异常.
      *
+     * @param <E> 泛型
      * @param text 判断的字符串
      * @param message 断言失败的信息
      * @param exceptionCreator 异常构建器
-     * @param <E> 泛型
      */
     public static <E extends RuntimeException> void isNotEmpty(String text, String message,
         Function<String, E> exceptionCreator) {
@@ -99,12 +100,12 @@ public final class AssertUtils {
     }
 
     /**
-     * 判断数组不为null或size不为0，判断失败抛出指定异常
+     * 判断数组不为null或size不为0，判断失败抛出指定异常.
      *
+     * @param <E> 泛型
      * @param array 需要判断的数组
      * @param message 断言失败的信息
      * @param exceptionCreator 异常构建器
-     * @param <E> 泛型
      */
     public static <E extends RuntimeException> void isNotEmpty(Object[] array, String message,
         Function<String, E> exceptionCreator) {
@@ -112,12 +113,12 @@ public final class AssertUtils {
     }
 
     /**
-     * 判断集合不为null或size不为0，判断失败抛出指定异常
+     * 判断集合不为null或size不为0，判断失败抛出指定异常.
      *
+     * @param <E> 泛型
      * @param collection 判断的集合
      * @param message 断言失败的信息
      * @param exceptionCreator 异常构建器
-     * @param <E> 泛型
      */
     public static <E extends RuntimeException> void isNotEmpty(Collection<?> collection, String message,
         Function<String, E> exceptionCreator) {
@@ -125,12 +126,12 @@ public final class AssertUtils {
     }
 
     /**
-     * 判断MAP不为null或size不为0，判断失败抛出指定异常
+     * 判断MAP不为null或size不为0，判断失败抛出指定异常.
      *
+     * @param <E> 泛型
      * @param map 判断的集合
      * @param message 断言失败的信息
      * @param exceptionCreator 异常构建器
-     * @param <E> 泛型
      */
     public static <E extends RuntimeException> void isNotEmpty(Map<?, ?> map, String message,
         Function<String, E> exceptionCreator) {
@@ -138,12 +139,12 @@ public final class AssertUtils {
     }
 
     /**
-     * 判断传入文件对象代表的物理文件是否存在，判断失败抛出指定异常
+     * 判断传入文件对象代表的物理文件是否存在，判断失败抛出指定异常.
      *
+     * @param <E> 泛型
      * @param file 判断的文件对象
      * @param message 断言失败的信息
      * @param exceptionCreator 异常构建器
-     * @param <E> 泛型
      */
     public static <E extends RuntimeException> void isExists(File file, String message,
         Function<String, E> exceptionCreator) {
@@ -151,24 +152,24 @@ public final class AssertUtils {
     }
 
     /**
-     * 判断传入文件对象代表的物理文件是否存在，判断失败抛出指定异常
+     * 判断传入文件对象代表的物理文件是否存在，判断失败抛出指定异常.
      *
+     * @param <E> 泛型
      * @param file 判断的文件对象
      * @param exceptionCreator 异常构建器
-     * @param <E> 泛型
      */
     public static <E extends RuntimeException> void isExists(File file, Function<String, E> exceptionCreator) {
         new Assert<>(exceptionCreator).isExists(file);
     }
 
     /**
-     * 判断对象（第二个参数）是指定类型（第一个参数）的实例，判断失败抛出指定异常
+     * 判断对象（第二个参数）是指定类型（第一个参数）的实例，判断失败抛出指定异常.
      *
+     * @param <E> 泛型
      * @param clazz 类型
      * @param obj 对象
      * @param message 断言失败的信息
      * @param exceptionCreator 异常构建器
-     * @param <E> 泛型
      */
     public static <E extends RuntimeException> void isInstanceOf(Class<?> clazz, Object obj, String message,
         Function<String, E> exceptionCreator) {
@@ -176,12 +177,12 @@ public final class AssertUtils {
     }
 
     /**
-     * 判断对象（第二个参数）是指定类型（第一个参数）的实例，判断失败抛出指定异常
+     * 判断对象（第二个参数）是指定类型（第一个参数）的实例，判断失败抛出指定异常.
      *
+     * @param <E> 泛型
      * @param clazz 类型
      * @param obj 对象
-     * @param exceptionType 异常类型
-     * @param <E> 泛型
+     * @param exceptionCreator the exception creator
      */
     public static <E extends RuntimeException> void isInstanceOf(Class<?> clazz, Object obj,
         Function<String, E> exceptionCreator) {
@@ -192,11 +193,12 @@ public final class AssertUtils {
      * <p>
      * 判断不为空，如果为空，抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param object 判断的对象
      * @param message 断言失败的信息
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isNotNull(Object object, String message, Class<E> exceptionType) {
@@ -207,10 +209,11 @@ public final class AssertUtils {
      * <p>
      * 判断不为空，如果为空，抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param object 判断的对象
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isNotNull(Object object, Class<E> exceptionType) {
@@ -221,11 +224,12 @@ public final class AssertUtils {
      * <p>
      * 判断为true，如果为false，抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param expression 判断的值
      * @param message 断言失败的信息
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isTrue(boolean expression, String message, Class<E> exceptionType) {
@@ -236,11 +240,12 @@ public final class AssertUtils {
      * <p>
      * 判断为false，如果为true，抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param expression 判断的值
      * @param message 断言失败的信息
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isFalse(boolean expression, String message,
@@ -252,11 +257,12 @@ public final class AssertUtils {
      * <p>
      * 判断不为空或空串（包括只有空字符的串），判断失败抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param text 判断的字符串
      * @param message 断言失败的信息
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isNotBlank(String text, String message, Class<E> exceptionType) {
@@ -267,10 +273,11 @@ public final class AssertUtils {
      * <p>
      * 判断不为空或空串（包括只有空字符的串），判断失败抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param text 判断的字符串
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isNotBlank(String text, Class<E> exceptionType) {
@@ -281,11 +288,12 @@ public final class AssertUtils {
      * <p>
      * 判断不为空（String,Collection,Map,Array还要判断长度是否为0），判断失败抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param obj 判断的对象
      * @param message 断言失败的信息
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isNotEmpty(Object obj, String message, Class<E> exceptionType) {
@@ -296,10 +304,11 @@ public final class AssertUtils {
      * <p>
      * 判断不为空（String,Collection,Map,Array还要判断长度是否为0），判断失败抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param obj 判断的对象
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isNotEmpty(Object obj, Class<E> exceptionType) {
@@ -310,11 +319,12 @@ public final class AssertUtils {
      * <p>
      * 判断不为空或空串，判断失败抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param text 判断的字符串
      * @param message 断言失败的信息
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isNotEmpty(String text, String message, Class<E> exceptionType) {
@@ -325,10 +335,11 @@ public final class AssertUtils {
      * <p>
      * 判断不为空或空串，判断失败抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param text 判断的字符串
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isNotEmpty(String text, Class<E> exceptionType) {
@@ -339,11 +350,12 @@ public final class AssertUtils {
      * <p>
      * 判断数组不为null或size不为0，判断失败抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param array 需要判断的数组
      * @param message 断言失败的信息
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isNotEmpty(Object[] array, String message, Class<E> exceptionType) {
@@ -354,10 +366,11 @@ public final class AssertUtils {
      * <p>
      * 判断数组不为null或size不为0，判断失败抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param array 需要判断的数组
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isNotEmpty(Object[] array, Class<E> exceptionType) {
@@ -368,11 +381,12 @@ public final class AssertUtils {
      * <p>
      * 判断集合不为null或size不为0，判断失败抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param collection 判断的集合
      * @param message 断言失败的信息
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isNotEmpty(Collection<?> collection, String message,
@@ -384,10 +398,11 @@ public final class AssertUtils {
      * <p>
      * 判断集合不为null或size不为0，判断失败抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param collection 判断的集合
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isNotEmpty(Collection<?> collection, Class<E> exceptionType) {
@@ -398,11 +413,12 @@ public final class AssertUtils {
      * <p>
      * 判断MAP不为null或size不为0，判断失败抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param map 判断的集合
      * @param message 断言失败的信息
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isNotEmpty(Map<?, ?> map, String message, Class<E> exceptionType) {
@@ -413,10 +429,11 @@ public final class AssertUtils {
      * <p>
      * 判断MAP不为null或size不为0，判断失败抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param map 判断的集合
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isNotEmpty(Map<?, ?> map, Class<E> exceptionType) {
@@ -427,11 +444,12 @@ public final class AssertUtils {
      * <p>
      * 判断传入文件对象代表的物理文件是否存在，判断失败抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param file 判断的文件对象
      * @param message 断言失败的信息
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isExists(File file, String message, Class<E> exceptionType) {
@@ -442,10 +460,11 @@ public final class AssertUtils {
      * <p>
      * 判断传入文件对象代表的物理文件是否存在，判断失败抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param file 判断的文件对象
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isExists(File file, Class<E> exceptionType) {
@@ -456,12 +475,13 @@ public final class AssertUtils {
      * <p>
      * 判断对象（第二个参数）是指定类型（第一个参数）的实例，判断失败抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param clazz 类型
      * @param obj 对象
      * @param message 断言失败的信息
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isInstanceOf(Class<?> clazz, Object obj, String message,
@@ -473,11 +493,12 @@ public final class AssertUtils {
      * <p>
      * 判断对象（第二个参数）是指定类型（第一个参数）的实例，判断失败抛出指定异常
      * </p>
+     * .
      *
+     * @param <E> 泛型
      * @param clazz 类型
      * @param obj 对象
      * @param exceptionType 异常类型
-     * @param <E> 泛型
      */
     @Deprecated
     public static <E extends RuntimeException> void isInstanceOf(Class<?> clazz, Object obj, Class<E> exceptionType) {

@@ -188,6 +188,7 @@ public final class ClassUtils {
     /**
      * 返回目标类型的指定类型的静态字段值，支持多层嵌套 例如, user.address.no
      *
+     * @param <V> the value type
      * @param type 目标类型
      * @param fieldName 字段名
      * @return 目标类型的指定名称的字段
@@ -199,6 +200,7 @@ public final class ClassUtils {
     /**
      * 返回目标对象的指定类型的字段值，支持多层嵌套 例如, user.address.no
      *
+     * @param <V> the value type
      * @param object 目标对象
      * @param fieldName 字段名
      * @return 目标类型的指定名称的字段，支持多层嵌套
@@ -208,8 +210,9 @@ public final class ClassUtils {
     }
 
     /**
-     * 返回目标对象的指定类型的字段值
+     * 返回目标对象的指定类型的字段值.
      *
+     * @param <V> the value type
      * @param object 目标对象
      * @param field 字段
      * @return 目标类型的指定名称的字段
@@ -224,8 +227,9 @@ public final class ClassUtils {
     }
 
     /**
-     * 返回目标对象的指定类型的字段值
+     * 返回目标对象的指定类型的字段值.
      *
+     * @param <V> the value type
      * @param type 目标类型
      * @param field 字段
      * @return 目标类型的指定名称的字段
@@ -310,6 +314,7 @@ public final class ClassUtils {
     /**
      * invoke static method.
      *
+     * @param <T> the generic type
      * @param type type
      * @param methodName method name
      * @return method return value
@@ -321,6 +326,7 @@ public final class ClassUtils {
     /**
      * invoke static method.
      *
+     * @param <T> the generic type
      * @param type type
      * @param methodName method name
      * @param args method arguments
@@ -333,6 +339,7 @@ public final class ClassUtils {
     /**
      * invoke static method.
      *
+     * @param <T> the generic type
      * @param type type
      * @param method method
      * @param args method arguments
@@ -355,6 +362,7 @@ public final class ClassUtils {
     /**
      * invoke object method.
      *
+     * @param <T> the generic type
      * @param object object
      * @param methodName method name
      * @return method return value
@@ -366,6 +374,7 @@ public final class ClassUtils {
     /**
      * invoke object method.
      *
+     * @param <T> the generic type
      * @param object object
      * @param methodName method name
      * @param args method arguments
@@ -378,6 +387,7 @@ public final class ClassUtils {
     /**
      * invoke object method.
      *
+     * @param <T> the generic type
      * @param object object
      * @param method method
      * @param args method arguments

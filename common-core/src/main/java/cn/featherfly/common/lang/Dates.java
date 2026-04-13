@@ -218,8 +218,8 @@ public final class Dates {
      * @param localDate the local date
      * @return 如果传入的日期不为null,则按yyyy-MM-dd的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
      */
-    public static String formatDate(LocalDate localDateTime) {
-        return localDateTime.format(FORMATTER_DATE);
+    public static String formatDate(LocalDate localDate) {
+        return localDate.format(FORMATTER_DATE);
     }
 
     /**
@@ -247,12 +247,12 @@ public final class Dates {
     /**
      * 使用hh:mm:ss进行格式化.
      *
-     * @param localDateTime the local date time
+     * @param localTime the local time
      * @return 如果传入的日期不为null,则按yyyy-MM-dd hh:mm:ss的格式返回一个格式化的字符串
      *         如果传入的日期为null则返回空字符串（""）
      */
-    public static String formatTime(LocalTime localDateTime) {
-        return format(localDateTime, FORMATTER_TIME);
+    public static String formatTime(LocalTime localTime) {
+        return format(localTime, FORMATTER_TIME);
     }
 
     /**

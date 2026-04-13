@@ -6,9 +6,9 @@ import java.util.Collection;
 /**
  * 白名单策略.
  *
+ * @author zhongj
  * @param <T> 需要判断的类型
  * @param <P> 白名单类型
- * @author zhongj
  */
 public interface WhiteListPolicy<T, P extends WhiteListPolicy<T, P>> extends AllowPolicy<T> {
     /**
@@ -43,7 +43,7 @@ public interface WhiteListPolicy<T, P extends WhiteListPolicy<T, P>> extends All
     P clearWhiteList();
 
     /**
-     * 返回whiteList
+     * 返回whiteList.
      *
      * @return whiteList
      */
@@ -53,6 +53,7 @@ public interface WhiteListPolicy<T, P extends WhiteListPolicy<T, P>> extends All
      * 设置策略.
      *
      * @param whiteList 策略
+     * @return the p
      */
     P setWhiteList(Collection<T> whiteList);
 }

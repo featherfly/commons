@@ -36,30 +36,30 @@ public final class Dates {
     }
 
     // 默认格式化参数
-    private static final String FORMART_DATE = "yyyy-MM-dd";
+    public static final String FORMAT_DATE = "yyyy-MM-dd";
 
-    private static final String FORMART_TIME = "HH:mm:ss";
+    public static final String FORMAT_TIME = "HH:mm:ss";
 
-    private static final String FORMART_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
+    public static final String FORMAT_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
 
     private static final Map<String, DateFormat> DATE_FORMAT_MAP = new HashMap<>();
     static {
-        DATE_FORMAT_MAP.put(FORMART_DATE, new SimpleDateFormat(FORMART_DATE));
-        DATE_FORMAT_MAP.put(FORMART_TIME, new SimpleDateFormat(FORMART_TIME));
-        DATE_FORMAT_MAP.put(FORMART_DATE_TIME, new SimpleDateFormat(FORMART_DATE_TIME));
+        DATE_FORMAT_MAP.put(FORMAT_DATE, new SimpleDateFormat(FORMAT_DATE));
+        DATE_FORMAT_MAP.put(FORMAT_TIME, new SimpleDateFormat(FORMAT_TIME));
+        DATE_FORMAT_MAP.put(FORMAT_DATE_TIME, new SimpleDateFormat(FORMAT_DATE_TIME));
     }
 
-    private static final DateTimeFormatter FORMATTER_DATE = DateTimeFormatter.ofPattern(FORMART_DATE);
+    private static final DateTimeFormatter FORMATTER_DATE = DateTimeFormatter.ofPattern(FORMAT_DATE);
 
-    private static final DateTimeFormatter FORMATTER_TIME = DateTimeFormatter.ofPattern(FORMART_TIME);
+    private static final DateTimeFormatter FORMATTER_TIME = DateTimeFormatter.ofPattern(FORMAT_TIME);
 
-    private static final DateTimeFormatter FORMATTER_DATE_TIME = DateTimeFormatter.ofPattern(FORMART_DATE_TIME);
+    private static final DateTimeFormatter FORMATTER_DATE_TIME = DateTimeFormatter.ofPattern(FORMAT_DATE_TIME);
 
     private static final Map<String, DateTimeFormatter> DATE_TIME_FORMATTER_MAP = new HashMap<>();
     static {
-        DATE_TIME_FORMATTER_MAP.put(FORMART_DATE, FORMATTER_DATE);
-        DATE_TIME_FORMATTER_MAP.put(FORMART_TIME, FORMATTER_TIME);
-        DATE_TIME_FORMATTER_MAP.put(FORMART_DATE_TIME, FORMATTER_DATE_TIME);
+        DATE_TIME_FORMATTER_MAP.put(FORMAT_DATE, FORMATTER_DATE);
+        DATE_TIME_FORMATTER_MAP.put(FORMAT_TIME, FORMATTER_TIME);
+        DATE_TIME_FORMATTER_MAP.put(FORMAT_DATE_TIME, FORMATTER_DATE_TIME);
     }
 
     // 信息
@@ -263,7 +263,7 @@ public final class Dates {
      * @return 如果传入的日期不会null,则按传入的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
      */
     public static String format(LocalDateTime localDateTime, String format) {
-        LOGGER.debug("formart : formart = {} ||| localDateTime = {}", format, localDateTime);
+        LOGGER.debug("format : format = {} ||| localDateTime = {}", format, localDateTime);
         return format(localDateTime, getDateTimeFormatter(format));
     }
 
@@ -275,7 +275,7 @@ public final class Dates {
      * @return 如果传入的日期不会null,则按传入的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
      */
     public static String format(LocalDate localDate, String format) {
-        LOGGER.debug("formart : formart = {} ||| localDate = {}", format, localDate);
+        LOGGER.debug("format : format = {} ||| localDate = {}", format, localDate);
         return format(localDate, getDateTimeFormatter(format));
     }
 
@@ -287,7 +287,7 @@ public final class Dates {
      * @return 如果传入的日期不会null,则按传入的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
      */
     public static String format(LocalTime localTime, String format) {
-        LOGGER.debug("formart : formart = {} ||| localTime = {}", format, localTime);
+        LOGGER.debug("format : format = {} ||| localTime = {}", format, localTime);
         return format(localTime, getDateTimeFormatter(format));
     }
 
@@ -299,9 +299,9 @@ public final class Dates {
         return formatter;
     }
 
-    private static String format(TemporalAccessor accessor, DateTimeFormatter formartter) {
+    private static String format(TemporalAccessor accessor, DateTimeFormatter formatter) {
         if (accessor != null) {
-            return formartter.format(accessor);
+            return formatter.format(accessor);
         }
         return "";
     }
@@ -313,7 +313,7 @@ public final class Dates {
      * @return 如果传入的日期不为null,则按yyyy-MM-dd的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
      */
     public static String formatDate(Date date) {
-        return format(date, FORMART_DATE);
+        return format(date, FORMAT_DATE);
     }
 
     /**
@@ -324,7 +324,7 @@ public final class Dates {
      *         如果传入的日期为null则返回空字符串（""）
      */
     public static String formatDateTime(Date date) {
-        return format(date, FORMART_DATE_TIME);
+        return format(date, FORMAT_DATE_TIME);
     }
 
     /**
@@ -335,7 +335,7 @@ public final class Dates {
      *         如果传入的日期为null则返回空字符串（""）
      */
     public static String formatTime(Date date) {
-        return format(date, FORMART_TIME);
+        return format(date, FORMAT_TIME);
     }
 
     /**
@@ -346,7 +346,7 @@ public final class Dates {
      * @return 如果传入的日期不会null,则按传入的格式返回一个格式化的字符串 如果传入的日期为null则返回空字符串（""）
      */
     public static String format(Date date, String format) {
-        LOGGER.debug("formartDate: formart={} ||| date={}", format, date);
+        LOGGER.debug("formatDate: format={} ||| date={}", format, date);
         if (date == null) {
             return "";
         }
@@ -453,7 +453,7 @@ public final class Dates {
             default:
                 throw new UnsupportedOperationException("unsupport TimeUnit: " + durationTimeUnit);
         }
-        LOGGER.debug("formart: duration={} | durationTimeUnit={} | formatMaxTimeUnit={}", duration, durationTimeUnit,
+        LOGGER.debug("format: duration={} | durationTimeUnit={} | formatMaxTimeUnit={}", duration, durationTimeUnit,
             formatMaxTimeUnit);
         if (sb.charAt(sb.length() - 1) == Chars.SPACE_CHAR) {
             sb.deleteCharAt(sb.length() - 1);
@@ -468,7 +468,7 @@ public final class Dates {
      * @return 转换后的日期
      */
     public static Date parseDateTime(String strDate) {
-        return parse(strDate, FORMART_DATE_TIME);
+        return parse(strDate, FORMAT_DATE_TIME);
     }
 
     /**
@@ -478,7 +478,7 @@ public final class Dates {
      * @return 转换后的日期
      */
     public static Date parseDate(String strDate) {
-        return parse(strDate, FORMART_DATE);
+        return parse(strDate, FORMAT_DATE);
     }
 
     /**
@@ -488,22 +488,22 @@ public final class Dates {
      * @return 转换后的日期
      */
     public static Date parseTime(String strDate) {
-        return parse(strDate, FORMART_TIME);
+        return parse(strDate, FORMAT_TIME);
     }
 
     /**
      * 将传入的参数（第一个）以传入的格式（第二个）进行日期转换.
      *
      * @param strDate 日期的字符串表示
-     * @param formart 格式
+     * @param format 格式
      * @return 转换后的日期
      */
-    public static Date parse(String strDate, String formart) {
-        LOGGER.debug("parse: formart={} ||| strDate={}", formart, strDate);
+    public static Date parse(String strDate, String format) {
+        LOGGER.debug("parse: format={} ||| strDate={}", format, strDate);
         AssertIllegalArgument.isNotBlank(strDate, "String strDate");
-        AssertIllegalArgument.isNotBlank(formart, "String formart");
+        AssertIllegalArgument.isNotBlank(format, "String format");
         try {
-            return getDateFormat(formart).parse(strDate);
+            return getDateFormat(format).parse(strDate);
         } catch (ParseException e) {
             throw new IllegalArgumentException(e);
         }
@@ -773,8 +773,8 @@ public final class Dates {
      * @return 日期比较后的常量
      */
     public static int compareYear(Date firstDate, Date secondDate) {
-        final String formart = "yyyy";
-        return compare(firstDate, secondDate, formart);
+        final String format = "yyyy";
+        return compare(firstDate, secondDate, format);
     }
 
     /**
@@ -786,8 +786,8 @@ public final class Dates {
      * @return 日期比较后的常量
      */
     public static int compareMonth(Date firstDate, Date secondDate) {
-        final String formart = "yyyyMM";
-        return compare(firstDate, secondDate, formart);
+        final String format = "yyyyMM";
+        return compare(firstDate, secondDate, format);
     }
 
     /**
@@ -799,8 +799,8 @@ public final class Dates {
      * @return 日期比较后的常量
      */
     public static int compareDay(Date firstDate, Date secondDate) {
-        final String formart = "yyyyMMdd";
-        return compare(firstDate, secondDate, formart);
+        final String format = "yyyyMMdd";
+        return compare(firstDate, secondDate, format);
     }
 
     /**
@@ -812,8 +812,8 @@ public final class Dates {
      * @return 日期比较后的常量
      */
     public static int compareHour(Date firstDate, Date secondDate) {
-        final String formart = "yyyyMMddHH";
-        return compare(firstDate, secondDate, formart);
+        final String format = "yyyyMMddHH";
+        return compare(firstDate, secondDate, format);
     }
 
     /**
@@ -825,8 +825,8 @@ public final class Dates {
      * @return 日期比较后的常量
      */
     public static int compareMinute(Date firstDate, Date secondDate) {
-        final String formart = "yyyyMMddHHmm";
-        return compare(firstDate, secondDate, formart);
+        final String format = "yyyyMMddHHmm";
+        return compare(firstDate, secondDate, format);
     }
 
     /**
@@ -838,8 +838,8 @@ public final class Dates {
      * @return 日期比较后的常量
      */
     public static int compareSecond(Date firstDate, Date secondDate) {
-        final String formart = "yyyyMMddHHmmss";
-        return compare(firstDate, secondDate, formart);
+        final String format = "yyyyMMddHHmmss";
+        return compare(firstDate, secondDate, format);
     }
 
     /**
@@ -1312,13 +1312,13 @@ public final class Dates {
      * 1
      * @param firstDate 第一个日期
      * @param secondDate 第二个日期
-     * @param formart 格式
+     * @param format 格式
      * @return 日期比较后的常量
      */
-    private static int compare(Date firstDate, Date secondDate, String formart) {
+    private static int compare(Date firstDate, Date secondDate, String format) {
         checkNull(firstDate, secondDate);
-        long first = Long.parseLong(format(firstDate, formart));
-        long second = Long.parseLong(format(secondDate, formart));
+        long first = Long.parseLong(format(firstDate, format));
+        long second = Long.parseLong(format(secondDate, format));
         if (first < second) {
             return COMPARE_LT;
         } else if (first == second) {

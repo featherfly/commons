@@ -27,6 +27,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
@@ -816,6 +818,31 @@ public final class ClassUtils {
     @SuppressWarnings("unchecked")
     public static <T> Class<T> castGenericType(Class<?> type, T castToType) {
         return (Class<T>) type;
+    }
+
+    public static <E> Class<Collection<E>> getCollectionClass(Class<E> elementType) {
+        Collection<E> obj = null;
+        return castGenericType(Map.class, obj);
+    }
+
+    public static <E> Class<List<E>> getListClass(Class<E> elementType) {
+        List<E> obj = null;
+        return castGenericType(List.class, obj);
+    }
+
+    public static <E> Class<Set<E>> getSetClass(Class<E> elementType) {
+        Set<E> obj = null;
+        return castGenericType(Set.class, obj);
+    }
+
+    public static <E> Class<Queue<E>> getQueueClass(Class<E> elementType) {
+        Queue<E> obj = null;
+        return castGenericType(Queue.class, obj);
+    }
+
+    public static <K, V> Class<Map<K, V>> getMapClass(Class<K> keyType, Class<V> valueType) {
+        Map<K, V> obj = null;
+        return castGenericType(Map.class, obj);
     }
 
     /**

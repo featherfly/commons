@@ -10,6 +10,17 @@ def getFinalVersion() {
     return isReleaseBuild() ? version : version + "-SNAPSHOT"
 }
 
+def hasSnapshotDepend() {
+    boolean has = false;
+    configurations.compileClasspath.allDependencies.each { dependency ->
+        if (dependency.version.endsWith("SNAPSHOT") || dependency.version.endsWith("snapshot")) {
+            println "found snapshot dependency -> ${dependency.name}:${dependency.version}"
+            has = true;
+        }
+    }
+    return has;
+}
+
 def getSonatypeRepositoryUrl() {
     if (isReleaseBuild()) {
         println 'RELEASE BUILD'
@@ -129,4 +140,27 @@ jreleaser {
             */
         }
     }
+}
+
+// 1. 注册专属检查任务
+tasks.register('mavenPublishCheck') {
+    group = 'verification'
+    description = '仅在发布到 Maven 前执行的校验任务'
+    doLast {
+        println '执行 Maven Central 发布前检查...'
+        boolean isRelease = isReleaseBuild();
+        boolean hasSnapshot = hasSnapshotDepend();
+        if (hasSnapshot && isRelease) {
+            throw new IllegalArgumentException("依赖包含shapshot版本, 只能发布shapshot版本")
+//            throw new GraldeException("dependencies contains shapshot lib, only can publish shapshot version");
+        }
+    }
+}
+
+// 2. 核心拦截逻辑
+tasks.withType(PublishToMavenLocal).configureEach {
+    dependsOn 'mavenPublishCheck'
+}
+tasks.withType(PublishToMavenRepository).configureEach {
+    dependsOn 'mavenPublishCheck'
 }

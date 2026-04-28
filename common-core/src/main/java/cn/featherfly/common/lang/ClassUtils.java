@@ -853,7 +853,6 @@ public final class ClassUtils {
             String excalmatoryMark = "!";
             String filePrefix = "file:";
             String path = url.getPath();
-            url.getProtocol();
             if (path.startsWith(filePrefix)) {
                 String os = System.getProperty("os.name");
                 if (os.startsWith("Windows")) {

@@ -5,6 +5,8 @@
 1. 修复StringFormatter连续两个占位参数在一起（{}{})时，参数是空字符串导致后面紧跟的占位参数没有被替换的问题
 2. 加入Iterables类
 3. 移除Str.appendRequestParams(String, String, String)方法
+4. UriUtils添加appendParam方法
+5. ServiceLoaderUtils添加带ClassLoader参数的重载方法
 
 # 1.16.0 2026-01-29
 

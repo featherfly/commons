@@ -1131,19 +1131,40 @@ public final class Str {
      * 此方法将给出的字符串source使用delim划分为单词数组.
      *
      * @param source 需要进行划分的原字符串
+     * @param delim 单词的分隔字符
+     * @return 划分以后的数组
+     *         1. 如果source为empty，返回空数组
+     *         2. 如果delim为空字符''，返回以source为唯一元素的数组.
+     */
+    public static String[] split(String source, char delim) {
+        if (isEmpty(source)) {
+            return ArrayUtils.EMPTY_STRING_ARRAY;
+        }
+        if (delim == Chars.EMPTY_CHAR) {
+            return new String[] { source };
+        }
+        return split(source, String.valueOf(delim));
+    }
+
+    /**
+     * 此方法将给出的字符串source使用delim划分为单词数组.
+     *
+     * @param source 需要进行划分的原字符串
      * @param delim 单词的分隔字符串
-     * @return 划分以后的数组，如果source或delim为null的时候返回以source为唯一元素的数组.
+     * @return 划分以后的数组
+     *         1. 如果source为empty，返回空数组
+     *         2. 如果delim为empty，返回以source为唯一元素的数组.
      */
     public static String[] split(String source, String delim) {
-        String[] wordLists;
-        if (source == null || delim == null) {
-            wordLists = new String[1];
-            wordLists[0] = source;
-            return wordLists;
+        if (isEmpty(source)) {
+            return ArrayUtils.EMPTY_STRING_ARRAY;
+        }
+        if (isEmpty(delim)) {
+            return new String[] { source };
         }
         StringTokenizer st = new StringTokenizer(source, delim);
         int total = st.countTokens();
-        wordLists = new String[total];
+        String[] wordLists = new String[total];
         for (int i = 0; i < total; i++) {
             wordLists[i] = st.nextToken();
         }

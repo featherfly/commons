@@ -502,7 +502,7 @@ public final class Str {
      * @return formated str
      */
     public static String format(String str, Object argu) {
-        return FORMATTER.format(str, new Object[] { argu });
+        return FORMATTER.format(str, argu);
     }
 
     /**
@@ -1341,7 +1341,7 @@ public final class Str {
             // 取出每一个字符
             char c = string.charAt(i);
             // 转换为unicode
-            unicode.append("\\u" + Integer.toHexString(c));
+            unicode.append("\\u").append(Integer.toHexString(c));
         }
 
         return unicode.toString();
@@ -1624,10 +1624,7 @@ public final class Str {
      * @return 完成过滤以后的字符串
      */
     public static String filterHtml(String str) {
-        if (str == null) {
-            return null;
-        }
-        if (str.length() == 0) {
+        if (isEmpty(str)) {
             return str;
         }
         StringBuilder html = new StringBuilder();
@@ -1664,10 +1661,7 @@ public final class Str {
      * @return 完成转换的html
      */
     public static String toHtml(String str) {
-        if (str == null) {
-            return null;
-        }
-        if (str.length() == 0) {
+        if (isEmpty(str)) {
             return str;
         }
         return str.replace("&amp;", "&") //
@@ -1675,26 +1669,5 @@ public final class Str {
             .replace("&gt;", ">") //
             .replace("&#39;", "'") //
             .replace("&quot;", "\"");
-    }
-
-    /**
-     * 为传入URI附加请求参数 .
-     *
-     * @param uri uri
-     * @param name name
-     * @param value value
-     * @return 附加请求参数后的URI
-     */
-    // TODO 是否应该移动到web
-    public static String appendRequestParams(String uri, String name, String value) {
-        if (Lang.isNotEmpty(uri)) {
-            if (uri.contains(Chars.QUESTION)) {
-                uri += Chars.AMP;
-            } else {
-                uri += Chars.QUESTION;
-            }
-            uri += name + "=" + value;
-        }
-        return uri;
     }
 }

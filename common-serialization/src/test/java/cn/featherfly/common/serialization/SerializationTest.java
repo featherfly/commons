@@ -37,7 +37,7 @@ public class SerializationTest {
     public void testXml() {
         System.out.println(new String(Serialization.serialize(user, Serialization.MIME_TYPE_XML)));
         System.out.println(
-                new String(Serialization.serialize(user, Serialization.MIME_TYPE_XML), StandardCharsets.ISO_8859_1)); // 会乱码
+            new String(Serialization.serialize(user, Serialization.MIME_TYPE_XML), StandardCharsets.ISO_8859_1)); // 会乱码
     }
 
     @Test
@@ -50,7 +50,7 @@ public class SerializationTest {
         assertEquals(u, user);
 
         System.out.println(
-                new String(Serialization.serialize(user, Serialization.MIME_TYPE_KRYO), StandardCharsets.ISO_8859_1)); // 会乱码
+            new String(Serialization.serialize(user, Serialization.MIME_TYPE_KRYO), StandardCharsets.ISO_8859_1)); // 会乱码
     }
 
     @Test
@@ -63,6 +63,6 @@ public class SerializationTest {
         assertEquals(u, user);
 
         System.out.println(new String(Serialization.serialize(user, Serialization.MIME_TYPE_PROTOBUFF),
-                StandardCharsets.ISO_8859_1)); // 会乱码
+            StandardCharsets.ISO_8859_1)); // 会乱码
     }
 }

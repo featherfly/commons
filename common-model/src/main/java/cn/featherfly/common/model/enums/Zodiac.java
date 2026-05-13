@@ -68,10 +68,10 @@ public enum Zodiac implements Property<Integer> {
     }
 
     /**
-     * value of Gender.
+     * value of Zodiac.
      *
      * @param value the value
-     * @return the platforms
+     * @return the Zodiac
      */
     public static Zodiac valueOf(Integer value) {
         if (value == null) {
@@ -81,10 +81,10 @@ public enum Zodiac implements Property<Integer> {
     }
 
     /**
-     * value of Gender.
+     * value of Zodiac.
      *
      * @param value the value
-     * @return the platforms
+     * @return the Zodiac
      */
     public static Zodiac valueOf(int value) {
         for (Zodiac p : Zodiac.values()) {

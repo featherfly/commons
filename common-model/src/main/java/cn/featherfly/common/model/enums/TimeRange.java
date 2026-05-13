@@ -34,4 +34,32 @@ public enum TimeRange implements Property<Integer> {
     public Integer value() {
         return ordinal();
     }
+
+    /**
+     * value of TimeRange.
+     *
+     * @param value the value
+     * @return the TimeRange
+     */
+    public static TimeRange valueOf(Integer value) {
+        if (value == null) {
+            return null;
+        }
+        return valueOf(value.intValue());
+    }
+
+    /**
+     * value of TimeRange.
+     *
+     * @param value the value
+     * @return the TimeRange
+     */
+    public static TimeRange valueOf(int value) {
+        for (TimeRange p : TimeRange.values()) {
+            if (p.value() == value) {
+                return p;
+            }
+        }
+        return null;
+    }
 }

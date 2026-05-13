@@ -166,10 +166,10 @@ public enum Platforms implements Platform {
     }
 
     /**
-     * value of value.
+     * value of Platforms.
      *
      * @param value the value
-     * @return the platforms
+     * @return the Platforms
      */
     public static Platforms valueOf(Integer value) {
         if (value == null) {
@@ -179,10 +179,10 @@ public enum Platforms implements Platform {
     }
 
     /**
-     * value of value.
+     * value of Platforms.
      *
      * @param value the value
-     * @return the platforms
+     * @return the Platforms
      */
     public static Platforms valueOf(int value) {
         for (Platforms p : Platforms.values()) {

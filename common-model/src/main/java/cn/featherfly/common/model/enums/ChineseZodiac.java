@@ -76,4 +76,32 @@ public enum ChineseZodiac implements Property<Integer> {
     public Integer value() {
         return ordinal();
     }
+
+    /**
+     * value of ChineseZodiac.
+     *
+     * @param value the value
+     * @return the ChineseZodiac
+     */
+    public static ChineseZodiac valueOf(Integer value) {
+        if (value == null) {
+            return null;
+        }
+        return valueOf(value.intValue());
+    }
+
+    /**
+     * value of ChineseZodiac.
+     *
+     * @param value the value
+     * @return the ChineseZodiac
+     */
+    public static ChineseZodiac valueOf(int value) {
+        for (ChineseZodiac p : ChineseZodiac.values()) {
+            if (p.value() == value) {
+                return p;
+            }
+        }
+        return null;
+    }
 }

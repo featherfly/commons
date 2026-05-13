@@ -49,7 +49,7 @@ public enum Gender implements Property<Integer> {
      * value of Gender.
      *
      * @param value the value
-     * @return the platforms
+     * @return the Gender
      */
     public static Gender valueOf(Integer value) {
         if (value == null) {
@@ -62,7 +62,7 @@ public enum Gender implements Property<Integer> {
      * value of Gender.
      *
      * @param value the value
-     * @return the platforms
+     * @return the Gender
      */
     public static Gender valueOf(int value) {
         for (Gender p : Gender.values()) {

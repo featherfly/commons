@@ -1,3 +1,7 @@
+# 0.4.0 2026-05-13
+1. AuditState|ChineseZodiac|State|TimeRange加入valueOf(Integer|int)方法
+2. 升级common-api到0.5.7
+
 # 0.3.0 2024-12-30
 1. Value接口继承Serializable接口
 2. AuditStatus重命名为AuditState

@@ -1,7 +1,9 @@
 
 package cn.featherfly.common.serialization;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -16,32 +18,27 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
  */
 public class JacksonXmlSerializer extends AbstractSerializer {
 
-    /** The Constant DEFAULT_MAPPER. */
-    private static XmlMapper defaultMapper;
+    private enum SingleXmlMapper {
+        INSTANCE;
 
-    // 这种写法android有问题
-    //    static {
-    //        JacksonXmlModule xmlModule = new JacksonXmlModule();
-    //        xmlModule.setDefaultUseWrapper(false);
-    //        DEFAULT_MAPPER = new XmlMapper(xmlModule);
-    //        DEFAULT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-    //        DEFAULT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    //    }
+        SingleXmlMapper() {
+            JacksonXmlModule xmlModule = new JacksonXmlModule();
+            xmlModule.setDefaultUseWrapper(false);
+            mapper = new XmlMapper(xmlModule);
+            mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_EMPTY);
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        }
 
-    private XmlMapper mapper;
+        private final XmlMapper mapper;
+    }
+
+    private final XmlMapper mapper;
 
     /**
      * Instantiates a new jackson xml serializer.
      */
     public JacksonXmlSerializer() {
-        if (defaultMapper == null) {
-            JacksonXmlModule xmlModule = new JacksonXmlModule();
-            xmlModule.setDefaultUseWrapper(false);
-            defaultMapper = new XmlMapper(xmlModule);
-            defaultMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-            defaultMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        }
-        mapper = defaultMapper;
+        this(SingleXmlMapper.INSTANCE.mapper);
     }
 
     /**
@@ -59,15 +56,13 @@ public class JacksonXmlSerializer extends AbstractSerializer {
      */
     @Override
     public <O> byte[] serialize(O obj) {
-        try {
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            OutputStreamWriter writer = new OutputStreamWriter(os, charset);
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream();
+            OutputStreamWriter writer = new OutputStreamWriter(os, charset);) {
             mapper.writerFor(obj.getClass()).writeValue(writer, obj);
             return os.toByteArray();
-            //            return mapper.writerFor(obj.getClass()).writeValueAsBytes(obj);
         } catch (Exception e) {
             throw new SerializationException(SerializationExceptionCode
-                    .createSerializeErrorCode(obj.getClass().getName(), e.getLocalizedMessage()));
+                .createSerializeErrorCode(obj.getClass().getName(), e.getLocalizedMessage()));
         }
     }
 
@@ -76,11 +71,12 @@ public class JacksonXmlSerializer extends AbstractSerializer {
      */
     @Override
     public <O> O deserialize(byte[] bytes, Class<O> type) {
-        try {
-            return mapper.readerFor(type).readValue(bytes);
+        try (ByteArrayInputStream is = new ByteArrayInputStream(bytes);
+            InputStreamReader reader = new InputStreamReader(is, charset);) {
+            return mapper.readerFor(type).readValue(reader);
         } catch (Exception e) {
             throw new SerializationException(
-                    SerializationExceptionCode.createDeserializeErrorCode(type.getName(), e.getLocalizedMessage()), e);
+                SerializationExceptionCode.createDeserializeErrorCode(type.getName(), e.getLocalizedMessage()), e);
         }
     }
 

@@ -39,9 +39,7 @@ public class SerializableStrategy {
     /**
      * Instantiates a new serializable strategy.
      *
-     * @param serializers the serializers
      * @param defaultSerializer the default serializer
-     * @param charset the charset
      */
     public SerializableStrategy(Serializer defaultSerializer) {
         this(defaultSerializer, null, StandardCharsets.UTF_8);
@@ -50,9 +48,8 @@ public class SerializableStrategy {
     /**
      * Instantiates a new serializable strategy.
      *
-     * @param serializers the serializers
      * @param defaultSerializer the default serializer
-     * @param charset the charset
+     * @param serializers the serializers
      */
     public SerializableStrategy(Serializer defaultSerializer, Map<String, Serializer> serializers) {
         this(defaultSerializer, serializers, StandardCharsets.UTF_8);
@@ -61,8 +58,8 @@ public class SerializableStrategy {
     /**
      * Instantiates a new serializable strategy.
      *
-     * @param serializers the serializers
      * @param defaultSerializer the default serializer
+     * @param serializers the serializers
      * @param charset the charset
      */
     public SerializableStrategy(Serializer defaultSerializer, Map<String, Serializer> serializers, Charset charset) {
@@ -84,6 +81,12 @@ public class SerializableStrategy {
         return serializer;
     }
 
+    /**
+     * Adds the serializer.
+     *
+     * @param mimeType the mime type
+     * @param serializer the serializer
+     */
     protected void addSerializer(String mimeType, Serializer serializer) {
         serializers.put(mimeType, serializer);
         if (serializer instanceof AbstractSerializer) {
@@ -112,7 +115,7 @@ public class SerializableStrategy {
     }
 
     /**
-     * get charset value
+     * get charset value.
      *
      * @return charset
      */
@@ -121,7 +124,7 @@ public class SerializableStrategy {
     }
 
     /**
-     * set charset value
+     * set charset value.
      *
      * @param charset charset
      */

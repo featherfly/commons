@@ -1,4 +1,11 @@
+# 0.4.1 2026-05-13
+
+1. refactor: extract manager Serializers and serialize|deserialize logic to class SerializableStrategy
+2. `JacksonSerializer`,`JacksonXmlSerializer`的默认Mapper使用基于枚举的单例实现
+3. 升级依赖 jackson 2.21.3
+
 # 0.4.0 2025-05-27
+
 1. 升级依赖
 
 # 0.3.0 2022-11-07

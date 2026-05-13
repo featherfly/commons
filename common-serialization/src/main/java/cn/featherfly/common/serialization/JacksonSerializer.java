@@ -1,7 +1,9 @@
 
 package cn.featherfly.common.serialization;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -15,22 +17,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class JacksonSerializer extends AbstractSerializer {
 
-    /** The Constant DEFAULT_MAPPER. */
-    public static final ObjectMapper DEFAULT_MAPPER;
+    private enum SingleObjectMapper {
+        INSTANCE;
 
-    static {
-        DEFAULT_MAPPER = new ObjectMapper();
-        DEFAULT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-        DEFAULT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        SingleObjectMapper() {
+            mapper = new ObjectMapper();
+            mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_EMPTY);
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        }
+
+        private final ObjectMapper mapper;
     }
 
-    private ObjectMapper mapper;
+    private final ObjectMapper mapper;
 
     /**
      * Instantiates a new jackson serializer.
      */
     public JacksonSerializer() {
-        this(DEFAULT_MAPPER);
+        this(SingleObjectMapper.INSTANCE.mapper);
     }
 
     /**
@@ -48,15 +53,13 @@ public class JacksonSerializer extends AbstractSerializer {
      */
     @Override
     public <O> byte[] serialize(O obj) {
-        try {
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            OutputStreamWriter writer = new OutputStreamWriter(os, charset);
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream();
+            OutputStreamWriter writer = new OutputStreamWriter(os, charset);) {
             mapper.writerFor(obj.getClass()).writeValue(writer, obj);
             return os.toByteArray();
-            //            return mapper.writerFor(obj.getClass()).writeValueAsBytes(obj);
         } catch (Exception e) {
             throw new SerializationException(SerializationExceptionCode
-                    .createSerializeErrorCode(obj.getClass().getName(), e.getLocalizedMessage()));
+                .createSerializeErrorCode(obj.getClass().getName(), e.getLocalizedMessage()));
         }
     }
 
@@ -65,11 +68,12 @@ public class JacksonSerializer extends AbstractSerializer {
      */
     @Override
     public <O> O deserialize(byte[] bytes, Class<O> type) {
-        try {
-            return mapper.readerFor(type).readValue(bytes);
+        try (ByteArrayInputStream is = new ByteArrayInputStream(bytes);
+            InputStreamReader reader = new InputStreamReader(is, charset);) {
+            return mapper.readerFor(type).readValue(reader);
         } catch (Exception e) {
             throw new SerializationException(
-                    SerializationExceptionCode.createDeserializeErrorCode(type.getName(), e.getLocalizedMessage()), e);
+                SerializationExceptionCode.createDeserializeErrorCode(type.getName(), e.getLocalizedMessage()), e);
         }
     }
 

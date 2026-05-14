@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cn.featherfly.common.serialization.SerializableStrategy;
 import cn.featherfly.common.serialization.Serialization;
 import io.reactivex.rxjava3.core.Observable;
 import okhttp3.MediaType;
@@ -39,7 +40,7 @@ public class HttpClientRequest implements HttpRequest {
     /**
      * Instantiates a new ok http request.
      *
-     * @param config  the config
+     * @param config the config
      * @param headers the headers
      */
     public HttpClientRequest(HttpRequestConfig config, Map<String, String> headers) {
@@ -49,59 +50,59 @@ public class HttpClientRequest implements HttpRequest {
     /**
      * Instantiates a new ok http request.
      *
-     * @param config        the config
+     * @param config the config
      * @param serialization the serialization
      */
-    public HttpClientRequest(HttpRequestConfig config, Serialization serialization) {
+    public HttpClientRequest(HttpRequestConfig config, SerializableStrategy serialization) {
         this(config, serialization, HttpUtils.JSON_MEDIA_TYPE);
     }
 
     /**
      * Instantiates a new ok http request.
      *
-     * @param config        the config
+     * @param config the config
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
-    public HttpClientRequest(HttpRequestConfig config, Serialization serialization, MediaType mediaType) {
+    public HttpClientRequest(HttpRequestConfig config, SerializableStrategy serialization, MediaType mediaType) {
         this(config, new HashMap<>(), serialization, mediaType);
     }
 
     /**
      * Instantiates a new ok http request.
      *
-     * @param config        the config
-     * @param headers       the headers
+     * @param config the config
+     * @param headers the headers
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
-    public HttpClientRequest(HttpRequestConfig config, Map<String, String> headers, Serialization serialization,
-            MediaType mediaType) {
+    public HttpClientRequest(HttpRequestConfig config, Map<String, String> headers, SerializableStrategy serialization,
+        MediaType mediaType) {
         this(new OkHttpClient.Builder().cache(new okhttp3.Cache(config.cacheDir, config.cacheMaxSize))
-                .connectTimeout(config.connectTimeout, TimeUnit.SECONDS).build(), headers, serialization, mediaType);
+            .connectTimeout(config.connectTimeout, TimeUnit.SECONDS).build(), headers, serialization, mediaType);
     }
 
     /**
      * Instantiates a new ok http request.
      *
-     * @param okHttpClient  the ok http client
+     * @param okHttpClient the ok http client
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
-    public HttpClientRequest(OkHttpClient okHttpClient, Serialization serialization, MediaType mediaType) {
+    public HttpClientRequest(OkHttpClient okHttpClient, SerializableStrategy serialization, MediaType mediaType) {
         this(okHttpClient, new HashMap<>(), serialization, mediaType);
     }
 
     /**
      * Instantiates a new ok http request.
      *
-     * @param okHttpClient  the ok http client
-     * @param headers       the headers
+     * @param okHttpClient the ok http client
+     * @param headers the headers
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
-    public HttpClientRequest(OkHttpClient okHttpClient, Map<String, String> headers, Serialization serialization,
-            MediaType mediaType) {
+    public HttpClientRequest(OkHttpClient okHttpClient, Map<String, String> headers, SerializableStrategy serialization,
+        MediaType mediaType) {
         client = new HttpSyncClientImpl(okHttpClient, headers, serialization, mediaType);
         asyncClient = new HttpAsyncClientImpl(okHttpClient, headers, serialization, mediaType);
         rxjavaClient = new HttpRxjavaClientImpl(okHttpClient, headers, serialization, mediaType);
@@ -112,7 +113,7 @@ public class HttpClientRequest implements HttpRequest {
      */
     @Override
     public <R, T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, R requestBody,
-            Map<String, String> headers, final Class<T> responseType) {
+        Map<String, String> headers, final Class<T> responseType) {
         final StringBuilder newUrl = new StringBuilder(url);
         preSend(method, newUrl, requestBody, headers, responseType);
         final String finalUrl = newUrl.toString();
@@ -124,7 +125,7 @@ public class HttpClientRequest implements HttpRequest {
      */
     @Override
     public <R, T> T send(HttpMethod method, String url, R requestBody, Map<String, String> headers,
-            Class<T> responseType, ErrorListener errorListener) {
+        Class<T> responseType, ErrorListener errorListener) {
         return send(method, url, requestBody, headers, responseType, errorListener, -1l);
     }
 
@@ -133,7 +134,7 @@ public class HttpClientRequest implements HttpRequest {
      */
     @Override
     public <R, T> T send(HttpMethod method, String url, R requestBody, Map<String, String> headers,
-            Class<T> responseType, ErrorListener errorListener, long requestTimeoutSeconds) {
+        Class<T> responseType, ErrorListener errorListener, long requestTimeoutSeconds) {
         final StringBuilder newUrl = new StringBuilder(url);
         preSend(method, newUrl, requestBody, headers, responseType);
         final String finalUrl = newUrl.toString();
@@ -150,7 +151,7 @@ public class HttpClientRequest implements HttpRequest {
      */
     @Override
     public <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, Serializable> params,
-            Map<String, String> headers, final Class<T> responseType) {
+        Map<String, String> headers, final Class<T> responseType) {
         final StringBuilder newUrl = new StringBuilder(url);
         preSend(method, newUrl, params, headers, responseType);
         final String finalUrl = newUrl.toString();
@@ -162,7 +163,7 @@ public class HttpClientRequest implements HttpRequest {
      */
     @Override
     public <T> T send(HttpMethod method, String url, Map<String, Serializable> params, Map<String, String> headers,
-            Class<T> responseType, ErrorListener errorListener) {
+        Class<T> responseType, ErrorListener errorListener) {
         final StringBuilder newUrl = new StringBuilder(url);
         preSend(method, newUrl, params, headers, responseType);
         final String finalUrl = newUrl.toString();
@@ -179,8 +180,8 @@ public class HttpClientRequest implements HttpRequest {
      */
     @Override
     public <R, T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, R requestBody,
-            Class<T> responseType) {
-        return sendCompletion(method, url, requestBody, new HashMap<String, String>(), responseType);
+        Class<T> responseType) {
+        return sendCompletion(method, url, requestBody, new HashMap<>(), responseType);
     }
 
     /**
@@ -188,8 +189,8 @@ public class HttpClientRequest implements HttpRequest {
      */
     @Override
     public <R, T> T send(HttpMethod method, String url, R requestBody, Class<T> responseType,
-            ErrorListener errorListener) {
-        return send(method, url, requestBody, new HashMap<String, String>(), responseType, errorListener);
+        ErrorListener errorListener) {
+        return send(method, url, requestBody, new HashMap<>(), responseType, errorListener);
     }
 
     /**
@@ -197,8 +198,8 @@ public class HttpClientRequest implements HttpRequest {
      */
     @Override
     public <T> HttpRequestCompletion<T> sendCompletion(HttpMethod method, String url, Map<String, Serializable> params,
-            Class<T> responseType) {
-        return sendCompletion(method, url, params, new HashMap<String, String>(), responseType);
+        Class<T> responseType) {
+        return sendCompletion(method, url, params, new HashMap<>(), responseType);
     }
 
     /**
@@ -214,7 +215,7 @@ public class HttpClientRequest implements HttpRequest {
      */
     @Override
     public <R, T> Observable<T> sendObservable(HttpMethod method, String url, R requestBody,
-            Map<String, String> headers, Class<T> responseType) {
+        Map<String, String> headers, Class<T> responseType) {
         final StringBuilder newUrl = new StringBuilder(url);
         preSend(method, newUrl, requestBody, headers, responseType);
         final String finalUrl = newUrl.toString();
@@ -226,7 +227,7 @@ public class HttpClientRequest implements HttpRequest {
      */
     @Override
     public <T> Observable<T> sendObservable(HttpMethod method, String url, Map<String, Serializable> params,
-            Map<String, String> headers, Class<T> responseType) {
+        Map<String, String> headers, Class<T> responseType) {
         final StringBuilder newUrl = new StringBuilder(url);
         preSend(method, newUrl, params, headers, responseType);
         final String finalUrl = newUrl.toString();
@@ -238,7 +239,7 @@ public class HttpClientRequest implements HttpRequest {
      */
     @Override
     public <T> Observable<T> sendObservable(HttpMethod method, String url, Map<String, Serializable> params,
-            Class<T> responseType) {
+        Class<T> responseType) {
         return sendObservable(method, url, params, new HashMap<>(), responseType);
     }
 
@@ -247,22 +248,22 @@ public class HttpClientRequest implements HttpRequest {
      */
     @Override
     public <T> T send(HttpMethod method, String url, Map<String, Serializable> params, Class<T> responseType,
-            ErrorListener errorListener) {
-        return send(method, url, params, new HashMap<String, String>(), responseType, errorListener);
+        ErrorListener errorListener) {
+        return send(method, url, params, new HashMap<>(), responseType, errorListener);
     }
 
     /**
      * Pre send.
      *
-     * @param <T>          the generic type
-     * @param method       the method
-     * @param url          the url
-     * @param params       the params
-     * @param headers      the headers
+     * @param <T> the generic type
+     * @param method the method
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @param responseType the response type
      */
     protected <T> void preSend(HttpMethod method, StringBuilder url, Object params, Map<String, String> headers,
-            Class<T> responseType) {
+        Class<T> responseType) {
     }
 
     /**

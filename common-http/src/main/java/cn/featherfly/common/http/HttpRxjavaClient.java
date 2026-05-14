@@ -21,7 +21,8 @@ import io.reactivex.rxjava3.core.Observable;
  *
  * @author zhongj
  */
-public interface HttpRxjavaClient extends HttpClient<Observable<String>>, HttpDownloadClient<Observable<Long>> {
+public interface HttpRxjavaClient
+    extends HttpClient<Observable<String>, HttpRxjavaClient>, HttpDownloadClient<Observable<Long>> {
 
     /**
      * request with params and deserialize response .

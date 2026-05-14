@@ -5,11 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * <p>
- * Application1
- * 类的说明放这里
- * </p>
- * 
+ * App Server
+ *
  * @author 钟冀
  */
 @SpringBootApplication

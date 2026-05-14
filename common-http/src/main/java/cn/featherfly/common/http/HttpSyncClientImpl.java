@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 import cn.featherfly.common.lang.Str;
-import cn.featherfly.common.serialization.Serialization;
+import cn.featherfly.common.serialization.SerializableStrategy;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -20,7 +20,7 @@ import okhttp3.Response;
  *
  * @author zhongj
  */
-public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncClient {
+public class HttpSyncClientImpl extends AbstractHttpClient<HttpSyncClientImpl> implements HttpSyncClient {
 
     /**
      * Instantiates a new http client.
@@ -37,7 +37,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public HttpSyncClientImpl(HttpRequestConfig config, Map<String, String> headers, Serialization serialization,
+    public HttpSyncClientImpl(HttpRequestConfig config, Map<String, String> headers, SerializableStrategy serialization,
         MediaType mediaType) {
         super(config, headers, serialization, mediaType);
     }
@@ -59,7 +59,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public HttpSyncClientImpl(HttpRequestConfig config, Serialization serialization, MediaType mediaType) {
+    public HttpSyncClientImpl(HttpRequestConfig config, SerializableStrategy serialization, MediaType mediaType) {
         super(config, serialization, mediaType);
     }
 
@@ -89,7 +89,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public HttpSyncClientImpl(OkHttpClient client, Map<String, String> headers, Serialization serialization,
+    public HttpSyncClientImpl(OkHttpClient client, Map<String, String> headers, SerializableStrategy serialization,
         MediaType mediaType) {
         super(client, headers, serialization, mediaType);
     }
@@ -111,7 +111,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public HttpSyncClientImpl(OkHttpClient client, Serialization serialization, MediaType mediaType) {
+    public HttpSyncClientImpl(OkHttpClient client, SerializableStrategy serialization, MediaType mediaType) {
         super(client, serialization, mediaType);
     }
 
@@ -418,5 +418,4 @@ public class HttpSyncClientImpl extends AbstractHttpClient implements HttpSyncCl
     private InputStream stream(final Request request) {
         return getSuccessResponse(request).body().byteStream();
     }
-
 }

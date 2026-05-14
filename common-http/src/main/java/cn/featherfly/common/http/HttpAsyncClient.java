@@ -20,7 +20,8 @@ import java.util.Map;
  * @author zhongj
  */
 public interface HttpAsyncClient
-    extends HttpClient<HttpRequestCompletion<String>>, HttpDownloadClient<HttpRequestCompletion<Long>> {
+    extends HttpClient<HttpRequestCompletion<String>, HttpAsyncClient>,
+    HttpDownloadClient<HttpRequestCompletion<Long>> {
 
     /**
      * request with params and deserialize response .

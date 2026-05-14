@@ -3,6 +3,7 @@ package cn.featherfly.common.http;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * HttpRequestHandlerImpl.
@@ -62,6 +63,20 @@ public class HttpRequestCompletionImpl<T> implements HttpRequestCompletion<T> {
     public HttpRequestCompletion<T> completion(Consumer<T> success, Consumer<HttpErrorResponse> error) {
         completableFuture.thenAccept(success);
         errorFuture.thenAccept(error);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public HttpRequestCompletion<T> exceptionally(Function<Throwable, ? extends T> fn) {
+        completableFuture.exceptionally(fn);
+        return this;
+    }
+
+    public HttpRequestCompletion<T> completeExceptionally(HttpException ex) {
+        completableFuture.completeExceptionally(ex);
         return this;
     }
 

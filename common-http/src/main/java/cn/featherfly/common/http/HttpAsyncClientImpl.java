@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 import cn.featherfly.common.lang.Str;
-import cn.featherfly.common.serialization.Serialization;
+import cn.featherfly.common.serialization.SerializableStrategy;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -22,7 +22,7 @@ import okhttp3.Response;
  *
  * @author zhongj
  */
-public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsyncClient {
+public class HttpAsyncClientImpl extends AbstractHttpClient<HttpAsyncClientImpl> implements HttpAsyncClient {
 
     /**
      * Instantiates a new http async client.
@@ -39,7 +39,8 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public HttpAsyncClientImpl(HttpRequestConfig config, Map<String, String> headers, Serialization serialization,
+    public HttpAsyncClientImpl(HttpRequestConfig config, Map<String, String> headers,
+        SerializableStrategy serialization,
         MediaType mediaType) {
         super(config, headers, serialization, mediaType);
     }
@@ -61,7 +62,7 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public HttpAsyncClientImpl(HttpRequestConfig config, Serialization serialization, MediaType mediaType) {
+    public HttpAsyncClientImpl(HttpRequestConfig config, SerializableStrategy serialization, MediaType mediaType) {
         super(config, serialization, mediaType);
     }
 
@@ -91,7 +92,7 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public HttpAsyncClientImpl(OkHttpClient client, Map<String, String> headers, Serialization serialization,
+    public HttpAsyncClientImpl(OkHttpClient client, Map<String, String> headers, SerializableStrategy serialization,
         MediaType mediaType) {
         super(client, headers, serialization, mediaType);
     }
@@ -113,7 +114,7 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public HttpAsyncClientImpl(OkHttpClient client, Serialization serialization, MediaType mediaType) {
+    public HttpAsyncClientImpl(OkHttpClient client, SerializableStrategy serialization, MediaType mediaType) {
         super(client, serialization, mediaType);
     }
 
@@ -385,8 +386,8 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
 
             @Override
             public void onFailure(Call call, IOException e) {
-                // TODO 需要处理
                 completion.setHttpErrorResponse(new HttpErrorResponse(e.getMessage()));
+                completion.completeExceptionally(new HttpException(e));
             }
         });
         return completion;
@@ -412,6 +413,7 @@ public class HttpAsyncClientImpl extends AbstractHttpClient implements HttpAsync
             @Override
             public void onFailure(Call call, IOException e) {
                 completion.setHttpErrorResponse(new HttpErrorResponse(e.getMessage()));
+                completion.completeExceptionally(new HttpException(e));
             }
         });
         return completion;

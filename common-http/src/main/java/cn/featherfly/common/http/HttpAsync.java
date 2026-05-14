@@ -806,6 +806,7 @@ public final class HttpAsync {
      * @param url the url
      * @param params the params
      * @param output the output
+     * @param progress the progress
      * @return the http request completion
      * @see cn.featherfly.common.http.HttpSyncClientImpl#download(java.lang.String,
      *      java.util.Map, java.io.OutputStream, BiConsumer)

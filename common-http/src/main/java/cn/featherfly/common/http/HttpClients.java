@@ -3,7 +3,6 @@
  * All rights Reserved, Designed By zhongj
  * @Title: HttpClient.java
  * @Package cn.featherfly.common.http
- * @Description: todo (用一句话描述该文件做什么)
  * @author: zhongj
  * @date: 2021-03-05 13:45:05
  * @Copyright: 2021 www.featherfly.cn Inc. All rights reserved.
@@ -17,7 +16,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-import cn.featherfly.common.serialization.Serialization;
+import cn.featherfly.common.serialization.SerializableStrategy;
 import io.reactivex.rxjava3.core.Observable;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -27,9 +26,9 @@ import okhttp3.OkHttpClient;
  *
  * @author zhongj
  */
-public class HttpClients extends AbstractHttpClient implements HttpSyncClient, HttpDownloadClient<Long> {
+public class HttpClients extends AbstractHttpClient<HttpClients> implements HttpSyncClient, HttpDownloadClient<Long> {
 
-    private HttpSyncClient client;
+    private HttpSyncClient syncClient;
 
     private HttpAsyncClient asyncClient;
 
@@ -50,7 +49,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public HttpClients(HttpRequestConfig config, Map<String, String> headers, Serialization serialization,
+    public HttpClients(HttpRequestConfig config, Map<String, String> headers, SerializableStrategy serialization,
         MediaType mediaType) {
         super(config, headers, serialization, mediaType);
     }
@@ -72,7 +71,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public HttpClients(HttpRequestConfig config, Serialization serialization, MediaType mediaType) {
+    public HttpClients(HttpRequestConfig config, SerializableStrategy serialization, MediaType mediaType) {
         super(config, serialization, mediaType);
     }
 
@@ -111,7 +110,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public HttpClients(OkHttpClient okhttpClient, Serialization serialization, MediaType mediaType) {
+    public HttpClients(OkHttpClient okhttpClient, SerializableStrategy serialization, MediaType mediaType) {
         super(okhttpClient, serialization, mediaType);
     }
 
@@ -123,7 +122,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public HttpClients(OkHttpClient okhttpClient, Map<String, String> headers, Serialization serialization,
+    public HttpClients(OkHttpClient okhttpClient, Map<String, String> headers, SerializableStrategy serialization,
         MediaType mediaType) {
         super(okhttpClient, headers, serialization, mediaType);
     }
@@ -132,10 +131,10 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      * {@inheritDoc}
      */
     @Override
-    protected void init(OkHttpClient okhttpClient, Map<String, String> headers, Serialization serialization,
+    protected void init(OkHttpClient okhttpClient, Map<String, String> headers, SerializableStrategy serialization,
         MediaType mediaType) {
         super.init(okhttpClient, headers, serialization, mediaType);
-        client = new HttpSyncClientImpl(okhttpClient, headers, serialization, mediaType);
+        syncClient = new HttpSyncClientImpl(okhttpClient, headers, serialization, mediaType);
         asyncClient = new HttpAsyncClientImpl(okhttpClient, headers, serialization, mediaType);
         rxjavaClient = new HttpRxjavaClientImpl(okhttpClient, headers, serialization, mediaType);
     }
@@ -443,7 +442,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String get(String url) {
-        return client.get(url);
+        return syncClient.get(url);
     }
 
     /**
@@ -455,7 +454,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String get(String url, Map<String, Serializable> params) {
-        return client.get(url, params);
+        return syncClient.get(url, params);
     }
 
     /**
@@ -468,7 +467,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String get(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return client.get(url, params, headers);
+        return syncClient.get(url, params, headers);
     }
 
     /**
@@ -481,7 +480,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R get(String url, Class<R> responseType) {
-        return client.get(url, responseType);
+        return syncClient.get(url, responseType);
     }
 
     /**
@@ -495,7 +494,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R get(String url, Map<String, Serializable> params, Class<R> responseType) {
-        return client.get(url, params, responseType);
+        return syncClient.get(url, params, responseType);
     }
 
     /**
@@ -510,7 +509,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R get(String url, Map<String, Serializable> params, Map<String, String> headers, Class<R> responseType) {
-        return client.get(url, params, headers, responseType);
+        return syncClient.get(url, params, headers, responseType);
     }
 
     /**
@@ -669,7 +668,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String head(String url) {
-        return client.head(url);
+        return syncClient.head(url);
     }
 
     /**
@@ -681,7 +680,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String head(String url, Map<String, Serializable> params) {
-        return client.head(url, params);
+        return syncClient.head(url, params);
     }
 
     /**
@@ -694,7 +693,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String head(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return client.head(url, params, headers);
+        return syncClient.head(url, params, headers);
     }
 
     /**
@@ -707,7 +706,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R head(String url, Class<R> responseType) {
-        return client.head(url, responseType);
+        return syncClient.head(url, responseType);
     }
 
     /**
@@ -721,7 +720,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R head(String url, Map<String, Serializable> params, Class<R> responseType) {
-        return client.head(url, params, responseType);
+        return syncClient.head(url, params, responseType);
     }
 
     /**
@@ -737,7 +736,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
     @Override
     public <R> R head(String url, Map<String, Serializable> params, Map<String, String> headers,
         Class<R> responseType) {
-        return client.head(url, params, headers, responseType);
+        return syncClient.head(url, params, headers, responseType);
     }
 
     /**
@@ -897,7 +896,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String post(String url) {
-        return client.post(url);
+        return syncClient.post(url);
     }
 
     /**
@@ -909,7 +908,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String post(String url, Map<String, Serializable> params) {
-        return client.post(url, params);
+        return syncClient.post(url, params);
     }
 
     /**
@@ -922,7 +921,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String post(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return client.post(url, params, headers);
+        return syncClient.post(url, params, headers);
     }
 
     /**
@@ -936,7 +935,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R post(String url, Map<String, Serializable> params, Class<R> responseType) {
-        return client.post(url, params, responseType);
+        return syncClient.post(url, params, responseType);
     }
 
     /**
@@ -952,7 +951,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
     @Override
     public <R> R post(String url, Map<String, Serializable> params, Map<String, String> headers,
         Class<R> responseType) {
-        return client.post(url, params, headers, responseType);
+        return syncClient.post(url, params, headers, responseType);
     }
 
     /**
@@ -964,7 +963,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String post(String url, Object requestBody) {
-        return client.post(url, requestBody);
+        return syncClient.post(url, requestBody);
     }
 
     /**
@@ -977,7 +976,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String post(String url, Object requestBody, Map<String, String> headers) {
-        return client.post(url, requestBody, headers);
+        return syncClient.post(url, requestBody, headers);
     }
 
     /**
@@ -991,7 +990,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R post(String url, Object requestBody, Class<R> responseType) {
-        return client.post(url, requestBody, responseType);
+        return syncClient.post(url, requestBody, responseType);
     }
 
     /**
@@ -1006,7 +1005,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R post(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
-        return client.post(url, requestBody, headers, responseType);
+        return syncClient.post(url, requestBody, headers, responseType);
     }
 
     /**
@@ -1244,7 +1243,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String put(String url) {
-        return client.put(url);
+        return syncClient.put(url);
     }
 
     /**
@@ -1256,7 +1255,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String put(String url, Map<String, Serializable> params) {
-        return client.put(url, params);
+        return syncClient.put(url, params);
     }
 
     /**
@@ -1269,7 +1268,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String put(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return client.put(url, params, headers);
+        return syncClient.put(url, params, headers);
     }
 
     /**
@@ -1283,7 +1282,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R put(String url, Map<String, Serializable> params, Class<R> responseType) {
-        return client.put(url, params, responseType);
+        return syncClient.put(url, params, responseType);
     }
 
     /**
@@ -1298,7 +1297,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R put(String url, Map<String, Serializable> params, Map<String, String> headers, Class<R> responseType) {
-        return client.put(url, params, headers, responseType);
+        return syncClient.put(url, params, headers, responseType);
     }
 
     /**
@@ -1310,7 +1309,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String put(String url, Object requestBody) {
-        return client.put(url, requestBody);
+        return syncClient.put(url, requestBody);
     }
 
     /**
@@ -1323,7 +1322,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String put(String url, Object requestBody, Map<String, String> headers) {
-        return client.put(url, requestBody, headers);
+        return syncClient.put(url, requestBody, headers);
     }
 
     /**
@@ -1337,7 +1336,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R put(String url, Object requestBody, Class<R> responseType) {
-        return client.put(url, requestBody, responseType);
+        return syncClient.put(url, requestBody, responseType);
     }
 
     /**
@@ -1352,7 +1351,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R put(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
-        return client.put(url, requestBody, headers, responseType);
+        return syncClient.put(url, requestBody, headers, responseType);
     }
 
     /**
@@ -1589,7 +1588,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String patch(String url) {
-        return client.patch(url);
+        return syncClient.patch(url);
     }
 
     /**
@@ -1601,7 +1600,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String patch(String url, Map<String, Serializable> params) {
-        return client.patch(url, params);
+        return syncClient.patch(url, params);
     }
 
     /**
@@ -1614,7 +1613,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String patch(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return client.patch(url, params, headers);
+        return syncClient.patch(url, params, headers);
     }
 
     /**
@@ -1628,7 +1627,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R patch(String url, Map<String, Serializable> params, Class<R> responseType) {
-        return client.patch(url, params, responseType);
+        return syncClient.patch(url, params, responseType);
     }
 
     /**
@@ -1644,7 +1643,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
     @Override
     public <R> R patch(String url, Map<String, Serializable> params, Map<String, String> headers,
         Class<R> responseType) {
-        return client.patch(url, params, headers, responseType);
+        return syncClient.patch(url, params, headers, responseType);
     }
 
     /**
@@ -1656,7 +1655,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String patch(String url, Object requestBody) {
-        return client.patch(url, requestBody);
+        return syncClient.patch(url, requestBody);
     }
 
     /**
@@ -1669,7 +1668,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String patch(String url, Object requestBody, Map<String, String> headers) {
-        return client.patch(url, requestBody, headers);
+        return syncClient.patch(url, requestBody, headers);
     }
 
     /**
@@ -1683,7 +1682,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R patch(String url, Object requestBody, Class<R> responseType) {
-        return client.patch(url, requestBody, responseType);
+        return syncClient.patch(url, requestBody, responseType);
     }
 
     /**
@@ -1698,7 +1697,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R patch(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
-        return client.patch(url, requestBody, headers, responseType);
+        return syncClient.patch(url, requestBody, headers, responseType);
     }
 
     /**
@@ -1936,7 +1935,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String delete(String url) {
-        return client.delete(url);
+        return syncClient.delete(url);
     }
 
     /**
@@ -1948,7 +1947,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String delete(String url, Map<String, String> headers) {
-        return client.delete(url, headers);
+        return syncClient.delete(url, headers);
     }
 
     /**
@@ -1961,7 +1960,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R delete(String url, Class<R> responseType) {
-        return client.delete(url, responseType);
+        return syncClient.delete(url, responseType);
     }
 
     /**
@@ -1975,7 +1974,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R delete(String url, Map<String, String> headers, Class<R> responseType) {
-        return client.delete(url, headers, responseType);
+        return syncClient.delete(url, headers, responseType);
     }
 
     /**
@@ -1987,7 +1986,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String delete(String url, Object requestBody) {
-        return client.delete(url, requestBody);
+        return syncClient.delete(url, requestBody);
     }
 
     /**
@@ -2000,7 +1999,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public String delete(String url, Object requestBody, Map<String, String> headers) {
-        return client.delete(url, requestBody, headers);
+        return syncClient.delete(url, requestBody, headers);
     }
 
     /**
@@ -2014,7 +2013,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R delete(String url, Object requestBody, Class<R> responseType) {
-        return client.delete(url, requestBody, responseType);
+        return syncClient.delete(url, requestBody, responseType);
     }
 
     /**
@@ -2029,7 +2028,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public <R> R delete(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
-        return client.delete(url, requestBody, headers, responseType);
+        return syncClient.delete(url, requestBody, headers, responseType);
     }
 
     /**
@@ -2233,7 +2232,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
     @Override
     public Long download(String url, Map<String, Serializable> params, Map<String, String> headers,
         OutputStream output, BiConsumer<Long, Long> progress) {
-        return client.download(url, params, headers, output, progress);
+        return syncClient.download(url, params, headers, output, progress);
     }
 
     /**
@@ -2242,7 +2241,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
     @Override
     public InputStream stream(HttpMethod httpMethod, String url, Map<String, Serializable> params,
         Map<String, String> headers) {
-        return client.stream(httpMethod, url, params, headers);
+        return syncClient.stream(httpMethod, url, params, headers);
     }
 
     /**
@@ -2250,7 +2249,7 @@ public class HttpClients extends AbstractHttpClient implements HttpSyncClient, H
      */
     @Override
     public InputStream stream(HttpMethod httpMethod, String url, Object requestBody, Map<String, String> headers) {
-        return client.stream(httpMethod, url, requestBody, headers);
+        return syncClient.stream(httpMethod, url, requestBody, headers);
     }
 
     /**

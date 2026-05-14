@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 import cn.featherfly.common.lang.Str;
-import cn.featherfly.common.serialization.Serialization;
+import cn.featherfly.common.serialization.SerializableStrategy;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.Call;
@@ -24,7 +24,7 @@ import okhttp3.Response;
  *
  * @author zhongj
  */
-public class HttpRxjavaClientImpl extends AbstractHttpClient implements HttpRxjavaClient {
+public class HttpRxjavaClientImpl extends AbstractHttpClient<HttpRxjavaClientImpl> implements HttpRxjavaClient {
 
     private boolean autoSubscribeOnIo = true;
 
@@ -43,7 +43,8 @@ public class HttpRxjavaClientImpl extends AbstractHttpClient implements HttpRxja
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public HttpRxjavaClientImpl(HttpRequestConfig config, Map<String, String> headers, Serialization serialization,
+    public HttpRxjavaClientImpl(HttpRequestConfig config, Map<String, String> headers,
+        SerializableStrategy serialization,
         MediaType mediaType) {
         super(config, headers, serialization, mediaType);
     }
@@ -65,7 +66,7 @@ public class HttpRxjavaClientImpl extends AbstractHttpClient implements HttpRxja
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public HttpRxjavaClientImpl(HttpRequestConfig config, Serialization serialization, MediaType mediaType) {
+    public HttpRxjavaClientImpl(HttpRequestConfig config, SerializableStrategy serialization, MediaType mediaType) {
         super(config, serialization, mediaType);
     }
 
@@ -95,7 +96,7 @@ public class HttpRxjavaClientImpl extends AbstractHttpClient implements HttpRxja
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public HttpRxjavaClientImpl(OkHttpClient client, Map<String, String> headers, Serialization serialization,
+    public HttpRxjavaClientImpl(OkHttpClient client, Map<String, String> headers, SerializableStrategy serialization,
         MediaType mediaType) {
         super(client, headers, serialization, mediaType);
     }
@@ -117,7 +118,7 @@ public class HttpRxjavaClientImpl extends AbstractHttpClient implements HttpRxja
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    public HttpRxjavaClientImpl(OkHttpClient client, Serialization serialization, MediaType mediaType) {
+    public HttpRxjavaClientImpl(OkHttpClient client, SerializableStrategy serialization, MediaType mediaType) {
         super(client, serialization, mediaType);
     }
 

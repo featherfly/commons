@@ -9,17 +9,17 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.concurrent.atomic.AtomicLong;
 
-import javax.activation.MimeTypeParseException;
-
 import org.testng.annotations.Test;
 
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Console;
+import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.lang.SystemPropertyUtils;
 import cn.featherfly.common.lang.WordUtils;
 import cn.featherfly.common.serialization.Serialization;
+import cn.featherfly.common.server.Result;
 import cn.featherfly.common.server.User;
 import cn.featherfly.common.structure.ChainMapImpl;
-import cn.featherfly.common.structure.HashChainMap;
+import okhttp3.MediaType;
 
 /**
  * Test.
@@ -44,27 +44,91 @@ public class HttpTest {
     }
 
     @Test
-    public void get() throws MimeTypeParseException {
+    public void listener() {
+        String url = Str.format(host, "user2");
+        Result result = null;
+        HttpSyncClientImpl http = new HttpSyncClientImpl();
+        http.setDeserializeWithContentType(true);
+        HttpListener listener = new HttpListener() {
+            @Override
+            public void onDeserialize(byte[] responseBody, Object deserializeBody, MediaType mediaType) {
+                Console.log("onDeserialize: mediaType = {}", mediaType.toString());
+                System.out.println(new String(responseBody, mediaType.charset()));
+            }
+
+            @Override
+            public void onSerialize(Object requestBody, byte[] serializeBody, MediaType mediaType) {
+                Console.log("onSerialize: mediaType = {}", mediaType.toString());
+                System.out.println(new String(serializeBody, mediaType.charset()));
+            }
+        };
+        HttpListener listener2 = new HttpListener() {
+            @Override
+            public void onDeserialize(byte[] responseBody, Object deserializeBody, MediaType mediaType) {
+                System.out.println("onDeserialize2");
+            }
+
+            @Override
+            public void onSerialize(Object requestBody, byte[] serializeBody, MediaType mediaType) {
+                System.out.println("onSerialize2");
+            }
+        };
+        HttpListener listener3 = new HttpListener() {
+            @Override
+            public void onDeserialize(byte[] responseBody, Object deserializeBody, MediaType mediaType) {
+                System.out.println("onDeserialize3");
+            }
+
+            @Override
+            public void onSerialize(Object requestBody, byte[] serializeBody, MediaType mediaType) {
+                System.out.println("onSerialize3");
+            }
+        };
+        http.on(listener);
+        http.on(listener3);
+        http.on(listener2);
+
+        result = http.post(url, user, Result.class);
+        System.out.println(result);
+        assertEquals(result.getCode(), OK);
+
+        http.remove(listener);
+        http.remove(listener2);
+        http.remove(listener3);
+        result = http.post(url, user, Result.class);
+        System.out.println(result);
+        assertEquals(result.getCode(), OK);
+
+        //        HttpSyncClientImpl xmlClient = new HttpSyncClientImpl(new HttpRequestConfig(), Serialization.getDefault(),
+        //            HttpUtils.XML_MEDIA_TYPE);
+        //
+        //        result = xmlClient.post(url, user, Result.class);
+        //        System.out.println(result);
+        //        assertEquals(result.getCode(), OK);
+    }
+
+    @Test
+    public void get() {
         String json = "{\"name\":\"yufei羽飞\",\"age\":18}";
         String xml = "<User><name>yufei羽飞</name><age>18</age></User>";
-        String url = Strings.format(host, "user");
+        String url = Str.format(host, "user");
         String result = Http.get(url);
         System.out.println(result);
         assertEquals(result, json);
 
-        result = Http.get(url, null, new HashChainMap<String, String>().putChain("Accept", "application/json"));
+        result = Http.get(url, null, new ChainMapImpl<String, String>().putChain("Accept", "application/json"));
         System.out.println(result);
         assertEquals(result, json);
 
-        result = Http.get(url, null, new HashChainMap<String, String>().putChain("Accept", "application/xml"));
+        result = Http.get(url, null, new ChainMapImpl<String, String>().putChain("Accept", "application/xml"));
         System.out.println(result);
         assertEquals(result, xml);
     }
 
     @Test
-    public void postBody() throws MimeTypeParseException {
+    public void postBody() {
         String json = "{\"name\":\"yufei羽飞\",\"age\":18}";
-        String url = Strings.format(host, "user");
+        String url = Str.format(host, "user");
         String result = null;
         result = Http.post(url, json,
             new ChainMapImpl<String, String>().putChain("content-type", "application/json; charset=utf-8"));
@@ -84,20 +148,20 @@ public class HttpTest {
     }
 
     @Test(expectedExceptions = HttpException.class)
-    public void postBodyContentTypeError() throws MimeTypeParseException {
+    public void postBodyContentTypeError() {
         String json = "{\"name\":\"yufei羽飞\",\"age\":18}";
-        String url = Strings.format(host, "user");
+        String url = Str.format(host, "user");
         String result = Http.post(url, json);
         System.out.println(result);
         assertEquals(result, OK);
     }
 
     @Test
-    public void upload() throws MimeTypeParseException {
-        String url = Strings.format(host, "upload");
+    public void upload() {
+        String url = Str.format(host, "upload");
 
         String result = Http.post(url,
-            new HashChainMap<String, Serializable>().putChain("key", "key2")
+            new ChainMapImpl<String, Serializable>().putChain("key", "key2")
                 .putChain("file1", new UploadFile("filename1.txt", "text/plain", "abcde".getBytes()))
                 .putChain("file2", new UploadFile("测试中文名.txt", "text/plain", "12345".getBytes())));
 
@@ -105,10 +169,10 @@ public class HttpTest {
     }
 
     @Test
-    public void download() throws MimeTypeParseException {
+    public void download() {
         AtomicLong count = new AtomicLong(0);
         //        String url = "https://mirrors.openanolis.cn/anolis/23.2/isos/GA/x86_64/AnolisOS-23.2-x86_64-boot.iso";
-        String url = "https://mirrors.cloud.tencent.com/debian/dists/Debian12.11/main/binary-amd64/Packages.xz";
+        String url = "https://mirrors.cloud.tencent.com/debian/dists/stable/main/binary-amd64/Packages.xz";
         File file = new File(SystemPropertyUtils.getJavaIoTmpdir() + "/download/" + System.currentTimeMillis());
 
         long size =
@@ -116,7 +180,7 @@ public class HttpTest {
                 (r, t) -> {
                     count.set(r);
                     System.out.print(
-                        Strings.format("\r文件大小：{0}, 下载：{1}， 进度：{2}%", WordUtils.parseUnit(t), WordUtils.parseUnit(r),
+                        Str.format("\r文件大小：{0}, 下载：{1}， 进度：{2}%", WordUtils.parseUnit(t), WordUtils.parseUnit(r),
                             BigDecimal.valueOf(r).divide(BigDecimal.valueOf(t), 4, RoundingMode.DOWN)
                                 .multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.DOWN).toString()));
                 });

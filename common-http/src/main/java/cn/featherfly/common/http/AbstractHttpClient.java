@@ -3,6 +3,7 @@ package cn.featherfly.common.http;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.Str;
+import cn.featherfly.common.serialization.SerializableStrategy;
 import cn.featherfly.common.serialization.Serialization;
 import cn.featherfly.common.serialization.SerializationException;
 import cn.featherfly.common.serialization.SerializationExceptionCode;
@@ -31,7 +33,7 @@ import okhttp3.Response;
  *
  * @author zhongj
  */
-public abstract class AbstractHttpClient {
+public abstract class AbstractHttpClient<C extends AbstractHttpClient<C>> {
 
     /** The logger. */
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -43,7 +45,7 @@ public abstract class AbstractHttpClient {
     protected boolean deserializeWithContentType;
 
     /** The serialization. */
-    protected Serialization serialization;
+    protected SerializableStrategy serialization;
 
     private Serializer serializer;
 
@@ -61,6 +63,8 @@ public abstract class AbstractHttpClient {
     private Set<Integer> codeSameAsSuccess = new HashSet<>();
 
     protected int downloadProgressPerSize = 1024 * 256;
+
+    protected final Set<HttpListener> listeners = new LinkedHashSet<>(0);
 
     /**
      * Instantiates a new http client.
@@ -104,7 +108,7 @@ public abstract class AbstractHttpClient {
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    protected AbstractHttpClient(HttpRequestConfig config, Serialization serialization, MediaType mediaType) {
+    protected AbstractHttpClient(HttpRequestConfig config, SerializableStrategy serialization, MediaType mediaType) {
         this(config, null, serialization, mediaType);
     }
 
@@ -116,7 +120,8 @@ public abstract class AbstractHttpClient {
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    protected AbstractHttpClient(HttpRequestConfig config, Map<String, String> headers, Serialization serialization,
+    protected AbstractHttpClient(HttpRequestConfig config, Map<String, String> headers,
+        SerializableStrategy serialization,
         MediaType mediaType) {
         init(config, headers, serialization, mediaType);
     }
@@ -138,7 +143,7 @@ public abstract class AbstractHttpClient {
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    protected AbstractHttpClient(OkHttpClient client, Serialization serialization, MediaType mediaType) {
+    protected AbstractHttpClient(OkHttpClient client, SerializableStrategy serialization, MediaType mediaType) {
         this(client, null, serialization, mediaType);
     }
 
@@ -150,7 +155,7 @@ public abstract class AbstractHttpClient {
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    protected AbstractHttpClient(OkHttpClient client, Map<String, String> headers, Serialization serialization,
+    protected AbstractHttpClient(OkHttpClient client, Map<String, String> headers, SerializableStrategy serialization,
         MediaType mediaType) {
         init(client, headers, serialization, mediaType);
     }
@@ -163,7 +168,7 @@ public abstract class AbstractHttpClient {
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    protected void init(HttpRequestConfig config, Map<String, String> headers, Serialization serialization,
+    protected void init(HttpRequestConfig config, Map<String, String> headers, SerializableStrategy serialization,
         MediaType mediaType) {
         init(okHttpClient(config), headers, serialization, mediaType);
     }
@@ -187,7 +192,7 @@ public abstract class AbstractHttpClient {
      * @param serialization the serialization
      * @param mediaType the media type
      */
-    protected void init(OkHttpClient client, Map<String, String> headers, Serialization serialization,
+    protected void init(OkHttpClient client, Map<String, String> headers, SerializableStrategy serialization,
         MediaType mediaType) {
         if (client == null) {
             this.client = okHttpClient(null);
@@ -274,9 +279,15 @@ public abstract class AbstractHttpClient {
             return ((String) requestBody).getBytes(mediaType.charset());
         } else if (requestBody instanceof byte[]) {
             return (byte[]) requestBody;
-        } else {
+        }
+        if (listeners.isEmpty()) {
             return serializer.serialize(requestBody);
         }
+        byte[] serializeBody = serializer.serialize(requestBody);
+        for (HttpListener listener : listeners) {
+            listener.onSerialize(requestBody, serializeBody, mediaType);
+        }
+        return serializeBody;
     }
 
     /**
@@ -289,18 +300,28 @@ public abstract class AbstractHttpClient {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     protected <T> T deserialize(Response response, final Class<T> responseType) throws IOException {
-        Serializer serializer = null;
+        Serializer resSerializer = null;
+        MediaType resMediaType;
         if (deserializeWithContentType) {
-            MediaType mediaType = response.body().contentType();
-            if (mediaType == null) {
-                mediaType = HttpUtils.JSON_MEDIA_TYPE;
+            resMediaType = response.body().contentType();
+            if (resMediaType == null) {
+                resMediaType = HttpUtils.JSON_MEDIA_TYPE;
             }
-            serializer = getSerializer(mediaType, false);
+            resSerializer = getSerializer(resMediaType, false);
         }
-        if (serializer == null) {
-            serializer = this.serializer;
+        if (resSerializer == null) {
+            resSerializer = serializer;
+            resMediaType = mediaType;
         }
-        return serializer.deserialize(response.body().bytes(), responseType);
+        if (listeners.isEmpty()) {
+            return resSerializer.deserialize(response.body().bytes(), responseType);
+        }
+        byte[] responseBody = response.body().bytes();
+        T deserializeBody = resSerializer.deserialize(responseBody, responseType);
+        for (HttpListener listener : listeners) {
+            listener.onDeserialize(responseBody, deserializeBody, mediaType);
+        }
+        return deserializeBody;
     }
 
     /**
@@ -311,21 +332,21 @@ public abstract class AbstractHttpClient {
      * @return the serializer
      */
     protected Serializer getSerializer(MediaType mediaType, boolean throwExceptionNoSerializer) {
-        Serializer serializer = null;
         try {
             MimeType mimeType = new MimeType(mediaType.type(), mediaType.subtype());
-            serializer = serialization.getSerializer(mimeType);
-            if (serializer == null) {
-                if (throwExceptionNoSerializer) {
-                    throw new SerializationException(
-                        SerializationExceptionCode.createNoSerializerForMimeTypeCode(mimeType.getBaseType()));
-                }
-                logger.warn("no serializer found for content-type {}", mimeType.getBaseType());
+            Serializer mimeTypeSerializer = serialization.getSerializer(mimeType);
+            if (mimeTypeSerializer != null) {
+                return mimeTypeSerializer;
             }
+            if (throwExceptionNoSerializer) {
+                throw new SerializationException(
+                    SerializationExceptionCode.createNoSerializerForMimeTypeCode(mimeType.getBaseType()));
+            }
+            logger.warn("no serializer found for content-type {}", mimeType.getBaseType());
         } catch (MimeTypeParseException e) {
             logger.error(e.getMessage(), e);
         }
-        return serializer;
+        return null;
     }
 
     /**
@@ -436,5 +457,17 @@ public abstract class AbstractHttpClient {
         } catch (IOException e) {
             throw new HttpException(e);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public C on(HttpListener listener) {
+        listeners.add(listener);
+        return (C) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public C remove(HttpListener listener) {
+        listeners.remove(listener);
+        return (C) this;
     }
 }

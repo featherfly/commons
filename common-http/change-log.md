@@ -1,6 +1,7 @@
-# 0.8.1
+# 0.9.0 2026-05-14
 
 1. HttpUtils appenParam|toParamString支持同名多参数(name=yufei&name=yi)
+2. Http[Sync|Async|Rx]Client加入HttpListener支持
 
 # 0.8.0 2025-05-27
 

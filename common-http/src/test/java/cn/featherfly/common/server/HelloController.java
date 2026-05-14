@@ -35,7 +35,7 @@ public class HelloController {
 
     @RequestMapping(path = "/upload", method = { RequestMethod.POST })
     public String upload(@RequestParam(name = "key") String key, MultipartRequest multipartRequest,
-            HttpServletRequest request) {
+        HttpServletRequest request) {
         showRequest(request);
         Iterator<String> it = multipartRequest.getFileNames();
         System.out.println("key = " + key);
@@ -47,14 +47,14 @@ public class HelloController {
             System.out.println("  filename = " + multipartRequest.getFile(na).getOriginalFilename());
             try {
                 System.out.println("  decode(filename) = "
-                        + URLDecoder.decode(multipartRequest.getFile(na).getOriginalFilename(), "UTF-8"));
+                    + URLDecoder.decode(multipartRequest.getFile(na).getOriginalFilename(), "UTF-8"));
             } catch (UnsupportedEncodingException e1) {
                 e1.printStackTrace();
             }
             System.out.println("  contenttype = " + multipartRequest.getFile(na).getContentType());
             try {
                 System.out.println("  file value = "
-                        + new String(multipartRequest.getFile(na).getBytes(), StandardCharsets.UTF_8));
+                    + new String(multipartRequest.getFile(na).getBytes(), StandardCharsets.UTF_8));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -75,5 +75,12 @@ public class HelloController {
         showRequest(request);
         System.out.println(user);
         return "OK";
+    }
+
+    @RequestMapping(path = "/user2", method = { RequestMethod.POST })
+    public String adduser2(@RequestBody User user, HttpServletRequest request) {
+        showRequest(request);
+        System.out.println(user);
+        return "{\"code\":\"OK\"}";
     }
 }

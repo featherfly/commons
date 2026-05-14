@@ -19,8 +19,25 @@ import java.util.Map;
  *
  * @author zhongj
  * @param <RS> the generic request response type
+ * @param <C> the generic type
  */
-public interface HttpClient<RS> {
+public interface HttpClient<RS, C> {
+
+    /**
+     * add HttpListener listener.
+     *
+     * @param listener the listener
+     * @return the c
+     */
+    C on(HttpListener listener);
+
+    /**
+     * remove HttpListener listener.
+     *
+     * @param listener the listener
+     * @return the c
+     */
+    C remove(HttpListener listener);
 
     /**
      * get request.
@@ -35,7 +52,7 @@ public interface HttpClient<RS> {
     /**
      * get request with params.
      *
-     * @param url    the url
+     * @param url the url
      * @param params the params
      * @return response content
      */
@@ -46,8 +63,8 @@ public interface HttpClient<RS> {
     /**
      * get request with params.
      *
-     * @param url     the url
-     * @param params  the params
+     * @param url the url
+     * @param params the params
      * @param headers the headers
      * @return response content
      */
@@ -66,7 +83,7 @@ public interface HttpClient<RS> {
     /**
      * Post params with FormBody.
      *
-     * @param url    the url
+     * @param url the url
      * @param params the params
      * @return response content
      */
@@ -77,8 +94,8 @@ public interface HttpClient<RS> {
     /**
      * Post params with FormBody.
      *
-     * @param url     the url
-     * @param params  the params
+     * @param url the url
+     * @param params the params
      * @param headers the headers
      * @return response content
      */
@@ -87,7 +104,7 @@ public interface HttpClient<RS> {
     /**
      * Post requestBody with medieType format.
      *
-     * @param url         the url
+     * @param url the url
      * @param requestBody the request body
      * @return response content
      */
@@ -98,9 +115,9 @@ public interface HttpClient<RS> {
     /**
      * Post requestBody with medieType format.
      *
-     * @param url         the url
+     * @param url the url
      * @param requestBody the request body
-     * @param headers     the headers
+     * @param headers the headers
      * @return response content
      */
     RS post(String url, Object requestBody, Map<String, String> headers);
@@ -118,7 +135,7 @@ public interface HttpClient<RS> {
     /**
      * Put params with FormBody.
      *
-     * @param url    the url
+     * @param url the url
      * @param params the params
      * @return response content
      */
@@ -129,8 +146,8 @@ public interface HttpClient<RS> {
     /**
      * Put params with FormBody.
      *
-     * @param url     the url
-     * @param params  the params
+     * @param url the url
+     * @param params the params
      * @param headers the headers
      * @return response content
      */
@@ -139,7 +156,7 @@ public interface HttpClient<RS> {
     /**
      * Put requestBody with medieType format.
      *
-     * @param url         the url
+     * @param url the url
      * @param requestBody the request body
      * @return response content
      */
@@ -150,9 +167,9 @@ public interface HttpClient<RS> {
     /**
      * Put requestBody with medieType format.
      *
-     * @param url         the url
+     * @param url the url
      * @param requestBody the request body
-     * @param headers     the headers
+     * @param headers the headers
      * @return response content
      */
     RS put(String url, Object requestBody, Map<String, String> headers);
@@ -170,7 +187,7 @@ public interface HttpClient<RS> {
     /**
      * Delete.
      *
-     * @param url     the url
+     * @param url the url
      * @param headers the headers
      * @return response content
      */
@@ -179,7 +196,7 @@ public interface HttpClient<RS> {
     /**
      * Delete requestBody with medieType format.
      *
-     * @param url         the url
+     * @param url the url
      * @param requestBody the request body
      * @return response content
      */
@@ -190,9 +207,9 @@ public interface HttpClient<RS> {
     /**
      * Delete requestBody with medieType format.
      *
-     * @param url         the url
+     * @param url the url
      * @param requestBody the request body
-     * @param headers     the headers
+     * @param headers the headers
      * @return response content
      */
     RS delete(String url, Object requestBody, Map<String, String> headers);
@@ -210,7 +227,7 @@ public interface HttpClient<RS> {
     /**
      * patch request params with FormBody.
      *
-     * @param url    the url
+     * @param url the url
      * @param params the params
      * @return response content
      */
@@ -221,8 +238,8 @@ public interface HttpClient<RS> {
     /**
      * patch request params with FormBody.
      *
-     * @param url     the url
-     * @param params  the params
+     * @param url the url
+     * @param params the params
      * @param headers the headers
      * @return response content
      */
@@ -231,7 +248,7 @@ public interface HttpClient<RS> {
     /**
      * patch request requestBody with medieType format.
      *
-     * @param url         the url
+     * @param url the url
      * @param requestBody the request body
      * @return response content
      */
@@ -242,9 +259,9 @@ public interface HttpClient<RS> {
     /**
      * patch request requestBody with medieType format.
      *
-     * @param url         the url
+     * @param url the url
      * @param requestBody the request body
-     * @param headers     the headers
+     * @param headers the headers
      * @return response content
      */
     RS patch(String url, Object requestBody, Map<String, String> headers);
@@ -262,7 +279,7 @@ public interface HttpClient<RS> {
     /**
      * head request with params.
      *
-     * @param url    the url
+     * @param url the url
      * @param params the params
      * @return response content
      */
@@ -273,8 +290,8 @@ public interface HttpClient<RS> {
     /**
      * head request with params.
      *
-     * @param url     the url
-     * @param params  the params
+     * @param url the url
+     * @param params the params
      * @param headers the headers
      * @return response content
      */
@@ -284,7 +301,7 @@ public interface HttpClient<RS> {
      * Request.
      *
      * @param httpMethod the http method
-     * @param url        the url
+     * @param url the url
      * @return response content
      */
     default RS request(HttpMethod httpMethod, String url) {
@@ -295,8 +312,8 @@ public interface HttpClient<RS> {
      * Request.
      *
      * @param httpMethod the http method
-     * @param url        the url
-     * @param params     the params
+     * @param url the url
+     * @param params the params
      * @return response content
      */
     default RS request(HttpMethod httpMethod, String url, Map<String, Serializable> params) {
@@ -307,13 +324,13 @@ public interface HttpClient<RS> {
      * Request.
      *
      * @param httpMethod the http method
-     * @param url        the url
-     * @param params     the params
-     * @param headers    the headers
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
      * @return response content
      */
     default RS request(HttpMethod httpMethod, String url, Map<String, Serializable> params,
-            Map<String, String> headers) {
+        Map<String, String> headers) {
         switch (httpMethod) {
             case GET:
                 return get(url, params, headers);
@@ -335,8 +352,8 @@ public interface HttpClient<RS> {
     /**
      * request body with medieType format.
      *
-     * @param httpMethod  the http method
-     * @param url         the url
+     * @param httpMethod the http method
+     * @param url the url
      * @param requestBody the request body
      * @return response content
      */
@@ -347,10 +364,10 @@ public interface HttpClient<RS> {
     /**
      * Post requestBody with medieType format.
      *
-     * @param httpMethod  the http method
-     * @param url         the url
+     * @param httpMethod the http method
+     * @param url the url
      * @param requestBody the request body
-     * @param headers     the headers
+     * @param headers the headers
      * @return response content
      */
     default RS request(HttpMethod httpMethod, String url, Object requestBody, Map<String, String> headers) {

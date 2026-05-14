@@ -20,7 +20,8 @@ import java.util.Map;
  *
  * @author zhongj
  */
-public interface HttpSyncClient extends HttpClient<String>, HttpDownloadClient<Long>, HttpStreamClient<InputStream> {
+public interface HttpSyncClient
+    extends HttpClient<String, HttpSyncClient>, HttpDownloadClient<Long>, HttpStreamClient<InputStream> {
 
     /**
      * request with params and deserialize response .

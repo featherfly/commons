@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.serialization.Serialization;
+import cn.featherfly.common.serialization.SerializableStrategy;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 
@@ -30,7 +30,7 @@ public class BrowerHttpClient extends HttpSyncClientImpl {
     }
 
     /**
-     * @param client  the client
+     * @param client the client
      * @param headers the headers
      */
     public BrowerHttpClient(OkHttpClient client, Map<String, String> headers) {
@@ -38,27 +38,27 @@ public class BrowerHttpClient extends HttpSyncClientImpl {
     }
 
     /**
-     * @param client        the client
+     * @param client the client
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
-    public BrowerHttpClient(OkHttpClient client, Serialization serialization, MediaType mediaType) {
+    public BrowerHttpClient(OkHttpClient client, SerializableStrategy serialization, MediaType mediaType) {
         this(client, null, serialization, mediaType);
     }
 
     /**
-     * @param client        the client
-     * @param headers       the headers
+     * @param client the client
+     * @param headers the headers
      * @param serialization the serialization
-     * @param mediaType     the media type
+     * @param mediaType the media type
      */
-    public BrowerHttpClient(OkHttpClient client, Map<String, String> headers, Serialization serialization,
-            MediaType mediaType) {
+    public BrowerHttpClient(OkHttpClient client, Map<String, String> headers, SerializableStrategy serialization,
+        MediaType mediaType) {
         super(client, headers, serialization, mediaType);
 
         Map<String, String> browersHeaders = new HashMap<>();
         browersHeaders.put("Accept",
-                "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
         //browersHeaders.put("Accept-Encoding", "gzip, deflate");
         // 不加入Accept-Encoding，okhttp默认会支持gzip
         browersHeaders.put("Accept-Language", "zh-CN,zh;q=0.9");
@@ -67,7 +67,7 @@ public class BrowerHttpClient extends HttpSyncClientImpl {
         browersHeaders.put("Upgrade-Insecure-Requests", "1");
         // TODO 后续加入操作系统参数
         browersHeaders.put("User-Agent",
-                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.81 Safari/537.36 SE 2.X MetaSr 1.0");
+            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.81 Safari/537.36 SE 2.X MetaSr 1.0");
 
         if (Lang.isNotEmpty(headers)) {
             browersHeaders.putAll(headers);

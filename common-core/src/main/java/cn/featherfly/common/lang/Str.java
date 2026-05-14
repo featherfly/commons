@@ -1548,31 +1548,35 @@ public final class Str {
     }
 
     /**
-     * 判断字符串是否以指定字符串开始,如果需要判断的源文本为null,返回false.
+     * Check if the string starts with the specified string. If the source string or prefix to be
+     * checked is null, return false.
+     * 判断字符串是否以指定字符串开始,如果源字符串或者前缀为null,返回false.
      *
-     * @param sourceString 源文本
-     * @param keyString 判断是否是起始的串
+     * @param sourceString 源字符串
+     * @param prefix 判断是否是起始的串
      * @return 字符串是否以指定字符串开始
      */
-    public static boolean startsWith(String sourceString, String keyString) {
-        if (sourceString == null) {
+    public static boolean startsWith(String sourceString, String prefix) {
+        if (sourceString == null || isEmpty(prefix)) {
             return false;
         }
-        return sourceString.startsWith(keyString);
+        return sourceString.startsWith(prefix);
     }
 
     /**
-     * 判断字符串是否以指定字符串结束,如果需要判断的源文本为null,返回false.
+     * Check if the string ends with the specified string. If the source string or suffix to be
+     * checked is null, return false.
+     * 判断字符串是否以指定字符串结束,如果源字符串或者后缀为null,返回false.
      *
-     * @param sourceString 源文本
-     * @param keyString 判断是否是起始的串
+     * @param sourceString 源字符串
+     * @param suffix 判断是否是结束的字符串
      * @return 字符串是否以指定字符串结束
      */
-    public static boolean endWith(String sourceString, String keyString) {
-        if (sourceString == null) {
+    public static boolean endsWith(String sourceString, String suffix) {
+        if (sourceString == null || isEmpty(suffix)) {
             return false;
         }
-        return sourceString.endsWith(keyString);
+        return sourceString.endsWith(suffix);
     }
 
     /**

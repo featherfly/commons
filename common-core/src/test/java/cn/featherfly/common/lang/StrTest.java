@@ -19,6 +19,40 @@ import cn.featherfly.common.structure.ChainMapImpl;
 public class StrTest {
 
     @Test
+    public void startWith() {
+        final String str = "hello world";
+        final String prefix = "hello";
+
+        assertTrue(Str.startsWith(str, prefix));
+
+        assertFalse(Str.startsWith(null, prefix));
+        assertFalse(Str.startsWith("", prefix));
+
+        assertFalse(Str.startsWith(str, null));
+        assertFalse(Str.startsWith(str, ""));
+
+        assertFalse(Str.startsWith(null, null));
+        assertFalse(Str.startsWith("", ""));
+    }
+
+    @Test
+    public void endsWith() {
+        final String str = "hello world";
+        final String suffix = "world";
+
+        assertTrue(Str.endsWith(str, suffix));
+
+        assertFalse(Str.endsWith(null, suffix));
+        assertFalse(Str.endsWith("", suffix));
+
+        assertFalse(Str.endsWith(str, null));
+        assertFalse(Str.endsWith(str, ""));
+
+        assertFalse(Str.endsWith(null, null));
+        assertFalse(Str.endsWith("", ""));
+    }
+
+    @Test
     public void trimFullWidthSpace() {
         String expected = "hello";
 

@@ -7,6 +7,7 @@
 3. 移除Str.appendRequestParams(String, String, String)方法
 4. UriUtils添加appendParam方法
 5. ServiceLoaderUtils添加带ClassLoader参数的重载方法
+6. 修复Str.[start|end]sWith参数prefix|suffix为空时，报空指针异常的问题
 
 # 1.16.0 2026-01-29
 

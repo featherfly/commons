@@ -26,13 +26,13 @@ import org.objectweb.asm.tree.MethodNode;
 
 import cn.featherfly.common.asm.Asm;
 import cn.featherfly.common.asm.AsmException;
+import cn.featherfly.common.io.FileUtils;
 import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.BytesClassLoader;
 import cn.featherfly.common.lang.ClassLoaderUtils;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
 import cn.featherfly.common.lang.ReloadableClassloader;
-import cn.featherfly.common.lang.Strings;
 import cn.featherfly.common.lang.WordUtils;
 import cn.featherfly.common.policy.AllowDenyListPolicy;
 import cn.featherfly.common.policy.AllowDenyListPolicy.Strategy;
@@ -322,7 +322,9 @@ public class AsmPropertyAccessorFactory extends ReloadableClassloader implements
 
         if (debug) {
             try {
-                FileOutputStream os = new FileOutputStream(new File("bin/" + createdClassName + ".class"));
+                File file = new File("bin/" + createdClassName + ".class");
+                FileUtils.makeDirectory(file);
+                FileOutputStream os = new FileOutputStream(file);
                 os.write(code);
                 os.flush();
                 os.close();
@@ -345,7 +347,7 @@ public class AsmPropertyAccessorFactory extends ReloadableClassloader implements
 
         // properties array
         methodNode.visitVarInsn(ALOAD, 0);
-        setInt(methodNode, propertyTypes.size());
+        Asm.visitIntConst(methodNode, propertyTypes.size());
 
         methodNode.visitTypeInsn(ANEWARRAY, Type.getInternalName(Property.class));
         methodNode.visitFieldInsn(PUTFIELD, classNode.name, PROPERTIES_ARRAY_NAME, PROPERTIES_ARRAY_DESCRIPTOR);
@@ -369,7 +371,7 @@ public class AsmPropertyAccessorFactory extends ReloadableClassloader implements
             // set to array
             methodNode.visitVarInsn(ALOAD, 0);
             methodNode.visitFieldInsn(GETFIELD, classNode.name, PROPERTIES_ARRAY_NAME, PROPERTIES_ARRAY_DESCRIPTOR);
-            setInt(methodNode, i);
+            Asm.visitIntConst(methodNode, i);
             methodNode.visitVarInsn(ALOAD, 0);
             methodNode.visitFieldInsn(GETFIELD, classNode.name, field.name, field.desc);
             methodNode.visitInsn(AASTORE);
@@ -378,35 +380,6 @@ public class AsmPropertyAccessorFactory extends ReloadableClassloader implements
         methodNode.visitInsn(RETURN);
         methodNode.visitEnd();
         return methodNode;
-    }
-
-    private void setInt(MethodNode methodNode, int size) {
-        switch (size) {
-            case 0:
-                methodNode.visitInsn(ICONST_0);
-                break;
-            case 1:
-                methodNode.visitInsn(ICONST_1);
-                break;
-            case 2:
-                methodNode.visitInsn(ICONST_2);
-                break;
-            case 3:
-                methodNode.visitInsn(ICONST_3);
-                break;
-            case 4:
-                methodNode.visitInsn(ICONST_4);
-                break;
-            case 5:
-                methodNode.visitInsn(ICONST_5);
-                break;
-            default:
-                if (size < 32768) { // Max short / 2 
-                    methodNode.visitIntInsn(SIPUSH, size);
-                } else {
-                    methodNode.visitLdcInsn(Strings.format("new Integer({})", size));
-                }
-        }
     }
 
     // ****************************************************************************************************************

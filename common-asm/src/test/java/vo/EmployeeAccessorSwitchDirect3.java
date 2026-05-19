@@ -8,16 +8,19 @@
  */
 package vo;
 
+import static org.testng.Assert.assertEquals;
+
 import java.time.LocalDate;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.testng.annotations.Test;
 
 import cn.featherfly.common.bean.AbstractPropertyAccessor;
 import cn.featherfly.common.bean.Property;
 import cn.featherfly.common.bean.PropertyAccessor;
 import cn.featherfly.common.exception.UnsupportedException;
 import cn.featherfly.common.lang.AssertIllegalArgument;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 import vo.AbstractEmployeeAccessor.EmployeeBirthDateProperty;
 import vo.AbstractEmployeeAccessor.EmployeeCreateUserProperty;
 import vo.AbstractEmployeeAccessor.EmployeeDepartmentIdProperty;
@@ -290,7 +293,7 @@ public class EmployeeAccessorSwitchDirect3 extends AbstractPropertyAccessor<Empl
         }
         PropertyAccessor<Object> visitor = property.getPropertyAccessor();
         if (visitor == null) {
-            throw new IllegalArgumentException(Strings.format("bean {} property {} type {} can not be visit property",
+            throw new IllegalArgumentException(Str.format("bean {} property {} type {} can not be visit property",
                 obj.getClass().getName(), "后续来加入名称", "后续来加入类型"));
         }
         return visitor.getPropertyValue(value, ArrayUtils.subarray(indexes, 1, indexes.length));
@@ -346,6 +349,220 @@ public class EmployeeAccessorSwitchDirect3 extends AbstractPropertyAccessor<Empl
         }
     }
 
+    public Object getPropertyValueFastest(Employee obj, String name) {
+        switch (name.hashCode()) {
+            case 3355:
+                return obj.getId();
+            case 3373707:
+                return obj.getName();
+            default:
+                throw new UnsupportedException();
+        }
+    }
+
+    public Object getPropertyValueFaster(Employee obj, String name) {
+        switch (name.hashCode()) {
+            case 3355:
+                if (name.length() == 2) { // 动态生成的，这里就知道id.length() == 2
+                    return obj.getId();
+                }
+            case 3373707:
+                if (name.length() == 4) { // 动态生成的，这里就知道name.length() ==4
+                    return obj.getName();
+                } else if (name.length() == 5) {
+                    return obj.getEmail();
+                }
+            default:
+                throw new UnsupportedException();
+        }
+    }
+
+    public Object ttttt(Employee obj, String name, int hashCode) {
+        //        switch (name.hashCode()) {
+        switch (hashCode) {
+            case 1:
+                System.out.println("case 1");
+                //                break;
+            case 3355:
+                System.out.println("case 3355");
+                //                break;
+            case 3373707:
+                System.out.println("case 3373707");
+                //                break;
+            default:
+                System.out.println("default");
+                ;
+        }
+        throw new UnsupportedException();
+    }
+
+    public Object getPropertyValue1_(Employee obj, String name, int hashCode) {
+        //        switch (name.hashCode()) {
+        switch (hashCode) {
+            case 1:
+                if (name.length() == 3) {
+                    return obj.getFax();
+                } else if (name.length() == 6) {
+                    return obj.getMobile();
+                }
+                break;
+            case 3355:
+                if (name.equals("id")) { // 动态生成的，这里就知道id.length() == 2
+                    return obj.getId();
+                }
+                break;
+            case 3373707:
+                if (name.equals("name")) { // 动态生成的，这里就知道name.length() ==4 4
+                    return obj.getName();
+                }
+                break;
+            default:
+                throw new UnsupportedException();
+        }
+        throw new RuntimeException("ttt");
+    }
+
+    public Object getPropertyValue2_(Employee obj, String name, int hashCode) {
+        //        switch (name.hashCode()) {
+        switch (hashCode) {
+            case 1:
+                if (name.equals("fax")) {
+                    return obj.getFax();
+                } else if (name.equals("mobile")) {
+                    return obj.getMobile();
+                }
+                break;
+            case 3355:
+                if (name.equals("id")) { // 动态生成的，这里就知道id.length() == 2
+                    return obj.getId();
+                }
+                break;
+            case 3373707:
+                if (name.equals("name")) { // 动态生成的，这里就知道name.length() ==4 4
+                    return obj.getName();
+                } else if (name.equals("email")) {
+                    return obj.getEmail();
+                }
+                break;
+            default:
+                System.out.println();
+        }
+        throw new UnsupportedException();
+    }
+
+    public Object getPropertyValue3_(Employee obj, String name) {
+        switch (name) {
+            case "id":
+                return obj.getId();
+            case "name":
+                return obj.getName();
+            case "email":
+                return obj.getEmail();
+            case "10":
+                return obj.getFax();
+            case "0O":
+                return obj.getMobile();
+            default:
+                throw new UnsupportedException();
+        }
+    }
+
+    public Object test(String name) {
+        switch (name) {
+            case "foo":
+                return "foo";
+            case "bar":
+                return "bar";
+            case "10":
+                return "10";
+            case "0O":
+                return "0O";
+            default:
+                return "unknow";
+        }
+    }
+
+    public Object test2(String name) {
+        switch (name) {
+            case "foo":
+                return "foo";
+            case "bar":
+                return "bar";
+            case "10":
+                return "10";
+            case "01":
+                return "01";
+            default:
+                return "unknow";
+        }
+    }
+
+    public Object test3(String name) {
+        switch (name.hashCode()) {
+            case 1567:
+                if (name.equals("10")) {
+                    return "10";
+                } else {
+                    return "01";
+                }
+            case 97299:
+                return "bar";
+            case 101574:
+                return "foo";
+            default:
+                return "unknow";
+        }
+    }
+
+    @Test
+    void test() {
+        Employee e = new Employee();
+        e.setId(1L);
+        e.setName("yufei");
+        e.setEmail("featherfly@foxmail.com");
+        e.setFax("0101");
+        e.setMobile("18912345678");
+        assertEquals(getPropertyValueFastest(e, "id"), e.getId());
+        assertEquals(getPropertyValueFastest(e, "name"), e.getName());
+
+        assertEquals(getPropertyValueFaster(e, "id"), e.getId());
+        assertEquals(getPropertyValueFaster(e, "name"), e.getName());
+
+        assertEquals(getPropertyValue1_(e, "id", "id".hashCode()), e.getId());
+        assertEquals(getPropertyValue1_(e, "name", "name".hashCode()), e.getName());
+        assertEquals(getPropertyValue1_(e, "fax", 1), e.getFax());
+        assertEquals(getPropertyValue1_(e, "mobile", 1), e.getMobile());
+        assertEquals(getPropertyValue1_(e, "email", 1), e.getMobile());
+
+        assertEquals(getPropertyValue2_(e, "id", "id".hashCode()), e.getId());
+        assertEquals(getPropertyValue2_(e, "name", "name".hashCode()), e.getName());
+        assertEquals(getPropertyValue2_(e, "fax", 1), e.getFax());
+        assertEquals(getPropertyValue2_(e, "mobile", 1), e.getMobile());
+        assertEquals(getPropertyValue2_(e, "email", 1), e.getMobile());
+
+        assertEquals(getPropertyValue3_(e, "id"), e.getId());
+        assertEquals(getPropertyValue3_(e, "name"), e.getName());
+        //        assertEquals(getPropertyValue3_(e, "email"), e.getEmail());
+    }
+
+    public static void main(String[] args) {
+        System.out.println("id " + "id".hashCode());
+        System.out.println("name " + "name".hashCode());
+        System.out.println("foo " + "foo".hashCode());
+        System.out.println("bar " + "bar".hashCode());
+        System.out.println("10 " + "10".hashCode());
+        System.out.println("0O " + "0O".hashCode());
+        System.out.println("ABCDEa123abc " + "ABCDEa123abc".hashCode());
+        System.out.println("ABCDFB123abc " + "ABCDFB123abc".hashCode());
+        System.out.println("Ea " + "Ea".hashCode());
+        System.out.println("FB " + "FB".hashCode());
+        System.out.println("Ab " + "Ab".hashCode());
+        System.out.println("BC " + "BC".hashCode());
+        System.out.println("aB " + "aB".hashCode());
+        System.out.println("bb " + "bb".hashCode());
+
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -362,7 +579,7 @@ public class EmployeeAccessorSwitchDirect3 extends AbstractPropertyAccessor<Empl
         }
         PropertyAccessor<Object> visitor = property.getPropertyAccessor();
         if (visitor == null) {
-            throw new IllegalArgumentException(Strings.format("bean {} property {} type {} can not be visit property",
+            throw new IllegalArgumentException(Str.format("bean {} property {} type {} can not be visit property",
                 obj.getClass().getName(), "后续来加入名称", "后续来加入类型"));
         }
         return visitor.getPropertyValue(value, ArrayUtils.subarray(names, 1, names.length));
@@ -486,7 +703,7 @@ public class EmployeeAccessorSwitchDirect3 extends AbstractPropertyAccessor<Empl
         PropertyAccessor<Object> visitor = property.getPropertyAccessor();
         if (visitor == null) {
             throw new IllegalArgumentException(
-                Strings.format("bean {} property {} type {} can not be visit property", "后续来加入名称", "后续来加入类型"));
+                Str.format("bean {} property {} type {} can not be visit property", "后续来加入名称", "后续来加入类型"));
         }
         return ArrayUtils.addAll(new int[] { property.getIndex() },
             visitor.getPropertyIndexes(ArrayUtils.subarray(names, 1, names.length)));

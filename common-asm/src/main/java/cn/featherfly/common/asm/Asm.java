@@ -3,15 +3,24 @@ package cn.featherfly.common.asm;
 
 import static org.objectweb.asm.Opcodes.ALOAD;
 import static org.objectweb.asm.Opcodes.ARETURN;
+import static org.objectweb.asm.Opcodes.BIPUSH;
 import static org.objectweb.asm.Opcodes.DLOAD;
 import static org.objectweb.asm.Opcodes.DRETURN;
 import static org.objectweb.asm.Opcodes.FLOAD;
 import static org.objectweb.asm.Opcodes.FRETURN;
+import static org.objectweb.asm.Opcodes.ICONST_0;
+import static org.objectweb.asm.Opcodes.ICONST_1;
+import static org.objectweb.asm.Opcodes.ICONST_2;
+import static org.objectweb.asm.Opcodes.ICONST_3;
+import static org.objectweb.asm.Opcodes.ICONST_4;
+import static org.objectweb.asm.Opcodes.ICONST_5;
+import static org.objectweb.asm.Opcodes.ICONST_M1;
 import static org.objectweb.asm.Opcodes.ILOAD;
 import static org.objectweb.asm.Opcodes.IRETURN;
 import static org.objectweb.asm.Opcodes.LLOAD;
 import static org.objectweb.asm.Opcodes.LRETURN;
 import static org.objectweb.asm.Opcodes.RETURN;
+import static org.objectweb.asm.Opcodes.SIPUSH;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -25,6 +34,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -44,13 +54,10 @@ import cn.featherfly.common.lang.ArrayUtils;
 import cn.featherfly.common.lang.AssertIllegalArgument;
 import cn.featherfly.common.lang.ClassUtils;
 import cn.featherfly.common.lang.Lang;
-import cn.featherfly.common.lang.Strings;
+import cn.featherfly.common.lang.Str;
 
 /**
- * <p>
- * AsmUtils
- * </p>
- * .
+ * asm utils.
  *
  * @author zhongj
  */
@@ -135,21 +142,21 @@ public class Asm {
             Type.getMethodDescriptor(ClassUtils.getMethod(Double.class, "doubleValue")));
 
         PRIMITIVE_BOXING_METHOD_DESCRIPTOR.put(Boolean.TYPE.getName(),
-            Type.getMethodDescriptor(ClassUtils.getMethod(Boolean.class, PRIMITIVE_WRAPPER_METHOD, Boolean.TYPE)));
+            Type.getMethodDescriptor(ClassUtils.getMethod(Boolean.class, PRIMITIVE_BOXING_METHOD, Boolean.TYPE)));
         PRIMITIVE_BOXING_METHOD_DESCRIPTOR.put(Character.TYPE.getName(),
-            Type.getMethodDescriptor(ClassUtils.getMethod(Character.class, PRIMITIVE_WRAPPER_METHOD, Character.TYPE)));
+            Type.getMethodDescriptor(ClassUtils.getMethod(Character.class, PRIMITIVE_BOXING_METHOD, Character.TYPE)));
         PRIMITIVE_BOXING_METHOD_DESCRIPTOR.put(Byte.TYPE.getName(),
-            Type.getMethodDescriptor(ClassUtils.getMethod(Byte.class, PRIMITIVE_WRAPPER_METHOD, Byte.TYPE)));
+            Type.getMethodDescriptor(ClassUtils.getMethod(Byte.class, PRIMITIVE_BOXING_METHOD, Byte.TYPE)));
         PRIMITIVE_BOXING_METHOD_DESCRIPTOR.put(Short.TYPE.getName(),
-            Type.getMethodDescriptor(ClassUtils.getMethod(Short.class, PRIMITIVE_WRAPPER_METHOD, Short.TYPE)));
+            Type.getMethodDescriptor(ClassUtils.getMethod(Short.class, PRIMITIVE_BOXING_METHOD, Short.TYPE)));
         PRIMITIVE_BOXING_METHOD_DESCRIPTOR.put(Integer.TYPE.getName(),
-            Type.getMethodDescriptor(ClassUtils.getMethod(Integer.class, PRIMITIVE_WRAPPER_METHOD, Integer.TYPE)));
+            Type.getMethodDescriptor(ClassUtils.getMethod(Integer.class, PRIMITIVE_BOXING_METHOD, Integer.TYPE)));
         PRIMITIVE_BOXING_METHOD_DESCRIPTOR.put(Long.TYPE.getName(),
-            Type.getMethodDescriptor(ClassUtils.getMethod(Long.class, PRIMITIVE_WRAPPER_METHOD, Long.TYPE)));
+            Type.getMethodDescriptor(ClassUtils.getMethod(Long.class, PRIMITIVE_BOXING_METHOD, Long.TYPE)));
         PRIMITIVE_BOXING_METHOD_DESCRIPTOR.put(Float.TYPE.getName(),
-            Type.getMethodDescriptor(ClassUtils.getMethod(Float.class, PRIMITIVE_WRAPPER_METHOD, Float.TYPE)));
+            Type.getMethodDescriptor(ClassUtils.getMethod(Float.class, PRIMITIVE_BOXING_METHOD, Float.TYPE)));
         PRIMITIVE_BOXING_METHOD_DESCRIPTOR.put(Double.TYPE.getName(),
-            Type.getMethodDescriptor(ClassUtils.getMethod(Double.class, PRIMITIVE_WRAPPER_METHOD, Double.TYPE)));
+            Type.getMethodDescriptor(ClassUtils.getMethod(Double.class, PRIMITIVE_BOXING_METHOD, Double.TYPE)));
 
         PRIMITIVE_WRAPPER.put(Boolean.TYPE.getName(), Boolean.class);
         PRIMITIVE_WRAPPER.put(Character.TYPE.getName(), Character.class);
@@ -274,7 +281,7 @@ public class Asm {
         for (Class<?> type : paramTypes) {
             params.append(_getMethodDescriptor(type));
         }
-        return Strings.format("({0})V", params.toString());
+        return Str.format("({0})V", params.toString());
     }
 
     /**
@@ -291,7 +298,7 @@ public class Asm {
         for (String descriptors : paramTypeDescriptors) {
             params.append(descriptors);
         }
-        return Strings.format("({0})V", params.toString());
+        return Str.format("({0})V", params.toString());
     }
 
     /**
@@ -683,5 +690,45 @@ public class Asm {
         int index = variableNode.index;
         String name = variableNode.name;
         return 0 == index && "this".equals(name);
+    }
+
+    /**
+     * Visit int.
+     *
+     * @param methodVisitor the method visitor
+     * @param size the size
+     */
+    public static void visitIntConst(final MethodVisitor methodVisitor, final int size) {
+        switch (size) {
+            case -1:
+                methodVisitor.visitInsn(ICONST_M1);
+                break;
+            case 0:
+                methodVisitor.visitInsn(ICONST_0);
+                break;
+            case 1:
+                methodVisitor.visitInsn(ICONST_1);
+                break;
+            case 2:
+                methodVisitor.visitInsn(ICONST_2);
+                break;
+            case 3:
+                methodVisitor.visitInsn(ICONST_3);
+                break;
+            case 4:
+                methodVisitor.visitInsn(ICONST_4);
+                break;
+            case 5:
+                methodVisitor.visitInsn(ICONST_5);
+                break;
+            default:
+                if (-129 < size && size < 128) { // byte range
+                    methodVisitor.visitIntInsn(BIPUSH, size);
+                } else if (-32769 < size && size < 32768) { // short range  
+                    methodVisitor.visitIntInsn(SIPUSH, size);
+                } else {
+                    methodVisitor.visitLdcInsn(Str.format("Integer.valueOf({})", size));
+                }
+        }
     }
 }

@@ -1,9 +1,9 @@
 ext {
-    asmv = '9.7' 
+    asmv = '9.9.1' 
 }
   
 dependencies {
-    api group: 'cn.featherfly.common', name: 'common-core', version: '1.13.0'
+    api group: 'cn.featherfly.common', name: 'common-core', version: '1.16.0'
     
     api group: 'org.ow2.asm', name: 'asm', version: asmv
     api group: 'org.ow2.asm', name: 'asm-tree', version: asmv

@@ -21,6 +21,8 @@ import cn.featherfly.common.bean.Instantiator;
  */
 public class InstantiatorFactorTest {
 
+    private static final int loops = 1000000;
+
     AsmInstantiatorFactory factor;
 
     @BeforeClass
@@ -39,6 +41,28 @@ public class InstantiatorFactorTest {
         Role role = roleInstantiator.instantiate();
 
         System.out.println(role.getDescp());
+    }
+
+    @Test
+    void performanceWithInstantiator() throws Exception {
+        Instantiator<User> userInstantiator = factor.create(User.class);
+        for (int i = 0; i < loops; i++) {
+            userInstantiator.instantiate();
+        }
+    }
+
+    @Test
+    void performanceWithReflection() throws Exception {
+        for (int i = 0; i < loops; i++) {
+            User.class.newInstance();
+        }
+    }
+
+    @Test
+    void performanceWithNew() throws Exception {
+        for (int i = 0; i < loops; i++) {
+            new User();
+        }
     }
 
 }

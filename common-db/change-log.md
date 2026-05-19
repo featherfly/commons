@@ -1,3 +1,7 @@
+# 0.8.2
+
+1. 升级依赖
+
 # 0.8.1 2025-12-21
 1. 优化JdbcUtils设置参数逻辑，使用switch代替if else,以及获取原始类型包装对象
 2. 移动枚举JdbcMappingFactory.MappingMode到JdbcMappingFactoryImpl.MappingMode

@@ -176,3 +176,13 @@ CREATE TABLE "uuid_table" (
   "descp" varchar(255) DEFAULT NULL,
   CONSTRAINT "uuid_table_pkey" PRIMARY KEY ("id")
 );
+
+
+DROP TABLE IF EXISTS `trade_order`;
+CREATE TABLE `trade_order` (
+  `id` serial NOT NULL,
+  `sn` varchar(64) NOT NULL,
+  `price` decimal(10,4) NOT NULL,
+  `payment` decimal(10,4) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='交易订单';

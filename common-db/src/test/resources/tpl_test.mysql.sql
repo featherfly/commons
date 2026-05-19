@@ -170,3 +170,13 @@ CREATE TABLE `uuid_table` (
   `descp` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='测试UUID主键';
+
+
+DROP TABLE IF EXISTS `trade_order`;
+CREATE TABLE `trade_order` (
+  `id` bigint NOT NULL COMMENT '主键ID',
+  `sn` varchar(64) NOT NULL COMMENT '编号',
+  `price` decimal(10,4) NOT NULL COMMENT '价格',
+  `payment` decimal(10,4) NOT NULL COMMENT '支付价格',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='交易订单';

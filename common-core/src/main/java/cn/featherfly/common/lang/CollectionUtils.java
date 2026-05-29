@@ -495,7 +495,7 @@ public final class CollectionUtils {
         return list != null ? list : creator.apply(type);
     }
 
-    private static <E, L> List<E> newListOrNull(Class<?> type) {
+    private static <E> List<E> newListOrNull(Class<?> type) {
         AssertIllegalArgument.isParent(List.class, type);
         switch (type.getName()) {
             case "java.util.List":

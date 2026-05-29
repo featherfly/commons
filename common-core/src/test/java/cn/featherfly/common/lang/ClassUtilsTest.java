@@ -290,6 +290,12 @@ public class ClassUtilsTest {
     }
 
     @Test
+    public void getAnnotations() {
+        Foo[] fs = ClassUtils.getAnnotations(String.class, Foo.class);
+        assertEquals(fs.length, 0);
+    }
+
+    @Test
     public void getter() throws NoSuchMethodException, SecurityException {
         Method method = User3.class.getMethod("isUser", new Class[] { String.class });
         assertFalse(ClassUtils.isGetter(method));
@@ -301,6 +307,33 @@ public class ClassUtilsTest {
         // Boolean isUser
         method = User3.class.getMethod("isUser2", new Class[0]);
         assertFalse(ClassUtils.isGetter(method));
+    }
+
+    @Test
+    public void t() {
+        Class<HashMap<String, Integer>> type = ClassUtils.getClass(new HashMap<String, Integer>());
+
+        System.out.println(type.getName());
+        System.out.println(ClassUtils.getSuperClassGenericTypeMap(type));
+        System.out.println(type.getTypeParameters().length);
+        assertEquals(type.getTypeParameters().length, 2);
+        System.out.println(ClassUtils.getSuperClassGenericType(type));
+        for (TypeVariable<Class<HashMap<String, Integer>>> typeParameter : type.getTypeParameters()) {
+            System.out.println(typeParameter);
+        }
+
+        type = ClassUtils.getClass(new HashMap<String, Integer>() {
+        });
+        System.out.println(type.getName());
+        System.out.println(ClassUtils.getSuperClassGenericTypeMap(type));
+        assertEquals(ClassUtils.getSuperClassGenericType(type, 0), String.class);
+        assertEquals(ClassUtils.getSuperClassGenericType(type, 1), Integer.class);
+
+        System.out.println(type.getTypeParameters().length);
+        assertEquals(type.getTypeParameters().length, 0);
+        for (TypeVariable<Class<HashMap<String, Integer>>> typeParameter : type.getTypeParameters()) {
+            System.out.println(typeParameter);
+        }
     }
 
     @Test

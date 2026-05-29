@@ -20,6 +20,9 @@ import java.lang.reflect.WildcardType;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -50,6 +53,9 @@ import cn.featherfly.common.lang.reflect.GenericType;
  * @since 1.0
  */
 public final class ClassUtils {
+
+    /** The Constant EMPTY_ANNOTATION_ARRAY. */
+    public static final Annotation[] EMPTY_ANNOTATION_ARRAY = new Annotation[0];
 
     private ClassUtils() {
     }
@@ -92,7 +98,7 @@ public final class ClassUtils {
             return null;
         }
 
-        Class<?> type = getPrimitiveType(className, true);
+        Class<?> type = getPrimitiveType(className, useHashCodeOnly);
 
         if (type != null) {
             return type;
@@ -322,7 +328,7 @@ public final class ClassUtils {
      * @return method return value
      */
     public static <T> T invokeMethod(Class<?> type, String methodName) {
-        return invokeMethod(type, methodName, new Object[0]);
+        return invokeMethod(type, methodName, ArrayUtils.EMPTY_OBJECT_ARRAY);
     }
 
     /**
@@ -342,13 +348,12 @@ public final class ClassUtils {
      * invoke static method.
      *
      * @param <T> the generic type
-     * @param type type
      * @param method method
      * @param args method arguments
      * @return method return value
      */
     @SuppressWarnings("unchecked")
-    public static <T> T invokeMethod(Class<?> type, Method method, Object... args) {
+    public static <T> T invokeMethod(Method method, Object... args) {
         try {
             if (method.getReturnType() == Void.TYPE) {
                 method.invoke(null, args);
@@ -362,6 +367,21 @@ public final class ClassUtils {
     }
 
     /**
+     * invoke static method.
+     *
+     * @param <T> the generic type
+     * @param type type
+     * @param method method
+     * @param args method arguments
+     * @return method return value
+     * @deprecated use {@link #invokeMethod(Method, Object...)} instead
+     */
+    @Deprecated
+    public static <T> T invokeMethod(Class<?> type, Method method, Object... args) {
+        return invokeMethod(method, args);
+    }
+
+    /**
      * invoke object method.
      *
      * @param <T> the generic type
@@ -370,7 +390,7 @@ public final class ClassUtils {
      * @return method return value
      */
     public static <T> T invokeMethod(Object object, String methodName) {
-        return invokeMethod(object, methodName, new Object[0]);
+        return invokeMethod(object, methodName, ArrayUtils.EMPTY_OBJECT_ARRAY);
     }
 
     /**
@@ -494,6 +514,7 @@ public final class ClassUtils {
      * @param fromSuper 是否从父类型查找
      * @return 指定注解类型数组
      */
+    @SuppressWarnings("unchecked")
     public static <A extends Annotation> A[] getAnnotations(Class<?> objectType, Class<A> annotationType,
         boolean fromSuper) {
         if (objectType != null && objectType != Object.class) {
@@ -504,7 +525,7 @@ public final class ClassUtils {
                 return a;
             }
         }
-        return null;
+        return (A[]) EMPTY_ANNOTATION_ARRAY;
     }
 
     /**
@@ -645,7 +666,7 @@ public final class ClassUtils {
         String fieldName = field.getName();
         String get = GET + WordUtils.upperCaseFirst(fieldName);
         try {
-            method = type.getMethod(get, new Class[] {});
+            method = type.getMethod(get, ArrayUtils.EMPTY_CLASS_ARRAY);
             if (Modifier.isStatic(method.getModifiers())) {
                 LOGGER.trace("{} method is static, not a java bean getter", method.getName());
                 throw new NoSuchMethodException("method is static, not a java bean getter");
@@ -657,7 +678,7 @@ public final class ClassUtils {
             LOGGER.trace("没有找到get{}方法, 使用is{}查找", field.getName(), field.getName());
             try {
                 String is = IS + WordUtils.upperCaseFirst(fieldName);
-                method = type.getMethod(is, new Class[] {});
+                method = type.getMethod(is, ArrayUtils.EMPTY_CLASS_ARRAY);
                 if (Modifier.isStatic(method.getModifiers())) {
                     LOGGER.trace("{} method is static, not a java bean getter", method.getName());
                     method = null;
@@ -687,7 +708,7 @@ public final class ClassUtils {
                 method = null;
             }
         } catch (Exception e) {
-            LOGGER.trace("没有找到{}的set方法", field.getName(), field.getName());
+            LOGGER.trace("没有找到{}的set方法", field.getName());
         }
         return method;
     }
@@ -701,53 +722,32 @@ public final class ClassUtils {
      * @return 是否是基础类型
      */
     public static boolean isBasicType(Class<?> type) {
-        boolean isBasic = false;
-        if (type.isPrimitive()) {
-            isBasic = true;
-        } else if (type == Byte.class) {
-            isBasic = true;
-        } else if (type == Character.class) {
-            isBasic = true;
-        } else if (type == Short.class) {
-            isBasic = true;
-        } else if (type == Integer.class) {
-            isBasic = true;
-        } else if (type == Long.class) {
-            isBasic = true;
-        } else if (type == Float.class) {
-            isBasic = true;
-        } else if (type == Double.class) {
-            isBasic = true;
-        } else if (type == Boolean.class) {
-            isBasic = true;
-        } else if (type == Integer.class) {
-            isBasic = true;
-        } else if (type == Integer.class) {
-            isBasic = true;
-        } else if (type == String.class) {
-            isBasic = true;
-        } else if (type == StringBuffer.class) {
-            isBasic = true;
-        } else if (type == StringBuilder.class) {
-            isBasic = true;
-        } else if (type == AtomicInteger.class) {
-            isBasic = true;
-        } else if (type == AtomicLong.class) {
-            isBasic = true;
-        } else if (type == BigDecimal.class) {
-            isBasic = true;
-        } else if (type == BigInteger.class) {
-            isBasic = true;
-        } else if (type == Date.class) {
-            isBasic = true;
-        } else if (type == java.sql.Date.class) {
-            isBasic = true;
-        } else if (type == java.sql.Time.class) {
-            isBasic = true;
-        } else if (type == java.sql.Timestamp.class) {
-            isBasic = true;
+        if (type == null) {
+            return false;
         }
-        return isBasic;
+        return type.isPrimitive() ||
+            type == Byte.class ||
+            type == Character.class ||
+            type == Short.class ||
+            type == Integer.class ||
+            type == Long.class ||
+            type == Float.class ||
+            type == Double.class ||
+            type == Boolean.class ||
+            type == String.class ||
+            type == StringBuffer.class ||
+            type == StringBuilder.class ||
+            type == LocalDate.class ||
+            type == LocalTime.class ||
+            type == LocalDateTime.class ||
+            type == Date.class ||
+            type == java.sql.Date.class ||
+            type == java.sql.Time.class ||
+            type == java.sql.Timestamp.class ||
+            type == BigInteger.class ||
+            type == BigDecimal.class ||
+            type == AtomicInteger.class ||
+            type == AtomicLong.class;
     }
 
     /**
@@ -794,6 +794,7 @@ public final class ClassUtils {
         if (parent == null) {
             return false;
         }
+        // support record for jdk8
         return "java.lang.Record".equals(parent.getName()) && Modifier.isFinal(type.getModifiers());
     }
 
@@ -830,26 +831,63 @@ public final class ClassUtils {
         return (Class<T>) type;
     }
 
+    /**
+     * Gets the collection class.
+     *
+     * @param <E> the element type
+     * @param elementType the element type
+     * @return the collection class
+     */
     public static <E> Class<Collection<E>> getCollectionClass(Class<E> elementType) {
         Collection<E> obj = null;
         return castGenericType(Map.class, obj);
     }
 
+    /**
+     * Gets the list class.
+     *
+     * @param <E> the element type
+     * @param elementType the element type
+     * @return the list class
+     */
     public static <E> Class<List<E>> getListClass(Class<E> elementType) {
         List<E> obj = null;
         return castGenericType(List.class, obj);
     }
 
+    /**
+     * Gets the sets the class.
+     *
+     * @param <E> the element type
+     * @param elementType the element type
+     * @return the sets the class
+     */
     public static <E> Class<Set<E>> getSetClass(Class<E> elementType) {
         Set<E> obj = null;
         return castGenericType(Set.class, obj);
     }
 
+    /**
+     * Gets the queue class.
+     *
+     * @param <E> the element type
+     * @param elementType the element type
+     * @return the queue class
+     */
     public static <E> Class<Queue<E>> getQueueClass(Class<E> elementType) {
         Queue<E> obj = null;
         return castGenericType(Queue.class, obj);
     }
 
+    /**
+     * Gets the map class.
+     *
+     * @param <K> the key type
+     * @param <V> the value type
+     * @param keyType the key type
+     * @param valueType the value type
+     * @return the map class
+     */
     public static <K, V> Class<Map<K, V>> getMapClass(Class<K> keyType, Class<V> valueType) {
         Map<K, V> obj = null;
         return castGenericType(Map.class, obj);
@@ -1171,19 +1209,6 @@ public final class ClassUtils {
      * @return 使用父类定义泛型的参数名作为KEY,子类实例化泛型的TYPE作为VALUE作为 <code>Object.class</code>
      */
     public static Map<Class<?>, Map<String, Type>> getSuperClassAllGenericTypeMap(Class<?> clazz) {
-        //        Map<String, Type> typeGenericParams = new HashMap<>();
-        //        // 得到泛型父类
-        //        Type genType = clazz.getGenericSuperclass();
-        //        if (genType instanceof ParameterizedType) {
-        //            // 如果是泛型父类拿到泛型父类定义中已经明确的泛型
-        //            ParameterizedType pt = (ParameterizedType) genType;
-        //            Type[] types = pt.getActualTypeArguments();
-        //            // 获取父类型的泛型定义
-        //            TypeVariable<?>[] tvs = clazz.getSuperclass().getTypeParameters();
-        //            for (int i = 0; i < types.length; i++) {
-        //                typeGenericParams.put(tvs[i].getName(), types[i]);
-        //            }
-        //        }
         return getSuperClassAllGenericTypeMap(clazz, new HashMap<>());
     }
 
@@ -1213,8 +1238,8 @@ public final class ClassUtils {
             if (type instanceof ParameterizedType) {
                 ParameterizedType parameterizedType = (ParameterizedType) type;
                 if (parameterizedType.getRawType() == interfaceType) {
-                    // 返回表示此类型实际类型参数的Type对象的数组,数组里放的都是对应类型的Class, 如BuyerServiceBean extends
-                    // DaoSupport<Buyer,Contact>就返回Buyer和Contact类型
+                    // 返回表示此类型实际类型参数的Type对象的数组,数组里放的都是对应类型的Class,
+                    // 如BuyerServiceBean extends DaoSupport<Buyer,Contact>就返回Buyer和Contact类型
                     Type[] params = parameterizedType.getActualTypeArguments();
                     if (index >= params.length || index < 0) {
                         throw new IllegalArgumentException("你输入的索引" + (index < 0 ? "不能小于0" : "超出了参数的总数"));
@@ -1480,8 +1505,6 @@ public final class ClassUtils {
      */
     public static <T> Class<T> getMethodParameterType(Class<?> type, Method method, int paramIndex) {
         Parameter[] ps = method.getParameters();
-        //        AssertIllegalArgument.isGe(paramIndex, 0, "paramIndex");
-        //        AssertIllegalArgument.isLt(paramIndex, ps.length, "paramIndex");
         if (paramIndex >= ps.length || paramIndex < 0) {
             throw new IllegalArgumentException("你输入的索引" + (paramIndex < 0 ? "不能小于0" : "超出了参数的总数" + ps.length));
         }

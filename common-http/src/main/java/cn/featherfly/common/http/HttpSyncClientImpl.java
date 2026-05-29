@@ -316,17 +316,18 @@ public class HttpSyncClientImpl extends AbstractHttpClient<HttpSyncClientImpl> i
         try {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
-                byte[] bs = new byte[downloadProgressPerSize];
-                InputStream is = response.body().byteStream();
-                long total = response.body().contentLength();
-                int len = -1;
-                long readed = 0;
-                while ((len = is.read(bs)) != -1) {
-                    readed += len;
-                    progress.accept(readed, total);
-                    output.write(bs, 0, len);
+                try (InputStream is = response.body().byteStream()) {
+                    byte[] bs = new byte[downloadProgressPerSize];
+                    long total = response.body().contentLength();
+                    int len = -1;
+                    long readed = 0;
+                    while ((len = is.read(bs)) != -1) {
+                        readed += len;
+                        progress.accept(readed, total);
+                        output.write(bs, 0, len);
+                    }
+                    return readed;
                 }
-                return readed;
             } else {
                 throw new HttpErrorResponseException(
                     Str.format("{0} error, code {1}, message {2}", request.url(), response.code(), response.message()),
@@ -401,6 +402,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient<HttpSyncClientImpl> i
 
     private String request(final Request request) {
         try {
+            // body().string() 会自动关闭
             return getSuccessResponse(request).body().string();
         } catch (IOException e) {
             throw new HttpException(e);
@@ -416,6 +418,7 @@ public class HttpSyncClientImpl extends AbstractHttpClient<HttpSyncClientImpl> i
     }
 
     private InputStream stream(final Request request) {
+        // 需要调用者自行关闭
         return getSuccessResponse(request).body().byteStream();
     }
 }

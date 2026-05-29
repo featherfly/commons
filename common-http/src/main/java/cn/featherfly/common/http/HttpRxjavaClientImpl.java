@@ -351,17 +351,18 @@ public class HttpRxjavaClientImpl extends AbstractHttpClient<HttpRxjavaClientImp
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
-                        byte[] bs = new byte[downloadProgressPerSize];
-                        InputStream is = response.body().byteStream();
-                        long total = response.body().contentLength();
-                        int len = -1;
-                        long readed = 0;
-                        while ((len = is.read(bs)) != -1) {
-                            readed += len;
-                            progress.accept(readed, total);
-                            output.write(bs, 0, len);
+                        try (InputStream is = response.body().byteStream()) {
+                            byte[] bs = new byte[downloadProgressPerSize];
+                            long total = response.body().contentLength();
+                            int len = -1;
+                            long readed = 0;
+                            while ((len = is.read(bs)) != -1) {
+                                readed += len;
+                                progress.accept(readed, total);
+                                output.write(bs, 0, len);
+                            }
+                            emitter.onNext(readed);
                         }
-                        emitter.onNext(readed);
                     } else {
                         emitter.onError(new HttpErrorResponseException(
                             Str.format("{0} error, code {1}, message {2}", request.url(), response.code(),
@@ -395,11 +396,13 @@ public class HttpRxjavaClientImpl extends AbstractHttpClient<HttpRxjavaClientImp
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     if (isSuccess(response)) {
+                        // body().string() 会自动关闭
                         emitter.onNext(response.body().string());
                     } else {
                         emitter.onError(new HttpErrorResponseException(
                             Str.format("{0} error, code {1}, message {2}", request.url(), response.code(),
                                 response.message()),
+                            // body().bytes() 会自动关闭
                             new HttpResponse(response.code(), response.body().bytes(),
                                 HttpUtils.headersToMap(response.headers()), deserializeWithContentType,
                                 response.receivedResponseAtMillis() - response.sentRequestAtMillis())));

@@ -300,20 +300,9 @@ public abstract class AbstractHttpClient<C extends AbstractHttpClient<C>> {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     protected <T> T deserialize(Response response, final Class<T> responseType) throws IOException {
-        Serializer resSerializer = null;
-        MediaType resMediaType;
-        if (deserializeWithContentType) {
-            resMediaType = response.body().contentType();
-            if (resMediaType == null) {
-                resMediaType = HttpUtils.JSON_MEDIA_TYPE;
-            }
-            resSerializer = getSerializer(resMediaType, false);
-        }
-        if (resSerializer == null) {
-            resSerializer = serializer;
-            resMediaType = mediaType;
-        }
+        Serializer resSerializer = getSerializer(response);
         if (listeners.isEmpty()) {
+            // body().bytes() 会自动关闭
             return resSerializer.deserialize(response.body().bytes(), responseType);
         }
         byte[] responseBody = response.body().bytes();
@@ -322,6 +311,29 @@ public abstract class AbstractHttpClient<C extends AbstractHttpClient<C>> {
             listener.onDeserialize(responseBody, deserializeBody, mediaType);
         }
         return deserializeBody;
+    }
+
+    /**
+     * Gets the serializer.
+     *
+     * @param response the response
+     * @return the serializer
+     */
+    private Serializer getSerializer(Response response) {
+        if (deserializeWithContentType) {
+            Serializer resSerializer = null;
+            MediaType resMediaType;
+            resMediaType = response.body().contentType();
+            if (resMediaType == null) {
+                //                resMediaType = HttpUtils.JSON_MEDIA_TYPE;
+                resMediaType = mediaType;
+            }
+            resSerializer = getSerializer(resMediaType, false);
+            if (resSerializer != null) {
+                return resSerializer;
+            }
+        }
+        return serializer;
     }
 
     /**

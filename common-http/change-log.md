@@ -1,5 +1,7 @@
-# 0.9.0 2026-05-14
+# 0.9.1 2026-05-29
+1. 修复download方法没有关闭Response对象
 
+# 0.9.0 2026-05-14
 1. HttpUtils appenParam|toParamString支持同名多参数(name=yufei&name=yi)
 2. Http[Sync|Async|Rx]Client加入HttpListener支持
 

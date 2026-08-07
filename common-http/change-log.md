@@ -1,4 +1,9 @@
+# 0.9.3 2026-08-07
+
+1. 修复HttpUtils.createMultipartBody(Map<String, Serializable>) 默认设置类型出错的问题（应该为MultipartBody.FORM）
+
 # 0.9.2 2026-08-07
+
 1. 修复HttpUtils.createMultipartBody默认设置类型为MultipartBody.FORM
 2. HttpUtils加入createMultipartBody(Map<String, Serializable>, MediaType)方法
 

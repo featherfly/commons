@@ -88,7 +88,7 @@ public final class HttpUtils {
      * @return the multipart body
      */
     public static MultipartBody createMultipartBody(Map<String, Serializable> params) {
-        return createMultipartBody(params, HTML_MEDIA_TYPE);
+        return createMultipartBody(params, MultipartBody.FORM);
     }
 
     /**

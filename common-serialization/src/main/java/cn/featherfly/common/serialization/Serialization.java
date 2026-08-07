@@ -45,21 +45,21 @@ public class Serialization {
             Class.forName("com.fasterxml.jackson.dataformat.xml.XmlMapper");
             serializers.put(MIME_TYPE_XML, (Serializer) ClassUtils
                 .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.JacksonXmlSerializer")));
-        } catch (Exception e) {
+        } catch (Throwable e) {
             LOG.warn(e.getMessage());
         }
         try {
             Class.forName("io.protostuff.ProtostuffIOUtil");
             serializers.put(MIME_TYPE_PROTOBUFF, (Serializer) ClassUtils
                 .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.ProtostuffSerializer")));
-        } catch (Exception e) {
+        } catch (Throwable e) {
             LOG.warn(e.getMessage());
         }
         try {
             Class.forName("com.esotericsoftware.kryo.Kryo");
             serializers.put(MIME_TYPE_KRYO, (Serializer) ClassUtils
                 .newInstance(ClassUtils.forName("cn.featherfly.common.serialization.KryoSerializer")));
-        } catch (Exception e) {
+        } catch (Throwable e) {
             LOG.warn(e.getMessage());
         }
         return new SerializableStrategy(defaultSerializer, serializers);

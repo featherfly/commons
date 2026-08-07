@@ -1,3 +1,7 @@
+# 0.4.2 2026-06-02
+
+1. 修复Serialization.init动态加载时，捕获throwable，因为class不存在时抛出的是java.lang.NoClassDefFoundError
+
 # 0.4.1 2026-05-13
 
 1. refactor: extract manager Serializers and serialize|deserialize logic to class SerializableStrategy

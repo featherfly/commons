@@ -88,7 +88,18 @@ public final class HttpUtils {
      * @return the multipart body
      */
     public static MultipartBody createMultipartBody(Map<String, Serializable> params) {
-        MultipartBody.Builder multiparBuilder = new MultipartBody.Builder();
+        return createMultipartBody(params, HTML_MEDIA_TYPE);
+    }
+
+    /**
+     * Creates the multipart body.
+     *
+     * @param params the params
+     * @param type the type
+     * @return the multipart body
+     */
+    public static MultipartBody createMultipartBody(Map<String, Serializable> params, MediaType type) {
+        MultipartBody.Builder multiparBuilder = new MultipartBody.Builder().setType(type);
         for (Map.Entry<String, Serializable> entry : params.entrySet()) {
             Serializable value = entry.getValue();
             if (value instanceof UploadFile) {

@@ -1,3 +1,7 @@
+# 0.9.2 2026-08-07
+1. 修复HttpUtils.createMultipartBody默认设置类型为MultipartBody.FORM
+2. HttpUtils加入createMultipartBody(Map<String, Serializable>, MediaType)方法
+
 # 0.9.1 2026-05-29
 1. 修复download方法没有关闭Response对象
 

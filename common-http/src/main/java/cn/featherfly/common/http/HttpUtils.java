@@ -83,6 +83,43 @@ public class HttpUtils {
     }
 
     /**
+     * Creates the multipart body.
+     *
+     * @param params the params
+     * @return the multipart body
+     */
+    public static MultipartBody createMultipartBody(Map<String, Serializable> params) {
+        return createMultipartBody(params, MultipartBody.FORM);
+    }
+
+    /**
+     * Creates the multipart body.
+     *
+     * @param params the params
+     * @param type the type
+     * @return the multipart body
+     */
+    public static MultipartBody createMultipartBody(Map<String, Serializable> params, MediaType type) {
+        MultipartBody.Builder multiparBuilder = new MultipartBody.Builder().setType(type);
+        for (Map.Entry<String, Serializable> entry : params.entrySet()) {
+            Serializable value = entry.getValue();
+            if (value instanceof UploadFile) {
+                UploadFile uploadFile = (UploadFile) value;
+                try {
+                    multiparBuilder.addFormDataPart(entry.getKey(), URL.encodeURL(uploadFile.getFilename()),
+                        RequestBody.create(MediaType.parse(uploadFile.getMediaType()), uploadFile.getContent()));
+                } catch (AlgorithmException e) {
+                    multiparBuilder.addFormDataPart(entry.getKey(), uploadFile.getFilename(),
+                        RequestBody.create(MediaType.parse(uploadFile.getMediaType()), uploadFile.getContent()));
+                }
+            } else {
+                multiparBuilder.addFormDataPart(entry.getKey(), value.toString());
+            }
+        }
+        return multiparBuilder.build();
+    }
+
+    /**
      * Creates the request body, support upload file.
      *
      * @param params the params
@@ -97,33 +134,9 @@ public class HttpUtils {
                     break;
                 }
             }
-
-            if (isMultipar) {
-                MultipartBody.Builder multiparBuilder = new MultipartBody.Builder();
-                if (Lang.isNotEmpty(params)) {
-                    for (Map.Entry<String, Serializable> entry : params.entrySet()) {
-                        Serializable value = entry.getValue();
-                        if (value != null) {
-                            if (value instanceof UploadFile) {
-                                UploadFile uploadFile = (UploadFile) value;
-                                try {
-                                    multiparBuilder.addFormDataPart(entry.getKey(),
-                                            URL.encodeURL(uploadFile.getFilename()),
-                                            RequestBody.create(MediaType.parse(uploadFile.getMediaType()),
-                                                    uploadFile.getContent()));
-                                } catch (AlgorithmException e) {
-                                    multiparBuilder.addFormDataPart(entry.getKey(), uploadFile.getFilename(),
-                                            RequestBody.create(MediaType.parse(uploadFile.getMediaType()),
-                                                    uploadFile.getContent()));
-                                }
-                            } else {
-                                multiparBuilder.addFormDataPart(entry.getKey(), value.toString());
-                            }
-                        }
-                    }
-                }
-                return multiparBuilder.build();
-            }
+        }
+        if (isMultipar) {
+            return createMultipartBody(params);
         }
         return createFormBody(params);
     }
@@ -179,7 +192,7 @@ public class HttpUtils {
     /**
      * Creates the headers.
      *
-     * @param headers        the headers
+     * @param headers the headers
      * @param defaultHeaders the default headers
      * @return the headers
      */
@@ -216,8 +229,8 @@ public class HttpUtils {
     /**
      * Append param.
      *
-     * @param url   the url
-     * @param name  the name
+     * @param url the url
+     * @param name the name
      * @param value the value
      * @return the url string with param
      */
@@ -237,7 +250,7 @@ public class HttpUtils {
     /**
      * Append param.
      *
-     * @param url    the url
+     * @param url the url
      * @param params the params
      * @return the url string with params
      */

@@ -1,6 +1,10 @@
+plugins {
+    id 'org.jreleaser' version '1.21.0'
+}
+
 allprojects {
-    apply from: rootDir.getAbsolutePath() + '/java_base.gradle'   
-    apply from: rootDir.getAbsolutePath() + '/maven_push.gradle'
+    apply from: rootDir.getAbsolutePath() +  '/java_base.gradle'   
+    apply from: rootDir.getAbsolutePath() +  '/maven_push_jreleaser.gradle'
         
     ext {
     }

@@ -1,3 +1,6 @@
+# 0.6.2 2026-08-07
+1. 修复HttpUtils.createMultipartBody默认设置类型为MultipartBody.FORM
+
 # 0.6.1 2022-10-28
 1. 上传文件的文件名进行转码处理（解决中文文件名出错的问题）
 

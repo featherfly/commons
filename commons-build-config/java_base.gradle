@@ -8,14 +8,6 @@ tasks.withType(Javadoc) {
     options.encoding = "UTF-8"
 }
 
-repositories {
-    mavenLocal()
-    maven {
-        url "https://maven.aliyun.com/repository/central"
-    }
-    mavenCentral()
-}
-
 jar {
     archiveBaseName = archivesBaseName
     manifest.attributes 'Build-Name': archivesBaseName

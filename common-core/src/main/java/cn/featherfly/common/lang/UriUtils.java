@@ -167,7 +167,7 @@ public final class UriUtils {
     }
 
     /**
-     * to parameter name value string. example: name=yufei&age=1
+     * to parameter name value string. example: name=yufei&amp;age=1
      *
      * @param params the params
      * @return parameter name value string
@@ -187,7 +187,7 @@ public final class UriUtils {
     }
 
     /**
-     * to parameter name value string. example:name=yufei or name=yufei&name=yi
+     * to parameter name value string. example:name=yufei or name=yufei&amp;name=yi
      *
      * @param name the name
      * @param value the value

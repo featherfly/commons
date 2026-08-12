@@ -1,13 +1,20 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
-# 1.16.1
+# 1.16.1 2026-08-12
 
+feat: 
+1. 加入Iterables类
+2. 移除Str.appendRequestParams(String, String, String)方法
+3. UriUtils添加appendParam方法
+4. ServiceLoaderUtils添加带ClassLoader参数的重载方法
+
+fix:
 1. 修复StringFormatter连续两个占位参数在一起（{}{})时，参数是空字符串导致后面紧跟的占位参数没有被替换的问题
-2. 加入Iterables类
-3. 移除Str.appendRequestParams(String, String, String)方法
-4. UriUtils添加appendParam方法
-5. ServiceLoaderUtils添加带ClassLoader参数的重载方法
-6. 修复Str.[start|end]sWith参数prefix|suffix为空时，报空指针异常的问题
+2. 修复Str.[start|end]sWith参数prefix|suffix为空时，报空指针异常的问题
+
+chore:
+1. 升级依赖
+
 
 # 1.16.0 2026-01-29
 

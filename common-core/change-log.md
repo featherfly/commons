@@ -2,15 +2,27 @@
 
 # 1.16.1 2026-08-12
 
-feat: 
-1. 加入Iterables类
-2. 移除Str.appendRequestParams(String, String, String)方法
-3. UriUtils添加appendParam方法
-4. ServiceLoaderUtils添加带ClassLoader参数的重载方法
+feat:
+   1. AssertUtils add overloading method with Function<String, E> argument instead Class<E>
+   2. Lang|CollectionUtils|ArrayUtils add create queue method, CollectionUtils add new[List|Set|Queue|Map]Force method
+   3. ClassUtils add overload method [set|get]FieldValue
+   4. support format[Date|DateTime|Time],parse[Date|DateTime|Time],parseLocal[Date|DateTime|Time]
+   5. Lang.toEnum support long|Long value
+   6. add Iterables
+   7. ClassUtils add get[Collection|List|Set|Queue|Map]Class
+   8. ServiceLoaderUtils add overload method load with ClassLoader argument
+   9. UriUtils add appendParam method
 
 fix:
-1. 修复StringFormatter连续两个占位参数在一起（{}{})时，参数是空字符串导致后面紧跟的占位参数没有被替换的问题
-2. 修复Str.[start|end]sWith参数prefix|suffix为空时，报空指针异常的问题
+   1. forName(String, boolean useHashCodeOnly) `useHashCodeOnly` do not use problem
+   2. NullPointException will occur when Str.[start|end]sWith argument prefix|suffix is null
+   3. StringFormatter error when format argument is empty string
+
+refactor:
+   1. LocalizedException use LocalizedExceptionUtils.getMessage to get localizedMessage
+   2. optimize jdk properties file and enhance properties file read write logic
+   3. spelling mistake FORMART_[DATE|TIME|DATE_TIME] rename to FORMAT_[DATE|TIME|DATE_TIME], change FORMAT_[DATE|TIME|DATE_TIME] to public access
+   4. remove Str.appendRequestParams(String, String, String)
 
 chore:
 1. 升级依赖

@@ -1,3 +1,8 @@
+# 0.4.1 2026-09-16
+
+1. 修复`Gender.FAMELE`拼写错误，修改为`Gender.FEMELE`
+
+
 # 0.4.0 2026-05-13
 1. AuditState|ChineseZodiac|State|TimeRange加入valueOf(Integer|int)方法
 2. 升级common-api到0.5.7

@@ -21,8 +21,8 @@ public enum Gender implements Property<Integer> {
 
     /** The male. */
     MALE(0),
-    /** The famale. */
-    FAMALE(1),
+    /** The female. */
+    FEMALE(1),
     /** The unknow. */
     UNKNOW(2);
 

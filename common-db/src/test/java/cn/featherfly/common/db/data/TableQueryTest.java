@@ -2,6 +2,8 @@ package cn.featherfly.common.db.data;
 
 import static org.testng.Assert.assertEquals;
 
+import java.io.Serializable;
+
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.db.builder.dml.SqlConditionGroup;
@@ -21,10 +23,11 @@ public class TableQueryTest {
     @Test
     public void test() {
         ConditionBuilder builder = new SqlConditionGroup(Dialects.mysql(), IgnoreStrategy.EMPTY,
-                new SqlSortBuilder(Dialects.mysql()));
+            new SqlSortBuilder(Dialects.mysql()));
         builder.eq("name", "yufei").and().gt("age", 18);
         TableQuery q = new TableQuery(Dialects.mysql(), "user", builder);
         System.out.println(q.getSql());
         assertEquals(q.getSql(), "select * from `user` WHERE `name` = ? AND `age` > ?");
+        assertEquals(q.getParams(), new Serializable[] { "yufei", 18 });
     }
 }

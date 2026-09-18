@@ -3,6 +3,7 @@ package cn.featherfly.common.db.data.query;
 
 import java.io.Serializable;
 
+import cn.featherfly.common.db.SqlUtils;
 import cn.featherfly.common.db.builder.BuilderUtils;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.db.dialect.Keywords;
@@ -45,8 +46,7 @@ public class TableQuery implements Query {
         sql.append("select * from ").append(dialect.dml().table(tableName));
         if (conditionBuilder != null) {
             String condition = conditionBuilder.build();
-            // FIXME 这里不能强制类型转换，需要处理
-            params = (Serializable[]) conditionBuilder.getParamValue();
+            params = SqlUtils.flatParams(conditionBuilder.getParamValue());
             if (Lang.isNotEmpty(condition)) {
                 BuilderUtils.link(sql, dialect.getKeyword(Keywords.WHERE), condition);
             }

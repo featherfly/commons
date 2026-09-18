@@ -1,5 +1,9 @@
 # 0.8.2
 
+feat:
+1. SqlExecutor的END_SQL_SIGN从";"变更为"; *(\\r?\\n+)+"
+
+chore:
 1. 升级依赖
 
 # 0.8.1 2025-12-21

@@ -58,11 +58,8 @@ public class SqlFile {
         INCLUDE;
     }
 
-    /** The Constant INCLUDE_SYMBOL. */
-    //    public static final String INCLUDE_SYMBOL = "--@include";
-
     /** The Constant INCLUDE_SYMBOL_PATTERN. */
-    public static final Pattern INCLUDE_SYMBOL_PATTERN = Pattern.compile("(--[ ]*@include) (.+)");
+    public static final Pattern INCLUDE_SYMBOL_PATTERN = Pattern.compile("(-- *@include) (.+)");
     /** The Constant END_SQL_SIGN. */
     public static final String END_SQL_SIGN = ";";
 

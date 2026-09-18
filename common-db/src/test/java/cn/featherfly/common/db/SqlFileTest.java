@@ -1,17 +1,19 @@
 
 package cn.featherfly.common.db;
 
+import static org.testng.Assert.assertEquals;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
+import java.nio.file.Files;
 
 import org.testng.annotations.Test;
 
 import cn.featherfly.common.db.SqlFile.IncludeExistPolicy;
 import cn.featherfly.common.lang.ClassLoaderUtils;
-import cn.featherfly.common.lang.Dates;
 import cn.featherfly.common.structure.ChainMapImpl;
 
 /**
@@ -20,16 +22,23 @@ import cn.featherfly.common.structure.ChainMapImpl;
  * @author zhongj
  */
 public class SqlFileTest {
+
+    private byte[] readFile(String path) throws IOException {
+        return Files.readAllBytes(new File(ClassLoaderUtils.getResource(path).getPath()).toPath());
+    }
+
     @Test
     public void testInclude() throws IOException {
         SqlFile sqlFile = SqlFile.read(new File(ClassLoaderUtils.getResource("executor_include.sql").getFile()),
             StandardCharsets.UTF_8);
-        System.out.println("\nsqlList:\n");
-        for (String sql : sqlFile.getSqlList()) {
-            System.out.println(sql);
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            // sqlFile.write(new File("executor_include_merged.sql"));
+            sqlFile.write(os);
+            System.out.println("\ntestInclude merged sql:\n");
+            System.out.println(os.toString());
+            byte[] exceptBytes = readFile("merged_sql/executor_include_merged.sql");
+            assertEquals(os.toByteArray(), exceptBytes);
         }
-
-        sqlFile.write(new File("executor_include_merged.sql"));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -50,9 +59,13 @@ public class SqlFileTest {
             new File(ClassLoaderUtils.getResource("executor_sql/executor_include.sql").getFile()),
             StandardCharsets.UTF_8);
 
-        System.out.println("\nsqlList:\n");
-        for (String sql : sqlFile.getSqlList()) {
-            System.out.println(sql);
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            //            sqlFile.write(new File("executor_include2_merged.sql"));
+            sqlFile.write(os);
+            System.out.println("\ntestInclude2 merged sql:\n");
+            System.out.println(os.toString());
+            byte[] exceptBytes = readFile("merged_sql/executor_include2_merged.sql");
+            assertEquals(os.toByteArray(), exceptBytes);
         }
     }
 
@@ -62,12 +75,14 @@ public class SqlFileTest {
             new File(ClassLoaderUtils.getResource("executor_sql/executor_include2.sql").getFile()),
             StandardCharsets.UTF_8);
 
-        System.out.println("\nsqlList:\n");
-        for (String sql : sqlFile.getSqlList()) {
-            System.out.println(sql);
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            //            sqlFile.write(new File("executor_include2_ignore_all.sql"));
+            sqlFile.write(os);
+            System.out.println("\ntestIncludeExistPolicyIgnore merged sql:\n");
+            System.out.println(os.toString());
+            byte[] exceptBytes = readFile("merged_sql/executor_include2_ignore_all.sql");
+            assertEquals(os.toByteArray(), exceptBytes);
         }
-
-        sqlFile.write(new File("executor_include2_ignore_all.sql"));
     }
 
     @Test
@@ -76,12 +91,14 @@ public class SqlFileTest {
             new File(ClassLoaderUtils.getResource("executor_sql/executor_include2.sql").getFile()),
             StandardCharsets.UTF_8, IncludeExistPolicy.INCLUDE);
 
-        System.out.println("\nsqlList:\n");
-        for (String sql : sqlFile.getSqlList()) {
-            System.out.println(sql);
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            // sqlFile.write(new File("executor_include2_ignore_include.sql"));
+            sqlFile.write(os);
+            System.out.println("\ntestIncludeExistPolicyInclude merged sql:\n");
+            System.out.println(os.toString());
+            byte[] exceptBytes = readFile("merged_sql/executor_include2_ignore_include.sql");
+            assertEquals(os.toByteArray(), exceptBytes);
         }
-
-        sqlFile.write(new File("executor_include2_ignore_include.sql"));
     }
 
     @Test(expectedExceptions = JdbcException.class)
@@ -101,36 +118,44 @@ public class SqlFileTest {
         SqlFile sqlFile = SqlFile.read(
             new File(ClassLoaderUtils.getResource("executor_sql/executor_include_with_jar.sql").getFile()),
             StandardCharsets.UTF_8);
-        System.out.println("\nsqlList:\n");
-        for (String sql : sqlFile.getSqlList()) {
-            System.out.println(sql);
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            // sqlFile.write(new File("executor_include_with_jar_merged.sql"));
+            sqlFile.write(os);
+            System.out.println("\ntestIncludeWithJar merged sql:\n");
+            System.out.println(os.toString());
+            byte[] exceptBytes = readFile("merged_sql/executor_include_with_jar_merged.sql");
+            assertEquals(os.toByteArray(), exceptBytes);
         }
-
-        sqlFile.write(new File("executor_include_with_jar_merged.sql"));
     }
 
     @Test
     public void testIncludeParams() throws IOException {
         SqlFile sqlFile = SqlFile.read(new File(ClassLoaderUtils.getResource("executor_include_params.sql").getFile()),
             StandardCharsets.UTF_8, new ChainMapImpl<String, Serializable>().putChain("name", "yufei").putChain("time",
-                Dates.formatTime(new Date())));
-        System.out.println("\nsqlList:\n");
-        for (String sql : sqlFile.getSqlList()) {
-            System.out.println(sql);
-        }
+                "2012-12-12 12:12:12"));
 
-        sqlFile.write(new File("executor_include_params_merged.sql"));
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            //            sqlFile.write(new File("executor_include_params_merged.sql"));
+            sqlFile.write(os);
+            System.out.println("\ntestIncludeParams merged sql:\n");
+            System.out.println(os.toString());
+            byte[] exceptBytes = readFile("merged_sql/executor_include_params_merged.sql");
+            assertEquals(os.toByteArray(), exceptBytes);
+        }
     }
 
     @Test
     public void testIncludeProcedure() throws IOException {
         SqlFile sqlFile = SqlFile.read(ClassLoaderUtils.getResource("executor_include_procedure.sql"),
             StandardCharsets.UTF_8);
-        System.out.println("\nsqlList:\n");
-        for (String sql : sqlFile.getSqlList()) {
-            System.out.println(sql);
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            //            sqlFile.write(new File("executor_include_procedure_merged.sql"));
+            sqlFile.write(os);
+            System.out.println("\nexecutor_include_procedure.sql merged sql:\n");
+            System.out.println(os.toString());
+            byte[] exceptBytes = readFile("merged_sql/executor_include_procedure_merged.sql");
+            assertEquals(os.toByteArray(), exceptBytes);
         }
-        sqlFile.write(new File("executor_include_procedure_merged.sql"));
     }
 
     //    @Test

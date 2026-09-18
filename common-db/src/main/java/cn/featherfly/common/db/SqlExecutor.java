@@ -38,7 +38,7 @@ public class SqlExecutor {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /** The Constant END_SQL_SIGN. */
-    private static final String END_SQL_SIGN = ";";
+    private static final String END_SQL_SIGN = "; *(\\r?\\n+)+";
 
     /** The data source. */
     private DataSource dataSource;

@@ -216,22 +216,38 @@ public class BeanDescriptorTest {
         BeanDescriptor<User> bd = BeanDescriptor.getBeanDescriptor(User.class);
 
         User user = new User();
+        // 这里进行了特殊优化，自动装箱
+        bd.setPropertyValue(user, "username", "yufei");
+        assertEquals(user.getUsername().get(), "yufei");
+        bd.getProperty("username").set(user, "yi");
+        assertEquals(user.getUsername().get(), "yi");
+
+        // 这里进行了特殊优化，自动拆箱
+        bd.setPropertyValue(user, "name", Optional.of("yi"));
+        assertEquals(user.getName(), "yi");
+        bd.getProperty("name").set(user, Optional.of("yufei"));
+        assertEquals(user.getName(), "yufei");
+
+        // 这里是强类型泛型，只能传入Optional
         BeanProperty<User, Optional<String>> username = bd.getBeanProperty("username");
         System.out.println(username.getType());
         Assert.assertEquals(username.getType(), Optional.class);
-
-        bd.setProperty(user, "username", "yufei");
-
-        assertEquals(user.getUsername().get(), "yufei");
-
-        assertEquals(username.getValue(user), user.getUsername());
-
-        username.setValue(user, "featherfly");
-
+        assertEquals(username.get(user), user.getUsername());
+        assertEquals(username.get(user).get(), user.getUsername().get());
+        // 这里是强类型泛型，只能传入Optional
+        username.set(user, Optional.of("featherfly"));
         assertEquals(user.getUsername().get(), "featherfly");
+        assertEquals(username.get(user), user.getUsername());
+        // 这里没有泛型直接使用的是Optional内包装的类型, 程序自动装箱
+        BeanProperty<User, String> username2 = bd.getBeanProperty("username");
+        username2.set(user, "featherfly2");
+        assertEquals(user.getUsername().get(), "featherfly2");
+        assertEquals(username.get(user), user.getUsername());
 
-        assertEquals(username.getValue(user), user.getUsername());
-
+        BeanProperty<User, String> name = bd.getBeanProperty("name");
+        Assert.assertEquals(name.getType(), String.class);
+        assertEquals(name.get(user), user.getName());
+        assertEquals(name.get(user), user.getName());
     }
 
     @Test

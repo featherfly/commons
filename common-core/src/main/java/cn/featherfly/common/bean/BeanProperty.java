@@ -78,6 +78,12 @@ public class BeanProperty<T, V> implements Type<V>, Property<T, V> {
         type = propertyType;
         this.setter = setter;
         this.getter = getter;
+        if (this.setter != null) {
+            this.setter.setAccessible(true);
+        }
+        if (this.getter != null) {
+            this.getter.setAccessible(true);
+        }
         initAnnotation();
     }
 
@@ -122,6 +128,24 @@ public class BeanProperty<T, V> implements Type<V>, Property<T, V> {
     // this.getter = getter;
     // }
 
+    private Object handleOptional(Object value) {
+        if (Optional.class == getType()) {
+            Optional<?> optValue;
+            if (value instanceof Optional) {
+                optValue = (Optional<?>) value;
+            } else {
+                // auto boxing for Optional
+                optValue = Optional.ofNullable(value);
+            }
+            return optValue;
+        } else if (Optional.class != getType() && value instanceof Optional) {
+            // auto unboxing for Optional
+            return ((Optional<?>) value).orElse(null);
+        } else {
+            return value;
+        }
+    }
+
     /**
      * 设置属性 .
      *
@@ -132,11 +156,7 @@ public class BeanProperty<T, V> implements Type<V>, Property<T, V> {
         checkType(obj.getClass());
         if (isWritable()) {
             try {
-                if (type == Optional.class) {
-                    setter.invoke(obj, Optional.ofNullable(value));
-                } else {
-                    setter.invoke(obj, value);
-                }
+                setter.invoke(obj, handleOptional(value));
             } catch (Exception e) {
                 throw new ReflectException(Str.format("set {0}.{1} error", ownerType.getName(), name), e);
             }
@@ -161,13 +181,11 @@ public class BeanProperty<T, V> implements Type<V>, Property<T, V> {
             checkType(obj.getClass());
             try {
                 field.setAccessible(true);
-                if (type == Optional.class) {
-                    field.set(obj, Optional.ofNullable(value));
-                } else {
-                    field.set(obj, value);
-                }
+                field.set(obj, handleOptional(value));
             } catch (Exception e) {
                 throw new ReflectException(Str.format("set {0}.{1} force error", ownerType.getName(), name), e);
+            } finally {
+                field.setAccessible(false);
             }
         }
     }
@@ -216,6 +234,8 @@ public class BeanProperty<T, V> implements Type<V>, Property<T, V> {
             return (V) field.get(obj);
         } catch (Exception e) {
             throw new ReflectException(Str.format("get {0}.{1} force error", ownerType.getName(), name), e);
+        } finally {
+            field.setAccessible(false);
         }
     }
 

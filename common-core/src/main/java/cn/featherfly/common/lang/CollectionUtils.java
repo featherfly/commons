@@ -451,7 +451,7 @@ public final class CollectionUtils {
      * @return instance of list
      */
     public static <E, L extends List<?>> List<E> newList(Class<L> type) {
-        return newList(type, CollectionUtils::newInstanceCreator);
+        return newList(type, (Function<Class<L>, List<E>>) CollectionUtils::newInstanceCreator);
     }
 
     /**
@@ -478,7 +478,7 @@ public final class CollectionUtils {
      * @return instance of list
      */
     public static <E> List<E> newListForce(Class<?> type) {
-        return newListForce(type, CollectionUtils::newInstanceCreator);
+        return newListForce(type, (Function<Class<?>, List<E>>) CollectionUtils::newInstanceCreator);
     }
 
     /**
@@ -569,7 +569,7 @@ public final class CollectionUtils {
      * @return Set instance object
      */
     public static <E, S extends Set<?>> Set<E> newSet(Class<S> type) {
-        return newSet(type, CollectionUtils::newInstanceCreator);
+        return newSet(type, (Function<Class<S>, Set<E>>) CollectionUtils::newInstanceCreator);
     }
 
     /**
@@ -581,7 +581,7 @@ public final class CollectionUtils {
      * @return Set instance object
      */
     public static <E> Set<E> newSetForce(Class<?> type) {
-        return newSetForce(type, CollectionUtils::newInstanceCreator);
+        return newSetForce(type, (Function<Class<?>, Set<E>>) CollectionUtils::newInstanceCreator);
     }
 
     /**
@@ -695,7 +695,7 @@ public final class CollectionUtils {
      * @return Queue instance object
      */
     public static <E, Q extends Queue<?>> Queue<E> newQueue(Class<Q> type) {
-        return newQueue(type, CollectionUtils::newInstanceCreator);
+        return newQueue(type, (Function<Class<Q>, Queue<E>>) CollectionUtils::newInstanceCreator);
     }
 
     /**
@@ -707,7 +707,7 @@ public final class CollectionUtils {
      * @return Queue instance object
      */
     public static <E> Queue<E> newQueueForce(Class<?> type) {
-        return newQueueForce(type, CollectionUtils::newInstanceCreator);
+        return newQueueForce(type, (Function<Class<?>, Queue<E>>) CollectionUtils::newInstanceCreator);
     }
 
     /**
@@ -814,7 +814,7 @@ public final class CollectionUtils {
      * @return Map instance object
      */
     public static <K, V, M extends Map<?, ?>> Map<K, V> newMap(Class<M> type) {
-        return newMap(type, CollectionUtils::newInstanceCreator);
+        return newMap(type, (Function<Class<M>, Map<K, V>>) CollectionUtils::newInstanceCreator);
     }
 
     /**
@@ -843,7 +843,7 @@ public final class CollectionUtils {
      * @return Map instance object
      */
     public static <K, V> Map<K, V> newMapForce(Class<?> type) {
-        return newMapForce(type, CollectionUtils::newInstanceCreator);
+        return newMapForce(type, (Function<Class<?>, Map<K, V>>) CollectionUtils::newInstanceCreator);
     }
 
     /**

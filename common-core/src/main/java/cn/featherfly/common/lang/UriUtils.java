@@ -6,8 +6,11 @@
 package cn.featherfly.common.lang;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.StringTokenizer;
 
 import cn.featherfly.common.constant.Chars;
 
@@ -102,6 +105,10 @@ public final class UriUtils {
         return linkUri(true, uris);
     }
 
+    public static String linkUri(List<String> uris) {
+        return linkUri(true, uris);
+    }
+
     /**
      * link given uris as given linkUri("/a/b/","c/d","/11/22/","/33/44/")
      * return /a/b/c/d/11/22/33/44
@@ -114,13 +121,37 @@ public final class UriUtils {
      * @return 连接后的uri
      */
     public static String linkUri(boolean ignoreCaseEmpty, String... uris) {
-        String resultUri = null;
-        if (uris != null && uris.length > 0) {
-            resultUri = uris[0];
-            if (uris.length > 1) {
-                for (int i = 1; i < uris.length; i++) {
-                    resultUri = linkUri(resultUri, uris[i], ignoreCaseEmpty);
-                }
+        if (Lang.isEmpty(uris)) {
+            return null;
+        }
+        String resultUri = uris[0];
+        if (uris.length > 1) {
+            for (int i = 1; i < uris.length; i++) {
+                resultUri = linkUri(resultUri, uris[i], ignoreCaseEmpty);
+            }
+        }
+        return resultUri;
+    }
+
+    /**
+     * link given uris as given linkUri("/a/b/","c/d","/11/22/","/33/44/")
+     * return /a/b/c/d/11/22/33/44
+     * if ignoreCaseEmpty is true and the beforeUri is empty,will return afterUri
+     * if ignoreCaseEmpty = true linkUri("","","c/d") return c/d
+     * if ignoreCaseEmpty = false linkUri("","","c/d") return /c/d
+     *
+     * @param ignoreCaseEmpty 如果开始uri为空，则忽略
+     * @param uris 待连接的uri
+     * @return 连接后的uri
+     */
+    public static String linkUri(boolean ignoreCaseEmpty, List<String> uris) {
+        if (Lang.isEmpty(uris)) {
+            return null;
+        }
+        String resultUri = uris.get(0);
+        if (uris.size() > 1) {
+            for (int i = 1; i < uris.size(); i++) {
+                resultUri = linkUri(resultUri, uris.get(i), ignoreCaseEmpty);
             }
         }
         return resultUri;
@@ -243,5 +274,53 @@ public final class UriUtils {
             url += toParameString(params);
         }
         return url;
+    }
+
+    /**
+     * simplify URL, remove ./ ../ and calculate the final result.
+     * example aa/bb/./cc/dd/../d2 to aa/bb/cc/d2
+     *
+     * @param url the url
+     * @return Simplified URL
+     */
+    public static String simplify(String url) {
+        StringTokenizer tokenizer = new StringTokenizer(url, "/");
+        if (tokenizer.countTokens() == 0) {
+            return url;
+        }
+        List<String> list = simplify(tokenizer);
+        StringBuilder result = new StringBuilder();
+        for (String s : list) {
+            result.append(s).append("/");
+        }
+        if (result.length() > 0) {
+            result.deleteCharAt(result.length() - 1);
+        }
+        return result.toString();
+    }
+
+    private static List<String> simplify(StringTokenizer tokenizer) {
+        List<String> list = new ArrayList<>();
+        int index = -1;
+        while (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            if (Chars.DOT.equals(token)) {
+                // do nothing
+            } else if ("..".equals(token)) {
+                if (index > 0) {
+                    index--;
+                } else {
+                    index = list.size() - 1;
+                }
+            } else {
+                if (index > 0) {
+                    list.set(index, token);
+                    index = -1;
+                } else {
+                    list.add(token);
+                }
+            }
+        }
+        return list;
     }
 }

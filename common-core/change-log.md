@@ -1,9 +1,10 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
-# 1.16.2
+# 1.16.2 2026-09-21
 
 feat:
   1. 当属性类型为 Optional 时，BeanDescriptor 和 BeanProperty 会在属性访问期间自动处理 Optional 值的装箱和拆箱
+  2. UriUtils加入simplify方法
 
 # 1.16.1 2026-08-12
 

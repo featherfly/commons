@@ -119,4 +119,31 @@ public class UriUtilsTest {
         System.out.println(result);
 
     }
+
+    @Test
+    void simplify() {
+        String url = "aa/bb/./cc/dd/../d2";
+        System.out.println(UriUtils.simplify(url));
+        assertEquals(UriUtils.simplify(url), "aa/bb/cc/d2");
+
+        url = "aa/bb/./cc/dd/../d2/";
+        assertEquals(UriUtils.simplify(url), "aa/bb/cc/d2");
+
+        url = "aa/bb/./cc/dd/../d2/../../c2";
+        System.out.println(UriUtils.simplify(url));
+        assertEquals(UriUtils.simplify(url), "aa/bb/c2/d2");
+
+        url = "aa/bb/./cc/dd/../d2/../../c2/";
+        assertEquals(UriUtils.simplify(url), "aa/bb/c2/d2");
+    }
+
+    @Test
+    void simplify2() {
+        String url = "aa/bb/./cc/dd/../d2/../../c2";
+        System.out.println(UriUtils.simplify(url));
+        assertEquals(UriUtils.simplify(url), "aa/bb/c2/d2");
+
+        //        url = "aa/bb/./cc/dd/../d2/";
+        //        assertEquals(UriUtils.simplify(url), "aa/bb/cc/d2");
+    }
 }

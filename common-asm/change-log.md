@@ -1,5 +1,11 @@
-# 0.4.0
-1.
+# 0.4.0 2026-09-21
+feat:
+
+1. add debug model
+
+chore:
+
+1. upgrade dependencies
 
 # 0.3.2 2024-11-25
 1. AsmPropertyAccessorFactory创建的PropetyAccessor，根据name（字符串）查找的方法实现更改为switch实现（同index[int]查找逻辑一致）

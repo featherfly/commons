@@ -1,5 +1,11 @@
+# 0.
+
+chore:
+  1. jpa依赖从hibernate-jpa-2.1-api变更为javax.persistence-api
+  2. 去除无效依赖
+
 # 0.5.4 2025-12-21
-1. 升级common-core到1.15.2 
+1. 升级common-core到1.15.2
 2. Params改为继承HashMap
 
 # 0.5.3 2025-03-20

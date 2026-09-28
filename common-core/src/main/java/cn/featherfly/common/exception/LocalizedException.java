@@ -13,7 +13,7 @@ import cn.featherfly.common.locale.LocalizedMessage;
  *
  * @author zhongj
  */
-public abstract class LocalizedException extends BaseException {
+public abstract class LocalizedException extends RuntimeException {
 
     private static final long serialVersionUID = -580152334157640022L;
 

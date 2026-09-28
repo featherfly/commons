@@ -28,6 +28,37 @@ public class ExceptionCodeExceptionCreatorTest {
     ExceptionCodeExceptionImpl e;
 
     @Test
+    public void code() {
+        e = ExceptionCodeExceptionImpl.STRING.create("yufei");
+        System.out.println(e.getExceptionCode().toString());
+        assertEquals(e.getExceptionCode().getModule(), "CODE");
+        assertEquals(e.getExceptionCode().getNum(), 100001);
+        assertEquals(e.getExceptionCode().getMessage(), "#string");
+        assertEquals(e.getExceptionCode().getCode(), "CODE100001");
+
+        e = ExceptionCodeExceptionImpl.INTEGER.create(18);
+        System.out.println(e.getExceptionCode().toString());
+        assertEquals(e.getExceptionCode().getModule(), "CODE");
+        assertEquals(e.getExceptionCode().getNum(), 100002);
+        assertEquals(e.getExceptionCode().getMessage(), "#integer");
+        assertEquals(e.getExceptionCode().getCode(), "CODE100002");
+
+        e = ExceptionCodeExceptionImpl.STRING_INTEGER.create(Tuples.of("yufei", 18));
+        System.out.println(e.getExceptionCode().toString());
+        assertEquals(e.getExceptionCode().getModule(), "CODE");
+        assertEquals(e.getExceptionCode().getNum(), 100003);
+        assertEquals(e.getExceptionCode().getMessage(), "#string_integer");
+        assertEquals(e.getExceptionCode().getCode(), "CODE100003");
+
+        e = ExceptionCodeExceptionImpl.DATE.create(Dates.toDate(LocalDate.of(2012, 12, 12)));
+        System.out.println(e.getExceptionCode().toString());
+        assertEquals(e.getExceptionCode().getModule(), "CODE");
+        assertEquals(e.getExceptionCode().getNum(), 100004);
+        assertEquals(e.getExceptionCode().getMessage(), "#date");
+        assertEquals(e.getExceptionCode().getCode(), "CODE100004");
+    }
+
+    @Test
     public void chineseDefaultLocale() {
         Locale.setDefault(Locale.CHINESE);
         e = ExceptionCodeExceptionImpl.INTEGER.create(18);

@@ -26,16 +26,16 @@ public class ExceptionCodeExceptionImpl extends ExceptionCodeException {
             ExceptionCodeExceptionImpl::new);
 
     public static final ExceptionCodeExceptionCreator<Integer, ExceptionCodeExceptionImpl> INTEGER =
-        new ExceptionCodeExceptionCreator<>("CODE", 100001, "#integer", ExceptionCodeExceptionImpl::new,
+        new ExceptionCodeExceptionCreator<>("CODE", 100002, "#integer", ExceptionCodeExceptionImpl::new,
             ExceptionCodeExceptionImpl::new);
 
     public static final ExceptionCodeExceptionCreator<Tuple2<String, Integer>,
         ExceptionCodeExceptionImpl> STRING_INTEGER =
-            new ExceptionCodeExceptionCreator<>("CODE", 100001, "#string_integer", ExceptionCodeExceptionImpl::new,
+            new ExceptionCodeExceptionCreator<>("CODE", 100003, "#string_integer", ExceptionCodeExceptionImpl::new,
                 ExceptionCodeExceptionImpl::new);
 
     public static final ExceptionCodeExceptionCreator<Date, ExceptionCodeExceptionImpl> DATE =
-        new ExceptionCodeExceptionCreator<>("CODE", 100001, "#date", ExceptionCodeExceptionImpl::new,
+        new ExceptionCodeExceptionCreator<>("CODE", 100004, "#date", ExceptionCodeExceptionImpl::new,
             ExceptionCodeExceptionImpl::new);
 
     private static final long serialVersionUID = -2340167234899586120L;

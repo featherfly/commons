@@ -1,5 +1,14 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
+# 1.16.3
+
+feat:
+  1. add ExceptionCodeExceptionCreator
+
+refactor:
+  1. remove BaseException
+
+
 # 1.16.2 2026-09-21
 
 feat:

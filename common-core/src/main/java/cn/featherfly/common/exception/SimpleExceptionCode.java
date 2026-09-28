@@ -47,4 +47,9 @@ public class SimpleExceptionCode implements ExceptionCode {
     public String getModule() {
         return module;
     }
+
+    @Override
+    public String toString() {
+        return "SimpleExceptionCode [module=" + module + ", num=" + num + ", message=" + message + "]";
+    }
 }

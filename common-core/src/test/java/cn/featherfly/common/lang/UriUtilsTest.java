@@ -121,28 +121,32 @@ public class UriUtilsTest {
     }
 
     @Test
-    void simplify() {
+    public void simplify() {
         String url = "aa/bb/./cc/dd/../d2";
-        System.out.println(UriUtils.simplify(url));
         assertEquals(UriUtils.simplify(url), "aa/bb/cc/d2");
 
         url = "aa/bb/./cc/dd/../d2/";
         assertEquals(UriUtils.simplify(url), "aa/bb/cc/d2");
 
         url = "aa/bb/./cc/dd/../d2/../../c2";
-        System.out.println(UriUtils.simplify(url));
         assertEquals(UriUtils.simplify(url), "aa/bb/c2/d2");
 
         url = "aa/bb/./cc/dd/../d2/../../c2/";
         assertEquals(UriUtils.simplify(url), "aa/bb/c2/d2");
+
+        url = "aa/../bb/c2/d.ext";
+        assertEquals(UriUtils.simplify(url), "bb/c2/d.ext");
     }
 
     @Test
-    void simplify2() {
-        String url = "aa/bb/./cc/dd/../d2/../../c2";
+    public void simplify2() {
+        String url = "aa/../bb/c2/d.ext";
+        System.out.println(UriUtils.simplify(url));
+        assertEquals(UriUtils.simplify(url), "bb/c2/d.ext");
+
+        url = "aa/bb/./cc/dd/../d2/../../c2";
         System.out.println(UriUtils.simplify(url));
         assertEquals(UriUtils.simplify(url), "aa/bb/c2/d2");
-
         //        url = "aa/bb/./cc/dd/../d2/";
         //        assertEquals(UriUtils.simplify(url), "aa/bb/cc/d2");
     }

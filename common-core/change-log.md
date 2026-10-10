@@ -1,9 +1,12 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
-# 1.16.3
+# 1.16.3 2026-10-10
 
 feat:
   1. add ExceptionCodeExceptionCreator
+
+fix:
+  1. UriUtils.simplify is not correct when argument is like "aa/../bb"
 
 refactor:
   1. remove BaseException

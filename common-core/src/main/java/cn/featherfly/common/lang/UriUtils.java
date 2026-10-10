@@ -307,13 +307,13 @@ public final class UriUtils {
             if (Chars.DOT.equals(token)) {
                 // do nothing
             } else if ("..".equals(token)) {
-                if (index > 0) {
+                if (index > -1) {
                     index--;
                 } else {
                     index = list.size() - 1;
                 }
             } else {
-                if (index > 0) {
+                if (index > -1) {
                     list.set(index, token);
                     index = -1;
                 } else {

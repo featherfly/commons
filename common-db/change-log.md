@@ -2,6 +2,7 @@
 
 feat:
 1. SqlExecutor的END_SQL_SIGN从";"变更为"; *(\\r?\\n+)+"
+2. DMLFeature加入AutoIncrementInsert支持，不同的数据库的Dialect对AutoIncrementInsert策略的实现有差异
 
 chore:
 1. 升级依赖

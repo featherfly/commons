@@ -8,7 +8,6 @@
  */
 package cn.featherfly.common.db.dialect.dml;
 
-import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.builder.model.SqlElement;
 import cn.featherfly.common.db.dialect.AbstractDMLFeature;
 import cn.featherfly.common.db.dialect.DialectException;
@@ -94,18 +93,18 @@ public class SQLServerDMLFeature extends AbstractDMLFeature<SQLServerDialect> {
      * {@inheritDoc}
      */
     @Override
-    protected String preparePrimaryKeyColumnForInsert(String tableName, String columnName, boolean autoIncrement) {
-        return Chars.QUESTION;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     protected String column(boolean distinct, String tableAlias, String columnName,
         String columnAlias, DateFunction function, Object... argus) {
         // NOIMPL 未实现
         throw new DialectException("未实现的 function" + function.getClass().getName());
     }
 
+    @Override
+    public AutoIncrementInsert getAutoIncrementInsert() {
+        if (autoIncrementInsert == AutoIncrementInsert.DEFAULT_PALCEHOLD
+            || autoIncrementInsert == AutoIncrementInsert.NULL_VALUE) {
+            throw new DialectException("{} nonsupport {}", getClass().getSimpleName(), autoIncrementInsert.name());
+        }
+        return autoIncrementInsert;
+    }
 }

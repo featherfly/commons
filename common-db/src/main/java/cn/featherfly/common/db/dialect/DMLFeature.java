@@ -45,11 +45,10 @@ public interface DMLFeature {
      *
      * @param tableName the table name
      * @param columnNames the column names
-     * @param autoIncrement the auto increment
      * @return the string
      */
-    default String insert(String tableName, String[] columnNames, boolean autoIncrement) {
-        return insert(tableName, null, columnNames, autoIncrement);
+    default String insert(String tableName, String[] columnNames) {
+        return insert(tableName, null, columnNames, false);
     }
 
     /**
@@ -72,8 +71,8 @@ public interface DMLFeature {
      * @param autoIncrement the auto increment
      * @return sql of batch insert
      */
-    default String insertBatch(String tableName, String[] columnNames, int insertAmount, boolean autoIncrement) {
-        return insertBatch(tableName, null, columnNames, insertAmount, autoIncrement);
+    default String insertBatch(String tableName, String[] columnNames, int insertAmount) {
+        return insertBatch(tableName, null, columnNames, insertAmount, false);
     }
 
     /**
@@ -603,5 +602,39 @@ public interface DMLFeature {
     default String inOrNotInExpression(boolean isIn, String columnName, Object values, String tableAlias,
         MatchStrategy matchStrategy) {
         return inOrNotInExpression(isIn, column(tableAlias, columnName), values, matchStrategy);
+    }
+
+    /**
+     * Gets the auto increment insert.
+     *
+     * @return the auto increment insert
+     */
+    AutoIncrementInsert getAutoIncrementInsert();
+
+    /**
+     * Sets the auto increment insert.
+     *
+     * @param autoIncrementInsert the new auto increment insert
+     */
+    void setAutoIncrementInsert(AutoIncrementInsert autoIncrementInsert);
+
+    /**
+     * AutoIncrementInsert.
+     * 
+     * @author zhongj
+     */
+    public enum AutoIncrementInsert {
+        /**
+         * ignore primary key column for insert sql
+         */
+        IGNORE_PRIMARY_KEY_COLUMN,
+        /**
+         * use the keyword DEFAULT as a placeholder for insert sql
+         */
+        DEFAULT_PALCEHOLD,
+        /**
+         * use null value
+         */
+        NULL_VALUE;
     }
 }

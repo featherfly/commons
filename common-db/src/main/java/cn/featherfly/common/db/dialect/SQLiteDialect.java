@@ -8,6 +8,7 @@ import java.util.Date;
 
 import cn.featherfly.common.db.JdbcException;
 import cn.featherfly.common.db.SqlUtils;
+import cn.featherfly.common.db.dialect.DMLFeature.AutoIncrementInsert;
 import cn.featherfly.common.db.dialect.ddl.SQLiteDDLFeature;
 import cn.featherfly.common.db.dialect.dml.SQLiteDMLFeature;
 import cn.featherfly.common.exception.UnsupportedException;
@@ -35,6 +36,7 @@ public class SQLiteDialect extends AbstractDialect {
         super();
         ddlFeature = new SQLiteDDLFeature(this);
         dmlFeature = new SQLiteDMLFeature(this);
+        dmlFeature.setAutoIncrementInsert(AutoIncrementInsert.NULL_VALUE);
     }
 
     /**

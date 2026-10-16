@@ -3,7 +3,10 @@ package cn.featherfly.common.db.dialect;
 
 import static org.testng.Assert.assertEquals;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import cn.featherfly.common.db.dialect.DMLFeature.AutoIncrementInsert;
 
 /**
  * PostgresqlDialectTest.
@@ -12,7 +15,19 @@ import org.testng.annotations.Test;
  */
 public class PostgresqlDialectTest extends DialectTest {
 
-    Dialect dialect = Dialects.postgresql();
+    /**
+     * Instantiates a new postgresql dialect test.
+     */
+    public PostgresqlDialectTest() {
+        super();
+        dialect = Dialects.postgresql();
+    }
+
+    @Override
+    @BeforeMethod
+    public void beforeMethod() {
+        dialect.dml().setAutoIncrementInsert(Dialects.postgresql().dml().getAutoIncrementInsert());
+    }
 
     @Override
     @Test
@@ -136,6 +151,25 @@ public class PostgresqlDialectTest extends DialectTest {
         assertEquals(sql,
             "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?)");
 
+        // ----------------------------------------------------------------------------------------------------------------
+
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 1, true);
+        assertEquals(sql, "INSERT INTO \"user\" (\"name\", \"descp\") VALUES (?, ?)");
+
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 2, true);
+        assertEquals(sql, "INSERT INTO \"user\" (\"name\", \"descp\") VALUES (?, ?),(?, ?)");
+
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 3, true);
+        assertEquals(sql,
+            "INSERT INTO \"user\" (\"name\", \"descp\") VALUES (?, ?),(?, ?),(?, ?)");
+
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 5, true);
+        assertEquals(sql,
+            "INSERT INTO \"user\" (\"name\", \"descp\") VALUES (?, ?),(?, ?),(?, ?),(?, ?),(?, ?)");
+
+        // ----------------------------------------------------------------------------------------------------------------
+
+        dialect.dml().setAutoIncrementInsert(AutoIncrementInsert.DEFAULT_PALCEHOLD);
         sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 1, true);
         assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"descp\") VALUES (DEFAULT, ?, ?)");
 
@@ -200,6 +234,12 @@ public class PostgresqlDialectTest extends DialectTest {
         sql = dialect.dml().upsert("user", "id", new String[] { "id", "name", "age" }, "id", true);
         System.out.println(sql);
         assertEquals(sql,
+            "INSERT INTO \"user\" (\"name\", \"age\") VALUES (?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"age\"=EXCLUDED.\"age\"");
+
+        dialect.dml().setAutoIncrementInsert(AutoIncrementInsert.DEFAULT_PALCEHOLD);
+        sql = dialect.dml().upsert("user", "id", new String[] { "id", "name", "age" }, "id", true);
+        System.out.println(sql);
+        assertEquals(sql,
             "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (DEFAULT, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"age\"=EXCLUDED.\"age\"");
     }
 
@@ -217,6 +257,12 @@ public class PostgresqlDialectTest extends DialectTest {
         sql = dialect.dml().upsertBatch("user", "id", new String[] { "id", "name", "age" }, "id", 2, true);
         System.out.println(sql);
         assertEquals(sql,
+            "INSERT INTO \"user\" (\"name\", \"age\") VALUES (?, ?),(?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"age\"=EXCLUDED.\"age\"");
+
+        dialect.dml().setAutoIncrementInsert(AutoIncrementInsert.DEFAULT_PALCEHOLD);
+        sql = dialect.dml().upsertBatch("user", "id", new String[] { "id", "name", "age" }, "id", 2, true);
+        System.out.println(sql);
+        assertEquals(sql,
             "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (DEFAULT, ?, ?),(DEFAULT, ?, ?) ON CONFLICT (id) DO UPDATE SET \"name\"=EXCLUDED.\"name\", \"age\"=EXCLUDED.\"age\"");
     }
 
@@ -226,10 +272,15 @@ public class PostgresqlDialectTest extends DialectTest {
     @Override
     @Test
     void testInsert() {
-        String sql = dialect.dml().insert("user", new String[] { "id", "name", "age" }, false);
+        String sql = dialect.dml().insert("user", new String[] { "id", "name", "age" });
         System.out.println(sql);
         assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (?, ?, ?)");
 
+        sql = dialect.dml().insert("user", "id", new String[] { "id", "name", "age" }, true);
+        System.out.println(sql);
+        assertEquals(sql, "INSERT INTO \"user\" (\"name\", \"age\") VALUES (?, ?)");
+
+        dialect.dml().setAutoIncrementInsert(AutoIncrementInsert.DEFAULT_PALCEHOLD);
         sql = dialect.dml().insert("user", "id", new String[] { "id", "name", "age" }, true);
         System.out.println(sql);
         assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (DEFAULT, ?, ?)");
@@ -241,10 +292,15 @@ public class PostgresqlDialectTest extends DialectTest {
     @Test
     @Override
     void testInsertBatch() {
-        String sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "age" }, 2, false);
+        String sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "age" }, 2);
         System.out.println(sql);
         assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (?, ?, ?),(?, ?, ?)");
 
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "age" }, 2, true);
+        System.out.println(sql);
+        assertEquals(sql, "INSERT INTO \"user\" (\"name\", \"age\") VALUES (?, ?),(?, ?)");
+
+        dialect.dml().setAutoIncrementInsert(AutoIncrementInsert.DEFAULT_PALCEHOLD);
         sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "age" }, 2, true);
         System.out.println(sql);
         assertEquals(sql, "INSERT INTO \"user\" (\"id\", \"name\", \"age\") VALUES (DEFAULT, ?, ?),(DEFAULT, ?, ?)");

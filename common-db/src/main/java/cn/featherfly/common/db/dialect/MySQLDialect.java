@@ -6,12 +6,18 @@ import java.sql.SQLException;
 import java.sql.SQLType;
 import java.sql.Types;
 import java.util.Date;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
 
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.SqlUtils;
+import cn.featherfly.common.db.dialect.DMLFeature.AutoIncrementInsert;
 import cn.featherfly.common.db.dialect.ddl.MysqlDDLFeature;
 import cn.featherfly.common.db.dialect.dml.MysqlDMLFeature;
+import cn.featherfly.common.db.metadata.DatabaseMetadata;
 import cn.featherfly.common.lang.Dates;
+import cn.featherfly.common.lang.Num;
 import cn.featherfly.common.lang.Str;
 import cn.featherfly.common.repository.id.IdGenerator;
 
@@ -22,6 +28,8 @@ import cn.featherfly.common.repository.id.IdGenerator;
  */
 public class MySQLDialect extends AbstractDialect {
 
+    private static final Pattern VERSION_PATTERN = Pattern.compile("^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$");
+
     /** The Constant DEFAULT_COLLATE_CASE_INSENSITIVE. */
     public static final String DEFAULT_COLLATE_CASE_INSENSITIVE = "UTF8_GENERAL_CI";
 
@@ -31,12 +39,31 @@ public class MySQLDialect extends AbstractDialect {
     private final DMLFeature dmlFeature;
 
     /**
-     * Instantiates a new my SQL
+     * Instantiates a new MySQL dialect.
      */
     public MySQLDialect() {
         super();
         ddlFeature = new MysqlDDLFeature(this);
         dmlFeature = new MysqlDMLFeature(this);
+        dmlFeature.setAutoIncrementInsert(AutoIncrementInsert.NULL_VALUE);
+    }
+
+    /**
+     * Instantiates a new MySQL dialect.
+     *
+     * @param databaseMetadata the database metadata
+     */
+    public MySQLDialect(DatabaseMetadata databaseMetadata) {
+        super();
+        boolean aliasForUpsert = true;
+        if (databaseMetadata.getMajorVersion() < 8 ||
+            databaseMetadata.getMajorVersion() == 8 && databaseMetadata.getDriverMinorVersion() == 0
+                && VERSION_PATTERN.matcher(databaseMetadata.getProductVersion()).matches()
+                && Num.parse(StringUtils.substringAfterLast(databaseMetadata.getProductVersion(), '.'), 0) < 20) {
+            aliasForUpsert = false;
+        }
+        ddlFeature = new MysqlDDLFeature(this);
+        dmlFeature = new MysqlDMLFeature(this, aliasForUpsert);
     }
 
     @Override
@@ -105,17 +132,18 @@ public class MySQLDialect extends AbstractDialect {
         StringBuilder pagingSelect = new StringBuilder(sql.length() + sqlLengthOffset);
         pagingSelect.append(sql);
         if (isParamNamed) {
+            pagingSelect.append(" ").append(getKeyword("LIMIT"));
             if (start > 0) {
-                pagingSelect
-                    .append(Str.format(" LIMIT {0}{1},{0}{2}", startSymbol, START_PARAM_NAME, LIMIT_PARAM_NAME));
+                pagingSelect.append(" ").append(startSymbol).append(START_PARAM_NAME).append(",")
+                    .append(startSymbol).append(LIMIT_PARAM_NAME);
             } else {
-                pagingSelect.append(Str.format(" LIMIT {0}{1}", startSymbol, LIMIT_PARAM_NAME));
+                pagingSelect.append(" ").append(startSymbol).append(LIMIT_PARAM_NAME);
+                pagingSelect.append(Str.format(" {0}{1}", startSymbol, LIMIT_PARAM_NAME));
             }
         } else {
+            pagingSelect.append(" ").append(getKeyword("LIMIT")).append(" ?");
             if (start > 0) {
-                pagingSelect.append(" LIMIT ?,?");
-            } else {
-                pagingSelect.append(" LIMIT ?");
+                pagingSelect.append(",?");
             }
         }
         if (isForUpdate) {

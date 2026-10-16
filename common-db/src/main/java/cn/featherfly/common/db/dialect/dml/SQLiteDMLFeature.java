@@ -50,7 +50,7 @@ public class SQLiteDMLFeature extends AbstractDMLFeature<SQLiteDialect> {
         StringBuilder sql = new StringBuilder();
         BuilderUtils.link(sql, dialect.getKeyword(Keywords.INSERT), dialect.getKeyword(Keywords.INTO),
             dialect.wrapName(tableName), dialect.getKeyword(Keywords.SELECT));
-
+        columnNames = filterPrimaryKey(pkColumnName, columnNames, autoIncrement);
         for (int i = 0; i < columnNames.length; i++) {
             BuilderUtils.link(sql, Chars.QUESTION, dialect.getKeyword(Keywords.AS),
                 dialect.wrapName(columnNames[i]) + Chars.COMMA);
@@ -255,17 +255,17 @@ public class SQLiteDMLFeature extends AbstractDMLFeature<SQLiteDialect> {
      * {@inheritDoc}
      */
     @Override
-    protected String preparePrimaryKeyColumnForInsert(String tableName, String columnName, boolean autoIncrement) {
-        return Chars.QUESTION;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     protected String column(boolean distinct, String tableAlias, String columnName,
         String columnAlias, DateFunction function, Object... argus) {
         // NOIMPL 未实现
         throw new DialectException("未实现的 function" + function.getClass().getName());
+    }
+
+    @Override
+    public AutoIncrementInsert getAutoIncrementInsert() {
+        if (autoIncrementInsert == AutoIncrementInsert.DEFAULT_PALCEHOLD) {
+            throw new DialectException("{} nonsupport {}", getClass().getSimpleName(), autoIncrementInsert.name());
+        }
+        return autoIncrementInsert;
     }
 }

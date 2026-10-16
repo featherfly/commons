@@ -152,18 +152,9 @@ public class OracleDMLFeature extends AbstractDMLFeature<OracleDialect> {
      * {@inheritDoc}
      */
     @Override
-    protected String preparePrimaryKeyColumnForInsert(String tableName, String columnName, boolean autoIncrement) {
-        return Chars.QUESTION;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     protected String column(boolean distinct, String tableAlias, String columnName,
         String columnAlias, DateFunction function, Object... argus) {
         // NOIMPL 未实现
         throw new DialectException("未实现的 function" + function.getClass().getName());
     }
-
 }

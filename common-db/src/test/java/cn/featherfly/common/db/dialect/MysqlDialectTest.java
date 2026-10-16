@@ -3,7 +3,12 @@ package cn.featherfly.common.db.dialect;
 
 import static org.testng.Assert.assertEquals;
 
+import java.lang.reflect.Field;
+
 import org.testng.annotations.Test;
+
+import cn.featherfly.common.db.dialect.DMLFeature.AutoIncrementInsert;
+import cn.featherfly.common.lang.ClassUtils;
 
 /**
  * MysqlDialectTest.
@@ -12,8 +17,17 @@ import org.testng.annotations.Test;
  */
 public class MysqlDialectTest extends DialectTest {
 
-    Dialect dialect = Dialects.mysql();
+    /**
+     * Instantiates a new mysql dialect test.
+     */
+    public MysqlDialectTest() {
+        super();
+        dialect = Dialects.mysql();
+    }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Test
     void testCreateDatabase() {
@@ -22,6 +36,9 @@ public class MysqlDialectTest extends DialectTest {
         assertEquals(sql, "CREATE DATABASE `db_test`;");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Test
     void testDrop() {
@@ -50,6 +67,9 @@ public class MysqlDialectTest extends DialectTest {
         assertEquals(sql, "DROP INDEX `db_test`.`username_uq` ON `db_test`.`user`;");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Test
     void testDropIfExists() {
@@ -69,6 +89,9 @@ public class MysqlDialectTest extends DialectTest {
         assertEquals(sql, "DROP INDEX IF EXISTS `db_test`.`username_uq` ON `db_test`.`user`;");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Test
     void testCreateTable() {
@@ -82,6 +105,9 @@ public class MysqlDialectTest extends DialectTest {
         assertEquals(sql, s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Test
     void testCreateTableMulitiKey() {
@@ -93,6 +119,9 @@ public class MysqlDialectTest extends DialectTest {
         assertEquals(sql, s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Test
     void testAlterTableDropColumn() {
@@ -103,6 +132,9 @@ public class MysqlDialectTest extends DialectTest {
         assertEquals(sql, s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Test
     void testAlterTableAddColumns() {
@@ -114,6 +146,9 @@ public class MysqlDialectTest extends DialectTest {
         assertEquals(sql, s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Test
     void testAlterTableModifyColumns() {
@@ -126,23 +161,59 @@ public class MysqlDialectTest extends DialectTest {
         assertEquals(sql, s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Test
     void testBuildInsertBatchSql() {
         String sql = null;
 
-        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 1, true);
+        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 1);
         assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?)");
 
-        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 2, true);
+        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 2);
         assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?),(?, ?, ?)");
 
-        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 3, true);
+        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 3);
         assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?)");
 
-        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 5, true);
+        sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "descp" }, 5);
         assertEquals(sql,
             "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?),(?, ?, ?)");
+
+        // ----------------------------------------------------------------------------------------------------------------
+
+        dialect.dml().setAutoIncrementInsert(AutoIncrementInsert.IGNORE_PRIMARY_KEY_COLUMN);
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 1, true);
+        assertEquals(sql, "INSERT INTO `user` (`name`, `descp`) VALUES (?, ?)");
+
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 2, true);
+        assertEquals(sql, "INSERT INTO `user` (`name`, `descp`) VALUES (?, ?),(?, ?)");
+
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 3, true);
+        assertEquals(sql, "INSERT INTO `user` (`name`, `descp`) VALUES (?, ?),(?, ?),(?, ?)");
+
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 5, true);
+        assertEquals(sql,
+            "INSERT INTO `user` (`name`, `descp`) VALUES (?, ?),(?, ?),(?, ?),(?, ?),(?, ?)");
+
+        // ----------------------------------------------------------------------------------------------------------------
+
+        dialect.dml().setAutoIncrementInsert(AutoIncrementInsert.DEFAULT_PALCEHOLD);
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 1, true);
+        assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (DEFAULT, ?, ?)");
+
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 2, true);
+        assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (DEFAULT, ?, ?),(DEFAULT, ?, ?)");
+
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 3, true);
+        assertEquals(sql,
+            "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (DEFAULT, ?, ?),(DEFAULT, ?, ?),(DEFAULT, ?, ?)");
+
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "descp" }, 5, true);
+        assertEquals(sql,
+            "INSERT INTO `user` (`id`, `name`, `descp`) VALUES (DEFAULT, ?, ?),(DEFAULT, ?, ?),(DEFAULT, ?, ?),(DEFAULT, ?, ?),(DEFAULT, ?, ?)");
     }
 
     /**
@@ -167,6 +238,9 @@ public class MysqlDialectTest extends DialectTest {
         assertEquals(pageNamedParamSql, "select * from user LIMIT :dialect_paging_start,:dialect_paging_limit");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Test
     void testCreateIndex() {
@@ -180,6 +254,16 @@ public class MysqlDialectTest extends DialectTest {
         assertEquals(sql, "CREATE UNIQUE INDEX username_uq ON `user`(`user_id`);");
     }
 
+    private void setAliasForInsert(boolean value) {
+        Field field = ClassUtils.getField(dialect.dml().getClass(), "aliasForUpsert");
+        field.setAccessible(true);
+        try {
+            field.set(dialect.dml(), value);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -189,7 +273,23 @@ public class MysqlDialectTest extends DialectTest {
         String sql = dialect.dml().upsert("user", new String[] { "id", "name", "age" }, "id", true);
         System.out.println(sql);
         assertEquals(sql,
-            "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `name`=values(`name`), `age`=values(`age`)");
+            "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `age` = VALUES(`age`)");
+
+        sql = dialect.dml().upsert("user", new String[] { "id", "name", "age" }, "id", true);
+        System.out.println(sql);
+        assertEquals(sql,
+            "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `age` = VALUES(`age`)");
+
+        // ****************************************************************************************************************
+
+        setAliasForInsert(true);
+
+        sql = dialect.dml().upsert("user", new String[] { "id", "name", "age" }, "id", true);
+        System.out.println(sql);
+        assertEquals(sql,
+            "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?) AS new ON DUPLICATE KEY UPDATE `name` = new.`name`, `age` = new.`age`");
+
+        setAliasForInsert(false);
     }
 
     /**
@@ -201,10 +301,18 @@ public class MysqlDialectTest extends DialectTest {
         String sql = dialect.dml().upsertBatch("user", new String[] { "id", "name", "age" }, "id", 2, true);
         System.out.println(sql);
         assertEquals(sql,
-            "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?),(?, ?, ?) ON DUPLICATE KEY UPDATE `name`=values(`name`), `age`=values(`age`)");
+            "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?),(?, ?, ?) ON DUPLICATE KEY UPDATE `name` = VALUES(`name`), `age` = VALUES(`age`)");
 
-        // INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?),(?, ?, ?) ON DUPLICATE KEY UPDATE `name`=values(`name`), `age`=values(`age`)
-        // INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?),(?, ?, ?) ON CONFLICT (id) DO UPDATE SET `name`=EXCLUDED.`name`, `age`=EXCLUDED.`age`]
+        // ****************************************************************************************************************
+
+        setAliasForInsert(true);
+
+        sql = dialect.dml().upsertBatch("user", new String[] { "id", "name", "age" }, "id", 2, true);
+        System.out.println(sql);
+        assertEquals(sql,
+            "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?),(?, ?, ?) AS new ON DUPLICATE KEY UPDATE `name` = new.`name`, `age` = new.`age`");
+
+        setAliasForInsert(false);
     }
 
     /**
@@ -213,9 +321,23 @@ public class MysqlDialectTest extends DialectTest {
     @Override
     @Test
     void testInsert() {
-        String sql = dialect.dml().insert("user", new String[] { "id", "name", "age" }, true);
+        String sql = dialect.dml().insert("user", new String[] { "id", "name", "age" });
         System.out.println(sql);
         assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?)");
+
+        sql = dialect.dml().insert("user", "id", new String[] { "id", "name", "age" }, true);
+        System.out.println(sql);
+        assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?)");
+
+        dialect.dml().setAutoIncrementInsert(AutoIncrementInsert.IGNORE_PRIMARY_KEY_COLUMN);
+        sql = dialect.dml().insert("user", "id", new String[] { "id", "name", "age" }, true);
+        System.out.println(sql);
+        assertEquals(sql, "INSERT INTO `user` (`name`, `age`) VALUES (?, ?)");
+
+        dialect.dml().setAutoIncrementInsert(AutoIncrementInsert.DEFAULT_PALCEHOLD);
+        sql = dialect.dml().insert("user", "id", new String[] { "id", "name", "age" }, true);
+        System.out.println(sql);
+        assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `age`) VALUES (DEFAULT, ?, ?)");
     }
 
     /**
@@ -224,12 +346,23 @@ public class MysqlDialectTest extends DialectTest {
     @Override
     @Test
     void testInsertBatch() {
-        String sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "age" }, 2, true);
+        String sql = dialect.dml().insertBatch("user", new String[] { "id", "name", "age" }, 2);
         System.out.println(sql);
         assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?),(?, ?, ?)");
 
-        //INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?),(?, ?, ?)] but found [
-        // INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?)INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?)?, ?, ?),(INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?)INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?)?, ?, ?),(]
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "age" }, 2, true);
+        System.out.println(sql);
+        assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `age`) VALUES (?, ?, ?),(?, ?, ?)");
+
+        dialect.dml().setAutoIncrementInsert(AutoIncrementInsert.IGNORE_PRIMARY_KEY_COLUMN);
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "age" }, 2, true);
+        System.out.println(sql);
+        assertEquals(sql, "INSERT INTO `user` (`name`, `age`) VALUES (?, ?),(?, ?)");
+
+        dialect.dml().setAutoIncrementInsert(AutoIncrementInsert.DEFAULT_PALCEHOLD);
+        sql = dialect.dml().insertBatch("user", "id", new String[] { "id", "name", "age" }, 2, true);
+        System.out.println(sql);
+        assertEquals(sql, "INSERT INTO `user` (`id`, `name`, `age`) VALUES (DEFAULT, ?, ?),(DEFAULT, ?, ?)");
     }
 
     /**

@@ -21,10 +21,8 @@ public class MetadataTestMysql {
     @BeforeClass
     void setup() {
         dataSource = new BasicDataSource();
-        //      dataSource.setUrl("jdbc:mysql://192.168.1.99:3306/mysql");
-        //        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/db_test");
         dataSource.setUrl(
-                "jdbc:mysql://127.0.0.1:3306/db_test?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false");
+            "jdbc:mysql://127.0.0.1:3306/db_test?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false");
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUsername("root");
         dataSource.setPassword("123456");
@@ -38,15 +36,20 @@ public class MetadataTestMysql {
             System.out.println("connection.getCatalog() = " + conn.getCatalog());
             System.out.println("connection.getSchema() = " + conn.getSchema());
 
+            System.out.println("databaseProductName = " + metaData.getDatabaseProductName());
+            System.out.println("databaseProductVersion = " + metaData.getDatabaseProductVersion());
+            System.out.println("databaseMajorVersion = " + metaData.getDatabaseMajorVersion());
+            System.out.println("databaseMinorVersion = " + metaData.getDatabaseMinorVersion());
+
             System.out.println("metaData.getURL() = " + metaData.getURL());
             System.out.println(
-                    "metaData.supportsCatalogsInDataManipulation() = " + metaData.supportsCatalogsInDataManipulation());
+                "metaData.supportsCatalogsInDataManipulation() = " + metaData.supportsCatalogsInDataManipulation());
             System.out.println(
-                    "metaData.supportsCatalogsInTableDefinitions() = " + metaData.supportsCatalogsInTableDefinitions());
+                "metaData.supportsCatalogsInTableDefinitions() = " + metaData.supportsCatalogsInTableDefinitions());
             System.out.println(
-                    "metaData.supportsSchemasInDataManipulation() = " + metaData.supportsSchemasInDataManipulation());
+                "metaData.supportsSchemasInDataManipulation() = " + metaData.supportsSchemasInDataManipulation());
             System.out.println(
-                    "metaData.supportsSchemasInTableDefinitions() = " + metaData.supportsSchemasInTableDefinitions());
+                "metaData.supportsSchemasInTableDefinitions() = " + metaData.supportsSchemasInTableDefinitions());
 
             ResultSet rs = metaData.getCatalogs();
             System.out.println("catalogs: ");
@@ -74,7 +77,7 @@ public class MetadataTestMysql {
         System.out.println(meta.getCatalogs().stream().map(c -> c.getName()).collect(Collectors.toList()));
         System.out.println(meta.getCatalog(catalog));
         System.out.println(
-                meta.getCatalog(catalog).getTables().stream().map(c -> c.getName()).collect(Collectors.toList()));
+            meta.getCatalog(catalog).getTables().stream().map(c -> c.getName()).collect(Collectors.toList()));
         System.out.println(meta.getTables().stream().map(c -> c.getName()).collect(Collectors.toList()));
 
         for (Table td : meta.getTables()) {
@@ -84,7 +87,7 @@ public class MetadataTestMysql {
             System.out.println("\t" + td.getName());
             td.getColumns().forEach(c -> {
                 System.out.println("\t\t" + c.getName() + " " + c.getTypeName() + "(" + c.getType() + ")" + " "
-                        + c.getDefaultValue());
+                    + c.getDefaultValue());
             });
         }
     }
@@ -94,7 +97,7 @@ public class MetadataTestMysql {
         //		dataSource.setUrl("jdbc:mysql://192.168.1.99:3306/mysql");
         //        dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/db_test");
         dataSource.setUrl(
-                "jdbc:mysql://127.0.0.1:3306/db_test?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false");
+            "jdbc:mysql://127.0.0.1:3306/db_test?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false");
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUsername("root");
         dataSource.setPassword("123456");
@@ -105,7 +108,7 @@ public class MetadataTestMysql {
             System.out.println("\t" + td.getName());
             td.getColumns().forEach(c -> {
                 System.out.println("\t\t" + c.getName() + " " + c.getTypeName() + "(" + c.getType() + ")" + " "
-                        + c.getDefaultValue());
+                    + c.getDefaultValue());
             });
         }
         for (Table td : meta.getTables()) {

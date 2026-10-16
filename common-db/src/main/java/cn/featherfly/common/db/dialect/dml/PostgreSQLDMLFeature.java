@@ -144,22 +144,17 @@ public class PostgreSQLDMLFeature extends AbstractDMLFeature<PostgreSQLDialect> 
      * {@inheritDoc}
      */
     @Override
-    protected String preparePrimaryKeyColumnForInsert(String tableName, String columnName, boolean autoIncrement) {
-        if (autoIncrement) {
-            return "DEFAULT";
-        } else {
-            return Chars.QUESTION;
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     protected String column(boolean distinct, String tableAlias, String columnName,
         String columnAlias, DateFunction function, Object... argus) {
         // NOIMPL 未实现
         throw new DialectException("未实现的 function" + function.getClass().getName());
     }
 
+    @Override
+    public AutoIncrementInsert getAutoIncrementInsert() {
+        if (autoIncrementInsert == AutoIncrementInsert.NULL_VALUE) {
+            throw new DialectException("{} nonsupport {}", getClass().getSimpleName(), autoIncrementInsert.name());
+        }
+        return autoIncrementInsert;
+    }
 }

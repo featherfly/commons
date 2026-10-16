@@ -1,5 +1,6 @@
 package cn.featherfly.common.db.dialect;
 
+import cn.featherfly.common.db.dialect.DMLFeature.AutoIncrementInsert;
 import cn.featherfly.common.db.dialect.ddl.SQLServerDDLFeature;
 import cn.featherfly.common.db.dialect.dml.SQLServerDMLFeature;
 import cn.featherfly.common.exception.NotImplementedException;
@@ -24,6 +25,7 @@ public class SQLServerDialect extends AbstractDialect {
         super();
         ddlFeature = new SQLServerDDLFeature(this);
         dmlFeature = new SQLServerDMLFeature(this);
+        dmlFeature.setAutoIncrementInsert(AutoIncrementInsert.IGNORE_PRIMARY_KEY_COLUMN);
         // NOIMPL 未实现
         throw new NotImplementedException();
     }

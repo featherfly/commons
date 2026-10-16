@@ -34,13 +34,26 @@ import cn.featherfly.common.operator.DateFunction;
  */
 public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
 
+    private final boolean aliasForUpsert;
+
     /**
      * Instantiates a new mysql DML feature.
      *
      * @param dialect the dialect
      */
     public MysqlDMLFeature(MySQLDialect dialect) {
+        this(dialect, false);
+    }
+
+    /**
+     * Instantiates a new mysql DML feature.
+     *
+     * @param dialect the dialect
+     * @param aliasForUpsert the alias for upsert
+     */
+    public MysqlDMLFeature(MySQLDialect dialect, boolean aliasForUpsert) {
         super(dialect);
+        this.aliasForUpsert = aliasForUpsert;
     }
 
     @Override
@@ -60,8 +73,15 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
     @Override
     public String upsertBatch(String tableName, String pkColumnName, String[] columnNames, String[] uniqueColumns,
         int insertAmount, boolean autoIncrement) {
-        String sql = insertBatch(tableName, pkColumnName, columnNames, insertAmount, autoIncrement);
-        sql = BuilderUtils.link(sql, "ON DUPLICATE KEY UPDATE");
+        StringBuilder sql =
+            new StringBuilder(insertBatch(tableName, pkColumnName, columnNames, insertAmount, autoIncrement));
+        if (aliasForUpsert) {
+
+            BuilderUtils.link(sql, dialect.getKeyword(Keywords.AS), "new");
+        }
+
+        BuilderUtils.link(sql, dialect.getKeyword(Keywords.ON), dialect.getKeyword(Keywords.DUPLICATE),
+            dialect.getKeyword(Keywords.KEY), dialect.getKeyword(Keywords.UPDATE));
 
         List<String> columns = ArrayUtils.toList(columnNames);
         for (String uc : uniqueColumns) {
@@ -72,12 +92,18 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
 
         StringBuilder columnsSql = new StringBuilder();
         for (String columnName : columns) {
-            BuilderUtils.link(columnsSql, Str.format("{0}=values({0}),", dialect.wrapName(columnName)));
+            if (aliasForUpsert) {
+                BuilderUtils.link(columnsSql, Str.format("{0} = new.{0},", dialect.wrapName(columnName)));
+            } else {
+                BuilderUtils.link(columnsSql,
+                    Str.format("{0} = {1}({0}),", dialect.wrapName(columnName), dialect.getKeyword(Keywords.VALUES)));
+            }
         }
         if (columnsSql.length() > 0) {
             columnsSql.deleteCharAt(columnsSql.length() - 1);
         }
-        return BuilderUtils.link(sql, columnsSql.toString());
+        BuilderUtils.link(sql, columnsSql.toString());
+        return sql.toString();
     }
 
     /**
@@ -234,7 +260,7 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
                     .append(Chars.SPACE).append(dialect.getCollateCaseInsensitive());
                 break;
             case CASE_SENSITIVE:
-                condition.append(dialect.getKeyword("BINARY")).append(Chars.SPACE).append(name);
+                condition.append(dialect.getKeyword(Keywords.BINARY)).append(Chars.SPACE).append(name);
                 break;
             default:
                 condition.append(name);
@@ -243,14 +269,6 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
         condition.append(Chars.SPACE).append(dialect.getOperator(comparisonOperator)).append(Chars.SPACE)
             .append(values.toSql());
         return condition.toString();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected String preparePrimaryKeyColumnForInsert(String tableName, String columnName, boolean autoIncrement) {
-        return Chars.QUESTION;
     }
 
     /**
@@ -324,5 +342,4 @@ public class MysqlDMLFeature extends AbstractDMLFeature<MySQLDialect> {
         }
         return column;
     }
-
 }

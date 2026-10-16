@@ -8,6 +8,7 @@ import java.util.Date;
 
 import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.db.SqlUtils;
+import cn.featherfly.common.db.dialect.DMLFeature.AutoIncrementInsert;
 import cn.featherfly.common.db.dialect.ddl.PostgreSQLDDLFeature;
 import cn.featherfly.common.db.dialect.dml.PostgreSQLDMLFeature;
 import cn.featherfly.common.exception.UnsupportedException;
@@ -34,6 +35,7 @@ public class PostgreSQLDialect extends AbstractDialect {
         super();
         ddlFeature = new PostgreSQLDDLFeature(this);
         dmlFeature = new PostgreSQLDMLFeature(this);
+        dmlFeature.setAutoIncrementInsert(AutoIncrementInsert.IGNORE_PRIMARY_KEY_COLUMN);
     }
 
     /**

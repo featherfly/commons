@@ -1,6 +1,8 @@
 
 package cn.featherfly.common.db.dialect;
 
+import cn.featherfly.common.db.metadata.DatabaseMetadata;
+
 /**
  * Dialects.
  *
@@ -15,6 +17,10 @@ public interface Dialects {
      */
     static Dialect mysql() {
         return new MySQLDialect();
+    }
+
+    static Dialect mysql(DatabaseMetadata databaseMetadata) {
+        return new MySQLDialect(databaseMetadata);
     }
 
     /**
@@ -47,7 +53,8 @@ public interface Dialects {
     /**
      * The mysql.
      *
-     * @deprecated use {@link #mysql()} instead, because dialect have state, you need manager instance by youself
+     * @deprecated use {@link #mysql()} instead, because dialect have state, you need manager
+     *             instance by youself
      */
     @Deprecated
     Dialect MYSQL = new MySQLDialect();
@@ -55,7 +62,8 @@ public interface Dialects {
     /**
      * The oracle.
      *
-     * @deprecated use {@link #oracle()} instead, because dialect have state, you need manager instance by youself
+     * @deprecated use {@link #oracle()} instead, because dialect have state, you need manager
+     *             instance by youself
      */
     @Deprecated
     Dialect ORACLE = new OracleDialect();
@@ -63,7 +71,8 @@ public interface Dialects {
     /**
      * The postgresql.
      *
-     * @deprecated use {@link #postgresql()} instead, because dialect have state, you need manager instance by youself
+     * @deprecated use {@link #postgresql()} instead, because dialect have state, you need manager
+     *             instance by youself
      */
     @Deprecated
     Dialect POSTGRESQL = new PostgreSQLDialect();
@@ -71,7 +80,8 @@ public interface Dialects {
     /**
      * The sqlite.
      *
-     * @deprecated use {@link #sqlite()} instead, because dialect have state, you need manager instance by youself
+     * @deprecated use {@link #sqlite()} instead, because dialect have state, you need manager
+     *             instance by youself
      */
     @Deprecated
     Dialect SQLITE = new SQLiteDialect();

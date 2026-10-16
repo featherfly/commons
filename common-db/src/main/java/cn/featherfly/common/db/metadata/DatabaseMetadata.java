@@ -25,7 +25,7 @@ public class DatabaseMetadata {
     /**
      * Instantiates a new database metadata.
      *
-     * @param databaseMetaData   the database meta data
+     * @param databaseMetaData the database meta data
      * @param jdbcDialectFactory the jdbc dialect factory
      */
     DatabaseMetadata(DatabaseMetaData databaseMetaData, JdbcDialectFactory jdbcDialectFactory) {
@@ -55,11 +55,7 @@ public class DatabaseMetadata {
             driverName = databaseMetaData.getDriverName();
             driverVersion = databaseMetaData.getDriverVersion();
 
-            jdbcMajorVersion = databaseMetaData.getJDBCMajorVersion();
-            jdbcMinorVersion = databaseMetaData.getJDBCMinorVersion();
-
             features = new Features(databaseMetaData, dialect);
-
         } catch (SQLException e) {
             throw new JdbcException(e);
         }
@@ -72,8 +68,8 @@ public class DatabaseMetadata {
     /**
      * Gets the catalog.
      *
-     * @param  catalogName the catalog name
-     * @return             the catalog metadata
+     * @param catalogName the catalog name
+     * @return the catalog metadata
      */
     public CatalogMetadata getCatalog(String catalogName) {
         return catalogMap.get(catalogName);
@@ -87,15 +83,6 @@ public class DatabaseMetadata {
     public Collection<CatalogMetadata> getCatalogs() {
         return catalogMap.values();
     }
-
-    //    /**
-    //     * Gets the catalog map.
-    //     *
-    //     * @return the catalog map
-    //     */
-    //    public Map<String, CatalogMetadata> getCatalogMap() {
-    //        return catalogMap;
-    //    }
 
     /**
      * Adds the table.
@@ -122,7 +109,7 @@ public class DatabaseMetadata {
     /**
      * Adds the catalog.
      *
-     * @param catalog   the catalog
+     * @param catalog the catalog
      * @param isDefault the is default
      */
     void addCatalog(CatalogMetadata catalog, boolean isDefault) {
@@ -139,9 +126,9 @@ public class DatabaseMetadata {
     /**
      * 默认catalog 返回指定名称的模式（schema）. 没有找到返回null.
      *
-     * @param  schemaName the schema name
-     * @return            the schema
-     * @see               cn.featherfly.common.db.metadata.CatalogMetadata#getSchema(java.lang.String)
+     * @param schemaName the schema name
+     * @return the schema
+     * @see cn.featherfly.common.db.metadata.CatalogMetadata#getSchema(java.lang.String)
      */
     public SchemaMetadata getSchema(String schemaName) {
         if (defaultCatalog == null) {
@@ -154,7 +141,7 @@ public class DatabaseMetadata {
      * 默认catalog 返回模式（schema）集合.
      *
      * @return the schemas
-     * @see    cn.featherfly.common.db.metadata.CatalogMetadata#getSchemas()
+     * @see cn.featherfly.common.db.metadata.CatalogMetadata#getSchemas()
      */
     public Collection<SchemaMetadata> getSchemas() {
         if (defaultCatalog == null) {
@@ -163,21 +150,11 @@ public class DatabaseMetadata {
         return defaultCatalog.getSchemas();
     }
 
-    //    /**
-    //     * 默认catalog 返回模式（schema）MAP.
-    //     *
-    //     * @return the schema map
-    //     * @see cn.featherfly.common.db.metadata.CatalogMetadata#getSchemaMap()
-    //     */
-    //    public Map<String, SchemaMetadata> getSchemaMap() {
-    //        return defaultCatalog.getSchemaMap();
-    //    }
-
     /**
      * 默认模式（schema）返回指定名称的表元数据对象. 没有找到返回null.
      *
-     * @param  tableName the table name
-     * @return           表元数据对象
+     * @param tableName the table name
+     * @return 表元数据对象
      */
     public Table getTable(String tableName) {
         if (defaultCatalog == null) {
@@ -256,21 +233,21 @@ public class DatabaseMetadata {
 
     private String productVersion;
 
-    private Integer majorVersion;
+    private int majorVersion;
 
-    private Integer minorVersion;
+    private int minorVersion;
 
     private String driverName;
 
     private String driverVersion;
 
-    private Integer driverMajorVersion;
+    private int driverMajorVersion;
 
-    private Integer driverMinorVersion;
+    private int driverMinorVersion;
 
-    private Integer jdbcMajorVersion;
+    private int jdbcMajorVersion;
 
-    private Integer jdbcMinorVersion;
+    private int jdbcMinorVersion;
 
     private Features features;
 
@@ -324,7 +301,7 @@ public class DatabaseMetadata {
      *
      * @return majorVersion
      */
-    public Integer getMajorVersion() {
+    public int getMajorVersion() {
         return majorVersion;
     }
 
@@ -333,7 +310,7 @@ public class DatabaseMetadata {
      *
      * @return minorVersion
      */
-    public Integer getMinorVersion() {
+    public int getMinorVersion() {
         return minorVersion;
     }
 
@@ -360,7 +337,7 @@ public class DatabaseMetadata {
      *
      * @return driverMajorVersion
      */
-    public Integer getDriverMajorVersion() {
+    public int getDriverMajorVersion() {
         return driverMajorVersion;
     }
 
@@ -369,7 +346,7 @@ public class DatabaseMetadata {
      *
      * @return driverMinorVersion
      */
-    public Integer getDriverMinorVersion() {
+    public int getDriverMinorVersion() {
         return driverMinorVersion;
     }
 
@@ -378,7 +355,7 @@ public class DatabaseMetadata {
      *
      * @return jdbcMajorVersion
      */
-    public Integer getJdbcMajorVersion() {
+    public int getJdbcMajorVersion() {
         return jdbcMajorVersion;
     }
 
@@ -387,7 +364,7 @@ public class DatabaseMetadata {
      *
      * @return jdbcMinorVersion
      */
-    public Integer getJdbcMinorVersion() {
+    public int getJdbcMinorVersion() {
         return jdbcMinorVersion;
     }
 

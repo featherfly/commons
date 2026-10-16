@@ -3,9 +3,12 @@ package cn.featherfly.common.db.dialect;
 
 import java.sql.Types;
 
+import org.testng.annotations.BeforeMethod;
+
 import cn.featherfly.common.db.Column;
 import cn.featherfly.common.db.builder.ColumnModel;
 import cn.featherfly.common.db.builder.TableModel;
+import cn.featherfly.common.db.dialect.DMLFeature.AutoIncrementInsert;
 
 /**
  * <p>
@@ -15,6 +18,13 @@ import cn.featherfly.common.db.builder.TableModel;
  * @author zhongj
  */
 public abstract class DialectTest {
+
+    protected Dialect dialect;
+
+    @BeforeMethod
+    public void beforeMethod() {
+        dialect.dml().setAutoIncrementInsert(AutoIncrementInsert.NULL_VALUE);
+    }
 
     String database = "db_test";
     String schema = "db_test";

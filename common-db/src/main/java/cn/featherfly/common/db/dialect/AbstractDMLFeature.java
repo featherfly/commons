@@ -9,6 +9,7 @@
 package cn.featherfly.common.db.dialect;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -34,6 +35,8 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
 
     /** The dialect. */
     protected final D dialect;
+
+    protected AutoIncrementInsert autoIncrementInsert = AutoIncrementInsert.NULL_VALUE;
 
     /**
      * Instantiates a new abstract DML feature.
@@ -62,13 +65,8 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
         StringBuilder sql = new StringBuilder();
         BuilderUtils.link(sql, dialect.getKeyword(Keywords.INSERT), dialect.getKeyword(Keywords.INTO),
             dialect.wrapName(tableName), Chars.PAREN_L);
-        if (Lang.isNotEmpty(columnNames)) {
-            sql.append(dialect.wrapName(columnNames[0])).append(Chars.COMMA);
-            for (int i = 1; i < columnNames.length; i++) {
-                sql.append(Chars.SPACE).append(dialect.wrapName(columnNames[i])).append(Chars.COMMA);
-            }
-            sql.deleteCharAt(sql.length() - 1).append(Chars.PAREN_R);
-        }
+        columnNames = insertColumns(sql, tableName, pkColumnName, columnNames, autoIncrement);
+        sql.append(Chars.PAREN_R);
         BuilderUtils.link(sql, dialect.getKeyword(Keywords.VALUES), Chars.PAREN_L);
         insertValues(sql, tableName, pkColumnName, columnNames, autoIncrement);
         sql.deleteCharAt(sql.length() - 1).append(Chars.PAREN_R);
@@ -84,13 +82,9 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
         StringBuilder sql = new StringBuilder();
         BuilderUtils.link(sql, dialect.getKeyword(Keywords.INSERT), dialect.getKeyword(Keywords.INTO),
             dialect.wrapName(tableName), Chars.PAREN_L);
-        if (Lang.isNotEmpty(columnNames)) {
-            sql.append(dialect.wrapName(columnNames[0])).append(Chars.COMMA);
-            for (int i = 1; i < columnNames.length; i++) {
-                sql.append(Chars.SPACE).append(dialect.wrapName(columnNames[i])).append(Chars.COMMA);
-            }
-            sql.deleteCharAt(sql.length() - 1).append(Chars.PAREN_R);
-        }
+        columnNames = insertColumns(sql, tableName, pkColumnName, columnNames, autoIncrement);
+        sql.append(Chars.PAREN_R);
+
         BuilderUtils.link(sql, dialect.getKeyword(Keywords.VALUES), Chars.PAREN_L);
         insertValues(sql, tableName, pkColumnName, columnNames, autoIncrement);
         sql.deleteCharAt(sql.length() - 1).append(Chars.PAREN_R);
@@ -122,11 +116,15 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
             conflict.insert(0, "(");
             conflict.append(")");
         }
-        sql = BuilderUtils.link(sql, "ON CONFLICT", conflict.toString(), "DO UPDATE SET");
+        sql = BuilderUtils.link(sql, dialect.getKeyword(Keywords.ON), dialect.getKeyword(Keywords.CONFLICT),
+            conflict.toString(), dialect.getKeyword(Keywords.DO), dialect.getKeyword(Keywords.UPDATE),
+            dialect.getKeyword(Keywords.SET));
         StringBuilder columnsSql = new StringBuilder();
         for (String columnName : columns) {
-            BuilderUtils.link(columnsSql, Str.format("{0}=EXCLUDED.{0},", dialect.wrapName(columnName)));
+            BuilderUtils.link(columnsSql, Str.format("{0}={1}.{0},", dialect.wrapName(columnName),
+                dialect.getKeyword(Keywords.EXCLUDED)));
         }
+
         if (columnsSql.length() > 0) {
             columnsSql.deleteCharAt(columnsSql.length() - 1);
         }
@@ -352,6 +350,16 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
     //
     // ****************************************************************************************************************
 
+    @Override
+    public AutoIncrementInsert getAutoIncrementInsert() {
+        return autoIncrementInsert;
+    }
+
+    @Override
+    public void setAutoIncrementInsert(AutoIncrementInsert autoIncrementInsert) {
+        this.autoIncrementInsert = autoIncrementInsert;
+    }
+
     /**
      * build sql for column with tableAlias and Date function.
      *
@@ -365,6 +373,28 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
      */
     protected abstract String column(boolean distinct, String tableAlias, String columnName,
         String columnAlias, DateFunction function, Object... argus);
+
+    /**
+     * Insert columns.
+     *
+     * @param sql the sql
+     * @param tableName the table name
+     * @param pkColumnName the pk column name
+     * @param columnNames the column names
+     * @param autoIncrement the auto increment
+     */
+    protected String[] insertColumns(StringBuilder sql, String tableName, String pkColumnName, String[] columnNames,
+        boolean autoIncrement) {
+        columnNames = filterPrimaryKey(pkColumnName, columnNames, autoIncrement);
+        if (Lang.isNotEmpty(columnNames)) {
+            sql.append(dialect.wrapName(columnNames[0])).append(Chars.COMMA);
+            for (int i = 1; i < columnNames.length; i++) {
+                sql.append(Chars.SPACE).append(dialect.wrapName(columnNames[i])).append(Chars.COMMA);
+            }
+            sql.deleteCharAt(sql.length() - 1);
+        }
+        return columnNames;
+    }
 
     /**
      * Insert values.
@@ -401,10 +431,27 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
     private String getPkColumnValueForInsert(String tableName, String pkColumnName, String columnName,
         boolean autoIncrement) {
         if (pkColumnName.equals(columnName)) {
+            // primary key
             return preparePrimaryKeyColumnForInsert(tableName, columnName, autoIncrement);
         } else {
             return Chars.QUESTION;
         }
+    }
+
+    /**
+     * Filter columns.
+     *
+     * @param pkColumnName the pk column name
+     * @param columnNames the column names
+     * @return the filtered columns
+     */
+    protected String[] filterPrimaryKey(String pkColumnName, String[] columnNames, boolean autoIncrement) {
+        if (autoIncrement && getAutoIncrementInsert() == AutoIncrementInsert.IGNORE_PRIMARY_KEY_COLUMN) {
+            return Arrays.stream(columnNames)
+                .filter(name -> !name.equals(pkColumnName))
+                .toArray(String[]::new);
+        }
+        return columnNames;
     }
 
     /**
@@ -415,6 +462,12 @@ public abstract class AbstractDMLFeature<D extends Dialect> implements DMLFeatur
      * @param autoIncrement the auto increment
      * @return the string
      */
-    protected abstract String preparePrimaryKeyColumnForInsert(String tableName, String columnName,
-        boolean autoIncrement);
+    protected String preparePrimaryKeyColumnForInsert(String tableName, String columnName,
+        boolean autoIncrement) {
+        if (autoIncrement && getAutoIncrementInsert() == AutoIncrementInsert.DEFAULT_PALCEHOLD) {
+            return Keywords.DEFAULT.name();
+        }
+        return Chars.QUESTION;
+    }
+
 }

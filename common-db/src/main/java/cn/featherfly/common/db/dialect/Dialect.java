@@ -1076,8 +1076,19 @@ public interface Dialect {
          * Default.
          *
          * @return the string
+         * @deprecated use {@link #default0()} instead
          */
+        @Deprecated
         public String default_() {
+            return default0();
+        }
+
+        /**
+         * Default.
+         *
+         * @return the string
+         */
+        public String default0() {
             return dialect.getKeyword(Keywords.DEFAULT);
         }
 
@@ -1178,6 +1189,42 @@ public interface Dialect {
          */
         public String binary() {
             return dialect.getKeyword(Keywords.BINARY);
+        }
+
+        /**
+         * Duplicate.
+         *
+         * @return the string
+         */
+        public String duplicate() {
+            return dialect.getKeyword(Keywords.DUPLICATE);
+        }
+
+        /**
+         * Conflict.
+         *
+         * @return the string
+         */
+        public String conflict() {
+            return dialect.getKeyword(Keywords.CONFLICT);
+        }
+
+        /**
+         * Do.
+         *
+         * @return the string
+         */
+        public String do0() {
+            return dialect.getKeyword(Keywords.DO);
+        }
+
+        /**
+         * Excluded.
+         *
+         * @return the string
+         */
+        public String excluded() {
+            return dialect.getKeyword(Keywords.EXCLUDED);
         }
     }
 

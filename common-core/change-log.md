@@ -1,5 +1,10 @@
 [ ] TODO 重构GenericType GenericClass BeanProperty这一些列的类，用于普通类，泛型类（Optional、Collection、Map）等
 
+# 1.
+
+feat:
+ 1. WordUtils add parseTo[Lower|Upper]CamelCase, parseCameCaseTo[Lower|Upper]SnakeCase methods
+
 # 1.16.3 2026-10-10
 
 feat:

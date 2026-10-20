@@ -4,6 +4,7 @@ package cn.featherfly.common.lang;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import cn.featherfly.common.constant.Chars;
 import cn.featherfly.common.constant.Unit;
 import cn.featherfly.common.lang.number.ChineseNumber;
 
@@ -68,7 +69,9 @@ public final class WordUtils {
      * @param word 需要转换的字符串
      * @param sign 符号
      * @return 转换完成的字符串
+     * @deprecated use {@link #parseToLowerCamelCase(String, char)} instead
      */
+    @Deprecated
     public static String parseToUpperFirst(String word, char sign) {
         return parseToUpperFirst(word, sign, true);
     }
@@ -146,8 +149,7 @@ public final class WordUtils {
         }
         StringBuilder sb = new StringBuilder();
         boolean isSign = false;
-
-        for (int i = 1; i < word.length(); i++) {
+        for (int i = 0; i < word.length(); i++) {
             char c = word.charAt(i);
             if (c == sign) {
                 isSign = true;
@@ -162,10 +164,54 @@ public final class WordUtils {
         }
         if (sb.length() > 0) {
             if (upperOrLowerCamelCase) {
-                sb.replace(0, 1, String.valueOf(Character.toUpperCase(sb.charAt(0))));
+                sb.replace(0, 1, Character.toUpperCase(sb.charAt(0)) + "");
             } else {
-                sb.replace(0, 1, String.valueOf(Character.toLowerCase(sb.charAt(0))));
+                sb.replace(0, 1, Character.toLowerCase(sb.charAt(0)) + "");
             }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 将驼峰格式转换为小蛇形格式.
+     * Parses the came case to lower snake case.
+     * example: HelloWorld -> hello_world .
+     *
+     * @param word the word
+     * @return the string
+     */
+    public static String parseCameCaseToLowerSnakeCase(String word) {
+        return parseCameCaseTo(word, Chars.UNDER_LINE_CHAR, false);
+    }
+
+    /**
+     * 将驼峰格式转换为大蛇形格式.
+     * Parses the came case to upper snake case.
+     * example: HelloWorld -> HELLO_WORLD .
+     * 
+     * @param word the word
+     * @return the string
+     */
+    public static String parseCameCaseToUpperSnakeCase(String word) {
+        return parseCameCaseTo(word, Chars.UNDER_LINE_CHAR, true);
+    }
+
+    private static String parseCameCaseTo(String word, char sign, boolean upperOrLowerCase) {
+        if (Lang.isEmpty(word)) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < word.length(); i++) {
+            char c = word.charAt(i);
+            if (Character.isUpperCase(c) && i > 0) {
+                sb.append(sign);
+            }
+            if (upperOrLowerCase) {
+                c = Character.toUpperCase(c);
+            } else {
+                c = Character.toLowerCase(c);
+            }
+            sb.append(c);
         }
         return sb.toString();
     }

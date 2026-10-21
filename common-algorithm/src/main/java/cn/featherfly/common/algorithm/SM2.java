@@ -41,24 +41,24 @@ import org.bouncycastle.util.encoders.Hex;
  * 用BC的注意点：
  * 这个版本的BC对SM3withSM2的结果为asn1格式的r和s，如果需要直接拼接的r||s需要自己转换。下面rsAsn1ToPlainByteArray、rsPlainByteArrayToAsn1就在干这事。
  * 这个版本的BC对SM2的结果为C1||C2||C3，据说为旧标准，新标准为C1||C3||C2，用新标准的需要自己转换。下面changeC1C2C3ToC1C3C2、changeC1C3C2ToC1C2C3就在干这事。
+ *
+ * @author zhongj
  */
 public class SM2 extends Algorithm {
-    /**
-     *
-     */
+
     private static final String SIGNATURE = "SM3withSM2";
     private static final String EC = "EC";
     private static X9ECParameters x9ECParameters = GMNamedCurves.getByName("sm2p256v1");
     private static ECDomainParameters ecDomainParameters = new ECDomainParameters(x9ECParameters.getCurve(),
-            x9ECParameters.getG(), x9ECParameters.getN());
+        x9ECParameters.getG(), x9ECParameters.getN());
     private static ECParameterSpec ecParameterSpec = new ECParameterSpec(x9ECParameters.getCurve(),
-            x9ECParameters.getG(), x9ECParameters.getN());
+        x9ECParameters.getG(), x9ECParameters.getN());
 
     /**
-     * c1||c3||c2
+     * c1||c3||c2.
      *
      * @param data data to encrypt
-     * @param key  public key
+     * @param key public key
      * @return encrypted byte[]
      */
     public static byte[] encrypt(byte[] data, PublicKey key) {
@@ -66,10 +66,10 @@ public class SM2 extends Algorithm {
     }
 
     /**
-     * c1||c3||c2
+     * c1||c3||c2.
      *
      * @param data data to encrypt
-     * @param key  public key
+     * @param key public key
      * @return encrypted byte[]
      */
     public static byte[] encrypt(String data, PublicKey key) {
@@ -77,10 +77,10 @@ public class SM2 extends Algorithm {
     }
 
     /**
-     * c1||c3||c2
+     * c1||c3||c2.
      *
      * @param data data to encrypt
-     * @param key  public key
+     * @param key public key
      * @return encrypted String
      */
     public static String encryptToString(byte[] data, PublicKey key) {
@@ -88,10 +88,10 @@ public class SM2 extends Algorithm {
     }
 
     /**
-     * c1||c3||c2
+     * c1||c3||c2.
      *
      * @param data data to encrypt
-     * @param key  public key
+     * @param key public key
      * @return encrypted String
      */
     public static String encryptToString(String data, PublicKey key) {
@@ -99,10 +99,10 @@ public class SM2 extends Algorithm {
     }
 
     /**
-     * c1||c3||c2
+     * c1||c3||c2.
      *
      * @param data data to encrypt
-     * @param key  private key
+     * @param key private key
      * @return encrypted byte[]
      */
     public static byte[] decrypt(byte[] data, PrivateKey key) {
@@ -110,10 +110,10 @@ public class SM2 extends Algorithm {
     }
 
     /**
-     * c1||c3||c2
+     * c1||c3||c2.
      *
      * @param data data to encrypt
-     * @param key  private key
+     * @param key private key
      * @return encrypted byte[]
      */
     public static byte[] decrypt(String data, PrivateKey key) {
@@ -121,10 +121,10 @@ public class SM2 extends Algorithm {
     }
 
     /**
-     * c1||c3||c2
+     * c1||c3||c2.
      *
      * @param data data to encrypt
-     * @param key  private key
+     * @param key private key
      * @return encrypted String
      */
     public static String decryptToString(byte[] data, PrivateKey key) {
@@ -132,10 +132,10 @@ public class SM2 extends Algorithm {
     }
 
     /**
-     * c1||c3||c2
+     * c1||c3||c2.
      *
      * @param data data to encrypt
-     * @param key  private key
+     * @param key private key
      * @return encrypted String
      */
     public static String decryptToString(String data, PrivateKey key) {
@@ -143,16 +143,16 @@ public class SM2 extends Algorithm {
     }
 
     /**
-     * c1||c2||c3
+     * c1||c2||c3.
      *
      * @param data data to encrypt
-     * @param key  public key
+     * @param key public key
      * @return encrypted byte[]
      */
     public static byte[] encryptOld(byte[] data, PublicKey key) {
         BCECPublicKey localECPublicKey = (BCECPublicKey) key;
         ECPublicKeyParameters ecPublicKeyParameters = new ECPublicKeyParameters(localECPublicKey.getQ(),
-                ecDomainParameters);
+            ecDomainParameters);
         SM2Engine sm2Engine = new SM2Engine();
         sm2Engine.init(true, new ParametersWithRandom(ecPublicKeyParameters, new SecureRandom()));
         try {
@@ -163,16 +163,16 @@ public class SM2 extends Algorithm {
     }
 
     /**
-     * c1||c2||c3
+     * c1||c2||c3.
      *
      * @param data data to decrypt
-     * @param key  private key
+     * @param key private key
      * @return decrypted byte[]
      */
     public static byte[] decryptOld(byte[] data, PrivateKey key) {
         BCECPrivateKey localECPrivateKey = (BCECPrivateKey) key;
         ECPrivateKeyParameters ecPrivateKeyParameters = new ECPrivateKeyParameters(localECPrivateKey.getD(),
-                ecDomainParameters);
+            ecDomainParameters);
         SM2Engine sm2Engine = new SM2Engine();
         sm2Engine.init(false, ecPrivateKeyParameters);
         try {
@@ -183,8 +183,10 @@ public class SM2 extends Algorithm {
     }
 
     /**
-     * @param data       data to sign
-     * @param id         id
+     * Sign.
+     *
+     * @param data data to sign
+     * @param id id
      * @param privateKey private key
      * @return r||s，直接拼接byte数组的rs
      */
@@ -193,10 +195,10 @@ public class SM2 extends Algorithm {
     }
 
     /**
-     * {@link #sign(byte[], byte[], PrivateKey)}
+     * {@link #sign(byte[], byte[], PrivateKey)}.
      *
-     * @param data       data to sign
-     * @param id         id
+     * @param data data to sign
+     * @param id id
      * @param privateKey private key
      * @return r||s，直接拼接byte数组的rs
      */
@@ -205,10 +207,10 @@ public class SM2 extends Algorithm {
     }
 
     /**
-     * {@link #sign(byte[], byte[], PrivateKey)}
+     * {@link #sign(byte[], byte[], PrivateKey)}.
      *
-     * @param data       data to sign
-     * @param id         id
+     * @param data data to sign
+     * @param id id
      * @param privateKey private key
      * @return String
      */
@@ -217,10 +219,10 @@ public class SM2 extends Algorithm {
     }
 
     /**
-     * {@link #signToString(byte[], byte[], PrivateKey)}
+     * {@link #signToString(byte[], byte[], PrivateKey)}.
      *
-     * @param data       data to sign
-     * @param id         id
+     * @param data data to sign
+     * @param id id
      * @param privateKey private key
      * @return String
      */
@@ -229,10 +231,10 @@ public class SM2 extends Algorithm {
     }
 
     /**
-     * {@link #signAsn1Rs(byte[], byte[], PrivateKey)}
+     * {@link #signAsn1Rs(byte[], byte[], PrivateKey)}.
      *
-     * @param data       data to sign
-     * @param id         id
+     * @param data data to sign
+     * @param id id
      * @param privateKey private key
      * @return rs in <b>asn1 format</b>
      */
@@ -241,8 +243,10 @@ public class SM2 extends Algorithm {
     }
 
     /**
-     * @param data       data to sign
-     * @param id         id
+     * Sign asn 1 rs.
+     *
+     * @param data data to sign
+     * @param id id
      * @param privateKey private key
      * @return rs in <b>asn1 format</b>
      */
@@ -261,33 +265,39 @@ public class SM2 extends Algorithm {
     }
 
     /**
-     * @param data
-     * @param id
-     * @param sign      r||s，直接拼接byte数组的rs
-     * @param publicKey
-     * @return
+     * Verify.
+     *
+     * @param data the data
+     * @param id the id
+     * @param sign r||s，直接拼接byte数组的rs
+     * @param publicKey the public key
+     * @return true, if successful
      */
     public static boolean verify(byte[] data, byte[] id, byte[] sign, PublicKey publicKey) {
         return verifyAsn1Rs(data, id, rsPlainByteArrayToAsn1(sign), publicKey);
     }
 
     /**
-     * @param data
-     * @param id
-     * @param sign      r||s，直接拼接byte数组的rs
-     * @param publicKey
-     * @return
+     * Verify.
+     *
+     * @param data the data
+     * @param id the id
+     * @param sign r||s，直接拼接byte数组的rs
+     * @param publicKey the public key
+     * @return true, if successful
      */
     public static boolean verify(String data, byte[] id, String sign, PublicKey publicKey) {
         return verify(getBytes(data), id, encryptResultToBytes(sign), publicKey);
     }
 
     /**
-     * @param msg
-     * @param userId
-     * @param rs        in <b>asn1 format</b>
-     * @param publicKey
-     * @return
+     * Verify asn 1 rs.
+     *
+     * @param msg the msg
+     * @param userId the user id
+     * @param rs in <b>asn1 format</b>
+     * @param publicKey the public key
+     * @return true, if successful
      */
     public static boolean verifyAsn1Rs(byte[] msg, byte[] userId, byte[] rs, PublicKey publicKey) {
         try {
@@ -303,7 +313,7 @@ public class SM2 extends Algorithm {
     }
 
     /**
-     * generate KeyPair
+     * generate KeyPair.
      *
      * @return KeyPair
      */
@@ -318,17 +328,36 @@ public class SM2 extends Algorithm {
         }
     }
 
+    /**
+     * Gets the privatekey from D.
+     *
+     * @param d the d
+     * @return the privatekey from D
+     */
     public static BCECPrivateKey getPrivatekeyFromD(BigInteger d) {
         ECPrivateKeySpec ecPrivateKeySpec = new ECPrivateKeySpec(d, ecParameterSpec);
         return new BCECPrivateKey(EC, ecPrivateKeySpec, BouncyCastleProvider.CONFIGURATION);
     }
 
+    /**
+     * Gets the publickey from XY.
+     *
+     * @param x the x
+     * @param y the y
+     * @return the publickey from XY
+     */
     public static BCECPublicKey getPublickeyFromXY(BigInteger x, BigInteger y) {
         ECPublicKeySpec ecPublicKeySpec = new ECPublicKeySpec(x9ECParameters.getCurve().createPoint(x, y),
-                ecParameterSpec);
+            ecParameterSpec);
         return new BCECPublicKey(EC, ecPublicKeySpec, BouncyCastleProvider.CONFIGURATION);
     }
 
+    /**
+     * Gets the publickey from X 509 file.
+     *
+     * @param in the in
+     * @return the publickey from X 509 file
+     */
     public static PublicKey getPublickeyFromX509File(InputStream in) {
         try {
             CertificateFactory cf = CertificateFactory.getInstance("X.509", BouncyCastleProvider.PROVIDER_NAME);

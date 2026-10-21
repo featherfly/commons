@@ -4,6 +4,7 @@ package cn.featherfly.common.algorithm;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -14,9 +15,7 @@ import org.bouncycastle.util.encoders.Hex;
 import org.testng.annotations.Test;
 
 /**
- * <p>
- * TestSm
- * </p>
+ * TestSm.
  *
  * @author zhongj
  */
@@ -61,6 +60,12 @@ public class TestSm {
         System.out.println("不带密钥加密后的密文：" + result);
         assertTrue(SM3.verify(data, result));
         assertEquals(result, r);
+    }
+
+    @Test
+    public void testSm3InputStream() {
+        byte[] src = "b673a85190098855103463dc908bc8c954b31460".getBytes();
+        assertEquals(SM3.encrypt(new ByteArrayInputStream(src), 5), SM3.encrypt(src));
     }
 
     @Test

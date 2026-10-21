@@ -2,53 +2,56 @@
 package cn.featherfly.common.algorithm;
 
 /**
- * <p>
- * AlgorithmException
- * </p>
+ * AlgorithmException.
  *
  * @author zhongj
  */
 public class AlgorithmException extends RuntimeException {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 7713425353152953851L;
 
     /**
-     *
+     * Instantiates a new algorithm exception.
      */
     public AlgorithmException() {
         super();
     }
 
     /**
-     * @param message
-     * @param cause
-     * @param enableSuppression
-     * @param writableStackTrace
+     * Instantiates a new algorithm exception.
+     *
+     * @param message the message
+     * @param cause the cause
+     * @param enableSuppression the enable suppression
+     * @param writableStackTrace the writable stack trace
      */
     public AlgorithmException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 
     /**
-     * @param message
-     * @param cause
+     * Instantiates a new algorithm exception.
+     *
+     * @param message the message
+     * @param cause the cause
      */
     public AlgorithmException(String message, Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * @param message
+     * Instantiates a new algorithm exception.
+     *
+     * @param message the message
      */
     public AlgorithmException(String message) {
         super(message);
     }
 
     /**
-     * @param cause
+     * Instantiates a new algorithm exception.
+     *
+     * @param cause the cause
      */
     public AlgorithmException(Throwable cause) {
         super(cause);

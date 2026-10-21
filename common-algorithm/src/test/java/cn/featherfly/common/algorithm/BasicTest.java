@@ -5,29 +5,30 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 
 import org.testng.annotations.Test;
 
 /**
- * <p>
- * Base64Test
- * </p>
+ * Base64Test.
  *
  * @author zhongj
  */
 @Test
 public class BasicTest {
 
-    /*   public static void main(String[] args)  {
-        Class clazz=Class.forName("com.sun.org.apache.xerces.internal.impl.dv.util.Base64");
-        Method mainMethod= clazz.getMethod("encode", byte[].class);
-        mainMethod.setAccessible(true);
-        Object retObj=mainMethod.invoke(null, new Object[]{"123".getBytes("UTF-8")});
-        System.out.println(retObj);
-        System.out.println(new sun.misc.BASE64Encoder().encode("123".getBytes("UTF-8")));
-    }*/
+    /*
+     * public static void main(String[] args) {
+     * Class clazz=Class.forName("com.sun.org.apache.xerces.internal.impl.dv.util.Base64");
+     * Method mainMethod= clazz.getMethod("encode", byte[].class);
+     * mainMethod.setAccessible(true);
+     * Object retObj=mainMethod.invoke(null, new Object[]{"123".getBytes("UTF-8")});
+     * System.out.println(retObj);
+     * System.out.println(new sun.misc.BASE64Encoder().encode("123".getBytes("UTF-8")));
+     * }
+     */
 
     byte[] data = "123".getBytes(StandardCharsets.UTF_8);
 
@@ -78,6 +79,12 @@ public class BasicTest {
     }
 
     @Test
+    public void testMD5InputStream() {
+        byte[] src = "202cb962ac59075b964b07152d234b70".getBytes();
+        assertEquals(MD5.encrypt(new ByteArrayInputStream(src), 5), MD5.encrypt(src));
+    }
+
+    @Test
     public void testHMACMD5() {
         String src = "123";
         String result1 = HMACMD5.encrypt(src);
@@ -112,9 +119,31 @@ public class BasicTest {
         assertEquals(SHA.encrypt384(src), target);
         assertEquals(SHA.encrypt384(src).length(), 96);
 
-        target = "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2";
+        target =
+            "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2";
         assertEquals(SHA.encrypt512(src), target);
         assertEquals(SHA.encrypt512(src).length(), 128);
+    }
+
+    @Test
+    public void testSHAInputStream() {
+        byte[] src = "40bd001563085fc35165329ea1ff5c5ecbdbbeef".getBytes();
+        assertEquals(SHA.encrypt(new ByteArrayInputStream(src), 5), SHA.encrypt(src));
+
+        src = "78d8045d684abd2eece923758f3cd781489df3a48e1278982466017f".getBytes();
+        assertEquals(SHA.encrypt224(new ByteArrayInputStream(src), 5), SHA.encrypt224(src));
+
+        src = "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3".getBytes();
+        assertEquals(SHA.encrypt256(new ByteArrayInputStream(src), 5), SHA.encrypt256(src));
+
+        src = "9a0a82f0c0cf31470d7affede3406cc9aa8410671520b727044eda15b4c25532a9b5cd8aaf9cec4919d76255b6bfb00f"
+            .getBytes();
+        assertEquals(SHA.encrypt384(new ByteArrayInputStream(src), 5), SHA.encrypt384(src));
+
+        src =
+            "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2"
+                .getBytes();
+        assertEquals(SHA.encrypt512(new ByteArrayInputStream(src), 5), SHA.encrypt512(src));
     }
 
     @Test
@@ -170,7 +199,8 @@ public class BasicTest {
         result2 = HMACSHA.encrypt512(src);
         assertNotEquals(result1, result2);
 
-        result = "2ea823c645b1baf845ef76096a6d7fa9e568304ba9f7910bd52f01c03eec39cdfeec54e50b86b62ef5bfb9e6ce5c0be747ec13b3a199f9d235e99a36de369a84";
+        result =
+            "2ea823c645b1baf845ef76096a6d7fa9e568304ba9f7910bd52f01c03eec39cdfeec54e50b86b62ef5bfb9e6ce5c0be747ec13b3a199f9d235e99a36de369a84";
         result1 = HMACSHA.encrypt512(src, key);
         result2 = HMACSHA.encrypt512(src, key);
         assertEquals(result1, result2);

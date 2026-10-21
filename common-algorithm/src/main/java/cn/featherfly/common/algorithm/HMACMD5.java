@@ -1,7 +1,7 @@
 package cn.featherfly.common.algorithm;
 
 /**
- * HMACMD5 algorithm
+ * HMACMD5 algorithm.
  *
  * @author zhongj
  */
@@ -13,18 +13,18 @@ public abstract class HMACMD5 extends Algorithm {
      *
      * @param data data to encode
      * @return encoded result with byte[]
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] encrypt(byte[] data) {
         return macEncode(data, MacAlgorithms.HMACMD5);
     }
 
     /**
-     * {@link #encrypt(byte[])}
+     * {@link #encrypt(byte[])}.
      *
      * @param data data to encode
      * @return encoded result with string
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String encrypt(String data) {
         return toHexString(encrypt(data.getBytes(CHARSET)));
@@ -34,21 +34,21 @@ public abstract class HMACMD5 extends Algorithm {
      * HMACMD5 encrypt.use gived key to encrypt.
      *
      * @param data data to encrypt
-     * @param key  key
+     * @param key key
      * @return encoded result with byte[]
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] encrypt(byte[] data, byte[] key) {
         return macEncode(data, key, MacAlgorithms.HMACMD5);
     }
 
     /**
-     * {@link #encrypt(byte[], byte[])}
+     * {@link #encrypt(byte[], byte[])}.
      *
      * @param data data to encrypt
-     * @param key  key
+     * @param key key
      * @return encoded result with string
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String encrypt(String data, String key) {
         return toHexString(encrypt(getBytes(data), getBytes(key)));

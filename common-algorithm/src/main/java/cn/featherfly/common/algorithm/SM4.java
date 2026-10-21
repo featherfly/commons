@@ -4,7 +4,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * SM4 algorithm
+ * SM4 algorithm.
  *
  * @author zhongj
  */
@@ -24,12 +24,12 @@ public class SM4 extends Algorithm {
     public static final String CIPHER_ALGORITHM = "SM4/ECB/PKCS5Padding";
 
     /**
-     * SM4 encrypt
+     * SM4 encrypt.
      *
      * @param data data to encrypt
-     * @param key  key
+     * @param key key
      * @return encrypted byte[]
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] encrypt(byte[] data, byte[] key) {
         try {
@@ -41,48 +41,48 @@ public class SM4 extends Algorithm {
     }
 
     /**
-     * SM4 encrypt
+     * SM4 encrypt.
      *
      * @param data data to encrypt
-     * @param key  key
+     * @param key key
      * @return encrypted byte[]
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] encrypt(String data, byte[] key) {
         return encrypt(getBytes(data), key);
     }
 
     /**
-     * SM4 encrypt
+     * SM4 encrypt.
      *
      * @param data data to encrypt
-     * @param key  key
+     * @param key key
      * @return encrypted String
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String encryptToString(byte[] data, byte[] key) {
         return encryptResultToString(encrypt(data, key));
     }
 
     /**
-     * SM4 encrypt
+     * SM4 encrypt.
      *
      * @param data data to encrypt
-     * @param key  key
+     * @param key key
      * @return encrypted String
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String encryptToString(String data, byte[] key) {
         return encryptToString(getBytes(data), key);
     }
 
     /**
-     * SM4 decrypt
+     * SM4 decrypt.
      *
      * @param data data to decrypt
-     * @param key  key
+     * @param key key
      * @return decrypted byte[]
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] decrypt(byte[] data, byte[] key) {
         // 还原密钥
@@ -95,37 +95,37 @@ public class SM4 extends Algorithm {
     }
 
     /**
-     * SM4 decrypt
+     * SM4 decrypt.
      *
      * @param data data to decrypt，使用encryptToString加密的字符串
-     * @param key  key
+     * @param key key
      * @return decrypted byte[]
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] decrypt(String data, byte[] key) {
         return decrypt(encryptResultToBytes(data), key);
     }
 
     /**
-     * SM4 decrypt
+     * SM4 decrypt.
      *
      * @param data data to decrypt
-     * @param key  key
+     * @param key key
      * @return decrypted String
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String decryptToString(byte[] data, byte[] key) {
         return new String(decrypt(data, key), CHARSET);
     }
 
     /**
-     * SM4 decrypt
+     * SM4 decrypt.
      *
      * @param data data to decrypt，the string encrypt with encryptToString
-     *             method
-     * @param key  key
+     *        method
+     * @param key key
      * @return decrypted String
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String decryptToString(String data, byte[] key) {
         return decryptToString(encryptResultToBytes(data), key);
@@ -136,7 +136,7 @@ public class SM4 extends Algorithm {
      *
      * @param seed seed for SecureRandom
      * @return byte[] key
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] generateKey(byte... seed) {
         return generateKey(ALGORITHM_NAME, seed);
@@ -146,7 +146,7 @@ public class SM4 extends Algorithm {
      * generate key.
      *
      * @return byte[] key
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] generateKey() {
         return generateKey(ALGORITHM_NAME);
@@ -157,7 +157,7 @@ public class SM4 extends Algorithm {
      *
      * @param keySize key size
      * @return byte[] key
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] generateKey(int keySize) {
         return generateKey(ALGORITHM_NAME, keySize);
@@ -166,11 +166,11 @@ public class SM4 extends Algorithm {
     /**
      * verify.
      *
-     * @param data      data to encrypted
+     * @param data data to encrypted
      * @param encrypted encrypted data
-     * @param key       encrypt key
+     * @param key encrypt key
      * @return equals
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static boolean verify(String data, String encrypted, byte[] key) {
         return encryptToString(data, key).equals(encrypted);

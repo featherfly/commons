@@ -1,14 +1,14 @@
 package cn.featherfly.common.algorithm;
 
 /**
- * Base64 algorithm
+ * Base64 algorithm.
  *
  * @author zhongj
  */
 public abstract class Base64 extends Algorithm {
 
     /**
-     * Base64 encrypt
+     * Base64 encrypt.
      *
      * @param data data to encrypt
      * @return encrypted result with byte[]
@@ -19,7 +19,7 @@ public abstract class Base64 extends Algorithm {
     }
 
     /**
-     * Base64 encrypt
+     * Base64 encrypt.
      *
      * @param data data to encrypt
      * @return encrypted result with byte[]
@@ -29,7 +29,7 @@ public abstract class Base64 extends Algorithm {
     }
 
     /**
-     * Base64 encrypt
+     * Base64 encrypt.
      *
      * @param data data to encrypt
      * @return encrypted result with String
@@ -39,7 +39,7 @@ public abstract class Base64 extends Algorithm {
     }
 
     /**
-     * Base64 encrypt
+     * Base64 encrypt.
      *
      * @param data data to encrypt
      * @return encrypted result with String
@@ -49,7 +49,7 @@ public abstract class Base64 extends Algorithm {
     }
 
     /**
-     * Base64 decrypt
+     * Base64 decrypt.
      *
      * @param data data to decrypt
      * @return decrypted result with byte[]
@@ -57,11 +57,10 @@ public abstract class Base64 extends Algorithm {
     public static byte[] decrypt(byte[] data) {
         // 执行解码
         return java.util.Base64.getDecoder().decode(data);
-        //        return org.bouncycastle.util.encoders.Base64.decode(data);
     }
 
     /**
-     * Base64 decrypt
+     * Base64 decrypt.
      *
      * @param data data to decrypt
      * @return decrypted result with byte[]
@@ -71,7 +70,7 @@ public abstract class Base64 extends Algorithm {
     }
 
     /**
-     * Base64 decrypt
+     * Base64 decrypt.
      *
      * @param data data to decrypt
      * @return decrypted result with String
@@ -81,7 +80,7 @@ public abstract class Base64 extends Algorithm {
     }
 
     /**
-     * Base64 decrypt
+     * Base64 decrypt.
      *
      * @param data data to decrypt
      * @return decrypted result with String

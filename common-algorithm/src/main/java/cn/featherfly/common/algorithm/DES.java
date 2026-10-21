@@ -8,7 +8,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
 /**
- * DES algorithm
+ * DES algorithm.
  *
  * @author zhongj
  */
@@ -16,21 +16,20 @@ public abstract class DES extends Algorithm {
 
     /**
      * 密钥算法 <br>
+     * .
      */
     public static final String ALGORITHM_NAME = "DES";
 
-    /**
-     * DES encrypt/解密算法 / 工作模式 / 填充方式
-     */
+    /** DES encrypt/解密算法 / 工作模式 / 填充方式. */
     public static final String CIPHER_ALGORITHM = "DES/ECB/PKCS5PADDING";
 
     /**
-     * DES decrypt
+     * DES decrypt.
      *
      * @param data 待解密数据
-     * @param key  密钥
+     * @param key 密钥
      * @return byte[] 解密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] decrypt(byte[] data, byte[] key) {
         // 还原密钥
@@ -48,48 +47,48 @@ public abstract class DES extends Algorithm {
     }
 
     /**
-     * DES decrypt
+     * DES decrypt.
      *
      * @param data 待解密数据，使用encryptToString加密的字符串
-     * @param key  密钥
+     * @param key 密钥
      * @return byte[] 解密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] decrypt(String data, byte[] key) {
         return decrypt(encryptResultToBytes(data), key);
     }
 
     /**
-     * DES decrypt
+     * DES decrypt.
      *
      * @param data 待解密数据
-     * @param key  密钥
+     * @param key 密钥
      * @return String 解密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String decryptToString(byte[] data, byte[] key) {
         return new String(decrypt(data, key), CHARSET);
     }
 
     /**
-     * DES decrypt
+     * DES decrypt.
      *
      * @param data 待解密数据，使用encryptToString加密的字符串
-     * @param key  密钥
+     * @param key 密钥
      * @return String 解密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String decryptToString(String data, byte[] key) {
         return decryptToString(encryptResultToBytes(data), key);
     }
 
     /**
-     * DES encrypt
+     * DES encrypt.
      *
      * @param data 待加密数据
-     * @param key  密钥
+     * @param key 密钥
      * @return byte[] 加密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] encrypt(byte[] data, byte[] key) {
         // 还原密钥
@@ -107,36 +106,36 @@ public abstract class DES extends Algorithm {
     }
 
     /**
-     * DES encrypt
+     * DES encrypt.
      *
      * @param data 待加密数据
-     * @param key  密钥
+     * @param key 密钥
      * @return byte[] 加密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] encrypt(String data, byte[] key) {
         return encrypt(getBytes(data), key);
     }
 
     /**
-     * DES encrypt
+     * DES encrypt.
      *
      * @param data 待加密数据
-     * @param key  密钥
+     * @param key 密钥
      * @return String 加密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String encryptToString(byte[] data, byte[] key) {
         return encryptResultToString(encrypt(data, key));
     }
 
     /**
-     * DES encrypt
+     * DES encrypt.
      *
      * @param data 待加密数据
-     * @param key  密钥
+     * @param key 密钥
      * @return String 加密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String encryptToString(String data, byte[] key) {
         return encryptToString(getBytes(data), key);
@@ -147,7 +146,7 @@ public abstract class DES extends Algorithm {
      *
      * @param seed seed for SecureRandom
      * @return byte[] key
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] generateKey(byte... seed) {
         return generateKey(ALGORITHM_NAME, seed);
@@ -157,7 +156,7 @@ public abstract class DES extends Algorithm {
      * generate key.
      *
      * @return byte[] key
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] generateKey() {
         return generateKey(ALGORITHM_NAME, 56);

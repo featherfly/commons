@@ -15,20 +15,16 @@ import java.security.spec.X509EncodedKeySpec;
 import javax.crypto.Cipher;
 
 /**
- * RSA algorithm
+ * RSA algorithm.
  *
  * @author zhongj
  */
 public abstract class RSA extends Algorithm {
 
-    /**
-     * 非对称加密密钥算法
-     */
+    /** 非对称加密密钥算法. */
     public static final String ALGORITHM_NAME = "RSA";
 
-    /**
-     * 数字签名 签名/验证算法
-     */
+    /** 数字签名 签名/验证算法. */
     public static final String SIGNATURE_ALGORITHM = "SHA1withRSA";
 
     /**
@@ -37,12 +33,12 @@ public abstract class RSA extends Algorithm {
     private static final int KEY_SIZE = 1024;
 
     /**
-     * decrypt with private key
+     * decrypt with private key.
      *
      * @param data data to decrypt
-     * @param key  private Key
+     * @param key private Key
      * @return decrypted byte[]
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] decrypt(byte[] data, PrivateKey key) {
         try {
@@ -55,24 +51,24 @@ public abstract class RSA extends Algorithm {
     }
 
     /**
-     * decrypt with private key
+     * decrypt with private key.
      *
      * @param data data to decrypt
-     * @param key  private Key
+     * @param key private Key
      * @return decrypted byte[]
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] decrypt(String data, PrivateKey key) {
         return decrypt(getBytes(data), key);
     }
 
     /**
-     * decrypt with private key
+     * decrypt with private key.
      *
      * @param data data to decrypt
-     * @param key  private Key
+     * @param key private Key
      * @return decrypted byte[]
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] decryptByPrivateKey(byte[] data, byte[] key) {
         try {
@@ -88,72 +84,72 @@ public abstract class RSA extends Algorithm {
     }
 
     /**
-     * decrypt with private key
+     * decrypt with private key.
      *
      * @param data data to decrypt
-     * @param key  private Key
+     * @param key private Key
      * @return decrypted byte[]
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] decryptByPrivateKey(String data, byte[] key) {
         return decryptByPrivateKey(encryptResultToBytes(data), key);
     }
 
     /**
-     * decrypt with private key
+     * decrypt with private key.
      *
      * @param data data to decrypt
-     * @param key  private Key
+     * @param key private Key
      * @return decrypted String
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String decryptToString(byte[] data, PrivateKey key) {
         return decryptByPrivateKeyToString(data, key.getEncoded());
     }
 
     /**
-     * decrypt with private key
+     * decrypt with private key.
      *
      * @param data data to decrypt
-     * @param key  private Key
+     * @param key private Key
      * @return decrypted String
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String decryptToString(String data, PrivateKey key) {
         return decryptByPrivateKeyToString(data, key.getEncoded());
     }
 
     /**
-     * 私钥解密
+     * 私钥解密.
      *
      * @param data 待解密数据
-     * @param key  私钥
+     * @param key 私钥
      * @return String 解密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String decryptByPrivateKeyToString(byte[] data, byte[] key) {
         return new String(decryptByPrivateKey(data, key), CHARSET);
     }
 
     /**
-     * 私钥解密
+     * 私钥解密.
      *
      * @param data 待解密数据
-     * @param key  私钥
+     * @param key 私钥
      * @return String 解密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String decryptByPrivateKeyToString(String data, byte[] key) {
         return decryptByPrivateKeyToString(encryptResultToBytes(data), key);
     }
 
     /**
-     * decrypt with public key
+     * decrypt with public key.
      *
      * @param data data to decrypt
-     * @param key  public Key
+     * @param key public Key
      * @return decrypted byte[]
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] decrypt(byte[] data, PublicKey key) {
         try {
@@ -166,24 +162,24 @@ public abstract class RSA extends Algorithm {
     }
 
     /**
-     * decrypt with public key
+     * decrypt with public key.
      *
      * @param data data to decrypt
-     * @param key  public Key
+     * @param key public Key
      * @return decrypted byte[]
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] decrypt(String data, PublicKey key) {
         return decrypt(getBytes(data), key);
     }
 
     /**
-     * 公钥解密
+     * 公钥解密.
      *
      * @param data 待解密数据
-     * @param key  公钥
+     * @param key 公钥
      * @return decrypted byte[]
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] decryptByPublicKey(byte[] data, byte[] key) {
         try {
@@ -199,72 +195,72 @@ public abstract class RSA extends Algorithm {
     }
 
     /**
-     * 公钥解密
+     * 公钥解密.
      *
      * @param data 待解密数据
-     * @param key  公钥
+     * @param key 公钥
      * @return decrypted byte[]
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] decryptByPublicKey(String data, byte[] key) {
         return decryptByPublicKey(encryptResultToBytes(data), key);
     }
 
     /**
-     * decrypt with public key
+     * decrypt with public key.
      *
      * @param data data to decrypt
-     * @param key  public Key
+     * @param key public Key
      * @return decrypted String
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String decryptToString(byte[] data, PublicKey key) {
         return decryptByPublicKeyToString(data, key.getEncoded());
     }
 
     /**
-     * decrypt with public key
+     * decrypt with public key.
      *
      * @param data data to decrypt
-     * @param key  public Key
+     * @param key public Key
      * @return decrypted String
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String decryptToString(String data, PublicKey key) {
         return decryptByPublicKeyToString(data, key.getEncoded());
     }
 
     /**
-     * 公钥解密
+     * 公钥解密.
      *
      * @param data 待解密数据
-     * @param key  公钥
+     * @param key 公钥
      * @return String 解密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String decryptByPublicKeyToString(byte[] data, byte[] key) {
         return new String(decryptByPublicKey(data, key), CHARSET);
     }
 
     /**
-     * 公钥解密
+     * 公钥解密.
      *
      * @param data 待解密数据
-     * @param key  公钥
+     * @param key 公钥
      * @return String 解密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String decryptByPublicKeyToString(String data, byte[] key) {
         return decryptByPublicKeyToString(encryptResultToBytes(data), key);
     }
 
     /**
-     * encrypt with private key
+     * encrypt with private key.
      *
      * @param data data to encrypt
-     * @param key  private Key
+     * @param key private Key
      * @return encrypted byte[]
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] encrypt(byte[] data, PrivateKey key) {
         // 对数据加密
@@ -278,24 +274,24 @@ public abstract class RSA extends Algorithm {
     }
 
     /**
-     * encrypt with private key
+     * encrypt with private key.
      *
      * @param data data to encrypt
-     * @param key  private Key
+     * @param key private Key
      * @return encrypted byte[]
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] encrypt(String data, PrivateKey key) {
         return encrypt(getBytes(data), key);
     }
 
     /**
-     * encrypt with public key
+     * encrypt with public key.
      *
      * @param data data to encrypt
-     * @param key  public Key
+     * @param key public Key
      * @return encrypted byte[]
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] encrypt(byte[] data, PublicKey key) {
         // 对数据加密
@@ -309,72 +305,72 @@ public abstract class RSA extends Algorithm {
     }
 
     /**
-     * encrypt with public key
+     * encrypt with public key.
      *
      * @param data data to encrypt
-     * @param key  public Key
+     * @param key public Key
      * @return encrypted String
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] encrypt(String data, PublicKey key) {
         return encrypt(getBytes(data), key);
     }
 
     /**
-     * encrypt with private key
+     * encrypt with private key.
      *
      * @param data data to encrypt
-     * @param key  private Key
+     * @param key private Key
      * @return encrypted String
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String encryptToString(byte[] data, PrivateKey key) {
         return encryptByPrivateKeyToString(data, key.getEncoded());
     }
 
     /**
-     * encrypt with private key
+     * encrypt with private key.
      *
      * @param data data to encrypt
-     * @param key  private Key
+     * @param key private Key
      * @return encrypted String
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String encryptToString(String data, PrivateKey key) {
         return encryptByPrivateKeyToString(data, key.getEncoded());
     }
 
     /**
-     * encrypt with public key
+     * encrypt with public key.
      *
      * @param data data to encrypt
-     * @param key  public Key
+     * @param key public Key
      * @return encrypted String
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String encryptToString(byte[] data, PublicKey key) {
         return encryptByPublicKeyToString(data, key.getEncoded());
     }
 
     /**
-     * encrypt with public key
+     * encrypt with public key.
      *
      * @param data data to encrypt
-     * @param key  public Key
+     * @param key public Key
      * @return encrypted String
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String encryptToString(String data, PublicKey key) {
         return encryptByPublicKeyToString(data, key.getEncoded());
     }
 
     /**
-     * 公钥加密
+     * 公钥加密.
      *
      * @param data 待加密数据
-     * @param key  公钥
+     * @param key 公钥
      * @return byte[] 加密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] encryptByPublicKey(byte[] data, byte[] key) {
         try {
@@ -390,48 +386,48 @@ public abstract class RSA extends Algorithm {
     }
 
     /**
-     * 公钥加密
+     * 公钥加密.
      *
      * @param data 待加密数据
-     * @param key  公钥
+     * @param key 公钥
      * @return byte[] 加密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] encryptByPublicKey(String data, byte[] key) {
         return encryptByPublicKey(getBytes(data), key);
     }
 
     /**
-     * 公钥加密
+     * 公钥加密.
      *
      * @param data 待加密数据
-     * @param key  公钥
+     * @param key 公钥
      * @return String 加密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String encryptByPublicKeyToString(byte[] data, byte[] key) {
         return encryptResultToString(encryptByPublicKey(data, key));
     }
 
     /**
-     * 公钥加密
+     * 公钥加密.
      *
      * @param data 待加密数据
-     * @param key  公钥
+     * @param key 公钥
      * @return String 加密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String encryptByPublicKeyToString(String data, byte[] key) {
         return encryptByPublicKeyToString(getBytes(data), key);
     }
 
     /**
-     * 私钥加密
+     * 私钥加密.
      *
      * @param data 待加密数据
-     * @param key  私钥
+     * @param key 私钥
      * @return byte[] 加密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] encryptByPrivateKey(byte[] data, byte[] key) {
         try {
@@ -448,47 +444,47 @@ public abstract class RSA extends Algorithm {
     }
 
     /**
-     * 私钥加密
+     * 私钥加密.
      *
      * @param data 待加密数据
-     * @param key  私钥
+     * @param key 私钥
      * @return byte[] 加密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] encryptByPrivateKey(String data, byte[] key) {
         return encryptByPrivateKey(getBytes(data), key);
     }
 
     /**
-     * 私钥加密
+     * 私钥加密.
      *
      * @param data 待加密数据
-     * @param key  私钥
+     * @param key 私钥
      * @return String 加密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String encryptByPrivateKeyToString(byte[] data, byte[] key) {
         return encryptResultToString(encryptByPrivateKey(data, key));
     }
 
     /**
-     * 私钥加密
+     * 私钥加密.
      *
      * @param data 待加密数据
-     * @param key  私钥
+     * @param key 私钥
      * @return String 加密数据
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String encryptByPrivateKeyToString(String data, byte[] key) {
         return encryptByPrivateKeyToString(getBytes(data), key);
     }
 
     /**
-     * generate KeyPair
+     * generate KeyPair.
      *
      * @param keySize key size
      * @return KeyPair KeyPair
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static KeyPair generateKeyPair(int keySize) {
         try {
@@ -505,11 +501,11 @@ public abstract class RSA extends Algorithm {
     }
 
     /**
-     * generate KeyPair
+     * generate KeyPair.
      *
      * @param seed seed for SecureRandom
      * @return KeyPair KeyPair
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static KeyPair generateKeyPair(byte... seed) {
         try {
@@ -538,10 +534,10 @@ public abstract class RSA extends Algorithm {
     /**
      * 签名. {@link #sign(byte[], PrivateKey)}
      *
-     * @param data       待签名数据
+     * @param data 待签名数据
      * @param privateKey 私钥
      * @return byte[] 数字签名
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String signToString(byte[] data, PrivateKey privateKey) {
         return encryptResultToString(sign(data, privateKey));
@@ -550,10 +546,10 @@ public abstract class RSA extends Algorithm {
     /**
      * 签名. {@link #sign(String, PrivateKey)}
      *
-     * @param data       待签名数据
+     * @param data 待签名数据
      * @param privateKey 私钥
      * @return byte[] 数字签名
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static String signToString(String data, PrivateKey privateKey) {
         return signToString(getBytes(data), privateKey);
@@ -562,10 +558,10 @@ public abstract class RSA extends Algorithm {
     /**
      * 签名. {@link #sign(byte[], PrivateKey)}
      *
-     * @param data       待签名数据
+     * @param data 待签名数据
      * @param privateKey 私钥
      * @return byte[] 数字签名
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] sign(String data, PrivateKey privateKey) {
         return sign(getBytes(data), privateKey);
@@ -574,22 +570,22 @@ public abstract class RSA extends Algorithm {
     /**
      * 签名. {@link #sign(byte[], byte[])}
      *
-     * @param data       待签名数据
+     * @param data 待签名数据
      * @param privateKey 私钥
      * @return byte[] 数字签名
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] sign(String data, byte[] privateKey) {
         return sign(getBytes(data), privateKey);
     }
 
     /**
-     * 签名
+     * 签名.
      *
-     * @param data       待签名数据
+     * @param data 待签名数据
      * @param privateKey 私钥
      * @return byte[] 数字签名
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] sign(byte[] data, PrivateKey privateKey) {
         try {
@@ -607,12 +603,12 @@ public abstract class RSA extends Algorithm {
     }
 
     /**
-     * 签名
+     * 签名.
      *
-     * @param data       待签名数据
+     * @param data 待签名数据
      * @param privateKey 私钥
      * @return byte[] 数字签名
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static byte[] sign(byte[] data, byte[] privateKey) {
         try {
@@ -638,11 +634,11 @@ public abstract class RSA extends Algorithm {
     /**
      * 校验. {@link #verify(byte[], byte[], PublicKey)}
      *
-     * @param data      待校验数据
-     * @param sign      数字签名
+     * @param data 待校验数据
+     * @param sign 数字签名
      * @param publicKey 公钥
      * @return boolean 校验成功返回true 失败返回false
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static boolean verify(String data, String sign, PublicKey publicKey) {
         return verify(getBytes(data), encryptResultToBytes(sign), publicKey);
@@ -651,24 +647,24 @@ public abstract class RSA extends Algorithm {
     /**
      * 校验. {@link #verify(byte[], byte[], byte[])}
      *
-     * @param data      待校验数据
-     * @param sign      数字签名
+     * @param data 待校验数据
+     * @param sign 数字签名
      * @param publicKey 公钥
      * @return boolean 校验成功返回true 失败返回false
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static boolean verify(String data, String sign, byte[] publicKey) {
         return verify(getBytes(data), encryptResultToBytes(sign), publicKey);
     }
 
     /**
-     * 校验
+     * 校验.
      *
-     * @param data      待校验数据
-     * @param sign      数字签名
+     * @param data 待校验数据
+     * @param sign 数字签名
      * @param publicKey 公钥
      * @return boolean 校验成功返回true 失败返回false
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static boolean verify(byte[] data, byte[] sign, PublicKey publicKey) {
         try {
@@ -686,13 +682,13 @@ public abstract class RSA extends Algorithm {
     }
 
     /**
-     * 校验
+     * 校验.
      *
-     * @param data      待校验数据
-     * @param sign      数字签名
+     * @param data 待校验数据
+     * @param sign 数字签名
      * @param publicKey 公钥
      * @return boolean 校验成功返回true 失败返回false
-     * @throws AlgorithmException
+     * @throws AlgorithmException the algorithm exception
      */
     public static boolean verify(byte[] data, byte[] sign, byte[] publicKey) {
         try {

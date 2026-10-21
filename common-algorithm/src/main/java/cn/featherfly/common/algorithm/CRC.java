@@ -8,13 +8,14 @@ import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
 
 /**
- * CRC algorithm
+ * CRC algorithm.
  *
  * @author zhongj
  */
 public abstract class CRC extends Algorithm {
+
     /**
-     * generate crc32 long number
+     * generate crc32 long number.
      *
      * @param data data bytes
      * @return crc32 long number
@@ -26,7 +27,7 @@ public abstract class CRC extends Algorithm {
     }
 
     /**
-     * generate crc32 long number
+     * generate crc32 long number.
      *
      * @param data data string
      * @return crc32 long number
@@ -36,11 +37,11 @@ public abstract class CRC extends Algorithm {
     }
 
     /**
-     * generate crc32 long number
+     * generate crc32 long number.
      *
      * @param inputStream inputStream
      * @return crc32 long number
-     * @throws IOException
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public static final long crc32(InputStream inputStream) throws IOException {
         CRC32 crc32 = new CRC32();
@@ -52,18 +53,18 @@ public abstract class CRC extends Algorithm {
     }
 
     /**
-     * generate crc32 long number
+     * generate crc32 long number.
      *
      * @param file file
      * @return crc32 long number
-     * @throws IOException
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public static final long crc32(File file) throws IOException {
         return crc32(new FileInputStream(file));
     }
 
     /**
-     * generate crc32 hex string
+     * generate crc32 hex string.
      *
      * @param data data bytes
      * @return crc32 hex string
@@ -73,7 +74,7 @@ public abstract class CRC extends Algorithm {
     }
 
     /**
-     * generate crc32 hex string
+     * generate crc32 hex string.
      *
      * @param data data string
      * @return crc32 hex string
@@ -83,22 +84,22 @@ public abstract class CRC extends Algorithm {
     }
 
     /**
-     * generate crc32 hex string
+     * generate crc32 hex string.
      *
      * @param inputStream inputStream
      * @return crc32 hex string
-     * @throws IOException
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public static final String crc32Hex(InputStream inputStream) throws IOException {
         return Long.toHexString(crc32(inputStream));
     }
 
     /**
-     * generate crc32 hex string
+     * generate crc32 hex string.
      *
      * @param file file
      * @return crc32 hex string
-     * @throws IOException
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public static String crc32Hex(File file) throws IOException {
         return Long.toHexString(crc32(file));
@@ -122,7 +123,7 @@ public abstract class CRC extends Algorithm {
     }
 
     /**
-     * generate crc64 long number
+     * generate crc64 long number.
      *
      * @param data data byte[]
      * @return crc64 long number
@@ -136,7 +137,7 @@ public abstract class CRC extends Algorithm {
     }
 
     /**
-     * generate crc64 long number
+     * generate crc64 long number.
      *
      * @param data data string
      * @return crc64 long number
@@ -146,7 +147,7 @@ public abstract class CRC extends Algorithm {
     }
 
     /**
-     * generate crc64 hex string
+     * generate crc64 hex string.
      *
      * @param data data byte[]
      * @return crc64 hex string
@@ -156,7 +157,7 @@ public abstract class CRC extends Algorithm {
     }
 
     /**
-     * generate crc64 hex string
+     * generate crc64 hex string.
      *
      * @param data data string
      * @return crc64 hex string
@@ -167,7 +168,7 @@ public abstract class CRC extends Algorithm {
 
     /**
      * CRC-16 (CCITT)：多项式x16+x12+x5+1（0x1021），初始值0x0000，低位在前，高位在后，结果与0x0000异或
-     * 0x8408是0x1021按位颠倒后的结果。
+     * 0x8408是0x1021按位颠倒后的结果。.
      *
      * @param data data byte[]
      * @return crc16 int number
@@ -192,7 +193,7 @@ public abstract class CRC extends Algorithm {
 
     /**
      * CRC-16 (CCITT
-     * REVERSE)：多项式x16+x12+x5+1（0x1021），初始值0xFFFF，低位在后，高位在前，结果与0x0000异或
+     * REVERSE)：多项式x16+x12+x5+1（0x1021），初始值0xFFFF，低位在后，高位在前，结果与0x0000异或.
      *
      * @param data data byte[]
      * @return crc16 int number
@@ -215,7 +216,7 @@ public abstract class CRC extends Algorithm {
     }
 
     /**
-     * CRC-16 (XModem)：多项式x16+x12+x5+1（0x1021），初始值0x0000，低位在后，高位在前，结果与0x0000异或
+     * CRC-16 (XModem)：多项式x16+x12+x5+1（0x1021），初始值0x0000，低位在后，高位在前，结果与0x0000异或.
      *
      * @param data data byte[]
      * @return crc16 int number
@@ -239,7 +240,7 @@ public abstract class CRC extends Algorithm {
 
     /**
      * CRC-16 (X25)：多项式x16+x12+x5+1（0x1021），初始值0xffff，低位在前，高位在后，结果与0xFFFF异或
-     * 0x8408是0x1021按位颠倒后的结果。
+     * 0x8408是0x1021按位颠倒后的结果。.
      *
      * @param data data byte[]
      * @return crc16 int number
@@ -263,7 +264,7 @@ public abstract class CRC extends Algorithm {
 
     /**
      * CRC-16 (Modbus)：多项式x16+x15+x2+1（0x8005），初始值0xFFFF，低位在前，高位在后，结果与0x0000异或
-     * 0xA001是0x8005按位颠倒后的结果
+     * 0xA001是0x8005按位颠倒后的结果.
      *
      * @param data data byte[]
      * @return crc16 int number
@@ -287,7 +288,7 @@ public abstract class CRC extends Algorithm {
 
     /**
      * CRC-16 (IBM)：多项式x16+x15+x2+1（0x8005），初始值0x0000，低位在前，高位在后，结果与0x0000异或
-     * 0xA001是0x8005按位颠倒后的结果
+     * 0xA001是0x8005按位颠倒后的结果.
      *
      * @param data data byte[]
      * @return crc16 int number
@@ -311,7 +312,7 @@ public abstract class CRC extends Algorithm {
 
     /**
      * CRC-16 (MAXIM)：多项式x16+x15+x2+1（0x8005），初始值0x0000，低位在前，高位在后，结果与0xFFFF异或
-     * 0xA001是0x8005按位颠倒后的结果
+     * 0xA001是0x8005按位颠倒后的结果.
      *
      * @param data data byte[]
      * @return crc16 int number
@@ -335,7 +336,7 @@ public abstract class CRC extends Algorithm {
 
     /**
      * CRC-16 (USB)：多项式x16+x15+x2+1（0x8005），初始值0xFFFF，低位在前，高位在后，结果与0xFFFF异或
-     * 0xA001是0x8005按位颠倒后的结果
+     * 0xA001是0x8005按位颠倒后的结果.
      *
      * @param data data byte[]
      * @return crc16 int number
@@ -360,7 +361,7 @@ public abstract class CRC extends Algorithm {
     /**
      * CRC-16
      * (DNP)：多项式x16+x13+x12+x11+x10+x8+x6+x5+x2+1（0x3D65），初始值0x0000，低位在前，高位在后，结果与0xFFFF异或
-     * 0xA6BC是0x3D65按位颠倒后的结果
+     * 0xA6BC是0x3D65按位颠倒后的结果.
      *
      * @param data data byte[]
      * @return crc16 int number

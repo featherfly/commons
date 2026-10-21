@@ -1,6 +1,7 @@
 
 package cn.featherfly.common.algorithm;
 
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -16,9 +17,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.slf4j.LoggerFactory;
 
 /**
- * <p>
- * 加解密算法
- * </p>
+ * 加解密算法.
  *
  * @author zhongj
  */
@@ -32,7 +31,7 @@ public abstract class Algorithm {
             if (Security.getProvider("BC") == null) {
                 // 使用反射可以处理没有添加BouncyCastleProvider实现JAR包时，这里出错的问题
                 Provider provider = (Provider) Class.forName("org.bouncycastle.jce.provider.BouncyCastleProvider")
-                        .newInstance();
+                    .newInstance();
                 Security.addProvider(provider);
             }
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
@@ -75,7 +74,7 @@ public abstract class Algorithm {
      * @return byte[]
      */
     public static byte[] hexStringToByte(String hexStr) {
-        /*对输入值进行规范化整理*/
+        /* 对输入值进行规范化整理 */
         hexStr = hexStr.trim();
         //处理值初始化
         int m = 0, n = 0;
@@ -104,7 +103,7 @@ public abstract class Algorithm {
      * generate key.
      *
      * @param algorithmName algorithm name
-     * @param keySize       key size
+     * @param keySize key size
      * @return byte[] key
      * @throws AlgorithmException
      */
@@ -122,7 +121,7 @@ public abstract class Algorithm {
      * generate key.
      *
      * @param algorithmName algorithm name
-     * @param seed          seed for SecureRandom
+     * @param seed seed for SecureRandom
      * @return byte[] key
      * @throws AlgorithmException
      */
@@ -180,7 +179,7 @@ public abstract class Algorithm {
     /**
      * 消息摘要编码
      *
-     * @param data      待编码的数据
+     * @param data 待编码的数据
      * @param algorithm 消息摘要算法
      * @return 编码的结果
      */
@@ -196,9 +195,35 @@ public abstract class Algorithm {
     }
 
     /**
+     * 消息摘要编码.
+     *
+     * @param data 待编码的数据
+     * @param chunkSize 分段大小
+     * @param algorithm 消息摘要算法
+     * @return 编码的结果
+     */
+    static byte[] messageDigestEncode(InputStream input, int chunkSize, MessageDigestAlgorithm algorithm) {
+        try {
+            // 初始化MessageDigest
+            MessageDigest md = MessageDigest.getInstance(algorithm.getName());
+            byte[] bs = new byte[chunkSize];
+            int size = input.read(bs);
+            while (size != -1) {
+                // 分段更新，不调用 digest()，只调用 update()
+                md.update(bs, 0, size);  // 喂入每一段
+                size = input.read(bs);
+            }
+            // 所有分段喂完后，统一完成计算
+            return md.digest();
+        } catch (Exception e) {
+            throw new AlgorithmException(e);
+        }
+    }
+
+    /**
      * mac编码,使用随机key进行编码，注意：对同一个data进行编码的结果每次都不一样.
      *
-     * @param data      待编码的数据
+     * @param data 待编码的数据
      * @param algorithm mac算法
      * @return 编码的结果
      */
@@ -218,8 +243,8 @@ public abstract class Algorithm {
     /**
      * mac编码
      *
-     * @param data      待编码的数据
-     * @param key       编码使用的key
+     * @param data 待编码的数据
+     * @param key 编码使用的key
      * @param algorithm mac算法
      * @return 编码的结果
      */
@@ -244,7 +269,7 @@ public abstract class Algorithm {
         SHA512("SHA-512"),
         SM3("SHA");
 
-        private MessageDigestAlgorithms(String name) {
+        MessageDigestAlgorithms(String name) {
             this.name = name;
         }
 
@@ -277,7 +302,7 @@ public abstract class Algorithm {
         HMACSHA384("HMACSHA384"),
         HMACSHA512("HMACSHA512");
 
-        private MacAlgorithms(String name) {
+        MacAlgorithms(String name) {
             this.name = name;
         }
 

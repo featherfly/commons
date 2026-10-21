@@ -3,14 +3,14 @@ apply plugin: 'java-library'
 
 import java.io.File;
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(jdkVersion as Integer)
+    }
+}
+
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
-    int runJdkVersion = Integer.parseInt(ant.properties['java.version'].split("\\.")[0])
-    //println ant.properties['java.version']
-    //println ant.properties['java.runtime.version']
-    if (runJdkVersion > 8) {
-        options.release.set(Integer.parseInt(jdkVersion))
-    }
 }
 tasks.withType(Javadoc) {
     options.encoding = "UTF-8"
@@ -29,11 +29,11 @@ jar {
     archiveBaseName = archivesBaseName
     manifest.attributes 'Build-Name': archivesBaseName
     manifest.attributes 'Build-By': "zhongj"
+    manifest.attributes 'Build-JDK' : jdkVersion
     manifest.attributes 'Build-Tool' : "gradle " + gradle.gradleVersion
-    manifest.attributes 'Build-Jdk' : ant.properties['java.runtime.version']
+    manifest.attributes 'Build-Tool-JDK' : ant.properties['java.runtime.version']
     manifest.attributes 'Build-OS' : ant.properties['os.name'] + "  --  " + ant.properties['os.version'] + "  --  " + ant.properties['os.arch']
     manifest.attributes 'Build-User' : ant.properties["user.name"]
     manifest.attributes 'Bundle-License': 'http://www.apache.org/licenses/LICENSE-2.0'
-    manifest.attributes 'Java-Version' : jdkVersion
 }
 

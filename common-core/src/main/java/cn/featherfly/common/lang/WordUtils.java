@@ -175,7 +175,7 @@ public final class WordUtils {
     /**
      * 将驼峰格式转换为小蛇形格式.
      * Parses the came case to lower snake case.
-     * example: HelloWorld -> hello_world .
+     * example: HelloWorld -- hello_world .
      *
      * @param word the word
      * @return the string
@@ -187,7 +187,7 @@ public final class WordUtils {
     /**
      * 将驼峰格式转换为大蛇形格式.
      * Parses the came case to upper snake case.
-     * example: HelloWorld -> HELLO_WORLD .
+     * example: HelloWorld -- HELLO_WORLD .
      * 
      * @param word the word
      * @return the string

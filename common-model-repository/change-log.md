@@ -1,5 +1,8 @@
 # 0.
 
+feat:
+  1. add EmptyRowIterable
+
 chore:
   1. jpa依赖从hibernate-jpa-2.1-api变更为javax.persistence-api
   2. 去除无效依赖

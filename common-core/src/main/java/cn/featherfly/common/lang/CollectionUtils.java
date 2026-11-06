@@ -110,8 +110,8 @@ public final class CollectionUtils {
      * @param elements 需要批量添加的元素
      * @return collection
      */
-    public static <T> Collection<T> addAllChain(Collection<T> collection,
-        @SuppressWarnings("unchecked") T... elements) {
+    @SafeVarargs
+    public static <T> Collection<T> addAllChain(Collection<T> collection, T... elements) {
         if (collection == null || Lang.isEmpty(elements)) {
             return collection;
         }
@@ -144,7 +144,8 @@ public final class CollectionUtils {
      * @param elements 需要批量添加的元素
      * @return 是否添加
      */
-    public static <T> boolean addAll(Collection<T> collection, @SuppressWarnings("unchecked") T... elements) {
+    @SafeVarargs
+    public static <T> boolean addAll(Collection<T> collection, T... elements) {
         if (collection == null || Lang.isEmpty(elements)) {
             return false;
         }
@@ -1056,7 +1057,8 @@ public final class CollectionUtils {
      * @param args the args
      * @return the list
      */
-    public static <T> List<T> list(@SuppressWarnings("unchecked") T... args) {
+    @SafeVarargs
+    public static <T> List<T> list(T... args) {
         List<T> list = new ArrayList<>(ArrayUtils.getLength(args));
         addAll(list, args);
         return list;
@@ -1070,7 +1072,8 @@ public final class CollectionUtils {
      * @param args the args
      * @return the list
      */
-    public static <T> List<T> list(IntFunction<List<T>> listCreator, @SuppressWarnings("unchecked") T... args) {
+    @SafeVarargs
+    public static <T> List<T> list(IntFunction<List<T>> listCreator, T... args) {
         List<T> list = listCreator == null ? new ArrayList<>(ArrayUtils.getLength(args))
             : listCreator.apply(ArrayUtils.getLength(args));
         addAll(list, args);
@@ -1084,7 +1087,8 @@ public final class CollectionUtils {
      * @param args the args
      * @return the sets
      */
-    public static <T> Set<T> set(@SuppressWarnings("unchecked") T... args) {
+    @SafeVarargs
+    public static <T> Set<T> set(T... args) {
         HashSet<T> set = new HashSet<>(ArrayUtils.getLength(args));
         addAll(set, args);
         return set;
@@ -1098,7 +1102,8 @@ public final class CollectionUtils {
      * @param args the args
      * @return the sets
      */
-    public static <T> Set<T> set(IntFunction<Set<T>> setCreator, @SuppressWarnings("unchecked") T... args) {
+    @SafeVarargs
+    public static <T> Set<T> set(IntFunction<Set<T>> setCreator, T... args) {
         Set<T> set = setCreator == null ? new HashSet<>(ArrayUtils.getLength(args))
             : setCreator.apply(ArrayUtils.getLength(args));
         addAll(set, args);
@@ -1112,7 +1117,8 @@ public final class CollectionUtils {
      * @param args the args
      * @return the sets
      */
-    public static <T> Queue<T> queue(@SuppressWarnings("unchecked") T... args) {
+    @SafeVarargs
+    public static <T> Queue<T> queue(T... args) {
         ArrayDeque<T> queue = new ArrayDeque<>(ArrayUtils.getLength(args));
         addAll(queue, args);
         return queue;
@@ -1126,7 +1132,8 @@ public final class CollectionUtils {
      * @param args the args
      * @return the sets
      */
-    public static <T> Queue<T> queue(IntFunction<Queue<T>> queueCreator, @SuppressWarnings("unchecked") T... args) {
+    @SafeVarargs
+    public static <T> Queue<T> queue(IntFunction<Queue<T>> queueCreator, T... args) {
         Queue<T> queue = queueCreator == null ? new ArrayDeque<>(ArrayUtils.getLength(args))
             : queueCreator.apply(ArrayUtils.getLength(args));
         addAll(queue, args);

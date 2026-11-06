@@ -16,13 +16,18 @@ import java.lang.annotation.Documented;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.AbstractCollection;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.ObjIntConsumer;
 import java.util.function.Supplier;
@@ -57,6 +62,27 @@ public class ClassUtilsTest {
         System.out.println(b);
         System.out.println(ClassUtils.invokeMethod(Lang.class, "each", array("a", "b"), consumer).toString());
         System.out.println(v);
+    }
+
+    @Test
+    void getCommonAncestorType() {
+        Class<?> commonAncestorType = null;
+
+        commonAncestorType = ClassUtils.getCommonAncestorType(LinkedList.class, HashSet.class);
+        assertEquals(commonAncestorType, AbstractCollection.class);
+        //        System.out.println(commonAncestorType);
+
+        commonAncestorType = ClassUtils.getCommonAncestorType(LinkedList.class, Set.class);
+        assertEquals(commonAncestorType, Collection.class);
+        //        System.out.println(commonAncestorType);
+
+        commonAncestorType = ClassUtils.getCommonAncestorType(LinkedList.class, Optional.class, Set.class);
+        assertEquals(commonAncestorType, Object.class);
+        //        System.out.println(commonAncestorType);
+
+        Class<?>[] types = null;
+        commonAncestorType = ClassUtils.getCommonAncestorType(types);
+        assertNull(commonAncestorType);
     }
 
     @Test
@@ -465,7 +491,6 @@ public class ClassUtilsTest {
             .println(ClassUtils.getMethodReturnTypeGenericParameterTypes(genericType, "getMap", EMPTY_CLASS_ARRAY));
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void getMethodParameterType() throws NoSuchFieldException, SecurityException, NoSuchMethodException {
         //        Method method = ClassUtils.getMethod(genericType, "set", Integer.class, String.class, Long.class);
@@ -519,7 +544,6 @@ public class ClassUtilsTest {
         assertEquals(ClassUtils.getMethodParameterType(genericType, number), Number.class);
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void getMethodGenericParameterType() throws NoSuchFieldException, SecurityException, NoSuchMethodException {
         //        assertEquals(

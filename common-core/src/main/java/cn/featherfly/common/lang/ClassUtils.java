@@ -23,13 +23,17 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -140,7 +144,7 @@ public final class ClassUtils {
     }
 
     /**
-     * 返回传入类型的共同父类.
+     * 返回传入类型的共同父类. 只检查c1和c2之间的父子关系，不检查共祖关系
      *
      * @param c1 类型1
      * @param c2 类型2
@@ -162,6 +166,92 @@ public final class ClassUtils {
         } else {
             return Object.class;
         }
+    }
+
+    /**
+     * 求多个类型的公共祖先类型（含类与接口）
+     * 
+     * @param types 求共组的类型数组
+     * @return 返回交集中"最具体"的那个, 无交集时返回 Object.class, types为空时返回null
+     */
+    public static Class<?> getCommonAncestorType(Class<?>... types) {
+        if (Lang.isEmpty(types)) {
+            return null;
+        }
+        Class<?>[] valid = Arrays.stream(types).filter(Objects::nonNull).toArray(Class<?>[]::new);
+        if (valid.length == 0) {
+            return Object.class;
+        }
+
+        return getCommonAncestorType0(valid);
+    }
+
+    /**
+     * 求多个类型的公共祖先类型（含类与接口）
+     * 
+     * @param types 求共组的类型集合
+     * @return 返回交集中"最具体"的那个, 无交集时返回 Object.class, types为空时返回null
+     */
+    public static Class<?> getCommonAncestorType(Collection<Class<?>> types) {
+        if (Lang.isEmpty(types)) {
+            return null;
+        }
+        Class<?>[] valid = types.stream().filter(Objects::nonNull).toArray(Class<?>[]::new);
+        if (valid.length == 0) {
+            return Object.class;
+        }
+
+        return getCommonAncestorType0(valid);
+    }
+
+    private static Class<?> getCommonAncestorType0(Class<?>[] valid) {
+        // 1) 取第一个类型的所有超类型（含自身）作为候选集合
+        Set<Class<?>> candidates = allSupertypes(valid[0]);
+
+        // 2) 与其余类型的超类型集合逐个求交集
+        for (int i = 1; i < valid.length; i++) {
+            candidates.retainAll(allSupertypes(valid[i]));
+            if (candidates.isEmpty() ||
+                candidates.size() == 1 && candidates.contains(Object.class)) {
+                // 只有Object共祖时直接返回
+                return Object.class;
+            }
+        }
+
+        // 3) 从交集中挑"最具体"的：不被交集中其他类型 isAssignableFrom 的那个
+        //    注意可能有多个并列（如两个无关接口），优先返回类，其次任意一个
+        Class<?> best = null;
+        for (Class<?> c : candidates) {
+            if (c == Object.class) {
+                continue;                  // 不选 Object 作结果
+            }
+            if (best == null || best.isAssignableFrom(c)) {
+                best = c;
+            } else if (!c.isAssignableFrom(best) && best.isInterface() && !c.isInterface()) {
+                best = c;
+            }
+        }
+        return best != null ? best : Object.class;
+    }
+
+    /* 收集一个类型的所有超类型（含自身、所有父类、所有接口，递归去重） */
+    private static Set<Class<?>> allSupertypes(Class<?> type) {
+        Set<Class<?>> result = new LinkedHashSet<>();
+        Deque<Class<?>> stack = new ArrayDeque<>();
+        stack.push(type);
+        while (!stack.isEmpty()) {
+            Class<?> c = stack.pop();
+            if (c == null || !result.add(c)) {
+                continue;
+            }
+            if (c.getSuperclass() != null) {
+                stack.push(c.getSuperclass());
+            }
+            for (Class<?> itf : c.getInterfaces()) {
+                stack.push(itf);
+            }
+        }
+        return result;
     }
 
     private static Field getField0(Class<?> type, String fieldName) {

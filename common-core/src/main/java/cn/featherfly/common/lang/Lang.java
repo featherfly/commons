@@ -83,7 +83,8 @@ public final class Lang {
      * @deprecated use {@link #ifNotNullFirst(Object...)} instead
      */
     @Deprecated
-    public static <T> T pickFirst(@SuppressWarnings("unchecked") T... objects) {
+    @SafeVarargs
+    public static <T> T pickFirst(T... objects) {
         if (objects != null) {
             for (T obj : objects) {
                 if (obj != null) {
@@ -123,7 +124,8 @@ public final class Lang {
      * @deprecated use {@link #ifNotNullLast(Object...)} instead
      */
     @Deprecated
-    public static <T> T pickLast(@SuppressWarnings("unchecked") T... pickedItems) {
+    @SafeVarargs
+    public static <T> T pickLast(T... pickedItems) {
         if (pickedItems != null) {
             for (int i = pickedItems.length - 1; i >= 0; i--) {
                 T t = pickedItems[i];
@@ -192,7 +194,8 @@ public final class Lang {
      * @param objects the objects
      * @return 第一个通过Predicate判断的对象, 如果没有满足条件的，返回null
      */
-    public static <T> T getFirst(Predicate<T> predicate, @SuppressWarnings("unchecked") T... objects) {
+    @SafeVarargs
+    public static <T> T getFirst(Predicate<T> predicate, T... objects) {
         return getFirst(objects, predicate);
     }
 
@@ -244,7 +247,8 @@ public final class Lang {
      * @param objects the objects
      * @return 最后一个通过Predicate判断的对象, 如果没有满足条件的，返回null
      */
-    public static <T> T getLast(Predicate<T> predicate, @SuppressWarnings("unchecked") T... objects) {
+    @SafeVarargs
+    public static <T> T getLast(Predicate<T> predicate, T... objects) {
         return getLast(objects, predicate);
     }
 
@@ -588,7 +592,8 @@ public final class Lang {
      * @param objects the objects
      * @return 第一个非空的对象
      */
-    public static <T> T ifNotNullFirst(@SuppressWarnings("unchecked") T... objects) {
+    @SafeVarargs
+    public static <T> T ifNotNullFirst(T... objects) {
         return getFirst(objects, Objects::nonNull);
     }
 
@@ -610,7 +615,8 @@ public final class Lang {
      * @param objects the objects
      * @return 最后一个非空的对象
      */
-    public static <T> T ifNotNullLast(@SuppressWarnings("unchecked") T... objects) {
+    @SafeVarargs
+    public static <T> T ifNotNullLast(T... objects) {
         return getLast(objects, Objects::nonNull);
     }
 
@@ -790,7 +796,8 @@ public final class Lang {
      * @param objects the objects
      * @return 第一个非空的对象
      */
-    public static <T> T ifNotEmptyFirst(@SuppressWarnings("unchecked") T... objects) {
+    @SafeVarargs
+    public static <T> T ifNotEmptyFirst(T... objects) {
         return getFirst(objects, Lang::isNotEmpty);
     }
 
@@ -812,7 +819,8 @@ public final class Lang {
      * @param suppliers the suppliers
      * @return 第一个非空的对象
      */
-    public static <T> T ifNotEmptyFirst(@SuppressWarnings("unchecked") Supplier<T>... suppliers) {
+    @SafeVarargs
+    public static <T> T ifNotEmptyFirst(Supplier<T>... suppliers) {
         if (suppliers == null) {
             return null;
         }
@@ -1429,7 +1437,8 @@ public final class Lang {
      * @param arrays the arrays
      * @return 列表
      */
-    public static <A> Map<String, A> toMapStringKey(@SuppressWarnings("unchecked") A... arrays) {
+    @SafeVarargs
+    public static <A> Map<String, A> toMapStringKey(A... arrays) {
         return ArrayUtils.toMapStringKey(arrays);
     }
 
@@ -1473,7 +1482,8 @@ public final class Lang {
      * @param consumer the consumer
      * @param array the array
      */
-    public static <T> void each(ObjIntConsumer<T> consumer, @SuppressWarnings("unchecked") T... array) {
+    @SafeVarargs
+    public static <T> void each(ObjIntConsumer<T> consumer, T... array) {
         ArrayUtils.each(consumer, array);
     }
 
@@ -1572,7 +1582,7 @@ public final class Lang {
      * @param array the array
      * @return the t[]
      */
-    @SuppressWarnings("unchecked")
+    @SafeVarargs
     public static <T> T[] array(T... array) {
         return array;
     }
@@ -1665,7 +1675,8 @@ public final class Lang {
      * @return the list
      * @see CollectionUtils#list(Object...)
      */
-    public static <E> List<E> list(@SuppressWarnings("unchecked") E... elements) {
+    @SafeVarargs
+    public static <E> List<E> list(E... elements) {
         return CollectionUtils.list(elements);
     }
 
@@ -1677,7 +1688,8 @@ public final class Lang {
      * @return the set
      * @see CollectionUtils#set(Object...)
      */
-    public static <E> Set<E> set(@SuppressWarnings("unchecked") E... elements) {
+    @SafeVarargs
+    public static <E> Set<E> set(E... elements) {
         return CollectionUtils.set(elements);
     }
 
@@ -1689,7 +1701,8 @@ public final class Lang {
      * @return the queue
      * @see CollectionUtils#queue(Object...)
      */
-    public static <T> Queue<T> queue(@SuppressWarnings("unchecked") T... args) {
+    @SafeVarargs
+    public static <T> Queue<T> queue(T... args) {
         return CollectionUtils.queue(args);
     }
 

@@ -3,13 +3,18 @@ package cn.featherfly.common.lang;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 import java.util.function.IntFunction;
 import java.util.function.ObjIntConsumer;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import cn.featherfly.common.constant.Chars;
 
@@ -163,7 +168,8 @@ public final class ArrayUtils {
      * @param consumer the consumer
      * @param array the array
      */
-    public static <T> void each(ObjIntConsumer<T> consumer, @SuppressWarnings("unchecked") T... array) {
+    @SafeVarargs
+    public static <T> void each(ObjIntConsumer<T> consumer, T... array) {
         if (array == null) {
             return;
         }
@@ -283,7 +289,8 @@ public final class ArrayUtils {
      * @param arrays the arrays
      * @return the list
      */
-    public static <T> List<T> toList(@SuppressWarnings("unchecked") T... arrays) {
+    @SafeVarargs
+    public static <T> List<T> toList(T... arrays) {
         return CollectionUtils.list(arrays);
     }
 
@@ -294,7 +301,8 @@ public final class ArrayUtils {
      * @param arrays the arrays
      * @return the set
      */
-    public static <T> Set<T> toSet(@SuppressWarnings("unchecked") T... arrays) {
+    @SafeVarargs
+    public static <T> Set<T> toSet(T... arrays) {
         return CollectionUtils.set(arrays);
     }
 
@@ -305,7 +313,8 @@ public final class ArrayUtils {
      * @param arrays the arrays
      * @return the queue
      */
-    public static <T> Queue<T> toQueue(@SuppressWarnings("unchecked") T... arrays) {
+    @SafeVarargs
+    public static <T> Queue<T> toQueue(T... arrays) {
         return CollectionUtils.queue(arrays);
     }
 
@@ -316,7 +325,8 @@ public final class ArrayUtils {
      * @param arrays 数组
      * @return map
      */
-    public static <A> Map<Integer, A> toMap(@SuppressWarnings("unchecked") A... arrays) {
+    @SafeVarargs
+    public static <A> Map<Integer, A> toMap(A... arrays) {
         if (arrays == null) {
             return new LinkedHashMap<>(0);
         }
@@ -336,7 +346,8 @@ public final class ArrayUtils {
      * @deprecated use {@link #toMapStringKey(Object...)} instead
      */
     @Deprecated
-    public static <A> Map<String, A> toMap2(@SuppressWarnings("unchecked") A... arrays) {
+    @SafeVarargs
+    public static <A> Map<String, A> toMap2(A... arrays) {
         return toMapStringKey(arrays);
     }
 
@@ -347,7 +358,8 @@ public final class ArrayUtils {
      * @param arrays 数组
      * @return 列表
      */
-    public static <A> Map<String, A> toMapStringKey(@SuppressWarnings("unchecked") A... arrays) {
+    @SafeVarargs
+    public static <A> Map<String, A> toMapStringKey(A... arrays) {
         if (arrays == null) {
             return new LinkedHashMap<>(0);
         }
@@ -453,8 +465,86 @@ public final class ArrayUtils {
         return contain(strSet, strTarget, ignoreCase);
     }
 
+    private static Class<?> getFinalComponentType(Class<?> arrayType) {
+        if (arrayType.isArray()) {
+            return getFinalComponentType(arrayType.getComponentType());
+        } else {
+            return arrayType;
+        }
+    }
+
     /**
-     * 数组链接 .
+     * 获取数组存储类型.
+     *
+     * @param arrays array array
+     * @return 数组存储的类型,当参数arrays为null时，返回null.
+     */
+    @SafeVarargs
+    @SuppressWarnings("unchecked")
+    public static <E> Class<E> getComponentType(E[]... arrays) {
+        if (arrays == null) {
+            return null;
+        }
+        return (Class<E>) getFinalComponentType(arrays.getClass().getComponentType());
+    }
+
+    /**
+     * 连接数组.
+     *
+     * @param arrays array array
+     * @return 连接后的数组,当参数arrays为null时，返回null.
+     */
+    @SafeVarargs
+    public static <E> E[] concatArray(E[]... arrays) {
+        if (arrays == null) {
+            return null;
+        }
+        return Arrays.stream(arrays)
+            .filter(Objects::nonNull)
+            .flatMap(Arrays::stream)
+            .toArray(length -> ArrayUtils.create(getComponentType(arrays), length));
+    }
+
+    /**
+     * 连接数组.
+     * 如果数组元素是数组或者集合，会被展开添加新数组中.
+     * 
+     * @param objects the cancat objects, element is any type
+     * @return 连接后的数组
+     */
+    public static Object concatObjects(Object... objects) {
+        if (Lang.isEmpty(objects)) {
+            return ArrayUtils.EMPTY_OBJECT_ARRAY;
+        }
+        // 加入判断，如果数组对象展开的都是一样的类型，则使用该类型创建数组，否则创建Object数组
+        Set<Class<?>> elementTypes = new HashSet<>();
+        return Arrays.stream(objects)
+            .filter(Lang::isNotEmpty)
+            .flatMap(array -> {
+                if (array.getClass().isArray()) {
+                    // 把数组里的对象加入新的数组里
+                    int len = Array.getLength(array);
+                    return IntStream.range(0, len).mapToObj(i -> Array.get(array, i));
+                } else if (array instanceof Collection) {
+                    // 把集合内的对象加入新的数组里
+                    return ((Collection<?>) array).stream();
+                } else {
+                    // 把对象直接加入新的数组里
+                    return Stream.of(array);
+                }
+            })
+            .peek(e -> { // 在展开后的元素流上收集类型（跳过 null），不改变元素本身
+                if (e != null) {
+                    elementTypes.add(e.getClass());
+                }
+            })
+            .toArray(length -> {
+                return ArrayUtils.create(ClassUtils.getCommonAncestorType(elementTypes), length);
+            });
+    }
+
+    /**
+     * 连接数组.
      *
      * @param arr1 arr1
      * @param arr2 arr2

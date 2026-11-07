@@ -15,7 +15,11 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
+import cn.featherfly.common.http.request.BasicMethodHttpRequestBuilder;
+import cn.featherfly.common.http.request.FormMethodHttpRequestBuilder;
+import cn.featherfly.common.http.request.HttpRequestAware;
 import cn.featherfly.common.serialization.SerializableStrategy;
 import io.reactivex.rxjava3.core.Observable;
 import okhttp3.MediaType;
@@ -513,6 +517,33 @@ public class HttpClients extends AbstractHttpClient<HttpClients> implements Http
     }
 
     /**
+     * Gets the.
+     *
+     * @param requestBuilder the request builder
+     * @return the string
+     * @see cn.featherfly.common.http.HttpClient#get(java.util.function.Function)
+     */
+    @Override
+    public String get(Function<BasicMethodHttpRequestBuilder, HttpRequestAware> requestBuilder) {
+        return syncClient.get(requestBuilder);
+    }
+
+    /**
+     * Gets the.
+     *
+     * @param <R> the generic type
+     * @param requestBuilder the request builder
+     * @param responseType the response type
+     * @return the r
+     * @see cn.featherfly.common.http.HttpSyncClient#get(java.util.function.Function,
+     *      java.lang.Class)
+     */
+    @Override
+    public <R> R get(Function<BasicMethodHttpRequestBuilder, HttpRequestAware> requestBuilder, Class<R> responseType) {
+        return syncClient.get(requestBuilder, responseType);
+    }
+
+    /**
      * get request.
      *
      * @param url the url
@@ -658,6 +689,33 @@ public class HttpClients extends AbstractHttpClient<HttpClients> implements Http
     public <R> Observable<R> getObservable(String url, Map<String, Serializable> params, Map<String, String> headers,
         Class<R> responseType) {
         return rxjavaClient.get(url, params, headers, responseType);
+    }
+
+    /**
+     * Head.
+     *
+     * @param <R> the generic type
+     * @param requestBuilder the request builder
+     * @param responseType the response type
+     * @return the r
+     * @see cn.featherfly.common.http.HttpSyncClient#head(java.util.function.Function,
+     *      java.lang.Class)
+     */
+    @Override
+    public <R> R head(Function<BasicMethodHttpRequestBuilder, HttpRequestAware> requestBuilder, Class<R> responseType) {
+        return syncClient.head(requestBuilder, responseType);
+    }
+
+    /**
+     * Head.
+     *
+     * @param requestBuilder the request builder
+     * @return the string
+     * @see cn.featherfly.common.http.HttpClient#head(java.util.function.Function)
+     */
+    @Override
+    public String head(Function<BasicMethodHttpRequestBuilder, HttpRequestAware> requestBuilder) {
+        return syncClient.head(requestBuilder);
     }
 
     /**
@@ -1009,6 +1067,68 @@ public class HttpClients extends AbstractHttpClient<HttpClients> implements Http
     }
 
     /**
+     * Post.
+     *
+     * @param requestBuilder the request builder
+     * @return the string
+     * @see cn.featherfly.common.http.HttpClient#post(java.util.function.Function)
+     */
+    @Override
+    public String post(Function<FormMethodHttpRequestBuilder, HttpRequestAware> requestBuilder) {
+        return syncClient.post(requestBuilder);
+    }
+
+    /**
+     * Post.
+     *
+     * @param url the url
+     * @param requestBody the request body
+     * @param params the params
+     * @param headers the headers
+     * @return the string
+     * @see cn.featherfly.common.http.HttpClient#post(java.lang.String, java.lang.Object,
+     *      java.util.Map, java.util.Map)
+     */
+    @Override
+    public String post(String url, Object requestBody, Map<String, Serializable> params, Map<String, String> headers) {
+        return syncClient.post(url, requestBody, params, headers);
+    }
+
+    /**
+     * Post.
+     *
+     * @param <R> the generic type
+     * @param requestBuilder the request builder
+     * @param responseType the response type
+     * @return the r
+     * @see cn.featherfly.common.http.HttpSyncClient#post(java.util.function.Function,
+     *      java.lang.Class)
+     */
+    @Override
+    public <R> R post(Function<FormMethodHttpRequestBuilder, HttpRequestAware> requestBuilder, Class<R> responseType) {
+        return syncClient.post(requestBuilder, responseType);
+    }
+
+    /**
+     * Post.
+     *
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param params the params
+     * @param headers the headers
+     * @param responseType the response type
+     * @return the r
+     * @see cn.featherfly.common.http.HttpSyncClient#post(java.lang.String, java.lang.Object,
+     *      java.util.Map, java.util.Map, java.lang.Class)
+     */
+    @Override
+    public <R> R post(String url, Object requestBody, Map<String, Serializable> params, Map<String, String> headers,
+        Class<R> responseType) {
+        return syncClient.post(url, requestBody, params, headers, responseType);
+    }
+
+    /**
      * post request.
      *
      * @param url the url
@@ -1352,6 +1472,68 @@ public class HttpClients extends AbstractHttpClient<HttpClients> implements Http
     @Override
     public <R> R put(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
         return syncClient.put(url, requestBody, headers, responseType);
+    }
+
+    /**
+     * Put.
+     *
+     * @param requestBuilder the request builder
+     * @return the string
+     * @see cn.featherfly.common.http.HttpClient#put(java.util.function.Function)
+     */
+    @Override
+    public String put(Function<FormMethodHttpRequestBuilder, HttpRequestAware> requestBuilder) {
+        return syncClient.put(requestBuilder);
+    }
+
+    /**
+     * Put.
+     *
+     * @param url the url
+     * @param requestBody the request body
+     * @param params the params
+     * @param headers the headers
+     * @return the string
+     * @see cn.featherfly.common.http.HttpClient#put(java.lang.String, java.lang.Object,
+     *      java.util.Map, java.util.Map)
+     */
+    @Override
+    public String put(String url, Object requestBody, Map<String, Serializable> params, Map<String, String> headers) {
+        return syncClient.put(url, requestBody, params, headers);
+    }
+
+    /**
+     * Put.
+     *
+     * @param <R> the generic type
+     * @param requestBuilder the request builder
+     * @param responseType the response type
+     * @return the r
+     * @see cn.featherfly.common.http.HttpSyncClient#put(java.util.function.Function,
+     *      java.lang.Class)
+     */
+    @Override
+    public <R> R put(Function<FormMethodHttpRequestBuilder, HttpRequestAware> requestBuilder, Class<R> responseType) {
+        return syncClient.put(requestBuilder, responseType);
+    }
+
+    /**
+     * Put.
+     *
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param params the params
+     * @param headers the headers
+     * @param responseType the response type
+     * @return the r
+     * @see cn.featherfly.common.http.HttpSyncClient#put(java.lang.String, java.lang.Object,
+     *      java.util.Map, java.util.Map, java.lang.Class)
+     */
+    @Override
+    public <R> R put(String url, Object requestBody, Map<String, Serializable> params, Map<String, String> headers,
+        Class<R> responseType) {
+        return syncClient.put(url, requestBody, params, headers, responseType);
     }
 
     /**
@@ -1701,6 +1883,68 @@ public class HttpClients extends AbstractHttpClient<HttpClients> implements Http
     }
 
     /**
+     * Patch.
+     *
+     * @param requestBuilder the request builder
+     * @return the string
+     * @see cn.featherfly.common.http.HttpClient#patch(java.util.function.Function)
+     */
+    @Override
+    public String patch(Function<FormMethodHttpRequestBuilder, HttpRequestAware> requestBuilder) {
+        return syncClient.patch(requestBuilder);
+    }
+
+    /**
+     * Patch.
+     *
+     * @param url the url
+     * @param requestBody the request body
+     * @param params the params
+     * @param headers the headers
+     * @return the string
+     * @see cn.featherfly.common.http.HttpClient#patch(java.lang.String, java.lang.Object,
+     *      java.util.Map, java.util.Map)
+     */
+    @Override
+    public String patch(String url, Object requestBody, Map<String, Serializable> params, Map<String, String> headers) {
+        return syncClient.patch(url, requestBody, params, headers);
+    }
+
+    /**
+     * Patch.
+     *
+     * @param <R> the generic type
+     * @param requestBuilder the request builder
+     * @param responseType the response type
+     * @return the r
+     * @see cn.featherfly.common.http.HttpSyncClient#patch(java.util.function.Function,
+     *      java.lang.Class)
+     */
+    @Override
+    public <R> R patch(Function<FormMethodHttpRequestBuilder, HttpRequestAware> requestBuilder, Class<R> responseType) {
+        return syncClient.patch(requestBuilder, responseType);
+    }
+
+    /**
+     * Patch.
+     *
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param params the params
+     * @param headers the headers
+     * @param responseType the response type
+     * @return the r
+     * @see cn.featherfly.common.http.HttpSyncClient#patch(java.lang.String, java.lang.Object,
+     *      java.util.Map, java.util.Map, java.lang.Class)
+     */
+    @Override
+    public <R> R patch(String url, Object requestBody, Map<String, Serializable> params, Map<String, String> headers,
+        Class<R> responseType) {
+        return syncClient.patch(url, requestBody, params, headers, responseType);
+    }
+
+    /**
      * patch request.
      *
      * @param url the url
@@ -1942,12 +2186,12 @@ public class HttpClients extends AbstractHttpClient<HttpClients> implements Http
      * Delete.
      *
      * @param url the url
-     * @param headers the headers
+     * @param params the params
      * @return response string
      */
     @Override
-    public String delete(String url, Map<String, String> headers) {
-        return syncClient.delete(url, headers);
+    public String delete(String url, Map<String, Serializable> params) {
+        return syncClient.delete(url, params);
     }
 
     /**
@@ -2029,6 +2273,91 @@ public class HttpClients extends AbstractHttpClient<HttpClients> implements Http
     @Override
     public <R> R delete(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
         return syncClient.delete(url, requestBody, headers, responseType);
+    }
+
+    /**
+     * @param requestBuilder
+     * @return
+     * @see cn.featherfly.common.http.HttpClient#delete(java.util.function.Function)
+     */
+    @Override
+    public String delete(Function<BasicMethodHttpRequestBuilder, HttpRequestAware> requestBuilder) {
+        return syncClient.delete(requestBuilder);
+    }
+
+    /**
+     * @param url
+     * @param params
+     * @param headers
+     * @return
+     * @see cn.featherfly.common.http.HttpClient#delete(java.lang.String, java.util.Map,
+     *      java.util.Map)
+     */
+    @Override
+    public String delete(String url, Map<String, Serializable> params, Map<String, String> headers) {
+        return syncClient.delete(url, params, headers);
+    }
+
+    /**
+     * @param url
+     * @param requestBody
+     * @param params
+     * @param headers
+     * @return
+     * @see cn.featherfly.common.http.HttpClient#delete(java.lang.String, java.lang.Object,
+     *      java.util.Map, java.util.Map)
+     */
+    @Override
+    public String delete(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers) {
+        return syncClient.delete(url, requestBody, params, headers);
+    }
+
+    /**
+     * @param <R>
+     * @param requestBuilder
+     * @param responseType
+     * @return
+     * @see cn.featherfly.common.http.HttpSyncClient#delete(java.util.function.Function,
+     *      java.lang.Class)
+     */
+    @Override
+    public <R> R delete(Function<BasicMethodHttpRequestBuilder, HttpRequestAware> requestBuilder,
+        Class<R> responseType) {
+        return syncClient.delete(requestBuilder, responseType);
+    }
+
+    /**
+     * @param <R>
+     * @param url
+     * @param params
+     * @param headers
+     * @param responseType
+     * @return
+     * @see cn.featherfly.common.http.HttpSyncClient#delete(java.lang.String, java.util.Map,
+     *      java.util.Map, java.lang.Class)
+     */
+    @Override
+    public <R> R delete(String url, Map<String, Serializable> params, Map<String, String> headers,
+        Class<R> responseType) {
+        return syncClient.delete(url, params, headers, responseType);
+    }
+
+    /**
+     * @param <R>
+     * @param url
+     * @param requestBody
+     * @param params
+     * @param headers
+     * @param responseType
+     * @return
+     * @see cn.featherfly.common.http.HttpSyncClient#delete(java.lang.String, java.lang.Object,
+     *      java.util.Map, java.util.Map, java.lang.Class)
+     */
+    @Override
+    public <R> R delete(String url, Object requestBody, Map<String, Serializable> params, Map<String, String> headers,
+        Class<R> responseType) {
+        return syncClient.delete(url, requestBody, params, headers, responseType);
     }
 
     /**
@@ -2230,8 +2559,8 @@ public class HttpClients extends AbstractHttpClient<HttpClients> implements Http
      * {@inheritDoc}
      */
     @Override
-    public Long download(String url, Map<String, Serializable> params, Map<String, String> headers,
-        OutputStream output, BiConsumer<Long, Long> progress) {
+    public Long download(String url, Map<String, Serializable> params, Map<String, String> headers, OutputStream output,
+        BiConsumer<Long, Long> progress) {
         return syncClient.download(url, params, headers, output, progress);
     }
 
@@ -2348,8 +2677,8 @@ public class HttpClients extends AbstractHttpClient<HttpClients> implements Http
      * @param progress the progress
      * @return the http request completion
      */
-    public HttpRequestCompletion<Long> downloadCompletion(String url, Map<String, Serializable> params,
-        File localFile, BiConsumer<Long, Long> progress) {
+    public HttpRequestCompletion<Long> downloadCompletion(String url, Map<String, Serializable> params, File localFile,
+        BiConsumer<Long, Long> progress) {
         return asyncClient.download(url, params, localFile, progress);
     }
 
@@ -2566,4 +2895,5 @@ public class HttpClients extends AbstractHttpClient<HttpClients> implements Http
         Map<String, String> headers, OutputStream output, BiConsumer<Long, Long> progress) {
         return rxjavaClient.download(url, params, headers, output, progress);
     }
+
 }

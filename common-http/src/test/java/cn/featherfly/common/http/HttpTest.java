@@ -126,6 +126,33 @@ public class HttpTest {
     }
 
     @Test
+    public void get2() {
+        String json = "{\"name\":\"yufei羽飞\",\"age\":18}";
+        String xml = "<User><name>yufei羽飞</name><age>18</age></User>";
+        String url = Str.format(host, "user");
+
+        String result = Http.get(rb -> rb.url(url));
+        System.out.println(result);
+        assertEquals(result, json);
+
+        result = Http
+            .get(rb -> rb.url(url).header(new ChainMapImpl<String, String>().putChain("Accept", "application/json")));
+        System.out.println(result);
+        assertEquals(result, json);
+
+        result = Http.get(rb -> rb.url(url).header(hb -> hb.set("Accept", "application/json")));
+        assertEquals(result, json);
+
+        result = Http
+            .get(rb -> rb.url(url).header(new ChainMapImpl<String, String>().putChain("Accept", "application/xml")));
+        System.out.println(result);
+        assertEquals(result, xml);
+
+        result = Http.get(rb -> rb.url(url).header(hb -> hb.set("Accept", "application/xml")));
+        assertEquals(result, xml);
+    }
+
+    @Test
     public void postBody() {
         String json = "{\"name\":\"yufei羽飞\",\"age\":18}";
         String url = Str.format(host, "user");
@@ -143,6 +170,41 @@ public class HttpTest {
             HttpUtils.XML_MEDIA_TYPE);
 
         result = xmlClient.post(url, user);
+        System.out.println(result);
+        assertEquals(result, OK);
+    }
+
+    @Test
+    public void postBody2() {
+        String json = "{\"name\":\"yufei羽飞\",\"age\":18}";
+        String url = Str.format(host, "user");
+        String result = null;
+        result = Http.post(
+            rb -> rb.url(url).header(hb -> hb.set("content-type", "application/json; charset=utf-8")).parameter(json));
+        System.out.println(result);
+        assertEquals(result, OK);
+
+        result = Http
+            .post(rb -> rb.url(url).header(hb -> hb.set("content-type", "application/json; charset=utf-8")).body(json));
+        System.out.println(result);
+        assertEquals(result, OK);
+
+        result = Http.post(rb -> rb.url(url).parameter(user));
+        System.out.println(result);
+        assertEquals(result, OK);
+
+        result = Http.post(rb -> rb.url(url).body(user));
+        System.out.println(result);
+        assertEquals(result, OK);
+
+        HttpSyncClientImpl xmlClient = new HttpSyncClientImpl(new HttpRequestConfig(), Serialization.getDefault(),
+            HttpUtils.XML_MEDIA_TYPE);
+
+        result = xmlClient.post(rb -> rb.url(url).parameter(user));
+        System.out.println(result);
+        assertEquals(result, OK);
+
+        result = xmlClient.post(rb -> rb.url(url).body(user));
         System.out.println(result);
         assertEquals(result, OK);
     }
@@ -175,15 +237,12 @@ public class HttpTest {
         String url = "https://mirrors.cloud.tencent.com/debian/dists/stable/main/binary-amd64/Packages.xz";
         File file = new File(SystemPropertyUtils.getJavaIoTmpdir() + "/download/" + System.currentTimeMillis());
 
-        long size =
-            Http.download(url, file,
-                (r, t) -> {
-                    count.set(r);
-                    System.out.print(
-                        Str.format("\r文件大小：{0}, 下载：{1}， 进度：{2}%", WordUtils.parseUnit(t), WordUtils.parseUnit(r),
-                            BigDecimal.valueOf(r).divide(BigDecimal.valueOf(t), 4, RoundingMode.DOWN)
-                                .multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.DOWN).toString()));
-                });
+        long size = Http.download(url, file, (r, t) -> {
+            count.set(r);
+            System.out.print(Str.format("\r文件大小：{0}, 下载：{1}， 进度：{2}%", WordUtils.parseUnit(t), WordUtils.parseUnit(r),
+                BigDecimal.valueOf(r).divide(BigDecimal.valueOf(t), 4, RoundingMode.DOWN)
+                    .multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.DOWN).toString()));
+        });
         System.out.println();
         System.out.println("download file: " + file.getAbsolutePath());
         assertEquals(size, count.longValue());

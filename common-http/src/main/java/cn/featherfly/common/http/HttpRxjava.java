@@ -6,7 +6,13 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
+import cn.featherfly.common.http.request.BasicMethodHttpRequestBuilder;
+import cn.featherfly.common.http.request.FormMethodHttpRequestBuilder;
+import cn.featherfly.common.http.request.HttpReQuestBuilderImpl.BasicMethodHttpRequestBuilderImpl;
+import cn.featherfly.common.http.request.HttpReQuestBuilderImpl.FormMethodHttpRequestBuilderImpl;
+import cn.featherfly.common.http.request.HttpRequestAware;
 import io.reactivex.rxjava3.core.Observable;
 
 /**
@@ -1002,8 +1008,8 @@ public final class HttpRxjava {
      * @see cn.featherfly.common.http.HttpRxjavaClientImpl#download(java.lang.String,
      *      java.util.Map, java.util.Map, java.io.File)
      */
-    public static Observable<Long> download(String url, Map<String, Serializable> params,
-        Map<String, String> headers, File localFile) {
+    public static Observable<Long> download(String url, Map<String, Serializable> params, Map<String, String> headers,
+        File localFile) {
         return CLIENT.download(url, params, headers, localFile);
     }
 
@@ -1019,8 +1025,8 @@ public final class HttpRxjava {
      * @see cn.featherfly.common.http.HttpRxjavaClientImpl#download(java.lang.String,
      *      java.util.Map, java.util.Map, java.io.File, BiConsumer)
      */
-    public static Observable<Long> download(String url, Map<String, Serializable> params,
-        Map<String, String> headers, File localFile, BiConsumer<Long, Long> progress) {
+    public static Observable<Long> download(String url, Map<String, Serializable> params, Map<String, String> headers,
+        File localFile, BiConsumer<Long, Long> progress) {
         return CLIENT.download(url, params, headers, localFile, progress);
     }
 
@@ -1035,8 +1041,8 @@ public final class HttpRxjava {
      * @see cn.featherfly.common.http.HttpRxjavaClientImpl#download(java.lang.String,
      *      java.util.Map, java.util.Map, java.io.OutputStream)
      */
-    public static Observable<Long> download(String url, Map<String, Serializable> params,
-        Map<String, String> headers, OutputStream output) {
+    public static Observable<Long> download(String url, Map<String, Serializable> params, Map<String, String> headers,
+        OutputStream output) {
         return CLIENT.download(url, params, headers, output);
     }
 
@@ -1052,8 +1058,332 @@ public final class HttpRxjava {
      * @see cn.featherfly.common.http.HttpRxjavaClientImpl#download(java.lang.String,
      *      java.util.Map, java.util.Map, java.io.OutputStream, BiConsumer)
      */
-    public static Observable<Long> download(String url, Map<String, Serializable> params,
-        Map<String, String> headers, OutputStream output, BiConsumer<Long, Long> progress) {
+    public static Observable<Long> download(String url, Map<String, Serializable> params, Map<String, String> headers,
+        OutputStream output, BiConsumer<Long, Long> progress) {
         return CLIENT.download(url, params, headers, output, progress);
     }
+
+    /**
+     * Gets the.
+     *
+     * @param requestBuilder the request builder
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpClient#get(java.util.function.Function)
+     */
+    public static Observable<String> get(Function<BasicMethodHttpRequestBuilder, HttpRequestAware> requestBuilder) {
+        return CLIENT.get(requestBuilder);
+    }
+
+    /**
+     * Post.
+     *
+     * @param requestBuilder the request builder
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpClient#post(java.util.function.Function)
+     */
+    public static Observable<String> post(Function<FormMethodHttpRequestBuilder, HttpRequestAware> requestBuilder) {
+        return CLIENT.post(requestBuilder);
+    }
+
+    /**
+     * Put.
+     *
+     * @param requestBuilder the request builder
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpClient#put(java.util.function.Function)
+     */
+    public static Observable<String> put(Function<FormMethodHttpRequestBuilder, HttpRequestAware> requestBuilder) {
+        return CLIENT.put(requestBuilder);
+    }
+
+    /**
+     * Gets the.
+     *
+     * @param <R> the generic type
+     * @param requestBuilder the request builder
+     * @param responseType the response type
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClient#get(java.util.function.Function,
+     *      java.lang.Class)
+     */
+    public static <R> Observable<R> get(Function<BasicMethodHttpRequestBuilderImpl, HttpRequestAware> requestBuilder,
+        Class<R> responseType) {
+        return CLIENT.get(requestBuilder, responseType);
+    }
+
+    /**
+     * Post.
+     *
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param params the params
+     * @param headers the headers
+     * @param responseType the response type
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClientImpl#post(java.lang.String, java.lang.Object,
+     *      java.util.Map, java.util.Map, java.lang.Class)
+     */
+    public static <R> Observable<R> post(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers, Class<R> responseType) {
+        return CLIENT.post(url, requestBody, params, headers, responseType);
+    }
+
+    /**
+     * Post.
+     *
+     * @param url the url
+     * @param requestBody the request body
+     * @param params the params
+     * @param headers the headers
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClientImpl#post(java.lang.String, java.lang.Object,
+     *      java.util.Map, java.util.Map)
+     */
+    public static Observable<String> post(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers) {
+        return CLIENT.post(url, requestBody, params, headers);
+    }
+
+    /**
+     * Put.
+     *
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param params the params
+     * @param headers the headers
+     * @param responseType the response type
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClientImpl#put(java.lang.String, java.lang.Object,
+     *      java.util.Map, java.util.Map, java.lang.Class)
+     */
+    public static <R> Observable<R> put(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers, Class<R> responseType) {
+        return CLIENT.put(url, requestBody, params, headers, responseType);
+    }
+
+    /**
+     * Head.
+     *
+     * @param <R> the generic type
+     * @param requestBuilder the request builder
+     * @param responseType the response type
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClient#head(java.util.function.Function,
+     *      java.lang.Class)
+     */
+    public static <R> Observable<R> head(Function<BasicMethodHttpRequestBuilderImpl, HttpRequestAware> requestBuilder,
+        Class<R> responseType) {
+        return CLIENT.head(requestBuilder, responseType);
+    }
+
+    /**
+     * Delete.
+     *
+     * @param requestBuilder the request builder
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpClient#delete(java.util.function.Function)
+     */
+    public static Observable<String> delete(Function<BasicMethodHttpRequestBuilder, HttpRequestAware> requestBuilder) {
+        return CLIENT.delete(requestBuilder);
+    }
+
+    /**
+     * Put.
+     *
+     * @param url the url
+     * @param requestBody the request body
+     * @param params the params
+     * @param headers the headers
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClientImpl#put(java.lang.String, java.lang.Object,
+     *      java.util.Map, java.util.Map)
+     */
+    public static Observable<String> put(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers) {
+        return CLIENT.put(url, requestBody, params, headers);
+    }
+
+    /**
+     * Patch.
+     *
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param params the params
+     * @param headers the headers
+     * @param responseType the response type
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClientImpl#patch(java.lang.String, java.lang.Object,
+     *      java.util.Map, java.util.Map, java.lang.Class)
+     */
+    public static <R> Observable<R> patch(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers, Class<R> responseType) {
+        return CLIENT.patch(url, requestBody, params, headers, responseType);
+    }
+
+    /**
+     * Delete.
+     *
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpClient#delete(java.lang.String, java.util.Map,
+     *      java.util.Map)
+     */
+    public static Observable<String> delete(String url, Map<String, Serializable> params, Map<String, String> headers) {
+        return CLIENT.delete(url, params, headers);
+    }
+
+    /**
+     * Patch.
+     *
+     * @param url the url
+     * @param requestBody the request body
+     * @param params the params
+     * @param headers the headers
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClientImpl#patch(java.lang.String, java.lang.Object,
+     *      java.util.Map, java.util.Map)
+     */
+    public static Observable<String> patch(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers) {
+        return CLIENT.patch(url, requestBody, params, headers);
+    }
+
+    /**
+     * Post.
+     *
+     * @param <R> the generic type
+     * @param requestBuilder the request builder
+     * @param responseType the response type
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClient#post(java.util.function.Function,
+     *      java.lang.Class)
+     */
+    public static <R> Observable<R> post(Function<FormMethodHttpRequestBuilderImpl, HttpRequestAware> requestBuilder,
+        Class<R> responseType) {
+        return CLIENT.post(requestBuilder, responseType);
+    }
+
+    /**
+     * Patch.
+     *
+     * @param requestBuilder the request builder
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpClient#patch(java.util.function.Function)
+     */
+    public static Observable<String> patch(Function<FormMethodHttpRequestBuilder, HttpRequestAware> requestBuilder) {
+        return CLIENT.patch(requestBuilder);
+    }
+
+    /**
+     * Delete.
+     *
+     * @param url the url
+     * @param requestBody the request body
+     * @param params the params
+     * @param headers the headers
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClientImpl#delete(java.lang.String,
+     *      java.lang.Object, java.util.Map, java.util.Map)
+     */
+    public static Observable<String> delete(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers) {
+        return CLIENT.delete(url, requestBody, params, headers);
+    }
+
+    /**
+     * Delete.
+     *
+     * @param <R> the generic type
+     * @param url the url
+     * @param requestBody the request body
+     * @param params the params
+     * @param headers the headers
+     * @param responseType the response type
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClientImpl#delete(java.lang.String,
+     *      java.lang.Object, java.util.Map, java.util.Map, java.lang.Class)
+     */
+    public static <R> Observable<R> delete(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers, Class<R> responseType) {
+        return CLIENT.delete(url, requestBody, params, headers, responseType);
+    }
+
+    /**
+     * Head.
+     *
+     * @param requestBuilder the request builder
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpClient#head(java.util.function.Function)
+     */
+    public static Observable<String> head(Function<BasicMethodHttpRequestBuilder, HttpRequestAware> requestBuilder) {
+        return CLIENT.head(requestBuilder);
+    }
+
+    /**
+     * Put.
+     *
+     * @param <R> the generic type
+     * @param requestBuilder the request builder
+     * @param responseType the response type
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClient#put(java.util.function.Function,
+     *      java.lang.Class)
+     */
+    public static <R> Observable<R> put(Function<FormMethodHttpRequestBuilderImpl, HttpRequestAware> requestBuilder,
+        Class<R> responseType) {
+        return CLIENT.put(requestBuilder, responseType);
+    }
+
+    /**
+     * Patch.
+     *
+     * @param <R> the generic type
+     * @param requestBuilder the request builder
+     * @param responseType the response type
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClient#patch(java.util.function.Function,
+     *      java.lang.Class)
+     */
+    public static <R> Observable<R> patch(Function<FormMethodHttpRequestBuilderImpl, HttpRequestAware> requestBuilder,
+        Class<R> responseType) {
+        return CLIENT.patch(requestBuilder, responseType);
+    }
+
+    /**
+     * Delete.
+     *
+     * @param <R> the generic type
+     * @param requestBuilder the request builder
+     * @param responseType the response type
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClient#delete(java.util.function.Function,
+     *      java.lang.Class)
+     */
+    public static <R> Observable<R> delete(Function<BasicMethodHttpRequestBuilderImpl, HttpRequestAware> requestBuilder,
+        Class<R> responseType) {
+        return CLIENT.delete(requestBuilder, responseType);
+    }
+
+    /**
+     * Delete.
+     *
+     * @param <R> the generic type
+     * @param url the url
+     * @param params the params
+     * @param headers the headers
+     * @param responseType the response type
+     * @return the observable
+     * @see cn.featherfly.common.http.HttpRxjavaClient#delete(java.lang.String, java.util.Map,
+     *      java.util.Map, java.lang.Class)
+     */
+    public static <R> Observable<R> delete(String url, Map<String, Serializable> params, Map<String, String> headers,
+        Class<R> responseType) {
+        return CLIENT.delete(url, params, headers, responseType);
+    }
+
 }

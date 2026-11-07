@@ -157,152 +157,132 @@ public class HttpSyncClientImpl extends AbstractHttpClient<HttpSyncClientImpl> i
      * {@inheritDoc}
      */
     @Override
-    public String post(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return request(new Request.Builder().url(url).headers(createHeaders(headers))
-            .post(HttpUtils.createRequestBody(params)).build());
+    public String post(String url, Object requestBody, Map<String, Serializable> params, Map<String, String> headers) {
+        if (requestBody == null) {
+            // 不使用请求体，params作为form param
+            return request(new Request.Builder().url(url).headers(createHeaders(headers))
+                .post(HttpUtils.createRequestBody(params)).build());
+        } else {
+            // 使用请求体，params作为url Query String
+            return request(new Request.Builder().url(HttpUtils.appendParam(url, params))
+                .headers(createHeaders(headers, requestBody))
+                .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+        }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public <R> R post(String url, Map<String, Serializable> params, Map<String, String> headers,
+    public <R> R post(String url, Object requestBody, Map<String, Serializable> params, Map<String, String> headers,
         Class<R> responseType) {
-        return request(new Request.Builder().url(url).headers(createHeaders(headers))
-            .post(HttpUtils.createRequestBody(params)).build(), responseType);
+        if (requestBody == null) {
+            return request(new Request.Builder().url(url).headers(createHeaders(headers))
+                .post(HttpUtils.createRequestBody(params)).build(), responseType);
+        } else {
+            return request(
+                new Request.Builder().url(HttpUtils.appendParam(url, params))
+                    .headers(createHeaders(headers, requestBody))
+                    .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+                responseType);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String post(String url, Object requestBody, Map<String, String> headers) {
-        return request(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-            .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+    public String put(String url, Object requestBody, Map<String, Serializable> params, Map<String, String> headers) {
+        if (requestBody == null) {
+            // 不使用请求体，params作为form param
+            return request(new Request.Builder().url(url).headers(createHeaders(headers))
+                .put(HttpUtils.createRequestBody(params)).build());
+        } else {
+            // 使用请求体，params作为url Query String
+            return request(new Request.Builder().url(HttpUtils.appendParam(url, params))
+                .headers(createHeaders(headers, requestBody))
+                .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+        }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public <R> R post(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
-        return request(
-            new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
-            responseType);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String put(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return request(new Request.Builder().url(url).headers(createHeaders(headers))
-            .put(HttpUtils.createFormBody(params)).build());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <R> R put(String url, Map<String, Serializable> params, Map<String, String> headers, Class<R> responseType) {
-        return request(new Request.Builder().url(url).headers(createHeaders(headers))
-            .put(HttpUtils.createFormBody(params)).build(), responseType);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String put(String url, Object requestBody, Map<String, String> headers) {
-        return request(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-            .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <R> R put(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
-        return request(
-            new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
-            responseType);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String patch(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return request(new Request.Builder().url(url).headers(createHeaders(headers))
-            .patch(HttpUtils.createFormBody(params)).build());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <R> R patch(String url, Map<String, Serializable> params, Map<String, String> headers,
+    public <R> R put(String url, Object requestBody, Map<String, Serializable> params, Map<String, String> headers,
         Class<R> responseType) {
-        return request(new Request.Builder().url(url).headers(createHeaders(headers))
-            .patch(HttpUtils.createFormBody(params)).build(), responseType);
+        if (requestBody == null) {
+            return request(new Request.Builder().url(url).headers(createHeaders(headers))
+                .put(HttpUtils.createRequestBody(params)).build(), responseType);
+        } else {
+            return request(
+                new Request.Builder().url(HttpUtils.appendParam(url, params))
+                    .headers(createHeaders(headers, requestBody))
+                    .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+                responseType);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String patch(String url, Object requestBody, Map<String, String> headers) {
-        return request(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-            .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+    public String patch(String url, Object requestBody, Map<String, Serializable> params, Map<String, String> headers) {
+        if (requestBody == null) {
+            // 不使用请求体，params作为form param
+            return request(new Request.Builder().url(url).headers(createHeaders(headers))
+                .patch(HttpUtils.createRequestBody(params)).build());
+        } else {
+            // 使用请求体，params作为url Query String
+            return request(new Request.Builder().url(HttpUtils.appendParam(url, params))
+                .headers(createHeaders(headers, requestBody))
+                .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+        }
+    }
+
+    @Override
+    public <R> R patch(String url, Object requestBody, Map<String, Serializable> params, Map<String, String> headers,
+        Class<R> responseType) {
+        if (requestBody == null) {
+            return request(new Request.Builder().url(url).headers(createHeaders(headers))
+                .patch(HttpUtils.createRequestBody(params)).build(), responseType);
+        } else {
+            return request(
+                new Request.Builder().url(HttpUtils.appendParam(url, params))
+                    .headers(createHeaders(headers, requestBody))
+                    .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+                responseType);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public <R> R patch(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
-        return request(
-            new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
-            responseType);
+    public <R> R delete(String url, Object requestBody, Map<String, Serializable> params, Map<String, String> headers,
+        Class<R> responseType) {
+        // delete form parameter 语义未定义, 直接加入url参数
+        if (requestBody == null) {
+            return request(new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+                .delete().build(), responseType);
+        } else {
+            return request(
+                new Request.Builder().url(HttpUtils.appendParam(url, params))
+                    .headers(createHeaders(headers, requestBody))
+                    .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+                responseType);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String delete(String url, Map<String, String> headers) {
-        return request(new Request.Builder().url(url).headers(createHeaders(headers)).delete().build());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <R> R delete(String url, Map<String, String> headers, Class<R> responseType) {
-        return request(new Request.Builder().url(url).headers(createHeaders(headers)).delete().build(), responseType);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String delete(String url, Object requestBody, Map<String, String> headers) {
-        return request(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-            .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <R> R delete(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
-        return request(
-            new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
-            responseType);
+    public String delete(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers) {
+        // delete form parameter 语义未定义, 直接加入url参数
+        if (requestBody == null) {
+            return request(new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+                .delete().build());
+        } else {
+            return request(new Request.Builder().url(HttpUtils.appendParam(url, params))
+                .headers(createHeaders(headers, requestBody))
+                .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+        }
     }
 
     /**

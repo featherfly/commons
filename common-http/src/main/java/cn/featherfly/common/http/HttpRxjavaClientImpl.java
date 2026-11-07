@@ -44,8 +44,7 @@ public class HttpRxjavaClientImpl extends AbstractHttpClient<HttpRxjavaClientImp
      * @param mediaType the media type
      */
     public HttpRxjavaClientImpl(HttpRequestConfig config, Map<String, String> headers,
-        SerializableStrategy serialization,
-        MediaType mediaType) {
+        SerializableStrategy serialization, MediaType mediaType) {
         super(config, headers, serialization, mediaType);
     }
 
@@ -181,155 +180,133 @@ public class HttpRxjavaClientImpl extends AbstractHttpClient<HttpRxjavaClientImp
      * {@inheritDoc}
      */
     @Override
-    public Observable<String> post(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers))
-            .post(HttpUtils.createRequestBody(params)).build());
+    public <R> Observable<R> post(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers, Class<R> responseType) {
+        if (requestBody == null) {
+            return observation(new Request.Builder().url(url).headers(createHeaders(headers))
+                .post(HttpUtils.createRequestBody(params)).build(), responseType);
+        } else {
+            return observation(
+                new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+                    .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+                responseType);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public <R> Observable<R> post(String url, Map<String, Serializable> params, Map<String, String> headers,
-        Class<R> responseType) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers))
-            .post(HttpUtils.createRequestBody(params)).build(), responseType);
+    public Observable<String> post(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers) {
+        if (requestBody == null) {
+            return observation(new Request.Builder().url(url).headers(createHeaders(headers))
+                .post(HttpUtils.createRequestBody(params)).build());
+        } else {
+            return observation(
+                new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+                    .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Observable<String> post(String url, Object requestBody, Map<String, String> headers) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-            .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+    public <R> Observable<R> put(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers, Class<R> responseType) {
+        if (requestBody == null) {
+            return observation(new Request.Builder().url(url).headers(createHeaders(headers))
+                .put(HttpUtils.createRequestBody(params)).build(), responseType);
+        } else {
+            return observation(
+                new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+                    .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+                responseType);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public <R> Observable<R> post(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
-        return observation(
-            new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                .post(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
-            responseType);
+    public Observable<String> put(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers) {
+        if (requestBody == null) {
+            return observation(new Request.Builder().url(url).headers(createHeaders(headers))
+                .put(HttpUtils.createRequestBody(params)).build());
+        } else {
+            return observation(
+                new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+                    .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Observable<String> put(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers))
-            .put(HttpUtils.createFormBody(params)).build());
+    public <R> Observable<R> patch(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers, Class<R> responseType) {
+        if (requestBody == null) {
+            return observation(new Request.Builder().url(url).headers(createHeaders(headers))
+                .patch(HttpUtils.createRequestBody(params)).build(), responseType);
+        } else {
+            return observation(
+                new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+                    .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+                responseType);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public <R> Observable<R> put(String url, Map<String, Serializable> params, Map<String, String> headers,
-        Class<R> responseType) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers))
-            .put(HttpUtils.createFormBody(params)).build(), responseType);
+    public Observable<String> patch(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers) {
+        if (requestBody == null) {
+            return observation(new Request.Builder().url(url).headers(createHeaders(headers))
+                .patch(HttpUtils.createRequestBody(params)).build());
+        } else {
+            return observation(
+                new Request.Builder().url(HttpUtils.appendParam(url, params)).headers(createHeaders(headers))
+                    .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Observable<String> put(String url, Object requestBody, Map<String, String> headers) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-            .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+    public Observable<String> delete(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers) {
+        if (requestBody == null) {
+            return observation(new Request.Builder().url(HttpUtils.appendParam(url, params))
+                .headers(createHeaders(headers)).delete().build());
+        } else {
+            return observation(new Request.Builder().url(HttpUtils.appendParam(url, params))
+                .headers(createHeaders(headers, requestBody))
+                .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public <R> Observable<R> put(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
-        return observation(
-            new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                .put(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
-            responseType);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Observable<String> patch(String url, Map<String, Serializable> params, Map<String, String> headers) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers))
-            .patch(HttpUtils.createFormBody(params)).build());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <R> Observable<R> patch(String url, Map<String, Serializable> params, Map<String, String> headers,
-        Class<R> responseType) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers))
-            .patch(HttpUtils.createFormBody(params)).build(), responseType);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Observable<String> patch(String url, Object requestBody, Map<String, String> headers) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-            .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <R> Observable<R> patch(String url, Object requestBody, Map<String, String> headers, Class<R> responseType) {
-        return observation(
-            new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                .patch(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
-            responseType);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Observable<String> delete(String url, Map<String, String> headers) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers)).delete().build());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <R> Observable<R> delete(String url, Map<String, String> headers, Class<R> responseType) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers)).delete().build(),
-            responseType);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Observable<String> delete(String url, Object requestBody, Map<String, String> headers) {
-        return observation(new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-            .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <R> Observable<R> delete(String url, Object requestBody, Map<String, String> headers,
-        Class<R> responseType) {
-        return observation(
-            new Request.Builder().url(url).headers(createHeaders(headers, requestBody))
-                .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
-            responseType);
+    public <R> Observable<R> delete(String url, Object requestBody, Map<String, Serializable> params,
+        Map<String, String> headers, Class<R> responseType) {
+        if (requestBody == null) {
+            return observation(new Request.Builder().url(HttpUtils.appendParam(url, params))
+                .headers(createHeaders(headers)).delete().build(), responseType);
+        } else {
+            return observation(
+                new Request.Builder().url(HttpUtils.appendParam(url, params))
+                    .headers(createHeaders(headers, requestBody))
+                    .delete(RequestBody.create(getMediaType(requestBody, headers), serialize(requestBody))).build(),
+                responseType);
+        }
     }
 
     /**
@@ -445,5 +422,4 @@ public class HttpRxjavaClientImpl extends AbstractHttpClient<HttpRxjavaClientImp
         }
         return observable;
     }
-
 }

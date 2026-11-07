@@ -1,3 +1,8 @@
+# 0.10.0
+
+1. 加入get|head|delete|post|put|patch(Function)方法
+2. post|put|patch加入requestBody和params同时设置的支持，同时设置params会作为查询参数自动拼接到url 
+
 # 0.9.3 2026-08-07
 
 1. 修复HttpUtils.createMultipartBody(Map<String, Serializable>) 默认设置类型出错的问题（应该为MultipartBody.FORM）

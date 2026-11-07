@@ -238,15 +238,16 @@ public final class HttpUtils {
      * @return the url string with param
      */
     public static String appendParam(String url, String name, Serializable value) {
-        String uri = url;
-        if (Lang.isNotEmpty(uri)) {
-            if (uri.contains(Chars.QUESTION)) {
-                uri += Chars.AMP;
-            } else {
-                uri += Chars.QUESTION;
-            }
-            uri += toParameString(name, value);
+        if (Lang.isEmpty(url)) {
+            return url;
         }
+        String uri = url;
+        if (uri.contains(Chars.QUESTION)) {
+            uri += Chars.AMP;
+        } else {
+            uri += Chars.QUESTION;
+        }
+        uri += toParameString(name, value);
         return uri;
     }
 
@@ -258,14 +259,16 @@ public final class HttpUtils {
      * @return the url string with params
      */
     public static String appendParam(String url, Map<String, Serializable> params) {
-        if (Lang.isNotEmpty(params)) {
-            if (url.contains(Chars.QUESTION)) {
-                url += Chars.AMP;
-            } else {
-                url += Chars.QUESTION;
-            }
-            url += toParameString(params);
+        if (Lang.isEmpty(params)) {
+            return url;
         }
+
+        if (url.contains(Chars.QUESTION)) {
+            url += Chars.AMP;
+        } else {
+            url += Chars.QUESTION;
+        }
+        url += toParameString(params);
         return url;
     }
 

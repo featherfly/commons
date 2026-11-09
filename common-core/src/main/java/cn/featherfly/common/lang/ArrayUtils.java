@@ -517,7 +517,7 @@ public final class ArrayUtils {
             return ArrayUtils.EMPTY_OBJECT_ARRAY;
         }
         // 加入判断，如果数组对象展开的都是一样的类型，则使用该类型创建数组，否则创建Object数组
-        Set<Class<?>> elementTypes = new HashSet<>();
+        final Set<Class<?>> elementTypes = new HashSet<>();
         return Arrays.stream(objects)
             .filter(Lang::isNotEmpty)
             .flatMap(array -> {
@@ -533,14 +533,13 @@ public final class ArrayUtils {
                     return Stream.of(array);
                 }
             })
-            .peek(e -> { // 在展开后的元素流上收集类型（跳过 null），不改变元素本身
+            .map(e -> { // 在展开后的元素流上收集类型（跳过 null），不改变元素本身
                 if (e != null) {
                     elementTypes.add(e.getClass());
                 }
+                return e;
             })
-            .toArray(length -> {
-                return ArrayUtils.create(ClassUtils.getCommonAncestorType(elementTypes), length);
-            });
+            .toArray(length -> ArrayUtils.create(ClassUtils.getCommonAncestorType(elementTypes), length));
     }
 
     /**
@@ -641,9 +640,7 @@ public final class ArrayUtils {
      */
     public static <T> T[] create(Class<T> type, int length, IntFunction<T> filler) {
         T[] array = create(type, length);
-        each(array, (e, i) -> {
-            array[i] = filler.apply(i);
-        });
+        each(array, (e, i) -> array[i] = filler.apply(i));
         return array;
     }
 

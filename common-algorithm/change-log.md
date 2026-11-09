@@ -1,3 +1,8 @@
+# 1.
+
+chore:
+  1. upgrade bcprov-jdk15on to bcprov-jdk18on
+
 # 1.2.0 2026-10-21
 
 feat:

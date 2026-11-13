@@ -5,6 +5,10 @@
 feat:
   1. ClassUtils add getCommonAncestorType method
   2. ArraysUtils add getComponentType,concatArray,concatObject method
+  3. WordUtils add parseSnakeCaseTo[Lower|Upper]CamelCase methods
+
+fix:
+  1. fix WordUtils.parseCameCaseTo[Lower|Upper]SnakeCase method name misspelled
 
 # 1.16.4 2026-10-22
 

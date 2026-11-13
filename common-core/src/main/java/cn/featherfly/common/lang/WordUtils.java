@@ -117,6 +117,26 @@ public final class WordUtils {
      * Parses the to lower camel case.
      *
      * @param word the word
+     * @return the string
+     */
+    public static String parseSnakeCaseToLowerCamelCase(String word) {
+        return parseToCamelCase(word, Chars.UNDER_LINE_CHAR, false);
+    }
+
+    /**
+     * Parses the to upper camel case.
+     *
+     * @param word the word
+     * @return the string
+     */
+    public static String parseSnakeCaseToUpperCamelCase(String word) {
+        return parseToCamelCase(word, Chars.UNDER_LINE_CHAR, true);
+    }
+
+    /**
+     * Parses the to lower camel case.
+     *
+     * @param word the word
      * @param sign the sign
      * @return the string
      */
@@ -180,23 +200,23 @@ public final class WordUtils {
      * @param word the word
      * @return the string
      */
-    public static String parseCameCaseToLowerSnakeCase(String word) {
-        return parseCameCaseTo(word, Chars.UNDER_LINE_CHAR, false);
+    public static String parseCamelCaseToLowerSnakeCase(String word) {
+        return parselCamelCaseTo(word, Chars.UNDER_LINE_CHAR, false);
     }
 
     /**
      * 将驼峰格式转换为大蛇形格式.
      * Parses the came case to upper snake case.
      * example: HelloWorld -- HELLO_WORLD .
-     * 
+     *
      * @param word the word
      * @return the string
      */
-    public static String parseCameCaseToUpperSnakeCase(String word) {
-        return parseCameCaseTo(word, Chars.UNDER_LINE_CHAR, true);
+    public static String parseCamelCaseToUpperSnakeCase(String word) {
+        return parselCamelCaseTo(word, Chars.UNDER_LINE_CHAR, true);
     }
 
-    private static String parseCameCaseTo(String word, char sign, boolean upperOrLowerCase) {
+    private static String parselCamelCaseTo(String word, char sign, boolean upperOrLowerCase) {
         if (Lang.isEmpty(word)) {
             return "";
         }

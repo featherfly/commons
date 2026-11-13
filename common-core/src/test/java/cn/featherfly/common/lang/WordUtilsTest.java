@@ -327,38 +327,99 @@ public class WordUtilsTest {
     }
 
     @Test
-    public void parseToUpperOrLowerSnakeCase() {
+    public void parseCamelCaseToUpperOrLowerSnakeCase() {
         String lowerCamelCase = "helloWorld";
         String upperCamelCase = "HelloWorld";
         String lowerSnakeCase = "hello_world";
         String upperSnakeCase = "HELLO_WORLD";
 
         Console.log("WordUtils.parseCameCaseToLowerSnakeCase({}) = {}", lowerCamelCase,
-            WordUtils.parseCameCaseToLowerSnakeCase(lowerCamelCase));
+            WordUtils.parseCamelCaseToLowerSnakeCase(lowerCamelCase));
         Console.log("WordUtils.parseCameCaseToLowerSnakeCase({}) = {}", upperCamelCase,
-            WordUtils.parseCameCaseToLowerSnakeCase(upperCamelCase));
+            WordUtils.parseCamelCaseToLowerSnakeCase(upperCamelCase));
 
         Console.log("WordUtils.parseToLowerCamelCase({}) = {}", lowerCamelCase,
-            WordUtils.parseCameCaseToUpperSnakeCase(lowerCamelCase));
+            WordUtils.parseCamelCaseToUpperSnakeCase(lowerCamelCase));
         Console.log("WordUtils.parseToLowerCamelCase({}) = {}", upperCamelCase,
-            WordUtils.parseCameCaseToUpperSnakeCase(upperCamelCase));
+            WordUtils.parseCamelCaseToUpperSnakeCase(upperCamelCase));
 
-        assertEquals(lowerSnakeCase, WordUtils.parseCameCaseToLowerSnakeCase(lowerCamelCase));
-        assertEquals(lowerSnakeCase, WordUtils.parseCameCaseToLowerSnakeCase(upperCamelCase));
+        assertEquals(lowerSnakeCase, WordUtils.parseCamelCaseToLowerSnakeCase(lowerCamelCase));
+        assertEquals(lowerSnakeCase, WordUtils.parseCamelCaseToLowerSnakeCase(upperCamelCase));
 
-        assertEquals(upperSnakeCase, WordUtils.parseCameCaseToUpperSnakeCase(lowerCamelCase));
-        assertEquals(upperSnakeCase, WordUtils.parseCameCaseToUpperSnakeCase(upperCamelCase));
+        assertEquals(upperSnakeCase, WordUtils.parseCamelCaseToUpperSnakeCase(lowerCamelCase));
+        assertEquals(upperSnakeCase, WordUtils.parseCamelCaseToUpperSnakeCase(upperCamelCase));
 
         lowerCamelCase = "aHelloWorld";
         upperCamelCase = "AHelloWorld";
         lowerSnakeCase = "a_hello_world";
         upperSnakeCase = "A_HELLO_WORLD";
 
-        assertEquals(lowerSnakeCase, WordUtils.parseCameCaseToLowerSnakeCase(lowerCamelCase));
-        assertEquals(lowerSnakeCase, WordUtils.parseCameCaseToLowerSnakeCase(upperCamelCase));
+        assertEquals(lowerSnakeCase, WordUtils.parseCamelCaseToLowerSnakeCase(lowerCamelCase));
+        assertEquals(lowerSnakeCase, WordUtils.parseCamelCaseToLowerSnakeCase(upperCamelCase));
 
-        assertEquals(upperSnakeCase, WordUtils.parseCameCaseToUpperSnakeCase(lowerCamelCase));
-        assertEquals(upperSnakeCase, WordUtils.parseCameCaseToUpperSnakeCase(upperCamelCase));
+        assertEquals(upperSnakeCase, WordUtils.parseCamelCaseToUpperSnakeCase(lowerCamelCase));
+        assertEquals(upperSnakeCase, WordUtils.parseCamelCaseToUpperSnakeCase(upperCamelCase));
+    }
+
+    @Test
+    public void parseSnakeCaseToUpperOrLowerCamelCase() {
+        String lowerSnakeCase = "hello_world";
+        String upperSnakeCase = "HELLO_WORLD";
+        String lowerCamelCase = "helloWorld";
+        String upperCamelCase = "HelloWorld";
+
+        Console.log("WordUtils.parseToUpperCamelCase({}, Chars.UNDER_LINE_CHAR) = {}", lowerSnakeCase,
+            WordUtils.parseToUpperCamelCase(lowerSnakeCase, Chars.UNDER_LINE_CHAR));
+        Console.log("WordUtils.parseToUpperCamelCase({}, Chars.UNDER_LINE_CHAR) = {}", upperSnakeCase,
+            WordUtils.parseToUpperCamelCase(upperSnakeCase, Chars.UNDER_LINE_CHAR));
+
+        Console.log("WordUtils.parseToLowerCamelCase({}, Chars.UNDER_LINE_CHAR) = {}", lowerSnakeCase,
+            WordUtils.parseToLowerCamelCase(lowerSnakeCase, Chars.UNDER_LINE_CHAR));
+        Console.log("WordUtils.parseToLowerCamelCase({}, Chars.UNDER_LINE_CHAR) = {}", upperSnakeCase,
+            WordUtils.parseToLowerCamelCase(upperSnakeCase, Chars.UNDER_LINE_CHAR));
+
+        assertEquals(lowerCamelCase, WordUtils.parseSnakeCaseToLowerCamelCase(lowerSnakeCase));
+        assertEquals(lowerCamelCase, WordUtils.parseSnakeCaseToLowerCamelCase(upperSnakeCase));
+
+        assertEquals(upperCamelCase, WordUtils.parseSnakeCaseToUpperCamelCase(lowerSnakeCase));
+        assertEquals(upperCamelCase, WordUtils.parseSnakeCaseToUpperCamelCase(upperSnakeCase));
+
+        lowerSnakeCase = "hello_world_";
+        upperSnakeCase = "Hello_World_";
+        assertEquals(lowerCamelCase, WordUtils.parseSnakeCaseToLowerCamelCase(lowerSnakeCase));
+        assertEquals(lowerCamelCase, WordUtils.parseSnakeCaseToLowerCamelCase(upperSnakeCase));
+        assertEquals(upperCamelCase, WordUtils.parseSnakeCaseToUpperCamelCase(lowerSnakeCase));
+        assertEquals(upperCamelCase, WordUtils.parseSnakeCaseToUpperCamelCase(upperSnakeCase));
+
+        lowerSnakeCase = "_hello_world";
+        upperSnakeCase = "_Hello_World";
+        assertEquals(lowerCamelCase, WordUtils.parseSnakeCaseToLowerCamelCase(lowerSnakeCase));
+        assertEquals(lowerCamelCase, WordUtils.parseSnakeCaseToLowerCamelCase(upperSnakeCase));
+        assertEquals(upperCamelCase, WordUtils.parseSnakeCaseToUpperCamelCase(lowerSnakeCase));
+        assertEquals(upperCamelCase, WordUtils.parseSnakeCaseToUpperCamelCase(upperSnakeCase));
+
+        lowerSnakeCase = "_hello_world_";
+        upperSnakeCase = "_Hello_World_";
+        assertEquals(lowerCamelCase, WordUtils.parseSnakeCaseToLowerCamelCase(lowerSnakeCase));
+        assertEquals(lowerCamelCase, WordUtils.parseSnakeCaseToLowerCamelCase(upperSnakeCase));
+        assertEquals(upperCamelCase, WordUtils.parseSnakeCaseToUpperCamelCase(lowerSnakeCase));
+        assertEquals(upperCamelCase, WordUtils.parseSnakeCaseToUpperCamelCase(upperSnakeCase));
+
+        lowerSnakeCase = "hello__world";
+        upperSnakeCase = "Hello__World";
+        assertEquals(lowerCamelCase, WordUtils.parseSnakeCaseToLowerCamelCase(lowerSnakeCase));
+        assertEquals(lowerCamelCase, WordUtils.parseSnakeCaseToLowerCamelCase(upperSnakeCase));
+        assertEquals(upperCamelCase, WordUtils.parseSnakeCaseToUpperCamelCase(lowerSnakeCase));
+        assertEquals(upperCamelCase, WordUtils.parseSnakeCaseToUpperCamelCase(upperSnakeCase));
+
+        lowerSnakeCase = "a_hello_world";
+        upperSnakeCase = "A_HELLO_WORLD";
+        lowerCamelCase = "aHelloWorld";
+        upperCamelCase = "AHelloWorld";
+        assertEquals(lowerCamelCase, WordUtils.parseSnakeCaseToLowerCamelCase(lowerSnakeCase));
+        assertEquals(lowerCamelCase, WordUtils.parseSnakeCaseToLowerCamelCase(upperSnakeCase));
+        assertEquals(upperCamelCase, WordUtils.parseSnakeCaseToUpperCamelCase(lowerSnakeCase));
+        assertEquals(upperCamelCase, WordUtils.parseSnakeCaseToUpperCamelCase(upperSnakeCase));
     }
 
     @Test
@@ -421,6 +482,68 @@ public class WordUtilsTest {
         assertEquals(lowerCamelCase, WordUtils.parseToLowerCamelCase(upperSnakeCase, underLine));
         assertEquals(upperCamelCase, WordUtils.parseToUpperCamelCase(lowerSnakeCase, underLine));
         assertEquals(upperCamelCase, WordUtils.parseToUpperCamelCase(upperSnakeCase, underLine));
+    }
+
+    @Test
+    public void parseToUpperOrLowerCamelCase2() {
+        final char minus = Chars.MINUS_CHAR;
+        String lowerSnakeCase = "hello-world";
+        String upperSnakeCase = "HELLO-WORLD";
+        String lowerCamelCase = "helloWorld";
+        String upperCamelCase = "HelloWorld";
+
+        Console.log("WordUtils.parseToUpperCamelCase({}, Chars.UNDER_LINE_CHAR) = {}", lowerSnakeCase,
+            WordUtils.parseToUpperCamelCase(lowerSnakeCase, Chars.UNDER_LINE_CHAR));
+        Console.log("WordUtils.parseToUpperCamelCase({}, Chars.UNDER_LINE_CHAR) = {}", upperSnakeCase,
+            WordUtils.parseToUpperCamelCase(upperSnakeCase, Chars.UNDER_LINE_CHAR));
+
+        Console.log("WordUtils.parseToLowerCamelCase({}, Chars.UNDER_LINE_CHAR) = {}", lowerSnakeCase,
+            WordUtils.parseToLowerCamelCase(lowerSnakeCase, Chars.UNDER_LINE_CHAR));
+        Console.log("WordUtils.parseToLowerCamelCase({}, Chars.UNDER_LINE_CHAR) = {}", upperSnakeCase,
+            WordUtils.parseToLowerCamelCase(upperSnakeCase, Chars.UNDER_LINE_CHAR));
+
+        assertEquals(lowerCamelCase, WordUtils.parseToLowerCamelCase(lowerSnakeCase, minus));
+        assertEquals(lowerCamelCase, WordUtils.parseToLowerCamelCase(upperSnakeCase, minus));
+
+        assertEquals(upperCamelCase, WordUtils.parseToUpperCamelCase(lowerSnakeCase, minus));
+        assertEquals(upperCamelCase, WordUtils.parseToUpperCamelCase(upperSnakeCase, minus));
+
+        lowerSnakeCase = "hello-world-";
+        upperSnakeCase = "Hello-World-";
+        assertEquals(lowerCamelCase, WordUtils.parseToLowerCamelCase(lowerSnakeCase, minus));
+        assertEquals(lowerCamelCase, WordUtils.parseToLowerCamelCase(upperSnakeCase, minus));
+        assertEquals(upperCamelCase, WordUtils.parseToUpperCamelCase(lowerSnakeCase, minus));
+        assertEquals(upperCamelCase, WordUtils.parseToUpperCamelCase(upperSnakeCase, minus));
+
+        lowerSnakeCase = "-hello-world";
+        upperSnakeCase = "-Hello-World";
+        assertEquals(lowerCamelCase, WordUtils.parseToLowerCamelCase(lowerSnakeCase, minus));
+        assertEquals(lowerCamelCase, WordUtils.parseToLowerCamelCase(upperSnakeCase, minus));
+        assertEquals(upperCamelCase, WordUtils.parseToUpperCamelCase(lowerSnakeCase, minus));
+        assertEquals(upperCamelCase, WordUtils.parseToUpperCamelCase(upperSnakeCase, minus));
+
+        lowerSnakeCase = "-hello-world-";
+        upperSnakeCase = "-Hello-World-";
+        assertEquals(lowerCamelCase, WordUtils.parseToLowerCamelCase(lowerSnakeCase, minus));
+        assertEquals(lowerCamelCase, WordUtils.parseToLowerCamelCase(upperSnakeCase, minus));
+        assertEquals(upperCamelCase, WordUtils.parseToUpperCamelCase(lowerSnakeCase, minus));
+        assertEquals(upperCamelCase, WordUtils.parseToUpperCamelCase(upperSnakeCase, minus));
+
+        lowerSnakeCase = "hello--world";
+        upperSnakeCase = "Hello--World";
+        assertEquals(lowerCamelCase, WordUtils.parseToLowerCamelCase(lowerSnakeCase, minus));
+        assertEquals(lowerCamelCase, WordUtils.parseToLowerCamelCase(upperSnakeCase, minus));
+        assertEquals(upperCamelCase, WordUtils.parseToUpperCamelCase(lowerSnakeCase, minus));
+        assertEquals(upperCamelCase, WordUtils.parseToUpperCamelCase(upperSnakeCase, minus));
+
+        lowerSnakeCase = "a-hello-world";
+        upperSnakeCase = "A-HELLO-WORLD";
+        lowerCamelCase = "aHelloWorld";
+        upperCamelCase = "AHelloWorld";
+        assertEquals(lowerCamelCase, WordUtils.parseToLowerCamelCase(lowerSnakeCase, minus));
+        assertEquals(lowerCamelCase, WordUtils.parseToLowerCamelCase(upperSnakeCase, minus));
+        assertEquals(upperCamelCase, WordUtils.parseToUpperCamelCase(lowerSnakeCase, minus));
+        assertEquals(upperCamelCase, WordUtils.parseToUpperCamelCase(upperSnakeCase, minus));
     }
 
 }

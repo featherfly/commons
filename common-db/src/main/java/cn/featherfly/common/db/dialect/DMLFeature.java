@@ -9,11 +9,11 @@
 package cn.featherfly.common.db.dialect;
 
 import cn.featherfly.common.db.builder.model.SqlElement;
-import cn.featherfly.common.db.builder.model.TableElement;
 import cn.featherfly.common.operator.AggregateFunction;
 import cn.featherfly.common.operator.ComparisonOperator;
 import cn.featherfly.common.operator.ComparisonOperator.MatchStrategy;
 import cn.featherfly.common.operator.Function;
+import cn.featherfly.common.repository.AliasRepository;
 
 /**
  * DML features.
@@ -288,8 +288,8 @@ public interface DMLFeature {
      * @param argus the argus
      * @return sql of column part
      */
-    default String column(String tableAlias, String columnName,
-        String columnAlias, Function function, Object... argus) {
+    default String column(String tableAlias, String columnName, String columnAlias, Function function,
+        Object... argus) {
         return column(false, tableAlias, columnName, columnAlias, function, argus);
     }
 
@@ -304,8 +304,8 @@ public interface DMLFeature {
      * @param argus the argus
      * @return sql of column part
      */
-    String column(boolean distinct, String tableAlias, String columnName,
-        String columnAlias, Function function, Object... argus);
+    String column(boolean distinct, String tableAlias, String columnName, String columnAlias, Function function,
+        Object... argus);
 
     /**
      * build sql for column with aggregate function.
@@ -379,8 +379,8 @@ public interface DMLFeature {
      * @param table table
      * @return sql of table part
      */
-    default String table(TableElement table) {
-        return table(table.getName(), table.getAlias());
+    default String table(AliasRepository table) {
+        return table(table.name(), table.alias());
     }
 
     /**
@@ -620,7 +620,7 @@ public interface DMLFeature {
 
     /**
      * AutoIncrementInsert.
-     * 
+     *
      * @author zhongj
      */
     public enum AutoIncrementInsert {

@@ -2,13 +2,14 @@
 package cn.featherfly.common.db.builder.model;
 
 import cn.featherfly.common.db.dialect.Dialect;
+import cn.featherfly.common.repository.AliasRepository;
 
 /**
  * Column.
  *
  * @author zhongj
  */
-public class TableElement extends AbstractSqlElement {
+public class TableElement extends AbstractSqlElement implements AliasRepository {
 
     private String name;
 
@@ -16,7 +17,7 @@ public class TableElement extends AbstractSqlElement {
 
     /**
      * @param dialect dialect
-     * @param name    name
+     * @param name name
      */
     public TableElement(Dialect dialect, String name) {
         this(dialect, name, null);
@@ -24,8 +25,8 @@ public class TableElement extends AbstractSqlElement {
 
     /**
      * @param dialect dialect
-     * @param name    name
-     * @param alias   alias
+     * @param name name
+     * @param alias alias
      */
     public TableElement(Dialect dialect, String name, String alias) {
         super(dialect);
@@ -75,5 +76,21 @@ public class TableElement extends AbstractSqlElement {
     @Override
     public String toSql() {
         return dialect.dml().table(name, alias);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String name() {
+        return getName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String alias() {
+        return getAlias();
     }
 }

@@ -6,13 +6,14 @@ import java.util.Arrays;
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.operator.CalculationOperator;
 import cn.featherfly.common.operator.Function;
+import cn.featherfly.common.repository.Field;
 
 /**
  * ColumnElement.
  *
  * @author zhongj
  */
-public class ColumnElement extends AbstractSqlElement {
+public class ColumnElement extends AbstractSqlElement implements Field {
 
     /** The name. */
     protected String name;
@@ -236,6 +237,14 @@ public class ColumnElement extends AbstractSqlElement {
             return false;
         }
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String name() {
+        return name;
     }
 
 }

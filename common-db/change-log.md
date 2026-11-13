@@ -3,6 +3,8 @@
 feat:
 1. SqlExecutor的END_SQL_SIGN从";"变更为"; *(\\r?\\n+)+"
 2. DMLFeature加入AutoIncrementInsert支持，不同的数据库的Dialect对AutoIncrementInsert策略的实现有差异
+3. DMLFeature的table(TableElement table)变更为table(AliasRepository table)
+4. TableElement实现AliasRepository, ColumnElement实现AliasField，ColumnElement实现Field
 
 chore:
 1. 升级依赖

@@ -3,13 +3,14 @@ package cn.featherfly.common.db.builder.model;
 
 import cn.featherfly.common.db.dialect.Dialect;
 import cn.featherfly.common.operator.AggregateFunction;
+import cn.featherfly.common.repository.AliasField;
 
 /**
  * select column element .
  *
  * @author zhongj
  */
-public class SelectColumnElement extends ColumnElement {
+public class SelectColumnElement extends ColumnElement implements AliasField {
 
     /** The aggregate functions. */
     protected AggregateFunction aggregateFunction;
@@ -199,5 +200,13 @@ public class SelectColumnElement extends ColumnElement {
     @Override
     public String toSql() {
         return dialect.dml().column(aggregateFunction, distinct, tableAlias, name, alias);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String alias() {
+        return alias;
     }
 }
